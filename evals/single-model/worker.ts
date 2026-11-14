@@ -10,8 +10,8 @@ import { type BenchmarkCase, bounds } from "./cases.js";
 
 const backend = process.argv[2];
 const path = process.argv[3];
-const workers =
-  process.argv[4] === undefined ? undefined : Number(process.argv[4]);
+const workers = !process.argv[4] ? undefined : Number(process.argv[4]);
+const binary = process.argv[5];
 assert.ok(
   (backend === "native" || backend === "wasm" || backend === "tla-ts") && path,
 );
@@ -51,11 +51,12 @@ if (backend === "tla-ts") {
     backend === "wasm"
       ? await createPortableWasm(
           await readFile(
-            "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+            binary ??
+              "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
           ),
         )
       : undefined;
-  const native = backend === "native" ? startNative() : undefined;
+  const native = backend === "native" ? startNative(binary) : undefined;
   if (native)
     await native.request({
       version: 1,

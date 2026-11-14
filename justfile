@@ -216,6 +216,17 @@ criterion-prepare:
 
 criterion-test: criterion-prepare
   cargo test --locked --manifest-path crates/modelt-core/Cargo.toml --bench safety
+  node --test dist/evals/criterion-safety/contract-test.js
 
 criterion-save stage run: criterion-prepare
   node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+criterion-controls run: safety-build
+  node dist/evals/criterion-safety/compare.js {{quote(run)}} controls
+
+criterion-compare run: safety-build
+  node dist/evals/criterion-safety/compare.js {{quote(run)}}
+
+criterion-replay saved run:
+  pnpm build
+  node dist/evals/criterion-safety/compare.js {{quote(run)}} {{quote(saved)}}
