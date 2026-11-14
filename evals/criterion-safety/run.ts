@@ -99,7 +99,10 @@ const collect = async (path: string, relative: string): Promise<void> => {
   for (const entry of await readdir(path, { withFileTypes: true })) {
     const next = join(relative, entry.name);
     if (entry.isDirectory()) await collect(join(path, entry.name), next);
-    else if (entry.name.endsWith(".json") && next.split("/").includes(stage)) {
+    else if (
+      entry.name.endsWith(".json") &&
+      dirname(next).split("/").at(-1) === stage
+    ) {
       const target = join(directory, "criterion", next);
       await mkdir(dirname(target), { recursive: true });
       const value = await readFile(join(path, entry.name));
@@ -145,7 +148,16 @@ const status =
 await writeFile(
   join(directory, "result.json"),
   JSON.stringify(
-    { status, stage, sourceVersion, exit, estimates, files },
+    {
+      status,
+      stage,
+      sourceVersion,
+      exit,
+      sourceUnchanged,
+      archiveError,
+      estimates,
+      files,
+    },
     null,
     2,
   ),
