@@ -4,69 +4,131 @@ use crate::safety::Scalar;
 use crate::safety_expressions::{EvalContext, visit_branch};
 use crate::safety_values::{Arena, ValueDelta};
 use crate::safety_work::WorkBudget;
-use rayon::iter::{IndexedParallelIterator, IntoParallelIterator, ParallelIterator};
+use rayon::iter::{
+    IndexedParallelIterator, IntoParallelIterator, IntoParallelRefMutIterator, ParallelIterator,
+};
 use std::ops::Range;
 
 enum Event {
     Candidate {
         parent: usize,
         action: usize,
-        values: Vec<Option<Scalar>>,
+        start: usize,
         checked: Result<Option<usize>, CoreError>,
     },
     Deadlock(usize),
     Error(CoreError),
 }
 
-struct Expansion {
-    delta: ValueDelta,
+struct Buffer {
     events: Vec<Event>,
+    values: Vec<Option<Scalar>>,
+    next: Vec<Option<Scalar>>,
+    current: Vec<Scalar>,
+    local: StateStore,
+}
+
+impl Buffer {
+    fn new(width: usize) -> Self {
+        Self {
+            events: vec![],
+            values: vec![],
+            next: vec![None; width],
+            current: Vec::with_capacity(width),
+            local: StateStore::new(width),
+        }
+    }
+    fn reset(&mut self) {
+        self.events.clear();
+        self.values.clear();
+        self.next.fill(None);
+        self.current.clear();
+        self.local.clear();
+    }
+    #[cfg(test)]
+    fn candidate(
+        &mut self,
+        parent: usize,
+        action: usize,
+        values: &[Option<Scalar>],
+        checked: Result<Option<usize>, CoreError>,
+    ) {
+        self.events.push(Event::Candidate {
+            parent,
+            action,
+            start: self.values.len(),
+            checked,
+        });
+        self.values.extend_from_slice(values);
+    }
+}
+
+pub(super) struct Workers {
+    pool: rayon::ThreadPool,
+    buffers: Vec<Buffer>,
+}
+
+impl Workers {
+    pub(super) fn new(workers: usize, width: usize) -> Result<Self, CoreError> {
+        Ok(Self {
+            pool: rayon::ThreadPoolBuilder::new()
+                .num_threads(workers)
+                .build()
+                .map_err(|error| CoreError::protocol(&format!("Safety worker pool: {error}")))?,
+            buffers: (0..workers).map(|_| Buffer::new(width)).collect(),
+        })
+    }
 }
 
 impl Search<'_> {
     pub(super) fn parallel_frontier(
         &mut self,
         frontier: Range<usize>,
-        pool: &rayon::ThreadPool,
+        workers: &mut Workers,
         arena: &mut Arena,
     ) -> Result<(), CoreError> {
         let mut start = frontier.start;
         while start < frontier.end {
             let chunk = (frontier.end - start)
-                .div_ceil(pool.current_num_threads())
+                .div_ceil(workers.buffers.len())
                 .min(64);
-            let end = (start + chunk * pool.current_num_threads()).min(frontier.end);
+            let end = (start + chunk * workers.buffers.len()).min(frontier.end);
             let ranges: Vec<_> = (start..end)
                 .step_by(chunk)
                 .map(|first| first..(first + chunk).min(end))
                 .collect();
             let budget = WorkBudget::new(self.bounds.max_work - arena.work, ranges.len());
-            let expansions: Vec<_> = pool.install(|| {
+            let expansions: Vec<_> = workers.pool.install(|| {
                 ranges
                     .into_par_iter()
+                    .zip(workers.buffers.par_iter_mut())
                     .enumerate()
-                    .map(|(worker, range)| self.expand_range(range, arena, &budget, worker))
+                    .map(|(worker, (range, buffer))| {
+                        self.expand_range(range, arena, &budget, worker, buffer)
+                    })
                     .collect()
             });
-            arena.work += expansions
-                .iter()
-                .map(|expansion| expansion.delta.work)
-                .sum::<u32>();
-            for expansion in expansions {
-                let mapping = arena.merge(expansion.delta)?;
-                for event in expansion.events {
+            arena.work += expansions.iter().map(|delta| delta.work).sum::<u32>();
+            for (delta, buffer) in expansions.into_iter().zip(&mut workers.buffers) {
+                let mapping = arena.merge(delta)?;
+                for value in buffer.values.iter_mut().flatten() {
+                    *value = mapping.get(*value);
+                }
+                for event in buffer.events.drain(..) {
                     match event {
                         Event::Candidate {
                             parent,
                             action,
-                            values,
+                            start,
                             checked,
                         } => {
-                            let values: Vec<_> = values
-                                .into_iter()
-                                .map(|value| value.map(|value| mapping.get(value)))
-                                .collect();
-                            self.accept(&values, Some(parent), action, arena, Some(checked))?;
+                            self.accept(
+                                &buffer.values[start..start + self.store.width],
+                                Some(parent),
+                                action,
+                                arena,
+                                Some(checked),
+                            )?;
                         }
                         Event::Deadlock(parent) => self.deadlock(parent, arena)?,
                         Event::Error(error) => return Err(error),
@@ -87,11 +149,10 @@ impl Search<'_> {
         base: &Arena,
         budget: &WorkBudget,
         worker: usize,
-    ) -> Expansion {
+        buffer: &mut Buffer,
+    ) -> ValueDelta {
+        buffer.reset();
         let mut arena = base.fork(budget, worker);
-        let mut events = vec![];
-        let mut local = StateStore::new(self.store.width);
-        let mut next = vec![None; self.store.width];
         for parent in range {
             let current = self.store.state(parent);
             let mut enabled = false;
@@ -100,59 +161,86 @@ impl Search<'_> {
                     branch,
                     0,
                     EvalContext::new(current, &[]),
-                    &mut next,
+                    &mut buffer.next,
                     &mut arena,
                     &mut |values, arena| {
                         enabled = true;
                         let hash = get_hash(values)?;
                         let checked = if self.nodes[parent].depth < self.bounds.max_depth
                             && self.store.find(hash, values).is_none()
-                            && local.find(hash, values).is_none()
+                            && buffer.local.find(hash, values).is_none()
                         {
-                            local.push(hash, values)?;
-                            check_invariants(
-                                self.program,
-                                &values.iter().flatten().copied().collect::<Vec<_>>(),
-                                arena,
-                            )
+                            buffer.local.push(hash, values)?;
+                            buffer.current.clear();
+                            buffer.current.extend(values.iter().flatten().copied());
+                            check_invariants(self.program, &buffer.current, arena)
                         } else {
                             Ok(None)
                         };
                         let stop = !matches!(checked, Ok(None));
-                        events.push(Event::Candidate {
+                        buffer.events.push(Event::Candidate {
                             parent,
                             action,
-                            values: values.to_vec(),
+                            start: buffer.values.len(),
                             checked,
                         });
+                        buffer.values.extend_from_slice(values);
                         Ok(stop)
                     },
                 );
                 match result {
-                    Ok(true) => {
-                        return Expansion {
-                            delta: arena.into_delta(),
-                            events,
-                        };
-                    }
+                    Ok(true) => return arena.into_delta(),
                     Ok(false) => {}
                     Err(error) => {
-                        events.push(Event::Error(error));
-                        return Expansion {
-                            delta: arena.into_delta(),
-                            events,
-                        };
+                        buffer.events.push(Event::Error(error));
+                        return arena.into_delta();
                     }
                 }
             }
             if !enabled && self.program.check_deadlock {
-                events.push(Event::Deadlock(parent));
+                buffer.events.push(Event::Deadlock(parent));
                 break;
             }
         }
-        Expansion {
-            delta: arena.into_delta(),
-            events,
+        arena.into_delta()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn candidates_keep_snapshots_and_order_when_buffers_are_reused() {
+        let mut buffer = Buffer::new(2);
+        let mut values = [Some(Scalar::Int(1)), Some(Scalar::Int(2))];
+        buffer.candidate(3, 0, &values, Ok(None));
+        values[0] = Some(Scalar::Int(7));
+        buffer.candidate(4, 1, &values, Ok(None));
+        assert_eq!(
+            buffer.values,
+            [
+                Some(Scalar::Int(1)),
+                Some(Scalar::Int(2)),
+                Some(Scalar::Int(7)),
+                Some(Scalar::Int(2))
+            ]
+        );
+        for (event, expected) in buffer.events.iter().zip([(3, 0, 0), (4, 1, 2)]) {
+            let Event::Candidate {
+                parent,
+                action,
+                start,
+                ..
+            } = event
+            else {
+                panic!("expected candidate")
+            };
+            assert_eq!((*parent, *action, *start), expected);
         }
+        buffer.reset();
+        buffer.candidate(5, 2, &values, Ok(None));
+        assert_eq!(buffer.values, values);
+        assert_eq!(buffer.events.len(), 1);
     }
 }
