@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { compileTlaSafety } from "../../src/tla-safety.js";
 import { cases } from "../single-model/cases.js";
 
@@ -33,7 +33,10 @@ await writeFile(
   `${JSON.stringify(inputs, null, 2)}\n`,
 );
 
-await writeFile(
-  "crates/modelt-core/src/bench-fixtures.json",
-  `${JSON.stringify(inputs, null, 2)}\n`,
+assert.deepEqual(
+  JSON.parse(
+    await readFile("crates/modelt-core/src/bench-fixtures.json", "utf8"),
+  ),
+  inputs,
+  "Regenerate the checked-in benchmark fixture when changing inputs",
 );
