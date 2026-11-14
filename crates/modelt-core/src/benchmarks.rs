@@ -125,6 +125,7 @@ mod measurements {
                 bencher.iter_batched(
                     || {
                         let mut arena = Arena::new(u32::MAX);
+                        arena.register_memberships(&input.program.invariants[0].expression);
                         let states: Vec<_> = (0..4096)
                             .map(|number| {
                                 let state = if name == "function-cube" {
