@@ -1,0 +1,35 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-replay/parallel-channels/before-native-8-0-normal/input.json",
+    "8",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/criterion-safety/before/modelt-core"
+  ],
+  "exit": 0,
+  "wallMs": 73.78691700000036,
+  "stdout": "{\"frontendMs\":3.7407089999999954,\"engineStartupMs\":3.104875,\"apiMs\":1.0748329999999982,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":64,\"generated\":193,\"depth\":8,\"work\":3656,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.7407089999999954,
+    "engineStartupMs": 3.104875,
+    "apiMs": 1.0748329999999982,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 64,
+      "generated": 193,
+      "depth": 8,
+      "work": 3656,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

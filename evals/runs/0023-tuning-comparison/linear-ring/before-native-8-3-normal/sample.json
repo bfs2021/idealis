@@ -1,0 +1,40 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-comparison/linear-ring/before-native-8-3-normal/input.json",
+    "8",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/criterion-safety/before/modelt-core"
+  ],
+  "exit": 0,
+  "wallMs": 216.2549590000417,
+  "stdout": "{\"frontendMs\":2.8145410000000055,\"engineStartupMs\":3.170957999999999,\"apiMs\":139.28525,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":1000000,\"generated\":1000001,\"depth\":999999,\"work\":2000002,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 2.8145410000000055,
+    "engineStartupMs": 3.170957999999999,
+    "apiMs": 139.28525,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 1000000,
+      "generated": 1000001,
+      "depth": 999999,
+      "work": 2000002,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 231.11491700005718,
+      "bytes": 81264640
+    }
+  ],
+  "sampledMaxRssBytes": 81264640,
+  "phases": null,
+  "phaseError": null
+}
