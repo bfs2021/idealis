@@ -1,10 +1,12 @@
-use crate::safety::Scalar;
+use crate::safety::{Expression, Scalar};
+use crate::safety_expressions::MembershipSet;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_work::WorkBudget;
 use crate::{CoreError, Value};
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::hash::{BuildHasherDefault, Hash, Hasher};
+use std::sync::Arc;
 
 #[derive(Debug, PartialEq, Eq, Hash)]
 enum Cell {
@@ -45,6 +47,8 @@ impl Hasher for ValueHasher {
     }
 }
 
+type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
+
 pub(crate) struct Arena<'a> {
     base: Option<&'a Arena<'a>>,
     offset: usize,
@@ -55,6 +59,8 @@ pub(crate) struct Arena<'a> {
     index: HashMap<u64, u32, BuildHasherDefault<ValueHasher>>,
     links: Vec<Option<u32>>,
     data: HashMap<Value, Scalar>,
+    types: HashMap<Expression, Option<Arc<MembershipSet>>>,
+    membership: MembershipCache,
     pub work: u32,
     maximum: u32,
 }
@@ -71,6 +77,8 @@ impl Arena<'_> {
             index: HashMap::default(),
             links: vec![],
             data: HashMap::new(),
+            types: HashMap::new(),
+            membership: HashMap::new(),
             work: 0,
             maximum,
         }
@@ -110,6 +118,8 @@ impl Arena<'_> {
         ValueDelta {
             cells: self.cells,
             data: self.data,
+            types: self.types,
+            membership: self.membership,
             offset: self.offset,
             work: self.work,
         }
@@ -140,7 +150,78 @@ impl Arena<'_> {
                 .entry(value)
                 .or_insert_with(|| mapping.get(scalar));
         }
+        for (expression, prepared) in delta.types {
+            self.types
+                .entry(expression)
+                .or_insert_with(|| prepared.map(|prepared| prepared.remap(&mapping)));
+        }
+        for ((_, value), results) in delta.membership {
+            for (prepared, result) in results {
+                self.cache_membership_result(prepared.remap(&mapping), mapping.get(value), result);
+            }
+        }
         Ok(mapping)
+    }
+    pub fn prepared_membership(
+        &self,
+        expression: &Expression,
+    ) -> Option<Option<Arc<MembershipSet>>> {
+        self.types.get(expression).cloned().or_else(|| {
+            self.base
+                .and_then(|base| base.prepared_membership(expression))
+        })
+    }
+    pub fn cache_membership_type(
+        &mut self,
+        expression: &Expression,
+        prepared: Option<Arc<MembershipSet>>,
+    ) {
+        self.types.insert(expression.clone(), prepared);
+    }
+    pub fn membership_result(&self, prepared: &Arc<MembershipSet>, value: Scalar) -> Option<bool> {
+        self.membership
+            .get(&(prepared.fingerprint(), value))
+            .and_then(|entries| {
+                entries
+                    .iter()
+                    .find(|(stored, _)| stored == prepared)
+                    .map(|(_, result)| *result)
+            })
+            .or_else(|| {
+                self.base
+                    .and_then(|base| base.membership_result(prepared, value))
+            })
+    }
+    pub fn cache_membership_result(
+        &mut self,
+        prepared: Arc<MembershipSet>,
+        value: Scalar,
+        result: bool,
+    ) {
+        let entries = self
+            .membership
+            .entry((prepared.fingerprint(), value))
+            .or_default();
+        if !entries.iter().any(|(stored, _)| *stored == prepared) {
+            entries.push((prepared, result));
+        }
+    }
+    pub fn has_domain(&self, function: Scalar, domain: Scalar) -> Result<bool, CoreError> {
+        let Cell::Function(entries) = self.cell(function)? else {
+            return Err(CoreError::protocol("Expected a function"));
+        };
+        let Ok(Cell::Set(keys)) = self.cell(domain) else {
+            return Err(CoreError::protocol("Incomparable TLA values"));
+        };
+        if entries.len() != keys.len() {
+            return Ok(false);
+        }
+        for ((actual, _), expected) in entries.iter().zip(keys) {
+            if !self.equal(*actual, *expected)? {
+                return Ok(false);
+            }
+        }
+        Ok(true)
     }
     pub fn text(&self, value: Scalar) -> Option<&str> {
         if let Scalar::Ref(index) = value
@@ -621,6 +702,8 @@ fn work_exhausted() -> CoreError {
 pub(crate) struct ValueDelta {
     cells: Vec<Cell>,
     data: HashMap<Value, Scalar>,
+    types: HashMap<Expression, Option<Arc<MembershipSet>>>,
+    membership: MembershipCache,
     offset: usize,
     pub work: u32,
 }
