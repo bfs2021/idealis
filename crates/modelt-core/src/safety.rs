@@ -422,12 +422,6 @@ impl StateStore {
             links: vec![],
         }
     }
-    #[cfg(not(target_arch = "wasm32"))]
-    fn clear(&mut self) {
-        self.values.clear();
-        self.heads.clear();
-        self.links.clear();
-    }
     fn state(&self, index: usize) -> &[Scalar] {
         &self.values[index * self.width..(index + 1) * self.width]
     }
@@ -761,7 +755,7 @@ impl<'program> Search<'program> {
             arena,
             &mut |values, arena| {
                 *enabled = true;
-                self.accept(values, parent, branch.index, arena, None)?;
+                self.accept(values, parent, branch.index, arena)?;
                 Ok(self.stopped())
             },
         )?;
@@ -773,7 +767,6 @@ impl<'program> Search<'program> {
         parent: Option<usize>,
         action: usize,
         arena: &mut Arena,
-        checked: Option<Result<Option<usize>, CoreError>>,
     ) -> Result<(), CoreError> {
         let hash = get_hash(values)?;
         self.result.generated += 1;
@@ -815,12 +808,8 @@ impl<'program> Search<'program> {
         } else if !self.roots.contains(&index) {
             self.roots.push(index);
         }
-        let checked = checked.transpose()?;
         if existing.is_none() {
-            let violation = match checked {
-                Some(violation) => violation,
-                None => check_invariants(self.program, self.store.state(index), arena)?,
-            };
+            let violation = check_invariants(self.program, self.store.state(index), arena)?;
             if let Some(predicate) = violation {
                 self.result.status = "invariant-violation".into();
                 self.result.reason = None;
