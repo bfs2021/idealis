@@ -1,0 +1,206 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.02s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/readme-comparison/evaluate.js '.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' '.artifacts/tlc/tla2tools.jar' '.artifacts/tlc/arm64/jre-arm64.tar.gz' 'evals/runs/0022-readme-comparison'
+Starting counter-product tla-ts iteration=0
+{"input":"counter-product","route":"tla-ts","iteration":0,"warmup":true,"status":"complete","wallMs":5223.8679170000005,"work":null,"intervalMs":5139.0605000000005,"sampledMaxRssBytes":1263517696,"path":"counter-product/tla-ts-0/sample.json","error":null}
+Starting counter-product tlc-1 iteration=0
+{"input":"counter-product","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":6443.9316659999995,"work":null,"intervalMs":5707.683584,"sampledMaxRssBytes":3098361856,"path":"counter-product/tlc-1-0/sample.json","error":null}
+Starting counter-product tlc-8 iteration=0
+{"input":"counter-product","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":6684.616874999998,"work":null,"intervalMs":6056.353292,"sampledMaxRssBytes":3406856192,"path":"counter-product/tlc-8-0/sample.json","error":null}
+Starting counter-product wasm iteration=0
+{"input":"counter-product","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":3776.0704160000023,"work":106168325,"intervalMs":3690.8127919999997,"sampledMaxRssBytes":805535744,"path":"counter-product/wasm-0/sample.json","error":null}
+Starting counter-product native-1 iteration=0
+{"input":"counter-product","route":"native-1","iteration":0,"warmup":true,"status":"complete","wallMs":3041.6041669999977,"work":106168325,"intervalMs":2776.3427920000004,"sampledMaxRssBytes":452755456,"path":"counter-product/native-1-0/sample.json","error":null}
+Starting counter-product native-8 iteration=0
+{"input":"counter-product","route":"native-8","iteration":0,"warmup":true,"status":"complete","wallMs":3488.647000000001,"work":106168325,"intervalMs":3423.6549999999997,"sampledMaxRssBytes":433012736,"path":"counter-product/native-8-0/sample.json","error":null}
+Starting counter-product tlc-1 iteration=1
+{"input":"counter-product","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":6084.396708999997,"work":null,"intervalMs":5465.6732079999965,"sampledMaxRssBytes":3424321536,"path":"counter-product/tlc-1-1/sample.json","error":null}
+Starting counter-product tlc-8 iteration=1
+{"input":"counter-product","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":6678.340041000003,"work":null,"intervalMs":6029.664833000003,"sampledMaxRssBytes":3431923712,"path":"counter-product/tlc-8-1/sample.json","error":null}
+Starting counter-product wasm iteration=1
+{"input":"counter-product","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":3818.0135410000003,"work":106168325,"intervalMs":3728.557083,"sampledMaxRssBytes":804257792,"path":"counter-product/wasm-1/sample.json","error":null}
+Starting counter-product native-1 iteration=1
+{"input":"counter-product","route":"native-1","iteration":1,"warmup":false,"status":"complete","wallMs":2859.1421249999985,"work":106168325,"intervalMs":2788.480542,"sampledMaxRssBytes":445333504,"path":"counter-product/native-1-1/sample.json","error":null}
+Starting counter-product native-8 iteration=1
+{"input":"counter-product","route":"native-8","iteration":1,"warmup":false,"status":"complete","wallMs":3504.18275,"work":106168325,"intervalMs":3439.657584,"sampledMaxRssBytes":465600512,"path":"counter-product/native-8-1/sample.json","error":null}
+Starting counter-product tla-ts iteration=1
+{"input":"counter-product","route":"tla-ts","iteration":1,"warmup":false,"status":"complete","wallMs":5176.8421670000025,"work":null,"intervalMs":5098.271542,"sampledMaxRssBytes":1274904576,"path":"counter-product/tla-ts-1/sample.json","error":null}
+Starting counter-product tlc-8 iteration=2
+{"input":"counter-product","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":6415.377291999997,"work":null,"intervalMs":5787.819000000003,"sampledMaxRssBytes":3443949568,"path":"counter-product/tlc-8-2/sample.json","error":null}
+Starting counter-product wasm iteration=2
+{"input":"counter-product","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":3761.3823749999938,"work":106168325,"intervalMs":3681.888458,"sampledMaxRssBytes":806207488,"path":"counter-product/wasm-2/sample.json","error":null}
+Starting counter-product native-1 iteration=2
+{"input":"counter-product","route":"native-1","iteration":2,"warmup":false,"status":"complete","wallMs":2817.185500000007,"work":106168325,"intervalMs":2751.7118750000004,"sampledMaxRssBytes":411631616,"path":"counter-product/native-1-2/sample.json","error":null}
+Starting counter-product native-8 iteration=2
+{"input":"counter-product","route":"native-8","iteration":2,"warmup":false,"status":"complete","wallMs":3649.868208,"work":106168325,"intervalMs":3585.059167,"sampledMaxRssBytes":448118784,"path":"counter-product/native-8-2/sample.json","error":null}
+Starting counter-product tla-ts iteration=2
+{"input":"counter-product","route":"tla-ts","iteration":2,"warmup":false,"status":"complete","wallMs":5190.108041999993,"work":null,"intervalMs":5113.695708,"sampledMaxRssBytes":1274413056,"path":"counter-product/tla-ts-2/sample.json","error":null}
+Starting counter-product tlc-1 iteration=2
+{"input":"counter-product","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":6552.708541,"work":null,"intervalMs":5946.138665999999,"sampledMaxRssBytes":2844426240,"path":"counter-product/tlc-1-2/sample.json","error":null}
+Starting counter-product wasm iteration=3
+{"input":"counter-product","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":3979.9064170000056,"work":106168325,"intervalMs":3909.4059159999997,"sampledMaxRssBytes":805797888,"path":"counter-product/wasm-3/sample.json","error":null}
+Starting counter-product native-1 iteration=3
+{"input":"counter-product","route":"native-1","iteration":3,"warmup":false,"status":"complete","wallMs":2850.634625000006,"work":106168325,"intervalMs":2784.856417,"sampledMaxRssBytes":450478080,"path":"counter-product/native-1-3/sample.json","error":null}
+Starting counter-product native-8 iteration=3
+{"input":"counter-product","route":"native-8","iteration":3,"warmup":false,"status":"complete","wallMs":3645.916167000003,"work":106168325,"intervalMs":3581.6169579999996,"sampledMaxRssBytes":421756928,"path":"counter-product/native-8-3/sample.json","error":null}
+Starting counter-product tla-ts iteration=3
+{"input":"counter-product","route":"tla-ts","iteration":3,"warmup":false,"status":"complete","wallMs":5298.806792000003,"work":null,"intervalMs":5218.940417000001,"sampledMaxRssBytes":1286438912,"path":"counter-product/tla-ts-3/sample.json","error":null}
+Starting counter-product tlc-1 iteration=3
+{"input":"counter-product","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":6134.216042,"work":null,"intervalMs":5508.980291999993,"sampledMaxRssBytes":3426091008,"path":"counter-product/tlc-1-3/sample.json","error":null}
+Starting counter-product tlc-8 iteration=3
+{"input":"counter-product","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":6475.689874999996,"work":null,"intervalMs":5858.294582999995,"sampledMaxRssBytes":3443097600,"path":"counter-product/tlc-8-3/sample.json","error":null}
+Starting function-cube tla-ts iteration=0
+{"input":"function-cube","route":"tla-ts","iteration":0,"warmup":true,"status":"complete","wallMs":5437.014833000008,"work":null,"intervalMs":5353.706708,"sampledMaxRssBytes":767885312,"path":"function-cube/tla-ts-0/sample.json","error":null}
+Starting function-cube tlc-1 iteration=0
+{"input":"function-cube","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":12892.226500000004,"work":null,"intervalMs":12275.126749999981,"sampledMaxRssBytes":2623782912,"path":"function-cube/tlc-1-0/sample.json","error":null}
+Starting function-cube tlc-8 iteration=0
+{"input":"function-cube","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":4825.263292000018,"work":null,"intervalMs":4156.3994999999995,"sampledMaxRssBytes":2660368384,"path":"function-cube/tlc-8-0/sample.json","error":null}
+Starting function-cube wasm iteration=0
+{"input":"function-cube","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":19589.792625000002,"work":109051928,"intervalMs":19489.444042,"sampledMaxRssBytes":929398784,"path":"function-cube/wasm-0/sample.json","error":null}
+Starting function-cube native-1 iteration=0
+{"input":"function-cube","route":"native-1","iteration":0,"warmup":true,"status":"complete","wallMs":9548.275958000013,"work":109051928,"intervalMs":9473.974125,"sampledMaxRssBytes":960167936,"path":"function-cube/native-1-0/sample.json","error":null}
+Starting function-cube native-8 iteration=0
+{"input":"function-cube","route":"native-8","iteration":0,"warmup":true,"status":"complete","wallMs":5080.112332999997,"work":168546943,"intervalMs":5010.585459,"sampledMaxRssBytes":954155008,"path":"function-cube/native-8-0/sample.json","error":null}
+Starting function-cube tlc-1 iteration=1
+{"input":"function-cube","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":12811.244915999996,"work":null,"intervalMs":12187.235292000027,"sampledMaxRssBytes":2626895872,"path":"function-cube/tlc-1-1/sample.json","error":null}
+Starting function-cube tlc-8 iteration=1
+{"input":"function-cube","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":4365.831000000006,"work":null,"intervalMs":3752.12608300001,"sampledMaxRssBytes":2637791232,"path":"function-cube/tlc-8-1/sample.json","error":null}
+Starting function-cube wasm iteration=1
+{"input":"function-cube","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":18707.762874999986,"work":109051928,"intervalMs":18596.9365,"sampledMaxRssBytes":930250752,"path":"function-cube/wasm-1/sample.json","error":null}
+Starting function-cube native-1 iteration=1
+{"input":"function-cube","route":"native-1","iteration":1,"warmup":false,"status":"complete","wallMs":9728.836542000005,"work":109051928,"intervalMs":9652.546,"sampledMaxRssBytes":955498496,"path":"function-cube/native-1-1/sample.json","error":null}
+Starting function-cube native-8 iteration=1
+{"input":"function-cube","route":"native-8","iteration":1,"warmup":false,"status":"complete","wallMs":5325.545916000003,"work":168546943,"intervalMs":5243.307916000001,"sampledMaxRssBytes":952958976,"path":"function-cube/native-8-1/sample.json","error":null}
+Starting function-cube tla-ts iteration=1
+{"input":"function-cube","route":"tla-ts","iteration":1,"warmup":false,"status":"complete","wallMs":5387.727500000008,"work":null,"intervalMs":5310.087375,"sampledMaxRssBytes":772587520,"path":"function-cube/tla-ts-1/sample.json","error":null}
+Starting function-cube tlc-8 iteration=2
+{"input":"function-cube","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":4560.570957999997,"work":null,"intervalMs":3892.297499999986,"sampledMaxRssBytes":2651193344,"path":"function-cube/tlc-8-2/sample.json","error":null}
+Starting function-cube wasm iteration=2
+{"input":"function-cube","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":18665.689332999988,"work":109051928,"intervalMs":18572.234624999997,"sampledMaxRssBytes":930136064,"path":"function-cube/wasm-2/sample.json","error":null}
+Starting function-cube native-1 iteration=2
+{"input":"function-cube","route":"native-1","iteration":2,"warmup":false,"status":"complete","wallMs":9345.201791,"work":109051928,"intervalMs":9271.829083,"sampledMaxRssBytes":960151552,"path":"function-cube/native-1-2/sample.json","error":null}
+Starting function-cube native-8 iteration=2
+{"input":"function-cube","route":"native-8","iteration":2,"warmup":false,"status":"complete","wallMs":5052.11262499998,"work":168546943,"intervalMs":4982.922208,"sampledMaxRssBytes":955793408,"path":"function-cube/native-8-2/sample.json","error":null}
+Starting function-cube tla-ts iteration=2
+{"input":"function-cube","route":"tla-ts","iteration":2,"warmup":false,"status":"complete","wallMs":5245.396542000002,"work":null,"intervalMs":5171.998041,"sampledMaxRssBytes":774340608,"path":"function-cube/tla-ts-2/sample.json","error":null}
+Starting function-cube tlc-1 iteration=2
+{"input":"function-cube","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":12482.501832999988,"work":null,"intervalMs":11836.021000000008,"sampledMaxRssBytes":2647310336,"path":"function-cube/tlc-1-2/sample.json","error":null}
+Starting function-cube wasm iteration=3
+{"input":"function-cube","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":17638.48545799998,"work":109051928,"intervalMs":17539.545708,"sampledMaxRssBytes":929972224,"path":"function-cube/wasm-3/sample.json","error":null}
+Starting function-cube native-1 iteration=3
+{"input":"function-cube","route":"native-1","iteration":3,"warmup":false,"status":"complete","wallMs":9155.349792000023,"work":109051928,"intervalMs":9080.348125,"sampledMaxRssBytes":960020480,"path":"function-cube/native-1-3/sample.json","error":null}
+Starting function-cube native-8 iteration=3
+{"input":"function-cube","route":"native-8","iteration":3,"warmup":false,"status":"complete","wallMs":5101.264666999981,"work":168546943,"intervalMs":5029.781625,"sampledMaxRssBytes":950648832,"path":"function-cube/native-8-3/sample.json","error":null}
+Starting function-cube tla-ts iteration=3
+{"input":"function-cube","route":"tla-ts","iteration":3,"warmup":false,"status":"complete","wallMs":5396.321041000017,"work":null,"intervalMs":5323.319375,"sampledMaxRssBytes":767819776,"path":"function-cube/tla-ts-3/sample.json","error":null}
+Starting function-cube tlc-1 iteration=3
+{"input":"function-cube","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":12647.430666,"work":null,"intervalMs":12038.274208999996,"sampledMaxRssBytes":2634301440,"path":"function-cube/tlc-1-3/sample.json","error":null}
+Starting function-cube tlc-8 iteration=3
+{"input":"function-cube","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":4443.964457999973,"work":null,"intervalMs":3842.81808300002,"sampledMaxRssBytes":2646900736,"path":"function-cube/tlc-8-3/sample.json","error":null}
+Starting parallel-channels tla-ts iteration=0
+{"input":"parallel-channels","route":"tla-ts","iteration":0,"warmup":true,"status":"complete","wallMs":16086.04137500003,"work":null,"intervalMs":16002.664125000001,"sampledMaxRssBytes":1229471744,"path":"parallel-channels/tla-ts-0/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=0
+{"input":"parallel-channels","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":23817.332082999987,"work":null,"intervalMs":23181.384458000015,"sampledMaxRssBytes":3160752128,"path":"parallel-channels/tlc-1-0/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=0
+{"input":"parallel-channels","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":6178.403292000003,"work":null,"intervalMs":5563.7910000000265,"sampledMaxRssBytes":3255943168,"path":"parallel-channels/tlc-8-0/sample.json","error":null}
+Starting parallel-channels wasm iteration=0
+{"input":"parallel-channels","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":30961.190833,"work":231735339,"intervalMs":30868.804207999998,"sampledMaxRssBytes":921059328,"path":"parallel-channels/wasm-0/sample.json","error":null}
+Starting parallel-channels native-1 iteration=0
+{"input":"parallel-channels","route":"native-1","iteration":0,"warmup":true,"status":"complete","wallMs":20658.190000000002,"work":231735339,"intervalMs":20586.491667000002,"sampledMaxRssBytes":967983104,"path":"parallel-channels/native-1-0/sample.json","error":null}
+Starting parallel-channels native-8 iteration=0
+{"input":"parallel-channels","route":"native-8","iteration":0,"warmup":true,"status":"complete","wallMs":9519.99995800003,"work":318785521,"intervalMs":9448.967416,"sampledMaxRssBytes":971063296,"path":"parallel-channels/native-8-0/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=1
+{"input":"parallel-channels","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":23734.21537499997,"work":null,"intervalMs":23079.529374999984,"sampledMaxRssBytes":3189669888,"path":"parallel-channels/tlc-1-1/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=1
+{"input":"parallel-channels","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":6807.179291999957,"work":null,"intervalMs":6190.439874999982,"sampledMaxRssBytes":3094593536,"path":"parallel-channels/tlc-8-1/sample.json","error":null}
+Starting parallel-channels wasm iteration=1
+{"input":"parallel-channels","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":31622.82166700001,"work":231735339,"intervalMs":31532.848875,"sampledMaxRssBytes":921010176,"path":"parallel-channels/wasm-1/sample.json","error":null}
+Starting parallel-channels native-1 iteration=1
+{"input":"parallel-channels","route":"native-1","iteration":1,"warmup":false,"status":"complete","wallMs":20733.380915999936,"work":231735339,"intervalMs":20659.17925,"sampledMaxRssBytes":968212480,"path":"parallel-channels/native-1-1/sample.json","error":null}
+Starting parallel-channels native-8 iteration=1
+{"input":"parallel-channels","route":"native-8","iteration":1,"warmup":false,"status":"complete","wallMs":9795.629958999925,"work":318785521,"intervalMs":9726.418082999999,"sampledMaxRssBytes":972193792,"path":"parallel-channels/native-8-1/sample.json","error":null}
+Starting parallel-channels tla-ts iteration=1
+{"input":"parallel-channels","route":"tla-ts","iteration":1,"warmup":false,"status":"complete","wallMs":16370.546708000009,"work":null,"intervalMs":16289.9675,"sampledMaxRssBytes":1230356480,"path":"parallel-channels/tla-ts-1/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=2
+{"input":"parallel-channels","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":6546.024250000017,"work":null,"intervalMs":5936.493832999957,"sampledMaxRssBytes":3197419520,"path":"parallel-channels/tlc-8-2/sample.json","error":null}
+Starting parallel-channels wasm iteration=2
+{"input":"parallel-channels","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":31414.60941699997,"work":231735339,"intervalMs":31328.826707999997,"sampledMaxRssBytes":920928256,"path":"parallel-channels/wasm-2/sample.json","error":null}
+Starting parallel-channels native-1 iteration=2
+{"input":"parallel-channels","route":"native-1","iteration":2,"warmup":false,"status":"complete","wallMs":20444.760917000007,"work":231735339,"intervalMs":20369.112458,"sampledMaxRssBytes":967786496,"path":"parallel-channels/native-1-2/sample.json","error":null}
+Starting parallel-channels native-8 iteration=2
+{"input":"parallel-channels","route":"native-8","iteration":2,"warmup":false,"status":"complete","wallMs":9158.733458000002,"work":318785521,"intervalMs":9089.644291,"sampledMaxRssBytes":976453632,"path":"parallel-channels/native-8-2/sample.json","error":null}
+Starting parallel-channels tla-ts iteration=2
+{"input":"parallel-channels","route":"tla-ts","iteration":2,"warmup":false,"status":"complete","wallMs":16286.61962500005,"work":null,"intervalMs":16204.682958,"sampledMaxRssBytes":1226080256,"path":"parallel-channels/tla-ts-2/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=2
+{"input":"parallel-channels","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":24314.953125,"work":null,"intervalMs":23682.068833000027,"sampledMaxRssBytes":3200598016,"path":"parallel-channels/tlc-1-2/sample.json","error":null}
+Starting parallel-channels wasm iteration=3
+{"input":"parallel-channels","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":30988.735749999993,"work":231735339,"intervalMs":30897.666833,"sampledMaxRssBytes":921452544,"path":"parallel-channels/wasm-3/sample.json","error":null}
+Starting parallel-channels native-1 iteration=3
+{"input":"parallel-channels","route":"native-1","iteration":3,"warmup":false,"status":"complete","wallMs":20781.586917000008,"work":231735339,"intervalMs":20707.135250000003,"sampledMaxRssBytes":967983104,"path":"parallel-channels/native-1-3/sample.json","error":null}
+Starting parallel-channels native-8 iteration=3
+{"input":"parallel-channels","route":"native-8","iteration":3,"warmup":false,"status":"complete","wallMs":9536.698749999981,"work":318785521,"intervalMs":9468.408416,"sampledMaxRssBytes":971030528,"path":"parallel-channels/native-8-3/sample.json","error":null}
+Starting parallel-channels tla-ts iteration=3
+{"input":"parallel-channels","route":"tla-ts","iteration":3,"warmup":false,"status":"complete","wallMs":16904.206041999976,"work":null,"intervalMs":16821.780667,"sampledMaxRssBytes":1226260480,"path":"parallel-channels/tla-ts-3/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=3
+{"input":"parallel-channels","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":23825.24870799994,"work":null,"intervalMs":23208.846541999956,"sampledMaxRssBytes":3143417856,"path":"parallel-channels/tlc-1-3/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=3
+{"input":"parallel-channels","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":7851.200667000026,"work":null,"intervalMs":7209.165250000078,"sampledMaxRssBytes":3101376512,"path":"parallel-channels/tlc-8-3/sample.json","error":null}
+Starting linear-ring tla-ts iteration=0
+{"input":"linear-ring","route":"tla-ts","iteration":0,"warmup":true,"status":"complete","wallMs":425.9291250000242,"work":null,"intervalMs":347.406708,"sampledMaxRssBytes":429850624,"path":"linear-ring/tla-ts-0/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=0
+{"input":"linear-ring","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":901.8252499999944,"work":null,"intervalMs":325.86954200000037,"sampledMaxRssBytes":552763392,"path":"linear-ring/tlc-1-0/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=0
+{"input":"linear-ring","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":1459.3920839999337,"work":null,"intervalMs":868.6920829999726,"sampledMaxRssBytes":542588928,"path":"linear-ring/tlc-8-0/sample.json","error":null}
+Starting linear-ring wasm iteration=0
+{"input":"linear-ring","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":249.50674999994226,"work":2000002,"intervalMs":174.463708,"sampledMaxRssBytes":168509440,"path":"linear-ring/wasm-0/sample.json","error":null}
+Starting linear-ring native-1 iteration=0
+{"input":"linear-ring","route":"native-1","iteration":0,"warmup":true,"status":"complete","wallMs":194.73620799998753,"work":2000002,"intervalMs":123.030666,"sampledMaxRssBytes":null,"path":"linear-ring/native-1-0/sample.json","error":null}
+Starting linear-ring native-8 iteration=0
+{"input":"linear-ring","route":"native-8","iteration":0,"warmup":true,"status":"complete","wallMs":186.05079200002365,"work":2000002,"intervalMs":121.24525,"sampledMaxRssBytes":null,"path":"linear-ring/native-8-0/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=1
+{"input":"linear-ring","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":895.1070840000175,"work":null,"intervalMs":332.4875410000095,"sampledMaxRssBytes":559841280,"path":"linear-ring/tlc-1-1/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=1
+{"input":"linear-ring","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":1441.422332999995,"work":null,"intervalMs":851.6120830000145,"sampledMaxRssBytes":560906240,"path":"linear-ring/tlc-8-1/sample.json","error":null}
+Starting linear-ring wasm iteration=1
+{"input":"linear-ring","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":240.55174999998417,"work":2000002,"intervalMs":170.784583,"sampledMaxRssBytes":169279488,"path":"linear-ring/wasm-1/sample.json","error":null}
+Starting linear-ring native-1 iteration=1
+{"input":"linear-ring","route":"native-1","iteration":1,"warmup":false,"status":"complete","wallMs":187.11699999996927,"work":2000002,"intervalMs":121.52504200000001,"sampledMaxRssBytes":null,"path":"linear-ring/native-1-1/sample.json","error":null}
+Starting linear-ring native-8 iteration=1
+{"input":"linear-ring","route":"native-8","iteration":1,"warmup":false,"status":"complete","wallMs":188.84587499999907,"work":2000002,"intervalMs":122.65783300000001,"sampledMaxRssBytes":null,"path":"linear-ring/native-8-1/sample.json","error":null}
+Starting linear-ring tla-ts iteration=1
+{"input":"linear-ring","route":"tla-ts","iteration":1,"warmup":false,"status":"complete","wallMs":411.27129199996125,"work":null,"intervalMs":345.20133400000003,"sampledMaxRssBytes":338903040,"path":"linear-ring/tla-ts-1/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=2
+{"input":"linear-ring","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":1391.6129590000492,"work":null,"intervalMs":813.0477919999976,"sampledMaxRssBytes":544292864,"path":"linear-ring/tlc-8-2/sample.json","error":null}
+Starting linear-ring wasm iteration=2
+{"input":"linear-ring","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":243.8678329999093,"work":2000002,"intervalMs":169.688125,"sampledMaxRssBytes":168607744,"path":"linear-ring/wasm-2/sample.json","error":null}
+Starting linear-ring native-1 iteration=2
+{"input":"linear-ring","route":"native-1","iteration":2,"warmup":false,"status":"complete","wallMs":185.70441699994262,"work":2000002,"intervalMs":122.20479200000001,"sampledMaxRssBytes":null,"path":"linear-ring/native-1-2/sample.json","error":null}
+Starting linear-ring native-8 iteration=2
+{"input":"linear-ring","route":"native-8","iteration":2,"warmup":false,"status":"complete","wallMs":186.88133300002664,"work":2000002,"intervalMs":122.081625,"sampledMaxRssBytes":null,"path":"linear-ring/native-8-2/sample.json","error":null}
+Starting linear-ring tla-ts iteration=2
+{"input":"linear-ring","route":"tla-ts","iteration":2,"warmup":false,"status":"complete","wallMs":410.11074999999255,"work":null,"intervalMs":343.704625,"sampledMaxRssBytes":279658496,"path":"linear-ring/tla-ts-2/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=2
+{"input":"linear-ring","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":899.9914170000702,"work":null,"intervalMs":326.1842909998959,"sampledMaxRssBytes":550748160,"path":"linear-ring/tlc-1-2/sample.json","error":null}
+Starting linear-ring wasm iteration=3
+{"input":"linear-ring","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":252.421667000046,"work":2000002,"intervalMs":170.706959,"sampledMaxRssBytes":166690816,"path":"linear-ring/wasm-3/sample.json","error":null}
+Starting linear-ring native-1 iteration=3
+{"input":"linear-ring","route":"native-1","iteration":3,"warmup":false,"status":"complete","wallMs":185.65037499996834,"work":2000002,"intervalMs":121.70279200000002,"sampledMaxRssBytes":null,"path":"linear-ring/native-1-3/sample.json","error":null}
+Starting linear-ring native-8 iteration=3
+{"input":"linear-ring","route":"native-8","iteration":3,"warmup":false,"status":"complete","wallMs":186.28162500006147,"work":2000002,"intervalMs":121.620375,"sampledMaxRssBytes":null,"path":"linear-ring/native-8-3/sample.json","error":null}
+Starting linear-ring tla-ts iteration=3
+{"input":"linear-ring","route":"tla-ts","iteration":3,"warmup":false,"status":"complete","wallMs":405.7880000000587,"work":null,"intervalMs":340.85454100000004,"sampledMaxRssBytes":258506752,"path":"linear-ring/tla-ts-3/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=3
+{"input":"linear-ring","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":917.0411249999888,"work":null,"intervalMs":352.76833300001454,"sampledMaxRssBytes":575602688,"path":"linear-ring/tlc-1-3/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=3
+{"input":"linear-ring","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":1439.5840829999652,"work":null,"intervalMs":835.375250000041,"sampledMaxRssBytes":545456128,"path":"linear-ring/tlc-8-3/sample.json","error":null}
+[{"input":"counter-product","route":"tla-ts","status":"complete","wall":{"median":5190.108041999993,"min":5176.8421670000025,"max":5298.806792000003},"interval":{"median":5113.695708,"min":5098.271542,"max":5218.940417000001},"sampledMaxRssBytes":1286438912},{"input":"counter-product","route":"tlc-1","status":"complete","wall":{"median":6134.216042,"min":6084.396708999997,"max":6552.708541},"interval":{"median":5508.980291999993,"min":5465.6732079999965,"max":5946.138665999999},"sampledMaxRssBytes":3426091008},{"input":"counter-product","route":"tlc-8","status":"complete","wall":{"median":6475.689874999996,"min":6415.377291999997,"max":6678.340041000003},"interval":{"median":5858.294582999995,"min":5787.819000000003,"max":6029.664833000003},"sampledMaxRssBytes":3443949568},{"input":"counter-product","route":"wasm","status":"complete","wall":{"median":3818.0135410000003,"min":3761.3823749999938,"max":3979.9064170000056},"interval":{"median":3728.557083,"min":3681.888458,"max":3909.4059159999997},"sampledMaxRssBytes":806207488},{"input":"counter-product","route":"native-1","status":"complete","wall":{"median":2850.634625000006,"min":2817.185500000007,"max":2859.1421249999985},"interval":{"median":2784.856417,"min":2751.7118750000004,"max":2788.480542},"sampledMaxRssBytes":450478080},{"input":"counter-product","route":"native-8","status":"complete","wall":{"median":3645.916167000003,"min":3504.18275,"max":3649.868208},"interval":{"median":3581.6169579999996,"min":3439.657584,"max":3585.059167},"sampledMaxRssBytes":465600512},{"input":"function-cube","route":"tla-ts","status":"complete","wall":{"median":5387.727500000008,"min":5245.396542000002,"max":5396.321041000017},"interval":{"median":5310.087375,"min":5171.998041,"max":5323.319375},"sampledMaxRssBytes":774340608},{"input":"function-cube","route":"tlc-1","status":"complete","wall":{"median":12647.430666,"min":12482.501832999988,"max":12811.244915999996},"interval":{"median":12038.274208999996,"min":11836.021000000008,"max":12187.235292000027},"sampledMaxRssBytes":2647310336},{"input":"function-cube","route":"tlc-8","status":"complete","wall":{"median":4443.964457999973,"min":4365.831000000006,"max":4560.570957999997},"interval":{"median":3842.81808300002,"min":3752.12608300001,"max":3892.297499999986},"sampledMaxRssBytes":2651193344},{"input":"function-cube","route":"wasm","status":"complete","wall":{"median":18665.689332999988,"min":17638.48545799998,"max":18707.762874999986},"interval":{"median":18572.234624999997,"min":17539.545708,"max":18596.9365},"sampledMaxRssBytes":930250752},{"input":"function-cube","route":"native-1","status":"complete","wall":{"median":9345.201791,"min":9155.349792000023,"max":9728.836542000005},"interval":{"median":9271.829083,"min":9080.348125,"max":9652.546},"sampledMaxRssBytes":960151552},{"input":"function-cube","route":"native-8","status":"complete","wall":{"median":5101.264666999981,"min":5052.11262499998,"max":5325.545916000003},"interval":{"median":5029.781625,"min":4982.922208,"max":5243.307916000001},"sampledMaxRssBytes":955793408},{"input":"parallel-channels","route":"tla-ts","status":"complete","wall":{"median":16370.546708000009,"min":16286.61962500005,"max":16904.206041999976},"interval":{"median":16289.9675,"min":16204.682958,"max":16821.780667},"sampledMaxRssBytes":1230356480},{"input":"parallel-channels","route":"tlc-1","status":"complete","wall":{"median":23825.24870799994,"min":23734.21537499997,"max":24314.953125},"interval":{"median":23208.846541999956,"min":23079.529374999984,"max":23682.068833000027},"sampledMaxRssBytes":3200598016},{"input":"parallel-channels","route":"tlc-8","status":"complete","wall":{"median":6807.179291999957,"min":6546.024250000017,"max":7851.200667000026},"interval":{"median":6190.439874999982,"min":5936.493832999957,"max":7209.165250000078},"sampledMaxRssBytes":3197419520},{"input":"parallel-channels","route":"wasm","status":"complete","wall":{"median":31414.60941699997,"min":30988.735749999993,"max":31622.82166700001},"interval":{"median":31328.826707999997,"min":30897.666833,"max":31532.848875},"sampledMaxRssBytes":921452544},{"input":"parallel-channels","route":"native-1","status":"complete","wall":{"median":20733.380915999936,"min":20444.760917000007,"max":20781.586917000008},"interval":{"median":20659.17925,"min":20369.112458,"max":20707.135250000003},"sampledMaxRssBytes":968212480},{"input":"parallel-channels","route":"native-8","status":"complete","wall":{"median":9536.698749999981,"min":9158.733458000002,"max":9795.629958999925},"interval":{"median":9468.408416,"min":9089.644291,"max":9726.418082999999},"sampledMaxRssBytes":976453632},{"input":"linear-ring","route":"tla-ts","status":"complete","wall":{"median":410.11074999999255,"min":405.7880000000587,"max":411.27129199996125},"interval":{"median":343.704625,"min":340.85454100000004,"max":345.20133400000003},"sampledMaxRssBytes":338903040},{"input":"linear-ring","route":"tlc-1","status":"complete","wall":{"median":899.9914170000702,"min":895.1070840000175,"max":917.0411249999888},"interval":{"median":332.4875410000095,"min":326.1842909998959,"max":352.76833300001454},"sampledMaxRssBytes":575602688},{"input":"linear-ring","route":"tlc-8","status":"complete","wall":{"median":1439.5840829999652,"min":1391.6129590000492,"max":1441.422332999995},"interval":{"median":835.375250000041,"min":813.0477919999976,"max":851.6120830000145},"sampledMaxRssBytes":560906240},{"input":"linear-ring","route":"wasm","status":"complete","wall":{"median":243.8678329999093,"min":240.55174999998417,"max":252.421667000046},"interval":{"median":170.706959,"min":169.688125,"max":170.784583},"sampledMaxRssBytes":169279488},{"input":"linear-ring","route":"native-1","status":"complete","wall":{"median":185.70441699994262,"min":185.65037499996834,"max":187.11699999996927},"interval":{"median":121.70279200000002,"min":121.52504200000001,"max":122.20479200000001},"sampledMaxRssBytes":null},{"input":"linear-ring","route":"native-8","status":"complete","wall":{"median":186.88133300002664,"min":186.28162500006147,"max":188.84587499999907},"interval":{"median":122.081625,"min":121.620375,"max":122.65783300000001},"sampledMaxRssBytes":null}]

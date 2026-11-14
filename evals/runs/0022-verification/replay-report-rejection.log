@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Replay timings are not the large-model benchmark
++ actual - expected
+
++ 'evals/runs/0022-readme-comparison'
+- null
+
+    at file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/readme-comparison/readme.js:9:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'evals/runs/0022-readme-comparison',
+  expected: null,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

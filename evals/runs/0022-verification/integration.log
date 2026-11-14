@@ -1,0 +1,27 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.07s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+MODELT_TLC_JAVA='.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' MODELT_TLC_JAR='.artifacts/tlc/tla2tools.jar' node --test dist/evals/readme-comparison/contract-test.js dist/evals/readme-comparison/integration-test.js
+✔ tla-ts must complete with the exact counts and never receives invented work (3.747958ms)
+✔ README comparisons reject missing routes and incomplete results (0.543542ms)
+✔ counter-product (3826.62625ms)
+✔ function-cube (2974.574083ms)
+✔ parallel-channels (2958.327416ms)
+✔ linear-ring (2824.282833ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12622.918042

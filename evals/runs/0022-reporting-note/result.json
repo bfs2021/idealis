@@ -1,0 +1,6 @@
+{
+  "status": "reporting-corrected",
+  "affectedFile": "0022-readme-replay/tables.json",
+  "reason": "The replay table combines small timings with large state-count constants and is invalid for performance reporting. Raw replay counts and statuses are valid. The README uses only the primary benchmark.",
+  "correction": "Skip replay performance tables, reject replay input in README generation, and consolidate the primary comparison into one table. No measured samples changed."
+}

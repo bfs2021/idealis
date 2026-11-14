@@ -1,0 +1,34 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-replay/function-cube/native-1-0/input.json",
+    "1"
+  ],
+  "exit": 0,
+  "wallMs": 69.86087499999985,
+  "stdout": "{\"frontendMs\":2.780124999999998,\"engineStartupMs\":2.9356250000000017,\"apiMs\":0.2827920000000006,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":16,\"generated\":65,\"depth\":4,\"work\":392,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 2.780124999999998,
+    "engineStartupMs": 2.9356250000000017,
+    "apiMs": 0.2827920000000006,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 65,
+      "depth": 4,
+      "work": 392,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

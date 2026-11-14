@@ -1,0 +1,72 @@
+{
+  "route": "tla-ts",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "tla-ts",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-comparison/linear-ring/tla-ts-3/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 405.7880000000587,
+  "stdout": "{\"apiMs\":340.85454100000004,\"result\":{\"status\":\"success\",\"generatedStates\":1000001,\"distinctStates\":1000000,\"queuedStates\":0,\"depth\":1000000,\"initialStates\":{\"generated\":1,\"distinct\":1},\"outDegrees\":[1,999999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}\n",
+  "stderr": "",
+  "output": {
+    "apiMs": 340.85454100000004,
+    "result": {
+      "status": "success",
+      "generatedStates": 1000001,
+      "distinctStates": 1000000,
+      "queuedStates": 0,
+      "depth": 1000000,
+      "initialStates": {
+        "generated": 1,
+        "distinct": 1
+      },
+      "outDegrees": [
+        1,
+        999999,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 228.6042090000119,
+      "bytes": 258506752
+    }
+  ],
+  "sampledMaxRssBytes": 258506752,
+  "phases": null,
+  "phaseError": null
+}

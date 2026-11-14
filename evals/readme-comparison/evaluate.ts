@@ -266,7 +266,7 @@ try {
   const status = samples.every((sample) => sample.status === "complete")
     ? "complete"
     : "incomplete";
-  if (status === "complete")
+  if (!saved && status === "complete")
     await write("tables.json", renderComparison({ status, summaries }));
   await write("result.json", {
     status,

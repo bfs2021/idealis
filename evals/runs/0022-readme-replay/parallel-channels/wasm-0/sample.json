@@ -1,0 +1,33 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-replay/parallel-channels/wasm-0/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 99.30308299999979,
+  "stdout": "{\"frontendMs\":3.610042,\"engineStartupMs\":1.3932080000000013,\"apiMs\":6.30570800000001,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":64,\"generated\":193,\"depth\":8,\"work\":2455,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.610042,
+    "engineStartupMs": 1.3932080000000013,
+    "apiMs": 6.30570800000001,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 64,
+      "generated": 193,
+      "depth": 8,
+      "work": 2455,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}
