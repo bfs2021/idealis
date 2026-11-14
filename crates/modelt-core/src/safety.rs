@@ -635,13 +635,15 @@ impl<'program> Search<'program> {
         let mut current = vec![Scalar::Int(0); program.variables.len()];
         #[cfg(not(target_arch = "wasm32"))]
         let mut pool = None;
+        #[cfg(not(target_arch = "wasm32"))]
+        let parallel = workers > 1 && parallel::is_expensive(program);
         #[cfg(target_arch = "wasm32")]
         let _ = workers;
         while index < self.nodes.len() {
             let end = self.nodes.len();
             #[cfg(not(target_arch = "wasm32"))]
-            if workers > 1
-                && end - index > 1
+            if parallel
+                && end - index >= 16
                 && program.action_properties.is_empty()
                 && program.properties.is_empty()
                 && program.fairness.is_empty()
