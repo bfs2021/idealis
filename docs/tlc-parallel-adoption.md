@@ -1,6 +1,6 @@
 # TLCの内部並列化をmodeltへ取り入れる
 
-TLCの状態単位の並列展開はmodeltへ取り入れられる。ただし、共有キューを追加するだけでは関数・recordの評価を並列化できない。現在のArenaが値の生成・intern・literal cache・work予算を共有可変データとして持つため、まず値の保持とworkerの評価用領域を分ける必要がある。ここに記載するmodelt側の方式は提案で、内部並列探索はまだ実装していない。
+TLCの状態単位の並列展開はmodeltへ取り入れられる。ただし、共有キューを追加するだけでは関数・recordの評価を並列化できない。現在のArenaが値の生成・intern・literal cache・work予算を共有可変データとして持つため、まず値の保持とworkerの評価用領域を分ける必要がある。nativeに層同期BFSの明示的な経路を実装した。既存Arenaを借用し、workerが作った値だけを統合する。初回の共有workカウンタ方式は遅くなったため、defaultは逐次のままにしている。[初回評価と制約](../evals/iterations/0020-frontier-safety.md)、[APIの使い方](rust-safety.md#nativeの並列探索)を参照。以下はTLCのソース調査と採用時の検討で、ブラウザ共有memoryやlivenessの内部並列化は未実装。
 
 [単一モデルの実測](../evals/iterations/0019-single-model-scaling.md)では、TLCの1→8 workerで関数cubeが12.81→4.72 s、チャネル群が24.08→6.27 sになった。nativeは8.89 sと19.86 sなので、TLC 8 workerへ並ぶにはそれぞれ約1.9倍、約3.2倍の改善が必要。これは必要改善率であり、移植後の速度の予測ではない。
 
