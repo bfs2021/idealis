@@ -530,11 +530,20 @@ impl Arena<'_> {
         let Some((first, rest)) = path.split_first() else {
             return Ok(value);
         };
-        let mut entries = self.entries(function)?;
-        if let Some(entry) = entries.iter_mut().find(|entry| entry.0 == *first) {
-            entry.1 = self.replace(entry.1, rest, value)?;
+        let Cell::Function(entries) = self.cell(function)? else {
+            return Err(CoreError::protocol("Expected a function"));
+        };
+        let Some(position) = entries.iter().position(|entry| entry.0 == *first) else {
+            return Ok(function);
+        };
+        let previous = entries[position].1;
+        let mut entries = entries.clone();
+        let updated = self.replace(previous, rest, value)?;
+        if updated == previous {
+            return Ok(function);
         }
-        self.function(entries)
+        entries[position].1 = updated;
+        self.intern(Cell::Function(entries))
     }
     pub fn path(&self, mut function: Scalar, path: &[Scalar]) -> Result<Option<Scalar>, CoreError> {
         for key in path {
@@ -723,5 +732,41 @@ mod tests {
         assert_eq!(arena.entries(mapping.get(local)).unwrap(), second);
         assert_ne!(base, mapping.get(local));
         assert_eq!(arena.function(second).unwrap(), mapping.get(local));
+    }
+
+    #[test]
+    fn replacement_keeps_the_normalized_domain_and_canonical_identity() {
+        let mut arena = Arena::new(1000);
+        let original = arena
+            .function(vec![
+                (Scalar::Int(3), Scalar::Int(30)),
+                (Scalar::Int(1), Scalar::Int(10)),
+                (Scalar::Int(2), Scalar::Int(20)),
+            ])
+            .unwrap();
+        let updated = arena
+            .replace(original, &[Scalar::Int(2)], Scalar::Int(21))
+            .unwrap();
+        let expected = arena
+            .function(vec![
+                (Scalar::Int(2), Scalar::Int(21)),
+                (Scalar::Int(1), Scalar::Int(10)),
+                (Scalar::Int(3), Scalar::Int(30)),
+            ])
+            .unwrap();
+        assert_eq!(updated, expected);
+        assert_eq!(arena.at(original, Scalar::Int(2)).unwrap(), Scalar::Int(20));
+        assert_eq!(
+            arena
+                .replace(original, &[Scalar::Int(4)], Scalar::Int(40))
+                .unwrap(),
+            original
+        );
+        assert_eq!(
+            arena
+                .replace(updated, &[Scalar::Int(2)], Scalar::Int(20))
+                .unwrap(),
+            original
+        );
     }
 }
