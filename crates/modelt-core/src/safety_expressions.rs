@@ -231,6 +231,37 @@ pub(crate) fn validate_branches(
 }
 
 impl Expression {
+    #[cfg(not(target_arch = "wasm32"))]
+    pub(crate) fn is_scalar_cost(&self) -> bool {
+        let simple = match self {
+            Self::Literal { value } => !matches!(value, Scalar::Ref(_)),
+            Self::Read { .. }
+            | Self::Bound { .. }
+            | Self::Old
+            | Self::Not { .. }
+            | Self::Neg { .. }
+            | Self::Add { .. }
+            | Self::Sub { .. }
+            | Self::Mul { .. }
+            | Self::Eq { .. }
+            | Self::Ne { .. }
+            | Self::Lt { .. }
+            | Self::Le { .. }
+            | Self::Gt { .. }
+            | Self::Ge { .. }
+            | Self::And { .. }
+            | Self::Or { .. }
+            | Self::Implies { .. }
+            | Self::If { .. } => true,
+            Self::In { domain, .. } => match domain {
+                Domain::Range { .. } => true,
+                Domain::Set { values } => values.len() <= 16,
+                Domain::Value { .. } => false,
+            },
+            _ => false,
+        };
+        simple && self.children().into_iter().all(Self::is_scalar_cost)
+    }
     fn children(&self) -> Vec<&Self> {
         match self {
             Self::Literal { .. }
