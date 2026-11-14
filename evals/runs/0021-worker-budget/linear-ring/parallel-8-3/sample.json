@@ -1,0 +1,39 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0021-worker-budget/linear-ring/parallel-8-3/input.json",
+    "8"
+  ],
+  "exit": 0,
+  "wallMs": 230.70999999996275,
+  "stdout": "{\"frontendMs\":3.171458000000001,\"engineStartupMs\":3.3157500000000013,\"apiMs\":154.748333,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":1000000,\"generated\":1000001,\"depth\":999999,\"work\":2000002,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.171458000000001,
+    "engineStartupMs": 3.3157500000000013,
+    "apiMs": 154.748333,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 1000000,
+      "generated": 1000001,
+      "depth": 999999,
+      "work": 2000002,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 234.50270800001454,
+      "bytes": 81068032
+    }
+  ],
+  "sampledMaxRssBytes": 81068032,
+  "phases": null,
+  "phaseError": null
+}

@@ -47,6 +47,8 @@ const command = {
 
 state invariantを持つsafety探索では、既存の値を共有し、worker専用の値をcommit時にcanonical化する。親・action・状態の列挙順を保ち、同じ層の処理が終わってから次の層へ進む。十分な予算がある場合の状態数・生成数・最短safety反例は逐次と一致する。hash衝突時には状態全体を比較する。
 
+workはworker専用のcreditから消費し、256 tick分を共通予算から予約する。予約とworker間の未使用creditの移動だけを同期する。全体の残り予算が少ない場合も、未使用creditを使い切れる。
+
 maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが、重複した新状態のinvariantと停止までの先行評価にも課金する。そのためwork量と予算境界での部分結果は逐次と同一とは限らない。返却するworkは上限を超えず、未処理の候補や失敗を残したcompleteを返さない。状態batchは最大64状態/workerで、1状態から生成する候補数や複合値全体への厳密なメモリ上限ではない。
 
 このrequestはnative専用。Wasmは明示的に拒否する。ブラウザ側は既存の逐次Wasmと、独立モデルを分配するpoolを使う。[方式と制約](tlc-parallel-adoption.md)を参照。
