@@ -1,0 +1,39 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0020-frontier-safety/linear-ring/parallel-4-2/input.json",
+    "4"
+  ],
+  "exit": 0,
+  "wallMs": 301.80033399991225,
+  "stdout": "{\"frontendMs\":4.6064580000000035,\"engineStartupMs\":3.4495000000000005,\"apiMs\":197.97200000000004,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":1000000,\"generated\":1000001,\"depth\":999999,\"work\":2000002,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 4.6064580000000035,
+    "engineStartupMs": 3.4495000000000005,
+    "apiMs": 197.97200000000004,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 1000000,
+      "generated": 1000001,
+      "depth": 999999,
+      "work": 2000002,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 233.28758399991784,
+      "bytes": 107986944
+    }
+  ],
+  "sampledMaxRssBytes": 107986944,
+  "phases": null,
+  "phaseError": null
+}

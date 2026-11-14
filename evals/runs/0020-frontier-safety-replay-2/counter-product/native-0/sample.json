@@ -1,0 +1,38 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0020-frontier-safety-replay-2/counter-product/native-0/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 370.40437499999996,
+  "stdout": "{\"frontendMs\":3.352000000000004,\"engineStartupMs\":304.84675,\"apiMs\":0.5578329999999596,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":81,\"generated\":325,\"depth\":8,\"work\":1625,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.352000000000004,
+    "engineStartupMs": 304.84675,
+    "apiMs": 0.5578329999999596,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 81,
+      "generated": 325,
+      "depth": 8,
+      "work": 1625,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 231.10037499999999,
+      "bytes": 81264640
+    }
+  ],
+  "sampledMaxRssBytes": 81264640,
+  "phases": null,
+  "phaseError": null
+}

@@ -1,0 +1,922 @@
+{
+  "status": "complete",
+  "sourceVersion": "23778cfbc463cd8d57cfcfd49c7f375df3a0a661ec0591f6a8d8184c5e3911c6",
+  "samples": [
+    {
+      "input": "counter-product",
+      "route": "native",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 370.40437499999996,
+      "work": 1625,
+      "intervalMs": 0.5578329999999596,
+      "sampledMaxRssBytes": 81264640,
+      "path": "counter-product/native-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-1",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 70.03770799999995,
+      "work": 1625,
+      "intervalMs": 0.3265829999999994,
+      "sampledMaxRssBytes": null,
+      "path": "counter-product/parallel-1-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-2",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 77.75116600000001,
+      "work": 1625,
+      "intervalMs": 0.6312500000000085,
+      "sampledMaxRssBytes": null,
+      "path": "counter-product/parallel-2-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-4",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 77.71162500000003,
+      "work": 1625,
+      "intervalMs": 0.6857090000000028,
+      "sampledMaxRssBytes": null,
+      "path": "counter-product/parallel-4-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-8",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 71.52662499999997,
+      "work": 1625,
+      "intervalMs": 0.7901659999999993,
+      "sampledMaxRssBytes": null,
+      "path": "counter-product/parallel-8-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "function-cube",
+      "route": "native",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 70.99633299999994,
+      "work": 392,
+      "intervalMs": 0.2843329999999966,
+      "sampledMaxRssBytes": null,
+      "path": "function-cube/native-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-1",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 71.64883299999997,
+      "work": 392,
+      "intervalMs": 0.3364999999999938,
+      "sampledMaxRssBytes": null,
+      "path": "function-cube/parallel-1-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-2",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 70.60441700000001,
+      "work": 480,
+      "intervalMs": 0.37112499999999926,
+      "sampledMaxRssBytes": null,
+      "path": "function-cube/parallel-2-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-4",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 71.21391700000004,
+      "work": 557,
+      "intervalMs": 0.5172500000000042,
+      "sampledMaxRssBytes": null,
+      "path": "function-cube/parallel-4-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-8",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 72.660709,
+      "work": 579,
+      "intervalMs": 0.5105829999999969,
+      "sampledMaxRssBytes": null,
+      "path": "function-cube/parallel-8-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "native",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 70.21983399999999,
+      "work": 2455,
+      "intervalMs": 0.4837920000000011,
+      "sampledMaxRssBytes": null,
+      "path": "parallel-channels/native-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-1",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 73.5545830000001,
+      "work": 2455,
+      "intervalMs": 0.4411660000000026,
+      "sampledMaxRssBytes": null,
+      "path": "parallel-channels/parallel-1-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-2",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 70.03887499999996,
+      "work": 2997,
+      "intervalMs": 0.7495000000000047,
+      "sampledMaxRssBytes": null,
+      "path": "parallel-channels/parallel-2-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-4",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 71.06375000000003,
+      "work": 3471,
+      "intervalMs": 1.0792919999999953,
+      "sampledMaxRssBytes": null,
+      "path": "parallel-channels/parallel-4-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-8",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 72.56779200000005,
+      "work": 3656,
+      "intervalMs": 1.1566250000000053,
+      "sampledMaxRssBytes": null,
+      "path": "parallel-channels/parallel-8-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "native",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 69.42004199999997,
+      "work": 36,
+      "intervalMs": 0.26795800000000014,
+      "sampledMaxRssBytes": null,
+      "path": "linear-ring/native-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-1",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 69.700916,
+      "work": 36,
+      "intervalMs": 0.2075410000000062,
+      "sampledMaxRssBytes": null,
+      "path": "linear-ring/parallel-1-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-2",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 68.75991699999986,
+      "work": 36,
+      "intervalMs": 0.2194160000000025,
+      "sampledMaxRssBytes": null,
+      "path": "linear-ring/parallel-2-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-4",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 68.52091599999994,
+      "work": 36,
+      "intervalMs": 0.20820900000000364,
+      "sampledMaxRssBytes": null,
+      "path": "linear-ring/parallel-4-0/sample.json",
+      "error": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-8",
+      "iteration": 0,
+      "warmup": false,
+      "status": "complete",
+      "wallMs": 66.11795900000016,
+      "work": 36,
+      "intervalMs": 0.23349999999999937,
+      "sampledMaxRssBytes": null,
+      "path": "linear-ring/parallel-8-0/sample.json",
+      "error": null
+    }
+  ],
+  "summaries": [
+    {
+      "input": "counter-product",
+      "route": "native",
+      "status": "complete",
+      "wall": {
+        "median": 370.40437499999996,
+        "min": 370.40437499999996,
+        "max": 370.40437499999996
+      },
+      "interval": {
+        "median": 0.5578329999999596,
+        "min": 0.5578329999999596,
+        "max": 0.5578329999999596
+      },
+      "sampledMaxRssBytes": 81264640
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-1",
+      "status": "complete",
+      "wall": {
+        "median": 70.03770799999995,
+        "min": 70.03770799999995,
+        "max": 70.03770799999995
+      },
+      "interval": {
+        "median": 0.3265829999999994,
+        "min": 0.3265829999999994,
+        "max": 0.3265829999999994
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-2",
+      "status": "complete",
+      "wall": {
+        "median": 77.75116600000001,
+        "min": 77.75116600000001,
+        "max": 77.75116600000001
+      },
+      "interval": {
+        "median": 0.6312500000000085,
+        "min": 0.6312500000000085,
+        "max": 0.6312500000000085
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-4",
+      "status": "complete",
+      "wall": {
+        "median": 77.71162500000003,
+        "min": 77.71162500000003,
+        "max": 77.71162500000003
+      },
+      "interval": {
+        "median": 0.6857090000000028,
+        "min": 0.6857090000000028,
+        "max": 0.6857090000000028
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "counter-product",
+      "route": "parallel-8",
+      "status": "complete",
+      "wall": {
+        "median": 71.52662499999997,
+        "min": 71.52662499999997,
+        "max": 71.52662499999997
+      },
+      "interval": {
+        "median": 0.7901659999999993,
+        "min": 0.7901659999999993,
+        "max": 0.7901659999999993
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "function-cube",
+      "route": "native",
+      "status": "complete",
+      "wall": {
+        "median": 70.99633299999994,
+        "min": 70.99633299999994,
+        "max": 70.99633299999994
+      },
+      "interval": {
+        "median": 0.2843329999999966,
+        "min": 0.2843329999999966,
+        "max": 0.2843329999999966
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-1",
+      "status": "complete",
+      "wall": {
+        "median": 71.64883299999997,
+        "min": 71.64883299999997,
+        "max": 71.64883299999997
+      },
+      "interval": {
+        "median": 0.3364999999999938,
+        "min": 0.3364999999999938,
+        "max": 0.3364999999999938
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-2",
+      "status": "complete",
+      "wall": {
+        "median": 70.60441700000001,
+        "min": 70.60441700000001,
+        "max": 70.60441700000001
+      },
+      "interval": {
+        "median": 0.37112499999999926,
+        "min": 0.37112499999999926,
+        "max": 0.37112499999999926
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-4",
+      "status": "complete",
+      "wall": {
+        "median": 71.21391700000004,
+        "min": 71.21391700000004,
+        "max": 71.21391700000004
+      },
+      "interval": {
+        "median": 0.5172500000000042,
+        "min": 0.5172500000000042,
+        "max": 0.5172500000000042
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "function-cube",
+      "route": "parallel-8",
+      "status": "complete",
+      "wall": {
+        "median": 72.660709,
+        "min": 72.660709,
+        "max": 72.660709
+      },
+      "interval": {
+        "median": 0.5105829999999969,
+        "min": 0.5105829999999969,
+        "max": 0.5105829999999969
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "native",
+      "status": "complete",
+      "wall": {
+        "median": 70.21983399999999,
+        "min": 70.21983399999999,
+        "max": 70.21983399999999
+      },
+      "interval": {
+        "median": 0.4837920000000011,
+        "min": 0.4837920000000011,
+        "max": 0.4837920000000011
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-1",
+      "status": "complete",
+      "wall": {
+        "median": 73.5545830000001,
+        "min": 73.5545830000001,
+        "max": 73.5545830000001
+      },
+      "interval": {
+        "median": 0.4411660000000026,
+        "min": 0.4411660000000026,
+        "max": 0.4411660000000026
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-2",
+      "status": "complete",
+      "wall": {
+        "median": 70.03887499999996,
+        "min": 70.03887499999996,
+        "max": 70.03887499999996
+      },
+      "interval": {
+        "median": 0.7495000000000047,
+        "min": 0.7495000000000047,
+        "max": 0.7495000000000047
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-4",
+      "status": "complete",
+      "wall": {
+        "median": 71.06375000000003,
+        "min": 71.06375000000003,
+        "max": 71.06375000000003
+      },
+      "interval": {
+        "median": 1.0792919999999953,
+        "min": 1.0792919999999953,
+        "max": 1.0792919999999953
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "parallel-channels",
+      "route": "parallel-8",
+      "status": "complete",
+      "wall": {
+        "median": 72.56779200000005,
+        "min": 72.56779200000005,
+        "max": 72.56779200000005
+      },
+      "interval": {
+        "median": 1.1566250000000053,
+        "min": 1.1566250000000053,
+        "max": 1.1566250000000053
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "native",
+      "status": "complete",
+      "wall": {
+        "median": 69.42004199999997,
+        "min": 69.42004199999997,
+        "max": 69.42004199999997
+      },
+      "interval": {
+        "median": 0.26795800000000014,
+        "min": 0.26795800000000014,
+        "max": 0.26795800000000014
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-1",
+      "status": "complete",
+      "wall": {
+        "median": 69.700916,
+        "min": 69.700916,
+        "max": 69.700916
+      },
+      "interval": {
+        "median": 0.2075410000000062,
+        "min": 0.2075410000000062,
+        "max": 0.2075410000000062
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-2",
+      "status": "complete",
+      "wall": {
+        "median": 68.75991699999986,
+        "min": 68.75991699999986,
+        "max": 68.75991699999986
+      },
+      "interval": {
+        "median": 0.2194160000000025,
+        "min": 0.2194160000000025,
+        "max": 0.2194160000000025
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-4",
+      "status": "complete",
+      "wall": {
+        "median": 68.52091599999994,
+        "min": 68.52091599999994,
+        "max": 68.52091599999994
+      },
+      "interval": {
+        "median": 0.20820900000000364,
+        "min": 0.20820900000000364,
+        "max": 0.20820900000000364
+      },
+      "sampledMaxRssBytes": null
+    },
+    {
+      "input": "linear-ring",
+      "route": "parallel-8",
+      "status": "complete",
+      "wall": {
+        "median": 66.11795900000016,
+        "min": 66.11795900000016,
+        "max": 66.11795900000016
+      },
+      "interval": {
+        "median": 0.23349999999999937,
+        "min": 0.23349999999999937,
+        "max": 0.23349999999999937
+      },
+      "sampledMaxRssBytes": null
+    }
+  ],
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "c281254eb415a87ec63ba9070b54f6088274bce205cc86d9de446ce6d2e5a774"
+    },
+    {
+      "path": "cases.json",
+      "sha256": "8310b786781963af75f8859fafa5146e767eb90205a4cde80fe4ae870c641dab"
+    },
+    {
+      "path": "counter-product/native-0/input.json",
+      "sha256": "51a986ce2a6e7f3e9d1623c53cdeb3de11da802f97971367fd92e9cbbe52643b"
+    },
+    {
+      "path": "counter-product/native-0/CounterProduct.tla",
+      "sha256": "691f80183bce41c9c3a7f979164643d2d7fbdc1d937c8a6afe89b7f24bc8ac14"
+    },
+    {
+      "path": "counter-product/native-0/CounterProduct.cfg",
+      "sha256": "1c52f76594b9459f098397e25ca76f9371b158a620a0440d9ab471c157221630"
+    },
+    {
+      "path": "counter-product/native-0/sample.json",
+      "sha256": "1d3ce3a28eb22c4b5f62f6c33512d09bf38831753b0c5ea2e82bacde56684920"
+    },
+    {
+      "path": "counter-product/parallel-1-0/input.json",
+      "sha256": "51a986ce2a6e7f3e9d1623c53cdeb3de11da802f97971367fd92e9cbbe52643b"
+    },
+    {
+      "path": "counter-product/parallel-1-0/CounterProduct.tla",
+      "sha256": "691f80183bce41c9c3a7f979164643d2d7fbdc1d937c8a6afe89b7f24bc8ac14"
+    },
+    {
+      "path": "counter-product/parallel-1-0/CounterProduct.cfg",
+      "sha256": "1c52f76594b9459f098397e25ca76f9371b158a620a0440d9ab471c157221630"
+    },
+    {
+      "path": "counter-product/parallel-1-0/sample.json",
+      "sha256": "ad4505f49d93c423a0879df90957fe4099bb474aa0ff0f1ed96a92601677e1b2"
+    },
+    {
+      "path": "counter-product/parallel-2-0/input.json",
+      "sha256": "51a986ce2a6e7f3e9d1623c53cdeb3de11da802f97971367fd92e9cbbe52643b"
+    },
+    {
+      "path": "counter-product/parallel-2-0/CounterProduct.tla",
+      "sha256": "691f80183bce41c9c3a7f979164643d2d7fbdc1d937c8a6afe89b7f24bc8ac14"
+    },
+    {
+      "path": "counter-product/parallel-2-0/CounterProduct.cfg",
+      "sha256": "1c52f76594b9459f098397e25ca76f9371b158a620a0440d9ab471c157221630"
+    },
+    {
+      "path": "counter-product/parallel-2-0/sample.json",
+      "sha256": "918f022be4f3fac7e8fee90bb6579953b4881f619cdb4118e3a62e1571b59751"
+    },
+    {
+      "path": "counter-product/parallel-4-0/input.json",
+      "sha256": "51a986ce2a6e7f3e9d1623c53cdeb3de11da802f97971367fd92e9cbbe52643b"
+    },
+    {
+      "path": "counter-product/parallel-4-0/CounterProduct.tla",
+      "sha256": "691f80183bce41c9c3a7f979164643d2d7fbdc1d937c8a6afe89b7f24bc8ac14"
+    },
+    {
+      "path": "counter-product/parallel-4-0/CounterProduct.cfg",
+      "sha256": "1c52f76594b9459f098397e25ca76f9371b158a620a0440d9ab471c157221630"
+    },
+    {
+      "path": "counter-product/parallel-4-0/sample.json",
+      "sha256": "2e4f7ca2a67f3be4942ea232e1bc60360f4cde9e744c006e491ff22f4b92cb61"
+    },
+    {
+      "path": "counter-product/parallel-8-0/input.json",
+      "sha256": "51a986ce2a6e7f3e9d1623c53cdeb3de11da802f97971367fd92e9cbbe52643b"
+    },
+    {
+      "path": "counter-product/parallel-8-0/CounterProduct.tla",
+      "sha256": "691f80183bce41c9c3a7f979164643d2d7fbdc1d937c8a6afe89b7f24bc8ac14"
+    },
+    {
+      "path": "counter-product/parallel-8-0/CounterProduct.cfg",
+      "sha256": "1c52f76594b9459f098397e25ca76f9371b158a620a0440d9ab471c157221630"
+    },
+    {
+      "path": "counter-product/parallel-8-0/sample.json",
+      "sha256": "8dccc6dd81ef6ae6f49c85574e5e19ff8d49a0baa3f3af0e96de11c78297cd69"
+    },
+    {
+      "path": "function-cube/native-0/input.json",
+      "sha256": "f1deccd76d8ac5bda90814717eda7a0a2dd802eb850a03dced94459ef28cd70d"
+    },
+    {
+      "path": "function-cube/native-0/FunctionCube.tla",
+      "sha256": "f9f92601d502d534b4a852f15b64ba3b900e782f08dbcc755d1b0e81a6a56fd3"
+    },
+    {
+      "path": "function-cube/native-0/FunctionCube.cfg",
+      "sha256": "89d561c618f8b53460a88da85cdb0255f4ceb1b8caa8f4b9cb66770e849b9fa3"
+    },
+    {
+      "path": "function-cube/native-0/sample.json",
+      "sha256": "1e5da801a8fa20085eb3d77d3b2b961f4f6fba761a6bbdf2d505fa8d13318df1"
+    },
+    {
+      "path": "function-cube/parallel-1-0/input.json",
+      "sha256": "f1deccd76d8ac5bda90814717eda7a0a2dd802eb850a03dced94459ef28cd70d"
+    },
+    {
+      "path": "function-cube/parallel-1-0/FunctionCube.tla",
+      "sha256": "f9f92601d502d534b4a852f15b64ba3b900e782f08dbcc755d1b0e81a6a56fd3"
+    },
+    {
+      "path": "function-cube/parallel-1-0/FunctionCube.cfg",
+      "sha256": "89d561c618f8b53460a88da85cdb0255f4ceb1b8caa8f4b9cb66770e849b9fa3"
+    },
+    {
+      "path": "function-cube/parallel-1-0/sample.json",
+      "sha256": "aa07de0143bcd6da0e3299267b5536f8508883bfdbc54cd80ce43b7fa7822aab"
+    },
+    {
+      "path": "function-cube/parallel-2-0/input.json",
+      "sha256": "f1deccd76d8ac5bda90814717eda7a0a2dd802eb850a03dced94459ef28cd70d"
+    },
+    {
+      "path": "function-cube/parallel-2-0/FunctionCube.tla",
+      "sha256": "f9f92601d502d534b4a852f15b64ba3b900e782f08dbcc755d1b0e81a6a56fd3"
+    },
+    {
+      "path": "function-cube/parallel-2-0/FunctionCube.cfg",
+      "sha256": "89d561c618f8b53460a88da85cdb0255f4ceb1b8caa8f4b9cb66770e849b9fa3"
+    },
+    {
+      "path": "function-cube/parallel-2-0/sample.json",
+      "sha256": "9c7049619f3fd3b52200bc56cb7eb4b302f28dd97fd1ee8a7c7ef8f887e2316c"
+    },
+    {
+      "path": "function-cube/parallel-4-0/input.json",
+      "sha256": "f1deccd76d8ac5bda90814717eda7a0a2dd802eb850a03dced94459ef28cd70d"
+    },
+    {
+      "path": "function-cube/parallel-4-0/FunctionCube.tla",
+      "sha256": "f9f92601d502d534b4a852f15b64ba3b900e782f08dbcc755d1b0e81a6a56fd3"
+    },
+    {
+      "path": "function-cube/parallel-4-0/FunctionCube.cfg",
+      "sha256": "89d561c618f8b53460a88da85cdb0255f4ceb1b8caa8f4b9cb66770e849b9fa3"
+    },
+    {
+      "path": "function-cube/parallel-4-0/sample.json",
+      "sha256": "d29309e676991db7ee160b4f891e398d4d1cd18743d569df5e66834316fa2772"
+    },
+    {
+      "path": "function-cube/parallel-8-0/input.json",
+      "sha256": "f1deccd76d8ac5bda90814717eda7a0a2dd802eb850a03dced94459ef28cd70d"
+    },
+    {
+      "path": "function-cube/parallel-8-0/FunctionCube.tla",
+      "sha256": "f9f92601d502d534b4a852f15b64ba3b900e782f08dbcc755d1b0e81a6a56fd3"
+    },
+    {
+      "path": "function-cube/parallel-8-0/FunctionCube.cfg",
+      "sha256": "89d561c618f8b53460a88da85cdb0255f4ceb1b8caa8f4b9cb66770e849b9fa3"
+    },
+    {
+      "path": "function-cube/parallel-8-0/sample.json",
+      "sha256": "e3a4582d10f513e3b2ecc9d3af28ee2cff7ca3ff0368b5cdf4fb72494c7aee20"
+    },
+    {
+      "path": "parallel-channels/native-0/input.json",
+      "sha256": "d9964eb762c2a408fffeb0507a0e3705b8eb7e1dfb469c023cd8f153fdb8d15b"
+    },
+    {
+      "path": "parallel-channels/native-0/ParallelChannels.tla",
+      "sha256": "23a98212b04f91fde1d860f5ce596c1d0740f29ad70aeb6b3ad1fff1acfdd26c"
+    },
+    {
+      "path": "parallel-channels/native-0/ParallelChannels.cfg",
+      "sha256": "4518616987b221969a2e26f4a292f42554a6481fd0a7acffb5d2f2c1a4a4e960"
+    },
+    {
+      "path": "parallel-channels/native-0/sample.json",
+      "sha256": "4102e2d9eecbd091919252e14f78969ae57d3a2d507f60814aa3cb99c2aa7e5d"
+    },
+    {
+      "path": "parallel-channels/parallel-1-0/input.json",
+      "sha256": "d9964eb762c2a408fffeb0507a0e3705b8eb7e1dfb469c023cd8f153fdb8d15b"
+    },
+    {
+      "path": "parallel-channels/parallel-1-0/ParallelChannels.tla",
+      "sha256": "23a98212b04f91fde1d860f5ce596c1d0740f29ad70aeb6b3ad1fff1acfdd26c"
+    },
+    {
+      "path": "parallel-channels/parallel-1-0/ParallelChannels.cfg",
+      "sha256": "4518616987b221969a2e26f4a292f42554a6481fd0a7acffb5d2f2c1a4a4e960"
+    },
+    {
+      "path": "parallel-channels/parallel-1-0/sample.json",
+      "sha256": "2138c2936257fe34315604d53e4c2bf5dd81331c8d4979ff1b2b1e98f96e66a5"
+    },
+    {
+      "path": "parallel-channels/parallel-2-0/input.json",
+      "sha256": "d9964eb762c2a408fffeb0507a0e3705b8eb7e1dfb469c023cd8f153fdb8d15b"
+    },
+    {
+      "path": "parallel-channels/parallel-2-0/ParallelChannels.tla",
+      "sha256": "23a98212b04f91fde1d860f5ce596c1d0740f29ad70aeb6b3ad1fff1acfdd26c"
+    },
+    {
+      "path": "parallel-channels/parallel-2-0/ParallelChannels.cfg",
+      "sha256": "4518616987b221969a2e26f4a292f42554a6481fd0a7acffb5d2f2c1a4a4e960"
+    },
+    {
+      "path": "parallel-channels/parallel-2-0/sample.json",
+      "sha256": "c1c9e495c57c3b2a24b32e336963989bcca2fa0afa84faec6ad51016825f3667"
+    },
+    {
+      "path": "parallel-channels/parallel-4-0/input.json",
+      "sha256": "d9964eb762c2a408fffeb0507a0e3705b8eb7e1dfb469c023cd8f153fdb8d15b"
+    },
+    {
+      "path": "parallel-channels/parallel-4-0/ParallelChannels.tla",
+      "sha256": "23a98212b04f91fde1d860f5ce596c1d0740f29ad70aeb6b3ad1fff1acfdd26c"
+    },
+    {
+      "path": "parallel-channels/parallel-4-0/ParallelChannels.cfg",
+      "sha256": "4518616987b221969a2e26f4a292f42554a6481fd0a7acffb5d2f2c1a4a4e960"
+    },
+    {
+      "path": "parallel-channels/parallel-4-0/sample.json",
+      "sha256": "49a5937f2d94284393a964e3d4696535ca6100958b42c9cef5b58de935a9ce38"
+    },
+    {
+      "path": "parallel-channels/parallel-8-0/input.json",
+      "sha256": "d9964eb762c2a408fffeb0507a0e3705b8eb7e1dfb469c023cd8f153fdb8d15b"
+    },
+    {
+      "path": "parallel-channels/parallel-8-0/ParallelChannels.tla",
+      "sha256": "23a98212b04f91fde1d860f5ce596c1d0740f29ad70aeb6b3ad1fff1acfdd26c"
+    },
+    {
+      "path": "parallel-channels/parallel-8-0/ParallelChannels.cfg",
+      "sha256": "4518616987b221969a2e26f4a292f42554a6481fd0a7acffb5d2f2c1a4a4e960"
+    },
+    {
+      "path": "parallel-channels/parallel-8-0/sample.json",
+      "sha256": "cf8d5f2ef6f7da6b1e3be803496eb3a5ee3c85b7b838d5f5b91abf3419129fad"
+    },
+    {
+      "path": "linear-ring/native-0/input.json",
+      "sha256": "b65becba6ccea0f6d64f68e05105312200d674619cadbaf968643d6ae3df34e9"
+    },
+    {
+      "path": "linear-ring/native-0/LinearRing.tla",
+      "sha256": "c6bdff2a2e99e9acdc1a9157dbe9fd537663ba6c3481bc3658cd6ca6bb1794e6"
+    },
+    {
+      "path": "linear-ring/native-0/LinearRing.cfg",
+      "sha256": "2e5394616cf1711b2564fe047fd46cc5e172822b6e1dcfaa999be829ad2cb258"
+    },
+    {
+      "path": "linear-ring/native-0/sample.json",
+      "sha256": "108d88b196bbe9846238a11d696c772f9e05f20f86a70675488db051bb94d430"
+    },
+    {
+      "path": "linear-ring/parallel-1-0/input.json",
+      "sha256": "b65becba6ccea0f6d64f68e05105312200d674619cadbaf968643d6ae3df34e9"
+    },
+    {
+      "path": "linear-ring/parallel-1-0/LinearRing.tla",
+      "sha256": "c6bdff2a2e99e9acdc1a9157dbe9fd537663ba6c3481bc3658cd6ca6bb1794e6"
+    },
+    {
+      "path": "linear-ring/parallel-1-0/LinearRing.cfg",
+      "sha256": "2e5394616cf1711b2564fe047fd46cc5e172822b6e1dcfaa999be829ad2cb258"
+    },
+    {
+      "path": "linear-ring/parallel-1-0/sample.json",
+      "sha256": "1e95a3a773bdfe8e543344cb5bfd62f17094dd6bd5be3d0ae9a0f551cb94d940"
+    },
+    {
+      "path": "linear-ring/parallel-2-0/input.json",
+      "sha256": "b65becba6ccea0f6d64f68e05105312200d674619cadbaf968643d6ae3df34e9"
+    },
+    {
+      "path": "linear-ring/parallel-2-0/LinearRing.tla",
+      "sha256": "c6bdff2a2e99e9acdc1a9157dbe9fd537663ba6c3481bc3658cd6ca6bb1794e6"
+    },
+    {
+      "path": "linear-ring/parallel-2-0/LinearRing.cfg",
+      "sha256": "2e5394616cf1711b2564fe047fd46cc5e172822b6e1dcfaa999be829ad2cb258"
+    },
+    {
+      "path": "linear-ring/parallel-2-0/sample.json",
+      "sha256": "0aab285779bb71dd1a7cc5958e88adc1cac831f1621f719176504e2503f13a48"
+    },
+    {
+      "path": "linear-ring/parallel-4-0/input.json",
+      "sha256": "b65becba6ccea0f6d64f68e05105312200d674619cadbaf968643d6ae3df34e9"
+    },
+    {
+      "path": "linear-ring/parallel-4-0/LinearRing.tla",
+      "sha256": "c6bdff2a2e99e9acdc1a9157dbe9fd537663ba6c3481bc3658cd6ca6bb1794e6"
+    },
+    {
+      "path": "linear-ring/parallel-4-0/LinearRing.cfg",
+      "sha256": "2e5394616cf1711b2564fe047fd46cc5e172822b6e1dcfaa999be829ad2cb258"
+    },
+    {
+      "path": "linear-ring/parallel-4-0/sample.json",
+      "sha256": "54e7e02b0c19a5ea07a7c7b813b111179468f4a40ca8386cbc271fb62314c269"
+    },
+    {
+      "path": "linear-ring/parallel-8-0/input.json",
+      "sha256": "b65becba6ccea0f6d64f68e05105312200d674619cadbaf968643d6ae3df34e9"
+    },
+    {
+      "path": "linear-ring/parallel-8-0/LinearRing.tla",
+      "sha256": "c6bdff2a2e99e9acdc1a9157dbe9fd537663ba6c3481bc3658cd6ca6bb1794e6"
+    },
+    {
+      "path": "linear-ring/parallel-8-0/LinearRing.cfg",
+      "sha256": "2e5394616cf1711b2564fe047fd46cc5e172822b6e1dcfaa999be829ad2cb258"
+    },
+    {
+      "path": "linear-ring/parallel-8-0/sample.json",
+      "sha256": "4a11e13670695de51500f18da53042f2a0b74f925478667a0c3b43853b82d319"
+    },
+    {
+      "path": "progress.jsonl",
+      "sha256": "6c9a270f90bc99ff1d5b5f78ecd61a9f3817668101b5ddd2905f485d0df62e52"
+    }
+  ]
+}

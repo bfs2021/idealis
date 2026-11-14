@@ -27,6 +27,30 @@ const result = checkSafety(core, program, {
 
 ブラウザでは `wasmBytes` を fetch で読み込める。compiler は optional peer の tla-ts を使い、その公開エントリを browser bundle にする場合は既存の [browser test](../tests/browser.spec.ts) と同じ `node:zlib` → `fflate` の alias と未使用の `bun:jsc` の除外が必要。生成した `modelt.safety-program` v1 の JSON を保存すれば、実行側は tla-ts やこれらの alias を必要としない。Rust native の `modelt-core` binary は `{"version":1,"request":{"kind":"check-safety","program":...,"bounds":...}}` を1行の JSON として受け取る。Rust library は deserialize した `SafetyProgram` に `check(SafetyBounds)` を呼ぶ。native と Wasm は同じ探索コードを使う。
 
+## nativeの並列探索
+
+native libraryの`SafetyProgram::check_parallel(bounds, workers)`は、同じ深さの状態をworkerへ分配する。JSONL binaryでは`check-safety-parallel`を使う。`workers`は1〜256の整数で、1は既存の逐次経路になる。既存の`check` / `check-safety`も逐次経路を使う。
+
+```ts
+const command = {
+  version: 1,
+  request: {
+    kind: "check-safety-parallel",
+    program,
+    bounds: { maxDepth: 100, maxStates: 10000, maxWork: 1000000 },
+    workers: 4,
+  },
+};
+```
+
+`program`には`compileTlaSafety`が返したIRを入れ、`JSON.stringify(command)`をbinaryのstdinへ1行で送る。新しいpublic helperを追加せず、既存のJSONL requestとRustのmethodでworker数を指定する。初期状態・assumption・初期propertyは逐次で検査する。action property・temporal property・fairnessを含むモデルも逐次へfallbackする。幅1の探索ではpoolを起動しない。
+
+state invariantを持つsafety探索では、既存の値を共有し、worker専用の値をcommit時にcanonical化する。親・action・状態の列挙順を保ち、同じ層の処理が終わってから次の層へ進む。十分な予算がある場合の状態数・生成数・最短safety反例は逐次と一致する。hash衝突時には状態全体を比較する。
+
+maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが、重複した新状態のinvariantと停止までの先行評価にも課金する。そのためwork量と予算境界での部分結果は逐次と同一とは限らない。返却するworkは上限を超えず、未処理の候補や失敗を残したcompleteを返さない。状態batchは最大64状態/workerで、1状態から生成する候補数や複合値全体への厳密なメモリ上限ではない。
+
+このrequestはnative専用。Wasmは明示的に拒否する。ブラウザ側は既存の逐次Wasmと、独立モデルを分配するpoolを使う。[方式と制約](tlc-parallel-adoption.md)を参照。
+
 ## 対応範囲
 
 基準は TLC v1.7.4 (`5a47802`)。state は signed 32 bit 整数、真偽値、文字列、有限集合、有限関数を扱う。tuple / sequence は1始まりの有限関数、record は文字列をキーにする有限関数として等価性を判定する。値は immutable な arena に intern し、state はその ID を保持する。hash が衝突しても、型付き値の完全一致で重複排除する。
