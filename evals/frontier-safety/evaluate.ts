@@ -36,6 +36,8 @@ const jar = process.argv[3];
 const archive = process.argv[4];
 const directory = process.argv[5];
 const saved = process.argv[6];
+const plan = process.env.MODELT_FRONTIER_PLAN ?? "0020-frontier-safety";
+assert.ok(plan === "0020-frontier-safety" || plan === "0021-worker-budget");
 assert.ok(
   java && jar && archive && directory,
   "Pass java, jar, JRE archive, new output directory, optional saved run",
@@ -107,6 +109,7 @@ try {
     const manifest = JSON.parse(
       await readFile(join(saved, "manifest.json"), "utf8"),
     );
+    assert.equal(manifest.plan, plan);
     assert.deepEqual(manifest.environment.binaries, tools.binaries);
     assert.deepEqual(
       JSON.parse(await readFile(join(saved, "cases.json"), "utf8")),
@@ -142,7 +145,7 @@ try {
   }
   const inputs = cases(saved ? "small" : "large");
   await write("manifest.json", {
-    plan: "0020-frontier-safety",
+    plan,
     ...source,
     commit: execFileSync("git", ["rev-parse", "HEAD"]).toString().trim(),
     dirtyPaths: execFileSync("git", ["status", "--short"]).toString().trim(),

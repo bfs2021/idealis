@@ -1,10 +1,10 @@
 use crate::safety::Scalar;
+#[cfg(not(target_arch = "wasm32"))]
+use crate::safety_work::WorkBudget;
 use crate::{CoreError, Value};
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::hash::{BuildHasherDefault, Hasher};
-#[cfg(not(target_arch = "wasm32"))]
-use std::sync::atomic::{AtomicU32, Ordering as AtomicOrdering};
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 enum Cell {
@@ -49,7 +49,7 @@ pub(crate) struct Arena<'a> {
     base: Option<&'a Arena<'a>>,
     offset: usize,
     #[cfg(not(target_arch = "wasm32"))]
-    budget: Option<&'a AtomicU32>,
+    budget: Option<(&'a WorkBudget, usize)>,
     cells: Vec<Cell>,
     depths: Vec<u8>,
     index: HashMap<Cell, u32, BuildHasherDefault<ValueHasher>>,
@@ -78,27 +78,14 @@ impl Arena<'_> {
     }
     pub fn consume(&mut self, count: usize) -> Result<(), CoreError> {
         #[cfg(not(target_arch = "wasm32"))]
-        if let Some(budget) = self.budget {
-            let mut remaining = budget.load(AtomicOrdering::Relaxed);
-            loop {
-                let used = count.min(remaining as usize) as u32;
-                match budget.compare_exchange_weak(
-                    remaining,
-                    remaining - used,
-                    AtomicOrdering::Relaxed,
-                    AtomicOrdering::Relaxed,
-                ) {
-                    Ok(_) => {
-                        self.work += used;
-                        return if used as usize == count {
-                            Ok(())
-                        } else {
-                            Err(work_exhausted())
-                        };
-                    }
-                    Err(actual) => remaining = actual,
-                }
-            }
+        if let Some((budget, worker)) = self.budget {
+            let used = budget.consume(worker, count)?;
+            self.work += used;
+            return if used as usize == count {
+                Ok(())
+            } else {
+                Err(work_exhausted())
+            };
         }
         if count > (self.maximum - self.work) as usize {
             self.work = self.maximum;
@@ -108,11 +95,11 @@ impl Arena<'_> {
         Ok(())
     }
     #[cfg(not(target_arch = "wasm32"))]
-    pub fn fork<'a>(&'a self, budget: &'a AtomicU32) -> Arena<'a> {
+    pub fn fork<'a>(&'a self, budget: &'a WorkBudget, worker: usize) -> Arena<'a> {
         Arena {
             base: Some(self),
             offset: self.offset + self.cells.len(),
-            budget: Some(budget),
+            budget: Some((budget, worker)),
             ..Arena::new(self.maximum)
         }
     }
@@ -646,12 +633,12 @@ mod tests {
     #[cfg(not(target_arch = "wasm32"))]
     #[test]
     fn worker_values_share_the_base_and_remap_conflicting_local_references() {
-        use std::sync::atomic::AtomicU32;
+        use crate::safety_work::WorkBudget;
         let mut base = Arena::new(1000);
         let original = base.tuple(vec![Scalar::Int(0)]).unwrap();
-        let budget = AtomicU32::new(900);
-        let mut first = base.fork(&budget);
-        let mut second = base.fork(&budget);
+        let budget = WorkBudget::new(900, 2);
+        let mut first = base.fork(&budget, 0);
+        let mut second = base.fork(&budget, 1);
         assert_eq!(first.tuple(vec![Scalar::Int(0)]).unwrap(), original);
         let left = first.set(vec![Scalar::Int(1)]).unwrap();
         let right = second.set(vec![Scalar::Int(2)]).unwrap();

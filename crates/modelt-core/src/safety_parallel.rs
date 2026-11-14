@@ -3,9 +3,9 @@ use crate::CoreError;
 use crate::safety::Scalar;
 use crate::safety_expressions::{EvalContext, visit_branch};
 use crate::safety_values::{Arena, ValueDelta};
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use crate::safety_work::WorkBudget;
+use rayon::iter::{IndexedParallelIterator, IntoParallelIterator, ParallelIterator};
 use std::ops::Range;
-use std::sync::atomic::AtomicU32;
 
 enum Event {
     Candidate {
@@ -40,11 +40,12 @@ impl Search<'_> {
                 .step_by(chunk)
                 .map(|first| first..(first + chunk).min(end))
                 .collect();
-            let budget = AtomicU32::new(self.bounds.max_work - arena.work);
+            let budget = WorkBudget::new(self.bounds.max_work - arena.work, ranges.len());
             let expansions: Vec<_> = pool.install(|| {
                 ranges
                     .into_par_iter()
-                    .map(|range| self.expand_range(range, arena, &budget))
+                    .enumerate()
+                    .map(|(worker, range)| self.expand_range(range, arena, &budget, worker))
                     .collect()
             });
             arena.work += expansions
@@ -80,8 +81,14 @@ impl Search<'_> {
         Ok(())
     }
 
-    fn expand_range(&self, range: Range<usize>, base: &Arena, budget: &AtomicU32) -> Expansion {
-        let mut arena = base.fork(budget);
+    fn expand_range(
+        &self,
+        range: Range<usize>,
+        base: &Arena,
+        budget: &WorkBudget,
+        worker: usize,
+    ) -> Expansion {
+        let mut arena = base.fork(budget, worker);
         let mut events = vec![];
         let mut local = StateStore::new(self.store.width);
         let mut next = vec![None; self.store.width];

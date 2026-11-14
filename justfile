@@ -194,3 +194,9 @@ frontier-safety-eval java jar archive run: safety-build
 
 frontier-safety-replay java jar archive saved run: safety-build
   node dist/evals/frontier-safety/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
+
+frontier-budget-eval java jar archive run: safety-build
+  MODELT_FRONTIER_PLAN=0021-worker-budget node dist/evals/frontier-safety/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+frontier-budget-replay java jar archive saved run: safety-build
+  MODELT_FRONTIER_PLAN=0021-worker-budget node dist/evals/frontier-safety/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
