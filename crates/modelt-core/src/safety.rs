@@ -1,4 +1,7 @@
-use crate::safety_expressions::{EvalContext, validate_branches};
+use crate::safety_expressions::{EvalContext, validate_branches, visit_branch};
+#[cfg(not(target_arch = "wasm32"))]
+#[path = "safety_parallel.rs"]
+mod parallel;
 use crate::safety_values::Arena;
 use crate::temporal::{GraphEdge, TemporalFormula, TemporalProperty};
 use crate::{CoreError, Value};
@@ -470,13 +473,32 @@ struct Search<'a> {
     nodes: Vec<Node>,
     store: StateStore,
     result: SafetyResult,
-    arena: Arena,
     graph: Option<Vec<Vec<GraphEdge>>>,
     roots: Vec<usize>,
 }
 
 impl SafetyProgram {
     pub fn check(&self, bounds: SafetyBounds) -> Result<SafetyResult, CoreError> {
+        self.check_with_workers(bounds, 1)
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn check_parallel(
+        &self,
+        bounds: SafetyBounds,
+        workers: usize,
+    ) -> Result<SafetyResult, CoreError> {
+        if workers == 0 || workers > 256 {
+            return Err(CoreError::protocol(
+                "Safety workers must be between 1 and 256",
+            ));
+        }
+        self.check_with_workers(bounds, workers)
+    }
+    fn check_with_workers(
+        &self,
+        bounds: SafetyBounds,
+        workers: usize,
+    ) -> Result<SafetyResult, CoreError> {
         if self.format != "modelt.safety-program"
             || self.version != 1
             || self.name.is_empty()
@@ -489,11 +511,11 @@ impl SafetyProgram {
         {
             return Err(CoreError::protocol("Invalid safety program or bounds"));
         }
+        let mut arena = Arena::new(bounds.max_work);
         let mut search = Search {
             program: self,
             bounds,
             nodes: vec![],
-            arena: Arena::new(bounds.max_work),
             graph: (!self.properties.is_empty()).then(Vec::new),
             roots: vec![],
             store: StateStore::new(self.variables.len()),
@@ -507,7 +529,7 @@ impl SafetyProgram {
                 violation: None,
             },
         };
-        let outcome = search.run();
+        let outcome = search.run(&mut arena, workers);
         if let Err(error) = outcome {
             if error.code != "budget" && error.code != "temporal-budget" {
                 return Err(error);
@@ -522,13 +544,13 @@ impl SafetyProgram {
                 .into(),
             );
         }
-        search.result.work = search.arena.work;
+        search.result.work = arena.work;
         Ok(search.result)
     }
 }
 
 impl Search<'_> {
-    fn run(&mut self) -> Result<(), CoreError> {
+    fn run(&mut self, arena: &mut Arena, workers: usize) -> Result<(), CoreError> {
         let program = self.program;
         validate_branches(&program.initial, program.variables.len(), 0, 0)?;
         validate_branches(&program.next, program.variables.len(), 1, 0)?;
@@ -539,7 +561,7 @@ impl Search<'_> {
             if predicate.expression.is_constant()
                 && !predicate
                     .expression
-                    .eval(EvalContext::new(&[], &[]), &mut self.arena)?
+                    .eval(EvalContext::new(&[], &[]), arena)?
                     .boolean()?
             {
                 return Err(CoreError::protocol(
@@ -564,7 +586,7 @@ impl Search<'_> {
                 .validate(program.variables.len(), 3, 0)?;
             if !predicate
                 .expression
-                .eval(EvalContext::new(&[], &[]), &mut self.arena)?
+                .eval(EvalContext::new(&[], &[]), arena)?
                 .boolean()?
             {
                 self.result.status = "assumption-violation".into();
@@ -580,6 +602,7 @@ impl Search<'_> {
         let mut next = vec![None; program.variables.len()];
         for (index, branch) in program.initial.iter().enumerate() {
             self.walk(
+                arena,
                 BranchCursor {
                     definition: branch,
                     index,
@@ -600,37 +623,43 @@ impl Search<'_> {
         }
         let mut index = 0;
         let mut current = vec![Scalar::Int(0); program.variables.len()];
+        #[cfg(not(target_arch = "wasm32"))]
+        let mut pool = None;
+        #[cfg(target_arch = "wasm32")]
+        let _ = workers;
         while index < self.nodes.len() {
-            current.copy_from_slice(self.store.state(index));
-            let mut enabled = false;
-            for (branch_index, branch) in program.next.iter().enumerate() {
-                self.walk(
-                    BranchCursor {
-                        definition: branch,
-                        index: branch_index,
-                    },
-                    0,
-                    EvalContext::new(&current, &[]),
-                    &mut next,
-                    Some(index),
-                    &mut enabled,
-                )?;
+            let end = self.nodes.len();
+            #[cfg(not(target_arch = "wasm32"))]
+            if workers > 1
+                && end - index > 1
+                && program.action_properties.is_empty()
+                && program.properties.is_empty()
+                && program.fairness.is_empty()
+            {
+                if pool.is_none() {
+                    pool = Some(
+                        rayon::ThreadPoolBuilder::new()
+                            .num_threads(workers)
+                            .build()
+                            .map_err(|error| {
+                                CoreError::protocol(&format!("Safety worker pool: {error}"))
+                            })?,
+                    );
+                }
+                self.parallel_frontier(index..end, pool.as_ref().unwrap(), arena)?;
                 if self.stopped() {
                     return Ok(());
                 }
+                index = end;
+                continue;
             }
-            if !enabled && program.check_deadlock {
-                self.result.status = "deadlock".into();
-                self.result.reason = None;
-                self.result.violation = Some(SafetyViolation {
-                    name: "deadlock".into(),
-                    trace: self.trace(index)?,
-                    loop_start: None,
-                    loop_action: None,
-                });
-                return Ok(());
+            while index < end {
+                self.expand(index, arena, &mut current, &mut next)?;
+                if self.stopped() {
+                    return Ok(());
+                }
+                index += 1;
             }
-            index += 1;
         }
         if self.result.status == "complete"
             && let Some(graph) = &mut self.graph
@@ -648,7 +677,7 @@ impl Search<'_> {
                 self.store.width,
                 graph,
                 &self.roots,
-                &mut self.arena,
+                arena,
             )? {
                 self.result.status = "liveness-violation".into();
                 self.result.violation = Some(violation);
@@ -661,16 +690,53 @@ impl Search<'_> {
             || self.result.reason.as_deref() == Some("work")
             || self.result.reason.as_deref() == Some("states")
     }
-    fn tick(&mut self) -> bool {
-        if self.arena.tick().is_err() {
-            self.result.status = "bounded".into();
-            self.result.reason = Some("work".into());
-            return false;
+    fn expand(
+        &mut self,
+        index: usize,
+        arena: &mut Arena,
+        current: &mut [Scalar],
+        next: &mut [Option<Scalar>],
+    ) -> Result<(), CoreError> {
+        let program = self.program;
+        current.copy_from_slice(self.store.state(index));
+        let mut enabled = false;
+        for (branch_index, branch) in program.next.iter().enumerate() {
+            self.walk(
+                arena,
+                BranchCursor {
+                    definition: branch,
+                    index: branch_index,
+                },
+                0,
+                EvalContext::new(current, &[]),
+                next,
+                Some(index),
+                &mut enabled,
+            )?;
+            if self.stopped() {
+                return Ok(());
+            }
         }
-        true
+        if !enabled && program.check_deadlock {
+            self.deadlock(index, arena)?;
+        }
+        Ok(())
     }
+    fn deadlock(&mut self, index: usize, arena: &Arena) -> Result<(), CoreError> {
+        self.result.status = "deadlock".into();
+        self.result.reason = None;
+        self.result.violation = Some(SafetyViolation {
+            name: "deadlock".into(),
+            trace: self.trace(index, arena)?,
+            loop_start: None,
+            loop_action: None,
+        });
+        Ok(())
+    }
+    #[allow(clippy::too_many_arguments)]
     fn walk(
         &mut self,
+        arena: &mut Arena,
         branch: BranchCursor<'_>,
         position: usize,
         context: EvalContext<'_>,
@@ -678,81 +744,18 @@ impl Search<'_> {
         parent: Option<usize>,
         enabled: &mut bool,
     ) -> Result<(), CoreError> {
-        if !self.tick() {
-            return Ok(());
-        }
-        let Some(step) = branch.definition.steps.get(position) else {
-            *enabled = true;
-            self.accept(next, parent, branch.index)?;
-            return Ok(());
-        };
-        let ctx = EvalContext { next, ..context };
-        match step {
-            Step::Guard { expression } => {
-                if expression.eval(ctx, &mut self.arena)?.boolean()? {
-                    self.walk(branch, position + 1, context, next, parent, enabled)?;
-                }
-            }
-            Step::Assign { slot, value } => {
-                let value = value.eval(ctx, &mut self.arena)?;
-                let previous = next[*slot];
-                if previous
-                    .map(|previous| self.arena.equal(previous, value))
-                    .transpose()?
-                    .unwrap_or(true)
-                {
-                    next[*slot] = Some(value);
-                    self.walk(branch, position + 1, context, next, parent, enabled)?;
-                    next[*slot] = previous;
-                }
-            }
-            Step::Choose { slot, domain } => {
-                if let Some(value) = next[*slot] {
-                    if domain.contains(value, ctx, &mut self.arena)? {
-                        self.walk(branch, position + 1, context, next, parent, enabled)?;
-                    }
-                    return Ok(());
-                }
-                for value in domain.values(ctx, &mut self.arena)? {
-                    next[*slot] = Some(value);
-                    self.walk(branch, position + 1, context, next, parent, enabled)?;
-                    if self.stopped() {
-                        break;
-                    }
-                }
-                next[*slot] = None;
-            }
-            Step::Bind {
-                slot,
-                domain,
-                tuple_size,
-            } => {
-                let values = domain.values(ctx, &mut self.arena)?;
-                let mut locals = context.locals.to_vec();
-                if *slot != locals.len() {
-                    return Err(CoreError::protocol("Invalid bound slot"));
-                }
-                for value in values {
-                    self.arena.check_tuple(value, *tuple_size)?;
-                    locals.push(value);
-                    self.walk(
-                        branch,
-                        position + 1,
-                        EvalContext {
-                            locals: &locals,
-                            ..context
-                        },
-                        next,
-                        parent,
-                        enabled,
-                    )?;
-                    locals.pop();
-                    if self.stopped() {
-                        break;
-                    }
-                }
-            }
-        }
+        visit_branch(
+            branch.definition,
+            position,
+            context,
+            next,
+            arena,
+            &mut |values, arena| {
+                *enabled = true;
+                self.accept(values, parent, branch.index, arena, None)?;
+                Ok(self.stopped())
+            },
+        )?;
         Ok(())
     }
     fn accept(
@@ -760,6 +763,8 @@ impl Search<'_> {
         values: &[Option<Scalar>],
         parent: Option<usize>,
         action: usize,
+        arena: &mut Arena,
+        checked: Option<Result<Option<usize>, CoreError>>,
     ) -> Result<(), CoreError> {
         let hash = get_hash(values)?;
         self.result.generated += 1;
@@ -801,42 +806,35 @@ impl Search<'_> {
         } else if !self.roots.contains(&index) {
             self.roots.push(index);
         }
+        let checked = checked.transpose()?;
         if existing.is_none() {
-            for predicate in &self.program.invariants {
-                if !predicate
-                    .expression
-                    .eval(
-                        EvalContext::new(self.store.state(index), &[]),
-                        &mut self.arena,
-                    )?
-                    .boolean()?
-                {
-                    self.result.status = "invariant-violation".into();
-                    self.result.reason = None;
-                    self.result.violation = Some(SafetyViolation {
-                        name: predicate.name.clone(),
-                        trace: self.trace(index)?,
-                        loop_start: None,
-                        loop_action: None,
-                    });
-                    return Ok(());
-                }
+            let violation = match checked {
+                Some(violation) => violation,
+                None => check_invariants(self.program, self.store.state(index), arena)?,
+            };
+            if let Some(predicate) = violation {
+                self.result.status = "invariant-violation".into();
+                self.result.reason = None;
+                self.result.violation = Some(SafetyViolation {
+                    name: self.program.invariants[predicate].name.clone(),
+                    trace: self.trace(index, arena)?,
+                    loop_start: None,
+                    loop_action: None,
+                });
+                return Ok(());
             }
         }
         if let Some(parent) = parent {
             for predicate in &self.program.action_properties {
                 if !predicate
                     .expression
-                    .eval(
-                        EvalContext::new(self.store.state(parent), values),
-                        &mut self.arena,
-                    )?
+                    .eval(EvalContext::new(self.store.state(parent), values), arena)?
                     .boolean()?
                 {
-                    let mut trace = self.trace(parent)?;
+                    let mut trace = self.trace(parent, arena)?;
                     trace.push(SafetyTraceStep {
                         action: Some(self.program.next[action].name.clone()),
-                        values: self.portable(index)?,
+                        values: self.portable(index, arena)?,
                     });
                     self.result.status = "property-violation".into();
                     self.result.reason = None;
@@ -853,17 +851,14 @@ impl Search<'_> {
             for predicate in &self.program.initial_properties {
                 if !predicate
                     .expression
-                    .eval(
-                        EvalContext::new(self.store.state(index), &[]),
-                        &mut self.arena,
-                    )?
+                    .eval(EvalContext::new(self.store.state(index), &[]), arena)?
                     .boolean()?
                 {
                     self.result.status = "property-violation".into();
                     self.result.reason = None;
                     self.result.violation = Some(SafetyViolation {
                         name: predicate.name.clone(),
-                        trace: self.trace(index)?,
+                        trace: self.trace(index, arena)?,
                         loop_start: None,
                         loop_action: None,
                     });
@@ -873,14 +868,14 @@ impl Search<'_> {
         }
         Ok(())
     }
-    fn portable(&self, index: usize) -> Result<Vec<Value>, CoreError> {
+    fn portable(&self, index: usize, arena: &Arena) -> Result<Vec<Value>, CoreError> {
         self.store
             .state(index)
             .iter()
-            .map(|value| self.arena.portable(*value))
+            .map(|value| arena.portable(*value))
             .collect()
     }
-    fn trace(&self, mut index: usize) -> Result<Vec<SafetyTraceStep>, CoreError> {
+    fn trace(&self, mut index: usize, arena: &Arena) -> Result<Vec<SafetyTraceStep>, CoreError> {
         let mut trace = vec![];
         loop {
             let node = &self.nodes[index];
@@ -888,7 +883,7 @@ impl Search<'_> {
                 action: node
                     .action
                     .map(|index| self.program.next[index].name.clone()),
-                values: self.portable(index)?,
+                values: self.portable(index, arena)?,
             });
             match node.parent {
                 Some(parent) => index = parent,
@@ -898,6 +893,23 @@ impl Search<'_> {
         trace.reverse();
         Ok(trace)
     }
+}
+
+fn check_invariants(
+    program: &SafetyProgram,
+    values: &[Scalar],
+    arena: &mut Arena,
+) -> Result<Option<usize>, CoreError> {
+    for (index, predicate) in program.invariants.iter().enumerate() {
+        if !predicate
+            .expression
+            .eval(EvalContext::new(values, &[]), arena)?
+            .boolean()?
+        {
+            return Ok(Some(index));
+        }
+    }
+    Ok(None)
 }
 
 #[cfg(test)]

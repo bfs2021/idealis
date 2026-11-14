@@ -117,6 +117,12 @@ pub enum Response {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Request {
+    #[cfg(not(target_arch = "wasm32"))]
+    CheckSafetyParallel {
+        program: SafetyProgram,
+        bounds: SafetyBounds,
+        workers: usize,
+    },
     CheckSafety {
         program: SafetyProgram,
         bounds: SafetyBounds,
@@ -431,6 +437,14 @@ impl Engine {
             return Err(CoreError::protocol("Unsupported protocol version"));
         }
         match command.request {
+            #[cfg(not(target_arch = "wasm32"))]
+            Request::CheckSafetyParallel {
+                program,
+                bounds,
+                workers,
+            } => Ok(Message::Safety {
+                result: program.check_parallel(bounds, workers)?,
+            }),
             Request::CheckSafety { program, bounds } => Ok(Message::Safety {
                 result: program.check(bounds)?,
             }),

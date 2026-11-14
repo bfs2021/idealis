@@ -184,3 +184,13 @@ single-model-eval java jar archive run: safety-build
 
 single-model-replay java jar archive saved run: safety-build
   node dist/evals/single-model/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
+
+frontier-safety-test: safety-build
+  cargo test --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml
+  node --test dist/evals/frontier-safety/contract-test.js
+
+frontier-safety-eval java jar archive run: safety-build
+  node dist/evals/frontier-safety/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+frontier-safety-replay java jar archive saved run: safety-build
+  node dist/evals/frontier-safety/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}

@@ -771,7 +771,7 @@ impl Expression {
                 let mut enabled = false;
                 for branch in branches {
                     let mut next = vec![None; current.len()];
-                    walk_enabled(
+                    visit_branch(
                         branch,
                         0,
                         EvalContext {
@@ -980,7 +980,7 @@ fn enumerate_functions(
     }
 }
 
-fn walk_enabled(
+pub(crate) fn visit_branch(
     branch: &Branch,
     position: usize,
     ctx: EvalContext<'_>,
@@ -996,7 +996,7 @@ fn walk_enabled(
     match step {
         Step::Guard { expression } => {
             if expression.eval(context, arena)?.boolean()? {
-                walk_enabled(branch, position + 1, ctx, next, arena, visitor)
+                visit_branch(branch, position + 1, ctx, next, arena, visitor)
             } else {
                 Ok(false)
             }
@@ -1010,21 +1010,21 @@ fn walk_enabled(
                 return Ok(false);
             }
             next[*slot] = Some(value);
-            let result = walk_enabled(branch, position + 1, ctx, next, arena, visitor);
+            let result = visit_branch(branch, position + 1, ctx, next, arena, visitor);
             next[*slot] = previous;
             result
         }
         Step::Choose { slot, domain } => {
             if let Some(value) = next[*slot] {
                 return if domain.contains(value, context, arena)? {
-                    walk_enabled(branch, position + 1, ctx, next, arena, visitor)
+                    visit_branch(branch, position + 1, ctx, next, arena, visitor)
                 } else {
                     Ok(false)
                 };
             }
             for value in domain.values(context, arena)? {
                 next[*slot] = Some(value);
-                let found = walk_enabled(branch, position + 1, ctx, next, arena, visitor)?;
+                let found = visit_branch(branch, position + 1, ctx, next, arena, visitor)?;
                 next[*slot] = None;
                 if found {
                     return Ok(true);
@@ -1045,7 +1045,7 @@ fn walk_enabled(
             for value in values {
                 arena.check_tuple(value, *tuple_size)?;
                 locals.push(value);
-                let found = walk_enabled(
+                let found = visit_branch(
                     branch,
                     position + 1,
                     EvalContext {

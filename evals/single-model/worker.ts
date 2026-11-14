@@ -9,7 +9,13 @@ import { type BenchmarkCase, bounds } from "./cases.js";
 
 const backend = process.argv[2];
 const path = process.argv[3];
+const workers =
+  process.argv[4] === undefined ? undefined : Number(process.argv[4]);
 assert.ok((backend === "native" || backend === "wasm") && path);
+assert.ok(
+  workers === undefined ||
+    (backend === "native" && Number.isSafeInteger(workers) && workers > 0),
+);
 const input: BenchmarkCase = JSON.parse(await readFile(path, "utf8"));
 const frontendStart = performance.now();
 const program = compileTlaSafety(input);
@@ -36,7 +42,10 @@ try {
     ? checkSafety(core, program, bounds)
     : await native?.request({
         version: 1,
-        request: { kind: "check-safety", program, bounds },
+        request:
+          workers === undefined
+            ? { kind: "check-safety", program, bounds }
+            : { kind: "check-safety-parallel", program, bounds, workers },
       });
   const result = core
     ? response

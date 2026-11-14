@@ -114,6 +114,12 @@ export interface PortableCommand {
   readonly version: 1;
   readonly request:
     | {
+        readonly kind: "check-safety-parallel";
+        readonly program: SafetyProgram;
+        readonly bounds: SafetyBounds;
+        readonly workers: number;
+      }
+    | {
         readonly kind: "check-safety";
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
