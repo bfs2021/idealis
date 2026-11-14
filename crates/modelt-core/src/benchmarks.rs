@@ -1,4 +1,4 @@
-#![allow(unused_imports)]
+#![allow(unused_imports, dead_code)]
 
 // Cargo includes the source test modules without their test harness in this target.
 include!("lib.rs");
@@ -28,7 +28,7 @@ mod measurements {
                 env!("CARGO_MANIFEST_DIR"),
                 "/../../.artifacts/criterion-safety/inputs.json"
             ))
-            .expect("Run just criterion-prepare"),
+            .unwrap_or_else(|_| include_bytes!("bench-fixtures.json").to_vec()),
         )
         .unwrap()
     }
