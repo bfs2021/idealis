@@ -1,0 +1,35 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-controls/linear-ring/before-wasm-1-0-normal/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/criterion-safety/before/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 77.0846249999995,
+  "stdout": "{\"frontendMs\":2.7701670000000007,\"engineStartupMs\":1.4257080000000002,\"apiMs\":4.614291000000009,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":17,\"generated\":18,\"depth\":16,\"work\":36,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 2.7701670000000007,
+    "engineStartupMs": 1.4257080000000002,
+    "apiMs": 4.614291000000009,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 17,
+      "generated": 18,
+      "depth": 16,
+      "work": 36,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

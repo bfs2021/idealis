@@ -2,8 +2,10 @@ import { spawn } from "node:child_process";
 import { createInterface } from "node:readline";
 import type { PortableCommand } from "../../src/contracts.js";
 
-export const startNative = () => {
-  const child = spawn("crates/modelt-core/target/release/modelt-core", [], {
+export const startNative = (
+  path = "crates/modelt-core/target/release/modelt-core",
+) => {
+  const child = spawn(path, [], {
     stdio: ["pipe", "pipe", "pipe"],
   });
   const pending: {
