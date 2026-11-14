@@ -209,3 +209,13 @@ readme-bench java jar archive run: safety-build
 
 readme-bench-replay java jar archive saved run: safety-build
   node dist/evals/readme-comparison/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
+
+criterion-prepare:
+  pnpm build
+  node dist/evals/criterion-safety/prepare.js
+
+criterion-test: criterion-prepare
+  cargo test --locked --manifest-path crates/modelt-core/Cargo.toml --bench safety
+
+criterion-save stage run: criterion-prepare
+  node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
