@@ -200,3 +200,12 @@ frontier-budget-eval java jar archive run: safety-build
 
 frontier-budget-replay java jar archive saved run: safety-build
   MODELT_FRONTIER_PLAN=0021-worker-budget node dist/evals/frontier-safety/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
+
+readme-bench-test java jar: safety-build
+  MODELT_TLC_JAVA={{quote(java)}} MODELT_TLC_JAR={{quote(jar)}} node --test dist/evals/readme-comparison/contract-test.js dist/evals/readme-comparison/integration-test.js
+
+readme-bench java jar archive run: safety-build
+  node dist/evals/readme-comparison/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+readme-bench-replay java jar archive saved run: safety-build
+  node dist/evals/readme-comparison/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}

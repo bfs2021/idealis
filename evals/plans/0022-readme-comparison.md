@@ -6,7 +6,7 @@
 
 6経路はtla-ts 1、TLC 1/8、modelt Wasm 1、modelt native 1/8。nativeはcheck-safety-parallelでworker数を明示し、1では逐次経路を使う。4入力はcounter-product (5,308,416状態)、function-cube (1,048,576)、parallel-channels (2,097,152)、linear-ring (1,000,000)。全経路で同じsource/configを毎回読み、解析から検査する。Rustコアと入力の最適化・縮小は行わない。
 
-各条件1 warmup + 3測定。経路順は反復ごとに回転し、全経路を直列実行する。測定中は別のbuild/test/replayを開始せず、測定プロセスの終了を確認してから検証を始める。112ではなく4×6×4=96 sampleを保存し、集計対象は72 sample。前のrunの値を新しい表へ混在させない。
+各条件1 warmup + 3測定。経路順は反復ごとに回転し、全経路を直列実行する。測定中は別のbuild/test/replayを開始せず、測定プロセスの終了を確認してから検証を始める。4×6×4=96 sampleを保存し、集計対象は72 sample。前のrunの値を新しい表へ混在させない。
 
 TLC v1.7.4、Temurin 21.0.13+9 arm64、-Xmx8g、ParallelGC、ActiveProcessorCount=8、seed16、lncheck final。Node24、--max-old-space-size=8192。tla-ts 0.0.10はworkers=1、version=1.7.4、livenessCheck=final。modelt上限はdepth/states=10,000,000、work=4,000,000,000。これらは厳密な共通RSS上限ではない。timeoutは追加しない。
 
