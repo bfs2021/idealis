@@ -1,0 +1,206 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.06s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/single-model/evaluate.js '.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' '.artifacts/tlc/tla2tools.jar' '.artifacts/tlc/arm64/jre-arm64.tar.gz' 'evals/runs/0019-single-model'
+Starting counter-product tlc-1 iteration=0
+{"input":"counter-product","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":6592.793667,"intervalMs":5943.976042,"sampledMaxRssBytes":3369041920,"path":"counter-product/tlc-1-0/sample.json","error":null}
+Starting counter-product tlc-2 iteration=0
+{"input":"counter-product","route":"tlc-2","iteration":0,"warmup":true,"status":"complete","wallMs":6258.064291000001,"intervalMs":5659.661,"sampledMaxRssBytes":3435986944,"path":"counter-product/tlc-2-0/sample.json","error":null}
+Starting counter-product tlc-4 iteration=0
+{"input":"counter-product","route":"tlc-4","iteration":0,"warmup":true,"status":"complete","wallMs":7331.9152920000015,"intervalMs":6737.905957999999,"sampledMaxRssBytes":3423584256,"path":"counter-product/tlc-4-0/sample.json","error":null}
+Starting counter-product tlc-8 iteration=0
+{"input":"counter-product","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":7227.41,"intervalMs":6591.261708000002,"sampledMaxRssBytes":3399057408,"path":"counter-product/tlc-8-0/sample.json","error":null}
+Starting counter-product native iteration=0
+{"input":"counter-product","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":3045.060999999998,"intervalMs":2770.379125,"sampledMaxRssBytes":417103872,"path":"counter-product/native-0/sample.json","error":null}
+Starting counter-product wasm iteration=0
+{"input":"counter-product","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":4387.706875,"intervalMs":4314.855208,"sampledMaxRssBytes":806928384,"path":"counter-product/wasm-0/sample.json","error":null}
+Starting counter-product tlc-2 iteration=1
+{"input":"counter-product","route":"tlc-2","iteration":1,"warmup":false,"status":"complete","wallMs":7126.169291000006,"intervalMs":6526.250667,"sampledMaxRssBytes":3428745216,"path":"counter-product/tlc-2-1/sample.json","error":null}
+Starting counter-product tlc-4 iteration=1
+{"input":"counter-product","route":"tlc-4","iteration":1,"warmup":false,"status":"complete","wallMs":8816.175917,"intervalMs":8205.093166999999,"sampledMaxRssBytes":3298426880,"path":"counter-product/tlc-4-1/sample.json","error":null}
+Starting counter-product tlc-8 iteration=1
+{"input":"counter-product","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":7572.9259170000005,"intervalMs":6955.14875,"sampledMaxRssBytes":3252174848,"path":"counter-product/tlc-8-1/sample.json","error":null}
+Starting counter-product native iteration=1
+{"input":"counter-product","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":3510.556958000001,"intervalMs":3421.363333,"sampledMaxRssBytes":428343296,"path":"counter-product/native-1/sample.json","error":null}
+Starting counter-product wasm iteration=1
+{"input":"counter-product","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":5083.784959000004,"intervalMs":4994.4069580000005,"sampledMaxRssBytes":810893312,"path":"counter-product/wasm-1/sample.json","error":null}
+Starting counter-product tlc-1 iteration=1
+{"input":"counter-product","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":6340.9382500000065,"intervalMs":5673.8036250000005,"sampledMaxRssBytes":3261349888,"path":"counter-product/tlc-1-1/sample.json","error":null}
+Starting counter-product tlc-4 iteration=2
+{"input":"counter-product","route":"tlc-4","iteration":2,"warmup":false,"status":"complete","wallMs":7978.144291999997,"intervalMs":7377.463374999992,"sampledMaxRssBytes":3282649088,"path":"counter-product/tlc-4-2/sample.json","error":null}
+Starting counter-product tlc-8 iteration=2
+{"input":"counter-product","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":6930.534166999991,"intervalMs":6344.8861250000045,"sampledMaxRssBytes":3233595392,"path":"counter-product/tlc-8-2/sample.json","error":null}
+Starting counter-product native iteration=2
+{"input":"counter-product","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":2853.111499999999,"intervalMs":2778.774167,"sampledMaxRssBytes":443367424,"path":"counter-product/native-2/sample.json","error":null}
+Starting counter-product wasm iteration=2
+{"input":"counter-product","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":4421.760166000007,"intervalMs":4348.203167,"sampledMaxRssBytes":805371904,"path":"counter-product/wasm-2/sample.json","error":null}
+Starting counter-product tlc-1 iteration=2
+{"input":"counter-product","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":6451.545083999998,"intervalMs":5856.368125000008,"sampledMaxRssBytes":3421569024,"path":"counter-product/tlc-1-2/sample.json","error":null}
+Starting counter-product tlc-2 iteration=2
+{"input":"counter-product","route":"tlc-2","iteration":2,"warmup":false,"status":"complete","wallMs":6372.969666999998,"intervalMs":5762.859792000003,"sampledMaxRssBytes":3452518400,"path":"counter-product/tlc-2-2/sample.json","error":null}
+Starting counter-product tlc-8 iteration=3
+{"input":"counter-product","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":6993.993875,"intervalMs":6351.497374999992,"sampledMaxRssBytes":3378839552,"path":"counter-product/tlc-8-3/sample.json","error":null}
+Starting counter-product native iteration=3
+{"input":"counter-product","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":2948.2669160000078,"intervalMs":2868.0313340000002,"sampledMaxRssBytes":425803776,"path":"counter-product/native-3/sample.json","error":null}
+Starting counter-product wasm iteration=3
+{"input":"counter-product","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":4620.382249999995,"intervalMs":4528.1738749999995,"sampledMaxRssBytes":805552128,"path":"counter-product/wasm-3/sample.json","error":null}
+Starting counter-product tlc-1 iteration=3
+{"input":"counter-product","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":6656.634582999992,"intervalMs":6029.876083999989,"sampledMaxRssBytes":3449962496,"path":"counter-product/tlc-1-3/sample.json","error":null}
+Starting counter-product tlc-2 iteration=3
+{"input":"counter-product","route":"tlc-2","iteration":3,"warmup":false,"status":"complete","wallMs":6928.821041000003,"intervalMs":6278.575083000018,"sampledMaxRssBytes":3449667584,"path":"counter-product/tlc-2-3/sample.json","error":null}
+Starting counter-product tlc-4 iteration=3
+{"input":"counter-product","route":"tlc-4","iteration":3,"warmup":false,"status":"complete","wallMs":7648.963291000022,"intervalMs":7030.145791999996,"sampledMaxRssBytes":3439722496,"path":"counter-product/tlc-4-3/sample.json","error":null}
+Starting function-cube tlc-1 iteration=0
+{"input":"function-cube","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":16025.814916000003,"intervalMs":15238.05349999998,"sampledMaxRssBytes":2458632192,"path":"function-cube/tlc-1-0/sample.json","error":null}
+Starting function-cube tlc-2 iteration=0
+{"input":"function-cube","route":"tlc-2","iteration":0,"warmup":true,"status":"complete","wallMs":8169.8813329999975,"intervalMs":7527.878457999992,"sampledMaxRssBytes":2639659008,"path":"function-cube/tlc-2-0/sample.json","error":null}
+Starting function-cube tlc-4 iteration=0
+{"input":"function-cube","route":"tlc-4","iteration":0,"warmup":true,"status":"complete","wallMs":4988.351374999998,"intervalMs":4373.014708000002,"sampledMaxRssBytes":2634137600,"path":"function-cube/tlc-4-0/sample.json","error":null}
+Starting function-cube tlc-8 iteration=0
+{"input":"function-cube","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":4203.102666000021,"intervalMs":3606.5745420000167,"sampledMaxRssBytes":2667364352,"path":"function-cube/tlc-8-0/sample.json","error":null}
+Starting function-cube native iteration=0
+{"input":"function-cube","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":9735.87274999998,"intervalMs":9653.832417,"sampledMaxRssBytes":955072512,"path":"function-cube/native-0/sample.json","error":null}
+Starting function-cube wasm iteration=0
+{"input":"function-cube","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":19470.894625000015,"intervalMs":19379.819916,"sampledMaxRssBytes":913227776,"path":"function-cube/wasm-0/sample.json","error":null}
+Starting function-cube tlc-2 iteration=1
+{"input":"function-cube","route":"tlc-2","iteration":1,"warmup":false,"status":"complete","wallMs":7916.154249999992,"intervalMs":7298.885833000008,"sampledMaxRssBytes":2642001920,"path":"function-cube/tlc-2-1/sample.json","error":null}
+Starting function-cube tlc-4 iteration=1
+{"input":"function-cube","route":"tlc-4","iteration":1,"warmup":false,"status":"complete","wallMs":5307.078375000012,"intervalMs":4681.803875000012,"sampledMaxRssBytes":2641199104,"path":"function-cube/tlc-4-1/sample.json","error":null}
+Starting function-cube tlc-8 iteration=1
+{"input":"function-cube","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":4720.864874999999,"intervalMs":4075.8616249999905,"sampledMaxRssBytes":2649243648,"path":"function-cube/tlc-8-1/sample.json","error":null}
+Starting function-cube native iteration=1
+{"input":"function-cube","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":8621.066791999998,"intervalMs":8543.285917,"sampledMaxRssBytes":957693952,"path":"function-cube/native-1/sample.json","error":null}
+Starting function-cube wasm iteration=1
+{"input":"function-cube","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":18064.330499999982,"intervalMs":17976.083625,"sampledMaxRssBytes":912932864,"path":"function-cube/wasm-1/sample.json","error":null}
+Starting function-cube tlc-1 iteration=1
+{"input":"function-cube","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":12779.958625,"intervalMs":12134.914999999979,"sampledMaxRssBytes":2624520192,"path":"function-cube/tlc-1-1/sample.json","error":null}
+Starting function-cube tlc-4 iteration=2
+{"input":"function-cube","route":"tlc-4","iteration":2,"warmup":false,"status":"complete","wallMs":5383.085625000007,"intervalMs":4757.64816599997,"sampledMaxRssBytes":2635415552,"path":"function-cube/tlc-4-2/sample.json","error":null}
+Starting function-cube tlc-8 iteration=2
+{"input":"function-cube","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":4823.735000000044,"intervalMs":4204.343583000009,"sampledMaxRssBytes":2664398848,"path":"function-cube/tlc-8-2/sample.json","error":null}
+Starting function-cube native iteration=2
+{"input":"function-cube","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":8887.98562500003,"intervalMs":8803.980042000001,"sampledMaxRssBytes":955711488,"path":"function-cube/native-2/sample.json","error":null}
+Starting function-cube wasm iteration=2
+{"input":"function-cube","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":18167.254749999964,"intervalMs":18074.826667,"sampledMaxRssBytes":929955840,"path":"function-cube/wasm-2/sample.json","error":null}
+Starting function-cube tlc-1 iteration=2
+{"input":"function-cube","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":12813.90058299998,"intervalMs":12177.496291999996,"sampledMaxRssBytes":2629550080,"path":"function-cube/tlc-1-2/sample.json","error":null}
+Starting function-cube tlc-2 iteration=2
+{"input":"function-cube","route":"tlc-2","iteration":2,"warmup":false,"status":"complete","wallMs":7850.164667000005,"intervalMs":7242.746291999996,"sampledMaxRssBytes":2653011968,"path":"function-cube/tlc-2-2/sample.json","error":null}
+Starting function-cube tlc-8 iteration=3
+{"input":"function-cube","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":4372.888666000043,"intervalMs":3793.4245419999934,"sampledMaxRssBytes":2661761024,"path":"function-cube/tlc-8-3/sample.json","error":null}
+Starting function-cube native iteration=3
+{"input":"function-cube","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":8911.31587500003,"intervalMs":8825.973375,"sampledMaxRssBytes":954990592,"path":"function-cube/native-3/sample.json","error":null}
+Starting function-cube wasm iteration=3
+{"input":"function-cube","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":18381.586541000055,"intervalMs":18289.041041999997,"sampledMaxRssBytes":929939456,"path":"function-cube/wasm-3/sample.json","error":null}
+Starting function-cube tlc-1 iteration=3
+{"input":"function-cube","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":13151.675999999978,"intervalMs":12536.054124999966,"sampledMaxRssBytes":2633596928,"path":"function-cube/tlc-1-3/sample.json","error":null}
+Starting function-cube tlc-2 iteration=3
+{"input":"function-cube","route":"tlc-2","iteration":3,"warmup":false,"status":"complete","wallMs":7437.733625000052,"intervalMs":6846.076457999996,"sampledMaxRssBytes":2652815360,"path":"function-cube/tlc-2-3/sample.json","error":null}
+Starting function-cube tlc-4 iteration=3
+{"input":"function-cube","route":"tlc-4","iteration":3,"warmup":false,"status":"complete","wallMs":4974.312624999962,"intervalMs":4384.063082999957,"sampledMaxRssBytes":2634924032,"path":"function-cube/tlc-4-3/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=0
+{"input":"parallel-channels","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":23704.91183300002,"intervalMs":23080.267292000004,"sampledMaxRssBytes":3166453760,"path":"parallel-channels/tlc-1-0/sample.json","error":null}
+Starting parallel-channels tlc-2 iteration=0
+{"input":"parallel-channels","route":"tlc-2","iteration":0,"warmup":true,"status":"complete","wallMs":13240.980541000026,"intervalMs":12648.685416999971,"sampledMaxRssBytes":3261890560,"path":"parallel-channels/tlc-2-0/sample.json","error":null}
+Starting parallel-channels tlc-4 iteration=0
+{"input":"parallel-channels","route":"tlc-4","iteration":0,"warmup":true,"status":"complete","wallMs":8744.899166000017,"intervalMs":8110.775458000018,"sampledMaxRssBytes":3261071360,"path":"parallel-channels/tlc-4-0/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=0
+{"input":"parallel-channels","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":6528.317541000026,"intervalMs":5927.312249999959,"sampledMaxRssBytes":3242311680,"path":"parallel-channels/tlc-8-0/sample.json","error":null}
+Starting parallel-channels native iteration=0
+{"input":"parallel-channels","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":19739.6115,"intervalMs":19656.404292,"sampledMaxRssBytes":967770112,"path":"parallel-channels/native-0/sample.json","error":null}
+Starting parallel-channels wasm iteration=0
+{"input":"parallel-channels","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":29385.794958000013,"intervalMs":29304.337125,"sampledMaxRssBytes":921305088,"path":"parallel-channels/wasm-0/sample.json","error":null}
+Starting parallel-channels tlc-2 iteration=1
+{"input":"parallel-channels","route":"tlc-2","iteration":1,"warmup":false,"status":"complete","wallMs":13553.215250000008,"intervalMs":12924.992624999955,"sampledMaxRssBytes":3254992896,"path":"parallel-channels/tlc-2-1/sample.json","error":null}
+Starting parallel-channels tlc-4 iteration=1
+{"input":"parallel-channels","route":"tlc-4","iteration":1,"warmup":false,"status":"complete","wallMs":8602.712083999999,"intervalMs":7953.8913750000065,"sampledMaxRssBytes":3099705344,"path":"parallel-channels/tlc-4-1/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=1
+{"input":"parallel-channels","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":6272.881082999986,"intervalMs":5669.363875000039,"sampledMaxRssBytes":3256500224,"path":"parallel-channels/tlc-8-1/sample.json","error":null}
+Starting parallel-channels native iteration=1
+{"input":"parallel-channels","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":22493.927957999986,"intervalMs":22413.654875,"sampledMaxRssBytes":967655424,"path":"parallel-channels/native-1/sample.json","error":null}
+Starting parallel-channels wasm iteration=1
+{"input":"parallel-channels","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":34351.27891700005,"intervalMs":34255.332540999996,"sampledMaxRssBytes":921387008,"path":"parallel-channels/wasm-1/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=1
+{"input":"parallel-channels","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":26652.31333299994,"intervalMs":26001.40891700005,"sampledMaxRssBytes":3013492736,"path":"parallel-channels/tlc-1-1/sample.json","error":null}
+Starting parallel-channels tlc-4 iteration=2
+{"input":"parallel-channels","route":"tlc-4","iteration":2,"warmup":false,"status":"complete","wallMs":9065.233792000101,"intervalMs":8236.273459000047,"sampledMaxRssBytes":3271639040,"path":"parallel-channels/tlc-4-2/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=2
+{"input":"parallel-channels","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":6180.584957999992,"intervalMs":5580.326833000057,"sampledMaxRssBytes":3228368896,"path":"parallel-channels/tlc-8-2/sample.json","error":null}
+Starting parallel-channels native iteration=2
+{"input":"parallel-channels","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":19864.46683300007,"intervalMs":19785.966041,"sampledMaxRssBytes":968015872,"path":"parallel-channels/native-2/sample.json","error":null}
+Starting parallel-channels wasm iteration=2
+{"input":"parallel-channels","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":28880.10120799998,"intervalMs":28796.707584,"sampledMaxRssBytes":922157056,"path":"parallel-channels/wasm-2/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=2
+{"input":"parallel-channels","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":23814.490292000002,"intervalMs":23220.50537499995,"sampledMaxRssBytes":3168010240,"path":"parallel-channels/tlc-1-2/sample.json","error":null}
+Starting parallel-channels tlc-2 iteration=2
+{"input":"parallel-channels","route":"tlc-2","iteration":2,"warmup":false,"status":"complete","wallMs":13222.140542000066,"intervalMs":12631.306083999923,"sampledMaxRssBytes":3240656896,"path":"parallel-channels/tlc-2-2/sample.json","error":null}
+Starting parallel-channels tlc-8 iteration=3
+{"input":"parallel-channels","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":6348.978917,"intervalMs":5752.803542000009,"sampledMaxRssBytes":3234168832,"path":"parallel-channels/tlc-8-3/sample.json","error":null}
+Starting parallel-channels native iteration=3
+{"input":"parallel-channels","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":19506.923666000017,"intervalMs":19416.994458999998,"sampledMaxRssBytes":967704576,"path":"parallel-channels/native-3/sample.json","error":null}
+Starting parallel-channels wasm iteration=3
+{"input":"parallel-channels","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":29923.79954200005,"intervalMs":29837.33425,"sampledMaxRssBytes":922812416,"path":"parallel-channels/wasm-3/sample.json","error":null}
+Starting parallel-channels tlc-1 iteration=3
+{"input":"parallel-channels","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":24076.05358399998,"intervalMs":23469.110916999984,"sampledMaxRssBytes":3196633088,"path":"parallel-channels/tlc-1-3/sample.json","error":null}
+Starting parallel-channels tlc-2 iteration=3
+{"input":"parallel-channels","route":"tlc-2","iteration":3,"warmup":false,"status":"complete","wallMs":14221.177417000057,"intervalMs":13600.645084000076,"sampledMaxRssBytes":3098525696,"path":"parallel-channels/tlc-2-3/sample.json","error":null}
+Starting parallel-channels tlc-4 iteration=3
+{"input":"parallel-channels","route":"tlc-4","iteration":3,"warmup":false,"status":"complete","wallMs":9212.029334000079,"intervalMs":8571.413959000027,"sampledMaxRssBytes":3256958976,"path":"parallel-channels/tlc-4-3/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=0
+{"input":"linear-ring","route":"tlc-1","iteration":0,"warmup":true,"status":"complete","wallMs":961.641042000032,"intervalMs":353.18425000004936,"sampledMaxRssBytes":570802176,"path":"linear-ring/tlc-1-0/sample.json","error":null}
+Starting linear-ring tlc-2 iteration=0
+{"input":"linear-ring","route":"tlc-2","iteration":0,"warmup":true,"status":"complete","wallMs":1379.7240000000456,"intervalMs":793.4079170000041,"sampledMaxRssBytes":552370176,"path":"linear-ring/tlc-2-0/sample.json","error":null}
+Starting linear-ring tlc-4 iteration=0
+{"input":"linear-ring","route":"tlc-4","iteration":0,"warmup":true,"status":"complete","wallMs":1363.6747500000056,"intervalMs":793.0557920000283,"sampledMaxRssBytes":548634624,"path":"linear-ring/tlc-4-0/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=0
+{"input":"linear-ring","route":"tlc-8","iteration":0,"warmup":true,"status":"complete","wallMs":1436.6752080000006,"intervalMs":858.9232089999132,"sampledMaxRssBytes":559955968,"path":"linear-ring/tlc-8-0/sample.json","error":null}
+Starting linear-ring native iteration=0
+{"input":"linear-ring","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":207.31345799996052,"intervalMs":125.41962500000001,"sampledMaxRssBytes":81051648,"path":"linear-ring/native-0/sample.json","error":null}
+Starting linear-ring wasm iteration=0
+{"input":"linear-ring","route":"wasm","iteration":0,"warmup":true,"status":"complete","wallMs":269.97262499993667,"intervalMs":199.49429099999998,"sampledMaxRssBytes":165920768,"path":"linear-ring/wasm-0/sample.json","error":null}
+Starting linear-ring tlc-2 iteration=1
+{"input":"linear-ring","route":"tlc-2","iteration":1,"warmup":false,"status":"complete","wallMs":1328.720417000004,"intervalMs":764.9894169999752,"sampledMaxRssBytes":552763392,"path":"linear-ring/tlc-2-1/sample.json","error":null}
+Starting linear-ring tlc-4 iteration=1
+{"input":"linear-ring","route":"tlc-4","iteration":1,"warmup":false,"status":"complete","wallMs":1386.7105420000153,"intervalMs":811.1930420000572,"sampledMaxRssBytes":548044800,"path":"linear-ring/tlc-4-1/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=1
+{"input":"linear-ring","route":"tlc-8","iteration":1,"warmup":false,"status":"complete","wallMs":1444.9322499999544,"intervalMs":857.1036249999888,"sampledMaxRssBytes":541327360,"path":"linear-ring/tlc-8-1/sample.json","error":null}
+Starting linear-ring native iteration=1
+{"input":"linear-ring","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":272.28375000006054,"intervalMs":138.331625,"sampledMaxRssBytes":115687424,"path":"linear-ring/native-1/sample.json","error":null}
+Starting linear-ring wasm iteration=1
+{"input":"linear-ring","route":"wasm","iteration":1,"warmup":false,"status":"complete","wallMs":267.7926660000812,"intervalMs":198.045,"sampledMaxRssBytes":165806080,"path":"linear-ring/wasm-1/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=1
+{"input":"linear-ring","route":"tlc-1","iteration":1,"warmup":false,"status":"complete","wallMs":955.9432500000112,"intervalMs":391.3110829999205,"sampledMaxRssBytes":567672832,"path":"linear-ring/tlc-1-1/sample.json","error":null}
+Starting linear-ring tlc-4 iteration=2
+{"input":"linear-ring","route":"tlc-4","iteration":2,"warmup":false,"status":"complete","wallMs":1371.2451670001028,"intervalMs":786.6168339999858,"sampledMaxRssBytes":549240832,"path":"linear-ring/tlc-4-2/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=2
+{"input":"linear-ring","route":"tlc-8","iteration":2,"warmup":false,"status":"complete","wallMs":1438.45320800005,"intervalMs":869.4791670000413,"sampledMaxRssBytes":546996224,"path":"linear-ring/tlc-8-2/sample.json","error":null}
+Starting linear-ring native iteration=2
+{"input":"linear-ring","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":186.38716700009536,"intervalMs":120.65537500000002,"sampledMaxRssBytes":null,"path":"linear-ring/native-2/sample.json","error":null}
+Starting linear-ring wasm iteration=2
+{"input":"linear-ring","route":"wasm","iteration":2,"warmup":false,"status":"complete","wallMs":251.79237499996088,"intervalMs":188.067625,"sampledMaxRssBytes":168181760,"path":"linear-ring/wasm-2/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=2
+{"input":"linear-ring","route":"tlc-1","iteration":2,"warmup":false,"status":"complete","wallMs":930.3699170000618,"intervalMs":356.58400000003166,"sampledMaxRssBytes":569360384,"path":"linear-ring/tlc-1-2/sample.json","error":null}
+Starting linear-ring tlc-2 iteration=2
+{"input":"linear-ring","route":"tlc-2","iteration":2,"warmup":false,"status":"complete","wallMs":1343.422666999977,"intervalMs":755.1157080000266,"sampledMaxRssBytes":567705600,"path":"linear-ring/tlc-2-2/sample.json","error":null}
+Starting linear-ring tlc-8 iteration=3
+{"input":"linear-ring","route":"tlc-8","iteration":3,"warmup":false,"status":"complete","wallMs":1419.1274170000106,"intervalMs":836.7956659999909,"sampledMaxRssBytes":557531136,"path":"linear-ring/tlc-8-3/sample.json","error":null}
+Starting linear-ring native iteration=3
+{"input":"linear-ring","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":189.62758400000166,"intervalMs":121.57049999999998,"sampledMaxRssBytes":null,"path":"linear-ring/native-3/sample.json","error":null}
+Starting linear-ring wasm iteration=3
+{"input":"linear-ring","route":"wasm","iteration":3,"warmup":false,"status":"complete","wallMs":254.34424999996554,"intervalMs":189.121375,"sampledMaxRssBytes":168001536,"path":"linear-ring/wasm-3/sample.json","error":null}
+Starting linear-ring tlc-1 iteration=3
+{"input":"linear-ring","route":"tlc-1","iteration":3,"warmup":false,"status":"complete","wallMs":906.6314169999678,"intervalMs":328.6163330000127,"sampledMaxRssBytes":569524224,"path":"linear-ring/tlc-1-3/sample.json","error":null}
+Starting linear-ring tlc-2 iteration=3
+{"input":"linear-ring","route":"tlc-2","iteration":3,"warmup":false,"status":"complete","wallMs":1344.1069170000264,"intervalMs":763.7147500000428,"sampledMaxRssBytes":552484864,"path":"linear-ring/tlc-2-3/sample.json","error":null}
+Starting linear-ring tlc-4 iteration=3
+{"input":"linear-ring","route":"tlc-4","iteration":3,"warmup":false,"status":"complete","wallMs":1370.3377910000272,"intervalMs":780.9958750000224,"sampledMaxRssBytes":551845888,"path":"linear-ring/tlc-4-3/sample.json","error":null}
+[{"input":"counter-product","route":"tlc-1","status":"complete","wall":{"median":6451.545083999998,"min":6340.9382500000065,"max":6656.634582999992},"interval":{"median":5856.368125000008,"min":5673.8036250000005,"max":6029.876083999989},"sampledMaxRssBytes":3449962496},{"input":"counter-product","route":"tlc-2","status":"complete","wall":{"median":6928.821041000003,"min":6372.969666999998,"max":7126.169291000006},"interval":{"median":6278.575083000018,"min":5762.859792000003,"max":6526.250667},"sampledMaxRssBytes":3452518400},{"input":"counter-product","route":"tlc-4","status":"complete","wall":{"median":7978.144291999997,"min":7648.963291000022,"max":8816.175917},"interval":{"median":7377.463374999992,"min":7030.145791999996,"max":8205.093166999999},"sampledMaxRssBytes":3439722496},{"input":"counter-product","route":"tlc-8","status":"complete","wall":{"median":6993.993875,"min":6930.534166999991,"max":7572.9259170000005},"interval":{"median":6351.497374999992,"min":6344.8861250000045,"max":6955.14875},"sampledMaxRssBytes":3378839552},{"input":"counter-product","route":"native","status":"complete","wall":{"median":2948.2669160000078,"min":2853.111499999999,"max":3510.556958000001},"interval":{"median":2868.0313340000002,"min":2778.774167,"max":3421.363333},"sampledMaxRssBytes":443367424},{"input":"counter-product","route":"wasm","status":"complete","wall":{"median":4620.382249999995,"min":4421.760166000007,"max":5083.784959000004},"interval":{"median":4528.1738749999995,"min":4348.203167,"max":4994.4069580000005},"sampledMaxRssBytes":810893312},{"input":"function-cube","route":"tlc-1","status":"complete","wall":{"median":12813.90058299998,"min":12779.958625,"max":13151.675999999978},"interval":{"median":12177.496291999996,"min":12134.914999999979,"max":12536.054124999966},"sampledMaxRssBytes":2633596928},{"input":"function-cube","route":"tlc-2","status":"complete","wall":{"median":7850.164667000005,"min":7437.733625000052,"max":7916.154249999992},"interval":{"median":7242.746291999996,"min":6846.076457999996,"max":7298.885833000008},"sampledMaxRssBytes":2653011968},{"input":"function-cube","route":"tlc-4","status":"complete","wall":{"median":5307.078375000012,"min":4974.312624999962,"max":5383.085625000007},"interval":{"median":4681.803875000012,"min":4384.063082999957,"max":4757.64816599997},"sampledMaxRssBytes":2641199104},{"input":"function-cube","route":"tlc-8","status":"complete","wall":{"median":4720.864874999999,"min":4372.888666000043,"max":4823.735000000044},"interval":{"median":4075.8616249999905,"min":3793.4245419999934,"max":4204.343583000009},"sampledMaxRssBytes":2664398848},{"input":"function-cube","route":"native","status":"complete","wall":{"median":8887.98562500003,"min":8621.066791999998,"max":8911.31587500003},"interval":{"median":8803.980042000001,"min":8543.285917,"max":8825.973375},"sampledMaxRssBytes":957693952},{"input":"function-cube","route":"wasm","status":"complete","wall":{"median":18167.254749999964,"min":18064.330499999982,"max":18381.586541000055},"interval":{"median":18074.826667,"min":17976.083625,"max":18289.041041999997},"sampledMaxRssBytes":929955840},{"input":"parallel-channels","route":"tlc-1","status":"complete","wall":{"median":24076.05358399998,"min":23814.490292000002,"max":26652.31333299994},"interval":{"median":23469.110916999984,"min":23220.50537499995,"max":26001.40891700005},"sampledMaxRssBytes":3196633088},{"input":"parallel-channels","route":"tlc-2","status":"complete","wall":{"median":13553.215250000008,"min":13222.140542000066,"max":14221.177417000057},"interval":{"median":12924.992624999955,"min":12631.306083999923,"max":13600.645084000076},"sampledMaxRssBytes":3254992896},{"input":"parallel-channels","route":"tlc-4","status":"complete","wall":{"median":9065.233792000101,"min":8602.712083999999,"max":9212.029334000079},"interval":{"median":8236.273459000047,"min":7953.8913750000065,"max":8571.413959000027},"sampledMaxRssBytes":3271639040},{"input":"parallel-channels","route":"tlc-8","status":"complete","wall":{"median":6272.881082999986,"min":6180.584957999992,"max":6348.978917},"interval":{"median":5669.363875000039,"min":5580.326833000057,"max":5752.803542000009},"sampledMaxRssBytes":3256500224},{"input":"parallel-channels","route":"native","status":"complete","wall":{"median":19864.46683300007,"min":19506.923666000017,"max":22493.927957999986},"interval":{"median":19785.966041,"min":19416.994458999998,"max":22413.654875},"sampledMaxRssBytes":968015872},{"input":"parallel-channels","route":"wasm","status":"complete","wall":{"median":29923.79954200005,"min":28880.10120799998,"max":34351.27891700005},"interval":{"median":29837.33425,"min":28796.707584,"max":34255.332540999996},"sampledMaxRssBytes":922812416},{"input":"linear-ring","route":"tlc-1","status":"complete","wall":{"median":930.3699170000618,"min":906.6314169999678,"max":955.9432500000112},"interval":{"median":356.58400000003166,"min":328.6163330000127,"max":391.3110829999205},"sampledMaxRssBytes":569524224},{"input":"linear-ring","route":"tlc-2","status":"complete","wall":{"median":1343.422666999977,"min":1328.720417000004,"max":1344.1069170000264},"interval":{"median":763.7147500000428,"min":755.1157080000266,"max":764.9894169999752},"sampledMaxRssBytes":567705600},{"input":"linear-ring","route":"tlc-4","status":"complete","wall":{"median":1371.2451670001028,"min":1370.3377910000272,"max":1386.7105420000153},"interval":{"median":786.6168339999858,"min":780.9958750000224,"max":811.1930420000572},"sampledMaxRssBytes":551845888},{"input":"linear-ring","route":"tlc-8","status":"complete","wall":{"median":1438.45320800005,"min":1419.1274170000106,"max":1444.9322499999544},"interval":{"median":857.1036249999888,"min":836.7956659999909,"max":869.4791670000413},"sampledMaxRssBytes":557531136},{"input":"linear-ring","route":"native","status":"complete","wall":{"median":189.62758400000166,"min":186.38716700009536,"max":272.28375000006054},"interval":{"median":121.57049999999998,"min":120.65537500000002,"max":138.331625},"sampledMaxRssBytes":115687424},{"input":"linear-ring","route":"wasm","status":"complete","wall":{"median":254.34424999996554,"min":251.79237499996088,"max":267.7926660000812},"interval":{"median":189.121375,"min":188.067625,"max":198.045},"sampledMaxRssBytes":168181760}]

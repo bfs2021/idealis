@@ -1,0 +1,208 @@
+{
+  "route": "tlc-4",
+  "command": "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java",
+  "args": [
+    "-Xmx8g",
+    "-XX:+UseParallelGC",
+    "-XX:ActiveProcessorCount=8",
+    "-Djava.io.tmpdir=/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/parallel-channels/tlc-4-1/tmp",
+    "-jar",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/tla2tools.jar",
+    "-workers",
+    "4",
+    "-seed",
+    "16",
+    "-lncheck",
+    "final",
+    "-tool",
+    "-cleanup",
+    "-config",
+    "ParallelChannels.cfg",
+    "ParallelChannels.tla"
+  ],
+  "exit": 0,
+  "wallMs": 8602.712083999999,
+  "stdout": "@!@!@STARTMSG 2262:0 @!@!@\nTLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)\n@!@!@ENDMSG 2262 @!@!@\n@!@!@STARTMSG 2187:0 @!@!@\nRunning breadth-first search Model-Checking with fp 103 and seed 16 with 4 workers on 8 cores with 7282MB heap and 64MB offheap memory [pid: 87051] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).\n@!@!@ENDMSG 2187 @!@!@\n@!@!@STARTMSG 2220:0 @!@!@\nStarting SANY...\n@!@!@ENDMSG 2220 @!@!@\nParsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/parallel-channels/tlc-4-1/ParallelChannels.tla\nParsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/parallel-channels/tlc-4-1/tmp/Naturals.tla\nSemantic processing of module Naturals\nSemantic processing of module ParallelChannels\n@!@!@STARTMSG 2219:0 @!@!@\nSANY finished.\n@!@!@ENDMSG 2219 @!@!@\n@!@!@STARTMSG 2185:0 @!@!@\nStarting... (2026-11-15 02:17:26)\n@!@!@ENDMSG 2185 @!@!@\n@!@!@STARTMSG 2189:0 @!@!@\nComputing initial states...\n@!@!@ENDMSG 2189 @!@!@\n@!@!@STARTMSG 2190:0 @!@!@\nFinished computing initial states: 1 distinct state generated at 2026-11-15 02:17:26.\n@!@!@ENDMSG 2190 @!@!@\n@!@!@STARTMSG 2200:0 @!@!@\nProgress(15) at 2026-11-15 02:17:29: 7,686,876 states generated (7,686,876 s/min), 991,473 distinct states found (991,473 ds/min), 259,975 states left on queue.\n@!@!@ENDMSG 2200 @!@!@\n@!@!@STARTMSG 2193:0 @!@!@\nModel checking completed. No error has been found.\n  Estimates of the probability that TLC did not check all reachable states\n  because two distinct states had the same fingerprint:\n  calculated (optimistic):  val = 2.3E-6\n  based on the actual fingerprints:  val = 9.1E-12\n@!@!@ENDMSG 2193 @!@!@\n@!@!@STARTMSG 2200:0 @!@!@\nProgress(29) at 2026-11-15 02:17:34: 22,020,097 states generated (161,952,172 s/min), 2,097,152 distinct states found (15,424,015 ds/min), 0 states left on queue.\n@!@!@ENDMSG 2200 @!@!@\n@!@!@STARTMSG 2199:0 @!@!@\n22020097 states generated, 2097152 distinct states found, 0 states left on queue.\n@!@!@ENDMSG 2199 @!@!@\n@!@!@STARTMSG 2194:0 @!@!@\nThe depth of the complete state graph search is 29.\n@!@!@ENDMSG 2194 @!@!@\n@!@!@STARTMSG 2268:0 @!@!@\nThe average outdegree of the complete state graph is 1 (minimum is 0, the maximum 14 and the 95th percentile is 3).\n@!@!@ENDMSG 2268 @!@!@\n@!@!@STARTMSG 2186:0 @!@!@\nFinished in 8162ms at (2026-11-15 02:17:34)\n@!@!@ENDMSG 2186 @!@!@\n",
+  "stderr": "",
+  "output": null,
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 242.55845900002168,
+      "bytes": 91701248
+    },
+    {
+      "milliseconds": 439.7222920000204,
+      "bytes": 273088512
+    },
+    {
+      "milliseconds": 633.7945000000182,
+      "bytes": 410632192
+    },
+    {
+      "milliseconds": 838.244250000047,
+      "bytes": 494010368
+    },
+    {
+      "milliseconds": 1036.4303340000333,
+      "bytes": 652820480
+    },
+    {
+      "milliseconds": 1232.7946250000386,
+      "bytes": 764575744
+    },
+    {
+      "milliseconds": 1439.3817920000292,
+      "bytes": 808747008
+    },
+    {
+      "milliseconds": 1638.1253750000033,
+      "bytes": 883998720
+    },
+    {
+      "milliseconds": 1841.2641670000157,
+      "bytes": 1279655936
+    },
+    {
+      "milliseconds": 2036.638666999992,
+      "bytes": 1365295104
+    },
+    {
+      "milliseconds": 2238.7195000000065,
+      "bytes": 1365295104
+    },
+    {
+      "milliseconds": 2438.99679200002,
+      "bytes": 1444577280
+    },
+    {
+      "milliseconds": 2640.088625000033,
+      "bytes": 1444626432
+    },
+    {
+      "milliseconds": 2839.189624999999,
+      "bytes": 1444773888
+    },
+    {
+      "milliseconds": 3042.520125000039,
+      "bytes": 1755299840
+    },
+    {
+      "milliseconds": 3246.4025000000256,
+      "bytes": 2155741184
+    },
+    {
+      "milliseconds": 3446.7903750000405,
+      "bytes": 2445803520
+    },
+    {
+      "milliseconds": 3647.552000000025,
+      "bytes": 2445803520
+    },
+    {
+      "milliseconds": 3845.4352500000386,
+      "bytes": 2445819904
+    },
+    {
+      "milliseconds": 4047.1961670000455,
+      "bytes": 2445819904
+    },
+    {
+      "milliseconds": 4250.479417000024,
+      "bytes": 2475786240
+    },
+    {
+      "milliseconds": 4447.423542000004,
+      "bytes": 2597224448
+    },
+    {
+      "milliseconds": 4648.969209000003,
+      "bytes": 2597224448
+    },
+    {
+      "milliseconds": 4848.500500000024,
+      "bytes": 2597224448
+    },
+    {
+      "milliseconds": 5049.135917000007,
+      "bytes": 2597224448
+    },
+    {
+      "milliseconds": 5249.680167000042,
+      "bytes": 2597224448
+    },
+    {
+      "milliseconds": 5454.18783400004,
+      "bytes": 2702524416
+    },
+    {
+      "milliseconds": 5653.412292000023,
+      "bytes": 3060072448
+    },
+    {
+      "milliseconds": 5854.916542000021,
+      "bytes": 3060072448
+    },
+    {
+      "milliseconds": 6054.394709000015,
+      "bytes": 3060072448
+    },
+    {
+      "milliseconds": 6254.786750000028,
+      "bytes": 3060072448
+    },
+    {
+      "milliseconds": 6456.521667000023,
+      "bytes": 3060072448
+    },
+    {
+      "milliseconds": 6658.530209000048,
+      "bytes": 3060088832
+    },
+    {
+      "milliseconds": 6859.653292000003,
+      "bytes": 3083665408
+    },
+    {
+      "milliseconds": 7058.352459000016,
+      "bytes": 3083665408
+    },
+    {
+      "milliseconds": 7259.345208999992,
+      "bytes": 3083665408
+    },
+    {
+      "milliseconds": 7462.520875000046,
+      "bytes": 3083665408
+    },
+    {
+      "milliseconds": 7660.8055420000455,
+      "bytes": 3083665408
+    },
+    {
+      "milliseconds": 7861.5225419999915,
+      "bytes": 3083698176
+    },
+    {
+      "milliseconds": 8062.705084000016,
+      "bytes": 3083714560
+    },
+    {
+      "milliseconds": 8262.490542000043,
+      "bytes": 3099705344
+    },
+    {
+      "milliseconds": 8479.65870900004,
+      "bytes": 3099705344
+    }
+  ],
+  "sampledMaxRssBytes": 3099705344,
+  "phases": {
+    "initStartMs": 230.38295900000958,
+    "initDoneMs": 234.3992089999956,
+    "successMs": 8184.274334000016,
+    "initAndSearchMs": 7953.8913750000065,
+    "searchAndFinalMs": 7949.8751250000205
+  },
+  "phaseError": null
+}

@@ -1,0 +1,33 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model-replay/linear-ring/native-0/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 79.39891700000044,
+  "stdout": "{\"frontendMs\":2.8931669999999983,\"engineStartupMs\":2.9726250000000007,\"apiMs\":0.2373750000000001,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":17,\"generated\":18,\"depth\":16,\"work\":36,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 2.8931669999999983,
+    "engineStartupMs": 2.9726250000000007,
+    "apiMs": 0.2373750000000001,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 17,
+      "generated": 18,
+      "depth": 16,
+      "work": 36,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

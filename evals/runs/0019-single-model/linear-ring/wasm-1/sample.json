@@ -1,0 +1,38 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/linear-ring/wasm-1/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 267.7926660000812,
+  "stdout": "{\"frontendMs\":6.000458000000002,\"engineStartupMs\":2.0369170000000025,\"apiMs\":198.045,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":1000000,\"generated\":1000001,\"depth\":999999,\"work\":2000002,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 6.000458000000002,
+    "engineStartupMs": 2.0369170000000025,
+    "apiMs": 198.045,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 1000000,
+      "generated": 1000001,
+      "depth": 999999,
+      "work": 2000002,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 228.3198750000447,
+      "bytes": 165806080
+    }
+  ],
+  "sampledMaxRssBytes": 165806080,
+  "phases": null,
+  "phaseError": null
+}

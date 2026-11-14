@@ -1,0 +1,164 @@
+{
+  "route": "tlc-8",
+  "command": "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java",
+  "args": [
+    "-Xmx8g",
+    "-XX:+UseParallelGC",
+    "-XX:ActiveProcessorCount=8",
+    "-Djava.io.tmpdir=/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/parallel-channels/tlc-8-1/tmp",
+    "-jar",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/tla2tools.jar",
+    "-workers",
+    "8",
+    "-seed",
+    "16",
+    "-lncheck",
+    "final",
+    "-tool",
+    "-cleanup",
+    "-config",
+    "ParallelChannels.cfg",
+    "ParallelChannels.tla"
+  ],
+  "exit": 0,
+  "wallMs": 6272.881082999986,
+  "stdout": "@!@!@STARTMSG 2262:0 @!@!@\nTLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)\n@!@!@ENDMSG 2262 @!@!@\n@!@!@STARTMSG 2187:0 @!@!@\nRunning breadth-first search Model-Checking with fp 23 and seed 16 with 8 workers on 8 cores with 7282MB heap and 64MB offheap memory [pid: 87338] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).\n@!@!@ENDMSG 2187 @!@!@\n@!@!@STARTMSG 2220:0 @!@!@\nStarting SANY...\n@!@!@ENDMSG 2220 @!@!@\nParsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/parallel-channels/tlc-8-1/ParallelChannels.tla\nParsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0019-single-model/parallel-channels/tlc-8-1/tmp/Naturals.tla\nSemantic processing of module Naturals\nSemantic processing of module ParallelChannels\n@!@!@STARTMSG 2219:0 @!@!@\nSANY finished.\n@!@!@ENDMSG 2219 @!@!@\n@!@!@STARTMSG 2185:0 @!@!@\nStarting... (2026-11-15 02:17:35)\n@!@!@ENDMSG 2185 @!@!@\n@!@!@STARTMSG 2189:0 @!@!@\nComputing initial states...\n@!@!@ENDMSG 2189 @!@!@\n@!@!@STARTMSG 2190:0 @!@!@\nFinished computing initial states: 1 distinct state generated at 2026-11-15 02:17:35.\n@!@!@ENDMSG 2190 @!@!@\n@!@!@STARTMSG 2200:0 @!@!@\nProgress(16) at 2026-11-15 02:17:38: 10,668,773 states generated (10,668,773 s/min), 1,284,552 distinct states found (1,284,552 ds/min), 267,003 states left on queue.\n@!@!@ENDMSG 2200 @!@!@\n@!@!@STARTMSG 2193:0 @!@!@\nModel checking completed. No error has been found.\n  Estimates of the probability that TLC did not check all reachable states\n  because two distinct states had the same fingerprint:\n  calculated (optimistic):  val = 2.3E-6\n  based on the actual fingerprints:  val = 8.8E-13\n@!@!@ENDMSG 2193 @!@!@\n@!@!@STARTMSG 2200:0 @!@!@\nProgress(29) at 2026-11-15 02:17:40: 22,020,097 states generated (226,699,694 s/min), 2,097,152 distinct states found (21,590,446 ds/min), 0 states left on queue.\n@!@!@ENDMSG 2200 @!@!@\n@!@!@STARTMSG 2199:0 @!@!@\n22020097 states generated, 2097152 distinct states found, 0 states left on queue.\n@!@!@ENDMSG 2199 @!@!@\n@!@!@STARTMSG 2194:0 @!@!@\nThe depth of the complete state graph search is 29.\n@!@!@ENDMSG 2194 @!@!@\n@!@!@STARTMSG 2268:0 @!@!@\nThe average outdegree of the complete state graph is 1 (minimum is 0, the maximum 14 and the 95th percentile is 3).\n@!@!@ENDMSG 2268 @!@!@\n@!@!@STARTMSG 2186:0 @!@!@\nFinished in 5832ms at (2026-11-15 02:17:40)\n@!@!@ENDMSG 2186 @!@!@\n",
+  "stderr": "",
+  "output": null,
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 235.53416699997615,
+      "bytes": 139608064
+    },
+    {
+      "milliseconds": 435.8922499999753,
+      "bytes": 317177856
+    },
+    {
+      "milliseconds": 633.2022919999436,
+      "bytes": 503283712
+    },
+    {
+      "milliseconds": 834.3363329999847,
+      "bytes": 764985344
+    },
+    {
+      "milliseconds": 1036.1762499999604,
+      "bytes": 814333952
+    },
+    {
+      "milliseconds": 1239.1177919999463,
+      "bytes": 898613248
+    },
+    {
+      "milliseconds": 1441.1686669999617,
+      "bytes": 1371652096
+    },
+    {
+      "milliseconds": 1639.7614999999641,
+      "bytes": 1371652096
+    },
+    {
+      "milliseconds": 1841.9493329999968,
+      "bytes": 1454129152
+    },
+    {
+      "milliseconds": 2042.7305829999968,
+      "bytes": 1454129152
+    },
+    {
+      "milliseconds": 2244.9485829999903,
+      "bytes": 1712390144
+    },
+    {
+      "milliseconds": 2452.5382079999545,
+      "bytes": 2272837632
+    },
+    {
+      "milliseconds": 2646.1976670000004,
+      "bytes": 2527363072
+    },
+    {
+      "milliseconds": 2848.428457999951,
+      "bytes": 2527379456
+    },
+    {
+      "milliseconds": 3046.1933329999447,
+      "bytes": 2527379456
+    },
+    {
+      "milliseconds": 3249.0767079999787,
+      "bytes": 2653159424
+    },
+    {
+      "milliseconds": 3449.0782079999917,
+      "bytes": 2653175808
+    },
+    {
+      "milliseconds": 3649.5939999999828,
+      "bytes": 2653175808
+    },
+    {
+      "milliseconds": 3849.3799169999547,
+      "bytes": 2653175808
+    },
+    {
+      "milliseconds": 4057.066582999949,
+      "bytes": 2963341312
+    },
+    {
+      "milliseconds": 4252.304832999944,
+      "bytes": 3151495168
+    },
+    {
+      "milliseconds": 4453.206582999963,
+      "bytes": 3151495168
+    },
+    {
+      "milliseconds": 4652.8748749999795,
+      "bytes": 3151511552
+    },
+    {
+      "milliseconds": 4854.718291999947,
+      "bytes": 3151511552
+    },
+    {
+      "milliseconds": 5056.769291999983,
+      "bytes": 3207921664
+    },
+    {
+      "milliseconds": 5255.4705829999875,
+      "bytes": 3207921664
+    },
+    {
+      "milliseconds": 5455.936332999961,
+      "bytes": 3207921664
+    },
+    {
+      "milliseconds": 5657.462749999948,
+      "bytes": 3207921664
+    },
+    {
+      "milliseconds": 5860.956458000001,
+      "bytes": 3256320000
+    },
+    {
+      "milliseconds": 6074.7566669999505,
+      "bytes": 3256500224
+    },
+    {
+      "milliseconds": 6261.450707999989,
+      "bytes": 3256500224
+    }
+  ],
+  "sampledMaxRssBytes": 3256500224,
+  "phases": {
+    "initStartMs": 184.9283749999595,
+    "initDoneMs": 187.5669999999809,
+    "successMs": 5854.292249999999,
+    "initAndSearchMs": 5669.363875000039,
+    "searchAndFinalMs": 5666.725250000018
+  },
+  "phaseError": null
+}
