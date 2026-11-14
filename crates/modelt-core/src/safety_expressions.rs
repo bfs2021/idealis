@@ -1,6 +1,11 @@
 use crate::CoreError;
 use crate::safety::{Binding, Branch, Domain, Expression, Scalar, Step};
 use crate::safety_values::Arena;
+#[cfg(not(target_arch = "wasm32"))]
+use crate::safety_values::ValueRemap;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+use std::sync::Arc;
 
 #[derive(Clone, Copy)]
 pub(crate) struct EvalContext<'a> {
@@ -263,6 +268,19 @@ impl Expression {
             Self::Subseq { sequence, from, to } => vec![sequence, from, to],
             Self::Enabled { .. } => vec![],
         }
+    }
+    fn is_context_free(&self) -> bool {
+        !matches!(
+            self,
+            Self::Read { .. }
+                | Self::Enabled { .. }
+                | Self::Bound { .. }
+                | Self::Old
+                | Self::Prime { .. }
+                | Self::Literal {
+                    value: Scalar::Ref(_)
+                }
+        ) && self.children().iter().all(|child| child.is_context_free())
     }
     pub(crate) fn is_constant(&self) -> bool {
         !matches!(self, Self::Read { .. } | Self::Enabled { .. })
@@ -745,8 +763,10 @@ impl Expression {
             }
             Self::SequenceIn { left, right } => {
                 let value = left.eval(ctx, arena)?;
-                let set =
-                    MembershipSet::Sequences(Box::new(MembershipSet::eval(right, ctx, arena)?));
+                let set = MembershipSet::new(
+                    MembershipKind::Sequences(MembershipSet::eval(right, ctx, arena)?),
+                    false,
+                );
                 Scalar::Bool(set.contains(value, arena)?)
             }
             Self::SequenceSet { .. } => {
@@ -815,45 +835,132 @@ impl Expression {
     }
 }
 
-enum MembershipSet {
+#[derive(PartialEq, Eq)]
+pub(crate) struct MembershipSet {
+    kind: MembershipKind,
+    cacheable: bool,
+    hash: u64,
+}
+#[derive(PartialEq, Eq, Hash)]
+enum MembershipKind {
     Finite(Scalar),
-    Sequences(Box<Self>),
-    Functions { domain: Scalar, range: Box<Self> },
-    Records(Vec<(Scalar, Self)>),
+    Sequences(Arc<MembershipSet>),
+    Functions {
+        domain: Scalar,
+        range: Arc<MembershipSet>,
+    },
+    Records(Vec<(Scalar, Arc<MembershipSet>)>),
     Subsets(Scalar),
 }
+impl Hash for MembershipSet {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        state.write_u64(self.hash);
+    }
+}
 impl MembershipSet {
+    pub(crate) fn fingerprint(&self) -> u64 {
+        self.hash
+    }
+    fn new(kind: MembershipKind, cacheable: bool) -> Arc<Self> {
+        let mut hasher = DefaultHasher::new();
+        kind.hash(&mut hasher);
+        Arc::new(Self {
+            kind,
+            cacheable,
+            hash: hasher.finish(),
+        })
+    }
     fn eval(
         expression: &Expression,
         ctx: EvalContext<'_>,
         arena: &mut Arena,
-    ) -> Result<Self, CoreError> {
-        Ok(match expression {
+    ) -> Result<Arc<Self>, CoreError> {
+        let cached = arena.prepared_membership(expression);
+        if let Some(Some(prepared)) = &cached {
+            return Ok(Arc::clone(prepared));
+        }
+        let cacheable = if cached.is_some() {
+            false
+        } else {
+            expression.is_context_free()
+        };
+        let kind = match expression {
             Expression::SequenceSet { argument } => {
-                Self::Sequences(Box::new(Self::eval(argument, ctx, arena)?))
+                MembershipKind::Sequences(Self::eval(argument, ctx, arena)?)
             }
-            Expression::FunctionSet { left, right } => Self::Functions {
+            Expression::FunctionSet { left, right } => MembershipKind::Functions {
                 domain: left.eval(ctx, arena)?,
-                range: Box::new(Self::eval(right, ctx, arena)?),
+                range: Self::eval(right, ctx, arena)?,
             },
             Expression::RecordSet { fields } => {
                 let mut values = vec![];
                 for (name, set) in fields {
                     let name = arena.string(name.clone())?;
-                    let set = Self::eval(set, ctx, arena)?;
-                    values.push((name, set));
+                    values.push((name, Self::eval(set, ctx, arena)?));
                 }
                 values.sort_by(|left, right| arena.total(left.0, right.0));
-                Self::Records(values)
+                MembershipKind::Records(values)
             }
-            Expression::Powerset { argument } => Self::Subsets(argument.eval(ctx, arena)?),
-            _ => Self::Finite(expression.eval(ctx, arena)?),
-        })
+            Expression::Powerset { argument } => {
+                MembershipKind::Subsets(argument.eval(ctx, arena)?)
+            }
+            _ => MembershipKind::Finite(expression.eval(ctx, arena)?),
+        };
+        let prepared = Self::new(kind, cacheable);
+        if cached.is_none() {
+            arena.cache_membership_type(expression, cacheable.then(|| Arc::clone(&prepared)));
+        }
+        Ok(prepared)
     }
-    fn contains(&self, value: Scalar, arena: &mut Arena) -> Result<bool, CoreError> {
-        match self {
-            Self::Finite(set) => arena.contains(value, *set),
-            Self::Subsets(set) => {
+    fn contains(self: &Arc<Self>, value: Scalar, arena: &mut Arena) -> Result<bool, CoreError> {
+        let cacheable = self.cacheable && matches!(self.kind, MembershipKind::Records(_));
+        if cacheable && let Some(result) = arena.membership_result(self, value) {
+            return Ok(result);
+        }
+        let result = self.contains_uncached(value, arena)?;
+        if cacheable {
+            arena.cache_membership_result(Arc::clone(self), value, result);
+        }
+        Ok(result)
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    pub(crate) fn remap(self: &Arc<Self>, mapping: &ValueRemap) -> Arc<Self> {
+        let changed = match &self.kind {
+            MembershipKind::Finite(value) | MembershipKind::Subsets(value) => {
+                mapping.get(*value) != *value
+            }
+            MembershipKind::Sequences(set) => !Arc::ptr_eq(set, &set.remap(mapping)),
+            MembershipKind::Functions { domain, range } => {
+                mapping.get(*domain) != *domain || !Arc::ptr_eq(range, &range.remap(mapping))
+            }
+            MembershipKind::Records(fields) => fields.iter().any(|(key, set)| {
+                mapping.get(*key) != *key || !Arc::ptr_eq(set, &set.remap(mapping))
+            }),
+        };
+        if !changed {
+            return Arc::clone(self);
+        }
+        let kind = match &self.kind {
+            MembershipKind::Finite(value) => MembershipKind::Finite(mapping.get(*value)),
+            MembershipKind::Subsets(value) => MembershipKind::Subsets(mapping.get(*value)),
+            MembershipKind::Sequences(set) => MembershipKind::Sequences(set.remap(mapping)),
+            MembershipKind::Functions { domain, range } => MembershipKind::Functions {
+                domain: mapping.get(*domain),
+                range: range.remap(mapping),
+            },
+            MembershipKind::Records(fields) => MembershipKind::Records(
+                fields
+                    .iter()
+                    .map(|(key, set)| (mapping.get(*key), set.remap(mapping)))
+                    .collect(),
+            ),
+        };
+        Self::new(kind, self.cacheable)
+    }
+    fn contains_uncached(&self, value: Scalar, arena: &mut Arena) -> Result<bool, CoreError> {
+        match &self.kind {
+            MembershipKind::Finite(set) => arena.contains(value, *set),
+            MembershipKind::Subsets(set) => {
                 for element in arena.members(value)? {
                     arena.tick()?;
                     if !arena.contains(element, *set)? {
@@ -862,7 +969,7 @@ impl MembershipSet {
                 }
                 Ok(true)
             }
-            Self::Sequences(set) => {
+            MembershipKind::Sequences(set) => {
                 for element in arena.sequence_values(value)? {
                     arena.tick()?;
                     if !set.contains(element, arena)? {
@@ -871,10 +978,9 @@ impl MembershipSet {
                 }
                 Ok(true)
             }
-            Self::Functions { domain, range } => {
+            MembershipKind::Functions { domain, range } => {
                 let entries = arena.entries(value)?;
-                let actual = arena.domain(value)?;
-                if !arena.equal(*domain, actual)? {
+                if !arena.has_domain(value, *domain)? {
                     return Ok(false);
                 }
                 for (_, element) in entries {
@@ -885,7 +991,7 @@ impl MembershipSet {
                 }
                 Ok(true)
             }
-            Self::Records(fields) => {
+            MembershipKind::Records(fields) => {
                 let entries = arena.entries(value)?;
                 if entries.iter().any(|(key, _)| arena.text(*key).is_none()) {
                     return Err(CoreError::protocol(
@@ -1063,5 +1169,232 @@ pub(crate) fn visit_branch(
             }
             Ok(false)
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::EvalContext;
+    use crate::Value;
+    use crate::safety::{Expression, Scalar};
+    use crate::safety_values::Arena;
+
+    fn membership(element: Expression) -> Expression {
+        Expression::FunctionIn {
+            left: Box::new(Expression::Read {
+                slot: 0,
+                next: false,
+            }),
+            right: Box::new(Expression::RecordSet {
+                fields: vec![(
+                    "value".into(),
+                    Expression::Set {
+                        values: vec![element],
+                    },
+                )],
+            }),
+        }
+    }
+
+    #[test]
+    fn successful_record_type_checks_reuse_their_work() {
+        let mut arena = Arena::new(1000);
+        let value = arena
+            .data(&Value::Record(vec![(
+                "value".into(),
+                Value::Int("0".into()),
+            )]))
+            .unwrap();
+        let expression = membership(Expression::Literal {
+            value: Scalar::Int(0),
+        });
+        assert!(
+            expression
+                .eval(EvalContext::new(&[value], &[]), &mut arena)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+        let work = arena.work;
+        for _ in 0..10 {
+            assert!(
+                expression
+                    .eval(EvalContext::new(&[value], &[]), &mut arena)
+                    .unwrap()
+                    .boolean()
+                    .unwrap()
+            );
+        }
+        assert_eq!(arena.work, work);
+    }
+
+    #[test]
+    fn cached_type_results_compare_descriptors_after_hash_collisions() {
+        use super::{MembershipKind, MembershipSet};
+        use std::sync::Arc;
+        let mut arena = Arena::new(1000);
+        let key = arena.string("value".into()).unwrap();
+        let value = arena.function(vec![(key, Scalar::Int(0))]).unwrap();
+        let zero = arena.set(vec![Scalar::Int(0)]).unwrap();
+        let one = arena.set(vec![Scalar::Int(1)]).unwrap();
+        let first = Arc::new(MembershipSet {
+            hash: 7,
+            cacheable: true,
+            kind: MembershipKind::Records(vec![(
+                key,
+                MembershipSet::new(MembershipKind::Finite(zero), true),
+            )]),
+        });
+        let second = Arc::new(MembershipSet {
+            hash: 7,
+            cacheable: true,
+            kind: MembershipKind::Records(vec![(
+                key,
+                MembershipSet::new(MembershipKind::Finite(one), true),
+            )]),
+        });
+        arena.cache_membership_result(Arc::clone(&first), value, true);
+        arena.cache_membership_result(Arc::clone(&second), value, false);
+        assert_eq!(arena.membership_result(&first, value), Some(true));
+        assert_eq!(arena.membership_result(&second, value), Some(false));
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn cached_membership_values_and_descriptors_remap_with_worker_references() {
+        use crate::safety_work::WorkBudget;
+        let mut base = Arena::new(1000);
+        let budget = WorkBudget::new(900, 2);
+        let first = membership(Expression::Literal {
+            value: Scalar::Int(1),
+        });
+        let second = membership(Expression::Literal {
+            value: Scalar::Int(2),
+        });
+        let mut left = base.fork(&budget, 0);
+        let mut right = base.fork(&budget, 1);
+        let left_value = left
+            .data(&Value::Record(vec![(
+                "value".into(),
+                Value::Int("1".into()),
+            )]))
+            .unwrap();
+        let right_value = right
+            .data(&Value::Record(vec![(
+                "value".into(),
+                Value::Int("2".into()),
+            )]))
+            .unwrap();
+        assert_eq!(left_value, right_value);
+        assert!(
+            first
+                .eval(EvalContext::new(&[left_value], &[]), &mut left)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+        assert!(
+            second
+                .eval(EvalContext::new(&[right_value], &[]), &mut right)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+        let left = left.into_delta();
+        let right = right.into_delta();
+        let left_map = base.merge(left).unwrap();
+        let right_map = base.merge(right).unwrap();
+        let left_value = left_map.get(left_value);
+        let right_value = right_map.get(right_value);
+        assert_ne!(left_value, right_value);
+        assert!(
+            first
+                .eval(EvalContext::new(&[left_value], &[]), &mut base)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+        assert!(
+            second
+                .eval(EvalContext::new(&[right_value], &[]), &mut base)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+        assert!(
+            !first
+                .eval(EvalContext::new(&[right_value], &[]), &mut base)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+    }
+
+    #[test]
+    fn record_types_depending_on_bound_variables_are_not_reused() {
+        let mut arena = Arena::new(1000);
+        let value = arena
+            .data(&Value::Record(vec![(
+                "value".into(),
+                Value::Int("0".into()),
+            )]))
+            .unwrap();
+        let expression = membership(Expression::Bound { slot: 0 });
+        for (number, expected) in [(0, true), (1, false), (0, true)] {
+            let current = [value];
+            let locals = [Scalar::Int(number)];
+            let context = EvalContext {
+                locals: &locals,
+                ..EvalContext::new(&current, &[])
+            };
+            assert_eq!(
+                expression
+                    .eval(context, &mut arena)
+                    .unwrap()
+                    .boolean()
+                    .unwrap(),
+                expected
+            );
+        }
+    }
+
+    #[test]
+    fn preparing_types_does_not_evaluate_an_unreached_branch_or_cache_an_error() {
+        let mut arena = Arena::new(1000);
+        let value = arena
+            .data(&Value::Record(vec![(
+                "value".into(),
+                Value::Int("0".into()),
+            )]))
+            .unwrap();
+        let invalid = membership(Expression::Head {
+            argument: Box::new(Expression::Tuple { values: vec![] }),
+        });
+        let expression = Expression::If {
+            condition: Box::new(Expression::Literal {
+                value: Scalar::Bool(false),
+            }),
+            consequent: Box::new(invalid.clone()),
+            alternative: Box::new(Expression::Literal {
+                value: Scalar::Bool(true),
+            }),
+        };
+        assert!(
+            expression
+                .eval(EvalContext::new(&[value], &[]), &mut arena)
+                .unwrap()
+                .boolean()
+                .unwrap()
+        );
+        assert!(
+            invalid
+                .eval(EvalContext::new(&[value], &[]), &mut arena)
+                .is_err()
+        );
+        assert!(
+            invalid
+                .eval(EvalContext::new(&[value], &[]), &mut arena)
+                .is_err()
+        );
     }
 }
