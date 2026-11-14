@@ -1,0 +1,91 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-controls/function-cube/after-wasm-1-0-fault/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 78.46829200000002,
+  "stdout": "{\"frontendMs\":3.2328329999999994,\"engineStartupMs\":1.555374999999998,\"apiMs\":6.172542000000007,\"result\":{\"status\":\"invariant-violation\",\"reason\":null,\"states\":2,\"generated\":2,\"depth\":1,\"work\":34,\"violation\":{\"name\":\"Safe\",\"trace\":[{\"action\":null,\"values\":[{\"type\":\"list\",\"value\":[{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]}]},{\"action\":\"Next\",\"values\":[{\"type\":\"list\",\"value\":[{\"type\":\"int\",\"value\":\"1\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]}]}]}}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.2328329999999994,
+    "engineStartupMs": 1.555374999999998,
+    "apiMs": 6.172542000000007,
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 2,
+      "generated": 2,
+      "depth": 1,
+      "work": 34,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

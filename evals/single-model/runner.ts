@@ -42,6 +42,7 @@ export const runTool = async (
   java: string,
   jar: string,
   workers?: number,
+  binary?: string,
 ) => {
   const moduleName = /^---- MODULE (\w+) ----/m.exec(input.source)?.[1];
   assert.ok(moduleName);
@@ -72,7 +73,11 @@ export const runTool = async (
         resolve("dist/evals/single-model/worker.js"),
         route,
         resolve(directory, "input.json"),
-        ...(workers === undefined ? [] : [String(workers)]),
+        ...(binary
+          ? [workers === undefined ? "" : String(workers), resolve(binary)]
+          : workers === undefined
+            ? []
+            : [String(workers)]),
       ];
   const recorder = createPhaseRecorder();
   const memory: { milliseconds: number; bytes: number }[] = [];

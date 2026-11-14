@@ -1,0 +1,35 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-controls/parallel-channels/after-native-8-0-normal/input.json",
+    "8",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/release/modelt-core"
+  ],
+  "exit": 0,
+  "wallMs": 77.890625,
+  "stdout": "{\"frontendMs\":3.7978750000000048,\"engineStartupMs\":3.2125839999999997,\"apiMs\":0.4389579999999995,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":64,\"generated\":193,\"depth\":8,\"work\":1717,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.7978750000000048,
+    "engineStartupMs": 3.2125839999999997,
+    "apiMs": 0.4389579999999995,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 64,
+      "generated": 193,
+      "depth": 8,
+      "work": 1717,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

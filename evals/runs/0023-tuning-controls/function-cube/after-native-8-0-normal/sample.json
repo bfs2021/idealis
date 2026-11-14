@@ -1,0 +1,35 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-controls/function-cube/after-native-8-0-normal/input.json",
+    "8",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/release/modelt-core"
+  ],
+  "exit": 0,
+  "wallMs": 75.1349580000001,
+  "stdout": "{\"frontendMs\":3.1653340000000014,\"engineStartupMs\":2.9578750000000014,\"apiMs\":0.24249999999999972,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":16,\"generated\":65,\"depth\":4,\"work\":392,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.1653340000000014,
+    "engineStartupMs": 2.9578750000000014,
+    "apiMs": 0.24249999999999972,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 65,
+      "depth": 4,
+      "work": 392,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}
