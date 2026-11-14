@@ -6,6 +6,7 @@ export const sourceFingerprint = async () => {
   const base = await singleModelFingerprint();
   const paths = [
     "evals/plans/0020-frontier-safety.md",
+    "evals/plans/0021-worker-budget.md",
     ...(await readdir("evals/frontier-safety"))
       .filter((path) => path.endsWith(".ts"))
       .map((path) => `evals/frontier-safety/${path}`),

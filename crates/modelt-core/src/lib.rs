@@ -2,6 +2,8 @@ mod finite;
 mod safety;
 mod safety_expressions;
 mod safety_values;
+#[cfg(not(target_arch = "wasm32"))]
+mod safety_work;
 mod temporal;
 pub use safety::{SafetyBounds, SafetyProgram, SafetyResult};
 mod history;
