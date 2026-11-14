@@ -169,3 +169,9 @@ parallel-safety-eval run: safety-build
 
 parallel-safety-replay saved run: safety-build
   node dist/evals/parallel-safety/replay.js {{quote(saved)}} {{quote(run)}}
+
+tlc-throughput java jar archive run: safety-build
+  node dist/evals/tlc-throughput/run.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+tlc-throughput-replay java jar archive saved run: safety-build
+  node dist/evals/tlc-throughput/run.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
