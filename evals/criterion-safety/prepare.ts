@@ -32,3 +32,8 @@ await writeFile(
   ".artifacts/criterion-safety/inputs.json",
   `${JSON.stringify(inputs, null, 2)}\n`,
 );
+
+await writeFile(
+  "crates/modelt-core/src/bench-fixtures.json",
+  `${JSON.stringify(inputs, null, 2)}\n`,
+);
