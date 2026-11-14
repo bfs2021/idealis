@@ -7,6 +7,7 @@ import { isRecord } from "../../src/trace.js";
 import { normalizeTlc } from "../tlc-throughput/protocol.js";
 import type { BenchmarkCase } from "./cases.js";
 import { createPhaseRecorder } from "./phases.js";
+import { normalizeTla } from "./tla.js";
 
 export const routes = [
   "tlc-1",
@@ -35,7 +36,7 @@ export const prepare = async (directory: string, input: BenchmarkCase) => {
 };
 
 export const runTool = async (
-  route: Route,
+  route: Route | "tla-ts",
   directory: string,
   input: BenchmarkCase,
   java: string,
@@ -189,6 +190,10 @@ export const verify = (
   assert.equal(actual.decodeError, null);
   const output = actual.output;
   assert.ok(isRecord(output));
+  if (actual.route === "tla-ts") {
+    assert.ok(typeof output.apiMs === "number" && output.apiMs > 0);
+    return normalizeTla(output.result, input, expected);
+  }
   const result = decodeSafetyResult(output.result);
   assert.equal(result.status, expected);
   if (expected === "complete") {
