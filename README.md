@@ -28,6 +28,24 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
+<!-- checker-comparison:start -->
+## モデル検査の速度比較
+
+同じTLA+ source/configを各回別processで解析し、完全探索した起動込み時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、TLC v1.7.4 / Temurin 21.0.13+9で測った。
+
+| モデル      |    状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | modelt Wasm 1 worker | modelt native 1 worker | modelt native 8 workers |
+| ----------- | --------: | --------------: | -----------: | ------------: | -------------------: | ---------------------: | ----------------------: |
+| カウンタ群  | 5,308,416 |           5.190 |        6.134 |         6.476 |                3.818 |                  2.851 |                   3.646 |
+| Boolean関数 | 1,048,576 |           5.388 |       12.647 |         4.444 |               18.666 |                  9.345 |                   5.101 |
+| チャネル群  | 2,097,152 |          16.371 |       23.825 |         6.807 |               31.415 |                 20.733 |                   9.537 |
+| 幅1のring   | 1,000,000 |           0.410 |        0.900 |         1.440 |                0.244 |                  0.186 |                   0.187 |
+
+Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。modeltは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
+
+[全sample・最小/最大・条件と再実行](evals/iterations/0022-readme-comparison.md)を保存した。表は同じrunから生成し、過去の値を混在させていない。常駐APIの比較は[別の0016測定](evals/iterations/0016-checker-benchmark.md#apiを再利用した全探索)を参照。上の起動込み時間と同じ指標として扱わない。
+
+<!-- checker-comparison:end -->
+
 ## モデルと実装の比較
 
 TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と Wasm で使い、適合性照合とトレース再生を行う。[Go adapter](docs/go-adapter.md) は CGO 不要で同じ Wasm に接続する。[値・effect protocol・使用例](docs/portable-core.md) を参照。`just portable-build` / `just portable-test` で Rust と Node・実ブラウザ、`just go-test` で Go の照合と単独 consumer を検査する。

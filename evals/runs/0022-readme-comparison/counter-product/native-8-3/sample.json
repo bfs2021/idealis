@@ -1,0 +1,107 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-comparison/counter-product/native-8-3/input.json",
+    "8"
+  ],
+  "exit": 0,
+  "wallMs": 3645.916167000003,
+  "stdout": "{\"frontendMs\":3.055125000000004,\"engineStartupMs\":2.615707999999998,\"apiMs\":3581.6169579999996,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":5308416,\"generated\":21233665,\"depth\":188,\"work\":106168325,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.055125000000004,
+    "engineStartupMs": 2.615707999999998,
+    "apiMs": 3581.6169579999996,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 5308416,
+      "generated": 21233665,
+      "depth": 188,
+      "work": 106168325,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 227.68579200000386,
+      "bytes": 116621312
+    },
+    {
+      "milliseconds": 427.1007079999981,
+      "bytes": 127664128
+    },
+    {
+      "milliseconds": 629.9075000000012,
+      "bytes": 157302784
+    },
+    {
+      "milliseconds": 829.8439580000122,
+      "bytes": 175226880
+    },
+    {
+      "milliseconds": 1031.8749170000083,
+      "bytes": 205225984
+    },
+    {
+      "milliseconds": 1231.9727920000005,
+      "bytes": 265666560
+    },
+    {
+      "milliseconds": 1433.7012079999986,
+      "bytes": 177553408
+    },
+    {
+      "milliseconds": 1634.0488750000077,
+      "bytes": 207716352
+    },
+    {
+      "milliseconds": 1836.5180830000027,
+      "bytes": 238714880
+    },
+    {
+      "milliseconds": 2039.2082920000103,
+      "bytes": 266059776
+    },
+    {
+      "milliseconds": 2238.1460420000076,
+      "bytes": 295288832
+    },
+    {
+      "milliseconds": 2439.256125,
+      "bytes": 325402624
+    },
+    {
+      "milliseconds": 2638.971792000011,
+      "bytes": 421756928
+    },
+    {
+      "milliseconds": 2839.68591700001,
+      "bytes": 274497536
+    },
+    {
+      "milliseconds": 3039.504375000004,
+      "bytes": 315359232
+    },
+    {
+      "milliseconds": 3245.6474580000067,
+      "bytes": 351977472
+    },
+    {
+      "milliseconds": 3443.794000000009,
+      "bytes": 390348800
+    },
+    {
+      "milliseconds": 3646.5905000000057,
+      "bytes": 81690624
+    }
+  ],
+  "sampledMaxRssBytes": 421756928,
+  "phases": null,
+  "phaseError": null
+}

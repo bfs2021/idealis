@@ -55,6 +55,14 @@ export const renderComparison = (result: {
   const rows = cases("large");
   for (const input of rows) for (const route of routes) get(input.name, route);
   return {
+    combined: [
+      "| モデル | 状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | modelt Wasm 1 worker | modelt native 1 worker | modelt native 8 workers |",
+      "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+      ...rows.map(
+        (input, index) =>
+          `| ${names[index]} | ${input.states.toLocaleString("en-US")} | ${routes.map((route) => get(input.name, route)).join(" | ")} |`,
+      ),
+    ].join("\n"),
     sequential: [
       "| モデル | 状態数 | tla-ts 1 worker | TLC 1 worker | modelt Wasm 1 worker | modelt native 1 worker |",
       "| --- | ---: | ---: | ---: | ---: | ---: |",

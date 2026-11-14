@@ -71,3 +71,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [nativeの層同期BFS](iterations/0020-frontier-safety.md)は、単一モデルを並列展開する明示的な経路。共有workカウンタの競合による後退と、初回の幅1測定への干渉も記録する。`frontier-safety-test` / `frontier-safety-eval` / `frontier-safety-replay`で検査する。
 
 [workerごとの予算予約](iterations/0021-worker-budget.md)は、共通counterへの毎tickの競合を減らす。同APIの1→8 workerで関数・チャネルは中央値約1.8倍、counterは遅くなるため、明示的な経路として採用する。`frontier-budget-eval` / `frontier-budget-replay`で固定入力の測定・再生を行う。
+
+[READMEの6経路比較](iterations/0022-readme-comparison.md)は、同じ4入力をtla-ts 1、TLC 1/8、Wasm 1、native 1/8で測り直した。条件・全sample・再生とREADMEへの照合を保存する。
