@@ -1,0 +1,7 @@
+{
+  "status": "timing-confounded",
+  "run": "0020-frontier-safety",
+  "affectedInput": "linear-ring",
+  "reason": "Started replay/build verification and budget Red compilation before observing the original evaluation process exit. Conservatively exclude all initial linear-ring performance samples. The other three model inputs completed before these commands. All 80 samples matched status/state/generated counts. Preserve the original complete result as a correctness result, not an assertion of isolated timing.",
+  "replacementPlan": "0021-worker-budget"
+}
