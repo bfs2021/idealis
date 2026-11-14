@@ -20,6 +20,7 @@ await mkdir(dirname(directory), { recursive: true });
 await mkdir(directory);
 const paths = [
   "evals/plans/0023-criterion-safety.md",
+  "evals/plans/0023-adaptive-policy.md",
   ...(await readdir("evals/criterion-safety"))
     .filter((path) => path.endsWith(".ts"))
     .map((path) => `evals/criterion-safety/${path}`),
