@@ -3,6 +3,8 @@ use crate::{CoreError, Value};
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::hash::{BuildHasherDefault, Hasher};
+#[cfg(not(target_arch = "wasm32"))]
+use std::sync::atomic::{AtomicU32, Ordering as AtomicOrdering};
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 enum Cell {
@@ -43,7 +45,11 @@ impl Hasher for ValueHasher {
     }
 }
 
-pub(crate) struct Arena {
+pub(crate) struct Arena<'a> {
+    base: Option<&'a Arena<'a>>,
+    offset: usize,
+    #[cfg(not(target_arch = "wasm32"))]
+    budget: Option<&'a AtomicU32>,
     cells: Vec<Cell>,
     depths: Vec<u8>,
     index: HashMap<Cell, u32, BuildHasherDefault<ValueHasher>>,
@@ -52,9 +58,13 @@ pub(crate) struct Arena {
     maximum: u32,
 }
 
-impl Arena {
+impl Arena<'_> {
     pub fn new(maximum: u32) -> Self {
         Self {
+            base: None,
+            offset: 0,
+            #[cfg(not(target_arch = "wasm32"))]
+            budget: None,
             cells: vec![],
             depths: vec![],
             index: HashMap::default(),
@@ -64,29 +74,88 @@ impl Arena {
         }
     }
     pub fn tick(&mut self) -> Result<(), CoreError> {
-        if self.work == self.maximum {
-            return Err(CoreError {
-                code: "budget",
-                message: "Safety work budget exhausted".into(),
-            });
-        }
-        self.work += 1;
-        Ok(())
+        self.consume(1)
     }
     pub fn consume(&mut self, count: usize) -> Result<(), CoreError> {
+        #[cfg(not(target_arch = "wasm32"))]
+        if let Some(budget) = self.budget {
+            let mut remaining = budget.load(AtomicOrdering::Relaxed);
+            loop {
+                let used = count.min(remaining as usize) as u32;
+                match budget.compare_exchange_weak(
+                    remaining,
+                    remaining - used,
+                    AtomicOrdering::Relaxed,
+                    AtomicOrdering::Relaxed,
+                ) {
+                    Ok(_) => {
+                        self.work += used;
+                        return if used as usize == count {
+                            Ok(())
+                        } else {
+                            Err(work_exhausted())
+                        };
+                    }
+                    Err(actual) => remaining = actual,
+                }
+            }
+        }
         if count > (self.maximum - self.work) as usize {
             self.work = self.maximum;
-            return Err(CoreError {
-                code: "budget",
-                message: "Safety work budget exhausted".into(),
-            });
+            return Err(work_exhausted());
         }
         self.work += count as u32;
         Ok(())
     }
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn fork<'a>(&'a self, budget: &'a AtomicU32) -> Arena<'a> {
+        Arena {
+            base: Some(self),
+            offset: self.offset + self.cells.len(),
+            budget: Some(budget),
+            ..Arena::new(self.maximum)
+        }
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn into_delta(self) -> ValueDelta {
+        ValueDelta {
+            cells: self.cells,
+            data: self.data,
+            offset: self.offset,
+            work: self.work,
+        }
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn merge(&mut self, delta: ValueDelta) -> Result<ValueRemap, CoreError> {
+        let mut mapping = ValueRemap {
+            offset: delta.offset,
+            values: Vec::with_capacity(delta.cells.len()),
+        };
+        for cell in delta.cells {
+            let cell = match cell {
+                Cell::String(value) => Cell::String(value),
+                Cell::Set(values) => {
+                    Cell::Set(values.into_iter().map(|value| mapping.get(value)).collect())
+                }
+                Cell::Function(values) => Cell::Function(
+                    values
+                        .into_iter()
+                        .map(|(key, value)| (mapping.get(key), mapping.get(value)))
+                        .collect(),
+                ),
+            };
+            mapping.values.push(self.insert(cell, false)?);
+        }
+        for (value, scalar) in delta.data {
+            self.data
+                .entry(value)
+                .or_insert_with(|| mapping.get(scalar));
+        }
+        Ok(mapping)
+    }
     pub fn text(&self, value: Scalar) -> Option<&str> {
         if let Scalar::Ref(index) = value
-            && let Some(Cell::String(text)) = self.cells.get(index as usize)
+            && let Ok(Cell::String(text)) = self.cell(Scalar::Ref(index))
         {
             return Some(text);
         }
@@ -111,19 +180,39 @@ impl Arena {
     }
     fn cell(&self, value: Scalar) -> Result<&Cell, CoreError> {
         match value {
+            Scalar::Ref(index) if (index as usize) < self.offset => self
+                .base
+                .ok_or_else(|| CoreError::protocol("Missing base value store"))?
+                .cell(value),
             Scalar::Ref(index) => self
                 .cells
-                .get(index as usize)
+                .get(index as usize - self.offset)
                 .ok_or_else(|| CoreError::protocol("Invalid interned value")),
             _ => Err(CoreError::protocol("Expected a collection or string")),
         }
     }
     fn intern(&mut self, cell: Cell) -> Result<Scalar, CoreError> {
-        if let Some(index) = self.index.get(&cell) {
-            return Ok(Scalar::Ref(*index));
+        self.insert(cell, true)
+    }
+    fn find(&self, cell: &Cell) -> Option<u32> {
+        self.index
+            .get(cell)
+            .copied()
+            .or_else(|| self.base.and_then(|base| base.find(cell)))
+    }
+    fn depth(&self, index: u32) -> u8 {
+        if (index as usize) < self.offset {
+            self.base.unwrap().depth(index)
+        } else {
+            self.depths[index as usize - self.offset]
+        }
+    }
+    fn insert(&mut self, cell: Cell, charge: bool) -> Result<Scalar, CoreError> {
+        if let Some(index) = self.find(&cell) {
+            return Ok(Scalar::Ref(index));
         }
         let depth = |value: &Scalar| match value {
-            Scalar::Ref(index) => self.depths[*index as usize],
+            Scalar::Ref(index) => self.depth(*index),
             _ => 0,
         };
         let depth = match &cell {
@@ -141,8 +230,10 @@ impl Arena {
         if depth > 64 {
             return Err(CoreError::protocol("TLA value nesting exceeds 64"));
         }
-        self.tick()?;
-        let index = u32::try_from(self.cells.len())
+        if charge {
+            self.tick()?;
+        }
+        let index = u32::try_from(self.offset + self.cells.len())
             .map_err(|_| CoreError::protocol("Value store exhausted"))?;
         self.index.insert(cell.clone(), index);
         self.cells.push(cell);
@@ -153,7 +244,11 @@ impl Arena {
         self.intern(Cell::String(value))
     }
     pub fn data(&mut self, value: &Value) -> Result<Scalar, CoreError> {
-        if let Some(result) = self.data.get(value) {
+        if let Some(result) = self
+            .data
+            .get(value)
+            .or_else(|| self.base.and_then(|base| base.data.get(value)))
+        {
             return Ok(*result);
         }
         let result = match value {
@@ -200,9 +295,9 @@ impl Arena {
         match value {
             Scalar::Bool(_) => 0,
             Scalar::Int(_) => 1,
-            Scalar::Ref(index) => match self.cells.get(index as usize) {
-                Some(Cell::String(_)) => 2,
-                Some(Cell::Set(_)) => 3,
+            Scalar::Ref(_) => match self.cell(value) {
+                Ok(Cell::String(_)) => 2,
+                Ok(Cell::Set(_)) => 3,
                 _ => 4,
             },
         }
@@ -509,11 +604,77 @@ impl Arena {
     }
 }
 
+fn work_exhausted() -> CoreError {
+    CoreError {
+        code: "budget",
+        message: "Safety work budget exhausted".into(),
+    }
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) struct ValueDelta {
+    cells: Vec<Cell>,
+    data: HashMap<Value, Scalar>,
+    offset: usize,
+    pub work: u32,
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) struct ValueRemap {
+    offset: usize,
+    values: Vec<Scalar>,
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+impl ValueRemap {
+    pub fn get(&self, value: Scalar) -> Scalar {
+        match value {
+            Scalar::Ref(index) if index as usize >= self.offset => {
+                self.values[index as usize - self.offset]
+            }
+            _ => value,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{Arena, Cell, ValueHasher};
     use crate::safety::Scalar;
     use std::hash::{Hash, Hasher};
+
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn worker_values_share_the_base_and_remap_conflicting_local_references() {
+        use std::sync::atomic::AtomicU32;
+        let mut base = Arena::new(1000);
+        let original = base.tuple(vec![Scalar::Int(0)]).unwrap();
+        let budget = AtomicU32::new(900);
+        let mut first = base.fork(&budget);
+        let mut second = base.fork(&budget);
+        assert_eq!(first.tuple(vec![Scalar::Int(0)]).unwrap(), original);
+        let left = first.set(vec![Scalar::Int(1)]).unwrap();
+        let right = second.set(vec![Scalar::Int(2)]).unwrap();
+        assert_eq!(left, right);
+        let nested = second.tuple(vec![right, original]).unwrap();
+        let first = first.into_delta();
+        let second = second.into_delta();
+        let first = base.merge(first).unwrap();
+        let second = base.merge(second).unwrap();
+        assert_ne!(first.get(left), second.get(right));
+        assert_eq!(
+            base.portable(first.get(left)).unwrap(),
+            crate::Value::Set(vec![crate::Value::Int("1".into())])
+        );
+        assert_eq!(
+            base.portable(second.get(right)).unwrap(),
+            crate::Value::Set(vec![crate::Value::Int("2".into())])
+        );
+        let members = base.sequence(second.get(nested)).unwrap();
+        assert_eq!(members, vec![second.get(right), original]);
+        let canonical = base.set(vec![Scalar::Int(2)]).unwrap();
+        assert_eq!(canonical, second.get(right));
+    }
 
     #[test]
     fn colliding_function_hashes_keep_distinct_values() {
