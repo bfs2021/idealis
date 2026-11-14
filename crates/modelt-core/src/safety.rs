@@ -422,6 +422,12 @@ impl StateStore {
             links: vec![],
         }
     }
+    #[cfg(not(target_arch = "wasm32"))]
+    fn clear(&mut self) {
+        self.values.clear();
+        self.heads.clear();
+        self.links.clear();
+    }
     fn state(&self, index: usize) -> &[Scalar] {
         &self.values[index * self.width..(index + 1) * self.width]
     }
@@ -647,16 +653,9 @@ impl<'program> Search<'program> {
                 && program.fairness.is_empty()
             {
                 if pool.is_none() {
-                    pool = Some(
-                        rayon::ThreadPoolBuilder::new()
-                            .num_threads(workers)
-                            .build()
-                            .map_err(|error| {
-                                CoreError::protocol(&format!("Safety worker pool: {error}"))
-                            })?,
-                    );
+                    pool = Some(parallel::Workers::new(workers, self.store.width)?);
                 }
-                self.parallel_frontier(index..end, pool.as_ref().unwrap(), arena)?;
+                self.parallel_frontier(index..end, pool.as_mut().unwrap(), arena)?;
                 if self.stopped() {
                     return Ok(());
                 }
