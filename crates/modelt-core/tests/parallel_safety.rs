@@ -123,3 +123,30 @@ fn global_cuts_remain_bounded_and_worker_zero_is_rejected() {
         }
     }
 }
+
+#[test]
+fn converging_workers_validate_each_canonical_state_once() {
+    let mut input = grid();
+    for action in input["next"].as_array_mut().unwrap() {
+        action["steps"][0]["value"]["condition"]["right"] = integer(31);
+    }
+    input["invariants"][0]["expression"] = json!({"op":"and", "left":{"op":"le", "left":{"op":"read","slot":0,"next":false},"right":integer(31)}, "right":{"op":"forall","bounds":[{"slot":0,"domain":{"kind":"range","lower":integer(0),"upper":integer(9)}}],"body":{"op":"lt","left":{"op":"bound","slot":0},"right":integer(10)}}});
+    let program: SafetyProgram = serde_json::from_value(input).unwrap();
+    let limits = SafetyBounds {
+        max_states: 2000,
+        max_work: 1_000_000,
+        ..bounds()
+    };
+    let expected = program.check(limits).unwrap();
+    assert_eq!(expected.states, 1024);
+    for workers in [2, 4, 8] {
+        let actual = program.check_parallel(limits, workers).unwrap();
+        assert_eq!(actual.status, "complete");
+        assert_eq!(actual.states, expected.states);
+        assert_eq!(actual.generated, expected.generated);
+        assert_eq!(
+            actual.work, expected.work,
+            "invariants must be checked once per canonical state, workers={workers}"
+        );
+    }
+}

@@ -1,4 +1,4 @@
-use super::{Search, StateStore, check_invariants, get_hash};
+use super::Search;
 use crate::CoreError;
 use crate::safety::Scalar;
 use crate::safety_expressions::{EvalContext, visit_branch};
@@ -14,7 +14,6 @@ enum Event {
         parent: usize,
         action: usize,
         start: usize,
-        checked: Result<Option<usize>, CoreError>,
     },
     Deadlock(usize),
     Error(CoreError),
@@ -24,8 +23,6 @@ struct Buffer {
     events: Vec<Event>,
     values: Vec<Option<Scalar>>,
     next: Vec<Option<Scalar>>,
-    current: Vec<Scalar>,
-    local: StateStore,
 }
 
 impl Buffer {
@@ -34,30 +31,19 @@ impl Buffer {
             events: vec![],
             values: vec![],
             next: vec![None; width],
-            current: Vec::with_capacity(width),
-            local: StateStore::new(width),
         }
     }
     fn reset(&mut self) {
         self.events.clear();
         self.values.clear();
         self.next.fill(None);
-        self.current.clear();
-        self.local.clear();
     }
     #[cfg(test)]
-    fn candidate(
-        &mut self,
-        parent: usize,
-        action: usize,
-        values: &[Option<Scalar>],
-        checked: Result<Option<usize>, CoreError>,
-    ) {
+    fn candidate(&mut self, parent: usize, action: usize, values: &[Option<Scalar>]) {
         self.events.push(Event::Candidate {
             parent,
             action,
             start: self.values.len(),
-            checked,
         });
         self.values.extend_from_slice(values);
     }
@@ -120,14 +106,12 @@ impl Search<'_> {
                             parent,
                             action,
                             start,
-                            checked,
                         } => {
                             self.accept(
                                 &buffer.values[start..start + self.store.width],
                                 Some(parent),
                                 action,
                                 arena,
-                                Some(checked),
                             )?;
                         }
                         Event::Deadlock(parent) => self.deadlock(parent, arena)?,
@@ -163,29 +147,15 @@ impl Search<'_> {
                     EvalContext::new(current, &[]),
                     &mut buffer.next,
                     &mut arena,
-                    &mut |values, arena| {
+                    &mut |values, _arena| {
                         enabled = true;
-                        let hash = get_hash(values)?;
-                        let checked = if self.nodes[parent].depth < self.bounds.max_depth
-                            && self.store.find(hash, values).is_none()
-                            && buffer.local.find(hash, values).is_none()
-                        {
-                            buffer.local.push(hash, values)?;
-                            buffer.current.clear();
-                            buffer.current.extend(values.iter().flatten().copied());
-                            check_invariants(self.program, &buffer.current, arena)
-                        } else {
-                            Ok(None)
-                        };
-                        let stop = !matches!(checked, Ok(None));
                         buffer.events.push(Event::Candidate {
                             parent,
                             action,
                             start: buffer.values.len(),
-                            checked,
                         });
                         buffer.values.extend_from_slice(values);
-                        Ok(stop)
+                        Ok(false)
                     },
                 );
                 match result {
@@ -214,9 +184,9 @@ mod tests {
     fn candidates_keep_snapshots_and_order_when_buffers_are_reused() {
         let mut buffer = Buffer::new(2);
         let mut values = [Some(Scalar::Int(1)), Some(Scalar::Int(2))];
-        buffer.candidate(3, 0, &values, Ok(None));
+        buffer.candidate(3, 0, &values);
         values[0] = Some(Scalar::Int(7));
-        buffer.candidate(4, 1, &values, Ok(None));
+        buffer.candidate(4, 1, &values);
         assert_eq!(
             buffer.values,
             [
@@ -239,7 +209,7 @@ mod tests {
             assert_eq!((*parent, *action, *start), expected);
         }
         buffer.reset();
-        buffer.candidate(5, 2, &values, Ok(None));
+        buffer.candidate(5, 2, &values);
         assert_eq!(buffer.values, values);
         assert_eq!(buffer.events.len(), 1);
     }
