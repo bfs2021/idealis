@@ -41,6 +41,46 @@ impl<'a> EvalContext<'a> {
     }
 }
 
+pub(crate) fn register_memberships<'a>(
+    expression: &'a Expression,
+    visitor: &mut impl FnMut(&'a Expression),
+) {
+    fn register_type<'a>(expression: &'a Expression, visitor: &mut impl FnMut(&'a Expression)) {
+        visitor(expression);
+        for child in expression.children() {
+            register_type(child, visitor);
+        }
+    }
+    if let Expression::FunctionIn { right, .. } | Expression::SequenceIn { right, .. } = expression
+    {
+        register_type(right, visitor);
+    }
+    for child in expression.children() {
+        register_memberships(child, visitor);
+    }
+}
+
+pub(crate) fn register_branch_memberships<'a>(
+    branches: &'a [Branch],
+    visitor: &mut impl FnMut(&'a Expression),
+) {
+    for branch in branches {
+        for step in &branch.steps {
+            match step {
+                Step::Guard { expression }
+                | Step::Assign {
+                    value: expression, ..
+                } => visitor(expression),
+                Step::Bind { domain, .. } | Step::Choose { domain, .. } => {
+                    for expression in domain.children() {
+                        visitor(expression);
+                    }
+                }
+            }
+        }
+    }
+}
+
 #[derive(Clone, Copy)]
 struct Validation {
     variables: usize,

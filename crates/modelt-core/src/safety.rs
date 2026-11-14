@@ -549,15 +549,23 @@ impl SafetyProgram {
     }
 }
 
-impl Search<'_> {
-    fn run(&mut self, arena: &mut Arena, workers: usize) -> Result<(), CoreError> {
+impl<'program> Search<'program> {
+    fn run(&mut self, arena: &mut Arena<'program>, workers: usize) -> Result<(), CoreError> {
         let program = self.program;
         validate_branches(&program.initial, program.variables.len(), 0, 0)?;
         validate_branches(&program.next, program.variables.len(), 1, 0)?;
+        crate::safety_expressions::register_branch_memberships(
+            &program.initial,
+            &mut |expression| arena.register_memberships(expression),
+        );
+        crate::safety_expressions::register_branch_memberships(&program.next, &mut |expression| {
+            arena.register_memberships(expression)
+        });
         for predicate in program.invariants.iter().chain(&program.initial_properties) {
             predicate
                 .expression
                 .validate(program.variables.len(), 2, 0)?;
+            arena.register_memberships(&predicate.expression);
             if predicate.expression.is_constant()
                 && !predicate
                     .expression
@@ -573,6 +581,7 @@ impl Search<'_> {
             predicate
                 .expression
                 .validate(program.variables.len(), 1, 0)?;
+            arena.register_memberships(&predicate.expression);
         }
         for property in &program.properties {
             property.formula.validate(program.variables.len(), 0)?;
@@ -584,6 +593,7 @@ impl Search<'_> {
             predicate
                 .expression
                 .validate(program.variables.len(), 3, 0)?;
+            arena.register_memberships(&predicate.expression);
             if !predicate
                 .expression
                 .eval(EvalContext::new(&[], &[]), arena)?

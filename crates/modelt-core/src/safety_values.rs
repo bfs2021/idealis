@@ -47,6 +47,8 @@ impl Hasher for ValueHasher {
     }
 }
 
+type RegisteredMembership = HashMap<usize, Option<Option<Arc<MembershipSet>>>>;
+
 type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
 
 pub(crate) struct Arena<'a> {
@@ -60,12 +62,13 @@ pub(crate) struct Arena<'a> {
     links: Vec<Option<u32>>,
     data: HashMap<Value, Scalar>,
     types: HashMap<Expression, Option<Arc<MembershipSet>>>,
+    registered: RegisteredMembership,
     membership: MembershipCache,
     pub work: u32,
     maximum: u32,
 }
 
-impl Arena<'_> {
+impl<'scope> Arena<'scope> {
     pub fn new(maximum: u32) -> Self {
         Self {
             base: None,
@@ -78,6 +81,7 @@ impl Arena<'_> {
             links: vec![],
             data: HashMap::new(),
             types: HashMap::new(),
+            registered: HashMap::new(),
             membership: HashMap::new(),
             work: 0,
             maximum,
@@ -119,6 +123,7 @@ impl Arena<'_> {
             cells: self.cells,
             data: self.data,
             types: self.types,
+            registered: self.registered,
             membership: self.membership,
             offset: self.offset,
             work: self.work,
@@ -150,6 +155,13 @@ impl Arena<'_> {
                 .entry(value)
                 .or_insert_with(|| mapping.get(scalar));
         }
+        for (address, prepared) in delta.registered {
+            let target = self.registered.entry(address).or_insert(None);
+            if target.is_none() {
+                *target =
+                    prepared.map(|prepared| prepared.map(|prepared| prepared.remap(&mapping)));
+            }
+        }
         for (expression, prepared) in delta.types {
             self.types
                 .entry(expression)
@@ -162,21 +174,42 @@ impl Arena<'_> {
         }
         Ok(mapping)
     }
+    pub fn register_memberships(&mut self, expression: &'scope Expression) {
+        crate::safety_expressions::register_memberships(expression, &mut |expression| {
+            self.registered
+                .entry(std::ptr::from_ref(expression) as usize)
+                .or_insert(None);
+        });
+    }
+    fn has_registered(&self, address: usize) -> bool {
+        self.registered.contains_key(&address)
+            || self.base.is_some_and(|base| base.has_registered(address))
+    }
     pub fn prepared_membership(
         &self,
         expression: &Expression,
     ) -> Option<Option<Arc<MembershipSet>>> {
-        self.types.get(expression).cloned().or_else(|| {
-            self.base
-                .and_then(|base| base.prepared_membership(expression))
-        })
+        if let Some(prepared) = self
+            .registered
+            .get(&(std::ptr::from_ref(expression) as usize))
+        {
+            return prepared.clone();
+        }
+        self.base
+            .and_then(|base| base.prepared_membership(expression))
+            .or_else(|| self.types.get(expression).cloned())
     }
     pub fn cache_membership_type(
         &mut self,
         expression: &Expression,
         prepared: Option<Arc<MembershipSet>>,
     ) {
-        self.types.insert(expression.clone(), prepared);
+        let address = std::ptr::from_ref(expression) as usize;
+        if self.has_registered(address) {
+            self.registered.insert(address, Some(prepared));
+        } else {
+            self.types.insert(expression.clone(), prepared);
+        }
     }
     pub fn membership_result(&self, prepared: &Arc<MembershipSet>, value: Scalar) -> Option<bool> {
         self.membership
@@ -703,6 +736,7 @@ pub(crate) struct ValueDelta {
     cells: Vec<Cell>,
     data: HashMap<Value, Scalar>,
     types: HashMap<Expression, Option<Arc<MembershipSet>>>,
+    registered: RegisteredMembership,
     membership: MembershipCache,
     offset: usize,
     pub work: u32,
