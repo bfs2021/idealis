@@ -46,6 +46,19 @@ Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅
 
 <!-- checker-comparison:end -->
 
+## Rustコアの最適化前後
+
+上の6経路比較は最適化前の0022時点の記録。今回の6項目の最適化は、変更前後のnative/Wasmを別途交互に測った。起動込み秒、1 warmup後3回の中央値。比率は変更前/変更後。TLC/tla-tsの過去値はこの表へ混ぜていない。
+
+| モデル      | native 1: 変更前 → 後 (秒) |  比率 | native 最大8: 変更前 → 後 (秒) |  比率 | Wasm 1: 変更前 → 後 (秒) |  比率 |
+| ----------- | -------------------------: | ----: | -----------------------------: | ----: | -----------------------: | ----: |
+| カウンタ群  |              3.114 → 3.061 | 1.02× |                  3.781 → 2.996 | 1.26× |            3.944 → 4.822 | 0.82× |
+| Boolean関数 |              9.609 → 7.221 | 1.33× |                  5.407 → 3.942 | 1.37× |          19.809 → 10.585 | 1.87× |
+| チャネル群  |            22.260 → 17.838 | 1.25× |                 13.500 → 8.829 | 1.53× |          38.771 → 24.964 | 1.55× |
+| 幅1のring   |              0.213 → 0.215 | 0.99× |                  0.223 → 0.217 | 1.03× |            0.268 → 0.286 | 0.94× |
+
+最大8のcounterは軽いscalar演算と判定して逐次実行する。Wasmのcounter/ringは後退が残る。Boolean関数のnative RSSは約40%、チャネル群は約35%減った（200 ms間隔の観測）。[Criterion・全sample・範囲・採否と再実行](evals/iterations/0023-criterion-safety.md)に記録した。`just criterion-test`でsmoke、`just criterion-save <stage> <新規runパス>`で14本を測る。
+
 ## モデルと実装の比較
 
 TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と Wasm で使い、適合性照合とトレース再生を行う。[Go adapter](docs/go-adapter.md) は CGO 不要で同じ Wasm に接続する。[値・effect protocol・使用例](docs/portable-core.md) を参照。`just portable-build` / `just portable-test` で Rust と Node・実ブラウザ、`just go-test` で Go の照合と単独 consumer を検査する。

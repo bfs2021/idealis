@@ -1,0 +1,24 @@
+   Compiling modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.44s
+     Running tests/parallel_safety.rs (crates/modelt-core/target/debug/deps/parallel_safety-ae43690d39737802)
+
+running 1 test
+test converging_workers_validate_each_canonical_state_once ... FAILED
+
+failures:
+
+---- converging_workers_validate_each_canonical_state_once stdout ----
+
+thread 'converging_workers_validate_each_canonical_state_once' (44024513) panicked at tests/parallel_safety.rs:147:9:
+assertion `left == right` failed: invariants must be checked once per canonical state, workers=2
+  left: 16997
+ right: 16387
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    converging_workers_validate_each_canonical_state_once
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test parallel_safety`

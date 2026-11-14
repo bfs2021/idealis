@@ -1,0 +1,73 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-utils v0.8.23
+   Compiling zerocopy v0.8.63
+   Compiling find-msvc-tools v0.1.15
+   Compiling zmij v1.0.23
+   Compiling crossbeam-epoch v0.9.21
+   Compiling serde v1.0.229
+   Compiling shlex v2.0.1
+   Compiling cc v1.11.2
+   Compiling libc v0.2.191
+   Compiling either v1.19.0
+   Compiling crossbeam-deque v0.8.8
+   Compiling cfg-if v1.0.5
+   Compiling autocfg v1.5.1
+   Compiling serde_json v1.0.154
+   Compiling num-traits v0.2.19
+   Compiling alloca v0.4.0
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling rayon-core v1.13.0
+   Compiling regex-syntax v0.8.11
+   Compiling ciborium-io v0.2.2
+   Compiling clap_lex v1.1.1
+   Compiling anstyle v1.0.14
+   Compiling clap_builder v4.6.7
+   Compiling regex-automata v0.4.18
+   Compiling syn v2.0.119
+   Compiling syn v3.0.10
+   Compiling itertools v0.13.0
+   Compiling same-file v1.0.6
+   Compiling cast v0.3.0
+   Compiling walkdir v2.5.0
+   Compiling serde_derive v1.0.229
+   Compiling criterion-plot v0.8.2
+   Compiling page_size v0.6.0
+   Compiling regex v1.13.1
+   Compiling clap v4.6.7
+   Compiling oorandom v11.1.5
+   Compiling anes v0.1.6
+   Compiling zerocopy-derive v0.8.63
+   Compiling rayon v1.12.0
+   Compiling tinytemplate v1.2.1
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.8.2
+   Compiling modelt-core v0.1.0-alpha.0 (/private/tmp/modelt-membership-red/crates/modelt-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.38s
+     Running unittests src/lib.rs (crates/modelt-core/target/debug/deps/modelt_core-ba9ac7f0faca7691)
+
+running 1 test
+test safety_expressions::tests::successful_record_type_checks_reuse_their_work ... FAILED
+
+failures:
+
+---- safety_expressions::tests::successful_record_type_checks_reuse_their_work stdout ----
+
+thread 'safety_expressions::tests::successful_record_type_checks_reuse_their_work' (43918144) panicked at src/safety_expressions.rs:1122:9:
+assertion `left == right` failed
+  left: 25
+ right: 5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    safety_expressions::tests::successful_record_type_checks_reuse_their_work
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
