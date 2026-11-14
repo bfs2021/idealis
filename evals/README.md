@@ -73,3 +73,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [workerごとの予算予約](iterations/0021-worker-budget.md)は、共通counterへの毎tickの競合を減らす。同APIの1→8 workerで関数・チャネルは中央値約1.8倍、counterは遅くなるため、明示的な経路として採用する。`frontier-budget-eval` / `frontier-budget-replay`で固定入力の測定・再生を行う。
 
 [READMEの6経路比較](iterations/0022-readme-comparison.md)は、同じ4入力をtla-ts 1、TLC 1/8、Wasm 1、native 1/8で測り直した。条件・全sample・再生とREADMEへの照合を保存する。
+
+[Criterionによる最適化](iterations/0023-criterion-safety.md)は、値の一重保持、EXCEPT、型所属cache、候補buffer、重複検査、worker/batch選択の6項目。`criterion-test` / `criterion-save`でnative kernel/APIを測り、`criterion-compare` / `criterion-replay`で固定binaryの前後・起動・RSS・正常/故障を確認する。Wasm scalarの後退も記録した。
