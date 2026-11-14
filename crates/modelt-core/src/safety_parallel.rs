@@ -19,33 +19,42 @@ enum Event {
     Error(CoreError),
 }
 
-struct Buffer {
+#[derive(Default)]
+struct Candidates {
     events: Vec<Event>,
     values: Vec<Option<Scalar>>,
-    next: Vec<Option<Scalar>>,
 }
 
-impl Buffer {
-    fn new(width: usize) -> Self {
-        Self {
-            events: vec![],
-            values: vec![],
-            next: vec![None; width],
-        }
-    }
-    fn reset(&mut self) {
+impl Candidates {
+    fn clear(&mut self) {
         self.events.clear();
         self.values.clear();
-        self.next.fill(None);
     }
-    #[cfg(test)]
-    fn candidate(&mut self, parent: usize, action: usize, values: &[Option<Scalar>]) {
+    fn push(&mut self, parent: usize, action: usize, values: &[Option<Scalar>]) {
         self.events.push(Event::Candidate {
             parent,
             action,
             start: self.values.len(),
         });
         self.values.extend_from_slice(values);
+    }
+}
+
+struct Buffer {
+    candidates: Candidates,
+    next: Vec<Option<Scalar>>,
+}
+
+impl Buffer {
+    fn new(width: usize) -> Self {
+        Self {
+            candidates: Candidates::default(),
+            next: vec![None; width],
+        }
+    }
+    fn reset(&mut self) {
+        self.candidates.clear();
+        self.next.fill(None);
     }
 }
 
@@ -125,15 +134,15 @@ impl Search<'_> {
                 .buffers
                 .iter()
                 .take(expansions.len())
-                .map(|buffer| buffer.values.len() / self.store.width)
+                .map(|buffer| buffer.candidates.values.len() / self.store.width)
                 .sum();
             workers.observe(end - start, candidates);
             for (delta, buffer) in expansions.into_iter().zip(&mut workers.buffers) {
                 let mapping = arena.merge(delta)?;
-                for value in buffer.values.iter_mut().flatten() {
+                for value in buffer.candidates.values.iter_mut().flatten() {
                     *value = mapping.get(*value);
                 }
-                for event in buffer.events.drain(..) {
+                for event in buffer.candidates.events.drain(..) {
                     match event {
                         Event::Candidate {
                             parent,
@@ -141,7 +150,7 @@ impl Search<'_> {
                             start,
                         } => {
                             self.accept(
-                                &buffer.values[start..start + self.store.width],
+                                &buffer.candidates.values[start..start + self.store.width],
                                 Some(parent),
                                 action,
                                 arena,
@@ -182,12 +191,7 @@ impl Search<'_> {
                     &mut arena,
                     &mut |values, _arena| {
                         enabled = true;
-                        buffer.events.push(Event::Candidate {
-                            parent,
-                            action,
-                            start: buffer.values.len(),
-                        });
-                        buffer.values.extend_from_slice(values);
+                        buffer.candidates.push(parent, action, values);
                         Ok(false)
                     },
                 );
@@ -195,13 +199,13 @@ impl Search<'_> {
                     Ok(true) => return arena.into_delta(),
                     Ok(false) => {}
                     Err(error) => {
-                        buffer.events.push(Event::Error(error));
+                        buffer.candidates.events.push(Event::Error(error));
                         return arena.into_delta();
                     }
                 }
             }
             if !enabled && self.program.check_deadlock {
-                buffer.events.push(Event::Deadlock(parent));
+                buffer.candidates.events.push(Event::Deadlock(parent));
                 break;
             }
         }
@@ -215,11 +219,11 @@ mod tests {
 
     #[test]
     fn candidates_keep_snapshots_and_order_when_buffers_are_reused() {
-        let mut buffer = Buffer::new(2);
+        let mut buffer = Candidates::default();
         let mut values = [Some(Scalar::Int(1)), Some(Scalar::Int(2))];
-        buffer.candidate(3, 0, &values);
+        buffer.push(3, 0, &values);
         values[0] = Some(Scalar::Int(7));
-        buffer.candidate(4, 1, &values);
+        buffer.push(4, 1, &values);
         assert_eq!(
             buffer.values,
             [
@@ -241,8 +245,8 @@ mod tests {
             };
             assert_eq!((*parent, *action, *start), expected);
         }
-        buffer.reset();
-        buffer.candidate(5, 2, &values);
+        buffer.clear();
+        buffer.push(5, 2, &values);
         assert_eq!(buffer.values, values);
         assert_eq!(buffer.events.len(), 1);
     }
