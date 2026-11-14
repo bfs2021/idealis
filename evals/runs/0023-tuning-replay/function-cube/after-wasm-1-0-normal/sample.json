@@ -1,0 +1,35 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-replay/function-cube/after-wasm-1-0-normal/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 81.39750000000004,
+  "stdout": "{\"frontendMs\":3.041667000000004,\"engineStartupMs\":1.5577919999999992,\"apiMs\":5.7862499999999955,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":16,\"generated\":65,\"depth\":4,\"work\":392,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.041667000000004,
+    "engineStartupMs": 1.5577919999999992,
+    "apiMs": 5.7862499999999955,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 65,
+      "depth": 4,
+      "work": 392,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

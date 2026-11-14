@@ -1,0 +1,35 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-replay/counter-product/before-native-8-0-normal/input.json",
+    "8",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/criterion-safety/before/modelt-core"
+  ],
+  "exit": 0,
+  "wallMs": 73.19349999999997,
+  "stdout": "{\"frontendMs\":3.3754160000000013,\"engineStartupMs\":2.994415999999994,\"apiMs\":0.9072499999999977,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":81,\"generated\":325,\"depth\":8,\"work\":1625,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.3754160000000013,
+    "engineStartupMs": 2.994415999999994,
+    "apiMs": 0.9072499999999977,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 81,
+      "generated": 325,
+      "depth": 8,
+      "work": 1625,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}
