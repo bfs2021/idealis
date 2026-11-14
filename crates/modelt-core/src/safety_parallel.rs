@@ -52,6 +52,7 @@ impl Buffer {
 pub(super) struct Workers {
     pool: rayon::ThreadPool,
     buffers: Vec<Buffer>,
+    chunk: usize,
 }
 
 impl Workers {
@@ -62,8 +63,31 @@ impl Workers {
                 .build()
                 .map_err(|error| CoreError::protocol(&format!("Safety worker pool: {error}")))?,
             buffers: (0..workers).map(|_| Buffer::new(width)).collect(),
+            chunk: 64,
         })
     }
+}
+
+impl Workers {
+    fn observe(&mut self, parents: usize, candidates: usize) {
+        self.chunk = (1024 * parents / candidates.max(1)).clamp(16, 128);
+    }
+}
+
+pub(super) fn is_expensive(program: &super::SafetyProgram) -> bool {
+    program
+        .next
+        .iter()
+        .flat_map(|branch| &branch.steps)
+        .any(|step| match step {
+            super::Step::Assign { value, .. } => !value.is_scalar_cost(),
+            super::Step::Guard { expression } => !expression.is_scalar_cost(),
+            super::Step::Bind { .. } | super::Step::Choose { .. } => true,
+        })
+        || program
+            .invariants
+            .iter()
+            .any(|predicate| !predicate.expression.is_scalar_cost())
 }
 
 impl Search<'_> {
@@ -75,10 +99,12 @@ impl Search<'_> {
     ) -> Result<(), CoreError> {
         let mut start = frontier.start;
         while start < frontier.end {
-            let chunk = (frontier.end - start)
-                .div_ceil(workers.buffers.len())
-                .min(64);
-            let end = (start + chunk * workers.buffers.len()).min(frontier.end);
+            let active = workers
+                .buffers
+                .len()
+                .min((frontier.end - start).div_ceil(8));
+            let chunk = (frontier.end - start).div_ceil(active).min(workers.chunk);
+            let end = (start + chunk * active).min(frontier.end);
             let ranges: Vec<_> = (start..end)
                 .step_by(chunk)
                 .map(|first| first..(first + chunk).min(end))
@@ -95,6 +121,13 @@ impl Search<'_> {
                     .collect()
             });
             arena.work += expansions.iter().map(|delta| delta.work).sum::<u32>();
+            let candidates = workers
+                .buffers
+                .iter()
+                .take(expansions.len())
+                .map(|buffer| buffer.values.len() / self.store.width)
+                .sum();
+            workers.observe(end - start, candidates);
             for (delta, buffer) in expansions.into_iter().zip(&mut workers.buffers) {
                 let mapping = arena.merge(delta)?;
                 for value in buffer.values.iter_mut().flatten() {
@@ -212,5 +245,24 @@ mod tests {
         buffer.candidate(5, 2, &values);
         assert_eq!(buffer.values, values);
         assert_eq!(buffer.events.len(), 1);
+    }
+}
+
+#[cfg(test)]
+mod schedule_tests {
+    use super::*;
+
+    #[test]
+    fn batch_tracks_fanout_and_stays_bounded() {
+        let mut workers = Workers::new(2, 1).unwrap();
+        assert_eq!(workers.chunk, 64);
+        workers.observe(64, 2048);
+        assert_eq!(workers.chunk, 32);
+        workers.observe(64, 1);
+        assert_eq!(workers.chunk, 128);
+        workers.observe(64, 100_000);
+        assert_eq!(workers.chunk, 16);
+        workers.observe(64, 0);
+        assert_eq!(workers.chunk, 128);
     }
 }
