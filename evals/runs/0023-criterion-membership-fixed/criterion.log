@@ -1,0 +1,143 @@
+warning: output filename collision at /Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/release/deps/libmodelt_core.dylib
+  |
+  = note: the lib target `modelt_core` in package `modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)` has the same output filename as the lib target `modelt_core` in package `modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+warning: output filename collision at /Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/release/deps/libmodelt_core.dylib.dSYM
+  |
+  = note: the lib target `modelt_core` in package `modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)` has the same output filename as the lib target `modelt_core` in package `modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+warning: output filename collision at /Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/release/deps/libmodelt_core.rlib
+  |
+  = note: the lib target `modelt_core` in package `modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)` has the same output filename as the lib target `modelt_core` in package `modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+   Compiling modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)
+    Finished `bench` profile [optimized] target(s) in 30.50s
+     Running src/benchmarks.rs (crates/modelt-core/target/release/deps/safety-bcdc023172c79e02)
+Benchmarking values/intern-new-functions
+Benchmarking values/intern-new-functions: Warming up for 500.00 ms
+Benchmarking values/intern-new-functions: Collecting 20 samples in estimated 1.0366 s (1680 iterations)
+Benchmarking values/intern-new-functions: Analyzing
+values/intern-new-functions
+                        time:   [512.85 µs 539.84 µs 570.23 µs]
+                        thrpt:  [7.1830 Melem/s 7.5875 Melem/s 7.9867 Melem/s]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high severe
+Benchmarking values/intern-existing-functions
+Benchmarking values/intern-existing-functions: Warming up for 500.00 ms
+Benchmarking values/intern-existing-functions: Collecting 20 samples in estimated 1.0695 s (1050 iterations)
+Benchmarking values/intern-existing-functions: Analyzing
+values/intern-existing-functions
+                        time:   [454.11 µs 458.85 µs 465.76 µs]
+                        thrpt:  [8.7942 Melem/s 8.9267 Melem/s 9.0197 Melem/s]
+Found 4 outliers among 20 measurements (20.00%)
+  1 (5.00%) low severe
+  1 (5.00%) low mild
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+Benchmarking values/except-function
+Benchmarking values/except-function: Warming up for 500.00 ms
+Benchmarking values/except-function: Collecting 20 samples in estimated 1.0269 s (1890 iterations)
+Benchmarking values/except-function: Analyzing
+values/except-function  time:   [468.03 µs 471.69 µs 476.60 µs]
+                        thrpt:  [8.5943 Melem/s 8.6836 Melem/s 8.7515 Melem/s]
+Found 4 outliers among 20 measurements (20.00%)
+  2 (10.00%) high mild
+  2 (10.00%) high severe
+Benchmarking values/except-record
+Benchmarking values/except-record: Warming up for 500.00 ms
+Benchmarking values/except-record: Collecting 20 samples in estimated 1.7434 s (420 iterations)
+Benchmarking values/except-record: Analyzing
+values/except-record    time:   [3.9087 ms 3.9194 ms 3.9302 ms]
+                        thrpt:  [1.0422 Melem/s 1.0451 Melem/s 1.0479 Melem/s]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high mild
+
+Benchmarking membership/function-cube
+Benchmarking membership/function-cube: Warming up for 500.00 ms
+
+Warning: Unable to complete 20 samples in 1.0s. You may wish to increase target time to 1.5s, enable flat sampling, or reduce sample count to 10.
+Benchmarking membership/function-cube: Collecting 20 samples in estimated 1.5468 s (210 iterations)
+Benchmarking membership/function-cube: Analyzing
+membership/function-cube
+                        time:   [2.2347 ms 2.2429 ms 2.2504 ms]
+                        thrpt:  [1.8201 Melem/s 1.8262 Melem/s 1.8329 Melem/s]
+Benchmarking membership/parallel-channels
+Benchmarking membership/parallel-channels: Warming up for 500.00 ms
+Benchmarking membership/parallel-channels: Collecting 20 samples in estimated 1.1461 s (120 iterations)
+Benchmarking membership/parallel-channels: Analyzing
+membership/parallel-channels
+                        time:   [958.08 µs 961.14 µs 964.29 µs]
+                        thrpt:  [4.2477 Melem/s 4.2616 Melem/s 4.2752 Melem/s]
+
+Benchmarking search/counter-product/1
+Benchmarking search/counter-product/1: Warming up for 500.00 ms
+Benchmarking search/counter-product/1: Collecting 20 samples in estimated 1.0559 s (100 iterations)
+Benchmarking search/counter-product/1: Analyzing
+search/counter-product/1
+                        time:   [10.534 ms 10.573 ms 10.632 ms]
+                        thrpt:  [7.8018 Melem/s 7.8451 Melem/s 7.8738 Melem/s]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high severe
+Benchmarking search/counter-product/8
+Benchmarking search/counter-product/8: Warming up for 500.00 ms
+Benchmarking search/counter-product/8: Collecting 20 samples in estimated 1.1751 s (80 iterations)
+Benchmarking search/counter-product/8: Analyzing
+search/counter-product/8
+                        time:   [14.407 ms 15.530 ms 17.254 ms]
+                        thrpt:  [4.8072 Melem/s 5.3410 Melem/s 5.7574 Melem/s]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+Benchmarking search/function-cube/1
+Benchmarking search/function-cube/1: Warming up for 500.00 ms
+Benchmarking search/function-cube/1: Collecting 20 samples in estimated 1.2217 s (100 iterations)
+Benchmarking search/function-cube/1: Analyzing
+search/function-cube/1  time:   [10.680 ms 10.752 ms 10.837 ms]
+                        thrpt:  [4.5358 Melem/s 4.5716 Melem/s 4.6022 Melem/s]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+Benchmarking search/function-cube/8
+Benchmarking search/function-cube/8: Warming up for 500.00 ms
+Benchmarking search/function-cube/8: Collecting 20 samples in estimated 1.0180 s (100 iterations)
+Benchmarking search/function-cube/8: Analyzing
+search/function-cube/8  time:   [9.9386 ms 10.011 ms 10.089 ms]
+                        thrpt:  [4.8720 Melem/s 4.9101 Melem/s 4.9457 Melem/s]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+Benchmarking search/parallel-channels/1
+Benchmarking search/parallel-channels/1: Warming up for 500.00 ms
+Benchmarking search/parallel-channels/1: Collecting 20 samples in estimated 1.1454 s (80 iterations)
+Benchmarking search/parallel-channels/1: Analyzing
+search/parallel-channels/1
+                        time:   [14.306 ms 14.539 ms 14.822 ms]
+                        thrpt:  [1.6581 Melem/s 1.6904 Melem/s 1.7179 Melem/s]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+Benchmarking search/parallel-channels/8
+Benchmarking search/parallel-channels/8: Warming up for 500.00 ms
+
+Warning: Unable to complete 20 samples in 1.0s. You may wish to increase target time to 1.8s, enable flat sampling, or reduce sample count to 10.
+Benchmarking search/parallel-channels/8: Collecting 20 samples in estimated 1.7969 s (210 iterations)
+Benchmarking search/parallel-channels/8: Analyzing
+search/parallel-channels/8
+                        time:   [8.5150 ms 8.6350 ms 8.8276 ms]
+                        thrpt:  [2.7841 Melem/s 2.8462 Melem/s 2.8863 Melem/s]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+Benchmarking search/linear-ring/1
+Benchmarking search/linear-ring/1: Warming up for 500.00 ms
+Benchmarking search/linear-ring/1: Collecting 20 samples in estimated 1.2463 s (1050 iterations)
+Benchmarking search/linear-ring/1: Analyzing
+search/linear-ring/1    time:   [1.1935 ms 1.2050 ms 1.2171 ms]
+                        thrpt:  [8.2170 Melem/s 8.2997 Melem/s 8.3798 Melem/s]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+Benchmarking search/linear-ring/8
+Benchmarking search/linear-ring/8: Warming up for 500.00 ms
+Benchmarking search/linear-ring/8: Collecting 20 samples in estimated 1.0178 s (840 iterations)
+Benchmarking search/linear-ring/8: Analyzing
+search/linear-ring/8    time:   [1.1922 ms 1.1991 ms 1.2060 ms]
+                        thrpt:  [8.2928 Melem/s 8.3407 Melem/s 8.3887 Melem/s]
+
