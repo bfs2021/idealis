@@ -4,9 +4,9 @@ use crate::safety_work::WorkBudget;
 use crate::{CoreError, Value};
 use std::cmp::Ordering;
 use std::collections::HashMap;
-use std::hash::{BuildHasherDefault, Hasher};
+use std::hash::{BuildHasherDefault, Hash, Hasher};
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 enum Cell {
     String(String),
     Set(Vec<Scalar>),
@@ -52,7 +52,8 @@ pub(crate) struct Arena<'a> {
     budget: Option<(&'a WorkBudget, usize)>,
     cells: Vec<Cell>,
     depths: Vec<u8>,
-    index: HashMap<Cell, u32, BuildHasherDefault<ValueHasher>>,
+    index: HashMap<u64, u32, BuildHasherDefault<ValueHasher>>,
+    links: Vec<Option<u32>>,
     data: HashMap<Value, Scalar>,
     pub work: u32,
     maximum: u32,
@@ -68,6 +69,7 @@ impl Arena<'_> {
             cells: vec![],
             depths: vec![],
             index: HashMap::default(),
+            links: vec![],
             data: HashMap::new(),
             work: 0,
             maximum,
@@ -181,11 +183,16 @@ impl Arena<'_> {
     fn intern(&mut self, cell: Cell) -> Result<Scalar, CoreError> {
         self.insert(cell, true)
     }
-    fn find(&self, cell: &Cell) -> Option<u32> {
-        self.index
-            .get(cell)
-            .copied()
-            .or_else(|| self.base.and_then(|base| base.find(cell)))
+    fn find(&self, hash: u64, cell: &Cell) -> Option<u32> {
+        let mut candidate = self.index.get(&hash).copied();
+        while let Some(index) = candidate {
+            let local = index as usize - self.offset;
+            if self.cells[local] == *cell {
+                return Some(index);
+            }
+            candidate = self.links[local];
+        }
+        self.base.and_then(|base| base.find(hash, cell))
     }
     fn depth(&self, index: u32) -> u8 {
         if (index as usize) < self.offset {
@@ -195,7 +202,10 @@ impl Arena<'_> {
         }
     }
     fn insert(&mut self, cell: Cell, charge: bool) -> Result<Scalar, CoreError> {
-        if let Some(index) = self.find(&cell) {
+        let mut hasher = ValueHasher::default();
+        cell.hash(&mut hasher);
+        let hash = hasher.finish();
+        if let Some(index) = self.find(hash, &cell) {
             return Ok(Scalar::Ref(index));
         }
         let depth = |value: &Scalar| match value {
@@ -222,7 +232,7 @@ impl Arena<'_> {
         }
         let index = u32::try_from(self.offset + self.cells.len())
             .map_err(|_| CoreError::protocol("Value store exhausted"))?;
-        self.index.insert(cell.clone(), index);
+        self.links.push(self.index.insert(hash, index));
         self.cells.push(cell);
         self.depths.push(depth);
         Ok(Scalar::Ref(index))
@@ -687,5 +697,31 @@ mod tests {
         assert_eq!(arena.function(second.clone()).unwrap(), second_id);
         assert_eq!(arena.entries(first_id).unwrap(), first);
         assert_eq!(arena.entries(second_id).unwrap(), second);
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn collisions_in_an_overlay_keep_base_and_local_values_distinct() {
+        use crate::safety_work::WorkBudget;
+        let first = vec![
+            (Scalar::Int(0), Scalar::Int(-1_370_170_012)),
+            (Scalar::Int(95_947_124), Scalar::Int(0)),
+        ];
+        let second = vec![
+            (Scalar::Int(0), Scalar::Int(803_057_848)),
+            (Scalar::Int(1_091_714_232), Scalar::Int(-1_935_938_920)),
+        ];
+        let mut arena = Arena::new(1000);
+        let base = arena.function(first.clone()).unwrap();
+        let budget = WorkBudget::new(900, 1);
+        let mut overlay = arena.fork(&budget, 0);
+        let local = overlay.function(second.clone()).unwrap();
+        assert_ne!(base, local);
+        assert_eq!(overlay.function(first.clone()).unwrap(), base);
+        let mapping = arena.merge(overlay.into_delta()).unwrap();
+        assert_eq!(arena.entries(base).unwrap(), first);
+        assert_eq!(arena.entries(mapping.get(local)).unwrap(), second);
+        assert_ne!(base, mapping.get(local));
+        assert_eq!(arena.function(second).unwrap(), mapping.get(local));
     }
 }
