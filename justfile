@@ -175,3 +175,12 @@ tlc-throughput java jar archive run: safety-build
 
 tlc-throughput-replay java jar archive saved run: safety-build
   node dist/evals/tlc-throughput/run.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
+
+single-model-test java jar: safety-build
+  MODELT_TLC_JAVA={{quote(java)}} MODELT_TLC_JAR={{quote(jar)}} node --test dist/evals/single-model/contract-test.js dist/evals/single-model/integration-test.js
+
+single-model-eval java jar archive run: safety-build
+  node dist/evals/single-model/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+single-model-replay java jar archive saved run: safety-build
+  node dist/evals/single-model/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
