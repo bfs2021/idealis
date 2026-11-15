@@ -66,3 +66,12 @@ fn budget_cuts_and_unsupported_theories_are_not_unsat() {
         assert!(Problem::parse(input).is_err(), "{input}");
     }
 }
+
+#[test]
+fn empty_boolean_applications_are_syntax_errors() {
+    for source in ["(assert (and))", "(assert (or))"] {
+        assert!(Problem::parse(source).is_err(), "{source}");
+    }
+    assert_eq!(solve("(assert (and true))")["status"], "sat");
+    assert_eq!(solve("(assert (or false))")["status"], "unsat");
+}

@@ -377,6 +377,12 @@ impl Compiler {
                         Ok(Term::Int(result))
                     }
                     "and" | "or" => {
+                        if terms.is_empty() {
+                            return Err(Error::new(
+                                "syntax",
+                                "Boolean application needs an argument",
+                            ));
+                        }
                         let values = terms
                             .into_iter()
                             .map(Term::boolean)
