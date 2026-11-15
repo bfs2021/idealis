@@ -1,0 +1,23 @@
+[package]
+name = "ralloy"
+version = "0.1.0-alpha.0"
+edition = "2024"
+description = "Portable bounded analysis for a static Alloy relational subset"
+repository = "https://github.com/mizchi/idealis"
+readme = "README.md"
+license = "MIT"
+include = ["src/**", "tests/**", "examples/**", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE", "NOTICE"]
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

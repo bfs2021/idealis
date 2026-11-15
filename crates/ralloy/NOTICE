@@ -1,0 +1,9 @@
+This is an independently written, incomplete implementation of a static Alloy subset.
+The public language specification and official implementation were used as semantic references.
+
+Alloy specification: https://alloytools.org/spec.html
+Alloy Analyzer 6.2.0: https://github.com/AlloyTools/org.alloytools.alloy/tree/v6.2.0
+Source commit: 59ba2033993449d483d54acad0e11a7bbf20354f
+References: Alloy.cup, ScopeComputer.java, util/graph.als.
+The graph regression expands the noSelfLoops and acyclic constraints into the supported subset.
+No AlloyTools implementation source is copied or linked into this crate.
