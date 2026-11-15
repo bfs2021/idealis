@@ -274,3 +274,11 @@ rtla-browser: rtla-build
 rtla-eval run java jar: rtla-build
   pnpm build
   node dist/evals/rtla-parser/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+apalache-test:
+  pnpm build
+  node --test dist/evals/apalache-comparison/contract-test.js
+
+apalache-eval run java jar: portable-build
+  pnpm build
+  node dist/evals/apalache-comparison/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
