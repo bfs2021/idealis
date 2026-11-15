@@ -1,6 +1,18 @@
 default:
   @just --list
 
+testing-build:
+  cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml
+
+testing-core-test:
+  cargo fmt --manifest-path crates/idealis-testing/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
+
+testing-example:
+  cargo run --example counter --locked --manifest-path crates/idealis-testing/Cargo.toml
+
 ralloy-build:
   cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml
