@@ -12,6 +12,7 @@ for (const name of [
   "rtla",
   "rtla-compiler",
   "idealis-smt",
+  "ralloy",
 ]) {
   const cargo = await readFile(`crates/${name}/Cargo.toml`, "utf8");
   if (!cargo.includes(`version = "${pkg.version}"`))
@@ -36,6 +37,9 @@ if (process.argv[3] === "--publish") {
       resolve(directory, `rtla-${pkg.version}.crate`),
       resolve(directory, `rtla-compiler-${pkg.version}.crate`),
       resolve(directory, `idealis-smt-${pkg.version}.crate`),
+      resolve(directory, `ralloy-${pkg.version}.crate`),
+      resolve(directory, "ralloy.wasm"),
+      resolve(directory, "ralloy-manifest.json"),
       resolve(directory, "idealis-smt.wasm"),
       resolve(directory, "idealis-smt-manifest.json"),
       resolve(directory, "rtla.wasm"),
@@ -68,6 +72,9 @@ if (process.argv[3] === "--publish") {
       resolve(directory, `rtla-${pkg.version}.crate`),
       resolve(directory, `rtla-compiler-${pkg.version}.crate`),
       resolve(directory, `idealis-smt-${pkg.version}.crate`),
+      resolve(directory, `ralloy-${pkg.version}.crate`),
+      resolve(directory, "ralloy.wasm"),
+      resolve(directory, "ralloy-manifest.json"),
       resolve(directory, "idealis-smt.wasm"),
       resolve(directory, "idealis-smt-manifest.json"),
       resolve(directory, "rtla.wasm"),

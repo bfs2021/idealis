@@ -40,6 +40,7 @@ for (const name of [
   "rtla-compiler",
   "idealis-core",
   "idealis-smt",
+  "ralloy",
 ]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
@@ -50,7 +51,7 @@ for (const name of [
     "Cargo.lock",
     "README.md",
     "LICENSE",
-    ...(name === "rtla" ? ["NOTICE"] : []),
+    ...(["rtla", "ralloy"].includes(name) ? ["NOTICE"] : []),
     ...(name === "idealis-smt" ? ["benches"] : []),
   ])
     await cp(`crates/${name}/${file}`, resolve(workspace, name, file), {
@@ -59,7 +60,7 @@ for (const name of [
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt","ralloy"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -93,6 +94,7 @@ for (const name of [
   "rtla-compiler",
   "idealis-core",
   "idealis-smt",
+  "ralloy",
 ]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
@@ -118,6 +120,14 @@ await writeFile(
   resolve(target, "idealis-smt-manifest.json"),
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(smt).digest("hex"), bytes: smt.length }, null, 2)}\n`,
 );
+const alloy = await readFile(
+  "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
+);
+await writeFile(resolve(target, "ralloy.wasm"), alloy);
+await writeFile(
+  resolve(target, "ralloy-manifest.json"),
+  `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(alloy).digest("hex"), bytes: alloy.length }, null, 2)}\n`,
+);
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy Cargo and Wasm artifacts: ${target}`,
 );

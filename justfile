@@ -13,6 +13,21 @@ ralloy-test:
 ralloy-example:
   cargo run --example graph --locked --manifest-path crates/ralloy/Cargo.toml
 
+ralloy-contract: ralloy-build
+  pnpm build
+  node --test dist/evals/alloy-subset/contract-test.js
+
+ralloy-browser: ralloy-build
+  pnpm exec playwright test --config alloy-playwright.config.ts
+
+ralloy-eval phase run java jar parent="": ralloy-build
+  pnpm build
+  node dist/evals/alloy-subset/run.js {{quote(phase)}} {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(parent)}}
+
+ralloy-replay run:
+  pnpm build
+  node dist/evals/alloy-subset/replay.js {{quote(run)}}
+
 rsmt-build:
   pnpm rsmt:build
 

@@ -4,6 +4,8 @@
 
 [0030: RustのSMTサブセット](iterations/0030-smt-subset.md)は生成入力とSATモデルをZ3に照合する。[0031: Z3の再利用を含む速度比較](iterations/0031-smt-reuse.md)でnative/Wasm、解析、prepared、push/pop、起動の費用を分けた。限定した差分制約の経路は候補とし、Boolean UNSATの後退とunknownも保存している。
 
+[0034: 静的Alloyサブセット](iterations/0034-alloy-subset.md)は、独立crate `ralloy`のnative/Wasmと公式Alloy 6.2.0を比較する。有限scopeの関係モデル、返却構造の受理、空関係のarityの修正、ブラウザと単独consumerを検査した。
+
 ```sh
 just eval-loop
 just replay-loop
