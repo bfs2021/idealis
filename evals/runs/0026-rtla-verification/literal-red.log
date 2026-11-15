@@ -1,0 +1,34 @@
+   Compiling rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running unittests src/lib.rs (crates/rtla/target/debug/deps/rtla-9c7a0a79020231c7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (crates/rtla/target/debug/deps/rtla-7e1edd3c88ad14c4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/parser.rs (crates/rtla/target/debug/deps/parser-fb5e73509d24af4b)
+
+running 1 test
+test strings_are_never_operators_and_concatenation_is_not_an_octal_numeral ... FAILED
+
+failures:
+
+---- strings_are_never_operators_and_concatenation_is_not_an_octal_numeral stdout ----
+
+thread 'strings_are_never_operators_and_concatenation_is_not_an_octal_numeral' (44969492) panicked at tests/parser.rs:44:51:
+called `Result::unwrap()` on an `Err` value: ParseError { kind: Syntax, message: "Expected expression before end of input or offside token", location: Location { start: 4, end: 4, line: 1, column: 5 } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    strings_are_never_operators_and_concatenation_is_not_an_octal_numeral
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test parser`

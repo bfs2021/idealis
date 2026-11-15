@@ -1,0 +1,222 @@
+{
+  "plan": "0026-rtla-parser",
+  "sourceVersion": "e630ec229be50102851612730ecb64fd5123c2664cc5047744b9c7e00396d31c",
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "1c0a95e13c80cc045a951c144678ba86c580b5d08e4816aebe89d073854d798d"
+    },
+    {
+      "path": "crates/rtla/Cargo.lock",
+      "sha256": "9b35082c314f3682e4c3d20b6bef5e95b41387c4c70782c498af76f296f53858"
+    },
+    {
+      "path": "crates/rtla/Cargo.toml",
+      "sha256": "08b30869d5a913476122de1bed975dba625ebe025ddc116a6abf2fa80f9d13dc"
+    },
+    {
+      "path": "crates/rtla/LICENSE",
+      "sha256": "c5f6ee341fb447b0b69264d5e304186f1d9cd2e9d1b9d33095d08879888defc1"
+    },
+    {
+      "path": "crates/rtla/NOTICE",
+      "sha256": "6f18428281839e8b8d7ae20477ddaae6c76cc7b5684eb8054fbdf01205ad9e9e"
+    },
+    {
+      "path": "crates/rtla/README.md",
+      "sha256": "a615cd224a7ceda430982c00de5b797711e058ee54df53dbdb37f0dc808f794d"
+    },
+    {
+      "path": "crates/rtla/examples/inspect.rs",
+      "sha256": "c2ddd0476818d2b5bec7c34d52f6f10d1270c86e671603cfa0788979917467b7"
+    },
+    {
+      "path": "crates/rtla/src/ast.rs",
+      "sha256": "c7ca707c3e048b1d5e558ee1116556bb72bb5dc99276c546ceafa7aef72c4e53"
+    },
+    {
+      "path": "crates/rtla/src/config.rs",
+      "sha256": "f6824eb589df8e8b1d005dad9262cae02aac39568cdbffbdb0caf4c736d95c9c"
+    },
+    {
+      "path": "crates/rtla/src/error.rs",
+      "sha256": "3e1e4f360c44399e9c253f7697fb416f479564a5b6c61b2a9e67d74dd415b191"
+    },
+    {
+      "path": "crates/rtla/src/lexer.rs",
+      "sha256": "b705cadc17efe3df98c564e92afea8b080aad8af25bc4cceaee811a72450cfe5"
+    },
+    {
+      "path": "crates/rtla/src/lib.rs",
+      "sha256": "48e5e99cda0be623898b6c4743c28d0ca4044dc8ef82199533424cde28799903"
+    },
+    {
+      "path": "crates/rtla/src/main.rs",
+      "sha256": "8ba189d89ab92a002019441133a7aa2f86aed704ffca456d7c4094dead0d817c"
+    },
+    {
+      "path": "crates/rtla/src/parser.rs",
+      "sha256": "5ba955392565b7457b40e1ba197b78eec4bc3c7ac80256a939bd8caa8c3eb170"
+    },
+    {
+      "path": "crates/rtla/src/protocol.rs",
+      "sha256": "2c1e018da00062d8d2f6f2f20891ddad650f6cae12e772a84d81599782f385e0"
+    },
+    {
+      "path": "crates/rtla/src/wasm.rs",
+      "sha256": "e0487ce961fa75f57d34345c0b57674b1c925ad7af6b04bbda1176807cda6a5d"
+    },
+    {
+      "path": "crates/rtla/tests/fixtures/Channel.tla",
+      "sha256": "8b2cbd4533a157ae0760e3117e3c008fb9a31dc3673005fc8b537d3879de1bfc"
+    },
+    {
+      "path": "crates/rtla/tests/fixtures/DieHard.tla",
+      "sha256": "295495de6509d86a82b88757835b95e3f91fad8691d764ece4d98886dcf42b66"
+    },
+    {
+      "path": "crates/rtla/tests/fixtures/LICENSE.md",
+      "sha256": "9fce60dd2b6c2be72803e96fc67f0a34b91b073ead999cea21d00c33b8bce147"
+    },
+    {
+      "path": "crates/rtla/tests/parser.rs",
+      "sha256": "f678a286af66f8512870b6fea785a4063ade6efcf653ca129d47f82f63f6ba5f"
+    },
+    {
+      "path": "evals/collections-temporal/cases.ts",
+      "sha256": "7ab53cd38e10fcc5ee7a3efaa5c1ea6431176b294a69d710c0bc5edae9ac41e1"
+    },
+    {
+      "path": "evals/plans/0026-rtla-parser.md",
+      "sha256": "76d37a87ef2a817da00417bd5532da0fa6891852aa05d40e62274f60a2122084"
+    },
+    {
+      "path": "evals/rtla-parser/compare.ts",
+      "sha256": "622700b2fac738d7a5f260b0844f7ef088a903e267079e85f52c54df2f46519b"
+    },
+    {
+      "path": "evals/rtla-parser/contract-test.ts",
+      "sha256": "f31ef69cbe4959d3f9adc3fc059ec1d68ca6d2bbda1ab6dbaaf21ba1831c29a0"
+    },
+    {
+      "path": "evals/rtla-parser/corpus.ts",
+      "sha256": "05fa60354f8611e42cd17a3811b440875340dff1dcebd93a362bde11de22dee1"
+    },
+    {
+      "path": "evals/rtla-parser/evaluate.ts",
+      "sha256": "89099552509fe75931d8f32d5321ee3da452ecebd2d90879c7a248f605873681"
+    },
+    {
+      "path": "evals/rtla-parser/sany.ts",
+      "sha256": "fe7e9322d79314b49020600361e9e34529bbe731e40563a581838a7fa944ab46"
+    },
+    {
+      "path": "evals/rtla-parser/syntax.ts",
+      "sha256": "54024e1b33f82ba616e9f3f35196e9570337f4269c7b91ed9a28f6645918b819"
+    },
+    {
+      "path": "evals/rtla-parser/wasm.ts",
+      "sha256": "a6c3884195fd1b7f4da615c2bfa719eca8acff72e510cccb1a23df077507ec71"
+    },
+    {
+      "path": "evals/runs/0015-confirmation-isolated/inputs.json",
+      "sha256": "2401144d8b66ed23fa5b3d5918013e7f241f46158d795058c0b77394ef798f2b"
+    },
+    {
+      "path": "evals/runs/0015-development-final/inputs.json",
+      "sha256": "d3e5ecec76ba0f3edd54a5b65438a94829ccc8593cf5760408b4ad137e46a1dc"
+    },
+    {
+      "path": "evals/runs/0019-single-model/cases.json",
+      "sha256": "38df2fd51775e265020983816b974e7672aaa340972ea4d0dc08eead8f226d26"
+    },
+    {
+      "path": "evals/runs/0022-readme-comparison/cases.json",
+      "sha256": "38df2fd51775e265020983816b974e7672aaa340972ea4d0dc08eead8f226d26"
+    },
+    {
+      "path": "evals/usable/provenance.ts",
+      "sha256": "33a9cc550a587882938a8949a37fa58dc3c80a68f82e89a1b532a633767e778a"
+    },
+    {
+      "path": "justfile",
+      "sha256": "1c976b2688588a947c590a2a31cf8c887197d7bc4d427f324919066416a5f70f"
+    },
+    {
+      "path": "package.json",
+      "sha256": "69536e6855ee39cecb3396d7001a188301e2a8e2ee289c2113ddab7c3503dc91"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "27d1f2216d738d57e5a7a277158ba006f03e821df60606865915c54884fd6274"
+    },
+    {
+      "path": "portable-playwright.config.ts",
+      "sha256": "194f62ae71c8b6d2a8fff439006e448ece3576dd634f763864a1906d6f06a77d"
+    },
+    {
+      "path": "rtla-playwright.config.ts",
+      "sha256": "85bf8d185ddbfecd5bec7c5115812bcc7495ab0cc10f0425089804ce65295705"
+    },
+    {
+      "path": "scripts/package-test.ts",
+      "sha256": "6d92b50678a9a8314358b8ab5dc149db134dc94b0dc3d46c7b4c785483e639de"
+    },
+    {
+      "path": "scripts/package.ts",
+      "sha256": "a26d82d1e7dca6a75f21b156988c0b162477e7eb8e2b9ab18ff0c32ee8b0d7a5"
+    },
+    {
+      "path": "scripts/release.ts",
+      "sha256": "9689f33738ed8c00132411b9d2040479ce63986d4794d2836f74a5f4b3b4cd8f"
+    },
+    {
+      "path": "src/trace.ts",
+      "sha256": "0a20a45ba0d84841139bec2dd8178c40585276fffc75e536d33ea1ca2c077cf3"
+    },
+    {
+      "path": "tests/rtla-browser-entry.ts",
+      "sha256": "e024f92b100f4af579d76b63595b588759796fab1b284e360cf088820a2dffa6"
+    },
+    {
+      "path": "tests/rtla.browser.spec.ts",
+      "sha256": "1ae7eb59a1e8ec5cc48dddea7d46f859f8a879218cc6a533a34e6d5af060ccad"
+    },
+    {
+      "path": "tsconfig.build.json",
+      "sha256": "d4e5348b7e9c8685110feabc9d2ff878d8bf235e0f778a5b230adbffcb7b520f"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "002e2f5c7e99896b3a6853d651b4ee4b3c5a92d5cce156a60ef0c371dd5a6410"
+    }
+  ],
+  "binaries": [
+    {
+      "path": "crates/rtla/target/release/rtla",
+      "sha256": "e73d74d44359e6011c79705fef5fd1a154f2bb99138d54af8f8d8c7b3d5ec520"
+    },
+    {
+      "path": "crates/rtla/target/wasm32-unknown-unknown/release/rtla.wasm",
+      "sha256": "d2b807b80fb5190fa757819386ccaa9fcefbbed4114e93ee6c75eeca8976271a"
+    },
+    {
+      "path": ".artifacts/tlc/tla2tools.jar",
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+    }
+  ],
+  "commit": "69cd70bf2ab3a036566fc37ca8c72fb264542efd",
+  "dirty": "M evals/runs/ledger.jsonl\n?? evals/runs/0026-rtla-confirmation/\n?? evals/runs/0026-rtla-development/",
+  "environment": {
+    "node": "v24.22.2",
+    "platform": "darwin/arm64",
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)"
+  },
+  "reference": {
+    "tlaTs": "0.0.10",
+    "sanySource": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+    "java": "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java"
+  },
+  "normalization": "Compare semantic AST fields. Ignore source/range/spelling metadata, Number.text and rawConstants. Require modules/instances/uses to be empty. Keep operators, binding order, all values, prime, bullet nesting, assumptions and theorems.",
+  "startedAt": "2026-11-15T08:26:14.180Z"
+}

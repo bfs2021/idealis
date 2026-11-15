@@ -1,0 +1,230 @@
+{
+  "status": "complete",
+  "sourceVersion": "e630ec229be50102851612730ecb64fd5123c2664cc5047744b9c7e00396d31c",
+  "commit": "69cd70bf2ab3a036566fc37ca8c72fb264542efd",
+  "checks": [
+    {
+      "command": "crate missing before implementation",
+      "path": "red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "literal/operator distinction",
+      "path": "literal-red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "empty application rejection",
+      "path": "empty-arguments-red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "deep input before the guard revision",
+      "path": "depth-red.log",
+      "status": "regression-found"
+    },
+    {
+      "command": "AST chain before its depth guard",
+      "path": "ast-depth-red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "just rtla-test: fmt/clippy/all targets and native/Wasm AST comparisons",
+      "path": "rtla-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "portable browser: core and rtla",
+      "path": "browser-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just package",
+      "path": "package-latest.log",
+      "status": "passed"
+    },
+    {
+      "command": "just check",
+      "path": "check-latest.log",
+      "status": "passed"
+    },
+    {
+      "command": "just browser",
+      "path": "modelt-browser-latest.log",
+      "status": "passed"
+    },
+    {
+      "command": "just portable-test",
+      "path": "portable-latest.log",
+      "status": "passed"
+    },
+    {
+      "command": "just evaluate",
+      "path": "evaluate-latest.log",
+      "status": "passed"
+    },
+    {
+      "command": "just replay-evaluation",
+      "path": "replay-latest.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-build",
+      "path": "runtime-latest-build.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-test",
+      "path": "runtime-latest-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "rtla standalone Rust example",
+      "path": "example.log",
+      "status": "passed"
+    },
+    {
+      "command": "release metadata without publishing",
+      "path": "release-metadata.log",
+      "status": "passed"
+    },
+    {
+      "command": "initial SANY log classification",
+      "path": "rtla-eval.log",
+      "status": "error-preserved"
+    },
+    {
+      "command": "AST/SANY confirmation before AST chain guards",
+      "path": "rtla-confirmation.log",
+      "status": "passed"
+    },
+    {
+      "command": "final AST/SANY and resource boundaries",
+      "path": "rtla-final-eval.log",
+      "status": "passed"
+    }
+  ],
+  "semanticAst": {
+    "pairs": 199,
+    "nativeWasmReplies": 421,
+    "sanyControls": 18,
+    "resourceLimits": 5
+  },
+  "packaging": {
+    "rtlaIndependent": true,
+    "solverRequired": false,
+    "registryPublished": false,
+    "artifacts": [
+      {
+        "path": "mizchi-modelt-0.1.0-alpha.0.tgz",
+        "sha256": "f1d4de3c16840d63cc5f3680a84fd45db5053292b188a5e22e6207e0ffa9b351"
+      },
+      {
+        "path": "modelt-core-0.1.0-alpha.0.crate",
+        "sha256": "eaf612f61f014482fd0a705d20ec40b35e42685a2d17bc67a178b1b98bc48a68"
+      },
+      {
+        "path": "rtlc-0.1.0-alpha.0.crate",
+        "sha256": "76696eddd7393a7286080dd4e96f841e55627c356fde424409648797b6d0d90d"
+      },
+      {
+        "path": "rtla-0.1.0-alpha.0.crate",
+        "sha256": "0be3b8da9d8fb5287a0583da341a2aeaedf35f83e82a5ca5788bfd4db0452d2b"
+      },
+      {
+        "path": "rtla.wasm",
+        "sha256": "d2b807b80fb5190fa757819386ccaa9fcefbbed4114e93ee6c75eeca8976271a"
+      },
+      {
+        "path": "rtla-manifest.json",
+        "sha256": "380e557daa8fea2fb4fb4f5b120739b2a1d1276c10d6d570374d280dd5847e2c"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "red.log",
+      "sha256": "f7f9ecfd20f969e274ddba4df068cc63ba77d64885f30197c77b7c6b5bd2c074"
+    },
+    {
+      "path": "literal-red.log",
+      "sha256": "ed60534d1c110c597257f70ff2d4845e4c6e03d826042c2cf02547291e01a02c"
+    },
+    {
+      "path": "empty-arguments-red.log",
+      "sha256": "6d9744429c2c485c0924198d88aeac1ed6865fdc81e2e049a5de5423afe36a5a"
+    },
+    {
+      "path": "depth-red.log",
+      "sha256": "6478a0f17a5096f0e5b3b0055423a483c3b13a9c49945c95d5ac3088706c8b15"
+    },
+    {
+      "path": "ast-depth-red.log",
+      "sha256": "77c9fba81b0807cd27e4e5bf60ec6479531991c439ad6b7cfc85bab138d3ff26"
+    },
+    {
+      "path": "rtla-final.log",
+      "sha256": "33805e26a6185f4333108c8d1ea71c1bd37e5b7857c00d43f505cdcb30baa685"
+    },
+    {
+      "path": "browser-final.log",
+      "sha256": "109cc7954089b75354961f283b313b9e51c8ae34e52203f5bd69764b9f890009"
+    },
+    {
+      "path": "package-latest.log",
+      "sha256": "7914157d9c51620d5580b99a81a920dfbcd3978419af3e782853d2f0ac7d2666"
+    },
+    {
+      "path": "check-latest.log",
+      "sha256": "ceede932f01deab189a8f776fb18a6fab2eca383383f1bbc0650b6f7617e8ab8"
+    },
+    {
+      "path": "modelt-browser-latest.log",
+      "sha256": "0704864d9871cfb367c0a0a0fc2997b47807bf585c57f2f45675dcd9b5b3d63b"
+    },
+    {
+      "path": "portable-latest.log",
+      "sha256": "f5fff46d8411461fc1e9e61793c2ca34d313912d8554c24bbf505492b5225f93"
+    },
+    {
+      "path": "evaluate-latest.log",
+      "sha256": "24c065845dbe85a87f4b5d5d7ed25533bde8a1be1bdd3e98be45fe31f98e7ce3"
+    },
+    {
+      "path": "replay-latest.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "runtime-latest-build.log",
+      "sha256": "ab49af708a7ed81304f926eec1f65bcdaab0394b63b5bf3686ba4ecc3d849fb7"
+    },
+    {
+      "path": "runtime-latest-test.log",
+      "sha256": "f7446994383db1224816ddd25bcf15d036b2c28d4a766fe2e6d39567d558931f"
+    },
+    {
+      "path": "example.log",
+      "sha256": "54d9b9ea432b21db309fa6fe44350553533c24e525673d0b3c4bf1ff9b6dded2"
+    },
+    {
+      "path": "release-metadata.log",
+      "sha256": "701700d5ba3fbfe55d874651208e7b74e1d517aaf2d5381e37694cbcdcd73982"
+    },
+    {
+      "path": "rtla-eval.log",
+      "sha256": "91f792a88dadaae4edf9f8f9d8f791feda295bc75da86a60ff4211fc9842d358"
+    },
+    {
+      "path": "rtla-confirmation.log",
+      "sha256": "e58d1ac779b9def10f49fea60c59f5fc87424c673d33efd08112984ba2df073b"
+    },
+    {
+      "path": "rtla-final-eval.log",
+      "sha256": "fe809bcdde58bd9ba1435e2a5d92bc51a7f733e65555c2b0620052e1410b7226"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "4a3da84cf51232b606c4227cc3e77a1127792f6808543ad52bc5f037d0131df2"
+    }
+  ]
+}
