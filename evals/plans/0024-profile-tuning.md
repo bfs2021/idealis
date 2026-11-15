@@ -17,3 +17,9 @@
 runは追記のみ。source変更、例外、未完了の探索、プロフィールの取得失敗を成功へ置き換えない。最終のprofileも取り、割合だけでなくabsolute sample、探索work、結果の一致を確認する。profile用buildがproductionと異なる場合はその差を記録する。
 
 just check/browser、portable-build/test、runtime-build/test、fmt/clippy、safety/frontierの差分、TLC正常/故障、evaluate/replayを実行する。変更前binaryと各sourceはtagで保持する。
+
+## 名前付与の補正
+
+最初のWasm profileは名前付き別buildの非custom section不一致でerrorになった。関数code/type/function sectionの一致を検査し、production binaryの末尾へname custom sectionだけを追加する。これにより記録対象の実行sectionはproductionと完全一致する。元の失敗runを残し、修正後は別runへ保存する。
+
+CARGO_PROFILE_RELEASE_STRIP=noneによる別buildは関数順も変わり、name付与の検査が拒否した。cargo rustc --release -- -C strip=noneでCargoの通常profile metadataを保つと、code/type/function sectionが一致した。計測はそのnameだけを元binaryへ追加したものを使う。
