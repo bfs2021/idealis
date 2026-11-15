@@ -18,7 +18,7 @@ const scope = {
 test("the rtlc adapter executes real Wasm and keeps exhaustion, empty, assumptions and violations distinct", async () => {
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const backend = createRtlcBackend(core, { version: "0.1.0-alpha.0" });

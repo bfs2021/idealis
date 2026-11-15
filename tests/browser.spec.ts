@@ -25,7 +25,7 @@ test.beforeAll(async () => {
     bundle: true,
     platform: "browser",
     format: "iife",
-    globalName: "modeltBrowser",
+    globalName: "idealisBrowser",
     define: { global: "globalThis" },
     alias: { "node:zlib": "fflate" },
     external: ["bun:jsc"],
@@ -39,7 +39,7 @@ test.beforeAll(async () => {
       "/core.wasm",
       {
         body: await readFile(
-          "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+          "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
         ),
         type: "application/wasm",
       },
@@ -67,7 +67,7 @@ test.beforeAll(async () => {
     response.setHeader("Content-Type", asset?.type ?? "text/html");
     response.end(
       asset?.body ??
-        '<!doctype html><title>modelt browser test</title><script src="/z3-built.js"></script><script src="/bundle.js"></script>',
+        '<!doctype html><title>idealis browser test</title><script src="/z3-built.js"></script><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));
@@ -89,7 +89,7 @@ test("runs core, shrinking, TLA+ and Z3 Wasm in a real browser", async ({
 }) => {
   await page.goto(origin);
   const result = await page.evaluate(async () => {
-    const api: unknown = Reflect.get(globalThis, "modeltBrowser");
+    const api: unknown = Reflect.get(globalThis, "idealisBrowser");
     if (
       typeof api !== "object" ||
       api === null ||

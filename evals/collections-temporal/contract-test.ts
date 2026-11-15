@@ -12,7 +12,7 @@ import { traceInput } from "./tlc.js";
 
 const core = await createPortableWasm(
   await readFile(
-    "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   ),
 );
 for (const input of cases)

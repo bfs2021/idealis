@@ -21,7 +21,7 @@ assert.ok(directory, "Pass a new output directory");
 await mkdir(dirname(directory), { recursive: true });
 await mkdir(directory, { recursive: false });
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 const source = await fingerprint();
 const write = (path: string, value: unknown) =>

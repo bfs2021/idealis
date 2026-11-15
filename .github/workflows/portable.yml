@@ -15,8 +15,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - run: rustup target add wasm32-unknown-unknown
-      - run: cargo fmt --manifest-path crates/modelt-core/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml -- -D warnings
+      - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
       - run: pnpm portable:test
       - run: pnpm exec playwright install --with-deps chromium

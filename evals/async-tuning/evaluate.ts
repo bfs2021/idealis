@@ -93,7 +93,7 @@ const ledger = async (value: unknown) => {
     await appendFile("evals/runs/ledger.jsonl", `${JSON.stringify(value)}\n`);
 };
 const wasm = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 await write("manifest.json", {
   plan: "0008-async-tuning",

@@ -16,7 +16,7 @@ export const registerEvalLoopContract = (
   });
 
   test("completed runs retain evidence and cannot overwrite an existing run ID", async () => {
-    const root = await mkdtemp(join(tmpdir(), "modelt-evals-"));
+    const root = await mkdtemp(join(tmpdir(), "idealis-evals-"));
     try {
       const plan = await readPlan("evals/plans/0001-longer-walk.json");
       const small = {

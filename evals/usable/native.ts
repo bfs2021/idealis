@@ -3,7 +3,7 @@ import { createInterface } from "node:readline";
 import type { PortableCommand } from "../../src/contracts.js";
 
 export const startNative = (
-  path = "crates/modelt-core/target/release/modelt-core",
+  path = "crates/idealis-core/target/release/idealis-core",
 ) => {
   const child = spawn(path, [], {
     stdio: ["pipe", "pipe", "pipe"],

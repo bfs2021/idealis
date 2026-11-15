@@ -41,7 +41,7 @@ assert.equal(
   saved.wasmSha256,
   digest(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   ),
 );

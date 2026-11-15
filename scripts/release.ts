@@ -6,14 +6,20 @@ const pkg = JSON.parse(await readFile("package.json", "utf8"));
 const tag = process.argv[2];
 if (tag !== `v${pkg.version}`)
   throw new Error("Release tag and package version differ");
-for (const name of ["modelt-core", "rtlc", "rtla", "rtla-compiler", "rsmt"]) {
+for (const name of [
+  "idealis-core",
+  "rtlc",
+  "rtla",
+  "rtla-compiler",
+  "idealis-smt",
+]) {
   const cargo = await readFile(`crates/${name}/Cargo.toml`, "utf8");
   if (!cargo.includes(`version = "${pkg.version}"`))
     throw new Error(`${name} and npm versions differ`);
 }
 if (process.argv[3] === "--publish") {
   const directory = resolve(".artifacts/packages");
-  const tarball = resolve(directory, `mizchi-modelt-${pkg.version}.tgz`);
+  const tarball = resolve(directory, `mizchi-idealis-${pkg.version}.tgz`);
   const changelog = await readFile("CHANGELOG.md", "utf8");
   const section = changelog
     .split(`## ${pkg.version}\n`)[1]
@@ -25,16 +31,16 @@ if (process.argv[3] === "--publish") {
   await Promise.all(
     [
       tarball,
-      resolve(directory, `modelt-core-${pkg.version}.crate`),
+      resolve(directory, `idealis-core-${pkg.version}.crate`),
       resolve(directory, `rtlc-${pkg.version}.crate`),
       resolve(directory, `rtla-${pkg.version}.crate`),
       resolve(directory, `rtla-compiler-${pkg.version}.crate`),
-      resolve(directory, `rsmt-${pkg.version}.crate`),
-      resolve(directory, "rsmt.wasm"),
-      resolve(directory, "rsmt-manifest.json"),
+      resolve(directory, `idealis-smt-${pkg.version}.crate`),
+      resolve(directory, "idealis-smt.wasm"),
+      resolve(directory, "idealis-smt-manifest.json"),
       resolve(directory, "rtla.wasm"),
       resolve(directory, "rtla-manifest.json"),
-      resolve(directory, "modelt-core.wasm"),
+      resolve(directory, "idealis-core.wasm"),
       resolve(directory, "wasm-manifest.json"),
     ].map((path) => readFile(path)),
   );
@@ -57,19 +63,19 @@ if (process.argv[3] === "--publish") {
       "create",
       tag,
       tarball,
-      resolve(directory, `modelt-core-${pkg.version}.crate`),
+      resolve(directory, `idealis-core-${pkg.version}.crate`),
       resolve(directory, `rtlc-${pkg.version}.crate`),
       resolve(directory, `rtla-${pkg.version}.crate`),
       resolve(directory, `rtla-compiler-${pkg.version}.crate`),
-      resolve(directory, `rsmt-${pkg.version}.crate`),
-      resolve(directory, "rsmt.wasm"),
-      resolve(directory, "rsmt-manifest.json"),
+      resolve(directory, `idealis-smt-${pkg.version}.crate`),
+      resolve(directory, "idealis-smt.wasm"),
+      resolve(directory, "idealis-smt-manifest.json"),
       resolve(directory, "rtla.wasm"),
       resolve(directory, "rtla-manifest.json"),
-      resolve(directory, "modelt-core.wasm"),
+      resolve(directory, "idealis-core.wasm"),
       resolve(directory, "wasm-manifest.json"),
       "--title",
-      `modelt ${pkg.version}`,
+      `idealis ${pkg.version}`,
       "--notes-file",
       notes,
       ...(pkg.version.includes("-") ? ["--prerelease"] : []),

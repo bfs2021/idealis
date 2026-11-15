@@ -31,7 +31,7 @@ await mkdir(".artifacts", { recursive: true });
 const directory = await mkdtemp(resolve(".artifacts/tlc-compare-"));
 const core = await createPortableWasm(
   await readFile(
-    "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   ),
 );
 const dieHard = await readFile("evals/fixtures/die-hard/DieHard.tla", "utf8");
@@ -48,7 +48,7 @@ for (const [index, input] of inputs.entries()) {
   const program = compileTlaSafety(input);
   await writeFile(join(directory, `${program.name}.tla`), input.source);
   await writeFile(join(directory, `${program.name}.cfg`), input.config);
-  const scratch = await mkdtemp(join(tmpdir(), "modelt-tlc-"));
+  const scratch = await mkdtemp(join(tmpdir(), "idealis-tlc-"));
   const processResult: SpawnSyncReturns<string> = spawnSync(
     java.includes("/") ? resolve(java) : java,
     [

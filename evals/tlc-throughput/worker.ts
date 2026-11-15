@@ -117,7 +117,7 @@ if (route === "tlc-1x8" || route === "tlc-8x1") {
   const pool = await adapter.createNodePool(8, {
     backend: route === "native-8" ? "native" : "wasm",
     bytes: await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
     programs,
     jobs: input.jobs,
@@ -151,7 +151,7 @@ if (route === "tlc-1x8" || route === "tlc-8x1") {
         completed: result.completed.map((entry) => {
           assert.equal(entry.result.status, "ok");
           if (entry.result.status !== "ok")
-            throw new Error("Modelt evaluation error");
+            throw new Error("Idealis evaluation error");
           assert.equal(entry.result.result.violation, null);
           return {
             id: entry.id,

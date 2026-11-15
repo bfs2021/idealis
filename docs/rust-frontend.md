@@ -1,13 +1,13 @@
 # RustだけでTLA+ソースを検査する
 
-`compileTlaSource`と`checkTlaSource`は、modelt-coreのWasmでTLA+ソースを解析・変換・検査する。ブラウザとNodeで使え、tla-ts、Z3、JVMを必要としない。Rust nativeでは同じfrontendをlibraryとJSONLで使える。
+`compileTlaSource`と`checkTlaSource`は、idealis-coreのWasmでTLA+ソースを解析・変換・検査する。ブラウザとNodeで使え、tla-ts、Z3、JVMを必要としない。Rust nativeでは同じfrontendをlibraryとJSONLで使える。
 
 ```ts
 import {
   createPortableWasm,
   compileTlaSource,
   checkTlaSource,
-} from "@mizchi/modelt/portable";
+} from "@mizchi/idealis/portable";
 
 const core = await createPortableWasm(wasmBytes);
 const input = {
@@ -32,12 +32,12 @@ flowchart LR
   Source["TLA+ / TLC設定"] --> Parser["rtla: 型付きAST"]
   Parser --> Compiler["rtla-compiler: 名前解決・IR生成"]
   Compiler --> Checker["rtlc: 探索・temporal検査"]
-  Host["modelt-core: native / Wasm API"] --> Parser
+  Host["idealis-core: native / Wasm API"] --> Parser
   Host --> Compiler
   Host --> Checker
 ```
 
-rtlaはparser、rtlcはIRとcheckerとして独立している。rtla-compilerが両方へ依存し、`compile(&Module, &Config)`でSafetyProgramを返す。modelt-coreの`compile_tla(source, config)`は解析と変換をまとめる。
+rtlaはparser、rtlcはIRとcheckerとして独立している。rtla-compilerが両方へ依存し、`compile(&Module, &Config)`でSafetyProgramを返す。idealis-coreの`compile_tla(source, config)`は解析と変換をまとめる。
 
 ```sh
 cargo run --locked --manifest-path crates/rtla-compiler/Cargo.toml --example check

@@ -1,4 +1,4 @@
-module github.com/mizchi/modelt/adapters/go
+module github.com/mizchi/idealis/adapters/go
 
 go 1.25.0
 

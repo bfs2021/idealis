@@ -37,7 +37,7 @@ test("the same host tape replays in TS, Rust/Wasm and native Rust", async () => 
   });
   assert.deepEqual(verifyHostTape(core, tape), expected);
   const native = JSON.parse(
-    execFileSync("crates/modelt-core/target/release/modelt-core", {
+    execFileSync("crates/idealis-core/target/release/idealis-core", {
       input: JSON.stringify({
         version: 1,
         request: { kind: "replay-host", tape },
@@ -58,7 +58,7 @@ import {
 const wasm = async () =>
   createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
 test("the original upstream mutex regression fails before the fix and passes after it", async () => {
@@ -156,7 +156,7 @@ test("one finite artifact runs on TS, Rust/Wasm and Rust native", async () => {
     request: { kind: "check-finite", model: compiled.model, traces: histories },
   };
   const native = JSON.parse(
-    execFileSync("crates/modelt-core/target/release/modelt-core", {
+    execFileSync("crates/idealis-core/target/release/idealis-core", {
       input: JSON.stringify(command),
     }).toString(),
   );

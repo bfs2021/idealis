@@ -30,7 +30,7 @@ for (const file of result.files)
 const manifest = await read("manifest.json");
 assert.equal(manifest.sourceVersion, result.sourceVersion);
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 assert.equal(manifest.wasmSha256, digest(bytes));
 // Digests and the source fingerprint authenticate this experiment's saved schema.

@@ -7,10 +7,10 @@ import { cases, fault } from "../single-model/cases.js";
 import { prepare, runTool, verify } from "../single-model/runner.js";
 import { routes } from "./protocol.js";
 
-const java = process.env.MODELT_TLC_JAVA;
-const jar = process.env.MODELT_TLC_JAR;
+const java = process.env.IDEALIS_TLC_JAVA;
+const jar = process.env.IDEALIS_TLC_JAR;
 assert.ok(java && jar);
-const root = await mkdtemp(join(tmpdir(), "modelt-readme-"));
+const root = await mkdtemp(join(tmpdir(), "idealis-readme-"));
 await mkdir(".artifacts/readme-comparison/controls", { recursive: true });
 for (const input of cases("small"))
   test(input.name, async () => {

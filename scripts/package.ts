@@ -14,14 +14,14 @@ const target = resolve(process.argv[2] ?? ".artifacts/packages");
 await mkdir(target, { recursive: true });
 await mkdir("assets", { recursive: true });
 await copyFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
-  "assets/modelt-core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
+  "assets/idealis-core.wasm",
 );
 await copyFile(
   "crates/rtla/target/wasm32-unknown-unknown/release/rtla.wasm",
   "assets/rtla.wasm",
 );
-const wasm = await readFile("assets/modelt-core.wasm");
+const wasm = await readFile("assets/idealis-core.wasm");
 const pkg = JSON.parse(await readFile("package.json", "utf8"));
 await writeFile(
   "assets/manifest.json",
@@ -34,7 +34,13 @@ await writeFile(
 );
 execFileSync("pnpm", ["pack", "--pack-destination", target], { stdio: "pipe" });
 const workspace = await mkdtemp(resolve(target, "cargo-workspace-"));
-for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core", "rsmt"]) {
+for (const name of [
+  "rtla",
+  "rtlc",
+  "rtla-compiler",
+  "idealis-core",
+  "idealis-smt",
+]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
     "src",
@@ -45,7 +51,7 @@ for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core", "rsmt"]) {
     "README.md",
     "LICENSE",
     ...(name === "rtla" ? ["NOTICE"] : []),
-    ...(name === "rsmt" ? ["benches"] : []),
+    ...(name === "idealis-smt" ? ["benches"] : []),
   ])
     await cp(`crates/${name}/${file}`, resolve(workspace, name, file), {
       recursive: true,
@@ -53,7 +59,7 @@ for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core", "rsmt"]) {
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","modelt-core","rsmt"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -81,14 +87,23 @@ execFileSync(
   ],
   { stdio: "pipe" },
 );
-for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core", "rsmt"]) {
+for (const name of [
+  "rtla",
+  "rtlc",
+  "rtla-compiler",
+  "idealis-core",
+  "idealis-smt",
+]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
     resolve(workspace, "target/package", crate),
     resolve(target, crate),
   );
 }
-await copyFile("assets/modelt-core.wasm", resolve(target, "modelt-core.wasm"));
+await copyFile(
+  "assets/idealis-core.wasm",
+  resolve(target, "idealis-core.wasm"),
+);
 await copyFile("assets/manifest.json", resolve(target, "wasm-manifest.json"));
 await copyFile("assets/rtla.wasm", resolve(target, "rtla.wasm"));
 await copyFile(
@@ -96,13 +111,13 @@ await copyFile(
   resolve(target, "rtla-manifest.json"),
 );
 const smt = await readFile(
-  "crates/rsmt/target/wasm32-unknown-unknown/release/rsmt.wasm",
+  "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
 );
-await writeFile(resolve(target, "rsmt.wasm"), smt);
+await writeFile(resolve(target, "idealis-smt.wasm"), smt);
 await writeFile(
-  resolve(target, "rsmt-manifest.json"),
+  resolve(target, "idealis-smt-manifest.json"),
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(smt).digest("hex"), bytes: smt.length }, null, 2)}\n`,
 );
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/modelt-core/rsmt Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt Cargo and Wasm artifacts: ${target}`,
 );

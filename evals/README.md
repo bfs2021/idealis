@@ -62,11 +62,11 @@ pnpm eval:replay evals/runs/my-run-confirmation
 
 [TLC直接比較の結果](iterations/0015-tlc-differential.md) は、境界値と seed 固定の小さい有限モデルを TLC / Rust native / Wasm へ渡す差分検査。`just tlc-diff` / `tlc-diff-replay` で判定・計数・返却値・反例を確認する。TLCを拒否対照、モデル評価エラー、実行基盤の失敗と分け、JVMごとに標準モジュールの展開先を隔離する。
 
-[速度比較の結果](iterations/0016-checker-benchmark.md) は、同じ11モデルを tla-ts / TLC / modelt native / Wasm で完全探索した測定。`checker-bench` / `checker-bench-replay` で起動込みとAPI再利用時を分け、source解析を含む時間・状態数・生成数・生ログを保存する。
+[速度比較の結果](iterations/0016-checker-benchmark.md) は、同じ11モデルを tla-ts / TLC / idealis native / Wasm で完全探索した測定。`checker-bench` / `checker-bench-replay` で起動込みとAPI再利用時を分け、source解析を含む時間・状態数・生成数・生ログを保存する。
 
 [常駐poolの評価](iterations/0017-parallel-safety.md) は、独立したTLA検査を1/2/4/8 workerへ配る。`parallel-safety-test` / `parallel-safety-eval` / `parallel-safety-replay` で、予算によるworker数の選択、費用順配置、batch化、結果と反例の一致を確認する。1モデル内部のBFS並列化とは区別する。
 
-[TLCとのbatch比較](iterations/0018-tlc-throughput.md) は、同じ88件を指定探索worker合計8で実行する。TLCの1 JVM × 8 worker / 8 JVM × 各1 workerとmodelt native / Wasmを比較し、JVM起動とIR再利用を含むthroughputの差を記録する。`tlc-throughput` / `tlc-throughput-replay` で実行できる。
+[TLCとのbatch比較](iterations/0018-tlc-throughput.md) は、同じ88件を指定探索worker合計8で実行する。TLCの1 JVM × 8 worker / 8 JVM × 各1 workerとidealis native / Wasmを比較し、JVM起動とIR再利用を含むthroughputの差を記録する。`tlc-throughput` / `tlc-throughput-replay` で実行できる。
 
 [単一モデルの比較](iterations/0019-single-model-scaling.md) は、約2,100万遷移の幅広い3モデルと幅1の対照を使い、TLC 1/2/4/8 workerと逐次native/Wasmを測る。`single-model-test` / `single-model-eval` / `single-model-replay`で正しさ・全体時間・補助区間・RSSを保存する。TLC内部方式の移植検討は[並列探索の調査](../docs/tlc-parallel-adoption.md)を参照。
 
@@ -80,7 +80,7 @@ pnpm eval:replay evals/runs/my-run-confirmation
 
 [CPU profileとmicro tuning](iterations/0024-profile-tuning.md)は、Wasm/nativeのraw profileとself/inclusive集計からleaf評価と整数位置検索を調整した。`profile-record` / `profile-summary`でprofile、`profile-criterion`で14本、`profile-scalar` / `profile-replay`で通常Wasmの交互比較と再生を行う。
 
-[rtlcへの分離](iterations/0025-rtlc-extraction.md)は、有限TLA+ fragmentの検査をmodeltから独立したcrateへ移した。`rtlc-test` / `rtlc-example`と単独package consumer、分離前後のnative964件・Wasm241件で既存挙動を確認した。探索アルゴリズムと速度の主張は追加していない。
+[rtlcへの分離](iterations/0025-rtlc-extraction.md)は、有限TLA+ fragmentの検査をidealisから独立したcrateへ移した。`rtlc-test` / `rtlc-example`と単独package consumer、分離前後のnative964件・Wasm241件で既存挙動を確認した。探索アルゴリズムと速度の主張は追加していない。
 
 [rtlaのparser](iterations/0026-rtla-parser.md)は、TLA+／TLC設定を型付きASTへ解析する独立Rust crate。`rtla-test` / `rtla-browser`でnative/Wasm、`rtla-eval`で199組のASTとSANYの構文対照を検査する。IR生成はTS側に残し、対応fragmentと全TLA+を区別する。
 

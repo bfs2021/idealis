@@ -38,8 +38,8 @@ TS は既存の checker、Rust は native `Session`、Go は Go adapter と Rust
 Rust / Go の runner は stdin の同じ suite を読む。Go command は実験用で、SDK の public API ではない。
 
 ```sh
-evals/shared-oracle-rust/target/release/modelt-shared-oracle < .artifacts/shared-confirm/suite.json
-.artifacts/go/counter-replay crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm < .artifacts/shared-confirm/suite.json
+evals/shared-oracle-rust/target/release/idealis-shared-oracle < .artifacts/shared-confirm/suite.json
+.artifacts/go/counter-replay crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm < .artifacts/shared-confirm/suite.json
 ```
 
 ## 証拠と範囲

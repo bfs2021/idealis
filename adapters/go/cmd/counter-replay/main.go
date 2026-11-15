@@ -9,14 +9,14 @@ import (
 	"os"
 	"strconv"
 
-	modelt "github.com/mizchi/modelt/adapters/go"
-	"github.com/mizchi/modelt/adapters/go/internal/counter"
+	idealis "github.com/mizchi/idealis/adapters/go"
+	"github.com/mizchi/idealis/adapters/go/internal/counter"
 )
 
 type oracleCase struct {
-	ID     string       `json:"id"`
-	Seed   *int64       `json:"seed,omitempty"`
-	Oracle modelt.Trace `json:"oracle"`
+	ID     string        `json:"id"`
+	Seed   *int64        `json:"seed,omitempty"`
+	Oracle idealis.Trace `json:"oracle"`
 }
 type suite struct {
 	Format  string          `json:"format"`
@@ -30,15 +30,15 @@ type calls struct {
 	Steps  int `json:"steps"`
 }
 type execution struct {
-	CaseID      string        `json:"caseId"`
-	Fault       string        `json:"fault"`
-	Finite      modelt.Result `json:"finite"`
-	Replay      modelt.Result `json:"replay"`
-	FiniteCalls calls         `json:"finiteCalls"`
-	ReplayCalls calls         `json:"replayCalls"`
+	CaseID      string         `json:"caseId"`
+	Fault       string         `json:"fault"`
+	Finite      idealis.Result `json:"finite"`
+	Replay      idealis.Result `json:"replay"`
+	FiniteCalls calls          `json:"finiteCalls"`
+	ReplayCalls calls          `json:"replayCalls"`
 }
 
-func nativeValue(input modelt.Value) (any, error) {
+func nativeValue(input idealis.Value) (any, error) {
 	var tagged struct {
 		Type  string          `json:"type"`
 		Value json.RawMessage `json:"value"`
@@ -80,23 +80,23 @@ func nativeValue(input modelt.Value) (any, error) {
 	}
 }
 
-func driver(fault string, counts *calls) (modelt.Driver, error) {
+func driver(fault string, counts *calls) (idealis.Driver, error) {
 	sut, err := counter.New(fault)
 	if err != nil {
-		return modelt.Driver{}, err
+		return idealis.Driver{}, err
 	}
-	observe := func(observation counter.Observation) (modelt.Value, error) {
-		return modelt.ValueOf(map[string]any{"running": observation.Running, "value": observation.Value})
+	observe := func(observation counter.Observation) (idealis.Value, error) {
+		return idealis.ValueOf(map[string]any{"running": observation.Running, "value": observation.Value})
 	}
-	return modelt.Driver{
-		Reset: func(ctx context.Context) (modelt.Value, error) {
+	return idealis.Driver{
+		Reset: func(ctx context.Context) (idealis.Value, error) {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
 			counts.Resets++
 			return observe(sut.Reset())
 		},
-		Step: func(ctx context.Context, input modelt.Value) (modelt.Value, error) {
+		Step: func(ctx context.Context, input idealis.Value) (idealis.Value, error) {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
@@ -146,12 +146,12 @@ func run() error {
 		return err
 	}
 	ctx := context.Background()
-	core, err := modelt.New(ctx, wasm)
+	core, err := idealis.New(ctx, wasm)
 	if err != nil {
 		return err
 	}
 	defer core.Close(ctx)
-	traces := make([]modelt.Trace, len(bundle.Cases))
+	traces := make([]idealis.Trace, len(bundle.Cases))
 	for index, entry := range bundle.Cases {
 		traces[index] = entry.Oracle
 	}
@@ -172,7 +172,7 @@ func run() error {
 			if err != nil {
 				return err
 			}
-			actions := make([]modelt.Value, len(entry.Oracle.Steps))
+			actions := make([]idealis.Value, len(entry.Oracle.Steps))
 			for index, step := range entry.Oracle.Steps {
 				actions[index] = step.Action
 			}

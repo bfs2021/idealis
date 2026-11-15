@@ -31,7 +31,7 @@ export const compareHistories = async (
   );
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const loaded = loadFiniteModel(core, model);
@@ -40,18 +40,21 @@ export const compareHistories = async (
     expected,
   );
   loaded.release();
-  const native = execFileSync("crates/modelt-core/target/release/modelt-core", {
-    input: [
-      JSON.stringify({ version: 1, request: { kind: "load-model", model } }),
-      ...cases.map((entry) =>
-        JSON.stringify({
-          version: 1,
-          request: { kind: "check-history", handle: 1, ...entry },
-        }),
-      ),
-    ].join("\n"),
-    maxBuffer: 16 * 1024 * 1024,
-  })
+  const native = execFileSync(
+    "crates/idealis-core/target/release/idealis-core",
+    {
+      input: [
+        JSON.stringify({ version: 1, request: { kind: "load-model", model } }),
+        ...cases.map((entry) =>
+          JSON.stringify({
+            version: 1,
+            request: { kind: "check-history", handle: 1, ...entry },
+          }),
+        ),
+      ].join("\n"),
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  )
     .toString()
     .trim()
     .split("\n")
@@ -62,7 +65,7 @@ export const compareHistories = async (
     execFileSync(
       ".artifacts/go/history-check",
       [
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
       ],
       { input: JSON.stringify({ model, cases }), maxBuffer: 16 * 1024 * 1024 },
     ).toString(),

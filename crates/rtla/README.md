@@ -1,10 +1,10 @@
 # rtla
 
-TLA+とTLC設定を型付きASTへ変換するRustパーサー。`modelt-core`と`rtlc`に依存しない。nativeと`wasm32-unknown-unknown`で同じコードを使い、解析中にファイル・ネットワーク・時計・スレッドを使わない。
+TLA+とTLC設定を型付きASTへ変換するRustパーサー。`idealis-core`と`rtlc`に依存しない。nativeと`wasm32-unknown-unknown`で同じコードを使い、解析中にファイル・ネットワーク・時計・スレッドを使わない。
 
 ## Rustから使う
 
-ローカルcheckoutでは`rtla = { path = "../modelt/crates/rtla" }`を依存に追加する。
+ローカルcheckoutでは`rtla = { path = "../idealis/crates/rtla" }`を依存に追加する。
 
 ```rust
 fn main() -> Result<(), rtla::ParseError> {
@@ -31,7 +31,7 @@ fn main() -> Result<(), rtla::ParseError> {
 
 proof、INSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析とASTの深さは64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。
 
-IR生成は既存のmodeltのTS frontendに残る。`rtla`のASTを直接`rtlc::SafetyProgram`として実行することはできない。既存の`compileTlaSafety`は引き続きtla-ts parserを使う。
+IR生成は既存のidealisのTS frontendに残る。`rtla`のASTを直接`rtlc::SafetyProgram`として実行することはできない。既存の`compileTlaSafety`は引き続きtla-ts parserを使う。
 
 ## native/WasmのJSON境界
 
@@ -54,6 +54,6 @@ cargo run --manifest-path crates/rtla/Cargo.toml --example inspect
 just package
 ```
 
-`rtla-test`はfmt/clippy、Rust全target、native/Wasm build、tla-ts 0.0.10との固定corpus比較を行う。文法と優先順位の参照元はTLC v1.7.4のSANY。[評価計画](https://github.com/mizchi/modelt/blob/main/evals/plans/0026-rtla-parser.md)と`NOTICE`に出典を記録する。
+`rtla-test`はfmt/clippy、Rust全target、native/Wasm build、tla-ts 0.0.10との固定corpus比較を行う。文法と優先順位の参照元はTLC v1.7.4のSANY。[評価計画](https://github.com/mizchi/idealis/blob/main/evals/plans/0026-rtla-parser.md)と`NOTICE`に出典を記録する。
 
-`just package`は独立した`.crate`と`rtla.wasm`を作り、展開したartifactだけでconsumerを実行する。npm artifactは`@mizchi/modelt/rtla.wasm`としてWasmを同梱する。registryへの初回publishは別途行う。
+`just package`は独立した`.crate`と`rtla.wasm`を作り、展開したartifactだけでconsumerを実行する。npm artifactは`@mizchi/idealis/rtla.wasm`としてWasmを同梱する。registryへの初回publishは別途行う。

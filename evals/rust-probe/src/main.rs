@@ -1,4 +1,4 @@
-use modelt_runtime_probe::{Table, run};
+use idealis_runtime_probe::{Table, run};
 use std::{env, fs, time::Instant};
 
 fn execute() -> Result<(), String> {

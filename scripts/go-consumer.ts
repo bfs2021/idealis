@@ -12,7 +12,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { compileFiniteModel } from "../src/finite.js";
 
-const consumer = await mkdtemp(join(tmpdir(), "modelt-go-consumer-"));
+const consumer = await mkdtemp(join(tmpdir(), "idealis-go-consumer-"));
 await mkdir(join(consumer, "sdk"));
 for (const file of await readdir("adapters/go")) {
   if (
@@ -23,8 +23,8 @@ for (const file of await readdir("adapters/go")) {
   await copyFile(join("adapters/go", file), join(consumer, "sdk", file));
 }
 await copyFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
-  join(consumer, "modelt-core.wasm"),
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
+  join(consumer, "idealis-core.wasm"),
 );
 const example = (await readFile("docs/go-adapter.md", "utf8")).match(
   /```go\n([\s\S]*?)\n```/,
@@ -46,13 +46,13 @@ assert.ok(toggle.model);
 await writeFile(join(consumer, "toggle.json"), JSON.stringify(toggle.model));
 await writeFile(
   join(consumer, "go.mod"),
-  `module modelt-consumer
+  `module idealis-consumer
 
 go 1.25.0
 
-require github.com/mizchi/modelt/adapters/go v0.0.0
+require github.com/mizchi/idealis/adapters/go v0.0.0
 
-replace github.com/mizchi/modelt/adapters/go => ./sdk
+replace github.com/mizchi/idealis/adapters/go => ./sdk
 `,
 );
 await writeFile(
@@ -63,15 +63,15 @@ import (
   "context"
   _ "embed"
   "testing"
-  modelt "github.com/mizchi/modelt/adapters/go"
+  idealis "github.com/mizchi/idealis/adapters/go"
 )
 
 func TestStandalone(t *testing.T) {
   ctx := context.Background()
-  core, err := modelt.New(ctx, wasm)
+  core, err := idealis.New(ctx, wasm)
   if err != nil { t.Fatal(err) }
   defer core.Close(ctx)
-  input, err := modelt.ValueOf(uint64(18446744073709551615))
+  input, err := idealis.ValueOf(uint64(18446744073709551615))
   if err != nil { t.Fatal(err) }
   actual, err := core.Canonicalize(ctx, input)
   if err != nil { t.Fatal(err) }
@@ -81,10 +81,10 @@ func TestStandalone(t *testing.T) {
   loaded, err := core.LoadModel(ctx, model)
   if err != nil { t.Fatal(err) }
   defer loaded.Close(ctx)
-  initial, _ := modelt.ValueOf(false)
-  toggle, _ := modelt.ValueOf("toggle")
-  observed, _ := modelt.ValueOf(true)
-  history := modelt.ConcurrentHistory{Format:"modelt.concurrent-history",Version:1,Model:"toggle",Initial:initial,Events:[]modelt.HistoryEvent{{Kind:"invoke",ID:"a",Action:toggle},{Kind:"return",ID:"a",Observation:observed}}}
+  initial, _ := idealis.ValueOf(false)
+  toggle, _ := idealis.ValueOf("toggle")
+  observed, _ := idealis.ValueOf(true)
+  history := idealis.ConcurrentHistory{Format:"modelt.concurrent-history",Version:1,Model:"toggle",Initial:initial,Events:[]idealis.HistoryEvent{{Kind:"invoke",ID:"a",Action:toggle},{Kind:"return",ID:"a",Observation:observed}}}
   checked, err := loaded.CheckHistory(ctx,history,100)
   if err != nil || checked.Status != "linearizable" { t.Fatalf("loaded history: %+v %v",checked,err) }
 }
@@ -98,7 +98,7 @@ execFileSync("go", ["mod", "tidy"], options);
 const output = execFileSync("go", ["test", "-count=1", "./..."], options)
   .toString()
   .trim();
-assert.match(output, /ok\s+modelt-consumer/);
+assert.match(output, /ok\s+idealis-consumer/);
 const exampleOutput = execFileSync("go", ["run", "."], options)
   .toString()
   .trim();

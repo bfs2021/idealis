@@ -12,7 +12,7 @@ import { bounds, cases } from "./cases.js";
 test("Rust generates TLA states and checks safety in native and Wasm without a materialized graph", async () => {
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const native = startNative();
@@ -91,7 +91,7 @@ test("the unmodified upstream DieHard model finds the same shortest solution", a
   const source = await readFile("evals/fixtures/die-hard/DieHard.tla", "utf8");
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   for (const invariants of ["TypeOK", "TypeOK NotSolved"]) {

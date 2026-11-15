@@ -1,4 +1,4 @@
-package modelt
+package idealis
 
 import (
 	"encoding/hex"
@@ -42,14 +42,14 @@ func encodeValue(input reflect.Value) (any, error) {
 		switch value := input.Interface().(type) {
 		case json.RawMessage:
 			if !utf8.Valid(value) || !json.Valid(value) {
-				return nil, fmt.Errorf("modelt: invalid raw portable JSON")
+				return nil, fmt.Errorf("idealis: invalid raw portable JSON")
 			}
 			return value, nil
 		case big.Int:
 			return taggedValue{Type: "int", Value: value.String()}, nil
 		case *big.Int:
 			if value == nil {
-				return nil, fmt.Errorf("modelt: nil big.Int")
+				return nil, fmt.Errorf("idealis: nil big.Int")
 			}
 			return taggedValue{Type: "int", Value: value.String()}, nil
 		case []byte:
@@ -61,7 +61,7 @@ func encodeValue(input reflect.Value) (any, error) {
 		return taggedValue{Type: "bool", Value: input.Bool()}, nil
 	case reflect.String:
 		if !utf8.ValidString(input.String()) {
-			return nil, fmt.Errorf("modelt: invalid Unicode string")
+			return nil, fmt.Errorf("idealis: invalid Unicode string")
 		}
 		return taggedValue{Type: "string", Value: input.String()}, nil
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
@@ -80,14 +80,14 @@ func encodeValue(input reflect.Value) (any, error) {
 		return taggedValue{Type: "list", Value: values}, nil
 	case reflect.Map:
 		if input.Type().Key().Kind() != reflect.String {
-			return nil, fmt.Errorf("modelt: record keys must be strings")
+			return nil, fmt.Errorf("idealis: record keys must be strings")
 		}
 		keys := input.MapKeys()
 		sort.Slice(keys, func(left, right int) bool { return keys[left].String() < keys[right].String() })
 		fields := make([][2]any, 0, len(keys))
 		for _, key := range keys {
 			if !utf8.ValidString(key.String()) {
-				return nil, fmt.Errorf("modelt: invalid Unicode record key")
+				return nil, fmt.Errorf("idealis: invalid Unicode record key")
 			}
 			value, err := encodeValue(input.MapIndex(key))
 			if err != nil {
@@ -97,6 +97,6 @@ func encodeValue(input reflect.Value) (any, error) {
 		}
 		return taggedValue{Type: "record", Value: fields}, nil
 	default:
-		return nil, fmt.Errorf("modelt: unsupported Go value %s", input.Type())
+		return nil, fmt.Errorf("idealis: unsupported Go value %s", input.Type())
 	}
 }

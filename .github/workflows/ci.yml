@@ -21,14 +21,14 @@ jobs:
       - run: pnpm check
       - run: pnpm typecheck
       - run: pnpm test
-      - run: cargo fmt --manifest-path crates/rsmt/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path crates/rsmt/Cargo.toml -- -D warnings
-      - run: cargo test --all-targets --locked --manifest-path crates/rsmt/Cargo.toml
-      - run: cargo build --release --locked --manifest-path crates/rsmt/Cargo.toml
-      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rsmt/Cargo.toml
+      - run: cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
+      - run: cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
       - run: node --test dist/evals/smt-subset/contract-test.js
-      - run: cargo fmt --manifest-path crates/modelt-core/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml -- -D warnings
+      - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
       - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
       - run: node --test dist/evals/frontier-safety/contract-test.js

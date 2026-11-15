@@ -154,7 +154,7 @@ export const executeSuite = async (input: OracleSuite) => {
   const options = { input: bytes, maxBuffer: 64 * 1024 * 1024 };
   const rust = parseExecutions(
     execFileSync(
-      "evals/shared-oracle-rust/target/release/modelt-shared-oracle",
+      "evals/shared-oracle-rust/target/release/idealis-shared-oracle",
       [],
       options,
     ),
@@ -163,7 +163,7 @@ export const executeSuite = async (input: OracleSuite) => {
     execFileSync(
       ".artifacts/go/counter-replay",
       [
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
       ],
       options,
     ),

@@ -5,7 +5,7 @@ import { compileTlaSafety } from "../../src/tla-safety.js";
 const input = JSON.parse(await readFile(process.argv[2] ?? "", "utf8"));
 const program = compileTlaSafety(input);
 process.stdout.write(
-  execFileSync("crates/modelt-core/target/release/modelt-core", [], {
+  execFileSync("crates/idealis-core/target/release/idealis-core", [], {
     input: `${JSON.stringify({ version: 1, request: { kind: "check-safety", program, bounds: input.bounds } })}\n`,
   }),
 );

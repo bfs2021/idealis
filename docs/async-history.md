@@ -1,14 +1,14 @@
 # 非同期履歴とモデルの再利用
 
-`@mizchi/modelt/history` は有限モデルに対する非同期履歴の checker と recorder。複数操作の呼び出し・応答を別イベントにし、仕様に合う順序が存在するか調べる。TS は独立実装、Rust native / Wasm と Go は共通 Rust checker を使う。
+`@mizchi/idealis/history` は有限モデルに対する非同期履歴の checker と recorder。複数操作の呼び出し・応答を別イベントにし、仕様に合う順序が存在するか調べる。TS は独立実装、Rust native / Wasm と Go は共通 Rust checker を使う。
 
 ```ts
-import { compileFiniteModel } from "@mizchi/modelt/finite";
+import { compileFiniteModel } from "@mizchi/idealis/finite";
 import {
   createHistoryRecorder,
   checkConcurrentHistory,
-} from "@mizchi/modelt/history";
-import { toPortableValue } from "@mizchi/modelt/portable";
+} from "@mizchi/idealis/history";
+import { toPortableValue } from "@mizchi/idealis/portable";
 
 const compiled = compileFiniteModel<number, string, number | string>(
   {
@@ -67,7 +67,7 @@ crash、epoch、時計やネットワークの制約はモデルへ明示する�
 ## 読み込んだモデルを使う
 
 ```ts
-import { loadFiniteModel } from "@mizchi/modelt/portable";
+import { loadFiniteModel } from "@mizchi/idealis/portable";
 // core は caller が読み込んだ Wasm instance。
 const loaded = loadFiniteModel(core, compiled.model);
 try {

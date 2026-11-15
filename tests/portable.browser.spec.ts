@@ -19,7 +19,7 @@ test.beforeAll(async () => {
   const output = bundle.outputFiles[0];
   if (!output) throw new Error("Missing portable browser bundle");
   const wasm = await readFile(
-    "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   );
   const safety = JSON.stringify(
     compileTlaSafety({
@@ -66,7 +66,7 @@ test.beforeAll(async () => {
             ? safety
             : request.url === "/complex.json"
               ? complex
-              : '<!doctype html><title>modelt portable core</title><script src="/bundle.js"></script>',
+              : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));

@@ -1,4 +1,4 @@
-package modelt
+package idealis
 
 import (
 	"context"
@@ -51,10 +51,10 @@ func (core *Core) run(ctx context.Context, request any, model *Model, driver Dri
 		}
 	}()
 	if driver.Reset == nil || driver.Step == nil {
-		return Result{}, fmt.Errorf("modelt: Driver requires Reset and Step")
+		return Result{}, fmt.Errorf("idealis: Driver requires Reset and Step")
 	}
 	if model != nil && (model.Initial == nil || model.Step == nil) {
-		return Result{}, fmt.Errorf("modelt: Model requires Initial and Step")
+		return Result{}, fmt.Errorf("idealis: Model requires Initial and Step")
 	}
 	output, err := core.exchange(ctx, request)
 	if err != nil {
@@ -62,7 +62,7 @@ func (core *Core) run(ctx context.Context, request any, model *Model, driver Dri
 	}
 	for {
 		if output.Kind != "effect" {
-			return Result{}, fmt.Errorf("modelt: expected effect, received %s", output.Kind)
+			return Result{}, fmt.Errorf("idealis: expected effect, received %s", output.Kind)
 		}
 		current := output.Effect
 		if current.Kind == "done" {
@@ -70,7 +70,7 @@ func (core *Core) run(ctx context.Context, request any, model *Model, driver Dri
 			return current.Result, nil
 		}
 		if current.ID == 0 {
-			return Result{}, fmt.Errorf("modelt: invalid effect ID")
+			return Result{}, fmt.Errorf("idealis: invalid effect ID")
 		}
 		pending = current.ID
 		if err := ctx.Err(); err != nil {
@@ -91,7 +91,7 @@ func respond(ctx context.Context, current effect, model *Model, driver Driver) (
 	switch current.Kind {
 	case "model-initial", "model-step":
 		if model == nil {
-			return nil, fmt.Errorf("modelt: unexpected model callback")
+			return nil, fmt.Errorf("idealis: unexpected model callback")
 		}
 		var transitions []Transition
 		var err error
@@ -120,6 +120,6 @@ func respond(ctx context.Context, current effect, model *Model, driver Driver) (
 		}
 		return map[string]any{"kind": "observation", "observation": observation}, nil
 	default:
-		return nil, fmt.Errorf("modelt: unknown effect %s", current.Kind)
+		return nil, fmt.Errorf("idealis: unknown effect %s", current.Kind)
 	}
 }

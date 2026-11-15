@@ -1,0 +1,324 @@
+{
+  "status": "complete",
+  "sourceVersion": "8ec0f24b23a106ecd3b0c6537ed65dce3e06a703dc0e5837e12a03b4dfffbefd",
+  "checks": [
+    {
+      "path": "package-red.log",
+      "command": "new package consumer before rename",
+      "status": "expected-red"
+    },
+    {
+      "path": "usable-eval.log",
+      "command": "incorrect just recipe invocation, corrected with pnpm usable:eval",
+      "status": "invocation-error-corrected"
+    },
+    {
+      "path": "check-relocated.log",
+      "command": "just check from relocated checkout",
+      "status": "passed"
+    },
+    {
+      "path": "portable-build.log",
+      "command": "just portable-build",
+      "status": "passed"
+    },
+    {
+      "path": "portable-test.log",
+      "command": "just portable-test: fmt/clippy/Rust/Node",
+      "status": "passed"
+    },
+    {
+      "path": "portable-browser.log",
+      "command": "pnpm portable:browser",
+      "status": "passed"
+    },
+    {
+      "path": "go-test.log",
+      "command": "just go-test: CGO off, race, vet, standalone consumer",
+      "status": "passed"
+    },
+    {
+      "path": "cross-test.log",
+      "command": "just cross-test",
+      "status": "passed"
+    },
+    {
+      "path": "async-test.log",
+      "command": "just async-test",
+      "status": "passed"
+    },
+    {
+      "path": "safety-test.log",
+      "command": "just safety-test",
+      "status": "passed"
+    },
+    {
+      "path": "smt-test.log",
+      "command": "just smt-test",
+      "status": "passed"
+    },
+    {
+      "path": "smt-build.log",
+      "command": "just smt-build",
+      "status": "passed"
+    },
+    {
+      "path": "smt-browser.log",
+      "command": "just smt-browser",
+      "status": "passed"
+    },
+    {
+      "path": "smt-regression.log",
+      "command": "251 SMT requests and 215 Z3 witness checks",
+      "status": "passed"
+    },
+    {
+      "path": "runtime-build.log",
+      "command": "just runtime-build",
+      "status": "passed"
+    },
+    {
+      "path": "runtime-test.log",
+      "command": "just runtime-test",
+      "status": "passed"
+    },
+    {
+      "path": "usable-test.log",
+      "command": "just usable-test",
+      "status": "passed"
+    },
+    {
+      "path": "usable-evaluation.log",
+      "command": "pnpm usable:eval with explicit fresh path",
+      "status": "passed"
+    },
+    {
+      "path": "usable-replay.log",
+      "command": "pnpm usable:replay",
+      "status": "passed"
+    },
+    {
+      "path": "evaluate.log",
+      "command": "just evaluate",
+      "status": "passed"
+    },
+    {
+      "path": "replay.log",
+      "command": "just replay-evaluation",
+      "status": "passed"
+    },
+    {
+      "path": "mutation.log",
+      "command": "just mutation",
+      "status": "passed"
+    },
+    {
+      "path": "browser-relocated.log",
+      "command": "just browser from relocated checkout",
+      "status": "passed"
+    },
+    {
+      "path": "package-final.log",
+      "command": "just package from relocated checkout, installed idealis CLI",
+      "status": "passed"
+    },
+    {
+      "path": "release-metadata.log",
+      "command": "release metadata verification without publish",
+      "status": "passed"
+    },
+    {
+      "path": "github-rename.log",
+      "command": "gh repo rename idealis --repo mizchi/modelt --yes",
+      "status": "passed"
+    }
+  ],
+  "counts": {
+    "sharedTestsPerRunner": 77,
+    "smtRequests": 251,
+    "smtRevalidatedWitnesses": 215,
+    "usableComparisons": 1200,
+    "usableHistoricalWitnesses": 20,
+    "crateArchives": 5
+  },
+  "mutationScore": 95.4,
+  "newIndependentEvaluation": false,
+  "newPerformanceClaim": false,
+  "repositoryRenamed": true,
+  "remoteUpdated": true,
+  "checkoutRelocated": true,
+  "files": [
+    {
+      "path": "async-test.log",
+      "sha256": "d0add71a85a3c40b106ab09b32d18b47d05dbedf87373c814a12c1f75b7e1e9e"
+    },
+    {
+      "path": "browser-relocated.log",
+      "sha256": "b0a171e9356ef39db32ac4e188dcac155c4d64a096bb92932150d3b9e319ac23"
+    },
+    {
+      "path": "check-relocated.log",
+      "sha256": "b259a3d8a9cc36c4a2ca24e4085e03a79347bd214ba4bf2558bb82454c3d514f"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "253f7553fa8a33c029750c9affa6a3fa0397ea13c3c7ed4597b00c04c04923e7"
+    },
+    {
+      "path": "cross-test.log",
+      "sha256": "e1f11f91a599c8a1036799063e39fecab7b47d881bf59027dfd8ae6692f5a445"
+    },
+    {
+      "path": "evaluate.log",
+      "sha256": "186cf4bafb86490d9a42d4c9e1cfd4cbafb36a4849ff5e3f592c357750868a9b"
+    },
+    {
+      "path": "github-rename.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "go-consumer-result.json",
+      "sha256": "338d7522b6c3e2200388210547d33a37ce561c40562f502d668d7070e7af2d20"
+    },
+    {
+      "path": "go-test.log",
+      "sha256": "8fa6e1479c8efe99a2ac673374096d5232b88c68d1f90146e3d42c981ef775b4"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "f42483321a93343e158cce93eac8da45b368f785083a975b563ae5fdbe55a74e"
+    },
+    {
+      "path": "mutation.json",
+      "sha256": "418f217cce83f504635d27e0ee32359dc8bbe5ec74560a386ce76c390d81c254"
+    },
+    {
+      "path": "mutation.log",
+      "sha256": "72cecdf1b55efd244fdb087bb849137fda96f39f69b6af5dde67aa83a0ee6180"
+    },
+    {
+      "path": "package-final.log",
+      "sha256": "e5dfffc497afebaaa35b28a756219bc43eba326511cfb5a2d56645394ab10c08"
+    },
+    {
+      "path": "package-red.log",
+      "sha256": "be9c49b2e62301149b69ee5a172699c5621e910e6a55fdd29c619a4b6813e0ab"
+    },
+    {
+      "path": "portable-browser.log",
+      "sha256": "643d9a989bdea58dddf034cde13e900bd0af62104f13b5394791aa96fa69f172"
+    },
+    {
+      "path": "portable-build.log",
+      "sha256": "6238547fedd1c14134dc9a8f703dc3dd05566626d45be4e3943ad1fa328fb752"
+    },
+    {
+      "path": "portable-test.log",
+      "sha256": "b64c9ed918d784876ef9678be86f05e6ad9b81c83fee4a93551587e385da1b05"
+    },
+    {
+      "path": "release-metadata.log",
+      "sha256": "701700d5ba3fbfe55d874651208e7b74e1d517aaf2d5381e37694cbcdcd73982"
+    },
+    {
+      "path": "replay.log",
+      "sha256": "795120b969f946c5b44e0487dead8098471aaa25507f3da00397ae71957cb7d5"
+    },
+    {
+      "path": "repo-after.json",
+      "sha256": "bf4cebb3d38a28abae38a0a11baf255d12871abeb07ae5418a12f3a14c43dce1"
+    },
+    {
+      "path": "repo-before.json",
+      "sha256": "8cc63dcbd03f0ce7c7c51b10a6861d34964d701c0175a5d54d5efa24925c2992"
+    },
+    {
+      "path": "runtime-build.log",
+      "sha256": "5f3e5217f1bacf1152235216360c94b23b406c395597b4bf85499049391ac0f7"
+    },
+    {
+      "path": "runtime-test.log",
+      "sha256": "26a594a2d3461105d225ee1a2ccbc62f9f218090af238505ef626062b5bbb233"
+    },
+    {
+      "path": "safety-test.log",
+      "sha256": "58070af54e699c3143c5cbf26a797a61f26d2c53685f36234c68b6073ddad13f"
+    },
+    {
+      "path": "smt-browser.log",
+      "sha256": "68b49917a5249dc9673793b0e4f4af3831716ba8735dc5db064d5f958b49f4b8"
+    },
+    {
+      "path": "smt-build.log",
+      "sha256": "b581c8e5a33f04a81382d173462a7fdd09393e908cc7c9ff1c3231a825374023"
+    },
+    {
+      "path": "smt-regression/records.json",
+      "sha256": "8a9c8460aca8f7ac562147c4e477686524748689a8087b94952bb7ec4d374f46"
+    },
+    {
+      "path": "smt-regression/result.json",
+      "sha256": "0839f172c36fcef0fae5432a498b75e63ea03cdb48f51d04e553ff0a85b3e9b8"
+    },
+    {
+      "path": "smt-regression.log",
+      "sha256": "2a05c11c5d5e5c8d3d3529478b79e3c34c58a56bc542b16071150ee5c2fbf584"
+    },
+    {
+      "path": "smt-test.log",
+      "sha256": "2c09cc95dd51bf4a8fd17f27f740d2fbc2930da12b597b9f3b150c70229c10f5"
+    },
+    {
+      "path": "stack-after.json",
+      "sha256": "ccfbd2180981624c9161c8a056794d2231ab1da97854b41989d3594486dc00df"
+    },
+    {
+      "path": "usable/benchmark.json",
+      "sha256": "a1f6dc568ea25e84416834a254ab0e3529048e90e22640a947fd54a5304f5428"
+    },
+    {
+      "path": "usable/cases.json",
+      "sha256": "23fcbcf4dfce634a1552329f8eb434d2a8a3be579b3b5513ed0020e7e8bafd81"
+    },
+    {
+      "path": "usable/host.json",
+      "sha256": "59342ace11d059e6ab88fdc1fa89ed16d917fa5b20e4930a838790d988bda406"
+    },
+    {
+      "path": "usable/manifest.json",
+      "sha256": "898a8689a4852f02499753e15ebb3e1dcc89985ac312843010ed480cdc5f36ee"
+    },
+    {
+      "path": "usable/model.json",
+      "sha256": "9c30226a528b8c3a1c6aaa5f7991dad3ceabcf4af04466417a15145e66019daa"
+    },
+    {
+      "path": "usable/packages.json",
+      "sha256": "4feb928de6fcce5221d62551f44974bc37d138182685a582a25e2f83127aeb6e"
+    },
+    {
+      "path": "usable/result.json",
+      "sha256": "0fcc67adb0a33f9895852e14d6a6896dfaeac5bf430fa6d7dc583495a0f6aaf3"
+    },
+    {
+      "path": "usable/witnesses.json",
+      "sha256": "b75e140f6753177d7842538b57a6fad55f3afc263ac1798aa51be521aede84fa"
+    },
+    {
+      "path": "usable-eval.log",
+      "sha256": "0d3d524f0d4a410b03350a36bd1598dc4c06ee5c80fed296eec6edd0599dfea8"
+    },
+    {
+      "path": "usable-evaluation.log",
+      "sha256": "2f787e29b5b280ac0ac8306987f76a33c8659313b4e10965263b733e49576993"
+    },
+    {
+      "path": "usable-replay.log",
+      "sha256": "fda0eb66cb47e8a444526f9b7cd33d9330687b6017c2df756177e095106be9f2"
+    },
+    {
+      "path": "usable-test.log",
+      "sha256": "f5080e7de5d13aba047dde6eb1d4cb2429c828d0479645dda1618a4f15e725e7"
+    }
+  ]
+}

@@ -34,7 +34,7 @@ import { createNativeComparison } from "./transcript.js";
 
 test("independent native and Wasm instances have matching protocol lifetimes", async () => {
   const bytes = await readFile(
-    "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   );
   for (const seed of [1, 2]) {
     const comparison = await createNativeComparison(bytes);
@@ -56,7 +56,7 @@ test("independent native and Wasm instances have matching protocol lifetimes", a
 const load = async () =>
   createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
 const decodeAction = (value: Parameters<typeof fromPortableValue>[0]) => {
@@ -102,10 +102,13 @@ test("Rust native and Wasm process the same conformance transcripts as the origi
       });
     }
   }
-  const native = execFileSync("crates/modelt-core/target/release/modelt-core", {
-    input: commands.map((command) => JSON.stringify(command)).join("\n"),
-    maxBuffer: 16 * 1024 * 1024,
-  })
+  const native = execFileSync(
+    "crates/idealis-core/target/release/idealis-core",
+    {
+      input: commands.map((command) => JSON.stringify(command)).join("\n"),
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  )
     .toString()
     .trim()
     .split("\n")

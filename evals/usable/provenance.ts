@@ -20,7 +20,7 @@ export const usableFingerprint = async () => {
         "evals/portable",
         "evals/harness",
         "evals/fixtures",
-        "crates/modelt-core",
+        "crates/idealis-core",
         "crates/rtlc",
         "crates/rtla",
         "crates/rtla-compiler",

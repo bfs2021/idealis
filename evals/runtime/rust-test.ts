@@ -18,7 +18,7 @@ test("Rust native and Wasm match the TS packed kernel and replay against indepen
   await writeFile(".artifacts/runtime/table.bin", encodeTable(table));
   const kernel = await createWasmKernel(
     await readFile(
-      "evals/rust-probe/target/wasm32-unknown-unknown/release/modelt_runtime_probe.wasm",
+      "evals/rust-probe/target/wasm32-unknown-unknown/release/idealis_runtime_probe.wasm",
     ),
     table,
   );
@@ -36,7 +36,7 @@ test("Rust native and Wasm match the TS packed kernel and replay against indepen
     const actual = kernel.run(options);
     assert.deepEqual(actual, reference);
     const native = await runNative(
-      resolve("evals/rust-probe/target/release/modelt-runtime-probe"),
+      resolve("evals/rust-probe/target/release/idealis-runtime-probe"),
       ".artifacts/runtime/table.bin",
       { ...options, trace: false },
     );

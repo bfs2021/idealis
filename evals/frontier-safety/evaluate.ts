@@ -36,7 +36,7 @@ const jar = process.argv[3];
 const archive = process.argv[4];
 const directory = process.argv[5];
 const saved = process.argv[6];
-const plan = process.env.MODELT_FRONTIER_PLAN ?? "0020-frontier-safety";
+const plan = process.env.IDEALIS_FRONTIER_PLAN ?? "0020-frontier-safety";
 assert.ok(plan === "0020-frontier-safety" || plan === "0021-worker-budget");
 assert.ok(
   java && jar && archive && directory,
@@ -159,7 +159,7 @@ try {
       wall: "Process spawn through exit and JSON decode",
       tlcInterval:
         "stdout receipts: init generation start through success; includes final FP check",
-      modeltInterval:
+      idealisInterval:
         "checkSafety API, includes IR validation, serialization and initial generation",
     },
     upstreamChannelSha256: digest(

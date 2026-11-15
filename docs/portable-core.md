@@ -1,6 +1,6 @@
 # TS / Rust / Go の共通コア
 
-`crates/modelt-core` は有限モデル、適合性照合、保存オラクルの再生、縮小、ホストの記録・再生を実装する Rust crate。同じソースを native と Wasm で使う。TS SDK は `@mizchi/modelt/portable`、[Go adapter](go-adapter.md) は `adapters/go`。既存 TS checker は独立した比較対象として残す。[有限モデル・縮小・ホストの使用例](using-models.md) と [配布手順](releasing.md) を参照。
+`crates/idealis-core` は有限モデル、適合性照合、保存オラクルの再生、縮小、ホストの記録・再生を実装する Rust crate。同じソースを native と Wasm で使う。TS SDK は `@mizchi/idealis/portable`、[Go adapter](go-adapter.md) は `adapters/go`。既存 TS checker は独立した比較対象として残す。[有限モデル・縮小・ホストの使用例](using-models.md) と [配布手順](releasing.md) を参照。
 
 ## 実行
 
@@ -10,7 +10,7 @@ TLA+ソースからの解析・IR生成・検査も同じcoreで実行できる�
 rustup target add wasm32-unknown-unknown
 just portable-build
 just portable-test
-cargo run --manifest-path crates/modelt-core/Cargo.toml --example counter
+cargo run --manifest-path crates/idealis-core/Cargo.toml --example counter
 just portable-eval
 just portable-replay evals/runs/<run-id>
 ```
@@ -27,7 +27,7 @@ import { counterModel, createCounter } from "./examples/durable-counter.js";
 
 const core = await createPortableWasm(
   await readFile(
-    "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   ),
 );
 const result = await checkPortableConformance(

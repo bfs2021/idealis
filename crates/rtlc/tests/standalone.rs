@@ -26,7 +26,7 @@ fn bounds() -> SafetyBounds {
 }
 
 #[test]
-fn typed_ir_checks_without_modelt() {
+fn typed_ir_checks_without_idealis() {
     let result = ring().check(bounds()).unwrap();
     assert_eq!(result.status, "complete");
     assert_eq!((result.states, result.generated), (4, 5));

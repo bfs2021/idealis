@@ -149,7 +149,7 @@ test("native parallel checks agree with the sequential corpus and preserve order
 test("the portable Wasm build rejects the native parallel request", async () => {
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const small = cases("small")[0];

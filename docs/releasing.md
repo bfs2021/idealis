@@ -16,9 +16,9 @@ npm の files はライブラリ、CLI、Wasm、docs に限定する。eval の�
 
 ```sh
 npm login --auth-type=web
-npm publish .artifacts/packages/mizchi-modelt-0.1.0-alpha.0.tgz --access public --tag next
-npm trust github @mizchi/modelt --repo mizchi/modelt --file release.yml --allow-publish -y
-npm trust list @mizchi/modelt
+npm publish .artifacts/packages/mizchi-idealis-0.1.0-alpha.0.tgz --access public --tag next
+npm trust github @mizchi/idealis --repo mizchi/idealis --file release.yml --allow-publish -y
+npm trust list @mizchi/idealis
 ```
 
 `npm trust` は npm 11.15+ と2FAが必要。公開と OIDC の仕組みは [npm の公式説明](https://docs.npmjs.com/trusted-publishers/) を参照。`v*` タグの保護は repo 管理者が ruleset で設定する。設定変更と初回 registry 書き込みは今回自動実行していない。
@@ -30,8 +30,8 @@ cargo login
 cargo publish --locked --manifest-path crates/rtla/Cargo.toml
 cargo publish --locked --manifest-path crates/rtlc/Cargo.toml
 cargo publish --locked --manifest-path crates/rtla-compiler/Cargo.toml
-cargo publish --locked --manifest-path crates/modelt-core/Cargo.toml
-cargo publish --locked --manifest-path crates/rsmt/Cargo.toml
+cargo publish --locked --manifest-path crates/idealis-core/Cargo.toml
+cargo publish --locked --manifest-path crates/idealis-smt/Cargo.toml
 ```
 
 この手順は crate registry への公開を行う。Cargo の自動公開は未設定で、GitHub Release に `.crate` を添付する構成。
@@ -50,10 +50,10 @@ PR は1ジョブで TS / Rust / ブラウザ / mutation / 実バグ評価 / cons
 
 4800件の portable 評価、runtime 性能評価、4 runner の cloud sharding はそれぞれ workflow_dispatch で残す。重い評価を明示的に実行でき、sharding の manifest / 欠落・衝突検出も保持する。PR で runner を prepare → shard → merge と3段階待つ構造を外した。GitHub の割当待ちそのものを短縮する保証ではない。
 
-`rtlc`の分離後は`rtlc-<version>.crate`と`modelt-core-<version>.crate`を同梱する。packageは一時workspaceで両者を同時検証し、Cargoの一時registryで依存を解決する。展開したarchiveのconsumerは未公開のrtlcを`[patch.crates-io]`でローカルへ結び、rtlc単独の依存graphにmodelt-coreが入らないことも確認する。通常のrepoは独立manifestのままとし、native/Wasm targetの位置を変更しない。この処理はCargo registryへのpublishではない。
+`rtlc`の分離後は`rtlc-<version>.crate`と`idealis-core-<version>.crate`を同梱する。packageは一時workspaceで両者を同時検証し、Cargoの一時registryで依存を解決する。展開したarchiveのconsumerは未公開のrtlcを`[patch.crates-io]`でローカルへ結び、rtlc単独の依存graphにidealis-coreが入らないことも確認する。通常のrepoは独立manifestのままとし、native/Wasm targetの位置を変更しない。この処理はCargo registryへのpublishではない。
 
-`rtla`は独立した`rtla-<version>.crate`、`rtla.wasm`、SHA256/ABI manifestを追加する。同じ一時workspaceで4つのcrateを検証し、parser単独consumerの依存graphにrtlc/modelt-coreが入らないことを確認する。npmでは`@mizchi/modelt/rtla.wasm`を解決し、solverがない別consumerで解析する。registry初回登録は上の手動手順を使い、package検証からpublishは実行しない。
+`rtla`は独立した`rtla-<version>.crate`、`rtla.wasm`、SHA256/ABI manifestを追加する。同じ一時workspaceで4つのcrateを検証し、parser単独consumerの依存graphにrtlc/idealis-coreが入らないことを確認する。npmでは`@mizchi/idealis/rtla.wasm`を解決し、solverがない別consumerで解析する。registry初回登録は上の手動手順を使い、package検証からpublishは実行しない。
 
-`rtla-compiler`のarchiveはrtlaのASTをrtlcのIRへ変換する。modelt-core consumerは未公開のrtla・rtla-compiler・rtlcを`[patch.crates-io]`で解決し、ソースからのコンパイルと検査も実行する。parserとcheckerの単独consumerは従来の独立性を検査する。
+`rtla-compiler`のarchiveはrtlaのASTをrtlcのIRへ変換する。idealis-core consumerは未公開のrtla・rtla-compiler・rtlcを`[patch.crates-io]`で解決し、ソースからのコンパイルと検査も実行する。parserとcheckerの単独consumerは従来の独立性を検査する。
 
-`rsmt`は5つ目の独立crate。`rsmt-<version>.crate`、`rsmt.wasm`、`rsmt-manifest.json`を配布物に加える。rsmtのarchiveだけを別ディレクトリへ展開し、SAT、UNSAT、unknown、未対応を検査する。依存graphへmodelt-core、rtla、rtlc、Z3が入らないことも確認する。npmのSMT backendへの接続は追加していない。
+`idealis-smt`は5つ目の独立crate。`rsmt-<version>.crate`、`idealis-smt.wasm`、`idealis-smt-manifest.json`を配布物に加える。idealis-smtのarchiveだけを別ディレクトリへ展開し、SAT、UNSAT、unknown、未対応を検査する。依存graphへidealis-core、rtla、rtlc、Z3が入らないことも確認する。npmのSMT backendへの接続は追加していない。

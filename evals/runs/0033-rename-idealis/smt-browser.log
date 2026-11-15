@@ -1,0 +1,16 @@
+pnpm rsmt:build
+
+> @mizchi/idealis@0.1.0-alpha.0 rsmt:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.03s
+    Finished `release` profile [optimized] target(s) in 0.03s
+pnpm exec playwright test --config smt-playwright.config.ts
+
+Running 1 test using 1 worker
+
+(node:38256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 evals/smt-subset/browser.spec.ts:5:1 › pure Rust SMT subset runs in Chromium without cross-origin isolation (71ms)
+
+  1 passed (401ms)

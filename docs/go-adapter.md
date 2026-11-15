@@ -6,15 +6,15 @@
 just go-test
 ```
 
-Wasm の build、TS の相互運用 fixture 生成、CGO 無効の Go tests、race、vet、別 module の consumer を実行する。Go module の取得には最初だけ依存の download が必要。既存プロジェクトからは module path `github.com/mizchi/modelt/adapters/go` を使う。version tag は未作成なので、依存は commit に固定するか `replace` で checkout を参照する。
+Wasm の build、TS の相互運用 fixture 生成、CGO 無効の Go tests、race、vet、別 module の consumer を実行する。Go module の取得には最初だけ依存の download が必要。既存プロジェクトからは module path `github.com/mizchi/idealis/adapters/go` を使う。version tag は未作成なので、依存は commit に固定するか `replace` で checkout を参照する。
 
 ## 有限モデルを渡す
 
-TS で有限グラフが閉じた場合だけ artifact を作る。この例をプロジェクト内で実行し、`toggle.json` と `just portable-build` で得た `modelt-core.wasm` を Go アプリへ渡す。
+TS で有限グラフが閉じた場合だけ artifact を作る。この例をプロジェクト内で実行し、`toggle.json` と `just portable-build` で得た `idealis-core.wasm` を Go アプリへ渡す。
 
 ```ts
 import { writeFile } from "node:fs/promises";
-import { compileFiniteModel } from "@mizchi/modelt/finite";
+import { compileFiniteModel } from "@mizchi/idealis/finite";
 
 const result = compileFiniteModel<boolean, string, boolean>(
   {
@@ -40,10 +40,10 @@ import (
     "context"
     _ "embed"
     "fmt"
-    modelt "github.com/mizchi/modelt/adapters/go"
+    idealis "github.com/mizchi/idealis/adapters/go"
 )
 
-//go:embed modelt-core.wasm
+//go:embed idealis-core.wasm
 var wasm []byte
 
 //go:embed toggle.json
@@ -51,24 +51,24 @@ var model []byte
 
 func main() {
     ctx := context.Background()
-    core, err := modelt.New(ctx, wasm)
+    core, err := idealis.New(ctx, wasm)
     if err != nil { panic(err) }
     defer core.Close(ctx)
 
     enabled := false
-    driver := modelt.Driver{
-        Reset: func(context.Context) (modelt.Value, error) {
+    driver := idealis.Driver{
+        Reset: func(context.Context) (idealis.Value, error) {
             enabled = false
-            return modelt.ValueOf(enabled)
+            return idealis.ValueOf(enabled)
         },
-        Step: func(context.Context, modelt.Value) (modelt.Value, error) {
+        Step: func(context.Context, idealis.Value) (idealis.Value, error) {
             enabled = !enabled
-            return modelt.ValueOf(enabled)
+            return idealis.ValueOf(enabled)
         },
     }
-    toggle, err := modelt.ValueOf("toggle")
+    toggle, err := idealis.ValueOf("toggle")
     if err != nil { panic(err) }
-    result, err := core.CheckFinite(ctx, model, driver, []modelt.Value{toggle, toggle})
+    result, err := core.CheckFinite(ctx, model, driver, []idealis.Value{toggle, toggle})
     if err != nil { panic(err) }
     if result.Status != "matched" { panic(result.Status) }
     fmt.Println(result.Status)
