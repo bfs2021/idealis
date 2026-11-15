@@ -1,0 +1,13 @@
+cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.01s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm exec playwright test --config testing-playwright.config.ts
+
+Running 1 test using 1 worker
+
+(node:88848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 evals/testing-core/browser.spec.ts:5:1 › public testing runtime generates, shrinks and replays real counter failures (190ms)
+
+  1 passed (734ms)

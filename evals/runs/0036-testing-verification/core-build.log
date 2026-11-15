@@ -1,0 +1,23 @@
+cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling syn v3.0.10
+   Compiling serde_derive v1.0.229
+   Compiling idealis-testing v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-testing)
+    Finished `release` profile [optimized] target(s) in 10.28s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling idealis-testing v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-testing)
+    Finished `release` profile [optimized] target(s) in 4.39s

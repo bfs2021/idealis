@@ -8,6 +8,8 @@
 
 [0035: Alloyモデルと固定instance](iterations/0035-alloy-instance.md)は、実装の関係スナップショットをnative/Wasmで評価する。公開TS API、node:test/Vitest、全512グラフ、公式Analyzerへの構造固定、実Chromiumと単独consumerを検査した。
 
+[0036: Rust testing core](iterations/0036-testing-core.md)は、生成・縮小・差分比較・保存caseの再生を独立crateへ移した。同じcorpusでnative/Wasm、TS生成器と既存縮小器を照合し、状態付きカウンタとブラウザ・配布consumerを検査した。
+
 ```sh
 just eval-loop
 just replay-loop

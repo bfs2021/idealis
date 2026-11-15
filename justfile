@@ -13,6 +13,22 @@ testing-core-test:
 testing-example:
   cargo run --example counter --locked --manifest-path crates/idealis-testing/Cargo.toml
 
+testing-test: testing-build
+  pnpm build
+  node --test dist/evals/testing-core/contract-test.js
+  pnpm exec vitest run --config testing-vitest.config.ts
+
+testing-browser: testing-build
+  pnpm exec playwright test --config testing-playwright.config.ts
+
+testing-eval phase run parent="": testing-build
+  pnpm build
+  node dist/evals/testing-core/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
+
+testing-replay run:
+  pnpm build
+  node dist/evals/testing-core/replay.js {{quote(run)}}
+
 ralloy-build:
   cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml

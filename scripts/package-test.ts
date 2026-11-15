@@ -28,6 +28,9 @@ const rsmtCrate = files.find(
 const ralloyCrate = files.find(
   (file) => file.startsWith("ralloy-") && file.endsWith(".crate"),
 );
+const testingCrate = files.find(
+  (file) => file.startsWith("idealis-testing-") && file.endsWith(".crate"),
+);
 assert.ok(
   tarball &&
     crate &&
@@ -35,8 +38,9 @@ assert.ok(
     rtlaCrate &&
     compilerCrate &&
     rsmtCrate &&
-    ralloyCrate,
-  "Prepare npm and all six Rust packages first, including standalone ralloy",
+    ralloyCrate &&
+    testingCrate,
+  "Prepare npm and all seven Rust packages first, including standalone idealis-testing",
 );
 const consumer = await mkdtemp(join(tmpdir(), "idealis-consumer-"));
 await writeFile(
@@ -119,6 +123,7 @@ await writeFile(
   join(consumer, "consumer.mjs"),
   `import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
+import {createTestingWasm} from '@mizchi/idealis/testing';
 import {createAlloyWasm,AlloyError} from '@mizchi/idealis/alloy';
 import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/idealis/portable';
 import {createHistoryRecorder} from '@mizchi/idealis/history';
@@ -126,6 +131,12 @@ import {parseFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
 import {planSchedule,runSchedule} from '@mizchi/idealis/scheduling';
 import {createRtlcBackend,runBackend,parseBackendResult} from '@mizchi/idealis/backend';
+const testing=await createTestingWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/testing.wasm'))));
+const testingPlan={generator:{id:'consumer',version:'1',initial:['s'],states:{s:[{action:'good',target:'s'},{action:'bad',target:'s'}]},minLength:0,maxLength:8},seed:0x36a1,cases:32,maxAttempts:64,maxShrinkChecks:64,maxWork:10000};
+const predicate=testCase=>testCase.actions.includes('bad')?{status:'mismatch',signature:'bad'}:{status:'matched'};
+const testingResult=await testing.property(testingPlan,predicate);assert.equal(testingResult.status,'failed');assert.deepEqual(testingResult.counterexample.actions,['bad']);assert.equal(testingResult.shrink.status,'minimal');
+assert.equal((await testing.replay(testingResult.counterexample,predicate,'bad')).status,'failed');assert.equal((await testing.property({...testingPlan,maxWork:0},predicate)).status,'inconclusive');
+assert.equal((await testing.compare({kind:'allowed',values:[1]},[{id:'candidate',outcome:{kind:'value',value:2}}])).status,'mismatch');
 const alloy=await createAlloyWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/ralloy.wasm'))));
 const alloyInput={source:'sig N { edge: set N } fact { no iden & edge } assert Safe { no iden & ^edge } check Safe for 2 but exactly 2 N, 0 Int',command:0,maxWork:100000};
 const generated=alloy.analyze(alloyInput);assert.equal(generated.status,'counterexample');assert.equal(alloy.checkInstance(alloyInput,generated.instance).status,'mismatch');
@@ -173,6 +184,8 @@ const node = execFileSync(process.execPath, [join(consumer, "consumer.mjs")], {
 await writeFile(
   join(consumer, "consumer.ts"),
   `import type {Model} from '@mizchi/idealis';
+import {createTestingWasm,type TestingCase} from '@mizchi/idealis/testing';
+const testingCase:TestingCase={format:'idealis.test-case',version:1,rng:'xorshift32-v1',generatorId:'g',generatorVersion:'1',seed:1,index:0,actions:[]};void testingCase;void createTestingWasm;
 import {createAlloyWasm,type AlloyInstance} from '@mizchi/idealis/alloy';
 const observed:AlloyInstance={signatures:{N:[]},fields:{edge:[]}};void observed;void createAlloyWasm;
 import {compileFiniteModel,createFiniteModel} from '@mizchi/idealis/finite';
@@ -460,6 +473,66 @@ const alloyModule = await WebAssembly.compile(
   new Uint8Array(await readFile(join(directory, "ralloy.wasm"))).buffer,
 );
 assert.deepEqual(WebAssembly.Module.imports(alloyModule), []);
+const testingConsumer = await mkdtemp(
+  join(tmpdir(), "idealis-testing-consumer-"),
+);
+execFileSync("tar", [
+  "-xzf",
+  join(directory, testingCrate),
+  "-C",
+  testingConsumer,
+]);
+await writeFile(
+  join(testingConsumer, "Cargo.toml"),
+  `[package]\nname="testing-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-testing={path="idealis-testing-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+);
+await writeFile(
+  join(testingConsumer, "main.rs"),
+  await readFile(
+    join(
+      testingConsumer,
+      `idealis-testing-${version}`,
+      "examples",
+      "counter.rs",
+    ),
+  ),
+);
+const testing = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+  cwd: testingConsumer,
+  stdio: "pipe",
+})
+  .toString()
+  .trim();
+assert.equal(testing, "standalone idealis-testing consumer checked");
+const testingMetadata = JSON.parse(
+  execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
+    cwd: testingConsumer,
+    stdio: "pipe",
+  }).toString(),
+);
+assert.ok(
+  !testingMetadata.packages.some((entry: { name: string }) =>
+    [
+      "rtla",
+      "rtlc",
+      "rtla-compiler",
+      "idealis-core",
+      "idealis-smt",
+      "ralloy",
+      "z3",
+      "z3-sys",
+    ].includes(entry.name),
+  ),
+);
+assert.deepEqual(
+  WebAssembly.Module.imports(
+    await WebAssembly.compile(
+      new Uint8Array(await readFile(join(directory, "idealis-testing.wasm")))
+        .buffer,
+    ),
+  ),
+  [],
+);
 const result = {
   status: "complete",
   node,
@@ -469,6 +542,10 @@ const result = {
   rtla,
   rsmt,
   ralloy,
+  testing,
+  testingDependencies: testingMetadata.packages
+    .map((entry: { name: string }) => entry.name)
+    .sort(),
   ralloyDependencies: alloyMetadata.packages
     .map((entry: { name: string }) => entry.name)
     .sort(),
@@ -486,6 +563,7 @@ const result = {
     compilerCrate,
     rsmtCrate,
     ralloyCrate,
+    testingCrate,
   ],
 };
 await writeFile(

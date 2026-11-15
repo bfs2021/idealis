@@ -41,6 +41,15 @@ await writeFile(
   "assets/ralloy-manifest.json",
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(alloy).digest("hex"), bytes: alloy.length }, null, 2)}\n`,
 );
+await copyFile(
+  "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+  "assets/idealis-testing.wasm",
+);
+const testing = await readFile("assets/idealis-testing.wasm");
+await writeFile(
+  "assets/idealis-testing-manifest.json",
+  `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(testing).digest("hex"), bytes: testing.length }, null, 2)}\n`,
+);
 execFileSync("pnpm", ["pack", "--pack-destination", target], { stdio: "pipe" });
 const workspace = await mkdtemp(resolve(target, "cargo-workspace-"));
 for (const name of [
@@ -50,6 +59,7 @@ for (const name of [
   "idealis-core",
   "idealis-smt",
   "ralloy",
+  "idealis-testing",
 ]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
@@ -69,7 +79,7 @@ for (const name of [
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt","ralloy"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt","ralloy","idealis-testing"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -104,6 +114,7 @@ for (const name of [
   "idealis-core",
   "idealis-smt",
   "ralloy",
+  "idealis-testing",
 ]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
@@ -134,6 +145,14 @@ await writeFile(
   resolve(target, "ralloy-manifest.json"),
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(alloy).digest("hex"), bytes: alloy.length }, null, 2)}\n`,
 );
+await copyFile(
+  "assets/idealis-testing.wasm",
+  resolve(target, "idealis-testing.wasm"),
+);
+await copyFile(
+  "assets/idealis-testing-manifest.json",
+  resolve(target, "idealis-testing-manifest.json"),
+);
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing Cargo and Wasm artifacts: ${target}`,
 );
