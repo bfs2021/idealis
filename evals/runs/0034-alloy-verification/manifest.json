@@ -1,0 +1,148 @@
+{
+  "status": "complete",
+  "commit": "6539f9961673d781b378a28eb15e8602f1e0f7a8",
+  "sourceVersion": "b6e0768c6355388557566d414d3a70aa0aad3654ac60b2d3cd696c5d71d9359f",
+  "environment": {
+    "dateUtc": "2026-11-15T19:10:39.389999+00:00",
+    "node": "v24.22.2",
+    "pnpm": "10.12.1",
+    "rust": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+    "java": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)"
+  },
+  "checks": [
+    "just ralloy-test (fmt/clippy/all-targets/7 tests)",
+    "just ralloy-build (native and Wasm)",
+    "node --test dist/evals/alloy-subset/contract-test.js",
+    "just ralloy-example",
+    "just check (lint/typecheck/Vitest/node:test)",
+    "just browser",
+    "Playwright actual Chromium ralloy",
+    "just runtime-build",
+    "just runtime-test",
+    "just evaluate",
+    "just replay-evaluation",
+    "just package (six crate archives and isolated consumers)",
+    "Alloy reference development 56 and confirmation 88",
+    "deterministic native/Wasm replay and evidence hashes",
+    "release metadata dry run, no publish"
+  ],
+  "expectedFailures": [
+    "red.log: missing crate before implementation",
+    "none-arity-red.log: previously accepted arity mismatch",
+    "package-red.log: missing ralloy archive before packaging"
+  ],
+  "reference": "AlloyTools v6.2.0 / SAT4J, source tag 59ba2033993449d483d54acad0e11a7bbf20354f",
+  "limitations": [
+    "No performance comparison",
+    "No public backend or CLI integration",
+    "Known artificial cycle defect only",
+    "Not full Alloy syntax or type-system compatibility"
+  ],
+  "artifacts": [
+    {
+      "name": "idealis-core-0.1.0-alpha.0.crate",
+      "bytes": 15691,
+      "sha256": "dfe599282c2306f3e79e17cd94b276b57aac2b5dec926b2a3c1bf78d6fc76ce2"
+    },
+    {
+      "name": "idealis-core.wasm",
+      "bytes": 1933369,
+      "sha256": "e057bbd008941bd8998a34ac0b0cdc7a1985cb3b474464273c3ab3b919ffc7ab"
+    },
+    {
+      "name": "idealis-smt-0.1.0-alpha.0.crate",
+      "bytes": 16302,
+      "sha256": "d9c724bb94e02e5c2d2e3ba952ea61eecf084a0f0736af03b002edac09bddf57"
+    },
+    {
+      "name": "idealis-smt-manifest.json",
+      "bytes": 144,
+      "sha256": "56f464b1831020889be6ef3758eed6545077eacd3341d30c90d5f03976e2e822"
+    },
+    {
+      "name": "idealis-smt.wasm",
+      "bytes": 330749,
+      "sha256": "ce71786a035e20b00acbba1e15d98529af1ebebfaaa7894c4b443d18c4ecf725"
+    },
+    {
+      "name": "mizchi-idealis-0.1.0-alpha.0.tgz",
+      "bytes": 664353,
+      "sha256": "28aadd8dcb23dfbf698c2ddf7d95e9e35234b128e69b5a18a3002c9fea2e5f82"
+    },
+    {
+      "name": "mizchi-modelt-0.1.0-alpha.0.tgz",
+      "bytes": 662086,
+      "sha256": "edd016bf52854af3eb043d22330215b64f93f081a608e8280e4b40ef0bd664e0"
+    },
+    {
+      "name": "modelt-core-0.1.0-alpha.0.crate",
+      "bytes": 15617,
+      "sha256": "0b28480f373c8cbf368b933fa80a3f9c3418d1e6994a52d8ab816cbdf73fa6c6"
+    },
+    {
+      "name": "modelt-core.wasm",
+      "bytes": 1933305,
+      "sha256": "540c8df4e7169efc82c95ceec4693ab75f2043b44ff1217ef4cc879cb69dfd2b"
+    },
+    {
+      "name": "ralloy-0.1.0-alpha.0.crate",
+      "bytes": 18800,
+      "sha256": "81bdfb13966c84ea8c31e868b9764a0a13333a27e7c581cdddcb1da9e4fde94e"
+    },
+    {
+      "name": "ralloy-manifest.json",
+      "bytes": 144,
+      "sha256": "ce6384a7fa3359de3c84792e827f2e2b82b7311c7761d1af4c7f96492457489b"
+    },
+    {
+      "name": "ralloy.wasm",
+      "bytes": 261526,
+      "sha256": "46d6cb056b42f54934ebc43c793764954c70a7eeafd0776a72779f21f8fbb504"
+    },
+    {
+      "name": "rsmt-0.1.0-alpha.0.crate",
+      "bytes": 16279,
+      "sha256": "4ec213854274ec82244ac2dfd60bcfe442d51831a7ec11f5558f44a94d069012"
+    },
+    {
+      "name": "rsmt-manifest.json",
+      "bytes": 144,
+      "sha256": "56f464b1831020889be6ef3758eed6545077eacd3341d30c90d5f03976e2e822"
+    },
+    {
+      "name": "rsmt.wasm",
+      "bytes": 330749,
+      "sha256": "ce71786a035e20b00acbba1e15d98529af1ebebfaaa7894c4b443d18c4ecf725"
+    },
+    {
+      "name": "rtla-0.1.0-alpha.0.crate",
+      "bytes": 23666,
+      "sha256": "a6795bcaadb69e4008b3c5b76c8af667190670bb41ebd16e646c7a25175c50e1"
+    },
+    {
+      "name": "rtla-compiler-0.1.0-alpha.0.crate",
+      "bytes": 14523,
+      "sha256": "6f3c9efc5eabed8d8dae76570e03afa106b6e417f508339e75b3b56138a11cbd"
+    },
+    {
+      "name": "rtla-manifest.json",
+      "bytes": 144,
+      "sha256": "380e557daa8fea2fb4fb4f5b120739b2a1d1276c10d6d570374d280dd5847e2c"
+    },
+    {
+      "name": "rtla.wasm",
+      "bytes": 273529,
+      "sha256": "d2b807b80fb5190fa757819386ccaa9fcefbbed4114e93ee6c75eeca8976271a"
+    },
+    {
+      "name": "rtlc-0.1.0-alpha.0.crate",
+      "bytes": 43090,
+      "sha256": "a57b857b16a86618a3429abbf25ed2fa654bf36c9454794e0fce2403bb608f9f"
+    },
+    {
+      "name": "wasm-manifest.json",
+      "bytes": 145,
+      "sha256": "75e892e389b135cbc3e5e7cbe32f2bb5a06db3cd3b8123ac7da88ac614c48fde"
+    }
+  ]
+}
