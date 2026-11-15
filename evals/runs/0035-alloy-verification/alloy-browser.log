@@ -1,0 +1,13 @@
+cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.04s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm exec playwright test --config alloy-instance-playwright.config.ts
+
+Running 1 test using 1 worker
+
+(node:57601) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 evals/alloy-instance/browser.spec.ts:5:1 › public Alloy adapter checks an observed instance in Chromium (133ms)
+
+  1 passed (597ms)

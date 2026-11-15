@@ -1,0 +1,84 @@
+node:internal/modules/esm/resolve:315
+  return new ERR_PACKAGE_PATH_NOT_EXPORTED(
+         ^
+
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './alloy' is not defined by "exports" in /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-consumer-MrDAxY/node_modules/@mizchi/idealis/package.json imported from /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-consumer-MrDAxY/consumer.mjs
+    at exportsNotFound (node:internal/modules/esm/resolve:315:10)
+    at packageExportsResolve (node:internal/modules/esm/resolve:663:9)
+    at packageResolve (node:internal/modules/esm/resolve:792:12)
+    at moduleResolve (node:internal/modules/esm/resolve:873:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35) {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+}
+
+Node.js v24.22.2
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /Users/mz/.local/share/mise/installs/node/24.22.2/bin/node /var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-consumer-MrDAxY/consumer.mjs
+node:internal/modules/esm/resolve:315
+  return new ERR_PACKAGE_PATH_NOT_EXPORTED(
+         ^
+
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './alloy' is not defined by "exports" in /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-consumer-MrDAxY/node_modules/@mizchi/idealis/package.json imported from /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-consumer-MrDAxY/consumer.mjs
+    at exportsNotFound (node:internal/modules/esm/resolve:315:10)
+    at packageExportsResolve (node:internal/modules/esm/resolve:663:9)
+    at packageResolve (node:internal/modules/esm/resolve:792:12)
+    at moduleResolve (node:internal/modules/esm/resolve:873:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35) {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+}
+
+Node.js v24.22.2
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execFileSync (node:child_process:979:15)
+    at file:///Users/mz/ghq/github.com/mizchi/idealis/dist/scripts/package-test.js:133:14 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    Buffer(0) [Uint8Array] [],
+    Buffer(1186) [Uint8Array] [
+      110, 111, 100, 101,  58, 105, 110, 116, 101, 114, 110,  97,
+      108,  47, 109, 111, 100, 117, 108, 101, 115,  47, 101, 115,
+      109,  47, 114, 101, 115, 111, 108, 118, 101,  58,  51,  49,
+       53,  10,  32,  32, 114, 101, 116, 117, 114, 110,  32, 110,
+      101, 119,  32,  69,  82,  82,  95,  80,  65,  67,  75,  65,
+       71,  69,  95,  80,  65,  84,  72,  95,  78,  79,  84,  95,
+       69,  88,  80,  79,  82,  84,  69,  68,  40,  10,  32,  32,
+       32,  32,  32,  32,  32,  32,  32,  94,  10,  10,  69, 114,
+      114, 111, 114,  32,
+      ... 1086 more items
+    ]
+  ],
+  pid: 55082,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(1186) [Uint8Array] [
+    110, 111, 100, 101,  58, 105, 110, 116, 101, 114, 110,  97,
+    108,  47, 109, 111, 100, 117, 108, 101, 115,  47, 101, 115,
+    109,  47, 114, 101, 115, 111, 108, 118, 101,  58,  51,  49,
+     53,  10,  32,  32, 114, 101, 116, 117, 114, 110,  32, 110,
+    101, 119,  32,  69,  82,  82,  95,  80,  65,  67,  75,  65,
+     71,  69,  95,  80,  65,  84,  72,  95,  78,  79,  84,  95,
+     69,  88,  80,  79,  82,  84,  69,  68,  40,  10,  32,  32,
+     32,  32,  32,  32,  32,  32,  32,  94,  10,  10,  69, 114,
+    114, 111, 114,  32,
+    ... 1086 more items
+  ]
+}
+
+Node.js v24.22.2
