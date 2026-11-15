@@ -86,6 +86,8 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 [Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
 
+[`@mizchi/modelt/backend`](docs/backend-contract.md)は、完全探索、有界の反例なし、帰納性を区別する共通契約。model/property/意味論/仮定/backend版を結果へ結びつけ、空の初期集合・資源切れ・unknownを検査成功へ変換しない。rtlcのnative/Wasm bridgeを提供する。Apalacheの汎用adapterとSMT encodingは今後の対象。[契約と保存応答の検査](evals/iterations/0028-backend-contract.md)に結果を記録した。
+
 ```ts
 import { checkConformance, checkModel, checkTrace } from "./src/index.js";
 import { counterModel, createCounter } from "./examples/durable-counter.js";

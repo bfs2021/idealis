@@ -1,0 +1,14 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/backend-contract/evaluate.js 'evals/runs/0028-backend-contract-final'
+6 native/Wasm pairs, 24 saved bounded results and induction evidence validated

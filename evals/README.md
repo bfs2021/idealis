@@ -83,3 +83,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [rtlaのparser](iterations/0026-rtla-parser.md)は、TLA+／TLC設定を型付きASTへ解析する独立Rust crate。`rtla-test` / `rtla-browser`でnative/Wasm、`rtla-eval`で199組のASTとSANYの構文対照を検査する。IR生成はTS側に残し、対応fragmentと全TLA+を区別する。
 
 [Apalacheとの比較](iterations/0027-apalache-comparison.md)は、BMC/帰納性と有限グラフのcompleteを区別する。`apalache-test` / `apalache-eval`で同じsource/configのpilotを実行し、raw log、ITF、IR、反例検証と起動込み時間を保存する。
+
+[backend契約](iterations/0028-backend-contract.md)は、explicit complete、有界の反例なし、帰納性と個別obligationを分ける。`backend-test` / `backend-eval`で実rtlc native/Wasm、0027の保存したApalache応答、非空性と帰納性の集約条件を確認する。新しい速度比較や汎用Apalache adapterの評価ではない。

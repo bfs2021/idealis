@@ -1,0 +1,32 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.06s
+    Finished `release` profile [optimized] target(s) in 0.02s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+pnpm exec vitest run tests/backend.vitest.test.ts
+
+ RUN  v5.1.0 /Users/mz/ghq/github.com/mizchi/modelt
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  18:35:57
+   Duration  108ms (transform 65%, import 20%, tests 9%, worker 5%)
+
+node --test dist/evals/backend-contract/integration-test.js
+✔ the rtlc adapter executes real Wasm and keeps exhaustion, empty, assumptions and violations distinct (18.689084ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.007125
