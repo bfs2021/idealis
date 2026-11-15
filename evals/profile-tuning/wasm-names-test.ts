@@ -39,3 +39,22 @@ test("invalid modules and absent names fail before recording", () => {
     /Invalid Wasm/,
   );
 });
+
+test("function imports cannot change the meaning of function name indices", () => {
+  const imported = new Uint8Array([
+    ...program.subarray(0, 15),
+    2,
+    7,
+    1,
+    1,
+    101,
+    1,
+    120,
+    0,
+    0,
+    ...program.subarray(15),
+    ...names,
+  ]);
+  assert.ok(WebAssembly.validate(imported));
+  assert.throws(() => withNames(program, imported), /Function code differs/);
+});
