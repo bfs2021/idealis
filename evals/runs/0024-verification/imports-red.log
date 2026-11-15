@@ -1,0 +1,32 @@
+✔ name injection preserves executable bytes and function behavior (0.937541ms)
+✔ a changed function body cannot borrow the old names (0.607208ms)
+✔ invalid modules and absent names fail before recording (0.428542ms)
+✖ function imports cannot change the meaning of function name indices (0.129208ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.515333
+
+✖ failing tests:
+
+test at dist/evals/profile-tuning/wasm-names-test.js:32:1
+✖ function imports cannot change the meaning of function name indices (0.129208ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/profile-tuning/wasm-names-test.js:35:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /Function code differs/,
+    operator: 'throws',
+    diff: 'simple'
+  }
