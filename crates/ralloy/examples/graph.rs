@@ -1,4 +1,4 @@
-use ralloy::{Model, Status};
+use ralloy::{CheckStatus, Model, Status};
 
 fn main() -> Result<(), ralloy::Error> {
     let model = Model::parse(
@@ -11,6 +11,14 @@ fn main() -> Result<(), ralloy::Error> {
     let instance = result.instance.unwrap();
     assert_eq!(instance.signatures["Node"].len(), 2);
     assert_eq!(instance.fields["edge"].len(), 2);
+    assert_eq!(
+        model.check_instance(0, &instance, 100_000)?.status,
+        CheckStatus::Mismatch
+    );
+    assert_eq!(
+        model.check_instance(0, &instance, 0)?.status,
+        CheckStatus::Unknown
+    );
     assert_eq!(model.analyze(0, 0)?.status, Status::Unknown);
     assert_eq!(
         Model::parse("sig A {} fact { some A no A } assert P { no A } check P for 1 but 0 Int")?

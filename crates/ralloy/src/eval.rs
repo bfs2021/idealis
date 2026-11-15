@@ -65,6 +65,24 @@ pub(crate) struct World {
     pub sets: BTreeMap<String, u64>,
     pub fields: Vec<Vec<u64>>,
 }
+impl World {
+    pub fn new(bitwidth: usize) -> Self {
+        let count = if bitwidth == 0 { 0 } else { 1i32 << bitwidth };
+        Self {
+            names: (0..count)
+                .map(|integer| (integer - count / 2).to_string())
+                .collect(),
+            sets: BTreeMap::from([
+                (
+                    "Int".into(),
+                    if count == 0 { 0 } else { (1u64 << count) - 1 },
+                ),
+                ("String".into(), 0),
+            ]),
+            fields: Vec::new(),
+        }
+    }
+}
 type Environment = BTreeMap<String, Relation>;
 pub(crate) struct Evaluator<'a> {
     pub module: &'a Module,
