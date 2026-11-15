@@ -13,13 +13,15 @@ import { basename, dirname, join } from "node:path";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { digest } from "../usable/provenance.js";
 
+const plan = process.env.MODELT_CRITERION_PLAN ?? "0023-criterion-safety";
+assert.match(plan, /^\d{4}-[a-z0-9-]+$/);
 const stage = process.argv[2];
 const directory = process.argv[3];
 assert.ok(stage && /^[a-z][a-z0-9-]*$/.test(stage) && directory);
 await mkdir(dirname(directory), { recursive: true });
 await mkdir(directory);
 const paths = [
-  "evals/plans/0023-criterion-safety.md",
+  `evals/plans/${plan}.md`,
   "evals/plans/0023-adaptive-policy.md",
   ...(await readdir("evals/criterion-safety"))
     .filter((path) => path.endsWith(".ts"))
@@ -37,7 +39,7 @@ await writeFile(
   join(directory, "manifest.json"),
   JSON.stringify(
     {
-      plan: "0023-criterion-safety",
+      plan,
       stage,
       sourceVersion,
       sources,
