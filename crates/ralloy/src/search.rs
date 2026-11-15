@@ -1,7 +1,6 @@
 use crate::eval::{Budget, Evaluator, World};
 use crate::syntax::{Expr, Module, Mult};
 use crate::{Analysis, Command, Error, Instance, Kind, Stats, Status};
-use std::collections::BTreeMap;
 
 pub(crate) fn analyze(
     module: &Module,
@@ -73,22 +72,11 @@ impl Search<'_> {
             }
             return Ok(false);
         }
-        let mut names = Vec::new();
-        let mut sets = BTreeMap::new();
-        let bitwidth = self.command.scope.integer_bitwidth;
-        let integer_count = if bitwidth == 0 { 0 } else { 1 << bitwidth };
-        for integer in 0..integer_count {
-            names.push((integer - integer_count / 2).to_string());
-        }
-        sets.insert(
-            "Int".into(),
-            if integer_count == 0 {
-                0
-            } else {
-                (1u64 << integer_count) - 1
-            },
-        );
-        sets.insert("String".into(), 0);
+        let World {
+            mut names,
+            mut sets,
+            ..
+        } = World::new(self.command.scope.integer_bitwidth);
         for (signature, count) in self.module.signatures.iter().zip(counts.iter()) {
             let mut set = 0;
             for index in 0..*count {

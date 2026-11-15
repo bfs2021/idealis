@@ -22,6 +22,14 @@ fn main() -> Result<(), ralloy::Error> {
 
 `Model::parse`は全宣言とcommandを検査する。`commands()`はkindと解決済みscopeを返し、`analyze(index, max_work)`で1つを実行する。`Analysis`はcommand、status、instanceとwork/candidates/factInstancesを持ち、serdeでJSONへ変換できる。
 
+## 実装のスナップショットを検査する
+
+`Model::check_instance(command, &instance, max_work)`は、渡したsig/fieldを固定して評価する。atom名には実装のIDを使い、全sigと全fieldを明示する。別の充足する構造を探索し直さない。
+
+結果は`InstanceCheck`で、matched、mismatch、invalid、unknownを返す。宣言とfactを満たしcommandの式が真ならmatched、式が偽ならmismatch。check commandもassertの真偽を返すため、反例はmismatchになる。scope・宣言multiplicity・factの違反はinvalidで、reasonはscope/declaration/facts。性質違反はproperty、予算切れはwork。matchedのreasonはnull。未知の宣言・atom、重複atom/tuple、fieldの欠落、builtin Intとのatom名の衝突はprotocol error。
+
+これは1つの観測構造への適合性検査。未観測の入力や時間的な実装の振る舞いを保証しない。workは構造の検査と式の評価を数え、parserとJSON復号の費用を含めない。
+
 ## 対応するサブセット
 
 - 静的なトップレベルsigとone/lone/some、名前が一意な二項field。fieldの既定multiplicityはone。
@@ -63,6 +71,8 @@ no-counterexampleはスコープ外の証明ではない。no-instanceもスコ�
   }
 }
 ```
+
+固定instanceのJSONL requestはkindを`check-instance`とし、同じsource/command/maxWorkに`instance: {signatures, fields}`を加える。応答は`kind: instance-check`とInstanceCheck。
 
 成功は`kind: analysis`とAnalysis、拒否は`kind: error`とError。Wasm ABI v1は`ralloy_abi_version`、`ralloy_input_resize`、`ralloy_dispatch`、`ralloy_output_ptr`、`ralloy_output_len`で、同じJSONを扱う。
 

@@ -1,6 +1,7 @@
 mod check;
 mod engine;
 mod eval;
+mod instance;
 mod parser;
 mod search;
 mod syntax;
@@ -59,6 +60,32 @@ pub enum Status {
     Unknown,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum CheckStatus {
+    Matched,
+    Mismatch,
+    Invalid,
+    Unknown,
+}
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum CheckReason {
+    Scope,
+    Declaration,
+    Facts,
+    Property,
+    Work,
+}
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct InstanceCheck {
+    pub command: Command,
+    pub status: CheckStatus,
+    pub reason: Option<CheckReason>,
+    pub stats: Stats,
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureScope {
@@ -114,7 +141,20 @@ impl Model {
     pub fn commands(&self) -> &[Command] {
         &self.commands
     }
+    pub fn check_instance(
+        &self,
+        command: usize,
+        instance: &Instance,
+        max_work: u64,
+    ) -> Result<InstanceCheck, Error> {
+        let (metadata, body) = self.get_command(command)?;
+        instance::check(&self.syntax, metadata, body, instance, max_work)
+    }
     pub fn analyze(&self, command: usize, max_work: u64) -> Result<Analysis, Error> {
+        let (metadata, body) = self.get_command(command)?;
+        search::analyze(&self.syntax, metadata, body, max_work)
+    }
+    fn get_command(&self, command: usize) -> Result<(&Command, &syntax::Expr), Error> {
         let metadata = self
             .commands
             .get(command)
@@ -125,6 +165,6 @@ impl Model {
         } else {
             body
         };
-        search::analyze(&self.syntax, metadata, body, max_work)
+        Ok((metadata, body))
     }
 }

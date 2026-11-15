@@ -1,4 +1,4 @@
-use crate::{Error, ErrorKind, Model};
+use crate::{Error, ErrorKind, Instance, Model};
 use serde::Deserialize;
 use serde_json::{Value, json};
 
@@ -14,6 +14,13 @@ enum Request {
     Analyze {
         source: String,
         command: usize,
+        #[serde(rename = "maxWork")]
+        max_work: u64,
+    },
+    CheckInstance {
+        source: String,
+        command: usize,
+        instance: Instance,
         #[serde(rename = "maxWork")]
         max_work: u64,
     },
@@ -40,6 +47,14 @@ impl Engine {
                 max_work,
             } => Ok(
                 json!({"kind":"analysis","result":Model::parse(&source)?.analyze(command, max_work)?}),
+            ),
+            Request::CheckInstance {
+                source,
+                command,
+                instance,
+                max_work,
+            } => Ok(
+                json!({"kind":"instance-check","result":Model::parse(&source)?.check_instance(command, &instance, max_work)?}),
             ),
         }
     }
