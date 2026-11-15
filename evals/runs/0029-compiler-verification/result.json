@@ -1,0 +1,655 @@
+{
+  "status": "complete",
+  "sourceVersion": "a1181b5fa962aae57170cae2132d7842975dfba5b29b244d681c93c50b0dce33",
+  "commit": "49cf04b60e3662cd4ddb9899694a59d9ca1c8054",
+  "verifiedSources": 180,
+  "sourceFilesChangedAfterTlc": [
+    "scripts/package-test.ts"
+  ],
+  "notes": "After TLC only the package consumer expected module name changed among common source files. Runtime/compiler sources are unchanged. Raw TLC evidence digests are recorded here after the run.",
+  "counts": {
+    "corpus": 199,
+    "compiled": 197,
+    "rejected": 2,
+    "tlc": 20,
+    "tlcWitnesses": 8,
+    "sharedTestsPerRunner": 77,
+    "rustCompilerTests": 5,
+    "sourceProtocolTests": 1
+  },
+  "mutation": {
+    "score": 95.4,
+    "killed": 104,
+    "survived": 5,
+    "compileErrors": 133,
+    "compilerCoverage": false
+  },
+  "checks": [
+    {
+      "command": "Rust compiler API before implementation",
+      "path": "red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "source request before implementation",
+      "path": "protocol-red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "just compiler-test",
+      "path": "compiler-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "source protocol Rust test",
+      "path": "protocol-green.log",
+      "status": "passed"
+    },
+    {
+      "command": "compiled IR wire contract",
+      "path": "wire-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just check after final consumer correction",
+      "path": "check-after-package.log",
+      "status": "passed"
+    },
+    {
+      "command": "just browser",
+      "path": "final-browser.log",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm portable:browser",
+      "path": "browser-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just portable-test",
+      "path": "final-portable.log",
+      "status": "passed"
+    },
+    {
+      "command": "modelt-core cargo clippy",
+      "path": "core-clippy.log",
+      "status": "passed"
+    },
+    {
+      "command": "modelt-core cargo fmt",
+      "path": "core-format.log",
+      "status": "passed"
+    },
+    {
+      "command": "Rust standalone source example",
+      "path": "native-example.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-build",
+      "path": "runtime-build.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-test",
+      "path": "runtime-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just mutation",
+      "path": "final-mutation.log",
+      "status": "passed"
+    },
+    {
+      "command": "initial package consumer fixture mismatch",
+      "path": "final-package.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "just package after fixture correction",
+      "path": "package-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just evaluate",
+      "path": "final-evaluate.log",
+      "status": "passed"
+    },
+    {
+      "command": "just replay-evaluation",
+      "path": "final-replay.log",
+      "status": "passed"
+    },
+    {
+      "command": "just compiler-eval final",
+      "path": "final-eval.log",
+      "status": "passed"
+    },
+    {
+      "command": "initial TLC harness directory error",
+      "path": "tlc.log",
+      "status": "error-retained"
+    },
+    {
+      "command": "just compiler-tlc after correction",
+      "path": "tlc-final.log",
+      "status": "passed"
+    }
+  ],
+  "files": [
+    {
+      "path": "red.log",
+      "sha256": "683e480bfcfba31da13c930b030b60b9566269ac02f934dba0f9bde9b02abb00"
+    },
+    {
+      "path": "protocol-red.log",
+      "sha256": "39137c023c2442663f06eee2ec434f92eba1024e63e1fe28d624b97d20410b83"
+    },
+    {
+      "path": "compiler-test.log",
+      "sha256": "9158cbef98ee6e5479324c14f0b2a4045b675598ec785b30b1b5a09375e062e8"
+    },
+    {
+      "path": "protocol-green.log",
+      "sha256": "f90e22b5b71b97f99078162226fbc1252664bd039643ed951af7a0f0816d7eea"
+    },
+    {
+      "path": "wire-test.log",
+      "sha256": "4eb9432f77a13a88cf814e61bf96d990416b58c473a5ae4b3aa82b76466ccaa7"
+    },
+    {
+      "path": "check-after-package.log",
+      "sha256": "4a63b5191468b849f58888b7aa4f31e3fc4c4f7b6fb0282a110cd80b25d6e645"
+    },
+    {
+      "path": "final-browser.log",
+      "sha256": "2d0ef3e4b7c066afb6a94223048d808074957330c763e8f488fcb970a6402d51"
+    },
+    {
+      "path": "browser-final.log",
+      "sha256": "035fbbb86995d9fb0a2617313003bbcbb6d8ca7bd25f94fea3c78d30b7a54f4e"
+    },
+    {
+      "path": "final-portable.log",
+      "sha256": "646f19fc8d1d7a871d787af7a88bbacb24ef8bd93e550f4d80eb6de6ebf1eb55"
+    },
+    {
+      "path": "core-clippy.log",
+      "sha256": "2557ad166ac59aae734ab0d2cf22f452a5f1c32dd58a642993efb9a3c2e704c2"
+    },
+    {
+      "path": "core-format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-example.log",
+      "sha256": "e50bdc8aa8373674ca23776cbe155b3a3d0e67512a593de2b744b64a30905867"
+    },
+    {
+      "path": "runtime-build.log",
+      "sha256": "df2022bd8c840e66e570fd7b9367911918afc45a14e9ceead3a501dacad179cf"
+    },
+    {
+      "path": "runtime-test.log",
+      "sha256": "9c9b8ef3a9703f2541ffa6a8f09628a8a6402733ff7c543bb5242bc1ac4cf44e"
+    },
+    {
+      "path": "final-mutation.log",
+      "sha256": "8af1739cab92a69c50e9342c9e5098a928c610c67b5a18cf95c0ca7c7e4e6ef5"
+    },
+    {
+      "path": "final-package.log",
+      "sha256": "609d036069916a3cc0040234c9e4d38ad82a8b5d3203bf742223cfa4a2384684"
+    },
+    {
+      "path": "package-final.log",
+      "sha256": "d88a6aba0cdc607d3c2614da206356bce4c94444797f668decaf1fb20d1308ea"
+    },
+    {
+      "path": "final-evaluate.log",
+      "sha256": "f03cd562c8fbfe5fabbb3a47af137030bff913527b8db6990ec858026790f096"
+    },
+    {
+      "path": "final-replay.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "final-eval.log",
+      "sha256": "af45ae24668f581a86d054c4e703149d9faddcffc84bbe7591c5a9d41a8884a8"
+    },
+    {
+      "path": "tlc.log",
+      "sha256": "fa213761ba907ebfb055f5b636aa2cc51b2071bc95180ddb464497a271a61e41"
+    },
+    {
+      "path": "tlc-final.log",
+      "sha256": "526200f4d91044e9bdcec7f8e72ef82ecbd202569c4df5fb126cc1a8563b0e0e"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "fb8bc10fb43f96a3c13857bcdabbe50aafc79d84b66ad3919913ec2924339f73"
+    },
+    {
+      "path": "wasm-manifest.json",
+      "sha256": "851391078805dc27e5f5c4cf9b02ce3149cc997d79c06a9ee2011a2c2a62ad93"
+    },
+    {
+      "path": "rtla-manifest.json",
+      "sha256": "380e557daa8fea2fb4fb4f5b120739b2a1d1276c10d6d570374d280dd5847e2c"
+    }
+  ],
+  "tlcFiles": [
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/SF-intermittent/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/SF-intermittent/model/Differential.tla",
+      "sha256": "8fe64a2ee17fd4bfc2c854f9a3b4d021fb803b94ffc4c5edf701b544697793b3"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/SF-intermittent/model/tlc.log",
+      "sha256": "0a3969b6808c6911e2f271af0ff5c50ca01466e0f5358b8a2090a246701446a5"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/Differential.tla",
+      "sha256": "fba905b49c16519493b333096a1cbebde68a24edb1289a16c0c4fa23c55cd08b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/states/26-11-15-19-28-59/Differential-0.st",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/states/26-11-15-19-28-59/Differential.st",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/states/26-11-15-19-28-59/Differential_0.fp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/states/26-11-15-19-28-59/Differential_1.fp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/states/26-11-15-19-28-59/nodes_0",
+      "sha256": "8ca37e0e7a2368d116d015c43a8f02a2491f79ea72bf0898056a92246f5cf1ab"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/states/26-11-15-19-28-59/ptrs_0",
+      "sha256": "b2c41214f5a4c9767711fd30a03e6151d6cea2c1ed9fc20b3d35319e50f7e582"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/model/tlc.log",
+      "sha256": "248d69b78cd5cdd712c5a643dd911fec624a7c5ba143477f6b247ba0b20becba"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/witness/Differential.tla",
+      "sha256": "f7897f73e91ebcafafa6edf18cc128cead6c73aee5ebf8853dca8df46d0d8306"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/WF-intermittent/witness/tlc.log",
+      "sha256": "dc4e402c319f2be146fa6295e03d5c447632223cd97dc340e6201328977c20ac"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/action-property/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/action-property/model/Differential.tla",
+      "sha256": "4905af9d15e91700604c2b14c5d706b7ea7d6efb134763c1e4254a365e18a334"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/action-property/model/tlc.log",
+      "sha256": "bcd1809a0e5ff2f6019e120648ff3b4b10c56041eb6e5ddd3c829d74b6a019e4"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/action-property/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/action-property/witness/Differential.tla",
+      "sha256": "923587c20451856bc8ae95ca0e5d8b233fb7ac7635eb7aa43a654b344349e695"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/action-property/witness/tlc.log",
+      "sha256": "a2dde84a8a9f5ddc1ca8a8edceaa45cf596b9bd259f9a0c6d2d5df8144da1a16"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/always-state/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/always-state/model/Differential.tla",
+      "sha256": "134bf901de5fa79a6956f0f26b02ff4bb4c8b7241ba0bcdbc1cb6f2a2c3de9d4"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/always-state/model/tlc.log",
+      "sha256": "17b4749c077e0b378e16dcbbe004be158935027b2959db2cfc9cc1c71fb52d84"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/always-state/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/always-state/witness/Differential.tla",
+      "sha256": "cdd94e934d16fd24e9d272e4b4fcceba47ae40fb259933b899c4d8316b109615"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/always-state/witness/tlc.log",
+      "sha256": "ee5d969bd36ce01a33384ef43843045e62b265d1cf8b22f40bfca06362a1afe1"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/deadlock-before-temporal/model/Differential.cfg",
+      "sha256": "bf486156e7cd6e95323825dfe8ad00996106a33d562c8e595bbef3b569589c53"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/deadlock-before-temporal/model/Differential.tla",
+      "sha256": "4e704067001a1992383d7079ce660c929c5481820aac2648308982deb389c0e3"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/deadlock-before-temporal/model/tlc.log",
+      "sha256": "4b550ae290c4b289d7b38b03de2e12dc62ed109e9daebada039f0dd226bf8e9c"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/deadlock-before-temporal/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/deadlock-before-temporal/witness/Differential.tla",
+      "sha256": "b3d5a5ac37afdfdf939ca9290fb88b843c5da4742bca0662013eb3355bd4bfe1"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/deadlock-before-temporal/witness/tlc.log",
+      "sha256": "e31c890d7918252bb8f7627b1259cd2c5870689b4f46da28abab646eceb43d8d"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-WF/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-WF/model/Differential.tla",
+      "sha256": "6bf84ba21c2d1a595db640f16580751944b2b9882c46c0719e5789fa9d6bb5db"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-WF/model/tlc.log",
+      "sha256": "f1205c9e6d2c64be3f147afe7ea69b62a2b574048517be114ad85c1bd95978de"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/Differential.tla",
+      "sha256": "c23432c20f5402e82c7efc489205154dda3e59d3d6953d7a4350fc9ee7b8ee1e"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/states/26-11-15-19-28-57/Differential-0.st",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/states/26-11-15-19-28-57/Differential.st",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/states/26-11-15-19-28-57/Differential_0.fp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/states/26-11-15-19-28-57/Differential_1.fp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/states/26-11-15-19-28-57/nodes_0",
+      "sha256": "b1353e18eca4c5dd95a1752dc48a4cce27499ad255ebd05da7d352c85c8df113"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/states/26-11-15-19-28-57/ptrs_0",
+      "sha256": "5e94c86097213e8ca463cf229813338c00054f66a600a9f8673d67df4f57a101"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/model/tlc.log",
+      "sha256": "056c4c4931b1112a78f9795d5ff6f86c32dd4749ec0694f4c6f704dfce3e7484"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/witness/Differential.tla",
+      "sha256": "6a3704a522fc26e18b3a79e4ad6b68e598f84877f6e1d22cc5d8abbac95a7769"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/eventually-stuttering/witness/tlc.log",
+      "sha256": "4629737fb354e731a07bca1d8fda11d72a5165fbe46b32512b2f653804be6146"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/except-sequential-at/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/except-sequential-at/model/Differential.tla",
+      "sha256": "1efb31ccc5b46a54c62a3b08c37751e47208c79023a8f30f3c35f110638b79a9"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/except-sequential-at/model/tlc.log",
+      "sha256": "6b8081bcfc6463fd5d6dc334b20ef6c6df1e5e2c6b33c780e5139f5997802186"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/except-sequential-at/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/except-sequential-at/witness/Differential.tla",
+      "sha256": "057088739e41d534b9abf554ce750e348c8809acc250584410ef2393b8d9375a"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/except-sequential-at/witness/tlc.log",
+      "sha256": "76b973fc04009d22c8881c664267346b2fe9cb279271c9717685ea173e370765"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/filter-map-powerset/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/filter-map-powerset/model/Differential.tla",
+      "sha256": "4789cc8b9d81b61d692381fe0ab5f160acc028c487f336a1aa88022e8c9f3176"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/filter-map-powerset/model/tlc.log",
+      "sha256": "34aee7b5070c5000683a98a6c56a454c51953113f78f2cd2e275ba129b88a1c5"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/function-updates/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/function-updates/model/Differential.tla",
+      "sha256": "9482650b5a938ed685b668c306ef15964b9cb159cd03e0a7640a1e98f2e54fec"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/function-updates/model/tlc.log",
+      "sha256": "81cfd93b650870fc637ac807396c3640e204a257f7f3836b8591d6dd03b8deed"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/independent-existentials/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/independent-existentials/model/Differential.tla",
+      "sha256": "193cbb650fef165f972b6c8cf16b806590f8368130c0916e978c2048faa35444"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/independent-existentials/model/tlc.log",
+      "sha256": "7ae8a4f5bace084c92e1b8e7750090e2e4d18d2bac70d3afdf362f673e135fe3"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/Differential.tla",
+      "sha256": "fba46e870c319aebadb48c1583405ee1065f4c4d3e4c384dfafb3765b15053a0"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/states/26-11-15-19-28-53/Differential-0.st",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/states/26-11-15-19-28-53/Differential.st",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/states/26-11-15-19-28-53/Differential_0.fp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/states/26-11-15-19-28-53/Differential_1.fp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/model/tlc.log",
+      "sha256": "3b7f62e919ff8a0865fa4f2752f70f5f718d93de5297d772ba1ceae09c8a1262"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/witness/Differential.tla",
+      "sha256": "c2aa3fa6ec22021a0ddec78e59ce23f3e286364180cb40f8db349223419e757a"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-failure/witness/tlc.log",
+      "sha256": "4ffb0d7a04ee43a524c281f3a467a326181561b7602dd896fa2a29a7771a6e63"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-only/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-only/model/Differential.tla",
+      "sha256": "c38caa63edfbbeec0f0a8cecebc3a060ef71320c105eb8691e0f07aab8cd6587"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/initial-property-only/model/tlc.log",
+      "sha256": "cdece1c762b5b0f49a9c251070da2453a2b190fd020142990b4d4fdb748755c6"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/leads-to-WF/model/Differential.cfg",
+      "sha256": "b8752046e3c8cb9e3bb719789f033b9cf6886321a6c0bf561434ac4a38cd109b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/leads-to-WF/model/Differential.tla",
+      "sha256": "99097445fe0a64cb6ceabc52437687e6195ebaf14ac750bb90671dc96c7d0e40"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/leads-to-WF/model/tlc.log",
+      "sha256": "a23012ef6949dc563153b8520235f60b4045e0d8600d16d7e12573c129b8d9d5"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/let-lexical-scope/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/let-lexical-scope/model/Differential.tla",
+      "sha256": "2adbc3c0e7780184861c8addeee462e457805e92a629a39eb0798ba5954ab19f"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/let-lexical-scope/model/tlc.log",
+      "sha256": "967da4392d6375fcd512b11e761d0491cd4e3fd9ef028da9e3a6d3df795ab08d"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/manifest.json",
+      "sha256": "950a265c78b93fd1d6bd3b006b4a6305216507d45c9b10a4f0cfa241d6574e45"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/record-updates/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/record-updates/model/Differential.tla",
+      "sha256": "e6fd300e8c4d3c65cc233bd305ca06e00fbd99f486ec5264e050d42542591c9a"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/record-updates/model/tlc.log",
+      "sha256": "77a8e1b1398a4343326bdb5b0c46fc55ba383ed90b705a31555ef9fa56f2bbe9"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/reports.json",
+      "sha256": "7aded7f819f0fa4bbbee51792ba83aadf1a3d49bf6a8b1abd9a7599a160eab0b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/result.json",
+      "sha256": "d0c9b926c4ecf77cb598beeb6a6636eeb8695bf469b5f3d3f2520cb0a8182f15"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/sequence-queue/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/sequence-queue/model/Differential.tla",
+      "sha256": "908f2825a386263cb10499e4d943655b2d577664de668142f8f8e67af25eb20d"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/sequence-queue/model/tlc.log",
+      "sha256": "dca4e1ce60e19eb99aaf76d4026b93ce51e5f07e5222d3d93c1a5eef28dc5b16"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-delivery/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-delivery/model/Differential.tla",
+      "sha256": "cad89a9fda1c6062f8e21ea170affd7acf5d54b16664933e1cdcc6540615c18e"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-delivery/model/tlc.log",
+      "sha256": "f87db48795a3f06dcb99a0ba19388bb8dd68581fef6887a4601b2f689efe4e9b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-fault/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-fault/model/Differential.tla",
+      "sha256": "7c7e88b05c07ef9f4bef7e1192683fe4f2af9cbe5d777fbdb00946b84cde0d13"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-fault/model/tlc.log",
+      "sha256": "f4aea82b4905cf1c5db99b37a3bfe5808d0903e11556566f76916e4f79a5258b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-fault/witness/Differential.cfg",
+      "sha256": "11d8f06cec165264fb709b77cc70e72cb4f6d3037c971211bcd50ffb18247570"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-fault/witness/Differential.tla",
+      "sha256": "8cd3d36abfd02e1d2964d9643ed50ca5a584b05c8b66f54807efc6afb2f6d513"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/set-fault/witness/tlc.log",
+      "sha256": "0348b7203c31210fef40e3144bef94024b3dbe663e57a865e4ef93424bd8658b"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/tuple-pattern/model/Differential.cfg",
+      "sha256": "6858ae31c010d755d7e5ab0aee762a23be1479115bd84d5a6787ae0ace9d9e71"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/tuple-pattern/model/Differential.tla",
+      "sha256": "8ac5aa4adcf0e687a156a4899b454dfbc7a6f53c4a6aed1c9d57e36f97b295dc"
+    },
+    {
+      "path": "evals/runs/0029-compiler-tlc-final/tuple-pattern/model/tlc.log",
+      "sha256": "bde162cc4f666383c42f01115a05239b3ff14e87dda658417729646d77a7ada0"
+    }
+  ]
+}

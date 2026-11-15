@@ -23,6 +23,7 @@ export const usableFingerprint = async () => {
         "crates/modelt-core",
         "crates/rtlc",
         "crates/rtla",
+        "crates/rtla-compiler",
         "fixtures",
         "tests",
         "cli",

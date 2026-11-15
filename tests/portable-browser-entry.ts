@@ -23,11 +23,29 @@ import {
   toPortableValue,
   verifyHostTape,
 } from "../src/portable.js";
+import { checkTlaSource, compileTlaSource } from "../src/tla-source.js";
 
 export const run = async (): Promise<Record<string, unknown>> => {
   const core = await createPortableWasm(
     new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
   );
+  const source = {
+    source:
+      "---- MODULE BrowserSource ----\nEXTENDS Naturals\nVARIABLE x\nInit == x = 0\nNext == x' = x + 1\nSafe == x < 2\n====",
+    config: "INIT Init\nNEXT Next\nINVARIANT Safe",
+  };
+  const sourceProgram = compileTlaSource(core, source);
+  const sourceResult = checkTlaSource(core, source, {
+    maxDepth: 10,
+    maxStates: 100,
+    maxWork: 10000,
+  });
+  if (
+    sourceProgram.name !== "BrowserSource" ||
+    sourceResult.status !== "invariant-violation" ||
+    sourceResult.violation?.trace.length !== 3
+  )
+    throw new Error("Rust source frontend differs in browser");
   const actions = [
     { type: "add", id: "a", amount: 1 },
     { type: "crash" },
@@ -177,6 +195,7 @@ export const run = async (): Promise<Record<string, unknown>> => {
   )
     throw new Error("Rust browser host replay differs");
   return {
+    source: sourceResult.status,
     backend: backendResult.outcome.kind,
     normal: normal.status,
     broken: broken.status,

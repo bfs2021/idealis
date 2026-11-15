@@ -29,6 +29,7 @@ Cargo の初回公開はアカウントと crate 名の確認後に行う。
 cargo login
 cargo publish --locked --manifest-path crates/rtla/Cargo.toml
 cargo publish --locked --manifest-path crates/rtlc/Cargo.toml
+cargo publish --locked --manifest-path crates/rtla-compiler/Cargo.toml
 cargo publish --locked --manifest-path crates/modelt-core/Cargo.toml
 ```
 
@@ -50,4 +51,6 @@ PR は1ジョブで TS / Rust / ブラウザ / mutation / 実バグ評価 / cons
 
 `rtlc`の分離後は`rtlc-<version>.crate`と`modelt-core-<version>.crate`を同梱する。packageは一時workspaceで両者を同時検証し、Cargoの一時registryで依存を解決する。展開したarchiveのconsumerは未公開のrtlcを`[patch.crates-io]`でローカルへ結び、rtlc単独の依存graphにmodelt-coreが入らないことも確認する。通常のrepoは独立manifestのままとし、native/Wasm targetの位置を変更しない。この処理はCargo registryへのpublishではない。
 
-`rtla`は独立した`rtla-<version>.crate`、`rtla.wasm`、SHA256/ABI manifestを追加する。同じ一時workspaceで3つのcrateを検証し、parser単独consumerの依存graphにrtlc/modelt-coreが入らないことを確認する。npmでは`@mizchi/modelt/rtla.wasm`を解決し、solverがない別consumerで解析する。registry初回登録は上の手動手順を使い、package検証からpublishは実行しない。
+`rtla`は独立した`rtla-<version>.crate`、`rtla.wasm`、SHA256/ABI manifestを追加する。同じ一時workspaceで4つのcrateを検証し、parser単独consumerの依存graphにrtlc/modelt-coreが入らないことを確認する。npmでは`@mizchi/modelt/rtla.wasm`を解決し、solverがない別consumerで解析する。registry初回登録は上の手動手順を使い、package検証からpublishは実行しない。
+
+`rtla-compiler`のarchiveはrtlaのASTをrtlcのIRへ変換する。modelt-core consumerは未公開のrtla・rtla-compiler・rtlcを`[patch.crates-io]`で解決し、ソースからのコンパイルと検査も実行する。parserとcheckerの単独consumerは従来の独立性を検査する。

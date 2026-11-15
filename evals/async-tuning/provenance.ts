@@ -18,6 +18,7 @@ export const fingerprint = async () => {
     "crates/modelt-core",
     "crates/rtlc",
     "crates/rtla",
+    "crates/rtla-compiler",
     "evals/async-tuning",
     "evals/harness",
     "evals/cross-language",

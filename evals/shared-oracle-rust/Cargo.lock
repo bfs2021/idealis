@@ -49,6 +49,8 @@ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 name = "modelt-core"
 version = "0.1.0-alpha.0"
 dependencies = [
+ "rtla",
+ "rtla-compiler",
  "rtlc",
  "serde",
  "serde_json",
@@ -99,6 +101,23 @@ checksum = "22e18b0f0062d30d4230b2e85ff77fdfe4326feb054b9783a3460d8435c8ab91"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
+]
+
+[[package]]
+name = "rtla"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "rtla-compiler"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "rtla",
+ "rtlc",
+ "serde_json",
 ]
 
 [[package]]

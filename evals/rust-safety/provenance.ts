@@ -16,6 +16,7 @@ export const fingerprint = async () => {
     "crates/modelt-core",
     "crates/rtlc",
     "crates/rtla",
+    "crates/rtla-compiler",
     "evals/rust-safety",
     "evals/tlc-differential",
     "evals/plans/0015-tlc-differential.md",

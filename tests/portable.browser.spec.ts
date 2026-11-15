@@ -97,6 +97,7 @@ test("runs the shared Rust core in Chromium without host imports or cross-origin
     return api.run();
   });
   expect(result).toEqual({
+    source: "invariant-violation",
     backend: "counterexample",
     normal: "matched",
     broken: "mismatch",

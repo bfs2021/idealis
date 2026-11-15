@@ -12,9 +12,13 @@ import { registerPropertyContract } from "./property-contract.js";
 import { registerSafetyContract } from "./safety-contract.js";
 import { registerSchedulingContract } from "./scheduling-contract.js";
 import { registerShardingContract } from "./sharding-contract.js";
+import { registerSourceContract } from "./source-contract.js";
 import { registerUsableContract } from "./usable-contract.js";
 
 registerContract((name, run) => {
+  test(name, run);
+});
+registerSourceContract((name, run) => {
   test(name, run);
 });
 registerBackendContract((name, run) => {

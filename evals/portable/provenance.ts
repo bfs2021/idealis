@@ -20,6 +20,7 @@ export const portableFingerprint = async () => {
         "crates/modelt-core",
         "crates/rtlc",
         "crates/rtla",
+        "crates/rtla-compiler",
         "fixtures",
         "tests",
         "package.json",

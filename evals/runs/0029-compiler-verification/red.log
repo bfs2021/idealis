@@ -1,0 +1,32 @@
+    Updating crates.io index
+     Locking 19 packages to latest Rust 1.98.0 compatible versions
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling crossbeam-utils v0.8.23
+   Compiling unicode-ident v1.0.27
+   Compiling serde_core v1.0.229
+   Compiling crossbeam-epoch v0.9.21
+   Compiling crossbeam-deque v0.8.8
+   Compiling zmij v1.0.23
+   Compiling rayon-core v1.13.0
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.19
+   Compiling either v1.19.0
+   Compiling syn v3.0.10
+   Compiling rayon v1.12.0
+   Compiling serde_derive v1.0.229
+   Compiling rtlc v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtlc)
+   Compiling rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla)
+   Compiling rtla-compiler v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla-compiler)
+error[E0432]: unresolved import `rtla_compiler`
+ --> tests/compiler.rs:1:5
+  |
+1 | use rtla_compiler::compile;
+  |     ^^^^^^^^^^^^^ use of unresolved module or unlinked crate `rtla_compiler`
+  |
+  = help: if you wanted to use a crate named `rtla_compiler`, use `cargo add rtla_compiler` to add it to your `Cargo.toml`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `rtla-compiler` (test "compiler") due to 1 previous error

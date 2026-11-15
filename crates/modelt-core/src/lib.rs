@@ -15,6 +15,15 @@ use std::{collections::BTreeMap, sync::Arc};
 mod wasm;
 use serde::{Deserialize, Serialize};
 
+pub fn compile_tla(source: &str, config: &str) -> Result<SafetyProgram, CoreError> {
+    let module = rtla::parse_module(source)
+        .map_err(|error| CoreError::protocol(&format!("TLA parsing: {error}")))?;
+    let config = rtla::parse_config(config)
+        .map_err(|error| CoreError::protocol(&format!("TLC configuration: {error}")))?;
+    rtla_compiler::compile(&module, &config)
+        .map_err(|error| CoreError::protocol(&error.to_string()))
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Transition {
@@ -111,6 +120,15 @@ pub enum Response {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Request {
+    CompileTla {
+        source: String,
+        config: String,
+    },
+    CheckTla {
+        source: String,
+        config: String,
+        bounds: SafetyBounds,
+    },
     #[cfg(not(target_arch = "wasm32"))]
     CheckSafetyParallel {
         program: SafetyProgram,
@@ -182,6 +200,7 @@ pub struct Command {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Message {
+    Compiled { program: SafetyProgram },
     Safety { result: SafetyResult },
     Loaded { handle: u32 },
     Released,
@@ -431,6 +450,16 @@ impl Engine {
             return Err(CoreError::protocol("Unsupported protocol version"));
         }
         match command.request {
+            Request::CompileTla { source, config } => Ok(Message::Compiled {
+                program: compile_tla(&source, &config)?,
+            }),
+            Request::CheckTla {
+                source,
+                config,
+                bounds,
+            } => Ok(Message::Safety {
+                result: compile_tla(&source, &config)?.check(bounds)?,
+            }),
             #[cfg(not(target_arch = "wasm32"))]
             Request::CheckSafetyParallel {
                 program,

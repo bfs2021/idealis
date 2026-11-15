@@ -265,6 +265,19 @@ rtlc-compare run:
 rtla-build:
   pnpm rtla:build
 
+compiler-test:
+  cargo fmt --manifest-path crates/rtla-compiler/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
+
+compiler-eval run: portable-build
+  pnpm build
+  node dist/evals/rtla-compiler/evaluate.js {{quote(run)}}
+
+compiler-tlc run java jar: portable-build
+  pnpm build
+  node dist/evals/rtla-compiler/tlc.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
 rtla-test:
   pnpm rtla:test
 

@@ -26,6 +26,7 @@ import {
   toPortableValue,
 } from "./portable-value.js";
 import { decodeSafetyResult } from "./safety.js";
+import { decodeSafetyProgram } from "./safety-program.js";
 import { isRecord } from "./trace.js";
 
 const fields = (
@@ -189,6 +190,13 @@ export const createPortableWasm = async (
       if (output.kind === "safety") {
         fields(output, ["kind", "result"]);
         return { kind: "safety", result: decodeSafetyResult(output.result) };
+      }
+      if (output.kind === "compiled") {
+        fields(output, ["kind", "program"]);
+        return {
+          kind: "compiled",
+          program: decodeSafetyProgram(output.program),
+        };
       }
       if (output.kind === "loaded") {
         fields(output, ["kind", "handle"]);
