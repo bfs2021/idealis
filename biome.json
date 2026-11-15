@@ -4,13 +4,18 @@
     "includes": [
       "**",
       "!dist",
+      "!assets",
       "!.mutator",
       "!.artifacts",
       "!test-results",
       "!playwright-report",
       "!evals/runs",
+      "!evals/fixtures",
       "!evals/rust-probe/target",
+      "!evals/shared-oracle-rust/target",
       "!crates/modelt-core/target",
+      "!crates/rtlc/target",
+      "!crates/rtla/target",
       "!pnpm-lock.yaml"
     ]
   },

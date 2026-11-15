@@ -1,0 +1,86 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0020-frontier-safety/counter-product/native-2/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 2810.4163750000007,
+  "stdout": "{\"frontendMs\":4.264499999999998,\"engineStartupMs\":3.727209000000002,\"apiMs\":2717.655583,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":5308416,\"generated\":21233665,\"depth\":188,\"work\":106168325,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 4.264499999999998,
+    "engineStartupMs": 3.727209000000002,
+    "apiMs": 2717.655583,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 5308416,
+      "generated": 21233665,
+      "depth": 188,
+      "work": 106168325,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 233.25266700000793,
+      "bytes": 107331584
+    },
+    {
+      "milliseconds": 428.63237500000105,
+      "bytes": 129908736
+    },
+    {
+      "milliseconds": 630.007375000001,
+      "bytes": 184500224
+    },
+    {
+      "milliseconds": 832.3812089999992,
+      "bytes": 194035712
+    },
+    {
+      "milliseconds": 1033.1389170000039,
+      "bytes": 296091648
+    },
+    {
+      "milliseconds": 1232.624542000005,
+      "bytes": 182960128
+    },
+    {
+      "milliseconds": 1433.6620840000105,
+      "bytes": 223035392
+    },
+    {
+      "milliseconds": 1635.0427090000012,
+      "bytes": 263487488
+    },
+    {
+      "milliseconds": 1836.8864590000012,
+      "bytes": 304447488
+    },
+    {
+      "milliseconds": 2037.3617090000043,
+      "bytes": 405733376
+    },
+    {
+      "milliseconds": 2239.5252089999994,
+      "bytes": 451166208
+    },
+    {
+      "milliseconds": 2439.390625,
+      "bytes": 319537152
+    },
+    {
+      "milliseconds": 2639.613375000001,
+      "bytes": 376094720
+    }
+  ],
+  "sampledMaxRssBytes": 451166208,
+  "phases": null,
+  "phaseError": null
+}

@@ -1,0 +1,79 @@
+import assert from "node:assert/strict";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { compileTlaSafety } from "../../dist/src/tla-safety.js";
+import { isRecord } from "../../dist/src/trace.js";
+import { startNative } from "../../dist/evals/usable/native.js";
+import { digest } from "../../dist/evals/usable/provenance.js";
+import { cases } from "../../dist/evals/single-model/cases.js";
+
+const directory = "evals/runs/0024-wide-controls";
+await mkdir(directory);
+const harness = await readFile(".artifacts/profile-tuning/wide-controls.ts");
+await writeFile(`${directory}/harness.txt`, harness, { flag: "wx" });
+const ordered = (name: string, expression: string) => ({ name, source: String.raw`---- MODULE WideOrdered ----
+EXTENDS Naturals, Sequences
+VARIABLE x
+Init == x=0
+Next == IF x=0 THEN x' \in 1..64 ELSE ${expression}
+Safe == x<=64
+====`, config: "INIT Init\nNEXT Next\nINVARIANT Safe" });
+const input = cases("large")[1];
+assert.ok(input);
+const cube = { ...input, name: "wide-function-fault", config: input.config.replace("N=20", "N=12"), source: input.source.replace("Safe == nodes \\in [1..N -> 0..1]", "Safe == nodes \\in [1..N -> 0..1] /\\ Cardinality({node \\in 1..N: nodes[node]=1})<6").replace("EXTENDS Naturals", "EXTENDS Naturals, FiniteSets") };
+const inputs = [
+  ordered("violation-before-other-parent-error", "IF x=1 THEN x'=65 ELSE IF x=2 THEN x'=Head(<<>>) ELSE x'=x"),
+  ordered("error-before-other-parent-violation", "IF x=1 THEN x'=Head(<<>>) ELSE IF x=2 THEN x'=65 ELSE x'=x"),
+  ordered("same-parent-violation-before-later-error", "IF x=1 THEN (x'=65 \\/ x'=Head(<<>>)) ELSE x'=x"),
+  ordered("wide-deadlock", "IF x=1 THEN FALSE ELSE x'=x"),
+  cube,
+];
+const bounds = { maxDepth: 100, maxStates: 10_000, maxWork: 100_000_000 };
+const native = startNative();
+const records: unknown[] = [];
+try {
+  for (const input of inputs) {
+    const program = compileTlaSafety(input);
+    const expected = await native.request({ version: 1, request: { kind: "check-safety", program, bounds } });
+    assert.ok(isRecord(expected));
+    if (input.name.startsWith("error-")) assert.equal(expected.kind, "error");
+    else {
+      assert.equal(expected.kind, "safety");
+      assert.ok(isRecord(expected.result));
+      assert.equal(expected.result.status, input.name === "wide-deadlock" ? "deadlock" : "invariant-violation");
+    }
+    for (const workers of [2, 4, 8]) {
+      const command = { version: 1, request: { kind: "check-safety-parallel", program, bounds, workers } } as const;
+      const actual = await native.request(command);
+      assert.ok(isRecord(actual));
+      if (expected.kind === "error") assert.deepEqual(actual, expected);
+      else {
+        assert.ok(isRecord(expected.result) && isRecord(actual.result));
+        assert.deepEqual({ ...actual.result, work: 0 }, { ...expected.result, work: 0 });
+        assert.ok(typeof actual.result.work === "number" && actual.result.work <= bounds.maxWork);
+      }
+      records.push({ input, command, expected, actual });
+    }
+  }
+  const program = compileTlaSafety({ ...input, config: input.config.replace("N=20", "N=12") });
+  for (const limits of [
+    { ...bounds, maxDepth: 5 },
+    { ...bounds, maxStates: 500 },
+    { ...bounds, maxWork: 10_000 },
+  ]) {
+    const expected = await native.request({ version: 1, request: { kind: "check-safety", program, bounds: limits } });
+    assert.ok(isRecord(expected) && isRecord(expected.result));
+    assert.equal(expected.result.status, "bounded", "control must exercise a real bound");
+    for (const workers of [2, 4, 8]) {
+      const command = { version: 1, request: { kind: "check-safety-parallel", program, bounds: limits, workers } } as const;
+      const actual = await native.request(command);
+      assert.ok(isRecord(actual) && isRecord(actual.result));
+      assert.equal(actual.result.status, "bounded");
+      assert.equal(actual.result.reason, expected.result.reason);
+      assert.ok(typeof actual.result.work === "number" && actual.result.work <= limits.maxWork);
+      if (limits.maxWork === bounds.maxWork) assert.deepEqual({ ...actual.result, work: 0 }, { ...expected.result, work: 0 });
+      records.push({ command, expected, actual });
+    }
+  }
+  await writeFile(`${directory}/result.json`, JSON.stringify({ status: "complete", harnessSha256: digest(harness), nativeSha256: digest(await readFile("crates/modelt-core/target/release/modelt-core")), records }, null, 2), { flag: "wx" });
+  console.log(`${records.length} wide controls passed`);
+} finally { await native.close(); }

@@ -1,0 +1,35 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0024-scalar-replay/counter-product/after-0-normal/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 74.85374999999999,
+  "stdout": "{\"frontendMs\":3.3185420000000008,\"engineStartupMs\":1.4726670000000013,\"apiMs\":4.673749999999998,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":81,\"generated\":325,\"depth\":8,\"work\":1625,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.3185420000000008,
+    "engineStartupMs": 1.4726670000000013,
+    "apiMs": 4.673749999999998,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 81,
+      "generated": 325,
+      "depth": 8,
+      "work": 1625,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

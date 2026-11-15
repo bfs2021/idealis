@@ -1,13 +1,27 @@
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
+import { createRtlcBackend, runBackend } from "../src/backend.js";
 import { checkConformance } from "../src/conformance.js";
+import type {
+  SafetyBounds,
+  SafetyProgram,
+  SafetyResult,
+} from "../src/contracts.js";
+import { compileFiniteModel } from "../src/finite.js";
+import { createSimulationHost } from "../src/host.js";
 import {
+  checkFiniteHistories,
   checkPortableConformance,
   checkPortableTrace,
+  checkSafety,
+  coreDeletionCandidates,
+  createHistoryRecorder,
   createPortableWasm,
   fromPortableValue,
+  loadFiniteModel,
   toPortableTrace,
   toPortableValue,
+  verifyHostTape,
 } from "../src/portable.js";
 
 export const run = async (): Promise<Record<string, unknown>> => {
@@ -19,6 +33,59 @@ export const run = async (): Promise<Record<string, unknown>> => {
     { type: "crash" },
     { type: "restart" },
   ] as const;
+  const program: SafetyProgram = await (await fetch("/safety.json")).json();
+  const safety = checkSafety(core, program, {
+    maxDepth: 4,
+    maxStates: 5,
+    maxWork: 100,
+  });
+  const backendResult = await runBackend(
+    createRtlcBackend(core, { version: "0.1.0-alpha.0" }),
+    {
+      format: "modelt.backend-request",
+      version: 1,
+      scope: {
+        modelId: "browser-safety-v1",
+        propertyId: "Safe-v1",
+        semantics: "tlc-1.7.4-int32",
+        assumptions: [],
+      },
+      query: {
+        kind: "explicit",
+        bounds: { maxDepth: 4, maxStates: 5, maxWork: 100 },
+      },
+      input: program,
+    },
+  );
+  if (
+    backendResult.outcome.kind !== "counterexample" ||
+    backendResult.outcome.witness.kind !== "behavior"
+  )
+    throw new Error("Browser backend contract differs");
+  if (
+    safety.status !== "invariant-violation" ||
+    safety.violation?.trace.length !== 4
+  )
+    throw new Error("Browser safety backend differs");
+  const complex: {
+    program: SafetyProgram;
+    bounds?: SafetyBounds;
+    expected: SafetyResult["status"];
+  }[] = await (await fetch("/complex.json")).json();
+  for (const input of complex) {
+    const result = checkSafety(
+      core,
+      input.program,
+      input.bounds ?? {
+        maxDepth: 100,
+        maxStates: 10000,
+        maxWork: 2000000,
+        maxTemporalNodes: 50000,
+      },
+    );
+    if (result.status !== input.expected)
+      throw new Error(`Browser complex backend: ${JSON.stringify(result)}`);
+  }
   const reference = await checkConformance(
     counterModel,
     createCounter(),
@@ -60,7 +127,57 @@ export const run = async (): Promise<Record<string, unknown>> => {
     JSON.stringify(result.value) !== JSON.stringify(value)
   )
     throw new Error("Browser value semantics differ");
+  const finite = compileFiniteModel(counterModel, {
+    maxDepth: 20,
+    maxStates: 1000,
+  });
+  if (
+    !finite.model ||
+    checkFiniteHistories(core, finite.model, [
+      toPortableTrace(reference.trace),
+    ])[0]?.status !== "matched"
+  )
+    throw new Error("Browser finite artifact differs");
+  if (!coreDeletionCandidates(core, 3).some((range) => range.count === 1))
+    throw new Error("Missing browser shrink candidates");
+  const loaded = loadFiniteModel(core, finite.model);
+  const history = createHistoryRecorder(
+    counterModel.name,
+    toPortableValue(reference.trace.initial),
+  );
+  for (const [index, step] of reference.trace.steps.entries()) {
+    history.invoke(String(index), toPortableValue(step.action));
+    history.returned(String(index), toPortableValue(step.observation));
+  }
+  if (
+    loaded.checkHistory(history.snapshot(), 100).status !== "linearizable" ||
+    loaded.checkHistories([toPortableTrace(reference.trace)])[0]?.status !==
+      "matched"
+  )
+    throw new Error("Browser loaded history differs");
+  loaded.release();
+  const host = createSimulationHost({ seed: 3 });
+  host.write("value", 1);
+  host.persist();
+  host.write("value", 2);
+  host.crash();
+  host.restart();
+  if (host.read("value") !== 1)
+    throw new Error("Browser storage recovery differs");
+  if (
+    JSON.stringify(verifyHostTape(core, host.trace())) !==
+    JSON.stringify(
+      toPortableValue({
+        clock: 0,
+        running: true,
+        storage: { value: 1 },
+        pending: [],
+      }),
+    )
+  )
+    throw new Error("Rust browser host replay differs");
   return {
+    backend: backendResult.outcome.kind,
     normal: normal.status,
     broken: broken.status,
     replay: replay.status,

@@ -1,0 +1,28 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+MODELT_TLC_JAVA='.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' MODELT_TLC_JAR='.artifacts/tlc/tla2tools.jar' node --test dist/evals/single-model/contract-test.js dist/evals/single-model/integration-test.js
+✔ wide benchmark sizes have independently known closed-graph counts (4.514375ms)
+✔ small models and fault controls retain the same initial and next definitions (0.231542ms)
+✔ phase markers handle split stream chunks and reject missing or repeated boundaries (0.601708ms)
+✔ counter-product: closed graph and delayed invariant faults agree (3153.279417ms)
+✔ function-cube: closed graph and delayed invariant faults agree (2878.311167ms)
+✔ parallel-channels: closed graph and delayed invariant faults agree (2900.250084ms)
+✔ linear-ring: closed graph and delayed invariant faults agree (2922.535875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11921.707584

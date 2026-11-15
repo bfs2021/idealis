@@ -1,50 +1,96 @@
 name: CI
-
 on:
   push:
+    branches: [main]
   pull_request:
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+env:
+  CI: true
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: pnpm/action-setup@v6.1.1
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: rustup target add wasm32-unknown-unknown
       - run: pnpm check
       - run: pnpm typecheck
       - run: pnpm test
+      - run: cargo fmt --manifest-path crates/modelt-core/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml -- -D warnings
+      - run: pnpm portable:build
+      - run: node --test dist/evals/frontier-safety/contract-test.js
+      - run: node --test dist/evals/readme-comparison/contract-test.js
+      - run: node --test dist/evals/rust-safety/contract-test.js dist/evals/collections-temporal/contract-test.js dist/evals/tlc-differential/compare-test.js dist/evals/tlc-differential/regression-test.js dist/evals/parallel-safety/contract-test.js
+      - run: node dist/evals/collections-temporal/evaluate.js .artifacts/collections-temporal
+      - run: node dist/evals/collections-temporal/replay.js .artifacts/collections-temporal
+      - run: node dist/evals/rust-safety/evaluate.js .artifacts/rust-safety
+      - run: node dist/evals/rust-safety/replay.js .artifacts/rust-safety
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: 1.25.x
+          cache-dependency-path: adapters/go/go.sum
+      - run: node dist/evals/go/prepare.js
+      - run: test -z "$(gofmt -l adapters/go)"
+      - run: go mod verify && go vet ./...
+        working-directory: adapters/go
+      - run: CGO_ENABLED=0 go test -count=1 ./...
+        working-directory: adapters/go
+      - run: go test -race -count=1 ./...
+        working-directory: adapters/go
+      - run: node dist/scripts/go-consumer.js
+      - run: cargo fmt --manifest-path evals/shared-oracle-rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/shared-oracle-rust/Cargo.toml -- -D warnings
+      - run: cargo build --release --locked --manifest-path evals/shared-oracle-rust/Cargo.toml
+      - run: CGO_ENABLED=0 go build -o ../../.artifacts/go/counter-replay ./cmd/counter-replay
+        working-directory: adapters/go
+      - run: node --test dist/evals/cross-language/contract-test.js
+      - run: node dist/evals/cross-language/evaluate.js regression .artifacts/shared-oracle
+      - run: node dist/evals/cross-language/replay.js .artifacts/shared-oracle
+      - run: CGO_ENABLED=0 go build -o ../../.artifacts/go/history-check ./cmd/history-check
+        working-directory: adapters/go
+      - run: CGO_ENABLED=0 go build -o ../../.artifacts/go/finite-bench ./cmd/finite-bench
+        working-directory: adapters/go
+      - run: node --test dist/evals/async-tuning/contract-test.js
+      - run: node dist/evals/async-tuning/evaluate.js regression .artifacts/async-tuning
+      - run: node dist/evals/async-tuning/replay.js .artifacts/async-tuning
+      - run: pnpm portable:test
+      - run: pnpm usable:test
+      - run: pnpm runtime:build
+      - run: pnpm runtime:test
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:browser
+      - run: pnpm portable:browser
+      - run: pnpm runtime:browser
       - run: pnpm test:mutation
       - run: pnpm evaluate
       - run: pnpm evaluate:replay
-      - run: pnpm eval:loop evals/plans/0001-longer-walk.json ci .artifacts/evals
-      - run: pnpm eval:replay .artifacts/evals/ci-confirmation
       - run: pnpm eval:loop evals/plans/0002-mixed-depth.json ci-mixed .artifacts/evals
       - run: pnpm eval:replay .artifacts/evals/ci-mixed-confirmation
-      - uses: actions/upload-artifact@v7.0.2
-        if: always()
+      - run: node dist/scripts/package.js
+      - run: pnpm package:test
+      - run: pnpm usable:eval .artifacts/usable-evaluation
+      - run: pnpm usable:replay .artifacts/usable-evaluation
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
         with:
-          name: mutation-report
-          path: .mutator/report
-          if-no-files-found: ignore
-      - uses: actions/upload-artifact@v7.0.2
-        if: always()
-        with:
-          name: method-evaluation
+          name: verification-evidence
           path: |
+            .mutator/report
             .artifacts/evaluation
             .artifacts/evals
-          if-no-files-found: ignore
+            .artifacts/usable-evaluation
+            .artifacts/packages
+            .artifacts/go
+            .artifacts/shared-oracle
+            .artifacts/async-tuning
+            .artifacts/rust-safety
+            .artifacts/collections-temporal
+            .artifacts/frontier-safety
+            .artifacts/readme-comparison
+          if-no-files-found: warn

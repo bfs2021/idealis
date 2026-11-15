@@ -1,0 +1,42 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0021-worker-budget-replay/counter-product/native-0/input.json"
+  ],
+  "exit": 0,
+  "wallMs": 579.479167,
+  "stdout": "{\"frontendMs\":3.1417080000000013,\"engineStartupMs\":512.196417,\"apiMs\":1.0879999999999654,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":81,\"generated\":325,\"depth\":8,\"work\":1625,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.1417080000000013,
+    "engineStartupMs": 512.196417,
+    "apiMs": 1.0879999999999654,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 81,
+      "generated": 325,
+      "depth": 8,
+      "work": 1625,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 240.25587499999995,
+      "bytes": 81461248
+    },
+    {
+      "milliseconds": 450.557459,
+      "bytes": 81461248
+    }
+  ],
+  "sampledMaxRssBytes": 81461248,
+  "phases": null,
+  "phaseError": null
+}

@@ -1,0 +1,228 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0024-scalar-replay/counter-product/after-0-fault/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 78.90091699999999,
+  "stdout": "{\"frontendMs\":3.2863340000000036,\"engineStartupMs\":1.366624999999999,\"apiMs\":5.947250000000004,\"result\":{\"status\":\"invariant-violation\",\"reason\":null,\"states\":81,\"generated\":309,\"depth\":8,\"work\":1545,\"violation\":{\"name\":\"Safe\",\"trace\":[{\"action\":null,\"values\":[{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepa\",\"values\":[{\"type\":\"int\",\"value\":\"1\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepa\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepb\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"1\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepb\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"0\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepc\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"1\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepc\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"0\"}]},{\"action\":\"Stepd\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"1\"}]},{\"action\":\"Stepd\",\"values\":[{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"},{\"type\":\"int\",\"value\":\"2\"}]}]}}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.2863340000000036,
+    "engineStartupMs": 1.366624999999999,
+    "apiMs": 5.947250000000004,
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 81,
+      "generated": 309,
+      "depth": 8,
+      "work": 1545,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepa",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepa",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepb",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "1"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepb",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepc",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "1"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepc",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Stepd",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Stepd",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              },
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

@@ -1,0 +1,2406 @@
+[
+  {
+    "name": "ring-safe-4",
+    "backend": "apalache",
+    "repetition": 0,
+    "warmup": true,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1903.595417,
+    "log": "ring-safe-4/0-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 371.61345900000015,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/0-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 3.8504159999997682,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/0-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 3.404125000000022,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/1-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 76.39037499999995,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/1-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "apalache",
+    "repetition": 1,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1105.1389169999998,
+    "log": "ring-safe-4/1-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "apalache",
+    "repetition": 2,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1207.0188330000005,
+    "log": "ring-safe-4/2-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 73.86220799999955,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/2-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 2.0323749999997744,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/2-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 1.8854160000000775,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/3-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 66.61754100000053,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-safe-4/3-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-4",
+    "backend": "apalache",
+    "repetition": 3,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1119.617542,
+    "log": "ring-safe-4/3-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "apalache",
+    "repetition": 0,
+    "warmup": true,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1080.6824159999996,
+    "log": "ring-safe-15/0-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-source",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 73.19375000000036,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/0-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-ir",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 2.686166999999841,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/0-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-ir",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 1.6348750000006476,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/1-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-source",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 67.94670799999949,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/1-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "apalache",
+    "repetition": 1,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1194.9633329999997,
+    "log": "ring-safe-15/1-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "apalache",
+    "repetition": 2,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1208.322083000001,
+    "log": "ring-safe-15/2-apalache/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-source",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 67.19425000000047,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/2-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-ir",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 1.8869579999991402,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/2-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-ir",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 1.7245829999992566,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/3-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "rtlc-source",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 63.552459000000454,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 16,
+      "generated": 17,
+      "depth": 15,
+      "work": 34,
+      "violation": null
+    },
+    "log": "ring-safe-15/3-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-safe-15",
+    "backend": "apalache",
+    "repetition": 3,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1101.2123339999998,
+    "log": "ring-safe-15/3-apalache/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "apalache",
+    "repetition": 0,
+    "warmup": true,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1198.9996250000004,
+    "log": "ring-fault-4/0-apalache/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 69.54329200000029,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/0-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 1.8925830000007409,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/0-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 1.9738749999996799,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/1-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 69.51395899999989,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/1-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "apalache",
+    "repetition": 1,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1099.5169580000002,
+    "log": "ring-fault-4/1-apalache/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "apalache",
+    "repetition": 2,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1144.4871660000008,
+    "log": "ring-fault-4/2-apalache/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 61.90204199999971,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/2-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 1.7937500000007276,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/2-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 1.6583339999997406,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/3-rtlc-ir/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 60.02629200000047,
+    "outcome": "bounded",
+    "result": {
+      "status": "bounded",
+      "reason": "depth",
+      "states": 5,
+      "generated": 6,
+      "depth": 4,
+      "work": 12,
+      "violation": null
+    },
+    "log": "ring-fault-4/3-rtlc-source/process.log"
+  },
+  {
+    "name": "ring-fault-4",
+    "backend": "apalache",
+    "repetition": 3,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1256.1290829999998,
+    "log": "ring-fault-4/3-apalache/process.log"
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "apalache",
+    "repetition": 0,
+    "warmup": true,
+    "outcome": "counterexample",
+    "wallMs": 1250.8472079999992,
+    "log": "ring-fault-8/0-apalache/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-source",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 63.732208999997965,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/0-rtlc-source/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-ir",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 2.082290999998804,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/0-rtlc-ir/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-ir",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 1.9162080000023707,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/1-rtlc-ir/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-source",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 79.21066699999938,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/1-rtlc-source/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "apalache",
+    "repetition": 1,
+    "warmup": false,
+    "outcome": "counterexample",
+    "wallMs": 1164.2313329999997,
+    "log": "ring-fault-8/1-apalache/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "apalache",
+    "repetition": 2,
+    "warmup": false,
+    "outcome": "counterexample",
+    "wallMs": 1159.9235410000001,
+    "log": "ring-fault-8/2-apalache/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-source",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 65.69491600000038,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/2-rtlc-source/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-ir",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 2.532792000001791,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/2-rtlc-ir/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-ir",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 1.8347909999974945,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/3-rtlc-ir/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "rtlc-source",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 61.76404099999854,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 9,
+      "generated": 9,
+      "depth": 8,
+      "work": 18,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "7"
+              }
+            ]
+          },
+          {
+            "action": "Next",
+            "values": [
+              {
+                "type": "int",
+                "value": "8"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "ring-fault-8/3-rtlc-source/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "ring-fault-8",
+    "backend": "apalache",
+    "repetition": 3,
+    "warmup": false,
+    "outcome": "counterexample",
+    "wallMs": 1119.6625830000012,
+    "log": "ring-fault-8/3-apalache/process.log",
+    "witness": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "apalache",
+    "repetition": 0,
+    "warmup": true,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1981.8544169999986,
+    "log": "function-safe-4/0-apalache/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 71.69524999999703,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/0-rtlc-source/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 2.5379590000011376,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/0-rtlc-ir/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 2.116874999999709,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/1-rtlc-ir/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 63.338040999999066,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/1-rtlc-source/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "apalache",
+    "repetition": 1,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1829.1991250000028,
+    "log": "function-safe-4/1-apalache/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "apalache",
+    "repetition": 2,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 2268.083541,
+    "log": "function-safe-4/2-apalache/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 69.26295799999934,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/2-rtlc-source/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 2.4410829999978887,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/2-rtlc-ir/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-ir",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 2.6028750000004948,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/3-rtlc-ir/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "rtlc-source",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 87.6093329999967,
+    "outcome": "complete",
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 256,
+      "generated": 2304,
+      "depth": 0,
+      "work": 13838,
+      "violation": null
+    },
+    "log": "function-safe-4/3-rtlc-source/process.log"
+  },
+  {
+    "name": "function-safe-4",
+    "backend": "apalache",
+    "repetition": 3,
+    "warmup": false,
+    "outcome": "bounded-no-counterexample",
+    "wallMs": 1873.5949159999982,
+    "log": "function-safe-4/3-apalache/process.log"
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "apalache",
+    "repetition": 0,
+    "warmup": true,
+    "outcome": "counterexample",
+    "wallMs": 1171.1672089999993,
+    "log": "function-fault-4/0-apalache/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 63.45454199999949,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/0-rtlc-source/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 0,
+    "warmup": true,
+    "wallMs": 2.1660830000000715,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/0-rtlc-ir/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 1.8496249999989232,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/1-rtlc-ir/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 1,
+    "warmup": false,
+    "wallMs": 62.39037499999904,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/1-rtlc-source/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "apalache",
+    "repetition": 1,
+    "warmup": false,
+    "outcome": "counterexample",
+    "wallMs": 1152.4842080000017,
+    "log": "function-fault-4/1-apalache/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "apalache",
+    "repetition": 2,
+    "warmup": false,
+    "outcome": "counterexample",
+    "wallMs": 1181.5584999999955,
+    "log": "function-fault-4/2-apalache/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 62.573833000002196,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/2-rtlc-source/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 2,
+    "warmup": false,
+    "wallMs": 1.9591250000012224,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/2-rtlc-ir/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-ir",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 1.8948749999981374,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/3-rtlc-ir/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "rtlc-source",
+    "repetition": 3,
+    "warmup": false,
+    "wallMs": 60.98008299999492,
+    "outcome": "invariant-violation",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 129,
+      "generated": 129,
+      "depth": 0,
+      "work": 2703,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "log": "function-fault-4/3-rtlc-source/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "name": "function-fault-4",
+    "backend": "apalache",
+    "repetition": 3,
+    "warmup": false,
+    "outcome": "counterexample",
+    "wallMs": 1140.6088329999984,
+    "log": "function-fault-4/3-apalache/process.log",
+    "witness": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  }
+]

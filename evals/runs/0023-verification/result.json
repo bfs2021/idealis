@@ -1,0 +1,155 @@
+{
+  "status": "complete",
+  "sourceVersion": "38700c11b08a816c52cb0be40743ff6cd5a0f17b860f8b2c2e3dc8ba159feaa0",
+  "checks": [
+    {
+      "command": "just check",
+      "status": "passed",
+      "path": "final-check-3.log"
+    },
+    {
+      "command": "just browser",
+      "status": "passed",
+      "path": "final-browser-2.log"
+    },
+    {
+      "command": "just portable-test",
+      "status": "passed",
+      "path": "final-portable-test.log"
+    },
+    {
+      "command": "just runtime-build",
+      "status": "passed",
+      "path": "final-runtime-build.log"
+    },
+    {
+      "command": "just runtime-test",
+      "status": "passed",
+      "path": "final-runtime-test.log"
+    },
+    {
+      "command": "just safety-test",
+      "status": "passed",
+      "path": "final-safety-test.log"
+    },
+    {
+      "command": "just frontier-safety-test",
+      "status": "passed",
+      "path": "final-frontier-2.log"
+    },
+    {
+      "command": "just single-model-test (pinned TLC normal/fault)",
+      "status": "passed",
+      "path": "final-tlc-2.log"
+    },
+    {
+      "command": "cargo fmt/clippy --all-targets",
+      "status": "passed",
+      "path": "shared-buffer-clippy.log"
+    },
+    {
+      "command": "cargo test --all-targets (production buffer test)",
+      "status": "passed",
+      "path": "shared-buffer-test.log"
+    },
+    {
+      "command": "just evaluate",
+      "status": "passed",
+      "path": "final-evaluate.log"
+    },
+    {
+      "command": "just replay-evaluation",
+      "status": "passed",
+      "path": "final-replay-evaluation.log"
+    },
+    {
+      "command": "just criterion-test",
+      "status": "passed",
+      "path": "final-bench-smoke.log"
+    },
+    {
+      "command": "cargo test --bench safety (artifacts input absent)",
+      "status": "passed",
+      "path": "final-embedded-smoke.log"
+    },
+    {
+      "command": "membership regression on the pre-cache source (expected Red)",
+      "status": "expected-red",
+      "path": "membership-red-behavior.log"
+    },
+    {
+      "command": "cross-worker dedup regression before change (expected Red)",
+      "status": "expected-red",
+      "path": "dedup-red.log"
+    }
+  ],
+  "pairedRun": "0023-tuning-comparison",
+  "replayRun": "0023-tuning-replay",
+  "wideControls": "0023-wide-controls-fixed",
+  "files": [
+    {
+      "path": "final-check-3.log",
+      "sha256": "ec88e235e9995eda0a1df45316ca8fd4d1ea19b071608c1e68d1764789299a0e"
+    },
+    {
+      "path": "final-browser-2.log",
+      "sha256": "48e2b8d884c8ca14267d870bef62e99b845687b8ce745135eb8fa90664ac5b2f"
+    },
+    {
+      "path": "final-portable-test.log",
+      "sha256": "dc140e14a8d79796efafe944c39e3b2e4701a548b592e57cc9de225bfe33e3c9"
+    },
+    {
+      "path": "final-runtime-build.log",
+      "sha256": "f66d18d14c8d9f14126085002f64c65bf9e6786405218a20bcbab8cc39388fda"
+    },
+    {
+      "path": "final-runtime-test.log",
+      "sha256": "229f03c3873cb0e81c0bdf4ca06fb0a062320b78820f8363cee1058f40ef5bd2"
+    },
+    {
+      "path": "final-safety-test.log",
+      "sha256": "55c533fce7e806d54d06233260c2ecb565d9d91a9f19d5ca6c680b21ee674b34"
+    },
+    {
+      "path": "final-frontier-2.log",
+      "sha256": "9aa8fd8200a58eb1cd3688ed2b57c41369ecf8a09c780fd038cf7793e7c950ed"
+    },
+    {
+      "path": "final-tlc-2.log",
+      "sha256": "1df0deb3f63a8bb7a0b96713d78a68189a3217c979d605cc1ccceb7d45bec3fb"
+    },
+    {
+      "path": "shared-buffer-clippy.log",
+      "sha256": "7e4d8fdfb86d0b6d5b74053a5aa4a9f100d9010b01d4734b0839efe0fd067325"
+    },
+    {
+      "path": "shared-buffer-test.log",
+      "sha256": "2844be3cf9072921dc4e0a9a0e58caa163b91bdc1b5be354ea3d381b245f4cc4"
+    },
+    {
+      "path": "final-evaluate.log",
+      "sha256": "ba209e6985c32135bfbbc024559ea01234476cab9665ed7712d2ee25a441c816"
+    },
+    {
+      "path": "final-replay-evaluation.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "final-bench-smoke.log",
+      "sha256": "9decea554148b0d6918e379796898f6707a3037808d5c874d8c01db21f8985fa"
+    },
+    {
+      "path": "final-embedded-smoke.log",
+      "sha256": "6d127fd8451f7c8c99e9155d4e89ba59ddb37fd58cad0e2adb36c52dc31c0b4c"
+    },
+    {
+      "path": "membership-red-behavior.log",
+      "sha256": "f5b36813f6e14c68aae4c2eeec1347e19388b98cd6309b7248f0db0c32db3a38"
+    },
+    {
+      "path": "dedup-red.log",
+      "sha256": "66c2d50736e2ae7f4aa59c01750f061f0b6128f008701e50fa7c4f887d7005a8"
+    }
+  ]
+}

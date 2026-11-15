@@ -6,9 +6,10 @@ import {
   createCounter,
 } from "../examples/durable-counter.js";
 import { checkConformance, checkModel, checkTrace } from "../src/index.js";
+import { checkSafety, createPortableWasm } from "../src/portable.js";
 import { checkProperty } from "../src/property.js";
 import { createSmtOracle } from "../src/smt.js";
-import { generateTlaOracle } from "../src/tla.js";
+import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
 
 export const run = async (): Promise<Record<string, unknown>> => {
   const model = checkModel(counterModel, { maxDepth: 2, maxStates: 100 });
@@ -41,6 +42,48 @@ export const run = async (): Promise<Record<string, unknown>> => {
     },
   );
   const api = await init({ locateFile: (path) => `/${path}` });
+  const rust = await createPortableWasm(
+    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+  );
+  const safety = checkSafety(
+    rust,
+    compileTlaSafety({
+      source:
+        "---- MODULE BrowserSafety ----\nEXTENDS Naturals\nVARIABLE x\nInit == x = 0\nNext == x' = x + 1\nSafe == x < 3\n====",
+      config: "INIT Init\nNEXT Next\nINVARIANT Safe",
+    }),
+    { maxDepth: 4, maxStates: 5, maxWork: 100 },
+  );
+  if (
+    safety.status !== "invariant-violation" ||
+    safety.violation?.trace.length !== 4
+  )
+    throw new Error("Browser TLA compiler and Rust backend differ");
+  const live = checkSafety(
+    rust,
+    compileTlaSafety({
+      source:
+        "---- MODULE BrowserLive ----\nEXTENDS Naturals, Sequences\nVARIABLE q\nInit == q = <<0>>\nNext == q' = <<1 - Head(q)>>\nSpec == Init /\\ [][Next]_q /\\ WF_q(Next)\nP == <>[](Head(q) = 1)\n====",
+      config: "SPECIFICATION Spec\nPROPERTY P",
+    }),
+    { maxDepth: 4, maxStates: 10, maxWork: 10000, maxTemporalNodes: 100 },
+  );
+  if (
+    live.status !== "liveness-violation" ||
+    live.violation?.loopStart === undefined
+  )
+    throw new Error("Browser temporal compilation differs");
+  const text = checkSafety(
+    rust,
+    compileTlaSafety({
+      source:
+        '---- MODULE BrowserString ----\nEXTENDS Naturals, Sequences\nVARIABLE x\nInit == x = "abc"\nNext == x\' = IF Len(x) > 1 THEN Tail(x) ELSE "abc"\nProp == Len(x) <= 3\n====',
+      config: "INIT Init\nNEXT Next\nINVARIANT Prop",
+    }),
+    { maxDepth: 10, maxStates: 10, maxWork: 1000 },
+  );
+  if (text.status !== "complete" || text.states !== 3)
+    throw new Error("Browser string operations differ");
   const smt = await createSmtOracle(api).solve(
     "(declare-const value Int) (assert (= value 7))",
     ["value"],

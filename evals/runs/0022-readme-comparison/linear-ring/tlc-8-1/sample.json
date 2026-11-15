@@ -1,0 +1,68 @@
+{
+  "route": "tlc-8",
+  "command": "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java",
+  "args": [
+    "-Xmx8g",
+    "-XX:+UseParallelGC",
+    "-XX:ActiveProcessorCount=8",
+    "-Djava.io.tmpdir=/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-comparison/linear-ring/tlc-8-1/tmp",
+    "-jar",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/tlc/tla2tools.jar",
+    "-workers",
+    "8",
+    "-seed",
+    "16",
+    "-lncheck",
+    "final",
+    "-tool",
+    "-cleanup",
+    "-config",
+    "LinearRing.cfg",
+    "LinearRing.tla"
+  ],
+  "exit": 0,
+  "wallMs": 1441.422332999995,
+  "stdout": "@!@!@STARTMSG 2262:0 @!@!@\nTLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)\n@!@!@ENDMSG 2262 @!@!@\n@!@!@STARTMSG 2187:0 @!@!@\nRunning breadth-first search Model-Checking with fp 106 and seed 16 with 8 workers on 8 cores with 7282MB heap and 64MB offheap memory [pid: 3211] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).\n@!@!@ENDMSG 2187 @!@!@\n@!@!@STARTMSG 2220:0 @!@!@\nStarting SANY...\n@!@!@ENDMSG 2220 @!@!@\nParsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-comparison/linear-ring/tlc-8-1/LinearRing.tla\nParsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0022-readme-comparison/linear-ring/tlc-8-1/tmp/Naturals.tla\nSemantic processing of module Naturals\nSemantic processing of module LinearRing\n@!@!@STARTMSG 2219:0 @!@!@\nSANY finished.\n@!@!@ENDMSG 2219 @!@!@\n@!@!@STARTMSG 2185:0 @!@!@\nStarting... (2026-11-15 04:27:51)\n@!@!@ENDMSG 2185 @!@!@\n@!@!@STARTMSG 2189:0 @!@!@\nComputing initial states...\n@!@!@ENDMSG 2189 @!@!@\n@!@!@STARTMSG 2190:0 @!@!@\nFinished computing initial states: 1 distinct state generated at 2026-11-15 04:27:51.\n@!@!@ENDMSG 2190 @!@!@\n@!@!@STARTMSG 2193:0 @!@!@\nModel checking completed. No error has been found.\n  Estimates of the probability that TLC did not check all reachable states\n  because two distinct states had the same fingerprint:\n  calculated (optimistic):  val = 5.4E-14\n@!@!@ENDMSG 2193 @!@!@\n@!@!@STARTMSG 2200:0 @!@!@\nProgress(1000000) at 2026-11-15 04:27:52: 1,000,001 states generated (58,881,315 s/min), 1,000,000 distinct states found (58,881,256 ds/min), 0 states left on queue.\n@!@!@ENDMSG 2200 @!@!@\n@!@!@STARTMSG 2199:0 @!@!@\n1000001 states generated, 1000000 distinct states found, 0 states left on queue.\n@!@!@ENDMSG 2199 @!@!@\n@!@!@STARTMSG 2194:0 @!@!@\nThe depth of the complete state graph search is 1000000.\n@!@!@ENDMSG 2194 @!@!@\n@!@!@STARTMSG 2268:0 @!@!@\nThe average outdegree of the complete state graph is 1 (minimum is 0, the maximum 1 and the 95th percentile is 1).\n@!@!@ENDMSG 2268 @!@!@\n@!@!@STARTMSG 2186:0 @!@!@\nFinished in 1021ms at (2026-11-15 04:27:52)\n@!@!@ENDMSG 2186 @!@!@\n",
+  "stderr": "",
+  "output": null,
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 227.7772910000058,
+      "bytes": 130334720
+    },
+    {
+      "milliseconds": 427.8824579999782,
+      "bytes": 259194880
+    },
+    {
+      "milliseconds": 628.8987079999642,
+      "bytes": 330940416
+    },
+    {
+      "milliseconds": 829.0155409999425,
+      "bytes": 345587712
+    },
+    {
+      "milliseconds": 1029.9321249999339,
+      "bytes": 560906240
+    },
+    {
+      "milliseconds": 1246.7627909999574,
+      "bytes": 559857664
+    },
+    {
+      "milliseconds": 1452.7786659999983,
+      "bytes": 559857664
+    }
+  ],
+  "sampledMaxRssBytes": 560906240,
+  "phases": {
+    "initStartMs": 198.02095799997915,
+    "initDoneMs": 199.24924999999348,
+    "successMs": 1049.6330409999937,
+    "initAndSearchMs": 851.6120830000145,
+    "searchAndFinalMs": 850.3837910000002
+  },
+  "phaseError": null
+}

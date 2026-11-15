@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import { registerAdvancedContract } from "./advanced-contract.js";
+import { registerAsyncContract } from "./async-contract.js";
+import { registerBackendContract } from "./backend-contract.js";
 import { registerBudgetContract } from "./budget-contract.js";
 import { registerContract } from "./contract.js";
 import { registerEvalLoopContract } from "./eval-loop-contract.js";
@@ -7,9 +9,15 @@ import { registerEvaluationContract } from "./evaluation-contract.js";
 import { registerIntegrationContract } from "./integration-contract.js";
 import { registerPortableContract } from "./portable-contract.js";
 import { registerPropertyContract } from "./property-contract.js";
+import { registerSafetyContract } from "./safety-contract.js";
+import { registerSchedulingContract } from "./scheduling-contract.js";
 import { registerShardingContract } from "./sharding-contract.js";
+import { registerUsableContract } from "./usable-contract.js";
 
 registerContract((name, run) => {
+  test(name, run);
+});
+registerBackendContract((name, run) => {
   test(name, run);
 });
 registerAdvancedContract((name, run) => {
@@ -34,5 +42,17 @@ registerShardingContract((name, run) => {
   test(name, run);
 });
 registerPortableContract((name, run) => {
+  test(name, run);
+});
+registerUsableContract((name, run) => {
+  test(name, run);
+});
+registerAsyncContract((name, run) => {
+  test(name, run);
+});
+registerSafetyContract((name, run) => {
+  test(name, run);
+});
+registerSchedulingContract((name, run) => {
   test(name, run);
 });

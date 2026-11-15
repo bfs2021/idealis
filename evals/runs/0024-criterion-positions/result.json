@@ -1,0 +1,332 @@
+{
+  "status": "complete",
+  "stage": "profile-positions",
+  "sourceVersion": "b74feb5731226b802e267a5e4f0877b0ef6b46bdae04b3a8638bd0d00fdba287",
+  "exit": 0,
+  "sourceUnchanged": true,
+  "archiveError": null,
+  "estimates": [
+    {
+      "benchmark": "membership/function-cube",
+      "mean": 2102780.674080398,
+      "lower": 2077871.0233966175,
+      "upper": 2136653.6777092707
+    },
+    {
+      "benchmark": "membership/parallel-channels",
+      "mean": 892042.2875617438,
+      "lower": 888924.2234669565,
+      "upper": 895742.1822638888
+    },
+    {
+      "benchmark": "search/counter-product/1",
+      "mean": 9084831.630307164,
+      "lower": 9043347.856393918,
+      "upper": 9129741.604647253
+    },
+    {
+      "benchmark": "search/counter-product/8",
+      "mean": 9159615.858348463,
+      "lower": 9118888.151486883,
+      "upper": 9216210.689291744
+    },
+    {
+      "benchmark": "search/function-cube/1",
+      "mean": 9369529.420265067,
+      "lower": 9348953.193656841,
+      "upper": 9392749.799565995
+    },
+    {
+      "benchmark": "search/function-cube/8",
+      "mean": 7812362.45627294,
+      "lower": 7672308.650634206,
+      "upper": 7970794.788761357
+    },
+    {
+      "benchmark": "search/linear-ring/1",
+      "mean": 1069432.9109180577,
+      "lower": 1052142.1760010382,
+      "upper": 1094900.2304644391
+    },
+    {
+      "benchmark": "search/linear-ring/8",
+      "mean": 1041938.4616292473,
+      "lower": 1040181.4178202249,
+      "upper": 1043773.200347964
+    },
+    {
+      "benchmark": "search/parallel-channels/1",
+      "mean": 13264507.275,
+      "lower": 13148308.9075,
+      "upper": 13391748.909374999
+    },
+    {
+      "benchmark": "search/parallel-channels/8",
+      "mean": 7469255.23305622,
+      "lower": 7216533.5459283,
+      "upper": 7778412.243504542
+    },
+    {
+      "benchmark": "values/except-function",
+      "mean": 471056.1276978118,
+      "lower": 468658.727454893,
+      "upper": 473594.35375156364
+    },
+    {
+      "benchmark": "values/except-record",
+      "mean": 4033152.1665471783,
+      "lower": 3913986.7729559313,
+      "upper": 4177806.2476999536
+    },
+    {
+      "benchmark": "values/intern-existing-functions",
+      "mean": 456292.66553779657,
+      "lower": 454728.53341795265,
+      "upper": 458052.53809601435
+    },
+    {
+      "benchmark": "values/intern-new-functions",
+      "mean": 496153.1738377932,
+      "lower": 492292.1324158544,
+      "upper": 500601.10889121844
+    }
+  ],
+  "files": [
+    {
+      "path": "criterion/membership/function-cube/profile-positions/benchmark.json",
+      "sha256": "0cf47ea1f18d5ac536250f61739cc59e492d64eca1006f9124bcefa820cebd22"
+    },
+    {
+      "path": "criterion/membership/function-cube/profile-positions/estimates.json",
+      "sha256": "7528e53efdbde40dfffd99067d1775a5b702a55dc109c986ddbcc30715a04f60"
+    },
+    {
+      "path": "criterion/membership/function-cube/profile-positions/sample.json",
+      "sha256": "f6098533b6d2519e94bfe6e047960e89b916829a6e59a1693ebab4cab109f7f2"
+    },
+    {
+      "path": "criterion/membership/function-cube/profile-positions/tukey.json",
+      "sha256": "aaadabbd2e9d48014de8e1769c89e277dd665023fec569adfddbae529d30bab5"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/profile-positions/benchmark.json",
+      "sha256": "29ba1763563f8fbddc0488d87ffc7efd36ccbaed8503f21447735ba606506a79"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/profile-positions/estimates.json",
+      "sha256": "19c663c7a2b727f5f3d7c7af65cb4b4f7ffb969cb534a087fbe4c2ccc317dfb4"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/profile-positions/sample.json",
+      "sha256": "6513045c0c5c559fc351f4a09263e69fe98e2590f3e62fb31c8d12dc40219911"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/profile-positions/tukey.json",
+      "sha256": "115cd97913ee4820412323b6e59fdab6bb938a3a34730487e6368adfbc4b8f37"
+    },
+    {
+      "path": "criterion/search/counter-product/1/profile-positions/benchmark.json",
+      "sha256": "120e55a924ed6aa621bffe5f0e275e791da831071b21663235e72c67fbe12ad0"
+    },
+    {
+      "path": "criterion/search/counter-product/1/profile-positions/estimates.json",
+      "sha256": "43c48f9241d4fb8cd84f8ff47e2831d9c838add6d255fc2314872ac6be219394"
+    },
+    {
+      "path": "criterion/search/counter-product/1/profile-positions/sample.json",
+      "sha256": "d901d41533b5fb8076e2986bfdfb2cdc2fde7ee3ed3bdede2b4abb06628eec7f"
+    },
+    {
+      "path": "criterion/search/counter-product/1/profile-positions/tukey.json",
+      "sha256": "4d632d871edcf3b7ceb2f9e06332b5fc38c10e9b206b4f0f25421820516c7fa5"
+    },
+    {
+      "path": "criterion/search/counter-product/8/profile-positions/benchmark.json",
+      "sha256": "8d1caf3af184aa582fc43e4894d151a2688799a05f70fb0b35dd0c8e27e7e488"
+    },
+    {
+      "path": "criterion/search/counter-product/8/profile-positions/estimates.json",
+      "sha256": "774fd2256dbb1028e4300c66adbc14e821a8c560cf41d9096e7c47b8ba41d66a"
+    },
+    {
+      "path": "criterion/search/counter-product/8/profile-positions/sample.json",
+      "sha256": "b42f28019298e89c2f58234ca698acf7b0ca0d2578085e1d12bc768e208cf1b2"
+    },
+    {
+      "path": "criterion/search/counter-product/8/profile-positions/tukey.json",
+      "sha256": "426ceb32d411565669eee7242b0eb7d2ae7b5e7a64d16898c47c50c3fdff9b2a"
+    },
+    {
+      "path": "criterion/search/function-cube/1/profile-positions/benchmark.json",
+      "sha256": "9a1eb84a697cde96cfcf6d95618bf0bbeac0d34d6f69af8474fa61816da60f4f"
+    },
+    {
+      "path": "criterion/search/function-cube/1/profile-positions/estimates.json",
+      "sha256": "0233d2a5ee4563fc3b4c648395cde3d44ae9fad057b3aca190c7b89b8120bd79"
+    },
+    {
+      "path": "criterion/search/function-cube/1/profile-positions/sample.json",
+      "sha256": "f9464b4cb604ecf4e4c990bf0694426490d29c68ca25d499ffcdd1a51f20e88d"
+    },
+    {
+      "path": "criterion/search/function-cube/1/profile-positions/tukey.json",
+      "sha256": "905dca61880791ef99962a48e4d0c607009d0cbae8d5d57319169e9b8fcb8af0"
+    },
+    {
+      "path": "criterion/search/function-cube/8/profile-positions/benchmark.json",
+      "sha256": "a84980a0099bbf2676878353a36875f965291136a463c1d0d950ae51edd46b06"
+    },
+    {
+      "path": "criterion/search/function-cube/8/profile-positions/estimates.json",
+      "sha256": "03d0a775cd25f0b15e5b11f4406644f290fe5ac3902f4bebe869ce2933d45f20"
+    },
+    {
+      "path": "criterion/search/function-cube/8/profile-positions/sample.json",
+      "sha256": "1583a867e9b9f787aaa6860f9ad9bfedf69340c422098149f1e34a680b1df0e4"
+    },
+    {
+      "path": "criterion/search/function-cube/8/profile-positions/tukey.json",
+      "sha256": "bf6dbe048765ea8bfe9c236faeab778cf6657926ee6dd87dc246954fddc0d40b"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/profile-positions/benchmark.json",
+      "sha256": "d95f4945a2767eee008aab813ba24de70abb58c6077095b88d04709105394b53"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/profile-positions/estimates.json",
+      "sha256": "75061fbd1fc9c60e5088455794528147be2bd776e872215d83bfdaa5ccd7d304"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/profile-positions/sample.json",
+      "sha256": "16af43193efd52dd3d4e1861ede73e7b212edfb8c6ed2e05056e8e6a28736f87"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/profile-positions/tukey.json",
+      "sha256": "9cdb157e17ae20fe75fc69e7467bee4de092e430497be15c127158a6064b00d1"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/profile-positions/benchmark.json",
+      "sha256": "b3b950e326c210ab5f767440cc1605c5f7833bbd9593889bc0cc29cdf06fdf47"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/profile-positions/estimates.json",
+      "sha256": "4ae61375c7d277c751f884f3abbe66e0483dd5817e2f4fcebcd6788cdf81a3a6"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/profile-positions/sample.json",
+      "sha256": "82fb1367c5424232fa23a9490ad3f5c51d964e1083e55e96984ecfc7a0be7db0"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/profile-positions/tukey.json",
+      "sha256": "59b94f5fffcf591882f01eb2cef88a55d645fc9ba44046656138e587be4198f4"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/profile-positions/benchmark.json",
+      "sha256": "30d1fe70463c5d38a87a77df0bc948efba37dcca42ccaa16a703ba4059a31387"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/profile-positions/estimates.json",
+      "sha256": "64dd757e3af687b7d2dc9d7e73d0ea6f472a81af5acb2d0b8813ecef34e7e2be"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/profile-positions/sample.json",
+      "sha256": "8158aad4695ff8cb3764b87ca02cf4999556a3059f40014841a7eeac1a48d996"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/profile-positions/tukey.json",
+      "sha256": "8f2d19b36cb2cba26aadf297b5c15d711d91959809f0affebd2f6f8c29678945"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/profile-positions/benchmark.json",
+      "sha256": "c562571d9ec67019552cda868a4c5df20ecfc97e93ee4478eb80cb91da03dc37"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/profile-positions/estimates.json",
+      "sha256": "29c36f174f57492949263036f320c376cd3bb9bef6fd3688b407df4af163f64c"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/profile-positions/sample.json",
+      "sha256": "f66c0695143611659f5e059e357db7849379d759e3888b0dbe6f41a82c911209"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/profile-positions/tukey.json",
+      "sha256": "4e509b2ba6d5afe227486af35be284bb9dcc14aa312f7f3e0398898476f8e0b9"
+    },
+    {
+      "path": "criterion/values/except-function/profile-positions/benchmark.json",
+      "sha256": "0d653631af28ce397f8506d965c3f1dbad29e15c88c8e302a76ddb3669fd1e99"
+    },
+    {
+      "path": "criterion/values/except-function/profile-positions/estimates.json",
+      "sha256": "a82a7200ba317283e676ec7a8122591c59c2c275cca4ee5d2cea403af5619b7f"
+    },
+    {
+      "path": "criterion/values/except-function/profile-positions/sample.json",
+      "sha256": "03be5ddf5ef0a4b42e49a46c892626d071174d27bd43d8cbee05cf4f73f30bbf"
+    },
+    {
+      "path": "criterion/values/except-function/profile-positions/tukey.json",
+      "sha256": "99e28b7c4535883239df97932153f992cde69ab56cbab9c827e8497614077942"
+    },
+    {
+      "path": "criterion/values/except-record/profile-positions/benchmark.json",
+      "sha256": "9c54005bdb65b73192a525c9b34d5be84126f5200374a5ed0481c615b5c1463d"
+    },
+    {
+      "path": "criterion/values/except-record/profile-positions/estimates.json",
+      "sha256": "d00b5b6f8ee7ee56906496474f62799cad82907b176315b3b830f2259d1f5ad2"
+    },
+    {
+      "path": "criterion/values/except-record/profile-positions/sample.json",
+      "sha256": "9bc34b96ec35c177ca8c0bd123f8db6ffdcfbdd2d44d5a636abd4665b13bf9ea"
+    },
+    {
+      "path": "criterion/values/except-record/profile-positions/tukey.json",
+      "sha256": "5bed73d30b63ecd8a6e61196cdc453fd9a4f9e26e317daec9c5a77933ba96647"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/profile-positions/benchmark.json",
+      "sha256": "2f98f6f8304ff08556c1aeba917248a35c4e6ff6a879b2b188372f7cc95f6015"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/profile-positions/estimates.json",
+      "sha256": "dc7ae7c0cd77be191ceaf7f70f1ac546ad53cef467fe3f8d9dc562567f36d94b"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/profile-positions/sample.json",
+      "sha256": "4aee0e2974aa3f31f8b712c873015eb05b2c1f2c3282cf6b5fca9d1393f3b7bd"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/profile-positions/tukey.json",
+      "sha256": "3fdc33c39ecd0a951877ba81e92d55f7f74ad9f02daa46af3f47d8f09a9f18e2"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/profile-positions/benchmark.json",
+      "sha256": "a9db83965d72162af188d92b5c155c09f977d9835dd655d48347e7dbc217971a"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/profile-positions/estimates.json",
+      "sha256": "b1e9b5a884c3440e38b2aa13e8ce9b20cb0333f3870ab69e6ba5d7fb9ff62082"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/profile-positions/sample.json",
+      "sha256": "5432fe78211579a26122a2348ff4c5bc988a8ce697ec25110b5a0bf590625325"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/profile-positions/tukey.json",
+      "sha256": "84ce8417efffadbcdb6ea6a564f1b751306ff6aa5e38742c84e31ebe3e1cac22"
+    },
+    {
+      "path": "criterion.log",
+      "sha256": "4a2ede23a9406c4437a3e3f1a97cb086f5aaa9ba8e606dd5e62972b047f1b954"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "f51ae3356974bf58c229aaa9ae8565de0cb9e4de217f0df919cec6cc1377d168"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "d9a95e8abff4900e74ca918a9fbd9ae6d1b9fcb39d00a9759ef114044a85b835"
+    }
+  ]
+}

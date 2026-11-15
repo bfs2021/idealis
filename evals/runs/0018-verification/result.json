@@ -1,0 +1,61 @@
+{
+  "status": "complete",
+  "sourceVersion": "4d1ace2014c6ea97279217ec479a31ea1c63e12715228c9321773af9e88615fe",
+  "commit": "2de603f3ebc15012164f1e94196e65c4d4edf104",
+  "checks": [
+    {
+      "command": "pnpm build before implementation",
+      "exit": 2,
+      "path": "red.log",
+      "sha256": "d8136c07557e7be7f534b91a69e84c9fa11c48074a2ec1a7da84bf23ed9cdd28"
+    },
+    {
+      "command": "just check",
+      "exit": 0,
+      "path": "check.log",
+      "sha256": "1fb9198e27cb85eb7adfba5ccc0225bb7a18808a2828c8c0914e39750b2a8538"
+    },
+    {
+      "command": "node --test dist/evals/tlc-throughput/contract-test.js",
+      "exit": 0,
+      "path": "contract.log",
+      "sha256": "25dae12989931131db6de75b30e56edbce7313d9a9e1a75b8a0ece46e01f7cf2"
+    },
+    {
+      "command": "just browser",
+      "exit": 0,
+      "path": "browser.log",
+      "sha256": "72ecbc32301414184bf3de2d24e7815b92d5aef473651102747047ad4db9777e"
+    },
+    {
+      "command": "just evaluate && just replay-evaluation",
+      "exit": 0,
+      "path": "evaluate.log",
+      "sha256": "07340acf7365e679ec45f6fd4be53dc868c4c658f29a9fd787c492631eae071a"
+    },
+    {
+      "command": "just runtime-build && just runtime-test",
+      "exit": 0,
+      "path": "runtime.log",
+      "sha256": "c962ce022455d09fe4220db132791f6c8f5a7e52cad8f6257f51e5adc6ffdd7f"
+    },
+    {
+      "command": "just tlc-throughput <java> <jar> <archive> evals/runs/0018-tlc-throughput",
+      "exit": 0,
+      "path": "benchmark.log",
+      "sha256": "18602c3b44d0421c74cf53dcb42baeb035512f1e08df66802a773429e5c217e2"
+    },
+    {
+      "command": "just tlc-throughput-replay <java> <jar> <archive> evals/runs/0018-tlc-throughput evals/runs/0018-tlc-throughput-replay",
+      "exit": 0,
+      "path": "replay.log",
+      "sha256": "3d19f014d68a4b0d3bf906240207f48b17f2d3b73168291fe42a73023e4a1b8f"
+    },
+    {
+      "command": "pnpm check",
+      "exit": 0,
+      "path": "doc-check.log",
+      "sha256": "25ed026866a3dab64b9d12683551b55aa043993567f52cd96f075504f26f59b0"
+    }
+  ]
+}

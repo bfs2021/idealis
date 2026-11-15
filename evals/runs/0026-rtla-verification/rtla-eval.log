@@ -1,0 +1,48 @@
+pnpm rtla:build
+
+> @mizchi/modelt@0.1.0-alpha.0 rtla:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/rtla-parser/evaluate.js 'evals/runs/0026-rtla-development' '.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' '.artifacts/tlc/tla2tools.jar'
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: missing-comment-end: 
+****** SANY2 Version 2.1 created 24 February 2014
+
+Parsing file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0026-rtla-development/sany/missing-comment-end/Syntax.tla
+Lexical {error: EOF reached, possibly open comment starting around line 4
+
+Fatal errors while parsing TLA+ spec in file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0026-rtla-development/sany/missing-comment-end/Syntax.tla
+
+tla2sany.semantic.AbortException
+*** Abort messages: 1
+
+In module Syntax
+
+Could not parse module Syntax from file /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0026-rtla-development/sany/missing-comment-end/Syntax.tla
+
+
+
+
+true !== false
+
+    at file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/rtla-parser/evaluate.js:97:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2
+error: Recipe `rtla-eval` failed on line 276 with exit code 1

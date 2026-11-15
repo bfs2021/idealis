@@ -1,0 +1,127 @@
+
+> @mizchi/modelt@0.1.0-alpha.0 rtlc:test /Users/mz/ghq/github.com/mizchi/modelt
+> cargo fmt --manifest-path crates/rtlc/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rtlc/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rtlc/Cargo.toml
+
+    Checking serde_core v1.0.229
+    Checking crossbeam-utils v0.8.23
+    Checking either v1.19.0
+    Checking zmij v1.0.23
+    Checking memchr v2.8.3
+    Checking itoa v1.0.19
+    Checking cfg-if v1.0.5
+    Checking zerocopy v0.8.63
+    Checking clap_lex v1.1.1
+    Checking ciborium-io v0.2.2
+    Checking anstyle v1.0.14
+    Checking regex-syntax v0.8.11
+    Checking libc v0.2.191
+    Checking cast v0.3.0
+    Checking itertools v0.13.0
+    Checking clap_builder v4.6.7
+    Checking same-file v1.0.6
+    Checking walkdir v2.5.0
+    Checking num-traits v0.2.19
+    Checking alloca v0.4.0
+    Checking crossbeam-epoch v0.9.21
+    Checking anes v0.1.6
+    Checking oorandom v11.1.5
+    Checking crossbeam-deque v0.8.8
+    Checking rayon-core v1.13.0
+    Checking rayon v1.12.0
+    Checking regex-automata v0.4.18
+    Checking page_size v0.6.0
+    Checking criterion-plot v0.8.2
+    Checking clap v4.6.7
+    Checking serde v1.0.229
+    Checking serde_json v1.0.154
+    Checking regex v1.13.1
+    Checking tinytemplate v1.2.1
+    Checking rtlc v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtlc)
+    Checking half v2.7.1
+    Checking ciborium-ll v0.2.2
+    Checking ciborium v0.2.2
+    Checking criterion v0.8.2
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.15s
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running unittests src/lib.rs (crates/rtlc/target/debug/deps/rtlc-4755f7e95d4686b7)
+
+running 17 tests
+test safety::parallel::tests::candidates_keep_snapshots_and_order_when_buffers_are_reused ... ok
+test safety_values::tests::colliding_function_hashes_keep_distinct_values ... ok
+test safety_expressions::tests::cached_type_results_compare_descriptors_after_hash_collisions ... ok
+test safety::tests::colliding_hashes_keep_distinct_typed_states ... ok
+test safety_expressions::tests::leaf_evaluation_preserves_context_errors_and_lazy_branches ... ok
+test safety_values::tests::integer_positions_preserve_sparse_domains_and_missing_keys ... ok
+test safety_expressions::tests::successful_record_type_checks_reuse_their_work ... ok
+test safety_values::tests::collisions_in_an_overlay_keep_base_and_local_values_distinct ... ok
+test safety_expressions::tests::record_types_depending_on_bound_variables_are_not_reused ... ok
+test safety::parallel::schedule_tests::batch_tracks_fanout_and_stays_bounded ... ok
+test safety_expressions::tests::preparing_types_does_not_evaluate_an_unreached_branch_or_cache_an_error ... ok
+test safety_values::tests::replacement_keeps_the_normalized_domain_and_canonical_identity ... ok
+test safety_expressions::tests::cached_membership_values_and_descriptors_remap_with_worker_references ... ok
+test safety_work::tests::another_worker_can_spend_unused_credit_below_the_reservation_size ... ok
+test safety_values::tests::worker_values_share_the_base_and_remap_conflicting_local_references ... ok
+test safety_work::tests::oversized_consumption_returns_the_actual_remaining_work ... ok
+test safety_work::tests::concurrent_workers_consume_exactly_the_global_budget ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/parallel_safety.rs (crates/rtlc/target/debug/deps/parallel_safety-25fbc92e25737a6f)
+
+running 4 tests
+test parallel_diamond_deduplicates_and_keeps_bfs_counts ... ok
+test parallel_trace_is_the_same_shortest_trace ... ok
+test global_cuts_remain_bounded_and_worker_zero_is_rejected ... ok
+test converging_workers_validate_each_canonical_state_once ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/standalone.rs (crates/rtlc/target/debug/deps/standalone-a6c5535d99ea86b8)
+
+running 3 tests
+test shortest_violation_and_empty_initial_states_remain_distinct ... ok
+test typed_ir_checks_without_modelt ... ok
+test wire_contract_roundtrips_and_rejects_internal_references ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running src/benchmarks.rs (crates/rtlc/target/debug/deps/safety-6ff2a72f4132f42b)
+Testing values/intern-new-functions
+Success
+Testing values/intern-existing-functions
+Success
+Testing values/except-function
+Success
+Testing values/except-record
+Success
+
+Testing membership/function-cube
+Success
+Testing membership/parallel-channels
+Success
+
+Testing search/counter-product/1
+Success
+Testing search/counter-product/8
+Success
+Testing search/function-cube/1
+Success
+Testing search/function-cube/8
+Success
+Testing search/parallel-channels/1
+Success
+Testing search/parallel-channels/8
+Success
+Testing search/linear-ring/1
+Success
+Testing search/linear-ring/8
+Success
+
+     Running unittests examples/counter.rs (crates/rtlc/target/debug/examples/counter-e28a761874087ac6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

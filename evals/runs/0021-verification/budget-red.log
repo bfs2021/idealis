@@ -1,0 +1,28 @@
+   Compiling crossbeam-utils v0.8.23
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling crossbeam-epoch v0.9.21
+   Compiling crossbeam-deque v0.8.8
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling rayon-core v1.13.0
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling either v1.19.0
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling rayon v1.12.0
+   Compiling syn v3.0.10
+   Compiling serde_derive v1.0.229
+   Compiling modelt-core v0.1.0-alpha.0 (/private/tmp/modelt-work-budget/crates/modelt-core)
+error[E0432]: unresolved import `super::WorkBudget`
+ --> src/safety_work.rs:3:9
+  |
+3 |     use super::WorkBudget;
+  |         ^^^^^^^----------
+  |                |
+  |                no `WorkBudget` in `safety_work`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `modelt-core` (lib test) due to 1 previous error

@@ -1,0 +1,21 @@
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/criterion-safety/prepare.js
+node --test dist/evals/profile-tuning/hotspots-test.js dist/evals/profile-tuning/wasm-names-test.js
+✔ self weights belong to leaves and recursion is counted once inclusively (0.696083ms)
+✔ empty and invalid sampling data never produce a passing summary (2.330125ms)
+✔ name injection preserves executable bytes and function behavior (1.036083ms)
+✔ a changed function body cannot borrow the old names (1.000417ms)
+✔ invalid modules and absent names fail before recording (0.116958ms)
+✔ function imports cannot change the meaning of function name indices (0.153625ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38.829

@@ -1,0 +1,120 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-comparison/counter-product/after-wasm-1-1-normal/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 4391.335250000004,
+  "stdout": "{\"frontendMs\":3.163125000000001,\"engineStartupMs\":1.2292089999999973,\"apiMs\":4318.889,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":5308416,\"generated\":21233665,\"depth\":188,\"work\":106168325,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.163125000000001,
+    "engineStartupMs": 1.2292089999999973,
+    "apiMs": 4318.889,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 5308416,
+      "generated": 21233665,
+      "depth": 188,
+      "work": 106168325,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 227.23325000000477,
+      "bytes": 111968256
+    },
+    {
+      "milliseconds": 428.5940410000039,
+      "bytes": 156073984
+    },
+    {
+      "milliseconds": 630.1160410000011,
+      "bytes": 181469184
+    },
+    {
+      "milliseconds": 831.8597080000036,
+      "bytes": 225345536
+    },
+    {
+      "milliseconds": 1032.4930830000012,
+      "bytes": 267517952
+    },
+    {
+      "milliseconds": 1233.3510410000017,
+      "bytes": 276185088
+    },
+    {
+      "milliseconds": 1434.3527910000048,
+      "bytes": 284688384
+    },
+    {
+      "milliseconds": 1635.2764580000003,
+      "bytes": 362872832
+    },
+    {
+      "milliseconds": 1836.4686660000007,
+      "bytes": 438091776
+    },
+    {
+      "milliseconds": 2037.4121250000026,
+      "bytes": 446529536
+    },
+    {
+      "milliseconds": 2238.364207999999,
+      "bytes": 454164480
+    },
+    {
+      "milliseconds": 2438.9915830000027,
+      "bytes": 462389248
+    },
+    {
+      "milliseconds": 2640.029666000002,
+      "bytes": 470515712
+    },
+    {
+      "milliseconds": 2843.7212500000023,
+      "bytes": 478461952
+    },
+    {
+      "milliseconds": 3043.011458000001,
+      "bytes": 626819072
+    },
+    {
+      "milliseconds": 3242.9516250000015,
+      "bytes": 634650624
+    },
+    {
+      "milliseconds": 3444.643333,
+      "bytes": 727498752
+    },
+    {
+      "milliseconds": 3645.112666000001,
+      "bytes": 784138240
+    },
+    {
+      "milliseconds": 3846.6068330000053,
+      "bytes": 791789568
+    },
+    {
+      "milliseconds": 4047.964082999999,
+      "bytes": 799162368
+    },
+    {
+      "milliseconds": 4247.4101660000015,
+      "bytes": 806567936
+    }
+  ],
+  "sampledMaxRssBytes": 806567936,
+  "phases": null,
+  "phaseError": null
+}

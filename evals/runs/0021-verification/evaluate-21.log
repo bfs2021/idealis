@@ -1,0 +1,174 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.06s
+    Finished `release` profile [optimized] target(s) in 0.02s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+MODELT_FRONTIER_PLAN=0021-worker-budget node dist/evals/frontier-safety/evaluate.js '.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' '.artifacts/tlc/tla2tools.jar' '.artifacts/tlc/arm64/jre-arm64.tar.gz' 'evals/runs/0021-worker-budget'
+Starting counter-product native iteration=0
+{"input":"counter-product","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":3233.951458,"work":106168325,"intervalMs":2998.661875,"sampledMaxRssBytes":416350208,"path":"counter-product/native-0/sample.json","error":null}
+Starting counter-product parallel-1 iteration=0
+{"input":"counter-product","route":"parallel-1","iteration":0,"warmup":true,"status":"complete","wallMs":2947.721542,"work":106168325,"intervalMs":2874.918959,"sampledMaxRssBytes":457342976,"path":"counter-product/parallel-1-0/sample.json","error":null}
+Starting counter-product parallel-2 iteration=0
+{"input":"counter-product","route":"parallel-2","iteration":0,"warmup":true,"status":"complete","wallMs":5704.469040999999,"work":106168325,"intervalMs":5636.631167,"sampledMaxRssBytes":445218816,"path":"counter-product/parallel-2-0/sample.json","error":null}
+Starting counter-product parallel-4 iteration=0
+{"input":"counter-product","route":"parallel-4","iteration":0,"warmup":true,"status":"complete","wallMs":3684.354459,"work":106168325,"intervalMs":3612.085792,"sampledMaxRssBytes":435486720,"path":"counter-product/parallel-4-0/sample.json","error":null}
+Starting counter-product parallel-8 iteration=0
+{"input":"counter-product","route":"parallel-8","iteration":0,"warmup":true,"status":"complete","wallMs":3573.7706660000003,"work":106168325,"intervalMs":3506.89175,"sampledMaxRssBytes":419971072,"path":"counter-product/parallel-8-0/sample.json","error":null}
+Starting counter-product parallel-1 iteration=1
+{"input":"counter-product","route":"parallel-1","iteration":1,"warmup":false,"status":"complete","wallMs":3020.2605829999993,"work":106168325,"intervalMs":2948.3164580000002,"sampledMaxRssBytes":422576128,"path":"counter-product/parallel-1-1/sample.json","error":null}
+Starting counter-product parallel-2 iteration=1
+{"input":"counter-product","route":"parallel-2","iteration":1,"warmup":false,"status":"complete","wallMs":5536.998291,"work":106168325,"intervalMs":5472.013041,"sampledMaxRssBytes":439926784,"path":"counter-product/parallel-2-1/sample.json","error":null}
+Starting counter-product parallel-4 iteration=1
+{"input":"counter-product","route":"parallel-4","iteration":1,"warmup":false,"status":"complete","wallMs":3528.4574580000008,"work":106168325,"intervalMs":3461.082875,"sampledMaxRssBytes":427556864,"path":"counter-product/parallel-4-1/sample.json","error":null}
+Starting counter-product parallel-8 iteration=1
+{"input":"counter-product","route":"parallel-8","iteration":1,"warmup":false,"status":"complete","wallMs":3644.1347910000004,"work":106168325,"intervalMs":3577.664708,"sampledMaxRssBytes":449396736,"path":"counter-product/parallel-8-1/sample.json","error":null}
+Starting counter-product native iteration=1
+{"input":"counter-product","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":3188.985584000002,"work":106168325,"intervalMs":3119.937334,"sampledMaxRssBytes":446218240,"path":"counter-product/native-1/sample.json","error":null}
+Starting counter-product parallel-2 iteration=2
+{"input":"counter-product","route":"parallel-2","iteration":2,"warmup":false,"status":"complete","wallMs":5601.346750000004,"work":106168325,"intervalMs":5525.939292,"sampledMaxRssBytes":432603136,"path":"counter-product/parallel-2-2/sample.json","error":null}
+Starting counter-product parallel-4 iteration=2
+{"input":"counter-product","route":"parallel-4","iteration":2,"warmup":false,"status":"complete","wallMs":4006.657333000003,"work":106168325,"intervalMs":3935.875,"sampledMaxRssBytes":423002112,"path":"counter-product/parallel-4-2/sample.json","error":null}
+Starting counter-product parallel-8 iteration=2
+{"input":"counter-product","route":"parallel-8","iteration":2,"warmup":false,"status":"complete","wallMs":3908.349875,"work":106168325,"intervalMs":3824.285291,"sampledMaxRssBytes":427638784,"path":"counter-product/parallel-8-2/sample.json","error":null}
+Starting counter-product native iteration=2
+{"input":"counter-product","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":3104.049291999996,"work":106168325,"intervalMs":3022.831709,"sampledMaxRssBytes":443514880,"path":"counter-product/native-2/sample.json","error":null}
+Starting counter-product parallel-1 iteration=2
+{"input":"counter-product","route":"parallel-1","iteration":2,"warmup":false,"status":"complete","wallMs":3039.7620000000024,"work":106168325,"intervalMs":2972.305875,"sampledMaxRssBytes":420364288,"path":"counter-product/parallel-1-2/sample.json","error":null}
+Starting counter-product parallel-4 iteration=3
+{"input":"counter-product","route":"parallel-4","iteration":3,"warmup":false,"status":"complete","wallMs":3569.6914590000015,"work":106168325,"intervalMs":3501.1658749999997,"sampledMaxRssBytes":453230592,"path":"counter-product/parallel-4-3/sample.json","error":null}
+Starting counter-product parallel-8 iteration=3
+{"input":"counter-product","route":"parallel-8","iteration":3,"warmup":false,"status":"complete","wallMs":3673.188083000001,"work":106168325,"intervalMs":3605.728333,"sampledMaxRssBytes":452444160,"path":"counter-product/parallel-8-3/sample.json","error":null}
+Starting counter-product native iteration=3
+{"input":"counter-product","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":3153.214,"work":106168325,"intervalMs":3081.951958,"sampledMaxRssBytes":446332928,"path":"counter-product/native-3/sample.json","error":null}
+Starting counter-product parallel-1 iteration=3
+{"input":"counter-product","route":"parallel-1","iteration":3,"warmup":false,"status":"complete","wallMs":2955.8850829999865,"work":106168325,"intervalMs":2889.9781669999998,"sampledMaxRssBytes":430882816,"path":"counter-product/parallel-1-3/sample.json","error":null}
+Starting counter-product parallel-2 iteration=3
+{"input":"counter-product","route":"parallel-2","iteration":3,"warmup":false,"status":"complete","wallMs":5544.829457999993,"work":106168325,"intervalMs":5477.821875,"sampledMaxRssBytes":439320576,"path":"counter-product/parallel-2-3/sample.json","error":null}
+Starting function-cube native iteration=0
+{"input":"function-cube","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":9637.661625000008,"work":109051928,"intervalMs":9563.498,"sampledMaxRssBytes":957939712,"path":"function-cube/native-0/sample.json","error":null}
+Starting function-cube parallel-1 iteration=0
+{"input":"function-cube","route":"parallel-1","iteration":0,"warmup":true,"status":"complete","wallMs":9712.082999999999,"work":109051928,"intervalMs":9630.225166999999,"sampledMaxRssBytes":955858944,"path":"function-cube/parallel-1-0/sample.json","error":null}
+Starting function-cube parallel-2 iteration=0
+{"input":"function-cube","route":"parallel-2","iteration":0,"warmup":true,"status":"complete","wallMs":11068.337249999997,"work":125479175,"intervalMs":10989.47825,"sampledMaxRssBytes":957497344,"path":"function-cube/parallel-2-0/sample.json","error":null}
+Starting function-cube parallel-4 iteration=0
+{"input":"function-cube","route":"parallel-4","iteration":0,"warmup":true,"status":"complete","wallMs":6502.954124999989,"work":146334304,"intervalMs":6420.116333,"sampledMaxRssBytes":954187776,"path":"function-cube/parallel-4-0/sample.json","error":null}
+Starting function-cube parallel-8 iteration=0
+{"input":"function-cube","route":"parallel-8","iteration":0,"warmup":true,"status":"complete","wallMs":5707.2814160000125,"work":168546943,"intervalMs":5626.29325,"sampledMaxRssBytes":957104128,"path":"function-cube/parallel-8-0/sample.json","error":null}
+Starting function-cube parallel-1 iteration=1
+{"input":"function-cube","route":"parallel-1","iteration":1,"warmup":false,"status":"complete","wallMs":9392.352333000003,"work":109051928,"intervalMs":9313.102666,"sampledMaxRssBytes":959086592,"path":"function-cube/parallel-1-1/sample.json","error":null}
+Starting function-cube parallel-2 iteration=1
+{"input":"function-cube","route":"parallel-2","iteration":1,"warmup":false,"status":"complete","wallMs":13117.691665999999,"work":125479175,"intervalMs":12999.622416,"sampledMaxRssBytes":943603712,"path":"function-cube/parallel-2-1/sample.json","error":null}
+Starting function-cube parallel-4 iteration=1
+{"input":"function-cube","route":"parallel-4","iteration":1,"warmup":false,"status":"complete","wallMs":6389.295707999991,"work":146334304,"intervalMs":6297.108958,"sampledMaxRssBytes":962117632,"path":"function-cube/parallel-4-1/sample.json","error":null}
+Starting function-cube parallel-8 iteration=1
+{"input":"function-cube","route":"parallel-8","iteration":1,"warmup":false,"status":"complete","wallMs":6088.579625000013,"work":168546943,"intervalMs":6006.478542000001,"sampledMaxRssBytes":956121088,"path":"function-cube/parallel-8-1/sample.json","error":null}
+Starting function-cube native iteration=1
+{"input":"function-cube","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":9540.873584000015,"work":109051928,"intervalMs":9464.998583,"sampledMaxRssBytes":954925056,"path":"function-cube/native-1/sample.json","error":null}
+Starting function-cube parallel-2 iteration=2
+{"input":"function-cube","route":"parallel-2","iteration":2,"warmup":false,"status":"complete","wallMs":11076.668291000009,"work":125479175,"intervalMs":11001.001125,"sampledMaxRssBytes":957579264,"path":"function-cube/parallel-2-2/sample.json","error":null}
+Starting function-cube parallel-4 iteration=2
+{"input":"function-cube","route":"parallel-4","iteration":2,"warmup":false,"status":"complete","wallMs":6601.399833000003,"work":146334304,"intervalMs":6526.025707999999,"sampledMaxRssBytes":961789952,"path":"function-cube/parallel-4-2/sample.json","error":null}
+Starting function-cube parallel-8 iteration=2
+{"input":"function-cube","route":"parallel-8","iteration":2,"warmup":false,"status":"complete","wallMs":5231.796208000014,"work":168546943,"intervalMs":5159.786917,"sampledMaxRssBytes":955678720,"path":"function-cube/parallel-8-2/sample.json","error":null}
+Starting function-cube native iteration=2
+{"input":"function-cube","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":10161.116584000003,"work":109051928,"intervalMs":10086.959792000001,"sampledMaxRssBytes":955564032,"path":"function-cube/native-2/sample.json","error":null}
+Starting function-cube parallel-1 iteration=2
+{"input":"function-cube","route":"parallel-1","iteration":2,"warmup":false,"status":"complete","wallMs":9853.409084000014,"work":109051928,"intervalMs":9748.794958,"sampledMaxRssBytes":957792256,"path":"function-cube/parallel-1-2/sample.json","error":null}
+Starting function-cube parallel-4 iteration=3
+{"input":"function-cube","route":"parallel-4","iteration":3,"warmup":false,"status":"complete","wallMs":6100.496374999988,"work":146334304,"intervalMs":6018.6865,"sampledMaxRssBytes":951943168,"path":"function-cube/parallel-4-3/sample.json","error":null}
+Starting function-cube parallel-8 iteration=3
+{"input":"function-cube","route":"parallel-8","iteration":3,"warmup":false,"status":"complete","wallMs":5548.258999999991,"work":168546943,"intervalMs":5475.970208,"sampledMaxRssBytes":961462272,"path":"function-cube/parallel-8-3/sample.json","error":null}
+Starting function-cube native iteration=3
+{"input":"function-cube","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":10754.399959000002,"work":109051928,"intervalMs":10676.430124999999,"sampledMaxRssBytes":956448768,"path":"function-cube/native-3/sample.json","error":null}
+Starting function-cube parallel-1 iteration=3
+{"input":"function-cube","route":"parallel-1","iteration":3,"warmup":false,"status":"complete","wallMs":10814.096749999997,"work":109051928,"intervalMs":10716.443542,"sampledMaxRssBytes":959496192,"path":"function-cube/parallel-1-3/sample.json","error":null}
+Starting function-cube parallel-2 iteration=3
+{"input":"function-cube","route":"parallel-2","iteration":3,"warmup":false,"status":"complete","wallMs":14158.202458999993,"work":125479175,"intervalMs":14063.131417,"sampledMaxRssBytes":956006400,"path":"function-cube/parallel-2-3/sample.json","error":null}
+Starting parallel-channels native iteration=0
+{"input":"parallel-channels","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":22270.445917000005,"work":231735339,"intervalMs":22184.931875,"sampledMaxRssBytes":968015872,"path":"parallel-channels/native-0/sample.json","error":null}
+Starting parallel-channels parallel-1 iteration=0
+{"input":"parallel-channels","route":"parallel-1","iteration":0,"warmup":true,"status":"complete","wallMs":21380.140208000026,"work":231735339,"intervalMs":21310.001334,"sampledMaxRssBytes":967835648,"path":"parallel-channels/parallel-1-0/sample.json","error":null}
+Starting parallel-channels parallel-2 iteration=0
+{"input":"parallel-channels","route":"parallel-2","iteration":0,"warmup":true,"status":"complete","wallMs":23337.193833000027,"work":257804639,"intervalMs":23261.203625,"sampledMaxRssBytes":969670656,"path":"parallel-channels/parallel-2-0/sample.json","error":null}
+Starting parallel-channels parallel-4 iteration=0
+{"input":"parallel-channels","route":"parallel-4","iteration":0,"warmup":true,"status":"complete","wallMs":15027.084832999972,"work":287480537,"intervalMs":14954.929124999999,"sampledMaxRssBytes":970047488,"path":"parallel-channels/parallel-4-0/sample.json","error":null}
+Starting parallel-channels parallel-8 iteration=0
+{"input":"parallel-channels","route":"parallel-8","iteration":0,"warmup":true,"status":"complete","wallMs":11500.96441700001,"work":318785521,"intervalMs":11407.978,"sampledMaxRssBytes":971636736,"path":"parallel-channels/parallel-8-0/sample.json","error":null}
+Starting parallel-channels parallel-1 iteration=1
+{"input":"parallel-channels","route":"parallel-1","iteration":1,"warmup":false,"status":"complete","wallMs":21759.474583000003,"work":231735339,"intervalMs":21671.166542,"sampledMaxRssBytes":967720960,"path":"parallel-channels/parallel-1-1/sample.json","error":null}
+Starting parallel-channels parallel-2 iteration=1
+{"input":"parallel-channels","route":"parallel-2","iteration":1,"warmup":false,"status":"complete","wallMs":23073.824500000046,"work":257804639,"intervalMs":22997.351625,"sampledMaxRssBytes":969506816,"path":"parallel-channels/parallel-2-1/sample.json","error":null}
+Starting parallel-channels parallel-4 iteration=1
+{"input":"parallel-channels","route":"parallel-4","iteration":1,"warmup":false,"status":"complete","wallMs":17756.455166,"work":287480537,"intervalMs":17671.388750000002,"sampledMaxRssBytes":970063872,"path":"parallel-channels/parallel-4-1/sample.json","error":null}
+Starting parallel-channels parallel-8 iteration=1
+{"input":"parallel-channels","route":"parallel-8","iteration":1,"warmup":false,"status":"complete","wallMs":12505.682625000016,"work":318785521,"intervalMs":12417.711792,"sampledMaxRssBytes":975290368,"path":"parallel-channels/parallel-8-1/sample.json","error":null}
+Starting parallel-channels native iteration=1
+{"input":"parallel-channels","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":26600.33495800005,"work":231735339,"intervalMs":26511.265167,"sampledMaxRssBytes":967868416,"path":"parallel-channels/native-1/sample.json","error":null}
+Starting parallel-channels parallel-2 iteration=2
+{"input":"parallel-channels","route":"parallel-2","iteration":2,"warmup":false,"status":"complete","wallMs":30397.474041999958,"work":257804639,"intervalMs":30292.729959,"sampledMaxRssBytes":952221696,"path":"parallel-channels/parallel-2-2/sample.json","error":null}
+Starting parallel-channels parallel-4 iteration=2
+{"input":"parallel-channels","route":"parallel-4","iteration":2,"warmup":false,"status":"complete","wallMs":19145.417124999978,"work":287480537,"intervalMs":19027.160083,"sampledMaxRssBytes":969965568,"path":"parallel-channels/parallel-4-2/sample.json","error":null}
+Starting parallel-channels parallel-8 iteration=2
+{"input":"parallel-channels","route":"parallel-8","iteration":2,"warmup":false,"status":"complete","wallMs":22491.42849999998,"work":318785521,"intervalMs":22342.605457999998,"sampledMaxRssBytes":923303936,"path":"parallel-channels/parallel-8-2/sample.json","error":null}
+Starting parallel-channels native iteration=2
+{"input":"parallel-channels","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":24614.75224999996,"work":231735339,"intervalMs":24507.353667,"sampledMaxRssBytes":967622656,"path":"parallel-channels/native-2/sample.json","error":null}
+Starting parallel-channels parallel-1 iteration=2
+{"input":"parallel-channels","route":"parallel-1","iteration":2,"warmup":false,"status":"complete","wallMs":23408.267416000017,"work":231735339,"intervalMs":23334.878959,"sampledMaxRssBytes":967704576,"path":"parallel-channels/parallel-1-2/sample.json","error":null}
+Starting parallel-channels parallel-4 iteration=3
+{"input":"parallel-channels","route":"parallel-4","iteration":3,"warmup":false,"status":"complete","wallMs":15128.502667000052,"work":287480537,"intervalMs":15054.987041,"sampledMaxRssBytes":970162176,"path":"parallel-channels/parallel-4-3/sample.json","error":null}
+Starting parallel-channels parallel-8 iteration=3
+{"input":"parallel-channels","route":"parallel-8","iteration":3,"warmup":false,"status":"complete","wallMs":11055.80366700003,"work":318785521,"intervalMs":10979.862792,"sampledMaxRssBytes":972668928,"path":"parallel-channels/parallel-8-3/sample.json","error":null}
+Starting parallel-channels native iteration=3
+{"input":"parallel-channels","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":23062.023415999953,"work":231735339,"intervalMs":22981.924750000002,"sampledMaxRssBytes":967557120,"path":"parallel-channels/native-3/sample.json","error":null}
+Starting parallel-channels parallel-1 iteration=3
+{"input":"parallel-channels","route":"parallel-1","iteration":3,"warmup":false,"status":"complete","wallMs":22712.503334000008,"work":231735339,"intervalMs":22629.241166,"sampledMaxRssBytes":968081408,"path":"parallel-channels/parallel-1-3/sample.json","error":null}
+Starting parallel-channels parallel-2 iteration=3
+{"input":"parallel-channels","route":"parallel-2","iteration":3,"warmup":false,"status":"complete","wallMs":29148.12629100005,"work":257804639,"intervalMs":29061.605625,"sampledMaxRssBytes":969801728,"path":"parallel-channels/parallel-2-3/sample.json","error":null}
+Starting linear-ring native iteration=0
+{"input":"linear-ring","route":"native","iteration":0,"warmup":true,"status":"complete","wallMs":462.47187500004657,"work":2000002,"intervalMs":331.55987500000003,"sampledMaxRssBytes":155959296,"path":"linear-ring/native-0/sample.json","error":null}
+Starting linear-ring parallel-1 iteration=0
+{"input":"linear-ring","route":"parallel-1","iteration":0,"warmup":true,"status":"complete","wallMs":351.55187500000466,"work":2000002,"intervalMs":215.42125,"sampledMaxRssBytes":112754688,"path":"linear-ring/parallel-1-0/sample.json","error":null}
+Starting linear-ring parallel-2 iteration=0
+{"input":"linear-ring","route":"parallel-2","iteration":0,"warmup":true,"status":"complete","wallMs":301.72958299994934,"work":2000002,"intervalMs":186.99870800000002,"sampledMaxRssBytes":128221184,"path":"linear-ring/parallel-2-0/sample.json","error":null}
+Starting linear-ring parallel-4 iteration=0
+{"input":"linear-ring","route":"parallel-4","iteration":0,"warmup":true,"status":"complete","wallMs":363.4936250000028,"work":2000002,"intervalMs":224.020667,"sampledMaxRssBytes":114458624,"path":"linear-ring/parallel-4-0/sample.json","error":null}
+Starting linear-ring parallel-8 iteration=0
+{"input":"linear-ring","route":"parallel-8","iteration":0,"warmup":true,"status":"complete","wallMs":364.6233750000829,"work":2000002,"intervalMs":250.72225000000003,"sampledMaxRssBytes":108216320,"path":"linear-ring/parallel-8-0/sample.json","error":null}
+Starting linear-ring parallel-1 iteration=1
+{"input":"linear-ring","route":"parallel-1","iteration":1,"warmup":false,"status":"complete","wallMs":338.99662499991246,"work":2000002,"intervalMs":211.732709,"sampledMaxRssBytes":111198208,"path":"linear-ring/parallel-1-1/sample.json","error":null}
+Starting linear-ring parallel-2 iteration=1
+{"input":"linear-ring","route":"parallel-2","iteration":1,"warmup":false,"status":"complete","wallMs":303.2954159999499,"work":2000002,"intervalMs":202.325208,"sampledMaxRssBytes":116310016,"path":"linear-ring/parallel-2-1/sample.json","error":null}
+Starting linear-ring parallel-4 iteration=1
+{"input":"linear-ring","route":"parallel-4","iteration":1,"warmup":false,"status":"complete","wallMs":272.94625000003725,"work":2000002,"intervalMs":171.475209,"sampledMaxRssBytes":123240448,"path":"linear-ring/parallel-4-1/sample.json","error":null}
+Starting linear-ring parallel-8 iteration=1
+{"input":"linear-ring","route":"parallel-8","iteration":1,"warmup":false,"status":"complete","wallMs":258.2186660000589,"work":2000002,"intervalMs":164.430458,"sampledMaxRssBytes":130383872,"path":"linear-ring/parallel-8-1/sample.json","error":null}
+Starting linear-ring native iteration=1
+{"input":"linear-ring","route":"native","iteration":1,"warmup":false,"status":"complete","wallMs":237.9247500000056,"work":2000002,"intervalMs":155.718208,"sampledMaxRssBytes":81068032,"path":"linear-ring/native-1/sample.json","error":null}
+Starting linear-ring parallel-2 iteration=2
+{"input":"linear-ring","route":"parallel-2","iteration":2,"warmup":false,"status":"complete","wallMs":233.77379200002179,"work":2000002,"intervalMs":147.41175,"sampledMaxRssBytes":80953344,"path":"linear-ring/parallel-2-2/sample.json","error":null}
+Starting linear-ring parallel-4 iteration=2
+{"input":"linear-ring","route":"parallel-4","iteration":2,"warmup":false,"status":"complete","wallMs":225.98045800009277,"work":2000002,"intervalMs":147.86929199999997,"sampledMaxRssBytes":80936960,"path":"linear-ring/parallel-4-2/sample.json","error":null}
+Starting linear-ring parallel-8 iteration=2
+{"input":"linear-ring","route":"parallel-8","iteration":2,"warmup":false,"status":"complete","wallMs":230.9357500000624,"work":2000002,"intervalMs":150.21079200000003,"sampledMaxRssBytes":81051648,"path":"linear-ring/parallel-8-2/sample.json","error":null}
+Starting linear-ring native iteration=2
+{"input":"linear-ring","route":"native","iteration":2,"warmup":false,"status":"complete","wallMs":246.77491599996574,"work":2000002,"intervalMs":166.40500000000003,"sampledMaxRssBytes":131284992,"path":"linear-ring/native-2/sample.json","error":null}
+Starting linear-ring parallel-1 iteration=2
+{"input":"linear-ring","route":"parallel-1","iteration":2,"warmup":false,"status":"complete","wallMs":243.65875000006054,"work":2000002,"intervalMs":151.86737499999998,"sampledMaxRssBytes":80953344,"path":"linear-ring/parallel-1-2/sample.json","error":null}
+Starting linear-ring parallel-4 iteration=3
+{"input":"linear-ring","route":"parallel-4","iteration":3,"warmup":false,"status":"complete","wallMs":224.21420799999032,"work":2000002,"intervalMs":149.183833,"sampledMaxRssBytes":81018880,"path":"linear-ring/parallel-4-3/sample.json","error":null}
+Starting linear-ring parallel-8 iteration=3
+{"input":"linear-ring","route":"parallel-8","iteration":3,"warmup":false,"status":"complete","wallMs":230.70999999996275,"work":2000002,"intervalMs":154.748333,"sampledMaxRssBytes":81068032,"path":"linear-ring/parallel-8-3/sample.json","error":null}
+Starting linear-ring native iteration=3
+{"input":"linear-ring","route":"native","iteration":3,"warmup":false,"status":"complete","wallMs":237.04791600001045,"work":2000002,"intervalMs":161.5075,"sampledMaxRssBytes":143785984,"path":"linear-ring/native-3/sample.json","error":null}
+Starting linear-ring parallel-1 iteration=3
+{"input":"linear-ring","route":"parallel-1","iteration":3,"warmup":false,"status":"complete","wallMs":226.09074999997392,"work":2000002,"intervalMs":146.51862500000001,"sampledMaxRssBytes":81068032,"path":"linear-ring/parallel-1-3/sample.json","error":null}
+Starting linear-ring parallel-2 iteration=3
+{"input":"linear-ring","route":"parallel-2","iteration":3,"warmup":false,"status":"complete","wallMs":222.78079200000502,"work":2000002,"intervalMs":144.377459,"sampledMaxRssBytes":80953344,"path":"linear-ring/parallel-2-3/sample.json","error":null}
+[{"input":"counter-product","route":"native","status":"complete","wall":{"median":3153.214,"min":3104.049291999996,"max":3188.985584000002},"interval":{"median":3081.951958,"min":3022.831709,"max":3119.937334},"sampledMaxRssBytes":446332928},{"input":"counter-product","route":"parallel-1","status":"complete","wall":{"median":3020.2605829999993,"min":2955.8850829999865,"max":3039.7620000000024},"interval":{"median":2948.3164580000002,"min":2889.9781669999998,"max":2972.305875},"sampledMaxRssBytes":430882816},{"input":"counter-product","route":"parallel-2","status":"complete","wall":{"median":5544.829457999993,"min":5536.998291,"max":5601.346750000004},"interval":{"median":5477.821875,"min":5472.013041,"max":5525.939292},"sampledMaxRssBytes":439926784},{"input":"counter-product","route":"parallel-4","status":"complete","wall":{"median":3569.6914590000015,"min":3528.4574580000008,"max":4006.657333000003},"interval":{"median":3501.1658749999997,"min":3461.082875,"max":3935.875},"sampledMaxRssBytes":453230592},{"input":"counter-product","route":"parallel-8","status":"complete","wall":{"median":3673.188083000001,"min":3644.1347910000004,"max":3908.349875},"interval":{"median":3605.728333,"min":3577.664708,"max":3824.285291},"sampledMaxRssBytes":452444160},{"input":"function-cube","route":"native","status":"complete","wall":{"median":10161.116584000003,"min":9540.873584000015,"max":10754.399959000002},"interval":{"median":10086.959792000001,"min":9464.998583,"max":10676.430124999999},"sampledMaxRssBytes":956448768},{"input":"function-cube","route":"parallel-1","status":"complete","wall":{"median":9853.409084000014,"min":9392.352333000003,"max":10814.096749999997},"interval":{"median":9748.794958,"min":9313.102666,"max":10716.443542},"sampledMaxRssBytes":959496192},{"input":"function-cube","route":"parallel-2","status":"complete","wall":{"median":13117.691665999999,"min":11076.668291000009,"max":14158.202458999993},"interval":{"median":12999.622416,"min":11001.001125,"max":14063.131417},"sampledMaxRssBytes":957579264},{"input":"function-cube","route":"parallel-4","status":"complete","wall":{"median":6389.295707999991,"min":6100.496374999988,"max":6601.399833000003},"interval":{"median":6297.108958,"min":6018.6865,"max":6526.025707999999},"sampledMaxRssBytes":962117632},{"input":"function-cube","route":"parallel-8","status":"complete","wall":{"median":5548.258999999991,"min":5231.796208000014,"max":6088.579625000013},"interval":{"median":5475.970208,"min":5159.786917,"max":6006.478542000001},"sampledMaxRssBytes":961462272},{"input":"parallel-channels","route":"native","status":"complete","wall":{"median":24614.75224999996,"min":23062.023415999953,"max":26600.33495800005},"interval":{"median":24507.353667,"min":22981.924750000002,"max":26511.265167},"sampledMaxRssBytes":967868416},{"input":"parallel-channels","route":"parallel-1","status":"complete","wall":{"median":22712.503334000008,"min":21759.474583000003,"max":23408.267416000017},"interval":{"median":22629.241166,"min":21671.166542,"max":23334.878959},"sampledMaxRssBytes":968081408},{"input":"parallel-channels","route":"parallel-2","status":"complete","wall":{"median":29148.12629100005,"min":23073.824500000046,"max":30397.474041999958},"interval":{"median":29061.605625,"min":22997.351625,"max":30292.729959},"sampledMaxRssBytes":969801728},{"input":"parallel-channels","route":"parallel-4","status":"complete","wall":{"median":17756.455166,"min":15128.502667000052,"max":19145.417124999978},"interval":{"median":17671.388750000002,"min":15054.987041,"max":19027.160083},"sampledMaxRssBytes":970162176},{"input":"parallel-channels","route":"parallel-8","status":"complete","wall":{"median":12505.682625000016,"min":11055.80366700003,"max":22491.42849999998},"interval":{"median":12417.711792,"min":10979.862792,"max":22342.605457999998},"sampledMaxRssBytes":975290368},{"input":"linear-ring","route":"native","status":"complete","wall":{"median":237.9247500000056,"min":237.04791600001045,"max":246.77491599996574},"interval":{"median":161.5075,"min":155.718208,"max":166.40500000000003},"sampledMaxRssBytes":143785984},{"input":"linear-ring","route":"parallel-1","status":"complete","wall":{"median":243.65875000006054,"min":226.09074999997392,"max":338.99662499991246},"interval":{"median":151.86737499999998,"min":146.51862500000001,"max":211.732709},"sampledMaxRssBytes":111198208},{"input":"linear-ring","route":"parallel-2","status":"complete","wall":{"median":233.77379200002179,"min":222.78079200000502,"max":303.2954159999499},"interval":{"median":147.41175,"min":144.377459,"max":202.325208},"sampledMaxRssBytes":116310016},{"input":"linear-ring","route":"parallel-4","status":"complete","wall":{"median":225.98045800009277,"min":224.21420799999032,"max":272.94625000003725},"interval":{"median":149.183833,"min":147.86929199999997,"max":171.475209},"sampledMaxRssBytes":123240448},{"input":"linear-ring","route":"parallel-8","status":"complete","wall":{"median":230.9357500000624,"min":230.70999999996275,"max":258.2186660000589},"interval":{"median":154.748333,"min":150.21079200000003,"max":164.430458},"sampledMaxRssBytes":130383872}]

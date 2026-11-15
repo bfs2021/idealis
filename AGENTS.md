@@ -16,4 +16,9 @@
 - Rust 実験を変更したら `just runtime-build` / `just runtime-test` と cargo fmt を確認する。言語差と表現の最適化、cold start と再利用、カーネルと SUT/オラクルの費用を分ける。
 - sharding は manifest / source version / task ID を固定し、欠落・再試行・異なる結果を区別する。輸送上の全 task 完了を、モデルの安全性や完全探索の証明として扱わない。
 - コミットは conventional commits。公開やリリースは依頼の範囲に従う。
+- 有限モデル・縮小・ホストの変更は `just usable-test` と `just usable-eval` / `just usable-replay` で検査する。archive と vendor の原本を編集せず、registry 初回公開やアカウント設定は別途扱う。配布変更は `just package` の単独 consumer まで確認する。
 - portable core を変更したら `just portable-build` / `just portable-test`、crate の cargo fmt / clippy を実行する。値・protocol の互換性は共有 fixture と既存 TS checker への差分比較で検査し、BFS や PBT まで移植済みと解釈しない。
+- Go adapter は `adapters/go` の独立 module。変更時は `just go-test` で CGO 無効・race・vet・TS fixture・別 module の consumer を検査する。照合の意味論は Wasm コアに任せる。
+- 3言語の実 SUT と共通 oracle の比較は `just cross-test`。実験時は `cross-eval` / `cross-replay` で保存したモデル・oracle・反例を使い、SUT の観測を期待値へ転用しない。
+- 非同期履歴・model handle・feedback は `just async-test` と `async-eval` / `async-replay` で検査する。unknown / cancel は未確定の marker、return / fail は確定結果。node budget 切れを linearizable にしない。
+- TLA safety backend は `just safety-test` と `safety-eval` / `safety-replay`。TLC の意味が曖昧なら `safety-tlc` で実行比較する。対応 fragment・empty・予算切れ・型エラーを全 TLA+ 互換や合格へ読み替えない。

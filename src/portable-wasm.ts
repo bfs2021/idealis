@@ -1,5 +1,10 @@
 import type {
+  ConcurrentResult,
+  DeletionRange,
   Driver,
+  FiniteModel,
+  HostTape,
+  LoadedFiniteModel,
   Model,
   PortableCommand,
   PortableCore,
@@ -12,12 +17,15 @@ import type {
   PortableValue,
   Trace,
 } from "./contracts.js";
+import { parseFiniteModel } from "./finite.js";
+import { parseConcurrentHistory } from "./history.js";
 import {
   normalizePortableValue,
   PortableCoreError,
   parsePortableTrace,
   toPortableValue,
 } from "./portable-value.js";
+import { decodeSafetyResult } from "./safety.js";
 import { isRecord } from "./trace.js";
 
 const fields = (
@@ -109,6 +117,13 @@ const parseEffect = (value: unknown): PortableEffect => {
   throw new PortableCoreError("protocol", "Unknown effect kind");
 };
 
+export const decodePortableResult = (value: unknown): PortableResult => {
+  const parsed = parseEffect({ kind: "done", result: value });
+  if (parsed.kind !== "done")
+    throw new PortableCoreError("protocol", "Invalid finite result");
+  return parsed.result;
+};
+
 export const createPortableWasm = async (
   bytes: Uint8Array,
 ): Promise<PortableCore> => {
@@ -171,9 +186,99 @@ export const createPortableWasm = async (
         fields(output, ["kind"]);
         return { kind: "cancelled" };
       }
+      if (output.kind === "safety") {
+        fields(output, ["kind", "result"]);
+        return { kind: "safety", result: decodeSafetyResult(output.result) };
+      }
+      if (output.kind === "loaded") {
+        fields(output, ["kind", "handle"]);
+        return { kind: "loaded", handle: requestId(output.handle) };
+      }
+      if (output.kind === "released") {
+        fields(output, ["kind"]);
+        return { kind: "released" };
+      }
+      if (output.kind === "history") {
+        fields(output, ["kind", "result"]);
+        const result = fields(output.result, [
+          "status",
+          "explored",
+          "order",
+          "omitted",
+          "pending",
+        ]);
+        if (
+          (result.status !== "linearizable" &&
+            result.status !== "not-linearizable" &&
+            result.status !== "inconclusive" &&
+            result.status !== "empty") ||
+          typeof result.explored !== "number" ||
+          !Number.isSafeInteger(result.explored) ||
+          result.explored < 0
+        )
+          throw new PortableCoreError("protocol", "Invalid concurrent result");
+        const strings = (values: unknown): readonly string[] => {
+          if (
+            !Array.isArray(values) ||
+            values.some((value) => typeof value !== "string")
+          )
+            throw new PortableCoreError(
+              "protocol",
+              "Invalid history operation ids",
+            );
+          return values.map((value: string) => value);
+        };
+        const history: ConcurrentResult = {
+          status: result.status,
+          explored: result.explored,
+          order: strings(result.order),
+          omitted: strings(result.omitted),
+          pending: strings(result.pending),
+        };
+        return { kind: "history", result: history };
+      }
       if (output.kind === "value") {
         fields(output, ["kind", "value"]);
         return { kind: "value", value: normalizePortableValue(output.value) };
+      }
+      if (output.kind === "host") {
+        fields(output, ["kind", "snapshot"]);
+        return {
+          kind: "host",
+          snapshot: normalizePortableValue(output.snapshot),
+        };
+      }
+      if (output.kind === "results") {
+        fields(output, ["kind", "results"]);
+        if (!Array.isArray(output.results))
+          throw new PortableCoreError("protocol", "Invalid finite results");
+        return {
+          kind: "results",
+          results: output.results.map((result: unknown) =>
+            decodePortableResult(result),
+          ),
+        };
+      }
+      if (output.kind === "candidates") {
+        fields(output, ["kind", "ranges"]);
+        if (!Array.isArray(output.ranges))
+          throw new PortableCoreError("protocol", "Invalid shrink candidates");
+        return {
+          kind: "candidates",
+          ranges: output.ranges.map((range: unknown) => {
+            const parsed = fields(range, ["start", "count"]);
+            if (
+              typeof parsed.start !== "number" ||
+              !Number.isSafeInteger(parsed.start) ||
+              parsed.start < 0 ||
+              typeof parsed.count !== "number" ||
+              !Number.isSafeInteger(parsed.count) ||
+              parsed.count < 1
+            )
+              throw new PortableCoreError("protocol", "Invalid deletion range");
+            return { start: parsed.start, count: parsed.count };
+          }),
+        };
       }
       fields(output, ["kind", "effect"]);
       if (output.kind !== "effect")
@@ -366,3 +471,163 @@ export const checkPortableTrace = async <Action, Observation>(
     },
     () => driver.dispose?.(),
   );
+
+export const checkFiniteConformance = async (
+  core: PortableCore,
+  model: FiniteModel,
+  driver: Driver<PortableValue, PortableValue>,
+  actions: readonly PortableValue[],
+): Promise<PortableResult> =>
+  runEffects(
+    core,
+    () => ({ version: 1, request: { kind: "start-finite", model, actions } }),
+    async (effect) => {
+      if (effect.kind === "driver-reset")
+        return {
+          kind: "observation",
+          observation: normalizePortableValue(await driver.reset()),
+        };
+      if (effect.kind === "driver-step")
+        return {
+          kind: "observation",
+          observation: normalizePortableValue(await driver.step(effect.action)),
+        };
+      throw new PortableCoreError(
+        "protocol",
+        "Finite core requested a model host",
+      );
+    },
+    () => driver.dispose?.(),
+  );
+
+export const checkFiniteHistories = (
+  core: PortableCore,
+  model: FiniteModel,
+  traces: readonly PortableTrace[],
+): readonly PortableResult[] => {
+  const result = core.request({
+    version: 1,
+    request: { kind: "check-finite", model, traces },
+  });
+  if (result.kind !== "results")
+    throw new PortableCoreError("protocol", "Expected finite results");
+  return result.results;
+};
+
+export const loadFiniteModel = (
+  core: PortableCore,
+  artifact: FiniteModel,
+): LoadedFiniteModel => {
+  const loaded = core.request({
+    version: 1,
+    request: { kind: "load-model", model: parseFiniteModel(artifact) },
+  });
+  if (loaded.kind !== "loaded")
+    throw new PortableCoreError("protocol", "Expected model handle");
+  let released = false;
+  const active = () => {
+    if (released)
+      throw new PortableCoreError("protocol", "Released model handle");
+  };
+  return {
+    checkHistories: (traces) => {
+      active();
+      const output = core.request({
+        version: 1,
+        request: { kind: "check-loaded", handle: loaded.handle, traces },
+      });
+      if (output.kind !== "results")
+        throw new PortableCoreError("protocol", "Expected finite results");
+      return output.results;
+    },
+    checkHistory: (history, maxNodes) => {
+      active();
+      if (
+        !Number.isSafeInteger(maxNodes) ||
+        maxNodes < 1 ||
+        maxNodes > 0xffff_ffff
+      )
+        throw new PortableCoreError("protocol", "Invalid history node budget");
+      const output = core.request({
+        version: 1,
+        request: {
+          kind: "check-history",
+          handle: loaded.handle,
+          history: parseConcurrentHistory(history),
+          maxNodes,
+        },
+      });
+      if (output.kind !== "history")
+        throw new PortableCoreError("protocol", "Expected concurrent result");
+      return output.result;
+    },
+    checkConformance: (driver, actions) =>
+      runEffects(
+        core,
+        () => {
+          active();
+          return {
+            version: 1,
+            request: { kind: "start-loaded", handle: loaded.handle, actions },
+          };
+        },
+        async (effect) => {
+          if (effect.kind === "driver-reset")
+            return {
+              kind: "observation",
+              observation: normalizePortableValue(await driver.reset()),
+            };
+          if (effect.kind === "driver-step")
+            return {
+              kind: "observation",
+              observation: normalizePortableValue(
+                await driver.step(effect.action),
+              ),
+            };
+          throw new PortableCoreError(
+            "protocol",
+            "Loaded model requested model host",
+          );
+        },
+        () => driver.dispose?.(),
+      ),
+    release: () => {
+      active();
+      const output = core.request({
+        version: 1,
+        request: { kind: "release-model", handle: loaded.handle },
+      });
+      if (output.kind !== "released")
+        throw new PortableCoreError("protocol", "Expected model release");
+      released = true;
+    },
+  };
+};
+
+export const coreDeletionCandidates = (
+  core: PortableCore,
+  length: number,
+): readonly DeletionRange[] => {
+  if (!Number.isSafeInteger(length) || length < 0 || length > 0xffff_ffff)
+    throw new RangeError("Invalid sequence length");
+  const result = core.request({
+    version: 1,
+    request: { kind: "shrink-candidates", length },
+  });
+  if (result.kind !== "candidates")
+    throw new PortableCoreError("protocol", "Expected deletion candidates");
+  return result.ranges;
+};
+
+export const verifyHostTape = (
+  core: PortableCore,
+  tape: HostTape,
+): PortableValue => {
+  const result = core.request({
+    version: 1,
+    request: { kind: "replay-host", tape },
+  });
+  if (result.kind !== "host")
+    throw new PortableCoreError("protocol", "Expected host snapshot");
+  return result.snapshot;
+};

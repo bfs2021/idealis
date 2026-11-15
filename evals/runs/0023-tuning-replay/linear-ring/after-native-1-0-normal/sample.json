@@ -1,0 +1,35 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0023-tuning-replay/linear-ring/after-native-1-0-normal/input.json",
+    "1",
+    "/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core/target/release/modelt-core"
+  ],
+  "exit": 0,
+  "wallMs": 72.34616600000027,
+  "stdout": "{\"frontendMs\":2.755541000000001,\"engineStartupMs\":2.974916999999998,\"apiMs\":0.21991700000000236,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":17,\"generated\":18,\"depth\":16,\"work\":36,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 2.755541000000001,
+    "engineStartupMs": 2.974916999999998,
+    "apiMs": 0.21991700000000236,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 17,
+      "generated": 18,
+      "depth": 16,
+      "work": 36,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

@@ -1,0 +1,80 @@
+   Compiling half v2.7.1
+   Compiling rtlc v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtlc)
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.8.2
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.89s
+     Running unittests src/lib.rs (crates/rtlc/target/debug/deps/rtlc-4755f7e95d4686b7)
+
+running 17 tests
+test safety_expressions::tests::cached_type_results_compare_descriptors_after_hash_collisions ... ok
+test safety_expressions::tests::successful_record_type_checks_reuse_their_work ... ok
+test safety_expressions::tests::leaf_evaluation_preserves_context_errors_and_lazy_branches ... ok
+test safety::parallel::tests::candidates_keep_snapshots_and_order_when_buffers_are_reused ... ok
+test safety_values::tests::colliding_function_hashes_keep_distinct_values ... ok
+test safety::tests::colliding_hashes_keep_distinct_typed_states ... ok
+test safety::parallel::schedule_tests::batch_tracks_fanout_and_stays_bounded ... ok
+test safety_expressions::tests::cached_membership_values_and_descriptors_remap_with_worker_references ... ok
+test safety_expressions::tests::record_types_depending_on_bound_variables_are_not_reused ... ok
+test safety_expressions::tests::preparing_types_does_not_evaluate_an_unreached_branch_or_cache_an_error ... ok
+test safety_values::tests::collisions_in_an_overlay_keep_base_and_local_values_distinct ... ok
+test safety_values::tests::integer_positions_preserve_sparse_domains_and_missing_keys ... ok
+test safety_values::tests::replacement_keeps_the_normalized_domain_and_canonical_identity ... ok
+test safety_work::tests::another_worker_can_spend_unused_credit_below_the_reservation_size ... ok
+test safety_values::tests::worker_values_share_the_base_and_remap_conflicting_local_references ... ok
+test safety_work::tests::oversized_consumption_returns_the_actual_remaining_work ... ok
+test safety_work::tests::concurrent_workers_consume_exactly_the_global_budget ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/parallel_safety.rs (crates/rtlc/target/debug/deps/parallel_safety-25fbc92e25737a6f)
+
+running 4 tests
+test parallel_diamond_deduplicates_and_keeps_bfs_counts ... ok
+test parallel_trace_is_the_same_shortest_trace ... ok
+test global_cuts_remain_bounded_and_worker_zero_is_rejected ... ok
+test converging_workers_validate_each_canonical_state_once ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/standalone.rs (crates/rtlc/target/debug/deps/standalone-a6c5535d99ea86b8)
+
+running 3 tests
+test typed_ir_checks_without_modelt ... ok
+test shortest_violation_and_empty_initial_states_remain_distinct ... ok
+test wire_contract_roundtrips_and_rejects_internal_references ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running src/benchmarks.rs (crates/rtlc/target/debug/deps/safety-6ff2a72f4132f42b)
+Testing values/intern-new-functions
+Success
+Testing values/intern-existing-functions
+Success
+Testing values/except-function
+Success
+Testing values/except-record
+Success
+
+Testing membership/function-cube
+Success
+Testing membership/parallel-channels
+Success
+
+Testing search/counter-product/1
+Success
+Testing search/counter-product/8
+Success
+Testing search/function-cube/1
+Success
+Testing search/function-cube/8
+Success
+Testing search/parallel-channels/1
+Success
+Testing search/parallel-channels/8
+Success
+Testing search/linear-ring/1
+Success
+Testing search/linear-ring/8
+Success
+

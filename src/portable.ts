@@ -1,4 +1,12 @@
 export type {
+  ConcurrentHistory,
+  ConcurrentResult,
+  DeletionRange,
+  FiniteModel,
+  HistoryEvent,
+  HistoryRecorder,
+  HostTape,
+  LoadedFiniteModel,
   PortableCommand,
   PortableCore,
   PortableEffect,
@@ -8,7 +16,23 @@ export type {
   PortableResult,
   PortableTrace,
   PortableValue,
+  SafetyBounds,
+  SafetyProgram,
+  SafetyResult,
+  ShrinkResult,
+  ShrinkVerdict,
 } from "./contracts.js";
+export {
+  checkFiniteHistory,
+  compileFiniteModel,
+  createFiniteModel,
+  parseFiniteModel,
+} from "./finite.js";
+export {
+  checkConcurrentHistory,
+  createHistoryRecorder,
+  parseConcurrentHistory,
+} from "./history.js";
 export {
   decodePortableTrace,
   encodePortableTrace,
@@ -18,8 +42,15 @@ export {
   toPortableValue,
 } from "./portable-value.js";
 export {
+  checkFiniteConformance,
+  checkFiniteHistories,
   checkPortableConformance,
   checkPortableTrace,
+  coreDeletionCandidates,
   createPortableWasm,
+  loadFiniteModel,
   toPortableTrace,
+  verifyHostTape,
 } from "./portable-wasm.js";
+export { checkSafety } from "./safety.js";
+export { deletionCandidates, shrinkCounterexample } from "./shrink.js";

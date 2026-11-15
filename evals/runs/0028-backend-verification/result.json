@@ -1,0 +1,170 @@
+{
+  "status": "complete",
+  "sourceVersion": "216a8aa583d808ae0e2dfc9bf62009eb5017880810da8dc9ef899ba30bf83e0f",
+  "sourceCommit": "f368a1562ebe5517eeaf50311804fb030e4f193e",
+  "commit": "f368a1562ebe5517eeaf50311804fb030e4f193e",
+  "sourceCheck": {
+    "files": 168,
+    "unchangedSinceRun": true
+  },
+  "run": "evals/runs/0028-backend-contract-final",
+  "runResultSha256": "b11ed9afea8f1de8135362d54caa20901827b706ce101f36d294a363bcd21416",
+  "counts": {
+    "sharedTestsPerRunner": 76,
+    "newContractTestsPerRunner": 5,
+    "wasmIntegrationTests": 1,
+    "browserTests": 2,
+    "portableBrowserTests": 2,
+    "nativeWasmPairs": 6,
+    "savedApalacheBoundedResults": 24
+  },
+  "mutation": {
+    "score": 95.4,
+    "killed": 104,
+    "survived": 5,
+    "compileErrors": 133,
+    "backendMutationCoverage": false,
+    "note": "Existing conformance/durable-counter targets. Final run reused cached mutant results; the earlier run executed them against the same target/test hashes."
+  },
+  "limits": {
+    "genericApalacheAdapter": false,
+    "smtEncoding": false,
+    "itfImporter": false,
+    "proofCertificate": false,
+    "newPerformanceMeasurement": false,
+    "unknownSutFaultDiscovery": false
+  },
+  "checks": [
+    {
+      "command": "contract imports/types before implementation",
+      "path": "red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "non-string inconclusive reason before correction",
+      "path": "reason-red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "just backend-test",
+      "path": "backend-test-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just backend-eval evals/runs/0028-backend-contract-final",
+      "path": "backend-final-eval.log",
+      "status": "passed"
+    },
+    {
+      "command": "just check",
+      "path": "final-check.log",
+      "status": "passed"
+    },
+    {
+      "command": "just browser",
+      "path": "final-browser.log",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm portable:browser",
+      "path": "final-portable-browser.log",
+      "status": "passed"
+    },
+    {
+      "command": "just portable-test",
+      "path": "final-portable-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just mutation",
+      "path": "final-mutation.log",
+      "status": "passed"
+    },
+    {
+      "command": "just package",
+      "path": "final-package.log",
+      "status": "passed"
+    },
+    {
+      "command": "just evaluate",
+      "path": "final-evaluate.log",
+      "status": "passed"
+    },
+    {
+      "command": "just replay-evaluation",
+      "path": "final-replay.log",
+      "status": "passed"
+    },
+    {
+      "command": "documentation format and diff checks",
+      "path": "final-docs-check.log",
+      "status": "passed"
+    }
+  ],
+  "files": [
+    {
+      "path": "red.log",
+      "sha256": "30b352cc8470507f6ebeab573bbeca1bc4a513d817f4432b9e4152bd353626ff"
+    },
+    {
+      "path": "reason-red.log",
+      "sha256": "ceb8201d1888f57c0e938655e38f1405e2f9dfde59898487af19216faa59ad46"
+    },
+    {
+      "path": "backend-test-final.log",
+      "sha256": "10af69fc9fdadc2ea091e7cd44fee2db8be9ee9fa560099819cbecb7fa1f5fb9"
+    },
+    {
+      "path": "backend-final-eval.log",
+      "sha256": "2725da7bdac3428f0df12f25d9dbe7633164f82c86fdf03adcc58f3626dc9fde"
+    },
+    {
+      "path": "final-check.log",
+      "sha256": "84bb110dff2e8d0faaee7b0a5f7407604d911f20103d6c5dc808c916f6019da9"
+    },
+    {
+      "path": "final-browser.log",
+      "sha256": "26b05f8be103239397f67f280b5f5fe80c5cb095453fb2b3dd963af04b424ca9"
+    },
+    {
+      "path": "final-portable-browser.log",
+      "sha256": "05558761efa359940d0fa2f2945899915b76627bd6aea535024bb3313c162664"
+    },
+    {
+      "path": "final-portable-test.log",
+      "sha256": "d629f7021924b2bc090ddd39f0b702cc61be139a1dafdb2158025bc1ad316c87"
+    },
+    {
+      "path": "final-mutation.log",
+      "sha256": "3740c7d7c2863c4c7533a150668280d96423e3a92e7d5c8c0584a55b58b4cde6"
+    },
+    {
+      "path": "final-package.log",
+      "sha256": "73c4c81cad793f8769bf754e6f84215c94a0021cb5d9f1ee89c8af76257abaec"
+    },
+    {
+      "path": "final-evaluate.log",
+      "sha256": "5e5fb285f22136446d225948b05cc8fbd840728c0ec26cc9a9ca9c9d7ee7a084"
+    },
+    {
+      "path": "final-replay.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "final-docs-check.log",
+      "sha256": "75714856d308306c29e4baec06c3a0bd3b1cbccee7c78c9b9e5ba11e6708cf8e"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "ba7bbcb52973b4a124c4aa02746fdb75b3eb657b12d1763e0a9d133ef40b6f35"
+    },
+    {
+      "path": "wasm-manifest.json",
+      "sha256": "80bd29a9855ed395489da9f949601f04bdbf310b9dd71d7f15a46ac7418b2790"
+    },
+    {
+      "path": "rtla-manifest.json",
+      "sha256": "380e557daa8fea2fb4fb4f5b120739b2a1d1276c10d6d570374d280dd5847e2c"
+    }
+  ]
+}

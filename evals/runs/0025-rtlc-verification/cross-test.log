@@ -1,0 +1,40 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.15s
+    Finished `release` profile [optimized] target(s) in 0.03s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+cargo build --release --locked --manifest-path evals/shared-oracle-rust/Cargo.toml
+   Compiling crossbeam-utils v0.8.23
+   Compiling crossbeam-epoch v0.9.21
+   Compiling crossbeam-deque v0.8.8
+   Compiling rayon-core v1.13.0
+   Compiling either v1.19.0
+   Compiling rayon v1.12.0
+   Compiling rtlc v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtlc)
+   Compiling modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)
+   Compiling modelt-shared-oracle v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/shared-oracle-rust)
+    Finished `release` profile [optimized] target(s) in 11.92s
+mkdir -p .artifacts/go
+cd adapters/go && CGO_ENABLED=0 go build -o ../../.artifacts/go/counter-replay ./cmd/counter-replay
+cargo fmt --manifest-path evals/shared-oracle-rust/Cargo.toml -- --check
+cargo clippy --all-targets --locked --manifest-path evals/shared-oracle-rust/Cargo.toml -- -D warnings
+    Checking modelt-shared-oracle v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/shared-oracle-rust)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
+node --test dist/evals/cross-language/contract-test.js
+✔ the same oracle drives live TS, Rust and Go implementations (2263.120791ms)
+✔ a changed expected observation is rejected before live execution (211.347875ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2515.175084

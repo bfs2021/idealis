@@ -1,0 +1,277 @@
+{
+  "status": "complete",
+  "sourceVersion": "5b984ab3ab1ce907f065bbb8d70aaa7fd32aaed05626c6d0536b1e81e907ce2e",
+  "modules": 199,
+  "configs": 199,
+  "nativeWasmComparisons": 418,
+  "syntaxCases": 18,
+  "limits": 2,
+  "sany": [
+    {
+      "name": "parenthesized-precedence",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/parenthesized-precedence/sany.log"
+    },
+    {
+      "name": "prefix-precedence",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/prefix-precedence/sany.log"
+    },
+    {
+      "name": "nested-junction",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/nested-junction/sany.log"
+    },
+    {
+      "name": "aliases-and-based-numerals",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/aliases-and-based-numerals/sany.log"
+    },
+    {
+      "name": "case-arms",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/case-arms/sany.log"
+    },
+    {
+      "name": "nested-comments",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/nested-comments/sany.log"
+    },
+    {
+      "name": "empty-tuple-and-set",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/empty-tuple-and-set/sany.log"
+    },
+    {
+      "name": "missing-bracket",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/missing-bracket/sany.log"
+    },
+    {
+      "name": "missing-comment-end",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/missing-comment-end/sany.log"
+    },
+    {
+      "name": "missing-string-end",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/missing-string-end/sany.log"
+    },
+    {
+      "name": "relational-chain",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/relational-chain/sany.log"
+    },
+    {
+      "name": "mixed-associativity",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/mixed-associativity/sany.log"
+    },
+    {
+      "name": "mixed-junctions",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/mixed-junctions/sany.log"
+    },
+    {
+      "name": "empty-call",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/empty-call/sany.log"
+    },
+    {
+      "name": "empty-index",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/empty-index/sany.log"
+    },
+    {
+      "name": "missing-comma",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/missing-comma/sany.log"
+    },
+    {
+      "name": "offside-body",
+      "expected": "syntax-error",
+      "exitCode": 255,
+      "log": "sany/offside-body/sany.log"
+    },
+    {
+      "name": "lambda-outside-fragment",
+      "expected": "accepted",
+      "exitCode": 0,
+      "log": "sany/lambda-outside-fragment/sany.log"
+    }
+  ],
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "e99acf3c57513598b15e9bdee3fdbcbd19f54f02c05bf53dd38628c7173816d1"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "27cb0e490518dc0a6ea0f2013ea14d75365639b2cac9b27b03282108990547a6"
+    },
+    {
+      "path": "records.json",
+      "sha256": "b2e567c4e8252f802f778471d5738a97eb465cd76aa0840ead57caaac6dc2499"
+    },
+    {
+      "path": "sany/parenthesized-precedence/sany.log",
+      "sha256": "6b3f3ab1bbbef477c8b45bb2d9c5a6edecca6e2c8f1fb823f35dea706c3594e4"
+    },
+    {
+      "path": "sany/parenthesized-precedence/Syntax.tla",
+      "sha256": "33bf62c43b59fd0d7e17e8a1b8fb9b9bf2fbfe01fb7bb26b299071b9d7930148"
+    },
+    {
+      "path": "sany/prefix-precedence/sany.log",
+      "sha256": "8db06437176f7af2071de56ce9d7a5fd55264bf4f1baea258c85f9a6459ff990"
+    },
+    {
+      "path": "sany/prefix-precedence/Syntax.tla",
+      "sha256": "eb34589aeda981eb8db635031e8040866dee477a831425655d28e4f9f7012857"
+    },
+    {
+      "path": "sany/nested-junction/sany.log",
+      "sha256": "25f9ef5549afeeb891573bad04cafbd465fd65128ebbd269300e1b37c6dde8e5"
+    },
+    {
+      "path": "sany/nested-junction/Syntax.tla",
+      "sha256": "c1acf9c3a0a8cf77634e5227884d2671c693a818e1cea2fbe47f4eb8e0dd5e64"
+    },
+    {
+      "path": "sany/aliases-and-based-numerals/sany.log",
+      "sha256": "a0b6e064210fc82ffae161a27f607d69195ef73ee9d0d6b16080ab3d2d01521b"
+    },
+    {
+      "path": "sany/aliases-and-based-numerals/Syntax.tla",
+      "sha256": "8d69dcc5aa70cff53cfb6e025a156072c7cc0753a6d3244ea054b6010868b3f6"
+    },
+    {
+      "path": "sany/case-arms/sany.log",
+      "sha256": "cdaaeec4a1e41e10cedfe5cb3ade8b5730d73b792010bd6254b024df15e1c2f3"
+    },
+    {
+      "path": "sany/case-arms/Syntax.tla",
+      "sha256": "0727284843698914df67c428e850fa0e78b3a6e1b4ca8ef441934ba3d9a1fb05"
+    },
+    {
+      "path": "sany/nested-comments/sany.log",
+      "sha256": "656e2ba823eaae56643a9c7f19161e9dee00d1d061e59b4b708d517c7a230889"
+    },
+    {
+      "path": "sany/nested-comments/Syntax.tla",
+      "sha256": "7f172d3e09318e1c03380b93f68183d57368d12281e601d0a4a9f370f9d28d5a"
+    },
+    {
+      "path": "sany/empty-tuple-and-set/sany.log",
+      "sha256": "6d556015e66c8b121a26b9b42eb22b6785fb9ad26f290e080a877cd529ec3fd9"
+    },
+    {
+      "path": "sany/empty-tuple-and-set/Syntax.tla",
+      "sha256": "3f6eedff5d55cb5052d07ace2e4c7c1f628fa6240ed9b4b1dce5b76a47d40d68"
+    },
+    {
+      "path": "sany/missing-bracket/sany.log",
+      "sha256": "5feedf4fd9333db4969f3a683df217cf905baabd41930b7f3e92bd466d8e60c1"
+    },
+    {
+      "path": "sany/missing-bracket/Syntax.tla",
+      "sha256": "99e885e5e6bd94cac1fd4775339a69d115b6783323ed212f40a4ff8d693108c3"
+    },
+    {
+      "path": "sany/missing-comment-end/sany.log",
+      "sha256": "73450a3305bf9e5df7bf0a53ca3de9e69818782192326c9a96c15a7c2fd3203e"
+    },
+    {
+      "path": "sany/missing-comment-end/Syntax.tla",
+      "sha256": "c815cd5442f5023cd6cdf62ddb37696b3ade68063da6171e28d4ed3558a7ee6b"
+    },
+    {
+      "path": "sany/missing-string-end/sany.log",
+      "sha256": "d1a72f51f83e9f2d420029e8d8319462589d2ab9b189724d62c6fee9646603d1"
+    },
+    {
+      "path": "sany/missing-string-end/Syntax.tla",
+      "sha256": "be0f86ee0421ff80c50ddc5fb557a24f136dc02c4982d694dbd8b3725868fbe8"
+    },
+    {
+      "path": "sany/relational-chain/sany.log",
+      "sha256": "f990ef68b0185afbf7c1d58453e9e9ebb92c3803f7f8d4a5407d11e923e6b761"
+    },
+    {
+      "path": "sany/relational-chain/Syntax.tla",
+      "sha256": "68405a9587b7c956e14a40f30858a10da6de66358b62a79c0bc0bd72319ceb7b"
+    },
+    {
+      "path": "sany/mixed-associativity/sany.log",
+      "sha256": "6fa93f2df1c097dad66b3149f4f1bb9456b5644c5499bb24c040956838aba281"
+    },
+    {
+      "path": "sany/mixed-associativity/Syntax.tla",
+      "sha256": "f72cdd6eba9ca2220ca07e452ea16ca6d0801bbefd24d912930076fd767aad90"
+    },
+    {
+      "path": "sany/mixed-junctions/sany.log",
+      "sha256": "ea405924adf5f75c15cdf1f2d9f60af5ade8fdb32bb108164c5adc624ac30d9e"
+    },
+    {
+      "path": "sany/mixed-junctions/Syntax.tla",
+      "sha256": "ff71b77ad42b305672747a169b627c59fc7de65495693fbc120fde393814cdaa"
+    },
+    {
+      "path": "sany/empty-call/sany.log",
+      "sha256": "9dc48fe84b469ea896bf13facf1405dfe55e4ab1c13a27c8177c8c6374114c5f"
+    },
+    {
+      "path": "sany/empty-call/Syntax.tla",
+      "sha256": "3174cf68fe563d0a9f17e567ab91a1f89286fb5090f96382fc8c061c3d1aa052"
+    },
+    {
+      "path": "sany/empty-index/sany.log",
+      "sha256": "bea53b84d84e3582159771abc10e733f2d827da6187d3ae83d6001edf3bc5c85"
+    },
+    {
+      "path": "sany/empty-index/Syntax.tla",
+      "sha256": "cd2b2aac5c69dceacdf1a9919da286865dee2570aad1e81645116c5715d76746"
+    },
+    {
+      "path": "sany/missing-comma/sany.log",
+      "sha256": "e4da3b33d51a33cc2857222ca2d6b18e76a5d77f6fb876f572e942982595ab54"
+    },
+    {
+      "path": "sany/missing-comma/Syntax.tla",
+      "sha256": "f9727bb25eaff8923353167e933189343d4e5be34f34873333075b2980c10abb"
+    },
+    {
+      "path": "sany/offside-body/sany.log",
+      "sha256": "3e64d7e2ad7cf2cd80373fe77a0afde9c9047d4ec54d2bd9e0eab48eb3882ad6"
+    },
+    {
+      "path": "sany/offside-body/Syntax.tla",
+      "sha256": "41005791b2160ce58170ed397ce91b3322540c7513ff1c5be1b0b7cad2f6cc91"
+    },
+    {
+      "path": "sany/lambda-outside-fragment/sany.log",
+      "sha256": "327b62b83f5488455d472190ac712e64b0b488adffe0452b78d18afb83aad0e6"
+    },
+    {
+      "path": "sany/lambda-outside-fragment/Syntax.tla",
+      "sha256": "356cac62970bfc98ab4ad338a311b5002fe2e50d4ff0a890e55a76176bec6843"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "route": "wasm",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "wasm",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0024-scalar-comparison/linear-ring/before-3-normal/input.json",
+    "",
+    "/Users/mz/ghq/github.com/mizchi/modelt/.artifacts/profile-tuning/before/modelt_core.wasm"
+  ],
+  "exit": 0,
+  "wallMs": 273.8937500000029,
+  "stdout": "{\"frontendMs\":2.736791999999994,\"engineStartupMs\":1.4808749999999975,\"apiMs\":206.30662499999997,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":1000000,\"generated\":1000001,\"depth\":999999,\"work\":2000002,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 2.736791999999994,
+    "engineStartupMs": 1.4808749999999975,
+    "apiMs": 206.30662499999997,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 1000000,
+      "generated": 1000001,
+      "depth": 999999,
+      "work": 2000002,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [
+    {
+      "milliseconds": 227.78654200000165,
+      "bytes": 165625856
+    }
+  ],
+  "sampledMaxRssBytes": 165625856,
+  "phases": null,
+  "phaseError": null
+}

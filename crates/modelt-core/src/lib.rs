@@ -1,8 +1,19 @@
-mod value;
+mod finite;
+pub use rtlc::{CoreError, SafetyBounds, SafetyProgram, SafetyResult, Value};
+mod history;
+pub use history::{ConcurrentHistory, ConcurrentResult, ConcurrentStatus, HistoryEvent};
+mod host;
+pub use host::{HostEvent, HostMessage, HostTape, SimulationHost, replay_host};
+mod shrink;
+pub use finite::{Edge, FiniteModel, FiniteState, Initial, PreparedFiniteModel};
+pub use shrink::{
+    DeletionRange, ShrinkResult, ShrinkStatus, ShrinkVerdict, deletion_candidates,
+    shrink_counterexample,
+};
+use std::{collections::BTreeMap, sync::Arc};
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 use serde::{Deserialize, Serialize};
-pub use value::{CoreError, Value};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -100,11 +111,67 @@ pub enum Response {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Request {
-    Canonicalize { value: Value },
-    Start { model: String, actions: Vec<Value> },
-    Replay { trace: Trace },
-    Resume { id: u32, response: Response },
-    Cancel { id: u32 },
+    #[cfg(not(target_arch = "wasm32"))]
+    CheckSafetyParallel {
+        program: SafetyProgram,
+        bounds: SafetyBounds,
+        workers: usize,
+    },
+    CheckSafety {
+        program: SafetyProgram,
+        bounds: SafetyBounds,
+    },
+    LoadModel {
+        model: FiniteModel,
+    },
+    ReleaseModel {
+        handle: u32,
+    },
+    StartLoaded {
+        handle: u32,
+        actions: Vec<Value>,
+    },
+    CheckLoaded {
+        handle: u32,
+        traces: Vec<Trace>,
+    },
+    CheckHistory {
+        handle: u32,
+        history: ConcurrentHistory,
+        #[serde(rename = "maxNodes")]
+        max_nodes: u32,
+    },
+    ReplayHost {
+        tape: HostTape,
+    },
+    StartFinite {
+        model: FiniteModel,
+        actions: Vec<Value>,
+    },
+    CheckFinite {
+        model: FiniteModel,
+        traces: Vec<Trace>,
+    },
+    ShrinkCandidates {
+        length: u32,
+    },
+    Canonicalize {
+        value: Value,
+    },
+    Start {
+        model: String,
+        actions: Vec<Value>,
+    },
+    Replay {
+        trace: Trace,
+    },
+    Resume {
+        id: u32,
+        response: Response,
+    },
+    Cancel {
+        id: u32,
+    },
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -115,6 +182,13 @@ pub struct Command {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Message {
+    Safety { result: SafetyResult },
+    Loaded { handle: u32 },
+    Released,
+    History { result: ConcurrentResult },
+    Host { snapshot: Value },
+    Results { results: Vec<ConformanceResult> },
+    Candidates { ranges: Vec<DeletionRange> },
     Value { value: Value },
     Effect { effect: Effect },
     Cancelled,
@@ -315,12 +389,20 @@ impl Session {
 
 pub struct Engine {
     session: Option<Session>,
+    finite: Option<Arc<PreparedFiniteModel>>,
+    models: BTreeMap<u32, Arc<PreparedFiniteModel>>,
+    active_handle: Option<u32>,
+    next_handle: u32,
     next_id: u32,
 }
 impl Default for Engine {
     fn default() -> Self {
         Self {
             session: None,
+            finite: None,
+            models: BTreeMap::new(),
+            active_handle: None,
+            next_handle: 1,
             next_id: 1,
         }
     }
@@ -349,11 +431,102 @@ impl Engine {
             return Err(CoreError::protocol("Unsupported protocol version"));
         }
         match command.request {
+            #[cfg(not(target_arch = "wasm32"))]
+            Request::CheckSafetyParallel {
+                program,
+                bounds,
+                workers,
+            } => Ok(Message::Safety {
+                result: program.check_parallel(bounds, workers)?,
+            }),
+            Request::CheckSafety { program, bounds } => Ok(Message::Safety {
+                result: program.check(bounds)?,
+            }),
+            Request::LoadModel { model } => {
+                let model = Arc::new(model.prepare()?);
+                let next = self
+                    .next_handle
+                    .checked_add(1)
+                    .ok_or_else(|| CoreError::protocol("Model handles exhausted"))?;
+                let handle = self.next_handle;
+                self.models.insert(handle, model);
+                self.next_handle = next;
+                Ok(Message::Loaded { handle })
+            }
+            Request::ReleaseModel { handle } => {
+                if self.active_handle == Some(handle)
+                    && self
+                        .session
+                        .as_ref()
+                        .is_some_and(|session| !matches!(session.phase, Phase::Done(_)))
+                {
+                    return Err(CoreError::protocol("Model handle is in use"));
+                }
+                self.models
+                    .remove(&handle)
+                    .ok_or_else(|| CoreError::protocol("Unknown model handle"))?;
+                if self.active_handle == Some(handle) {
+                    self.finite = None;
+                    self.active_handle = None;
+                }
+                Ok(Message::Released)
+            }
+            Request::StartLoaded { handle, actions } => {
+                let model = self.get_model(handle)?;
+                self.begin(
+                    Session::new(model.name().into(), actions)?,
+                    Some(model),
+                    Some(handle),
+                )
+            }
+            Request::CheckLoaded { handle, traces } => {
+                let model = self.get_model(handle)?;
+                Ok(Message::Results {
+                    results: traces
+                        .into_iter()
+                        .map(|trace| model.check_history(trace))
+                        .collect::<Result<_, _>>()?,
+                })
+            }
+            Request::CheckHistory {
+                handle,
+                history,
+                max_nodes,
+            } => Ok(Message::History {
+                result: self
+                    .get_model(handle)?
+                    .check_concurrent(history, max_nodes)?,
+            }),
+            Request::ReplayHost { tape } => Ok(Message::Host {
+                snapshot: replay_host(tape)?,
+            }),
             Request::Canonicalize { value } => Ok(Message::Value {
                 value: value.normalize()?,
             }),
-            Request::Start { model, actions } => self.begin(Session::new(model, actions)?),
-            Request::Replay { trace } => self.begin(Session::replay(trace)?),
+            Request::Start { model, actions } => {
+                self.begin(Session::new(model, actions)?, None, None)
+            }
+            Request::Replay { trace } => self.begin(Session::replay(trace)?, None, None),
+            Request::StartFinite { model, actions } => {
+                let model = Arc::new(model.prepare()?);
+                self.begin(
+                    Session::new(model.name().into(), actions)?,
+                    Some(model),
+                    None,
+                )
+            }
+            Request::CheckFinite { model, traces } => {
+                let model = model.prepare()?;
+                Ok(Message::Results {
+                    results: traces
+                        .into_iter()
+                        .map(|trace| model.check_history(trace))
+                        .collect::<Result<_, _>>()?,
+                })
+            }
+            Request::ShrinkCandidates { length } => Ok(Message::Candidates {
+                ranges: deletion_candidates(length),
+            }),
             Request::Resume { id, response } => {
                 let session = self
                     .session
@@ -361,7 +534,7 @@ impl Engine {
                     .ok_or_else(|| CoreError::protocol("No active session"))?;
                 let effect = session.resume(id, response)?;
                 self.next_id = session.id;
-                Ok(Message::Effect { effect })
+                self.drive(effect)
             }
             Request::Cancel { id } => {
                 let session = self
@@ -375,11 +548,18 @@ impl Engine {
                     .checked_add(1)
                     .ok_or_else(|| CoreError::protocol("Request ID exhausted"))?;
                 self.session = None;
+                self.finite = None;
+                self.active_handle = None;
                 Ok(Message::Cancelled)
             }
         }
     }
-    fn begin(&mut self, mut session: Session) -> Result<Message, CoreError> {
+    fn begin(
+        &mut self,
+        mut session: Session,
+        finite: Option<Arc<PreparedFiniteModel>>,
+        handle: Option<u32>,
+    ) -> Result<Message, CoreError> {
         if self
             .session
             .as_ref()
@@ -390,6 +570,35 @@ impl Engine {
         session.id = self.next_id;
         let effect = session.effect();
         self.session = Some(session);
+        self.finite = finite;
+        self.active_handle = handle;
+        self.drive(effect)
+    }
+    fn get_model(&self, handle: u32) -> Result<Arc<PreparedFiniteModel>, CoreError> {
+        self.models
+            .get(&handle)
+            .cloned()
+            .ok_or_else(|| CoreError::protocol("Unknown model handle"))
+    }
+    fn drive(&mut self, mut effect: Effect) -> Result<Message, CoreError> {
+        while let Some(response) = self
+            .finite
+            .as_ref()
+            .map(|model| model.response(&effect))
+            .transpose()?
+            .flatten()
+        {
+            let id = match effect {
+                Effect::ModelInitial { id } | Effect::ModelStep { id, .. } => id,
+                _ => unreachable!(),
+            };
+            let session = self
+                .session
+                .as_mut()
+                .ok_or_else(|| CoreError::protocol("No finite session"))?;
+            effect = session.resume(id, response)?;
+            self.next_id = session.id;
+        }
         Ok(Message::Effect { effect })
     }
 }

@@ -1,0 +1,116 @@
+pnpm check
+
+> @mizchi/modelt@0.1.0-alpha.0 check /Users/mz/ghq/github.com/mizchi/modelt
+> biome check .
+
+Checked 248 files in 51ms. No fixes applied.
+pnpm typecheck
+
+> @mizchi/modelt@0.1.0-alpha.0 typecheck /Users/mz/ghq/github.com/mizchi/modelt
+> tsc --noEmit
+
+pnpm test
+
+> @mizchi/modelt@0.1.0-alpha.0 test /Users/mz/ghq/github.com/mizchi/modelt
+> pnpm test:vitest && pnpm test:node
+
+
+> @mizchi/modelt@0.1.0-alpha.0 test:vitest /Users/mz/ghq/github.com/mizchi/modelt
+> vitest run
+
+
+ RUN  v5.1.0 /Users/mz/ghq/github.com/mizchi/modelt
+
+
+ Test Files  12 passed (12)
+      Tests  71 passed (71)
+   Start at  02:04:50
+   Duration  547ms (tests 56%, import 30%, transform 12%, worker 3%)
+
+
+> @mizchi/modelt@0.1.0-alpha.0 test:node /Users/mz/ghq/github.com/mizchi/modelt
+> pnpm build && node --test dist/tests/node.test.js
+
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+✔ a durable implementation conforms through retries, crashes and restarts (0.955791ms)
+✔ a volatile write loses an acknowledged value after a crash (0.4355ms)
+✔ a missing deduplication check applies a retried request twice (0.087167ms)
+✔ oracle generation gives replayable witnesses and distinguishes a depth bound (5.920041ms)
+✔ trace artifacts survive a JSON round trip (0.22325ms)
+✔ driver errors propagate instead of counting as a detected mismatch (0.252459ms)
+✔ dropped messages are removed before a later delivery (0.07575ms)
+✔ reset clears request deduplication and durable state between cases (0.11325ms)
+✔ restarting a running process preserves volatile state (0.0595ms)
+✔ the trace boundary accepts supported actions and rejects malformed JSON domains (0.109667ms)
+✔ successful reports and replay expose the complete observation record (0.126792ms)
+✔ differential execution disposes the reference and names its observation record (0.103ms)
+✔ delayed, reordered and dropped network messages remain replayable (0.066833ms)
+✔ a differential oracle detects an implementation regression (0.062833ms)
+✔ finite graph closure, state limits and empty initial states are distinct (0.096041ms)
+✔ model invariants return a shortest in-bound counterexample (0.049209ms)
+✔ conformance keeps one consistent nondeterministic history (0.090459ms)
+✔ invalid inputs and initial observations cannot pass vacuously (0.066042ms)
+✔ driver cleanup runs when stepping fails (0.145541ms)
+✔ trace replay checks the initial observation before any action (0.051833ms)
+✔ trace decoding validates the caller's action and observation domains (0.129625ms)
+✔ composed models expose interleavings and cross-component invariant failures (0.16525ms)
+✔ shared actions advance both components and preserve component invariants (0.10625ms)
+✔ property tests generate valid action sequences for a conforming implementation (3.531166ms)
+✔ shrunk fault traces replay from seed and path (2.29125ms)
+✔ discarding every generated input is exhaustion, never a passing test (0.14275ms)
+✔ property testing propagates infrastructure errors (0.082417ms)
+✔ request renaming is a metamorphic relation independent of the model (1.158042ms)
+✔ a real TLA+ counterexample becomes an executable implementation oracle (13.533791ms)
+✔ a successful TLA check does not fabricate a witness (1.2965ms)
+✔ Z3 Wasm solves SMT-LIB integer constraints and supplies a concrete test input (244.497834ms)
+✔ mixed-depth search alternates short and long cases under one operation budget (0.752958ms)
+✔ complete model coverage can miss a third-retry implementation fault (6.323541ms)
+✔ both experimental searches obey the same operation budget and replay on the normal implementation (0.857041ms)
+✔ a virtual clock reproduces the expiry boundary and the corrected version passes (0.321041ms)
+✔ state-dependent inputs remain executable when the choice list shrinks (0.286834ms)
+✔ history checking accepts overlapping valid operations, rejects lost updates, and respects real-time precedence (0.30525ms)
+✔ actual asynchronous lost updates depend on the controlled schedule and replay exactly (1.151667ms)
+✔ the experimental history checker agrees with an independent counter characterization (0.473833ms)
+✔ plans reject overlapping seed splits and unsupported scope (2.437625ms)
+✔ completed runs retain evidence and cannot overwrite an existing run ID (182.618041ms)
+✔ method comparison keeps improvements, regressions and broken controls distinct (0.233334ms)
+✔ time and memory budgets choose a feasible worker count and depth (0.156334ms)
+✔ insufficient and uncalibrated budgets never become successful exploration (0.045166ms)
+✔ packed and dynamic finite models generate the same results and action traces (4.508834ms)
+✔ schedule depth bounds distinguish partial exploration from all interleavings (0.198125ms)
+✔ sharding preserves task identities and exactly covers the manifest (2.086958ms)
+✔ cloud aggregation distinguishes missing tasks, retries, errors and incompatible results (0.67325ms)
+✔ portable values follow the shared canonical fixtures (0.549958ms)
+✔ portable codecs preserve integer precision and structural collections (0.343667ms)
+✔ portable values reject lossy or unsupported host values (0.053667ms)
+✔ portable traces have a distinct strict versioned format (0.106834ms)
+✔ finite artifacts retain closure, edge observations and invariants (8.874084ms)
+✔ finite edges preserve differing observations for the same target state (0.100041ms)
+✔ finite artifacts preserve violations and do not duplicate enabled actions (0.097542ms)
+✔ shrinking preserves failure identity, validity and explicit budgets (0.255417ms)
+✔ simulation hosts replay choices, queues, clocks and durable state (0.558375ms)
+✔ late responses resolve uncertainty at their actual event position (0.439208ms)
+✔ history formats reject unmatched ids, duplicate outcomes and unsupported metadata (0.379666ms)
+✔ trace buffers return isolated full snapshots and the exact failure prefix (0.177042ms)
+✔ unknown and cancel may take effect, confirmed failures cannot (0.176833ms)
+✔ concurrent responses may reorder, real-time order and budgets are preserved (0.2345ms)
+✔ causal shrinking can remove dependent pairs and preflight invalid histories (0.13ms)
+✔ safety compilation produces a portable program without enumerating reachable states (0.953417ms)
+✔ safety compilation rejects unsupported configuration instead of ignoring it (0.740791ms)
+✔ safety compilation rejects missing arithmetic imports and constant NEXT (0.150625ms)
+✔ safety compilation rejects unbound, recursive and conflicting symbols (0.290709ms)
+✔ safety result validates lasso boundaries and preserves compound snapshots (0.191292ms)
+✔ schedule chooses measured parallelism within time and memory budgets (0.232208ms)
+✔ cost order batches small jobs while FIFO preserves input order (0.062833ms)
+✔ scheduling rejects ambiguous identities and invalid resource estimates (0.091292ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 598.976125

@@ -1,0 +1,37 @@
+pnpm rtla:test
+
+> @mizchi/modelt@0.1.0-alpha.0 rtla:test /Users/mz/ghq/github.com/mizchi/modelt
+> cargo fmt --manifest-path crates/rtla/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rtla/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rtla/Cargo.toml && pnpm build && pnpm rtla:build && node --test dist/evals/rtla-parser/contract-test.js
+
+    Checking rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.35s
+   Compiling rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running unittests src/lib.rs (crates/rtla/target/debug/deps/rtla-9c7a0a79020231c7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (crates/rtla/target/debug/deps/rtla-7e1edd3c88ad14c4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/parser.rs (crates/rtla/target/debug/deps/parser-fb5e73509d24af4b)
+
+running 8 tests
+test preserves_nested_comments_strings_and_locations ... ok
+test parses_config_and_diagnoses_incomplete_input ... ok
+test rejects_empty_applications_and_misindented_junctions ... ok
+test strings_are_never_operators_and_concatenation_is_not_an_octal_numeral ... ok
+
+thread 'reports_resource_limits_without_claiming_the_tla_syntax_is_invalid' (45024471) has overflowed its stack
+fatal runtime error: stack overflow, aborting
+error: test failed, to rerun pass `--test parser`
+
+Caused by:
+  process didn't exit successfully: `/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla/target/debug/deps/parser-fb5e73509d24af4b` (signal: 6, SIGABRT: process abort signal)
+ ELIFECYCLE  Command failed with exit code 101.
+error: Recipe `rtla-test` failed on line 269 with exit code 101

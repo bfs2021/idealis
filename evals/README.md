@@ -47,3 +47,41 @@ pnpm eval:replay evals/runs/my-run-confirmation
 初回の幅広い pilot は `pnpm evaluate` / `pnpm evaluate:replay` で再実行できる。履歴は [0000](iterations/0000-pilot.md)。古い記録には後付けの厳密な provenance を主張せず、`legacy-import` として区別した。
 
 実行時間と Rust 化は [0003](iterations/0003-runtime.md)。[runtime/](runtime/README.md) に budget planner の前提、Rust/Wasm の比較、クラウド分割 CLI を記録している。
+
+[0007 の計画](plans/0007-shared-oracle.md) は、同じ仕様 oracle で TS / Rust / Go の実装を直接操作する。`just cross-test`、`cross-eval` / `cross-replay` と [利用手順](../docs/shared-oracle.md) を参照。
+
+[0008 の結果](iterations/0008-async-tuning.md) は、未確定操作を含む非同期履歴、障害境界、model handle、trace buffer、依存縮小、feedback 探索の採用判断。`just async-test`、`async-eval` / `async-replay` と [履歴の意味・API](../docs/async-history.md) を参照。
+
+[0009〜0011 の結果](iterations/0009-rust-safety.md) は、TLA+ safety fragment の状態生成・BFS を Rust native / Wasm 内で行う backend と、literal decode・状態保持の改善。TLC32件、変更前後37入力、各段階の固定入力測定を保存した。`just safety-test` と `safety-eval` / `safety-replay`、[対応範囲](../docs/rust-safety.md) を参照。
+
+[0012 の計画](plans/0012-collections-temporal.md) は、有限集合・関数・record・sequence、有限量化、temporal property と WF / SF の Rust backend 対応。`just complex-eval` / `complex-replay` は入力・結果・反例・対照を保存して再現する。`complex-tlc` / `complex-tlc-replay` は同じ入力と強制した反例を TLC で検査する。`safety-eval` は以前の6 scalar 入力と4つの複合値・temporal 入力を測る。
+
+[0012〜0014 の結果](iterations/0012-collections-temporal.md) に、複合値・temporal の対応、49入力・TLC46入力・反例14件、整数比較と intern table の改善、一律の高速化には至らない条件を記録した。
+
+[TLC直接比較の結果](iterations/0015-tlc-differential.md) は、境界値と seed 固定の小さい有限モデルを TLC / Rust native / Wasm へ渡す差分検査。`just tlc-diff` / `tlc-diff-replay` で判定・計数・返却値・反例を確認する。TLCを拒否対照、モデル評価エラー、実行基盤の失敗と分け、JVMごとに標準モジュールの展開先を隔離する。
+
+[速度比較の結果](iterations/0016-checker-benchmark.md) は、同じ11モデルを tla-ts / TLC / modelt native / Wasm で完全探索した測定。`checker-bench` / `checker-bench-replay` で起動込みとAPI再利用時を分け、source解析を含む時間・状態数・生成数・生ログを保存する。
+
+[常駐poolの評価](iterations/0017-parallel-safety.md) は、独立したTLA検査を1/2/4/8 workerへ配る。`parallel-safety-test` / `parallel-safety-eval` / `parallel-safety-replay` で、予算によるworker数の選択、費用順配置、batch化、結果と反例の一致を確認する。1モデル内部のBFS並列化とは区別する。
+
+[TLCとのbatch比較](iterations/0018-tlc-throughput.md) は、同じ88件を指定探索worker合計8で実行する。TLCの1 JVM × 8 worker / 8 JVM × 各1 workerとmodelt native / Wasmを比較し、JVM起動とIR再利用を含むthroughputの差を記録する。`tlc-throughput` / `tlc-throughput-replay` で実行できる。
+
+[単一モデルの比較](iterations/0019-single-model-scaling.md) は、約2,100万遷移の幅広い3モデルと幅1の対照を使い、TLC 1/2/4/8 workerと逐次native/Wasmを測る。`single-model-test` / `single-model-eval` / `single-model-replay`で正しさ・全体時間・補助区間・RSSを保存する。TLC内部方式の移植検討は[並列探索の調査](../docs/tlc-parallel-adoption.md)を参照。
+
+[nativeの層同期BFS](iterations/0020-frontier-safety.md)は、単一モデルを並列展開する明示的な経路。共有workカウンタの競合による後退と、初回の幅1測定への干渉も記録する。`frontier-safety-test` / `frontier-safety-eval` / `frontier-safety-replay`で検査する。
+
+[workerごとの予算予約](iterations/0021-worker-budget.md)は、共通counterへの毎tickの競合を減らす。同APIの1→8 workerで関数・チャネルは中央値約1.8倍、counterは遅くなるため、明示的な経路として採用する。`frontier-budget-eval` / `frontier-budget-replay`で固定入力の測定・再生を行う。
+
+[READMEの6経路比較](iterations/0022-readme-comparison.md)は、同じ4入力をtla-ts 1、TLC 1/8、Wasm 1、native 1/8で測り直した。条件・全sample・再生とREADMEへの照合を保存する。
+
+[Criterionによる最適化](iterations/0023-criterion-safety.md)は、値の一重保持、EXCEPT、型所属cache、候補buffer、重複検査、worker/batch選択の6項目。`criterion-test` / `criterion-save`でnative kernel/APIを測り、`criterion-compare` / `criterion-replay`で固定binaryの前後・起動・RSS・正常/故障を確認する。Wasm scalarの後退も記録した。
+
+[CPU profileとmicro tuning](iterations/0024-profile-tuning.md)は、Wasm/nativeのraw profileとself/inclusive集計からleaf評価と整数位置検索を調整した。`profile-record` / `profile-summary`でprofile、`profile-criterion`で14本、`profile-scalar` / `profile-replay`で通常Wasmの交互比較と再生を行う。
+
+[rtlcへの分離](iterations/0025-rtlc-extraction.md)は、有限TLA+ fragmentの検査をmodeltから独立したcrateへ移した。`rtlc-test` / `rtlc-example`と単独package consumer、分離前後のnative964件・Wasm241件で既存挙動を確認した。探索アルゴリズムと速度の主張は追加していない。
+
+[rtlaのparser](iterations/0026-rtla-parser.md)は、TLA+／TLC設定を型付きASTへ解析する独立Rust crate。`rtla-test` / `rtla-browser`でnative/Wasm、`rtla-eval`で199組のASTとSANYの構文対照を検査する。IR生成はTS側に残し、対応fragmentと全TLA+を区別する。
+
+[Apalacheとの比較](iterations/0027-apalache-comparison.md)は、BMC/帰納性と有限グラフのcompleteを区別する。`apalache-test` / `apalache-eval`で同じsource/configのpilotを実行し、raw log、ITF、IR、反例検証と起動込み時間を保存する。
+
+[backend契約](iterations/0028-backend-contract.md)は、explicit complete、有界の反例なし、帰納性と個別obligationを分ける。`backend-test` / `backend-eval`で実rtlc native/Wasm、0027の保存したApalache応答、非空性と帰納性の集約条件を確認する。新しい速度比較や汎用Apalache adapterの評価ではない。

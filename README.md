@@ -6,7 +6,9 @@ TypeScript のモデルと実装を比較する試作ライブラリ。モデル
 
 ## 実行
 
-Node.js 24+、pnpm、just を使う。npm には未公開。
+観測付きの有限モデルを TS / Rust で共有する方法、反例の縮小、時計・通信・永続化の注入は [利用ガイド](docs/using-models.md) を参照。`just package` で solver を必須にしない npm/Cargo/Wasm archive と CLI を作り、別 consumer で検証できる。[公開手順と CI の分割](docs/releasing.md) は別途記載している。
+
+Node.js 24+、pnpm、just を使う。リポジトリで Rust backend とブラウザの開発検査を実行する場合は Rust と `wasm32-unknown-unknown` target も必要。配布 Wasm の利用側で Rust をビルドする必要はない。npm には未公開。
 
 ```sh
 pnpm install --frozen-lockfile
@@ -14,6 +16,7 @@ just check
 just demo
 just mutation
 pnpm exec playwright install chromium
+rustup target add wasm32-unknown-unknown
 just browser
 ```
 
@@ -23,9 +26,67 @@ just browser
 
 時間・メモリから worker 数と探索深さを選ぶ `./budget`、独立 task の分割・集約を行う `./sharding` を追加した。[実行時間・Rust・cloud sharding の評価](evals/runtime/README.md) と [測定結果](evals/iterations/0003-runtime.md) を参照。Rust/Wasm は実験用カーネルとして分離している。
 
+独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
+
+<!-- checker-comparison:start -->
+## モデル検査の速度比較
+
+同じTLA+ source/configを各回別processで解析し、完全探索した起動込み時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、TLC v1.7.4 / Temurin 21.0.13+9で測った。
+
+| モデル      |    状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | modelt Wasm 1 worker | modelt native 1 worker | modelt native 8 workers |
+| ----------- | --------: | --------------: | -----------: | ------------: | -------------------: | ---------------------: | ----------------------: |
+| カウンタ群  | 5,308,416 |           5.190 |        6.134 |         6.476 |                3.818 |                  2.851 |                   3.646 |
+| Boolean関数 | 1,048,576 |           5.388 |       12.647 |         4.444 |               18.666 |                  9.345 |                   5.101 |
+| チャネル群  | 2,097,152 |          16.371 |       23.825 |         6.807 |               31.415 |                 20.733 |                   9.537 |
+| 幅1のring   | 1,000,000 |           0.410 |        0.900 |         1.440 |                0.244 |                  0.186 |                   0.187 |
+
+Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。modeltは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
+
+[全sample・最小/最大・条件と再実行](evals/iterations/0022-readme-comparison.md)を保存した。表は同じrunから生成し、過去の値を混在させていない。常駐APIの比較は[別の0016測定](evals/iterations/0016-checker-benchmark.md#apiを再利用した全探索)を参照。上の起動込み時間と同じ指標として扱わない。
+
+<!-- checker-comparison:end -->
+
+## Rustコアの最適化前後
+
+上の6経路比較は最適化前の0022時点の記録。今回の6項目の最適化は、変更前後のnative/Wasmを別途交互に測った。起動込み秒、1 warmup後3回の中央値。比率は変更前/変更後。TLC/tla-tsの過去値はこの表へ混ぜていない。
+
+| モデル      | native 1: 変更前 → 後 (秒) |  比率 | native 最大8: 変更前 → 後 (秒) |  比率 | Wasm 1: 変更前 → 後 (秒) |  比率 |
+| ----------- | -------------------------: | ----: | -----------------------------: | ----: | -----------------------: | ----: |
+| カウンタ群  |              3.114 → 3.061 | 1.02× |                  3.781 → 2.996 | 1.26× |            3.944 → 4.822 | 0.82× |
+| Boolean関数 |              9.609 → 7.221 | 1.33× |                  5.407 → 3.942 | 1.37× |          19.809 → 10.585 | 1.87× |
+| チャネル群  |            22.260 → 17.838 | 1.25× |                 13.500 → 8.829 | 1.53× |          38.771 → 24.964 | 1.55× |
+| 幅1のring   |              0.213 → 0.215 | 0.99× |                  0.223 → 0.217 | 1.03× |            0.268 → 0.286 | 0.94× |
+
+最大8のcounterは軽いscalar演算と判定して逐次実行する。Wasmのcounter/ringは後退が残る。Boolean関数のnative RSSは約40%、チャネル群は約35%減った（200 ms間隔の観測）。[Criterion・全sample・範囲・採否と再実行](evals/iterations/0023-criterion-safety.md)に記録した。`just criterion-test`でsmoke、`just criterion-save <stage> <新規runパス>`で14本を測る。
+
+## CPU profileを使った追加調整
+
+0023後の版から、scalarのleaf評価と整数keyの関数検索を調整した。以下はprofilerを外した通常Wasmの新しい交互比較で、起動込み中央値。上の表とは別run。
+
+| モデル     |     変更前 → 後 | before/after |
+| ---------- | --------------: | -----------: |
+| カウンタ群 | 4.476 → 4.136 s |        1.08× |
+| 幅1のring  |    272 → 255 ms |        1.07× |
+
+native Criterionのcounterは12.285→9.266 ms、functionは11.071→9.416 msだった。整数位置の変更単独はchannels最大8で後退する回もあり、全ケースの高速化を保証する結果ではない。[profile・14本の段階別測定・16 sampleと再生](evals/iterations/0024-profile-tuning.md)を保存した。`just profile-test`、`just profile-criterion <stage> <新規runパス>`で確認できる。
+
 ## モデルと実装の比較
 
-TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と Wasm で使い、適合性照合とトレース再生を行う。[値・effect protocol・使用例](docs/portable-core.md) を参照。`just portable-build` / `just portable-test` で Rust と Node・実ブラウザの照合を検査する。
+TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と Wasm で使い、適合性照合とトレース再生を行う。[Go adapter](docs/go-adapter.md) は CGO 不要で同じ Wasm に接続する。[値・effect protocol・使用例](docs/portable-core.md) を参照。`just portable-build` / `just portable-test` で Rust と Node・実ブラウザ、`just go-test` で Go の照合と単独 consumer を検査する。
+
+[共通オラクルで3言語の実装を動かす評価](docs/shared-oracle.md) は `just cross-test`。同じ有限モデルと保存 trace を使い、正常版・故障版の TS / Rust / Go を直接操作して比較する。
+
+[非同期履歴とモデル再利用](docs/async-history.md) は `./history` と `loadFiniteModel`。未完了・結果不明の操作を含む照合、索引付き handle、依存関係を使う縮小と探索 feedback の評価は `just async-test` から実行できる。
+
+[TLA+ の Rust backend](docs/rust-safety.md) は `compileTlaSafety` と `checkSafety`。整数・集合・関数・record・sequence の有限モデル、temporal property、WF / SF を IR に変換し、状態生成・BFS・SCC 検査・反例復元を native / Wasm 内で実行する。全 TLA+ 互換ではなく、対応外のモデルは既存の tla-ts を使う。
+
+検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、modelt-coreへの依存はない。modelt-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
+
+構文解析には独立した[`rtla` crate](crates/rtla)もある。TLA+／TLC設定から型付きASTを返し、nativeとhost import不要のWasmで動く。`rtlc`には依存しない。既存の`compileTlaSafety`は引き続きtla-ts parserからIRを作るため、rtlaのASTからIRへの変換は含まない。`just rtla-test` / `just rtla-browser`で検査し、`just package`で3つのcrateとparser/coreのWasmを確認できる。
+
+[Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
+
+[`@mizchi/modelt/backend`](docs/backend-contract.md)は、完全探索、有界の反例なし、帰納性を区別する共通契約。model/property/意味論/仮定/backend版を結果へ結びつけ、空の初期集合・資源切れ・unknownを検査成功へ変換しない。rtlcのnative/Wasm bridgeを提供する。Apalacheの汎用adapterとSMT encodingは今後の対象。[契約と保存応答の検査](evals/iterations/0028-backend-contract.md)に結果を記録した。
 
 ```ts
 import { checkConformance, checkModel, checkTrace } from "./src/index.js";

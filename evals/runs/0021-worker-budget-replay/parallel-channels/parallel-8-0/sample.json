@@ -1,0 +1,34 @@
+{
+  "route": "native",
+  "command": "/Users/mz/.local/share/mise/installs/node/24.22.2/bin/node",
+  "args": [
+    "--max-old-space-size=8192",
+    "/Users/mz/ghq/github.com/mizchi/modelt/dist/evals/single-model/worker.js",
+    "native",
+    "/Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0021-worker-budget-replay/parallel-channels/parallel-8-0/input.json",
+    "8"
+  ],
+  "exit": 0,
+  "wallMs": 64.65895799999998,
+  "stdout": "{\"frontendMs\":3.3509579999999985,\"engineStartupMs\":2.6587080000000043,\"apiMs\":1.0274580000000029,\"result\":{\"status\":\"complete\",\"reason\":null,\"states\":64,\"generated\":193,\"depth\":8,\"work\":3656,\"violation\":null}}\n",
+  "stderr": "",
+  "output": {
+    "frontendMs": 3.3509579999999985,
+    "engineStartupMs": 2.6587080000000043,
+    "apiMs": 1.0274580000000029,
+    "result": {
+      "status": "complete",
+      "reason": null,
+      "states": 64,
+      "generated": 193,
+      "depth": 8,
+      "work": 3656,
+      "violation": null
+    }
+  },
+  "decodeError": null,
+  "memory": [],
+  "sampledMaxRssBytes": null,
+  "phases": null,
+  "phaseError": null
+}

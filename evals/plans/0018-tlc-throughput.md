@@ -1,0 +1,13 @@
+# 同じ88件をTLCとmodeltへ配布する
+
+0017の並列速度比はmodeltの逐次実行に対する値であり、TLC比ではない。TLCを含む同じbatchの実測を追加する。入力は0017の保存manifest・source/config・混合88 taskをそのまま使い、状態数と生成数を全taskで照合する。1モデル内部の並列化と独立モデルの並列化を区別する。
+
+経路はTLCの1 JVM × 8 worker、8 JVM × 各1 worker、modelt nativeの8 executor、modelt Wasmの8 executor。合計の指定探索worker数は8にする。全経路に同じ88件と同じ費用順のtask順を渡す。TLCにも複数JVMの外側poolを用意し、逐次TLCと並列modeltの比を並列性能の比として報告しない。
+
+TLCは各検査で新しいJVMを起動する公開CLIを使い、JVM内で複数仕様を再利用する独自Java driverは作らない。最大heap合計8 GiBとして、1 JVMは-Xmx8g、8 JVMは各-Xmx1g。ParallelGC、ActiveProcessorCountは各JVMのworker数、-workersは1または8、seed16、-lncheck finalを使う。同じv1.7.4 jarとarm64 Temurin 21.0.13+9を固定する。heap上限はRSS上限ではなく、Node/Rustのメモリ制約と同一とも主張しない。各JVMのworking directoryと標準モジュール展開先を他の同時実行と隔離する。
+
+modeltはbatchごとに新しいNodeプロセスでsource/configを読み、11モデルをコンパイルして8-worker poolへ登録し、88 taskを探索する。nativeは8子プロセス、Wasmは8 instance。0017と同じcost配置・batch目標4 ms・最大16件とする。親プロセスからtask IDで送るIR再利用を含む。TLCでは88回のJVM起動、modeltでは1回のcontrollerと8 executor起動になるため、この差を結果の解釈で明示する。
+
+各経路は1回ウォームアップ後3回測定する。反復ごとに経路順を巡回し、経路同士の測定は直列に行う。全経路でbatch helperのプロセス起動から結果返却・JSON decode・終了まで測り、入力ファイルの配置と証拠保存は計測外。OSキャッシュは消さない。これはCLI/APIの実運用経路を含むthroughput測定であり、JVM startupを除いた探索kernelの倍率ではない。全サンプル・最小/中央値/最大・pool準備と探索の内訳を残す。時間制限は追加しない。
+
+条件の選別やチューニングを結果に合わせて変更しない。3回の中央値だけで統計的な優位性や全TLA+対応を主張しない。既存0016の1-worker・起動込み比較と0017の再利用時比較を別に参照する。source/binary/入力のdigest、開始commitとdirty paths、生のTLCログ、全taskの結果、失敗を新規runへ保存する。replayは証拠と計数を検査し、両TLC配置とmodeltでtaskを再実行する。確認実行を独立の性能サンプルへ加えない。

@@ -1,0 +1,83 @@
+# Usage statistics is OFF. We care about your privacy.
+# If you want to help our project, consider enabling statistics with config --enable-stats=true.
+
+Output directory: /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0027-apalache-pilot/ring-fault-4/2-apalache/output/Ring.tla/2026-11-15T17-46-47_14836770176861991683
+# APALACHE version: 0.63.0 | build: 67b8ec6                       I@17:46:47.840
+  > Spec.cfg: Loading TLC configuration                           I@17:46:47.842
+  > Using init predicate(s) Init from the TLC config              I@17:46:47.861
+  > Using next predicate(s) Next from the TLC config              I@17:46:47.861
+  > Using inv predicate(s) Safe from the TLC config               I@17:46:47.861
+Tuning:                                                           I@17:46:47.862
+PASS #0: SanyParser                                               I@17:46:47.939
+PASS #1: TypeCheckerSnowcat                                       I@17:46:48.004
+ > Running Snowcat .::.                                           I@17:46:48.004
+ > Your types are purrfect!                                       I@17:46:48.039
+ > All expressions are typed                                      I@17:46:48.039
+PASS #2: ConfigurationPass                                        I@17:46:48.040
+  > Spec.cfg: found INVARIANTS: Safe                              I@17:46:48.120
+  > Set the initialization predicate to Init                      I@17:46:48.120
+  > Set the transition predicate to Next                          I@17:46:48.120
+  > Set an invariant to Safe                                      I@17:46:48.120
+PASS #3: DesugarerPass                                            I@17:46:48.121
+  > Desugaring...                                                 I@17:46:48.121
+PASS #4: InlinePass                                               I@17:46:48.123
+Leaving only relevant operators: CInitPrimed, Init, InitPrimed, Next, Safe I@17:46:48.123
+PASS #5: TemporalPass                                             I@17:46:48.131
+  > Rewriting temporal operators...                               I@17:46:48.131
+  > No temporal property specified, nothing to encode             I@17:46:48.131
+PASS #6: InlinePass                                               I@17:46:48.131
+Leaving only relevant operators: CInitPrimed, Init, InitPrimed, Next, Safe I@17:46:48.132
+PASS #7: PrimingPass                                              I@17:46:48.132
+  > Introducing InitPrimed for Init'                              I@17:46:48.134
+PASS #8: VCGen                                                    I@17:46:48.134
+  > Producing verification conditions from the invariant Safe     I@17:46:48.134
+  > VCGen produced 1 verification condition(s)                    I@17:46:48.136
+PASS #9: PreprocessingPass                                        I@17:46:48.138
+  > Before preprocessing: unique renaming                         I@17:46:48.138
+ > Applying standard transformations:                             I@17:46:48.141
+  > PrimePropagation                                              I@17:46:48.141
+  > Desugarer                                                     I@17:46:48.141
+  > UniqueRenamer                                                 I@17:46:48.141
+  > Normalizer                                                    I@17:46:48.142
+  > SetMembershipSimplifier                                       I@17:46:48.143
+  > Keramelizer                                                   I@17:46:48.143
+  > After preprocessing: UniqueRenamer                            I@17:46:48.143
+PASS #10: TransitionFinderPass                                    I@17:46:48.144
+  > Found 1 initializing transitions                              I@17:46:48.151
+  > Found 1 transitions                                           I@17:46:48.151
+  > No constant initializer                                       I@17:46:48.151
+  > Applying unique renaming                                      I@17:46:48.151
+PASS #11: OptimizationPass                                        I@17:46:48.152
+ > Applying optimizations:                                        I@17:46:48.154
+  > ConstSimplifier                                               I@17:46:48.154
+  > ExprOptimizer                                                 I@17:46:48.154
+  > SetMembershipSimplifier                                       I@17:46:48.154
+  > ConstSimplifier                                               I@17:46:48.154
+PASS #12: AnalysisPass                                            I@17:46:48.155
+ > Marking skolemizable existentials and sets to be expanded...   I@17:46:48.155
+  > Skolemization                                                 I@17:46:48.155
+  > Expansion                                                     I@17:46:48.156
+  > Remove unused let-in defs                                     I@17:46:48.156
+ > Running analyzers...                                           I@17:46:48.156
+  > Introduced expression grades                                  I@17:46:48.157
+PASS #13: BoundedChecker                                          I@17:46:48.157
+State 0: Checking 1 state invariants                              I@17:46:48.721
+State 0: state invariant 0 holds.                                 I@17:46:48.723
+Step 0: picking a transition out of 1 transition(s)               I@17:46:48.723
+State 1: Checking 1 state invariants                              I@17:46:48.727
+State 1: state invariant 0 holds.                                 I@17:46:48.727
+Step 1: picking a transition out of 1 transition(s)               I@17:46:48.728
+State 2: Checking 1 state invariants                              I@17:46:48.729
+State 2: state invariant 0 holds.                                 I@17:46:48.729
+Step 2: picking a transition out of 1 transition(s)               I@17:46:48.729
+State 3: Checking 1 state invariants                              I@17:46:48.730
+State 3: state invariant 0 holds.                                 I@17:46:48.730
+Step 3: picking a transition out of 1 transition(s)               I@17:46:48.730
+State 4: Checking 1 state invariants                              I@17:46:48.731
+State 4: state invariant 0 holds.                                 I@17:46:48.732
+Step 4: picking a transition out of 1 transition(s)               I@17:46:48.732
+The outcome is: NoError                                           I@17:46:48.733
+Checker reports no error up to computation length 4               I@17:46:48.733
+It took me 0 days  0 hours  0 min  0 sec                          I@17:46:48.733
+Total time: 0.892 sec                                             I@17:46:48.734
+EXITCODE: OK

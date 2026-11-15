@@ -1,0 +1,301 @@
+{
+  "name": "ApalacheIR",
+  "version": "1.0",
+  "description": "https://apalache-mc.org/docs/adr/005adr-json.html",
+  "modules": [
+    {
+      "kind": "TlaModule",
+      "name": "counterexample",
+      "declarations": [
+        {
+          "type": "(() => Bool)",
+          "kind": "TlaOperDecl",
+          "name": "ConstInit",
+          "formalParams": [],
+          "isRecursive": false,
+          "body": {
+            "type": "Bool",
+            "kind": "ValEx",
+            "value": {
+              "kind": "TlaBool",
+              "value": true
+            }
+          }
+        },
+        {
+          "type": "(() => Bool)",
+          "kind": "TlaOperDecl",
+          "name": "State0",
+          "formalParams": [],
+          "isRecursive": false,
+          "body": {
+            "type": "Bool",
+            "kind": "OperEx",
+            "oper": "AND",
+            "args": [
+              {
+                "type": "Bool",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "(Int -> Int)",
+                    "kind": "NameEx",
+                    "name": "f"
+                  },
+                  {
+                    "type": "(Int -> Int)",
+                    "kind": "OperEx",
+                    "oper": "Apalache!SetAsFun",
+                    "args": [
+                      {
+                        "type": "Set(<<Int, Int>>)",
+                        "kind": "OperEx",
+                        "oper": "SET_ENUM",
+                        "args": [
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 1
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 1
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 2
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 3
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 4
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 5
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 6
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 7
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "<<Int, Int>>",
+                            "kind": "OperEx",
+                            "oper": "TUPLE",
+                            "args": [
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 8
+                                }
+                              },
+                              {
+                                "type": "Int",
+                                "kind": "ValEx",
+                                "value": {
+                                  "kind": "TlaInt",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "(() => Bool)",
+          "kind": "TlaOperDecl",
+          "name": "InvariantViolation",
+          "formalParams": [],
+          "isRecursive": false,
+          "body": {
+            "type": "Bool",
+            "kind": "OperEx",
+            "oper": "NOT",
+            "args": [
+              {
+                "type": "Bool",
+                "kind": "OperEx",
+                "oper": "EQ",
+                "args": [
+                  {
+                    "type": "Int",
+                    "kind": "OperEx",
+                    "oper": "FUN_APP",
+                    "args": [
+                      {
+                        "type": "(Int -> Int)",
+                        "kind": "NameEx",
+                        "name": "f"
+                      },
+                      {
+                        "type": "Int",
+                        "kind": "ValEx",
+                        "value": {
+                          "kind": "TlaInt",
+                          "value": 1
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Int",
+                    "kind": "ValEx",
+                    "value": {
+                      "kind": "TlaInt",
+                      "value": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
