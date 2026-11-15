@@ -81,9 +81,9 @@ fn relation_algebra_and_predicate_calls_work() {
 }
 
 #[test]
-fn polymorphic_empty_relations_preserve_arity() {
+fn empty_relations_preserve_arity() {
     assert_eq!(
-        analyze("sig N { r: set N } run { r = none + none no ^(none & none) } for 1 but 0 Int")
+        analyze("sig N { r: set N } run { r = (none -> none) no ^(none -> none) no (none + none) } for 1 but 0 Int")
             .status,
         Status::Instance
     );
@@ -106,6 +106,9 @@ fn budget_and_unsupported_input_never_become_success() {
         "sig A {} fact { A } run {}",
         "sig A {} run { unknown in A }",
         "sig A {} run { all x: none | no ^x }",
+        "sig A { r: set A } run { r = none }",
+        "sig A { r: set A } run { r = none + none }",
+        "sig A {} run { no ^none }",
         "one sig A {} run {} for 2 but 2 A",
         "sig A {} run {} for 1 but 1 A, 2 A",
     ] {

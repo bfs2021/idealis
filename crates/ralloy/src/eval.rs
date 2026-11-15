@@ -6,7 +6,6 @@ use std::collections::BTreeMap;
 
 #[derive(Clone)]
 pub(crate) enum Relation {
-    Empty,
     Unary(u64),
     Binary(Vec<u64>),
 }
@@ -29,23 +28,20 @@ impl Value {
     }
 }
 impl Relation {
-    fn rows(self, count: usize) -> Vec<u64> {
+    fn rows(self) -> Vec<u64> {
         match self {
-            Self::Empty => vec![0; count],
             Self::Binary(rows) => rows,
             _ => unreachable!("validated binary relation"),
         }
     }
     fn set(self) -> u64 {
         match self {
-            Self::Empty => 0,
             Self::Unary(set) => set,
             _ => unreachable!("validated unary relation"),
         }
     }
     fn count(&self) -> u32 {
         match self {
-            Self::Empty => 0,
             Self::Unary(set) => set.count_ones(),
             Self::Binary(rows) => rows.iter().map(|row| row.count_ones()).sum(),
         }
@@ -88,7 +84,7 @@ impl Evaluator<'_> {
                     return Ok(Value::Relation(value.clone()));
                 }
                 if name == "none" {
-                    return Ok(Value::Relation(Relation::Empty));
+                    return Ok(Value::Relation(Relation::Unary(0)));
                 }
                 if name == "iden" {
                     return Ok(Value::Relation(Relation::Binary(
@@ -136,7 +132,7 @@ impl Evaluator<'_> {
                         _ => count <= 1,
                     }));
                 }
-                let mut rows = relation.rows(self.world.names.len());
+                let mut rows = relation.rows();
                 if matches!(operator, Unary::Transpose) {
                     let mut transposed = vec![0; rows.len()];
                     for (source, row) in rows.iter().enumerate() {
@@ -213,15 +209,6 @@ impl Evaluator<'_> {
         right: Relation,
     ) -> Result<Value, ()> {
         let count = self.world.names.len();
-        if matches!(left, Relation::Empty)
-            && matches!(right, Relation::Empty)
-            && matches!(
-                operator,
-                Binary::Union | Binary::Difference | Binary::Intersection
-            )
-        {
-            return Ok(Value::Relation(Relation::Empty));
-        }
         if matches!(operator, Binary::Product) {
             let left = left.set();
             let right = right.set();
@@ -233,9 +220,9 @@ impl Evaluator<'_> {
         }
         if matches!(operator, Binary::Domain | Binary::Range) {
             let (set, mut rows) = if matches!(operator, Binary::Domain) {
-                (left.set(), right.rows(count))
+                (left.set(), right.rows())
             } else {
-                (right.set(), left.rows(count))
+                (right.set(), left.rows())
             };
             for (index, row) in rows.iter_mut().enumerate() {
                 self.budget.tick()?;
@@ -283,14 +270,13 @@ impl Evaluator<'_> {
                     }
                     Relation::Binary(output)
                 }
-                (Relation::Empty, _) | (_, Relation::Empty) => Relation::Empty,
                 _ => unreachable!("validated join"),
             };
             return Ok(Value::Relation(result));
         }
         let binary = matches!(left, Relation::Binary(_)) || matches!(right, Relation::Binary(_));
         let (left, right) = if binary {
-            (left.rows(count), right.rows(count))
+            (left.rows(), right.rows())
         } else {
             (vec![left.set()], vec![right.set()])
         };

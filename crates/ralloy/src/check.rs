@@ -5,14 +5,12 @@ use std::collections::{BTreeMap, BTreeSet};
 #[derive(Clone)]
 enum Type {
     Boolean,
-    Empty,
     Relation(Vec<u16>),
 }
 impl Type {
     fn columns(self) -> Result<Vec<u16>, Error> {
         match self {
             Self::Relation(columns) => Ok(columns),
-            Self::Empty => Ok(vec![u16::MAX]),
             _ => Err(Error::new(ErrorKind::Type, "expected relation")),
         }
     }
@@ -63,7 +61,9 @@ pub(crate) fn validate(module: &Module) -> Result<Vec<Command>, Error> {
     checker
         .globals
         .insert("univ".into(), Type::Relation(vec![all]));
-    checker.globals.insert("none".into(), Type::Empty);
+    checker
+        .globals
+        .insert("none".into(), Type::Relation(vec![all]));
     checker
         .globals
         .insert("iden".into(), Type::Relation(vec![all, all]));
@@ -268,11 +268,7 @@ impl Checker<'_> {
                         Ok(Type::Boolean)
                     }
                     Unary::Transpose | Unary::Closure | Unary::Reflexive => {
-                        let mut columns = if matches!(kind, Type::Empty) {
-                            vec![u16::MAX; 2]
-                        } else {
-                            kind.columns()?
-                        };
+                        let mut columns = kind.columns()?;
                         if columns.len() != 2 {
                             return Err(Error::new(
                                 ErrorKind::Type,
@@ -300,8 +296,6 @@ impl Checker<'_> {
                     right.boolean()?;
                     return Ok(Type::Boolean);
                 }
-                let left_empty = matches!(left, Type::Empty);
-                let right_empty = matches!(right, Type::Empty);
                 let left_columns = left.columns()?;
                 let right_columns = right.columns()?;
                 if matches!(operator, Binary::Product) {
@@ -341,7 +335,7 @@ impl Checker<'_> {
                     }
                     return Ok(Type::Relation(relation));
                 }
-                if !left_empty && !right_empty && left_columns.len() != right_columns.len() {
+                if left_columns.len() != right_columns.len() {
                     return Err(Error::new(ErrorKind::Type, "relation arity mismatch"));
                 }
                 if matches!(
@@ -349,15 +343,6 @@ impl Checker<'_> {
                     Binary::Equal | Binary::NotEqual | Binary::In | Binary::NotIn
                 ) {
                     return Ok(Type::Boolean);
-                }
-                if left_empty && right_empty {
-                    return Ok(Type::Empty);
-                }
-                if left_empty {
-                    return Ok(Type::Relation(right_columns));
-                }
-                if right_empty {
-                    return Ok(Type::Relation(left_columns));
                 }
                 Ok(Type::Relation(
                     left_columns

@@ -28,9 +28,9 @@ fn main() -> Result<(), ralloy::Error> {
 - fact、引数なしpred、名前付きassert、run/check、全体scopeと型ごとの上限・exactly。
 - 関係の和、差、交差、積、join、転置、推移閉包、反射推移閉包、domain/range制限。
 - 等価・包含、論理結合、単一atomを束縛するall/no/some/one/loneとdisj。
-- none、univ、iden、Int、String。整数演算は扱わないが、既定4-bitのInt atomはuniv/idenへ含める。0 Intも指定できる。
+- none、univ、iden、Int、String。noneは単項の空集合で、二項の空関係はnone -> noneと書く。整数演算は扱わないが、既定4-bitのInt atomはuniv/idenへ含める。0 Intも指定できる。
 
-signatureは最大8個、fieldは最大8個、signatureのscopeは最大8、Intは0-5 bit、全体は64 atomまで。sourceは1 MiB、10万token、tokenは256 bytes、式の再帰は48段まで。超える入力はresource errorにする。
+signatureは最大8個、fieldは最大8個、signatureのscopeは最大8、Intは0-5 bit、全体は64 atomまで。sourceは1 MiB、10万token、tokenは256 bytes、式の再帰は48段、同一式の連続演算は512 tokenまで。超える入力はresource errorにする。
 
 sigの継承・subset、複数sigの一括宣言、signature fact、module読込、引数付きpred/function、setを束縛する高階量化、整数演算・cardinality、3項以上の関係、時間・varは未対応として拒否する。Alloyの型検査全体や全構文の互換性は示さない。
 
