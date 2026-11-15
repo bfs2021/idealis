@@ -59,6 +59,17 @@ Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅
 
 最大8のcounterは軽いscalar演算と判定して逐次実行する。Wasmのcounter/ringは後退が残る。Boolean関数のnative RSSは約40%、チャネル群は約35%減った（200 ms間隔の観測）。[Criterion・全sample・範囲・採否と再実行](evals/iterations/0023-criterion-safety.md)に記録した。`just criterion-test`でsmoke、`just criterion-save <stage> <新規runパス>`で14本を測る。
 
+## CPU profileを使った追加調整
+
+0023後の版から、scalarのleaf評価と整数keyの関数検索を調整した。以下はprofilerを外した通常Wasmの新しい交互比較で、起動込み中央値。上の表とは別run。
+
+| モデル     |     変更前 → 後 | before/after |
+| ---------- | --------------: | -----------: |
+| カウンタ群 | 4.476 → 4.136 s |        1.08× |
+| 幅1のring  |    272 → 255 ms |        1.07× |
+
+native Criterionのcounterは12.285→9.266 ms、functionは11.071→9.416 msだった。整数位置の変更単独はchannels最大8で後退する回もあり、全ケースの高速化を保証する結果ではない。[profile・14本の段階別測定・16 sampleと再生](evals/iterations/0024-profile-tuning.md)を保存した。`just profile-test`、`just profile-criterion <stage> <新規runパス>`で確認できる。
+
 ## モデルと実装の比較
 
 TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と Wasm で使い、適合性照合とトレース再生を行う。[Go adapter](docs/go-adapter.md) は CGO 不要で同じ Wasm に接続する。[値・effect protocol・使用例](docs/portable-core.md) を参照。`just portable-build` / `just portable-test` で Rust と Node・実ブラウザ、`just go-test` で Go の照合と単独 consumer を検査する。

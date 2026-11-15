@@ -27,3 +27,9 @@
 - Wasmのscalar counterで起動込み中央値3.944→4.822秒、ringで0.268→0.286秒。評価器のhot pathとコード生成をprofileし、複合値の改善を保ったまま後退を解消できるか確認する。
 - 候補bufferとbatch規則の独立した寄与。全体の改善と分け、専有ホストで交互に測る。
 - canonical化後のinvariant検査が逐次部分となる。高コストなinvariantを持つモデルで、重複排除後の並列評価を比較する。
+
+0024のprofile後:
+
+- functionのintern検索findがWasm/nativeで残る。値の完全比較と一重保持を保ち、lookup/probeと値配列比較の費用を分ける。
+- 整数位置checkはfunctionで改善したが、短いdomainのchannels最大8ではleafのみの段階より遅い。domain幅別のlookup sweepで適用範囲を確認する。
+- Wasm scalarは今回counterで約8%、ringで約6%短縮した。以前の後退を全条件で解消したとの判定にはせず、operator評価に残る費用を調べる。

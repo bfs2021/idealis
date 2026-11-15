@@ -1,0 +1,277 @@
+{
+  "status": "complete",
+  "sourceVersion": "ca828d4f4d0cf9dfefd9fea92bbe8055cb98c3f4b2ac89fa0bad85fb1403d2aa",
+  "checks": [
+    {
+      "command": "just check",
+      "status": "passed",
+      "path": "final-check.log"
+    },
+    {
+      "command": "just browser",
+      "status": "passed",
+      "path": "final-browser.log"
+    },
+    {
+      "command": "just portable-build",
+      "status": "passed",
+      "path": "final-build.log"
+    },
+    {
+      "command": "just portable-test",
+      "status": "passed",
+      "path": "final-portable-test.log"
+    },
+    {
+      "command": "just runtime-build",
+      "status": "passed",
+      "path": "final-runtime-build.log"
+    },
+    {
+      "command": "just runtime-test",
+      "status": "passed",
+      "path": "final-runtime-test.log"
+    },
+    {
+      "command": "cargo fmt/clippy",
+      "status": "passed",
+      "path": "final-clippy.log"
+    },
+    {
+      "command": "just safety-test",
+      "status": "passed",
+      "path": "final-safety-test.log"
+    },
+    {
+      "command": "just frontier-safety-test",
+      "status": "passed",
+      "path": "final-frontier-test.log"
+    },
+    {
+      "command": "TLC small normal/fault",
+      "status": "passed",
+      "path": "final-tlc-test.log"
+    },
+    {
+      "command": "just evaluate",
+      "status": "passed",
+      "path": "final-evaluate.log"
+    },
+    {
+      "command": "just replay-evaluation",
+      "status": "passed",
+      "path": "final-evaluate-replay.log"
+    },
+    {
+      "command": "profile harness unit tests",
+      "status": "passed",
+      "path": "final-profile-test.log"
+    },
+    {
+      "command": "wide controls",
+      "status": "passed",
+      "path": "wide-controls.log"
+    },
+    {
+      "command": "leaf semantics before change",
+      "status": "passed",
+      "path": "leaf-control-before.log"
+    },
+    {
+      "command": "sparse/domain semantics before change",
+      "status": "passed",
+      "path": "positions-control-before.log"
+    },
+    {
+      "command": "all targets after leaf split",
+      "status": "passed",
+      "path": "leaves-test.log"
+    },
+    {
+      "command": "all targets after indexed lookup",
+      "status": "passed",
+      "path": "positions-test.log"
+    },
+    {
+      "command": "imports mismatch expected Red",
+      "status": "expected-red",
+      "path": "imports-red.log"
+    },
+    {
+      "command": "imports mismatch Green",
+      "status": "passed",
+      "path": "imports-green.log"
+    }
+  ],
+  "profileParity": [
+    {
+      "backend": "wasm",
+      "input": "counter-product",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "wasm",
+      "input": "function-cube",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "wasm",
+      "input": "parallel-channels",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "wasm",
+      "input": "linear-ring",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "counter-product",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "counter-product",
+      "workers": 8,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "function-cube",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "function-cube",
+      "workers": 8,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "parallel-channels",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "parallel-channels",
+      "workers": 8,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "linear-ring",
+      "workers": 1,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    },
+    {
+      "backend": "native",
+      "input": "linear-ring",
+      "workers": 8,
+      "repetitions": 16,
+      "countsAndWork": "identical"
+    }
+  ],
+  "unprofiledSamples": 16,
+  "replay": "0024-scalar-replay",
+  "wideControls": "0024-wide-controls",
+  "files": [
+    {
+      "path": "final-check.log",
+      "sha256": "e933b7ac0e0949012c5a838a581a4445f5425b5311ad05b1a485d5bcc85e023c"
+    },
+    {
+      "path": "final-browser.log",
+      "sha256": "37b6dbf8afa726ce4e4701bbdb3f603370480172fd3ade4d3f161905af2575d1"
+    },
+    {
+      "path": "final-build.log",
+      "sha256": "a928f8c852fe8ffede9c0f7ca8912fdd2704fdba4a36715c7a335e22ce6490ec"
+    },
+    {
+      "path": "final-portable-test.log",
+      "sha256": "adad2ca626373106d76a396dafb38280503ae230114310d2448ce57f5c87178b"
+    },
+    {
+      "path": "final-runtime-build.log",
+      "sha256": "df2022bd8c840e66e570fd7b9367911918afc45a14e9ceead3a501dacad179cf"
+    },
+    {
+      "path": "final-runtime-test.log",
+      "sha256": "cd7b614e21cb76b825baed92f846c9b5ef1a3412c171af630870df3443d5ef6f"
+    },
+    {
+      "path": "final-clippy.log",
+      "sha256": "c63e09a3b161c9ee01247b62b1a20e5f73aa6a2a070fa7e8c30d961a292c80b3"
+    },
+    {
+      "path": "final-safety-test.log",
+      "sha256": "f222d3776257b5a4d23ceac108588b195a46e3547b7eff0dd2c631794b78bf02"
+    },
+    {
+      "path": "final-frontier-test.log",
+      "sha256": "91106d57ec81ca07351fe4f2e900cbbc568c9fa0d34c2d64d8f593e2b5fec3fb"
+    },
+    {
+      "path": "final-tlc-test.log",
+      "sha256": "fe8bbe2d6bd04d61350899779a067cd00cc1f42b9cee61fba841075a444d3c64"
+    },
+    {
+      "path": "final-evaluate.log",
+      "sha256": "d6c841cf2384900740c63d773b8095ca81bb4bb4f992af48025f95dc53c28a9b"
+    },
+    {
+      "path": "final-evaluate-replay.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "final-profile-test.log",
+      "sha256": "3c568f60c72b7f621fe098cb733539d122af42fd031faf8a0202ee5d742bf3e6"
+    },
+    {
+      "path": "wide-controls.log",
+      "sha256": "9871eef82d9a3063220dae97c0acecbb0cf16efd1c6f8149600782273f993673"
+    },
+    {
+      "path": "leaf-control-before.log",
+      "sha256": "ea1bcf14819a5554f6e193b76f08959895c6577e722dd75f3fc004c8b1b65bad"
+    },
+    {
+      "path": "positions-control-before.log",
+      "sha256": "9c78e01f5564c8f140e26a5b67f80fe31d4721563c1bf44a2fd4237d3781d3fe"
+    },
+    {
+      "path": "leaves-test.log",
+      "sha256": "6d8162d3fed6e219f25957328de17a35ba3bcbc4efaf58719a6d4d74a0df94d4"
+    },
+    {
+      "path": "positions-test.log",
+      "sha256": "45b46ed9d6486bd91d6b86bb832598cdcc246ae20e8801bc321d9be6e9ad1fe6"
+    },
+    {
+      "path": "imports-red.log",
+      "sha256": "b8115326f11c5a8d5f2a9307d30fd849caa1d385a319824d00361b1bd33976ca"
+    },
+    {
+      "path": "imports-green.log",
+      "sha256": "9435a71f6502d1a2c9e0f3d27b8bac5841528272a71a2d68051e243bea8df291"
+    }
+  ]
+}

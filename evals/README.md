@@ -75,3 +75,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [READMEの6経路比較](iterations/0022-readme-comparison.md)は、同じ4入力をtla-ts 1、TLC 1/8、Wasm 1、native 1/8で測り直した。条件・全sample・再生とREADMEへの照合を保存する。
 
 [Criterionによる最適化](iterations/0023-criterion-safety.md)は、値の一重保持、EXCEPT、型所属cache、候補buffer、重複検査、worker/batch選択の6項目。`criterion-test` / `criterion-save`でnative kernel/APIを測り、`criterion-compare` / `criterion-replay`で固定binaryの前後・起動・RSS・正常/故障を確認する。Wasm scalarの後退も記録した。
+
+[CPU profileとmicro tuning](iterations/0024-profile-tuning.md)は、Wasm/nativeのraw profileとself/inclusive集計からleaf評価と整数位置検索を調整した。`profile-record` / `profile-summary`でprofile、`profile-criterion`で14本、`profile-scalar` / `profile-replay`で通常Wasmの交互比較と再生を行う。
