@@ -23,3 +23,12 @@ just check/browser、portable-build/test、runtime-build/test、fmt/clippy、saf
 最初のWasm profileは名前付き別buildの非custom section不一致でerrorになった。関数code/type/function sectionの一致を検査し、production binaryの末尾へname custom sectionだけを追加する。これにより記録対象の実行sectionはproductionと完全一致する。元の失敗runを残し、修正後は別runへ保存する。
 
 CARGO_PROFILE_RELEASE_STRIP=noneによる別buildは関数順も変わり、name付与の検査が拒否した。cargo rustc --release -- -C strip=noneでCargoの通常profile metadataを保つと、code/type/function sectionが一致した。計測はそのnameだけを元binaryへ追加したものを使う。
+
+## profile後の候補（実装前）
+
+Wasm counterのself sampleはExpression::eval 55.5%、visit_branch 29.7%。native 1のcounterでもevalが41.3%。Wasm channelsはArena::selectが17.2%、functionはArena::findが28.0%。native 8の全thread sampleは待機が多いため、その割合をCPU使用率と解釈しない。
+
+1. eval-leaves: literal/read/bound/@を小さいdispatchへ切り出し、残るoperator本体をinlineしない関数へ分離する。式の計算順・error・workは変更せず、大きい評価器へ入るleaf呼び出しを減らす。Criterionと最終Wasm scalar比較で採否を決める。
+2. indexed-lookups: 正の整数keyについて、key-1番目にそのkeyが存在することを検証してから直接参照する。selectとEXCEPTのpath探索で共通に使う。それ以外のdomain/keyは元の検索へ戻る。疎な整数domain、0/負数、record、missing key、衝突を対照にする。TLC v1.7.4 FcnRcdValue.select/takeExceptと照合済み。
+
+既存の意味を変えないため、追加する意味論の対照はbeforeでも通す。新しい失敗を作るために期待値を変えない。性能の基準はfresh before。各候補を別Criterion runへ保存し、final profileでsample/CPU deltaと結果を再照合する。
