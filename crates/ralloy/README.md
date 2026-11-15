@@ -1,0 +1,75 @@
+# ralloy
+
+静的なAlloy関係モデルを、有限スコープ内で検査する実験用Rustライブラリ。Node、JVM、Z3、idealisの他crateへ依存せず、同じ実装をnativeとホストimport不要のWasmへビルドする。Alloy AnalyzerのSAT変換やAlloy全体を移植したものではない。
+
+## Rustから使う
+
+```rust
+use ralloy::{Model, Status};
+
+fn main() -> Result<(), ralloy::Error> {
+    let model = Model::parse(
+        "sig Node { edge: set Node } fact { no iden & edge } \
+         assert Acyclic { no iden & ^edge } \
+         check Acyclic for 2 but exactly 2 Node, 0 Int",
+    )?;
+    let result = model.analyze(0, 2_000_000)?;
+    assert_eq!(result.status, Status::Counterexample);
+    println!("{:?}", result.instance);
+    Ok(())
+}
+```
+
+`Model::parse`は全宣言とcommandを検査する。`commands()`はkindと解決済みscopeを返し、`analyze(index, max_work)`で1つを実行する。`Analysis`はcommand、status、instanceとwork/candidates/factInstancesを持ち、serdeでJSONへ変換できる。
+
+## 対応するサブセット
+
+- 静的なトップレベルsigとone/lone/some、名前が一意な二項field。fieldの既定multiplicityはone。
+- fact、引数なしpred、名前付きassert、run/check、全体scopeと型ごとの上限・exactly。
+- 関係の和、差、交差、積、join、転置、推移閉包、反射推移閉包、domain/range制限。
+- 等価・包含、論理結合、単一atomを束縛するall/no/some/one/loneとdisj。
+- none、univ、iden、Int、String。整数演算は扱わないが、既定4-bitのInt atomはuniv/idenへ含める。0 Intも指定できる。
+
+signatureは最大8個、fieldは最大8個、signatureのscopeは最大8、Intは0-5 bit、全体は64 atomまで。sourceは1 MiB、10万token、tokenは256 bytes、式の再帰は48段まで。超える入力はresource errorにする。
+
+sigの継承・subset、複数sigの一括宣言、signature fact、module読込、引数付きpred/function、setを束縛する高階量化、整数演算・cardinality、3項以上の関係、時間・varは未対応として拒否する。Alloyの型検査全体や全構文の互換性は示さない。
+
+## 結果と探索
+
+| status            | 意味                                                            |
+| ----------------- | --------------------------------------------------------------- |
+| instance          | runの式とfactを満たす構造が見つかった                           |
+| counterexample    | factを満たしassertを破る構造が見つかった                        |
+| no-counterexample | factを満たす構造があり、指定scope内を列挙して反例がなかった     |
+| no-instance       | runの条件、またはcheckのfactを満たす構造が指定scope内になかった |
+| unknown           | work予算で探索を打ち切った。instanceは返さない                  |
+
+no-counterexampleはスコープ外の証明ではない。no-instanceもスコープ外の不整合を意味しない。未対応、構文・型・scope・protocol違反は`Error`として返し、検査成功へ変換しない。
+
+関係をbit matrixとして評価し、signatureの個数とfieldを列挙する。atom名で区別できないモデルでは、signatureごとに標準のatom名を使う。SAT符号化、節学習、一般的な対称性除去は実装していないため、小さいscope向けの試作。workは列挙と式の評価を数え、parserの費用やwall clockの上限ではない。
+
+## nativeとWasm
+
+`ralloy` binaryはJSONLをstdin/stdoutで扱う。
+
+```json
+{
+  "version": 1,
+  "request": {
+    "kind": "analyze",
+    "source": "sig A {} run { some A } for 1 but 0 Int",
+    "command": 0,
+    "maxWork": 100000
+  }
+}
+```
+
+成功は`kind: analysis`とAnalysis、拒否は`kind: error`とError。Wasm ABI v1は`ralloy_abi_version`、`ralloy_input_resize`、`ralloy_dispatch`、`ralloy_output_ptr`、`ralloy_output_len`で、同じJSONを扱う。
+
+```sh
+just ralloy-build
+just ralloy-test
+just ralloy-example
+```
+
+[Alloy言語仕様](https://alloytools.org/spec.html)とAlloy 6.2.0のparser/ScopeComputerを参照した。出典はNOTICEへ記録する。registryへは未公開。

@@ -1,6 +1,18 @@
 default:
   @just --list
 
+ralloy-build:
+  cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml
+
+ralloy-test:
+  cargo fmt --manifest-path crates/ralloy/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/ralloy/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/ralloy/Cargo.toml
+
+ralloy-example:
+  cargo run --example graph --locked --manifest-path crates/ralloy/Cargo.toml
+
 rsmt-build:
   pnpm rsmt:build
 
