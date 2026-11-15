@@ -7,3 +7,5 @@ rtlaとrtlcを独立したまま、橋渡しをrtla-compiler crateへ置く。�
 modelt-coreへsource/configのcompile-tlaとcheck-tla requestを追加する。既存ABIのrequestは維持する。TS SDKと実ブラウザから同じWasmでRustの解析・変換・検査を呼ぶ。tla-tsを入れない単独consumerでも確認する。rtla parserとrtlc checkerの依存関係は増やさない。
 
 plan、入力・結果・source digest、検証ログを新規runへ保存する。差分は実行時間の測定と分け、性能向上は主張しない。cargo fmt/clippy/test、portable test、check/browser、package、evaluate/replayを実行する。今回は全TLA+、INSTANCE、ユーザーモジュール、高階・再帰operator、symmetry、無限集合の列挙まで対応したとはしない。
+
+追加のTLC対照は既存collections-temporalの20件を固定する。集合・EXCEPT・sequence・量化・lexical scope・初期/action property・WF/SF・deadlockを含め、名前はrtla-compiler/tlc.tsへ実行前に記録する。比較器の既存filename契約に合わせ、モジュールheaderだけDifferentialへ変更し、同じ変換後sourceを両者へ渡す。無限成長や予算切れのcaseをTLCの無制限探索へ渡さない。

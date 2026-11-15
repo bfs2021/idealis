@@ -18,10 +18,11 @@ export const differential = async (
   java: string,
   jar: string,
   directory: string,
+  frontend: typeof compileTlaSafety = compileTlaSafety,
 ) => {
   const observe = (): Observation => {
     try {
-      const program = compileTlaSafety(input);
+      const program = frontend(input);
       try {
         return { result: checkSafety(core, program, bounds) };
       } catch (error) {

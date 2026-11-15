@@ -24,6 +24,7 @@ jobs:
       - run: cargo fmt --manifest-path crates/modelt-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
+      - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
       - run: node --test dist/evals/frontier-safety/contract-test.js
       - run: node --test dist/evals/readme-comparison/contract-test.js
       - run: node --test dist/evals/rust-safety/contract-test.js dist/evals/collections-temporal/contract-test.js dist/evals/tlc-differential/compare-test.js dist/evals/tlc-differential/regression-test.js dist/evals/parallel-safety/contract-test.js
@@ -93,4 +94,5 @@ jobs:
             .artifacts/collections-temporal
             .artifacts/frontier-safety
             .artifacts/readme-comparison
+            .artifacts/rtla-compiler
           if-no-files-found: warn
