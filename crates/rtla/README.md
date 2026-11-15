@@ -31,7 +31,7 @@ fn main() -> Result<(), rtla::ParseError> {
 
 proof、INSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析とASTの深さは64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。
 
-IR生成は既存のidealisのTS frontendに残る。`rtla`のASTを直接`rtlc::SafetyProgram`として実行することはできない。既存の`compileTlaSafety`は引き続きtla-ts parserを使う。
+RustでのIR生成は`rtla-compiler`が担当し、rtlaのASTを`rtlc::SafetyProgram`へ変換する。`idealis-core::compile_tla`は解析と変換を接続する。既存のTS API `compileTlaSafety`は独立した比較対象としてtla-ts parserを使う。
 
 ## native/WasmのJSON境界
 

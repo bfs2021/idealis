@@ -1,8 +1,30 @@
 # idealis
 
+**このリポジトリは開発途中の未完成なツールキットです。** 現在は `0.1.0-alpha.0` の試作段階で、API・対応範囲・backend間の統合を整備しています。npm / crates.io には未公開です。
+
 形式モデルを基準に、モデル検査と実装の適合性検査を行うポータブルなツールキット。モデルからのオラクル生成、差分テスト、反例を縮小する property-based testing を、Vitest・`node:test`・ブラウザで実行する。
 
 CLI は `idealis`、npm package は `@mizchi/idealis`。Rust のホストは `idealis-core`、SMT サブセットは `idealis-smt`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。
+
+## 構成とライブラリの役割
+
+| ライブラリ                                      | 入力                                         | 担当する処理・出力                                                                                                 |
+| ----------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| [`rtla`](crates/rtla)                           | TLA+ソースとTLC設定                          | 構文解析し、構文木（AST）を返す。名前解決やモデル検査は後段が担当する。                                            |
+| [`rtla-compiler`](crates/rtla-compiler)         | rtlaのAST                                    | 名前解決、定数・operatorの展開を行い、対応する有限モデルの中間表現（IR）へ変換する。                               |
+| [`rtlc`](crates/rtlc)                           | 検査用IR                                     | 状態を列挙し、invariant・deadlock・temporal property・fairnessを検査して反例を返す。nativeの探索並列化も担当する。 |
+| [`idealis-core`](crates/idealis-core)           | TLA+ソース、IR、有限モデル、実装の観測・履歴 | parser・compiler・checkerを接続し、実装照合、履歴検査、再生、縮小候補の生成とnative JSONL / Wasm境界を提供する。   |
+| [`idealis-smt`](crates/idealis-smt)（旧`rsmt`） | 対応するSMT-LIB式                            | 任意精度整数の差分制約とBoolean式を解き、SATの具体値、UNSAT、予算切れのunknownを返す独立した試作ソルバー。         |
+| [`@mizchi/idealis`](src)                        | TSのモデルとDriver、各backendの入出力        | オラクル生成、実装との照合、差分・property-based test、反例縮小、スケジューリングとCLIを提供する。                 |
+| [Go adapter](adapters/go)                       | 共通コアのWasmとGoのモデル・実装・履歴       | CGOなしでRustコアへ接続し、同じ値・オラクル・観測を使って照合と再生を行う。                                        |
+
+RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
+
+`idealis-smt`はこのTLA+探索経路から独立している。現在の公開SMT adapterはZ3 Wasmを使い、idealis-smtを公開backendへ組み込む作業は今後の対象。
+
+## 対応範囲と統合状況
+
+TLA+とSMT-LIBの対応はサブセットに限られる。モデル検査が確認するのは、指定したモデル・仮定・探索範囲に対する性質。実装との照合は、実行した操作列と観測を対象にする。予算内で反例が見つからなかった結果や、実装との一致を、全入力・全実行の正しさの証明へ読み替えない。[検証範囲](#検証の範囲)と各crateの制約を確認する。
 
 TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT adapterとして利用する。Quint Connectのモデルと実装をつなぐアプローチを参考に、TSの`Driver`を実装との境界にした。Quint言語やApalacheの再実装ではない。
 
@@ -86,7 +108,7 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、idealis-coreへの依存はない。idealis-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
 
-構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で4つのcrateとparser/coreのWasmを確認できる。
+構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で5つのcrateとWasmの配布物を確認できる。
 
 [Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
 
