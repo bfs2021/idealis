@@ -698,3 +698,61 @@ export interface ScheduledRun<Result> {
     readonly error: string | null;
   }[];
 }
+export interface AlloyInstance {
+  readonly signatures: Readonly<Record<string, readonly string[]>>;
+  readonly fields: Readonly<
+    Record<string, readonly (readonly [string, string])[]>
+  >;
+}
+export interface AlloyInput {
+  readonly source: string;
+  readonly command: number;
+  readonly maxWork: number;
+}
+export interface AlloyCommand {
+  readonly label: string;
+  readonly kind: "run" | "check";
+  readonly scope: {
+    readonly signatures: readonly {
+      readonly name: string;
+      readonly maximum: number;
+      readonly exact: boolean;
+    }[];
+    readonly integerBitwidth: number;
+  };
+}
+export interface AlloyStats {
+  readonly work: number;
+  readonly candidates: number;
+  readonly factInstances: number;
+}
+export interface AlloyAnalysis {
+  readonly command: AlloyCommand;
+  readonly status:
+    | "instance"
+    | "counterexample"
+    | "no-instance"
+    | "no-counterexample"
+    | "unknown";
+  readonly instance: AlloyInstance | null;
+  readonly stats: AlloyStats;
+}
+export interface AlloyInstanceCheck {
+  readonly command: AlloyCommand;
+  readonly status: "matched" | "mismatch" | "invalid" | "unknown";
+  readonly reason:
+    | "scope"
+    | "declaration"
+    | "facts"
+    | "property"
+    | "work"
+    | null;
+  readonly stats: AlloyStats;
+}
+export interface AlloyRuntime {
+  readonly analyze: (input: AlloyInput) => AlloyAnalysis;
+  readonly checkInstance: (
+    input: AlloyInput,
+    instance: AlloyInstance,
+  ) => AlloyInstanceCheck;
+}

@@ -32,6 +32,15 @@ await writeFile(
   "assets/rtla-manifest.json",
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(parser).digest("hex"), bytes: parser.length }, null, 2)}\n`,
 );
+await copyFile(
+  "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
+  "assets/ralloy.wasm",
+);
+const alloy = await readFile("assets/ralloy.wasm");
+await writeFile(
+  "assets/ralloy-manifest.json",
+  `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(alloy).digest("hex"), bytes: alloy.length }, null, 2)}\n`,
+);
 execFileSync("pnpm", ["pack", "--pack-destination", target], { stdio: "pipe" });
 const workspace = await mkdtemp(resolve(target, "cargo-workspace-"));
 for (const name of [
@@ -119,9 +128,6 @@ await writeFile(resolve(target, "idealis-smt.wasm"), smt);
 await writeFile(
   resolve(target, "idealis-smt-manifest.json"),
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(smt).digest("hex"), bytes: smt.length }, null, 2)}\n`,
-);
-const alloy = await readFile(
-  "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
 );
 await writeFile(resolve(target, "ralloy.wasm"), alloy);
 await writeFile(

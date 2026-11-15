@@ -6,6 +6,8 @@
 
 [0034: 静的Alloyサブセット](iterations/0034-alloy-subset.md)は、独立crate `ralloy`のnative/Wasmと公式Alloy 6.2.0を比較する。有限scopeの関係モデル、返却構造の受理、空関係のarityの修正、ブラウザと単独consumerを検査した。
 
+[0035: Alloyモデルと固定instance](iterations/0035-alloy-instance.md)は、実装の関係スナップショットをnative/Wasmで評価する。公開TS API、node:test/Vitest、全512グラフ、公式Analyzerへの構造固定、実Chromiumと単独consumerを検査した。
+
 ```sh
 just eval-loop
 just replay-loop
