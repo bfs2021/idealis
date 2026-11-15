@@ -45,3 +45,5 @@ registry へ公開済みの version は使い回さない。途中まで公開�
 PR は1ジョブで TS / Rust / ブラウザ / mutation / 実バグ評価 / consumer を順に検証する。push の自動実行は main に限り、PR branch の push と pull_request の二重起動を避ける。
 
 4800件の portable 評価、runtime 性能評価、4 runner の cloud sharding はそれぞれ workflow_dispatch で残す。重い評価を明示的に実行でき、sharding の manifest / 欠落・衝突検出も保持する。PR で runner を prepare → shard → merge と3段階待つ構造を外した。GitHub の割当待ちそのものを短縮する保証ではない。
+
+`rtlc`の分離後は`rtlc-<version>.crate`と`modelt-core-<version>.crate`を同梱する。packageは一時workspaceで両者を同時検証し、Cargoの一時registryで依存を解決する。展開したarchiveのconsumerは未公開のrtlcを`[patch.crates-io]`でローカルへ結び、rtlc単独の依存graphにmodelt-coreが入らないことも確認する。通常のrepoは独立manifestのままとし、native/Wasm targetの位置を変更しない。この処理はCargo registryへのpublishではない。

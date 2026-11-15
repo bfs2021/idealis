@@ -70,7 +70,7 @@ const args = [
   "bench",
   "--locked",
   "--manifest-path",
-  "crates/modelt-core/Cargo.toml",
+  "crates/rtlc/Cargo.toml",
   "--bench",
   "safety",
   "--",
@@ -125,7 +125,7 @@ const collect = async (path: string, relative: string): Promise<void> => {
 };
 let archiveError: string | null = null;
 try {
-  await collect("crates/modelt-core/target/criterion", "");
+  await collect("crates/rtlc/target/criterion", "");
 } catch (error) {
   archiveError = String(error);
 }

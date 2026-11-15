@@ -34,9 +34,7 @@ await writeFile(
 );
 
 assert.deepEqual(
-  JSON.parse(
-    await readFile("crates/modelt-core/src/bench-fixtures.json", "utf8"),
-  ),
+  JSON.parse(await readFile("crates/rtlc/src/bench-fixtures.json", "utf8")),
   inputs,
   "Regenerate the checked-in benchmark fixture when changing inputs",
 );

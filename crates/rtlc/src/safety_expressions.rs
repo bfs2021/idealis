@@ -1,5 +1,5 @@
 use crate::CoreError;
-use crate::safety::{Binding, Branch, Domain, Expression, Scalar, Step};
+use crate::ir::{Binding, Branch, Domain, Expression, Scalar, Step};
 use crate::safety_values::Arena;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_values::ValueRemap;
@@ -1258,7 +1258,7 @@ pub(crate) fn visit_branch(
 mod tests {
     use super::EvalContext;
     use crate::Value;
-    use crate::safety::{Expression, Scalar};
+    use crate::ir::{Expression, Scalar};
     use crate::safety_values::Arena;
 
     fn membership(element: Expression) -> Expression {

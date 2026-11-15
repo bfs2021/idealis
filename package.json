@@ -61,7 +61,8 @@
   },
   "scripts": {
     "portable:build": "cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml",
-    "portable:test": "pnpm build && cargo test --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml && node --test dist/evals/portable/contract-test.js",
+    "rtlc:test": "cargo fmt --manifest-path crates/rtlc/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rtlc/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rtlc/Cargo.toml",
+    "portable:test": "pnpm build && pnpm rtlc:test && cargo test --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml && node --test dist/evals/portable/contract-test.js",
     "portable:browser": "playwright test --config portable-playwright.config.ts",
     "portable:eval": "pnpm build && node dist/evals/portable/evaluate.js",
     "portable:replay": "pnpm build && node dist/evals/portable/replay.js",

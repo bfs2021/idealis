@@ -21,6 +21,7 @@ export const usableFingerprint = async () => {
         "evals/harness",
         "evals/fixtures",
         "crates/modelt-core",
+        "crates/rtlc",
         "fixtures",
         "tests",
         "cli",

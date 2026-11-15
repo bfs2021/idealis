@@ -18,6 +18,7 @@ export const portableFingerprint = async () => {
         "examples",
         "evals/portable",
         "crates/modelt-core",
+        "crates/rtlc",
         "fixtures",
         "tests",
         "package.json",

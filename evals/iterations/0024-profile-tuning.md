@@ -11,7 +11,7 @@ Wasm counterではevalがself sampleの55.5%、visit_branchが29.7%。native 1�
 1. `Literal`、`Read`、`Bound`、`Old`を小さいevalへ切り出し、operator本体をinlineしない関数へ分けた。式の順序、型エラー、短絡、workを変えずに、大きいoperator本体へ入るleaf呼び出しを減らす。
 2. `select`とEXCEPTのpath検索では、正の整数keyについて`key-1`番目のkeyが一致した場合に直接参照する。疎な整数domainやrecord、0/負数、missing keyは線形検索を使う。domainが連続すると推測して値を返さない。
 
-TLC v1.7.4のFcnRcdValue.select/takeExcept、IF/論理式の短絡と照合した。API/IRとScalarの表現は追加・変更していない。[評価器](../../crates/modelt-core/src/safety_expressions.rs)、[値の検索](../../crates/modelt-core/src/safety_values.rs)を参照。
+TLC v1.7.4のFcnRcdValue.select/takeExcept、IF/論理式の短絡と照合した。API/IRとScalarの表現は追加・変更していない。[評価器](../../crates/rtlc/src/safety_expressions.rs)、[値の検索](../../crates/rtlc/src/safety_values.rs)を参照。
 
 leaf切り出しはcounter/ringで改善し、採用した。整数位置の変更単独はfunctionで約5-6%改善したが、channels最大8では7.015→7.469 msに後退した。finalは7.361 msで、leafだけの回より遅い。関数の改善と短いdomainでの費用を分け、全ケースで速くなるとは解釈しない。次はdomain幅別にlookupの採用範囲を調べる。
 

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { compileTlaSafety } from "../src/tla-safety.js";
@@ -8,8 +8,16 @@ import { compileTlaSafety } from "../src/tla-safety.js";
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
 const files = await readdir(directory);
 const tarball = files.find((file) => file.endsWith(".tgz"));
-const crate = files.find((file) => file.endsWith(".crate"));
-assert.ok(tarball && crate, "Prepare both packages first");
+const crate = files.find(
+  (file) => file.startsWith("modelt-core-") && file.endsWith(".crate"),
+);
+const rtlcCrate = files.find(
+  (file) => file.startsWith("rtlc-") && file.endsWith(".crate"),
+);
+assert.ok(
+  tarball && crate && rtlcCrate,
+  "Prepare npm and both Rust packages first",
+);
 const consumer = await mkdtemp(join(tmpdir(), "modelt-consumer-"));
 await writeFile(
   join(consumer, "package.json"),
@@ -190,15 +198,16 @@ assert.equal(
   2,
 );
 execFileSync("tar", ["-xzf", join(directory, crate), "-C", consumer]);
+execFileSync("tar", ["-xzf", join(directory, rtlcCrate), "-C", consumer]);
 const version = JSON.parse(await readFile("package.json", "utf8")).version;
 await writeFile(
   join(consumer, "Cargo.toml"),
-  `[package]\nname="modelt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nmodelt-core={path="modelt-core-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,
+  `[package]\nname="modelt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nmodelt-core={path="modelt-core-${version}"}\nrtlc={path="rtlc-${version}"}\nserde_json="1.0"\n[patch.crates-io]\nrtlc={path="rtlc-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,
 );
 await writeFile(
   join(consumer, "consumer.rs"),
   `use modelt_core::{Engine,Message,Status};
-fn main(){let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};println!("packaged Rust consumer matched");}
+fn main(){let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: modelt_core::Command = serde_json::from_slice(&bytes).unwrap(); if let modelt_core::Request::CheckSafety { program, bounds } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check(bounds).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; println!("packaged Rust consumer matched");}
 `,
 );
 const rust = execFileSync(
@@ -214,14 +223,65 @@ const rust = execFileSync(
 )
   .toString()
   .trim();
+const rtlcConsumer = join(consumer, "rtlc-only");
+await mkdir(rtlcConsumer);
+await writeFile(
+  join(rtlcConsumer, "Cargo.toml"),
+  `[package]\nname="rtlc-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nrtlc={path="../rtlc-${version}"}\nserde_json="1.0"\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+);
+await writeFile(
+  join(rtlcConsumer, "main.rs"),
+  `fn main(){let bytes=std::fs::read("safety-request.json").unwrap();let request:serde_json::Value=serde_json::from_slice(&bytes).unwrap();let program:rtlc::SafetyProgram=serde_json::from_value(request["request"]["program"].clone()).unwrap();let bounds:rtlc::SafetyBounds=serde_json::from_value(request["request"]["bounds"].clone()).unwrap();let result=program.check(bounds).unwrap();assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4);println!("standalone rtlc consumer checked");}`,
+);
+const rtlc = execFileSync(
+  "cargo",
+  [
+    "run",
+    "--offline",
+    "--quiet",
+    "--manifest-path",
+    join(rtlcConsumer, "Cargo.toml"),
+  ],
+  {
+    cwd: consumer,
+    env: { ...process.env, CARGO_TARGET_DIR: join(consumer, "target") },
+    stdio: "pipe",
+  },
+)
+  .toString()
+  .trim();
+const metadata = JSON.parse(
+  execFileSync(
+    "cargo",
+    [
+      "metadata",
+      "--offline",
+      "--format-version",
+      "1",
+      "--manifest-path",
+      join(rtlcConsumer, "Cargo.toml"),
+    ],
+    { cwd: consumer, stdio: "pipe" },
+  ).toString(),
+);
+assert.ok(
+  metadata.packages.some((entry: { name: string }) => entry.name === "rtlc"),
+);
+assert.ok(
+  !metadata.packages.some(
+    (entry: { name: string }) => entry.name === "modelt-core",
+  ),
+  "rtlc must remain independent of the modelt host",
+);
 const result = {
   status: "complete",
   node,
   typecheck: "passed without solver declarations",
   rust,
+  rtlc,
   cliExitCodes: [0, 1, 2],
   consumer,
-  artifacts: [tarball, crate],
+  artifacts: [tarball, crate, rtlcCrate],
 };
 await writeFile(
   join(directory, "consumer-result.json"),

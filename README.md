@@ -80,6 +80,8 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 [TLA+ の Rust backend](docs/rust-safety.md) は `compileTlaSafety` と `checkSafety`。整数・集合・関数・record・sequence の有限モデル、temporal property、WF / SF を IR に変換し、状態生成・BFS・SCC 検査・反例復元を native / Wasm 内で実行する。全 TLA+ 互換ではなく、対応外のモデルは既存の tla-ts を使う。
 
+検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、modelt-coreへの依存はない。modelt-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
+
 ```ts
 import { checkConformance, checkModel, checkTrace } from "./src/index.js";
 import { counterModel, createCounter } from "./examples/durable-counter.js";

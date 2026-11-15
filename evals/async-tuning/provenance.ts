@@ -16,6 +16,7 @@ export const fingerprint = async () => {
     "examples",
     "adapters/go",
     "crates/modelt-core",
+    "crates/rtlc",
     "evals/async-tuning",
     "evals/harness",
     "evals/cross-language",

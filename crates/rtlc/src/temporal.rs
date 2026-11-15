@@ -1,28 +1,12 @@
 use crate::CoreError;
-use crate::safety::{
+use crate::ir::{
     Expression, SafetyBounds, SafetyProgram, SafetyTraceStep, SafetyViolation, Scalar,
+    TemporalFormula,
 };
 use crate::safety_expressions::EvalContext;
 use crate::safety_values::Arena;
-use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet, VecDeque};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
-pub enum TemporalFormula {
-    Atom { expression: Expression },
-    Not { formula: Box<Self> },
-    Always { formula: Box<Self> },
-    Eventually { formula: Box<Self> },
-    And { left: Box<Self>, right: Box<Self> },
-    Or { left: Box<Self>, right: Box<Self> },
-}
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct TemporalProperty {
-    pub name: String,
-    pub formula: TemporalFormula,
-}
 impl TemporalFormula {
     pub(crate) fn validate(&self, variables: usize, depth: usize) -> Result<(), CoreError> {
         if depth > 40 {

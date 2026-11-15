@@ -1,6 +1,6 @@
 #![cfg(not(target_arch = "wasm32"))]
 
-use modelt_core::{SafetyBounds, SafetyProgram};
+use rtlc::{SafetyBounds, SafetyProgram};
 use serde_json::{Value, json};
 
 fn integer(value: i32) -> Value {

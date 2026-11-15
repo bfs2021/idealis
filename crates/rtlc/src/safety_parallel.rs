@@ -1,6 +1,6 @@
 use super::Search;
 use crate::CoreError;
-use crate::safety::Scalar;
+use crate::ir::{SafetyProgram, Scalar, Step};
 use crate::safety_expressions::{EvalContext, visit_branch};
 use crate::safety_values::{Arena, ValueDelta};
 use crate::safety_work::WorkBudget;
@@ -83,15 +83,15 @@ impl Workers {
     }
 }
 
-pub(super) fn is_expensive(program: &super::SafetyProgram) -> bool {
+pub(super) fn is_expensive(program: &SafetyProgram) -> bool {
     program
         .next
         .iter()
         .flat_map(|branch| &branch.steps)
         .any(|step| match step {
-            super::Step::Assign { value, .. } => !value.is_scalar_cost(),
-            super::Step::Guard { expression } => !expression.is_scalar_cost(),
-            super::Step::Bind { .. } | super::Step::Choose { .. } => true,
+            Step::Assign { value, .. } => !value.is_scalar_cost(),
+            Step::Guard { expression } => !expression.is_scalar_cost(),
+            Step::Bind { .. } | Step::Choose { .. } => true,
         })
         || program
             .invariants

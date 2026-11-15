@@ -4,7 +4,7 @@
 include!("lib.rs");
 
 mod measurements {
-    use crate::safety::{Expression, Scalar};
+    use crate::ir::{Expression, Scalar};
     use crate::safety_expressions::EvalContext;
     use crate::safety_values::Arena;
     use crate::{SafetyBounds, SafetyProgram, Value};

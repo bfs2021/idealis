@@ -215,7 +215,7 @@ criterion-prepare:
   node dist/evals/criterion-safety/prepare.js
 
 criterion-test: criterion-prepare
-  cargo test --locked --manifest-path crates/modelt-core/Cargo.toml --bench safety
+  cargo test --locked --manifest-path crates/rtlc/Cargo.toml --bench safety
   node --test dist/evals/criterion-safety/contract-test.js
 
 criterion-save stage run: criterion-prepare
@@ -251,3 +251,9 @@ profile-scalar run: safety-build
 profile-replay saved run:
   pnpm build
   node dist/evals/profile-tuning/scalar-compare.js {{quote(run)}} {{quote(saved)}}
+
+rtlc-test:
+  pnpm rtlc:test
+
+rtlc-example:
+  cargo run --example counter --locked --manifest-path crates/rtlc/Cargo.toml

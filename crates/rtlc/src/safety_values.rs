@@ -1,4 +1,4 @@
-use crate::safety::{Expression, Scalar};
+use crate::ir::{Expression, Scalar};
 use crate::safety_expressions::MembershipSet;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_work::WorkBudget;
@@ -772,7 +772,7 @@ impl ValueRemap {
 #[cfg(test)]
 mod tests {
     use super::{Arena, Cell, ValueHasher};
-    use crate::safety::Scalar;
+    use crate::ir::Scalar;
     use std::hash::{Hash, Hasher};
 
     #[cfg(not(target_arch = "wasm32"))]
