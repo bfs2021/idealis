@@ -59,4 +59,4 @@ PR は1ジョブで TS / Rust / ブラウザ / mutation / 実バグ評価 / cons
 
 `idealis-smt`は5つ目の独立crate。`rsmt-<version>.crate`、`idealis-smt.wasm`、`idealis-smt-manifest.json`を配布物に加える。idealis-smtのarchiveだけを別ディレクトリへ展開し、SAT、UNSAT、unknown、未対応を検査する。依存graphへidealis-core、rtla、rtlc、Z3が入らないことも確認する。npmのSMT backendへの接続は追加していない。
 
-`ralloy`は6つ目の独立crate。`ralloy-<version>.crate`、`ralloy.wasm`、`ralloy-manifest.json`を加える。archiveだけを別consumerへ展開し、2-cycleの反例、予算切れ、不整合なfact、未対応構文を検査する。依存graphに他のidealis crateやZ3が含まれないこと、Wasmにホストimportがないことも確認する。npmのbackendやCLIにはまだ接続していない。
+`ralloy`は6つ目の独立crate。`ralloy-<version>.crate`、`ralloy.wasm`、`ralloy-manifest.json`を加える。archiveだけを別consumerへ展開し、2-cycleの反例、予算切れ、不整合なfact、未対応構文を検査する。依存graphに他のidealis crateやZ3が含まれないこと、Wasmにホストimportがないことも確認する。npmには`@mizchi/idealis/alloy`と`@mizchi/idealis/ralloy.wasm`を含め、別consumerで探索と固定instanceの照合を検査する。汎用backendやCLIにはまだ接続していない。

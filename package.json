@@ -62,7 +62,12 @@
       "default": "./dist/src/shrink.js"
     },
     "./core.wasm": "./assets/idealis-core.wasm",
-    "./rtla.wasm": "./assets/rtla.wasm"
+    "./rtla.wasm": "./assets/rtla.wasm",
+    "./alloy": {
+      "types": "./dist/src/alloy.d.ts",
+      "default": "./dist/src/alloy.js"
+    },
+    "./ralloy.wasm": "./assets/ralloy.wasm"
   },
   "scripts": {
     "rtla:build": "cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml",

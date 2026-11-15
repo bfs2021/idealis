@@ -1,0 +1,31 @@
+cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.01s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node --test dist/evals/alloy-instance/contract-test.js
+✔ public Alloy runtime checks observed graphs and explicit failures (9.234875ms)
+✔ observed structures agree between public Wasm and native JSONL (223.998417ms)
+✔ runtime rejects malformed snapshots and invalid budgets (1.165584ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 279.336375
+pnpm exec vitest run --config alloy-vitest.config.ts
+
+ RUN  v5.1.0 /Users/mz/ghq/github.com/mizchi/idealis
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  04:26:46
+   Duration  155ms (tests 69%, import 19%, transform 9%, worker 3%)
+

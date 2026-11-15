@@ -28,6 +28,22 @@ ralloy-replay run:
   pnpm build
   node dist/evals/alloy-subset/replay.js {{quote(run)}}
 
+alloy-test: ralloy-build
+  pnpm build
+  node --test dist/evals/alloy-instance/contract-test.js
+  pnpm exec vitest run --config alloy-vitest.config.ts
+
+alloy-browser: ralloy-build
+  pnpm exec playwright test --config alloy-instance-playwright.config.ts
+
+alloy-instance-eval phase run java jar parent="": ralloy-build
+  pnpm build
+  node dist/evals/alloy-instance/run.js {{quote(phase)}} {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(parent)}}
+
+alloy-instance-replay run:
+  pnpm build
+  node dist/evals/alloy-instance/replay.js {{quote(run)}}
+
 rsmt-build:
   pnpm rsmt:build
 

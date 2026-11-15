@@ -1,0 +1,2695 @@
+[
+  {
+    "input": {
+      "name": "dag",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 25,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "two-cycle",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 26,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "self-loop-fact",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 13,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "self-loop-property",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 19,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "scope",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no edge }\nQuery: check Property for 1 but 0 Int\nFeasible: run {} for 1 but 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "scope"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 1,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "scope",
+      "stats": {
+        "work": 1,
+        "candidates": 0,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "field-one",
+      "input": {
+        "source": "sig N { edge: N }\nfact Assumptions {  }\nassert Property { no edge }\nQuery: check Property for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "declaration"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "declaration",
+      "stats": {
+        "work": 4,
+        "candidates": 0,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "empty-owner",
+      "input": {
+        "source": "sig N { edge: some N }\nfact Assumptions {  }\nQuery: run { no N } for 0 but 0 Int\nFeasible: run {} for 0 but 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": []
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 5,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "some-sig",
+      "input": {
+        "source": "some sig N {}\nfact Assumptions {  }\nQuery: run { no N } for 1 but 0 Int\nFeasible: run {} for 1 but 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": []
+        },
+        "fields": {}
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "declaration"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 1,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "declaration",
+      "stats": {
+        "work": 1,
+        "candidates": 0,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "builtin-int",
+      "input": {
+        "source": "one sig N { value: Int }\nfact Assumptions {  }\nQuery: run { some value } for 0\nFeasible: run {} for 0\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "actor"
+          ]
+        },
+        "fields": {
+          "value": [
+            [
+              "actor",
+              "-8"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 1,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 4
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 24,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "run-query",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { some edge } for 0 but 0 Int\nFeasible: run {} for 0 but 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": []
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 5,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-0",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 16,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-1",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 31,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-2",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 18,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-3",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-4",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 19,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-5",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 28,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-6",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 25,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-7",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 30,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-8",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-9",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-10",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 19,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-11",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 34,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-12",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 15,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-13",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 27,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-14",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-15",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-16",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-17",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 33,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-18",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "expected": {
+        "status": "matched",
+        "reason": null
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "matched",
+      "reason": null,
+      "stats": {
+        "work": 24,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "matched",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-19",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 33,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-20",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-21",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 20,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-22",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 19,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-23",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 31,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-24",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 14,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-25",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 30,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-26",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 21,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-27",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 17,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-28",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 1"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 22,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-29",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 28,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-30",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions { no iden & edge }\nQuery: run { no iden & ^edge } for 2 but exactly 2 N, 0 Int\nFeasible: run {} for 2 but exactly 2 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 1",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 1"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "invalid",
+        "reason": "facts"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "invalid",
+      "reason": "facts",
+      "stats": {
+        "work": 14,
+        "candidates": 1,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "invalid",
+      "feasible": false,
+      "querySat": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-35c3-31",
+      "input": {
+        "source": "sig N { edge: set N }\nfact Assumptions {  }\nassert Property { no iden & ^edge }\nQuery: check Property for 3 but exactly 3 N, 0 Int\nFeasible: run {} for 3 but exactly 3 N, 0 Int\n",
+        "command": 0,
+        "maxWork": 100000
+      },
+      "instance": {
+        "signatures": {
+          "N": [
+            "implementation node 0",
+            "implementation node 1",
+            "implementation node 2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "implementation node 0",
+              "implementation node 0"
+            ],
+            [
+              "implementation node 0",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 1",
+              "implementation node 2"
+            ],
+            [
+              "implementation node 2",
+              "implementation node 2"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "status": "mismatch",
+        "reason": "property"
+      }
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "mismatch",
+      "reason": "property",
+      "stats": {
+        "work": 30,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "mismatch",
+      "feasible": true,
+      "querySat": true
+    }
+  }
+]

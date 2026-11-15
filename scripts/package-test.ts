@@ -119,12 +119,19 @@ await writeFile(
   join(consumer, "consumer.mjs"),
   `import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
+import {createAlloyWasm,AlloyError} from '@mizchi/idealis/alloy';
 import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/idealis/portable';
 import {createHistoryRecorder} from '@mizchi/idealis/history';
 import {parseFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
 import {planSchedule,runSchedule} from '@mizchi/idealis/scheduling';
 import {createRtlcBackend,runBackend,parseBackendResult} from '@mizchi/idealis/backend';
+const alloy=await createAlloyWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/ralloy.wasm'))));
+const alloyInput={source:'sig N { edge: set N } fact { no iden & edge } assert Safe { no iden & ^edge } check Safe for 2 but exactly 2 N, 0 Int',command:0,maxWork:100000};
+const generated=alloy.analyze(alloyInput);assert.equal(generated.status,'counterexample');assert.equal(alloy.checkInstance(alloyInput,generated.instance).status,'mismatch');
+assert.equal(alloy.checkInstance(alloyInput,{signatures:{N:['a','b']},fields:{edge:[['a','b']]}}).status,'matched');
+assert.equal(alloy.checkInstance({...alloyInput,maxWork:0},generated.instance).status,'unknown');
+assert.throws(()=>alloy.checkInstance(alloyInput,{signatures:{N:['a','b']},fields:{}}),AlloyError);
 const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/core.wasm'))));
 const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/idealis/rtla.wasm'))));
 assert.deepEqual(WebAssembly.Module.imports(parserModule),[]);
@@ -166,6 +173,8 @@ const node = execFileSync(process.execPath, [join(consumer, "consumer.mjs")], {
 await writeFile(
   join(consumer, "consumer.ts"),
   `import type {Model} from '@mizchi/idealis';
+import {createAlloyWasm,type AlloyInstance} from '@mizchi/idealis/alloy';
+const observed:AlloyInstance={signatures:{N:[]},fields:{edge:[]}};void observed;void createAlloyWasm;
 import {compileFiniteModel,createFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
 import {createPortableWasm,compileTlaSource,checkTlaSource} from '@mizchi/idealis/portable';
