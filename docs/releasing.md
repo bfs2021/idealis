@@ -27,6 +27,8 @@ Cargo の初回公開はアカウントと crate 名の確認後に行う。
 
 ```sh
 cargo login
+cargo publish --locked --manifest-path crates/rtla/Cargo.toml
+cargo publish --locked --manifest-path crates/rtlc/Cargo.toml
 cargo publish --locked --manifest-path crates/modelt-core/Cargo.toml
 ```
 
@@ -47,3 +49,5 @@ PR は1ジョブで TS / Rust / ブラウザ / mutation / 実バグ評価 / cons
 4800件の portable 評価、runtime 性能評価、4 runner の cloud sharding はそれぞれ workflow_dispatch で残す。重い評価を明示的に実行でき、sharding の manifest / 欠落・衝突検出も保持する。PR で runner を prepare → shard → merge と3段階待つ構造を外した。GitHub の割当待ちそのものを短縮する保証ではない。
 
 `rtlc`の分離後は`rtlc-<version>.crate`と`modelt-core-<version>.crate`を同梱する。packageは一時workspaceで両者を同時検証し、Cargoの一時registryで依存を解決する。展開したarchiveのconsumerは未公開のrtlcを`[patch.crates-io]`でローカルへ結び、rtlc単独の依存graphにmodelt-coreが入らないことも確認する。通常のrepoは独立manifestのままとし、native/Wasm targetの位置を変更しない。この処理はCargo registryへのpublishではない。
+
+`rtla`は独立した`rtla-<version>.crate`、`rtla.wasm`、SHA256/ABI manifestを追加する。同じ一時workspaceで3つのcrateを検証し、parser単独consumerの依存graphにrtlc/modelt-coreが入らないことを確認する。npmでは`@mizchi/modelt/rtla.wasm`を解決し、solverがない別consumerで解析する。registry初回登録は上の手動手順を使い、package検証からpublishは実行しない。

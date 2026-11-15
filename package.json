@@ -57,12 +57,15 @@
       "types": "./dist/src/shrink.d.ts",
       "default": "./dist/src/shrink.js"
     },
-    "./core.wasm": "./assets/modelt-core.wasm"
+    "./core.wasm": "./assets/modelt-core.wasm",
+    "./rtla.wasm": "./assets/rtla.wasm"
   },
   "scripts": {
+    "rtla:build": "cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml",
+    "rtla:test": "cargo fmt --manifest-path crates/rtla/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rtla/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rtla/Cargo.toml && pnpm build && pnpm rtla:build && node --test dist/evals/rtla-parser/contract-test.js",
     "portable:build": "cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml",
     "rtlc:test": "cargo fmt --manifest-path crates/rtlc/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rtlc/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rtlc/Cargo.toml",
-    "portable:test": "pnpm build && pnpm rtlc:test && cargo test --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml && node --test dist/evals/portable/contract-test.js",
+    "portable:test": "pnpm build && pnpm rtlc:test && pnpm rtla:test && cargo test --all-targets --locked --manifest-path crates/modelt-core/Cargo.toml && node --test dist/evals/portable/contract-test.js",
     "portable:browser": "playwright test --config portable-playwright.config.ts",
     "portable:eval": "pnpm build && node dist/evals/portable/evaluate.js",
     "portable:replay": "pnpm build && node dist/evals/portable/replay.js",
@@ -87,7 +90,7 @@
     "usable:test": "pnpm build && node --test dist/evals/usable/contract-test.js",
     "usable:eval": "pnpm build && node dist/evals/usable/evaluate.js",
     "usable:replay": "pnpm build && node dist/evals/usable/replay.js",
-    "package:prepare": "pnpm portable:build && pnpm build && node dist/scripts/package.js",
+    "package:prepare": "pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js",
     "package:test": "node dist/scripts/package-test.js"
   },
   "devDependencies": {

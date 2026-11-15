@@ -15,6 +15,7 @@ export const fingerprint = async () => {
     "adapters/go",
     "crates/modelt-core",
     "crates/rtlc",
+    "crates/rtla",
     "evals/cross-language",
     "evals/shared-oracle-rust",
     "evals/harness/counter-faults.ts",

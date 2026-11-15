@@ -17,15 +17,24 @@ await copyFile(
   "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
   "assets/modelt-core.wasm",
 );
+await copyFile(
+  "crates/rtla/target/wasm32-unknown-unknown/release/rtla.wasm",
+  "assets/rtla.wasm",
+);
 const wasm = await readFile("assets/modelt-core.wasm");
 const pkg = JSON.parse(await readFile("package.json", "utf8"));
 await writeFile(
   "assets/manifest.json",
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(wasm).digest("hex"), bytes: wasm.length }, null, 2)}\n`,
 );
+const parser = await readFile("assets/rtla.wasm");
+await writeFile(
+  "assets/rtla-manifest.json",
+  `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(parser).digest("hex"), bytes: parser.length }, null, 2)}\n`,
+);
 execFileSync("pnpm", ["pack", "--pack-destination", target], { stdio: "pipe" });
 const workspace = await mkdtemp(resolve(target, "cargo-workspace-"));
-for (const name of ["rtlc", "modelt-core"]) {
+for (const name of ["rtla", "rtlc", "modelt-core"]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
     "src",
@@ -35,6 +44,7 @@ for (const name of ["rtlc", "modelt-core"]) {
     "Cargo.lock",
     "README.md",
     "LICENSE",
+    ...(name === "rtla" ? ["NOTICE"] : []),
   ])
     await cp(`crates/${name}/${file}`, resolve(workspace, name, file), {
       recursive: true,
@@ -42,7 +52,7 @@ for (const name of ["rtlc", "modelt-core"]) {
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtlc","modelt-core"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","modelt-core"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -70,7 +80,7 @@ execFileSync(
   ],
   { stdio: "pipe" },
 );
-for (const name of ["rtlc", "modelt-core"]) {
+for (const name of ["rtla", "rtlc", "modelt-core"]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
     resolve(workspace, "target/package", crate),
@@ -79,6 +89,11 @@ for (const name of ["rtlc", "modelt-core"]) {
 }
 await copyFile("assets/modelt-core.wasm", resolve(target, "modelt-core.wasm"));
 await copyFile("assets/manifest.json", resolve(target, "wasm-manifest.json"));
+await copyFile("assets/rtla.wasm", resolve(target, "rtla.wasm"));
+await copyFile(
+  "assets/rtla-manifest.json",
+  resolve(target, "rtla-manifest.json"),
+);
 console.log(
-  `Verified npm, rtlc/modelt-core Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtlc/modelt-core Cargo and Wasm artifacts: ${target}`,
 );

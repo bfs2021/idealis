@@ -261,3 +261,16 @@ rtlc-example:
 rtlc-compare run:
   pnpm build
   node dist/evals/rtlc-extraction/compare.js {{quote(run)}}
+
+rtla-build:
+  pnpm rtla:build
+
+rtla-test:
+  pnpm rtla:test
+
+rtla-browser: rtla-build
+  pnpm exec playwright test --config rtla-playwright.config.ts
+
+rtla-eval run java jar: rtla-build
+  pnpm build
+  node dist/evals/rtla-parser/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}

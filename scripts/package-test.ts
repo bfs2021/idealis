@@ -14,9 +14,12 @@ const crate = files.find(
 const rtlcCrate = files.find(
   (file) => file.startsWith("rtlc-") && file.endsWith(".crate"),
 );
+const rtlaCrate = files.find(
+  (file) => file.startsWith("rtla-") && file.endsWith(".crate"),
+);
 assert.ok(
-  tarball && crate && rtlcCrate,
-  "Prepare npm and both Rust packages first",
+  tarball && crate && rtlcCrate && rtlaCrate,
+  "Prepare npm and all three Rust packages first",
 );
 const consumer = await mkdtemp(join(tmpdir(), "modelt-consumer-"));
 await writeFile(
@@ -103,6 +106,16 @@ import {parseFiniteModel} from '@mizchi/modelt/finite';
 import {createSimulationHost} from '@mizchi/modelt/host';
 import {planSchedule,runSchedule} from '@mizchi/modelt/scheduling';
 const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/modelt/core.wasm'))));
+const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/modelt/rtla.wasm'))));
+assert.deepEqual(WebAssembly.Module.imports(parserModule),[]);
+const parser=(await WebAssembly.instantiate(parserModule,{})).exports;
+assert.equal(parser.rtla_abi_version(),1);
+const parserInput=new TextEncoder().encode(JSON.stringify({kind:'expression',source:"x'"}));
+const parserPointer=parser.rtla_input_resize(parserInput.length);
+new Uint8Array(parser.memory.buffer,parserPointer,parserInput.length).set(parserInput);
+parser.rtla_dispatch();
+const parsed=JSON.parse(new TextDecoder().decode(new Uint8Array(parser.memory.buffer,parser.rtla_output_ptr(),parser.rtla_output_len())));
+assert.equal(parsed.expression.kind,'Prime');assert.equal(parsed.expression.expression.name,'x');
 const model=parseFiniteModel(JSON.parse(await readFile('model.json','utf8')));
 const trace=decodePortableTrace(await readFile('history.json','utf8'));
 assert.equal(checkFiniteHistories(core,model,[trace])[0].status,'matched');
@@ -199,6 +212,7 @@ assert.equal(
 );
 execFileSync("tar", ["-xzf", join(directory, crate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlcCrate), "-C", consumer]);
+execFileSync("tar", ["-xzf", join(directory, rtlaCrate), "-C", consumer]);
 const version = JSON.parse(await readFile("package.json", "utf8")).version;
 await writeFile(
   join(consumer, "Cargo.toml"),
@@ -273,15 +287,64 @@ assert.ok(
   ),
   "rtlc must remain independent of the modelt host",
 );
+const parserConsumer = join(consumer, "rtla-only");
+await mkdir(parserConsumer);
+await writeFile(
+  join(parserConsumer, "Cargo.toml"),
+  `[package]\nname="rtla-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nrtla={path="../rtla-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+);
+await writeFile(
+  join(parserConsumer, "main.rs"),
+  `fn main(){let module=rtla::parse_module("---- MODULE Consumer ----\\nVARIABLE x\\nInit == x = 0\\n====").unwrap();assert_eq!(module.name,"Consumer");assert_eq!(module.definitions[0].name,"Init");let config=rtla::parse_config("INIT Init").unwrap();assert_eq!(config.init.as_deref(),Some("Init"));println!("standalone rtla consumer parsed");}`,
+);
+const rtla = execFileSync(
+  "cargo",
+  [
+    "run",
+    "--offline",
+    "--quiet",
+    "--manifest-path",
+    join(parserConsumer, "Cargo.toml"),
+  ],
+  {
+    cwd: consumer,
+    env: { ...process.env, CARGO_TARGET_DIR: join(consumer, "target") },
+    stdio: "pipe",
+  },
+)
+  .toString()
+  .trim();
+const parserMetadata = JSON.parse(
+  execFileSync(
+    "cargo",
+    [
+      "metadata",
+      "--offline",
+      "--format-version",
+      "1",
+      "--manifest-path",
+      join(parserConsumer, "Cargo.toml"),
+    ],
+    { cwd: consumer, stdio: "pipe" },
+  ).toString(),
+);
+assert.ok(
+  !parserMetadata.packages.some(
+    (entry: { name: string }) =>
+      entry.name === "modelt-core" || entry.name === "rtlc",
+  ),
+);
 const result = {
   status: "complete",
   node,
   typecheck: "passed without solver declarations",
   rust,
   rtlc,
+  rtla,
+  parserWasm: "packaged rtla Wasm parsed without solvers",
   cliExitCodes: [0, 1, 2],
   consumer,
-  artifacts: [tarball, crate, rtlcCrate],
+  artifacts: [tarball, crate, rtlcCrate, rtlaCrate],
 };
 await writeFile(
   join(directory, "consumer-result.json"),

@@ -6,7 +6,7 @@ const pkg = JSON.parse(await readFile("package.json", "utf8"));
 const tag = process.argv[2];
 if (tag !== `v${pkg.version}`)
   throw new Error("Release tag and package version differ");
-for (const name of ["modelt-core", "rtlc"]) {
+for (const name of ["modelt-core", "rtlc", "rtla"]) {
   const cargo = await readFile(`crates/${name}/Cargo.toml`, "utf8");
   if (!cargo.includes(`version = "${pkg.version}"`))
     throw new Error(`${name} and npm versions differ`);
@@ -27,6 +27,9 @@ if (process.argv[3] === "--publish") {
       tarball,
       resolve(directory, `modelt-core-${pkg.version}.crate`),
       resolve(directory, `rtlc-${pkg.version}.crate`),
+      resolve(directory, `rtla-${pkg.version}.crate`),
+      resolve(directory, "rtla.wasm"),
+      resolve(directory, "rtla-manifest.json"),
       resolve(directory, "modelt-core.wasm"),
       resolve(directory, "wasm-manifest.json"),
     ].map((path) => readFile(path)),
@@ -52,6 +55,9 @@ if (process.argv[3] === "--publish") {
       tarball,
       resolve(directory, `modelt-core-${pkg.version}.crate`),
       resolve(directory, `rtlc-${pkg.version}.crate`),
+      resolve(directory, `rtla-${pkg.version}.crate`),
+      resolve(directory, "rtla.wasm"),
+      resolve(directory, "rtla-manifest.json"),
       resolve(directory, "modelt-core.wasm"),
       resolve(directory, "wasm-manifest.json"),
       "--title",

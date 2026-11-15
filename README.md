@@ -82,6 +82,8 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、modelt-coreへの依存はない。modelt-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
 
+構文解析には独立した[`rtla` crate](crates/rtla)もある。TLA+／TLC設定から型付きASTを返し、nativeとhost import不要のWasmで動く。`rtlc`には依存しない。既存の`compileTlaSafety`は引き続きtla-ts parserからIRを作るため、rtlaのASTからIRへの変換は含まない。`just rtla-test` / `just rtla-browser`で検査し、`just package`で3つのcrateとparser/coreのWasmを確認できる。
+
 ```ts
 import { checkConformance, checkModel, checkTrace } from "./src/index.js";
 import { counterModel, createCounter } from "./examples/durable-counter.js";
