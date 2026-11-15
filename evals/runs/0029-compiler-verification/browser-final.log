@@ -1,0 +1,15 @@
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:browser /Users/mz/ghq/github.com/mizchi/modelt
+> playwright test --config portable-playwright.config.ts
+
+
+Running 2 tests using 2 workers
+
+(node:65788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:65787) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/rtla.browser.spec.ts:56:1 › rtla parses TLA/config in Chromium and reuses memory after a syntax error (150ms)
+  ✓  2 tests/portable.browser.spec.ts:84:1 › runs the shared Rust core in Chromium without host imports or cross-origin isolation (186ms)
+
+  2 passed (624ms)

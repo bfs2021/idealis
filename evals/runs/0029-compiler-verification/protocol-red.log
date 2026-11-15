@@ -1,0 +1,25 @@
+   Compiling rtlc v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtlc)
+   Compiling modelt-core v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/modelt-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.76s
+     Running tests/tla.rs (crates/modelt-core/target/debug/deps/tla-9abbc24145ad5842)
+
+running 1 test
+test source_is_compiled_and_checked_without_a_host_frontend ... FAILED
+
+failures:
+
+---- source_is_compiled_and_checked_without_a_host_frontend stdout ----
+
+thread 'source_is_compiled_and_checked_without_a_host_frontend' (45499777) panicked at tests/tla.rs:13:33:
+assertion `left == right` failed
+  left: String("error")
+ right: "compiled"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    source_is_compiled_and_checked_without_a_host_frontend
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test tla`

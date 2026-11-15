@@ -4,6 +4,8 @@
 
 ## 実行
 
+TLA+ソースからの解析・IR生成・検査も同じcoreで実行できる。`compileTlaSource` / `checkTlaSource`はtla-tsを必要としない。[Rust frontendの利用と対応範囲](rust-frontend.md)を参照。
+
 ```sh
 rustup target add wasm32-unknown-unknown
 just portable-build

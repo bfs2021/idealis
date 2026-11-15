@@ -1,0 +1,117 @@
+pnpm package:prepare
+
+> @mizchi/modelt@0.1.0-alpha.0 package:prepare /Users/mz/ghq/github.com/mizchi/modelt
+> pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js
+
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.05s
+    Finished `release` profile [optimized] target(s) in 0.02s
+
+> @mizchi/modelt@0.1.0-alpha.0 rtla:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml
+
+   Compiling rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla)
+    Finished `release` profile [optimized] target(s) in 5.44s
+   Compiling rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rtla)
+    Finished `release` profile [optimized] target(s) in 2.11s
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+Verified npm, rtla/rtla-compiler/rtlc/modelt-core Cargo and Wasm artifacts: /Users/mz/ghq/github.com/mizchi/modelt/.artifacts/packages
+pnpm package:test
+
+> @mizchi/modelt@0.1.0-alpha.0 package:test /Users/mz/ghq/github.com/mizchi/modelt
+> node dist/scripts/package-test.js
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'PackageSafety'
+- 'Source'
+
+    at file:///private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/modelt-consumer-nuw3Sy/consumer.mjs:34:58 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'PackageSafety',
+  expected: 'Source',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /Users/mz/.local/share/mise/installs/node/24.22.2/bin/node /var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/modelt-consumer-nuw3Sy/consumer.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'PackageSafety'
+- 'Source'
+
+    at file:///private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/modelt-consumer-nuw3Sy/consumer.mjs:34:58 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'PackageSafety',
+  expected: 'Source',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execFileSync (node:child_process:979:15)
+    at file:///Users/mz/ghq/github.com/mizchi/modelt/dist/scripts/package-test.js:118:14 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    Buffer(0) [Uint8Array] [],
+    Buffer(472) [Uint8Array] [
+      110, 111, 100, 101,  58, 105, 110, 116, 101, 114, 110,  97,
+      108,  47, 109, 111, 100, 117, 108, 101, 115,  47, 114, 117,
+      110,  95, 109,  97, 105, 110,  58,  49,  48,  55,  10,  32,
+       32,  32,  32, 116, 114, 105, 103, 103, 101, 114,  85, 110,
+       99,  97, 117, 103, 104, 116,  69, 120,  99, 101, 112, 116,
+      105, 111, 110,  40,  10,  32,  32,  32,  32,  94,  10,  10,
+       65, 115, 115, 101, 114, 116, 105, 111, 110,  69, 114, 114,
+      111, 114,  32,  91,  69,  82,  82,  95,  65,  83,  83,  69,
+       82,  84,  73,  79,
+      ... 372 more items
+    ]
+  ],
+  pid: 73074,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(472) [Uint8Array] [
+    110, 111, 100, 101,  58, 105, 110, 116, 101, 114, 110,  97,
+    108,  47, 109, 111, 100, 117, 108, 101, 115,  47, 114, 117,
+    110,  95, 109,  97, 105, 110,  58,  49,  48,  55,  10,  32,
+     32,  32,  32, 116, 114, 105, 103, 103, 101, 114,  85, 110,
+     99,  97, 117, 103, 104, 116,  69, 120,  99, 101, 112, 116,
+    105, 111, 110,  40,  10,  32,  32,  32,  32,  94,  10,  10,
+     65, 115, 115, 101, 114, 116, 105, 111, 110,  69, 114, 114,
+    111, 114,  32,  91,  69,  82,  82,  95,  65,  83,  83,  69,
+     82,  84,  73,  79,
+    ... 372 more items
+  ]
+}
+
+Node.js v24.22.2
+ ELIFECYCLE  Command failed with exit code 1.
+error: Recipe `package` failed on line 131 with exit code 1

@@ -2,7 +2,7 @@
 
 検査器は独立した[`rtlc` crate](../crates/rtlc)に置く。`rtlc::ir`が公開IR、`SafetyProgram::check` / nativeの`check_parallel`が実行API。modelt-coreはこのbackendを利用し、既存のRust APIとJSONL/Wasm ABIを維持する。TLA+ソースを読むTypeScript frontendはmodelt側にある。
 
-独立した[`rtla` crate](../crates/rtla)は、TLA+／TLC設定を型付きASTへ解析する。IR生成と名前解決は含まず、既存の`compileTlaSafety`もtla-ts parserを継続利用する。rtla単独のnative/Wasm解析は`just rtla-test` / `just rtla-browser`で検査できる。
+独立した[`rtla` crate](../crates/rtla)は、TLA+／TLC設定を型付きASTへ解析する。[`rtla-compiler`](rust-frontend.md)が名前解決とIR生成を担当し、`compileTlaSource` / `checkTlaSource`でRustだけの経路を呼べる。既存の`compileTlaSafety`はtla-ts parserを継続利用する。rtla単独のnative/Wasm解析は`just rtla-test` / `just rtla-browser`で検査できる。
 
 `compileTlaSafety` は tla-ts の parser が返す構文木から、有限モデル用 IR を作る。Rust コアが式を評価し、Init / Next の状態生成、BFS、重複排除、不変条件・deadlock の検査、反例復元を実行する。temporal property がある場合は、有限グラフと否定した性質の generalized Büchi automaton の積から、受理する SCC を探す。全状態グラフを TS で先に列挙する必要はなく、探索中に JS へ戻らない。
 

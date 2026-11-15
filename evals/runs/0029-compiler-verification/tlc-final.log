@@ -1,0 +1,33 @@
+pnpm portable:build
+
+> @mizchi/modelt@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/modelt-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/modelt-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.07s
+    Finished `release` profile [optimized] target(s) in 0.02s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/rtla-compiler/tlc.js 'evals/runs/0029-compiler-tlc-final' '.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' '.artifacts/tlc/tla2tools.jar'
+set-delivery: matched
+set-fault: matched
+function-updates: matched
+record-updates: matched
+except-sequential-at: matched
+sequence-queue: matched
+filter-map-powerset: matched
+tuple-pattern: matched
+independent-existentials: matched
+let-lexical-scope: matched
+initial-property-failure: matched
+initial-property-only: matched
+action-property: matched
+always-state: matched
+eventually-stuttering: matched
+eventually-WF: matched
+leads-to-WF: matched
+WF-intermittent: matched
+SF-intermittent: matched
+deadlock-before-temporal: matched

@@ -2,7 +2,7 @@
 
 TypeScript のモデルと実装を比較する試作ライブラリ。モデルからのオラクル生成、差分テスト、反例を縮小する property-based testing を、Vitest・`node:test`・ブラウザで実行する。
 
-`tla-ts` を TLA+ エンジン、`z3-solver` を Z3 Wasm ランタイムとして利用する。Quint Connect のモデルと実装をつなぐアプローチを参考に、TS の `Driver` を実装との境界にした。Quint 言語や Apalache の再実装ではない。
+TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT adapterとして利用する。Quint Connectのモデルと実装をつなぐアプローチを参考に、TSの`Driver`を実装との境界にした。Quint言語やApalacheの再実装ではない。
 
 ## 実行
 
@@ -82,7 +82,7 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、modelt-coreへの依存はない。modelt-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
 
-構文解析には独立した[`rtla` crate](crates/rtla)もある。TLA+／TLC設定から型付きASTを返し、nativeとhost import不要のWasmで動く。`rtlc`には依存しない。既存の`compileTlaSafety`は引き続きtla-ts parserからIRを作るため、rtlaのASTからIRへの変換は含まない。`just rtla-test` / `just rtla-browser`で検査し、`just package`で3つのcrateとparser/coreのWasmを確認できる。
+構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で4つのcrateとparser/coreのWasmを確認できる。
 
 [Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
 
