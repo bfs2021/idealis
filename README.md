@@ -84,6 +84,8 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 構文解析には独立した[`rtla` crate](crates/rtla)もある。TLA+／TLC設定から型付きASTを返し、nativeとhost import不要のWasmで動く。`rtlc`には依存しない。既存の`compileTlaSafety`は引き続きtla-ts parserからIRを作るため、rtlaのASTからIRへの変換は含まない。`just rtla-test` / `just rtla-browser`で検査し、`just package`で3つのcrateとparser/coreのWasmを確認できる。
 
+[Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
+
 ```ts
 import { checkConformance, checkModel, checkTrace } from "./src/index.js";
 import { counterModel, createCounter } from "./examples/durable-counter.js";

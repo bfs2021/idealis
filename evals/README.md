@@ -81,3 +81,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [rtlcへの分離](iterations/0025-rtlc-extraction.md)は、有限TLA+ fragmentの検査をmodeltから独立したcrateへ移した。`rtlc-test` / `rtlc-example`と単独package consumer、分離前後のnative964件・Wasm241件で既存挙動を確認した。探索アルゴリズムと速度の主張は追加していない。
 
 [rtlaのparser](iterations/0026-rtla-parser.md)は、TLA+／TLC設定を型付きASTへ解析する独立Rust crate。`rtla-test` / `rtla-browser`でnative/Wasm、`rtla-eval`で199組のASTとSANYの構文対照を検査する。IR生成はTS側に残し、対応fragmentと全TLA+を区別する。
+
+[Apalacheとの比較](iterations/0027-apalache-comparison.md)は、BMC/帰納性と有限グラフのcompleteを区別する。`apalache-test` / `apalache-eval`で同じsource/configのpilotを実行し、raw log、ITF、IR、反例検証と起動込み時間を保存する。

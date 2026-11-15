@@ -1,0 +1,133 @@
+{
+  "status": "complete",
+  "sourceVersion": "15e6bc852dd5e8835b68fd4f9121ec10ac0de2528f5e2f19697a243f21786ecc",
+  "commit": "b01145a8231fe540539e89b2d012176c9b629f94",
+  "environmentObservedAfterRun": {
+    "cpu": "Apple M5",
+    "logicalCpus": 10,
+    "memoryBytes": 34359738368,
+    "node": "v24.22.2",
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)"
+  },
+  "release": {
+    "version": "0.63.0",
+    "archiveSha256": "a756e96af249bf33cd7629667a49472cb26ac8227c48583da139b414834d59df",
+    "checksumMatched": true
+  },
+  "comparison": {
+    "cases": 6,
+    "measuredSamples": 54,
+    "warmups": 18,
+    "witnesses": 24,
+    "inductionObligations": 2,
+    "sutReproduction": false,
+    "largeStateSpace": false
+  },
+  "checks": [
+    {
+      "command": "comparison contract before implementation",
+      "path": "red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "just apalache-test",
+      "path": "tests.log",
+      "status": "passed"
+    },
+    {
+      "command": "54 measurements, 18 warmups and induction checks",
+      "path": "pilot.log",
+      "status": "passed"
+    },
+    {
+      "command": "saved evidence, source/binaries and all 24 witnesses",
+      "path": "saved-replay.log",
+      "status": "passed"
+    },
+    {
+      "command": "just check",
+      "path": "check.log",
+      "status": "passed"
+    },
+    {
+      "command": "just browser",
+      "path": "browser.log",
+      "status": "passed"
+    },
+    {
+      "command": "just evaluate",
+      "path": "evaluate.log",
+      "status": "passed"
+    },
+    {
+      "command": "just replay-evaluation",
+      "path": "replay-evaluation.log",
+      "status": "passed"
+    },
+    {
+      "command": "final documentation checks",
+      "path": "docs-check-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "Apalache version",
+      "path": "version.log",
+      "status": "passed"
+    },
+    {
+      "command": "Apalache CLI options",
+      "path": "check-help.log",
+      "status": "observed"
+    }
+  ],
+  "files": [
+    {
+      "path": "red.log",
+      "sha256": "e9bd145aa22f84e9f986c37db4ff4f43f6c7d2fd1e22864b1b66871622839ea0"
+    },
+    {
+      "path": "tests.log",
+      "sha256": "257b7b93838ce71152ddddc707da53a58682091b1cf1621fb3ef3eb3c7bded3c"
+    },
+    {
+      "path": "pilot.log",
+      "sha256": "6391a70a1453aa298f4ad61c40661b15114c2b6511e1d3980b2151cbfa76a63d"
+    },
+    {
+      "path": "saved-replay.log",
+      "sha256": "db67dd3d98f1f6ffb9cac059b3eb1e7890b527bcb18389becfd054605b63b201"
+    },
+    {
+      "path": "check.log",
+      "sha256": "5e3df0a3d18be0e07a7cd51c32e1148052a69f6d83bf773def42b94a58544ecd"
+    },
+    {
+      "path": "browser.log",
+      "sha256": "a26e95dc23571a4298c13c1f297494e30fc1d0baa92f27096558e5af3e1ae7b0"
+    },
+    {
+      "path": "evaluate.log",
+      "sha256": "c2ee8b179d94fd91e7ce5363a0c5366cd19a3beed85eba34f3604da64fe35044"
+    },
+    {
+      "path": "replay-evaluation.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "docs-check-final.log",
+      "sha256": "d53675987f7dccaabbfbd523786c376aad383143319dc922e0cd743bd05ad9dc"
+    },
+    {
+      "path": "version.log",
+      "sha256": "9a108132abcbb17753ee4b8233d534e0958f6bfbea06cb41bde50a0aa9ac0cf9"
+    },
+    {
+      "path": "check-help.log",
+      "sha256": "621a9eff679e0ac4a9f4a98757eb82214d8593d43df35e04a37e1d7f8cdeed83"
+    },
+    {
+      "path": "official-sha256sum.txt",
+      "sha256": "5c352a52454ddd4fe0de9b9d4a15aed7893c703848fdb7d8c8ef9f98fbefcd36"
+    }
+  ]
+}

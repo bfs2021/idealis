@@ -1,0 +1,902 @@
+[
+  {
+    "name": "ring-safe-4",
+    "depth": 4,
+    "fault": false,
+    "family": "ring",
+    "source": "---- MODULE Ring ----\nEXTENDS Naturals\nVARIABLE\n  \\* @type: Int;\n  x\nInit == x = 0\nNext == x' = IF x < 15 THEN x + 1 ELSE 0\nSafe == x \\in 0..15\n====",
+    "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+    "expected": "bounded",
+    "bounds": {
+      "maxDepth": 4,
+      "maxStates": 65536,
+      "maxWork": 2000000
+    },
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Ring",
+      "variables": [
+        "x"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Next",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "if",
+                "condition": {
+                  "op": "lt",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "15"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "add",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "1"
+                    }
+                  }
+                },
+                "alternative": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "in",
+            "value": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "domain": {
+              "kind": "range",
+              "lower": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              },
+              "upper": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "15"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true
+    }
+  },
+  {
+    "name": "ring-safe-15",
+    "depth": 15,
+    "fault": false,
+    "family": "ring",
+    "source": "---- MODULE Ring ----\nEXTENDS Naturals\nVARIABLE\n  \\* @type: Int;\n  x\nInit == x = 0\nNext == x' = IF x < 15 THEN x + 1 ELSE 0\nSafe == x \\in 0..15\n====",
+    "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+    "expected": "complete",
+    "bounds": {
+      "maxDepth": 15,
+      "maxStates": 65536,
+      "maxWork": 2000000
+    },
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Ring",
+      "variables": [
+        "x"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Next",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "if",
+                "condition": {
+                  "op": "lt",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "15"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "add",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "1"
+                    }
+                  }
+                },
+                "alternative": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "in",
+            "value": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "domain": {
+              "kind": "range",
+              "lower": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              },
+              "upper": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "15"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true
+    }
+  },
+  {
+    "name": "ring-fault-4",
+    "depth": 4,
+    "fault": true,
+    "family": "ring",
+    "source": "---- MODULE Ring ----\nEXTENDS Naturals\nVARIABLE\n  \\* @type: Int;\n  x\nInit == x = 0\nNext == x' = IF x < 15 THEN x + 1 ELSE 0\nSafe == x < 8\n====",
+    "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+    "expected": "bounded",
+    "bounds": {
+      "maxDepth": 4,
+      "maxStates": 65536,
+      "maxWork": 2000000
+    },
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Ring",
+      "variables": [
+        "x"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Next",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "if",
+                "condition": {
+                  "op": "lt",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "15"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "add",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "1"
+                    }
+                  }
+                },
+                "alternative": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "lt",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "8"
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true
+    }
+  },
+  {
+    "name": "ring-fault-8",
+    "depth": 8,
+    "fault": true,
+    "family": "ring",
+    "source": "---- MODULE Ring ----\nEXTENDS Naturals\nVARIABLE\n  \\* @type: Int;\n  x\nInit == x = 0\nNext == x' = IF x < 15 THEN x + 1 ELSE 0\nSafe == x < 8\n====",
+    "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+    "expected": "invariant-violation",
+    "bounds": {
+      "maxDepth": 8,
+      "maxStates": 65536,
+      "maxWork": 2000000
+    },
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Ring",
+      "variables": [
+        "x"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Next",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "if",
+                "condition": {
+                  "op": "lt",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "15"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "add",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "1"
+                    }
+                  }
+                },
+                "alternative": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "lt",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "8"
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true
+    }
+  },
+  {
+    "name": "function-safe-4",
+    "family": "function",
+    "depth": 4,
+    "fault": false,
+    "source": "---- MODULE Functions ----\nEXTENDS Naturals\nVARIABLE\n  \\* @type: Int -> Int;\n  f\nInit == f \\in [1..8 -> 0..1]\nNext == \\E i \\in 1..8: f' = [f EXCEPT ![i] = 1 - @]\nSafe == f \\in [1..8 -> 0..1]\n====",
+    "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+    "expected": "complete",
+    "bounds": {
+      "maxDepth": 4,
+      "maxStates": 65536,
+      "maxWork": 2000000
+    },
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Functions",
+      "variables": [
+        "f"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "choose",
+              "slot": 0,
+              "domain": {
+                "kind": "value",
+                "value": {
+                  "op": "function-set",
+                  "left": {
+                    "op": "map-set",
+                    "bounds": [
+                      {
+                        "slot": 0,
+                        "domain": {
+                          "kind": "range",
+                          "lower": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "1"
+                            }
+                          },
+                          "upper": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "8"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "body": {
+                      "op": "bound",
+                      "slot": 0
+                    }
+                  },
+                  "right": {
+                    "op": "map-set",
+                    "bounds": [
+                      {
+                        "slot": 0,
+                        "domain": {
+                          "kind": "range",
+                          "lower": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "0"
+                            }
+                          },
+                          "upper": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "1"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "body": {
+                      "op": "bound",
+                      "slot": 0
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Next",
+          "steps": [
+            {
+              "kind": "bind",
+              "slot": 0,
+              "domain": {
+                "kind": "range",
+                "lower": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "1"
+                  }
+                },
+                "upper": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "8"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "update",
+                "target": {
+                  "op": "read",
+                  "slot": 0,
+                  "next": false
+                },
+                "updates": [
+                  {
+                    "path": [
+                      {
+                        "op": "bound",
+                        "slot": 0
+                      }
+                    ],
+                    "value": {
+                      "op": "sub",
+                      "left": {
+                        "op": "literal",
+                        "value": {
+                          "type": "int",
+                          "value": "1"
+                        }
+                      },
+                      "right": {
+                        "op": "old"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "function-in",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "function-set",
+              "left": {
+                "op": "map-set",
+                "bounds": [
+                  {
+                    "slot": 0,
+                    "domain": {
+                      "kind": "range",
+                      "lower": {
+                        "op": "literal",
+                        "value": {
+                          "type": "int",
+                          "value": "1"
+                        }
+                      },
+                      "upper": {
+                        "op": "literal",
+                        "value": {
+                          "type": "int",
+                          "value": "8"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "op": "bound",
+                  "slot": 0
+                }
+              },
+              "right": {
+                "op": "map-set",
+                "bounds": [
+                  {
+                    "slot": 0,
+                    "domain": {
+                      "kind": "range",
+                      "lower": {
+                        "op": "literal",
+                        "value": {
+                          "type": "int",
+                          "value": "0"
+                        }
+                      },
+                      "upper": {
+                        "op": "literal",
+                        "value": {
+                          "type": "int",
+                          "value": "1"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "op": "bound",
+                  "slot": 0
+                }
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true
+    }
+  },
+  {
+    "name": "function-fault-4",
+    "family": "function",
+    "depth": 4,
+    "fault": true,
+    "source": "---- MODULE Functions ----\nEXTENDS Naturals\nVARIABLE\n  \\* @type: Int -> Int;\n  f\nInit == f \\in [1..8 -> 0..1]\nNext == \\E i \\in 1..8: f' = [f EXCEPT ![i] = 1 - @]\nSafe == f[1] = 0\n====",
+    "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+    "expected": "invariant-violation",
+    "bounds": {
+      "maxDepth": 4,
+      "maxStates": 65536,
+      "maxWork": 2000000
+    },
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Functions",
+      "variables": [
+        "f"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "choose",
+              "slot": 0,
+              "domain": {
+                "kind": "value",
+                "value": {
+                  "op": "function-set",
+                  "left": {
+                    "op": "map-set",
+                    "bounds": [
+                      {
+                        "slot": 0,
+                        "domain": {
+                          "kind": "range",
+                          "lower": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "1"
+                            }
+                          },
+                          "upper": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "8"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "body": {
+                      "op": "bound",
+                      "slot": 0
+                    }
+                  },
+                  "right": {
+                    "op": "map-set",
+                    "bounds": [
+                      {
+                        "slot": 0,
+                        "domain": {
+                          "kind": "range",
+                          "lower": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "0"
+                            }
+                          },
+                          "upper": {
+                            "op": "literal",
+                            "value": {
+                              "type": "int",
+                              "value": "1"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "body": {
+                      "op": "bound",
+                      "slot": 0
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Next",
+          "steps": [
+            {
+              "kind": "bind",
+              "slot": 0,
+              "domain": {
+                "kind": "range",
+                "lower": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "1"
+                  }
+                },
+                "upper": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "8"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "update",
+                "target": {
+                  "op": "read",
+                  "slot": 0,
+                  "next": false
+                },
+                "updates": [
+                  {
+                    "path": [
+                      {
+                        "op": "bound",
+                        "slot": 0
+                      }
+                    ],
+                    "value": {
+                      "op": "sub",
+                      "left": {
+                        "op": "literal",
+                        "value": {
+                          "type": "int",
+                          "value": "1"
+                        }
+                      },
+                      "right": {
+                        "op": "old"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "eq",
+            "left": {
+              "op": "at",
+              "target": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              },
+              "key": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "1"
+                }
+              }
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true
+    }
+  }
+]

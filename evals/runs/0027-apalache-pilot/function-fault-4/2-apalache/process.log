@@ -1,0 +1,72 @@
+# Usage statistics is OFF. We care about your privacy.
+# If you want to help our project, consider enabling statistics with config --enable-stats=true.
+
+Output directory: /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0027-apalache-pilot/function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752
+# APALACHE version: 0.63.0 | build: 67b8ec6                       I@17:47:06.046
+  > Spec.cfg: Loading TLC configuration                           I@17:47:06.048
+  > Using init predicate(s) Init from the TLC config              I@17:47:06.065
+  > Using next predicate(s) Next from the TLC config              I@17:47:06.065
+  > Using inv predicate(s) Safe from the TLC config               I@17:47:06.065
+Tuning:                                                           I@17:47:06.066
+PASS #0: SanyParser                                               I@17:47:06.136
+PASS #1: TypeCheckerSnowcat                                       I@17:47:06.193
+ > Running Snowcat .::.                                           I@17:47:06.193
+ > Your types are purrfect!                                       I@17:47:06.237
+ > All expressions are typed                                      I@17:47:06.237
+PASS #2: ConfigurationPass                                        I@17:47:06.238
+  > Spec.cfg: found INVARIANTS: Safe                              I@17:47:06.305
+  > Set the initialization predicate to Init                      I@17:47:06.306
+  > Set the transition predicate to Next                          I@17:47:06.306
+  > Set an invariant to Safe                                      I@17:47:06.306
+PASS #3: DesugarerPass                                            I@17:47:06.307
+  > Desugaring...                                                 I@17:47:06.307
+PASS #4: InlinePass                                               I@17:47:06.309
+Leaving only relevant operators: CInitPrimed, Init, InitPrimed, Next, Safe I@17:47:06.309
+PASS #5: TemporalPass                                             I@17:47:06.314
+  > Rewriting temporal operators...                               I@17:47:06.314
+  > No temporal property specified, nothing to encode             I@17:47:06.314
+PASS #6: InlinePass                                               I@17:47:06.314
+Leaving only relevant operators: CInitPrimed, Init, InitPrimed, Next, Safe I@17:47:06.314
+PASS #7: PrimingPass                                              I@17:47:06.315
+  > Introducing InitPrimed for Init'                              I@17:47:06.316
+PASS #8: VCGen                                                    I@17:47:06.316
+  > Producing verification conditions from the invariant Safe     I@17:47:06.316
+  > VCGen produced 1 verification condition(s)                    I@17:47:06.318
+PASS #9: PreprocessingPass                                        I@17:47:06.319
+  > Before preprocessing: unique renaming                         I@17:47:06.319
+ > Applying standard transformations:                             I@17:47:06.321
+  > PrimePropagation                                              I@17:47:06.321
+  > Desugarer                                                     I@17:47:06.322
+  > UniqueRenamer                                                 I@17:47:06.322
+  > Normalizer                                                    I@17:47:06.322
+  > SetMembershipSimplifier                                       I@17:47:06.323
+  > Keramelizer                                                   I@17:47:06.323
+  > After preprocessing: UniqueRenamer                            I@17:47:06.324
+PASS #10: TransitionFinderPass                                    I@17:47:06.325
+  > Found 1 initializing transitions                              I@17:47:06.330
+  > Found 1 transitions                                           I@17:47:06.330
+  > No constant initializer                                       I@17:47:06.330
+  > Applying unique renaming                                      I@17:47:06.331
+PASS #11: OptimizationPass                                        I@17:47:06.331
+ > Applying optimizations:                                        I@17:47:06.333
+  > ConstSimplifier                                               I@17:47:06.333
+  > ExprOptimizer                                                 I@17:47:06.334
+  > SetMembershipSimplifier                                       I@17:47:06.334
+  > ConstSimplifier                                               I@17:47:06.334
+PASS #12: AnalysisPass                                            I@17:47:06.335
+ > Marking skolemizable existentials and sets to be expanded...   I@17:47:06.336
+  > Skolemization                                                 I@17:47:06.336
+  > Expansion                                                     I@17:47:06.336
+  > Remove unused let-in defs                                     I@17:47:06.336
+ > Running analyzers...                                           I@17:47:06.336
+  > Introduced expression grades                                  I@17:47:06.337
+PASS #13: BoundedChecker                                          I@17:47:06.337
+State 0: Checking 1 state invariants                              I@17:47:06.926
+Check the trace in: /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0027-apalache-pilot/function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation1.tla, /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0027-apalache-pilot/function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/MCviolation1.out, /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0027-apalache-pilot/function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation1.json, /Users/mz/ghq/github.com/mizchi/modelt/evals/runs/0027-apalache-pilot/function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation1.itf.json I@17:47:06.973
+State 0: state invariant 0 violated.                              I@17:47:06.974
+Found 1 error(s)                                                  I@17:47:06.975
+The outcome is: Error                                             I@17:47:06.976
+Checker has found an error                                        I@17:47:06.985
+It took me 0 days  0 hours  0 min  0 sec                          I@17:47:06.985
+Total time: 0.938 sec                                             I@17:47:06.986
+EXITCODE: ERROR (12)

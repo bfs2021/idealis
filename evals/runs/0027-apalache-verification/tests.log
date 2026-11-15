@@ -1,0 +1,16 @@
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node --test dist/evals/apalache-comparison/contract-test.js
+✔ bounded success, counterexample, solver failure and missing results stay distinct (0.3775ms)
+✔ ITF and independent trace checks reject invalid initial states, transitions and non-violations (2.904625ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37.182

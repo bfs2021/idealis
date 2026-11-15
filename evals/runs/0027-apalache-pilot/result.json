@@ -1,0 +1,1396 @@
+{
+  "status": "complete",
+  "sourceVersion": "15e6bc852dd5e8835b68fd4f9121ec10ac0de2528f5e2f19697a243f21786ecc",
+  "summary": [
+    {
+      "name": "ring-safe-4",
+      "backends": [
+        {
+          "backend": "apalache",
+          "medianMs": 1119.617542,
+          "minMs": 1105.1389169999998,
+          "maxMs": 1207.0188330000005,
+          "outcome": "bounded-no-counterexample"
+        },
+        {
+          "backend": "rtlc-source",
+          "medianMs": 73.86220799999955,
+          "minMs": 66.61754100000053,
+          "maxMs": 76.39037499999995,
+          "outcome": "bounded"
+        },
+        {
+          "backend": "rtlc-ir",
+          "medianMs": 2.0323749999997744,
+          "minMs": 1.8854160000000775,
+          "maxMs": 3.404125000000022,
+          "outcome": "bounded"
+        }
+      ]
+    },
+    {
+      "name": "ring-safe-15",
+      "backends": [
+        {
+          "backend": "apalache",
+          "medianMs": 1194.9633329999997,
+          "minMs": 1101.2123339999998,
+          "maxMs": 1208.322083000001,
+          "outcome": "bounded-no-counterexample"
+        },
+        {
+          "backend": "rtlc-source",
+          "medianMs": 67.19425000000047,
+          "minMs": 63.552459000000454,
+          "maxMs": 67.94670799999949,
+          "outcome": "complete"
+        },
+        {
+          "backend": "rtlc-ir",
+          "medianMs": 1.7245829999992566,
+          "minMs": 1.6348750000006476,
+          "maxMs": 1.8869579999991402,
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "name": "ring-fault-4",
+      "backends": [
+        {
+          "backend": "apalache",
+          "medianMs": 1144.4871660000008,
+          "minMs": 1099.5169580000002,
+          "maxMs": 1256.1290829999998,
+          "outcome": "bounded-no-counterexample"
+        },
+        {
+          "backend": "rtlc-source",
+          "medianMs": 61.90204199999971,
+          "minMs": 60.02629200000047,
+          "maxMs": 69.51395899999989,
+          "outcome": "bounded"
+        },
+        {
+          "backend": "rtlc-ir",
+          "medianMs": 1.7937500000007276,
+          "minMs": 1.6583339999997406,
+          "maxMs": 1.9738749999996799,
+          "outcome": "bounded"
+        }
+      ]
+    },
+    {
+      "name": "ring-fault-8",
+      "backends": [
+        {
+          "backend": "apalache",
+          "medianMs": 1159.9235410000001,
+          "minMs": 1119.6625830000012,
+          "maxMs": 1164.2313329999997,
+          "outcome": "counterexample"
+        },
+        {
+          "backend": "rtlc-source",
+          "medianMs": 65.69491600000038,
+          "minMs": 61.76404099999854,
+          "maxMs": 79.21066699999938,
+          "outcome": "invariant-violation"
+        },
+        {
+          "backend": "rtlc-ir",
+          "medianMs": 1.9162080000023707,
+          "minMs": 1.8347909999974945,
+          "maxMs": 2.532792000001791,
+          "outcome": "invariant-violation"
+        }
+      ]
+    },
+    {
+      "name": "function-safe-4",
+      "backends": [
+        {
+          "backend": "apalache",
+          "medianMs": 1873.5949159999982,
+          "minMs": 1829.1991250000028,
+          "maxMs": 2268.083541,
+          "outcome": "bounded-no-counterexample"
+        },
+        {
+          "backend": "rtlc-source",
+          "medianMs": 69.26295799999934,
+          "minMs": 63.338040999999066,
+          "maxMs": 87.6093329999967,
+          "outcome": "complete"
+        },
+        {
+          "backend": "rtlc-ir",
+          "medianMs": 2.4410829999978887,
+          "minMs": 2.116874999999709,
+          "maxMs": 2.6028750000004948,
+          "outcome": "complete"
+        }
+      ]
+    },
+    {
+      "name": "function-fault-4",
+      "backends": [
+        {
+          "backend": "apalache",
+          "medianMs": 1152.4842080000017,
+          "minMs": 1140.6088329999984,
+          "maxMs": 1181.5584999999955,
+          "outcome": "counterexample"
+        },
+        {
+          "backend": "rtlc-source",
+          "medianMs": 62.39037499999904,
+          "minMs": 60.98008299999492,
+          "maxMs": 62.573833000002196,
+          "outcome": "invariant-violation"
+        },
+        {
+          "backend": "rtlc-ir",
+          "medianMs": 1.8948749999981374,
+          "minMs": 1.8496249999989232,
+          "maxMs": 1.9591250000012224,
+          "outcome": "invariant-violation"
+        }
+      ]
+    }
+  ],
+  "induction": [
+    {
+      "obligation": "Init => Safe",
+      "outcome": "bounded-no-counterexample",
+      "wallMs": 1165.7324579999986,
+      "log": "induction-base/process.log"
+    },
+    {
+      "obligation": "Safe /\\ Next => Safe'",
+      "outcome": "bounded-no-counterexample",
+      "wallMs": 1155.393041000003,
+      "log": "induction-step/process.log"
+    }
+  ],
+  "measuredSamples": 54,
+  "warmups": 18,
+  "files": [
+    {
+      "path": "apalache.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "function-fault-4/0-apalache/Functions.tla",
+      "sha256": "9528cff6adc204cfce8acc1891754a123b0564c1be37392fa877957f26ea0f07"
+    },
+    {
+      "path": "function-fault-4/0-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-fault-4/0-apalache/command.json",
+      "sha256": "521f1b6af0ec96098d2b7f5e6acd0b1cc6b4e54ef05eb99a432a17fe399f3c25"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/MCviolation.out",
+      "sha256": "d21ffbaafff3ae475bb10f60c8b00bd61e2eba234092663d1f980d4e0c07a7cd"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/MCviolation1.out",
+      "sha256": "d21ffbaafff3ae475bb10f60c8b00bd61e2eba234092663d1f980d4e0c07a7cd"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/detailed.log",
+      "sha256": "1589f76f6e834f9c7781dcfbd6ac99ef7bc29c75860e2817ea080852523dd161"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/run.txt",
+      "sha256": "f3ab917291ea8bfc6155151a7724a884575fdb150aae1e7160eedeca5bf278da"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/violation.itf.json",
+      "sha256": "1fbcf4f9d9cbc90be3e9f92a1590db9eb3c42dc826ecab38541ece93256a1a3f"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/violation.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/violation.tla",
+      "sha256": "e874f1ae745ccfc67937ab5c81242ee1a8b8694d5805da324056f12af4bc7c97"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/violation1.itf.json",
+      "sha256": "1fbcf4f9d9cbc90be3e9f92a1590db9eb3c42dc826ecab38541ece93256a1a3f"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/violation1.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/0-apalache/output/Functions.tla/2026-11-15T17-47-03_13569604193048305114/violation1.tla",
+      "sha256": "e874f1ae745ccfc67937ab5c81242ee1a8b8694d5805da324056f12af4bc7c97"
+    },
+    {
+      "path": "function-fault-4/0-apalache/process.log",
+      "sha256": "031ed1c9e5aee44ba97eddee41e122f0b31226ef0512515dfd64a4345142eeee"
+    },
+    {
+      "path": "function-fault-4/0-rtlc-ir/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/0-rtlc-source/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/1-apalache/Functions.tla",
+      "sha256": "9528cff6adc204cfce8acc1891754a123b0564c1be37392fa877957f26ea0f07"
+    },
+    {
+      "path": "function-fault-4/1-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-fault-4/1-apalache/command.json",
+      "sha256": "699c689be261d9a9f3819795992f52b7b19277bd1116c38855f2851ccd9b61dc"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/MCviolation.out",
+      "sha256": "5d876a957becd91aac0c2e41838193fa7f638dad1e46d2768b8c0dcc7818f989"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/MCviolation1.out",
+      "sha256": "5d876a957becd91aac0c2e41838193fa7f638dad1e46d2768b8c0dcc7818f989"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/detailed.log",
+      "sha256": "a48a951ab46198151f5f84945d2e7fe2a5995fdac2a86475185d726205458b54"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/run.txt",
+      "sha256": "85c3d77fd0bbe4a518a6d61da19cdaa7c19072347fc7e9ca195d510a0b057e94"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/violation.itf.json",
+      "sha256": "a575634319e526884779bb1557b3789c4f9f7ddc2f74a2daa7e523df798aca74"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/violation.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/violation.tla",
+      "sha256": "c23edd3f0f3f6c40ce6f55c75e041a48b863bb197363e78ad846c64f0c991140"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/violation1.itf.json",
+      "sha256": "a575634319e526884779bb1557b3789c4f9f7ddc2f74a2daa7e523df798aca74"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/violation1.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/1-apalache/output/Functions.tla/2026-11-15T17-47-04_8224280576222863955/violation1.tla",
+      "sha256": "c23edd3f0f3f6c40ce6f55c75e041a48b863bb197363e78ad846c64f0c991140"
+    },
+    {
+      "path": "function-fault-4/1-apalache/process.log",
+      "sha256": "4cf52f062dc735a68bece95ec5ab236316e1849ffb7515e816765e52e02b702e"
+    },
+    {
+      "path": "function-fault-4/1-rtlc-ir/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/1-rtlc-source/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/2-apalache/Functions.tla",
+      "sha256": "9528cff6adc204cfce8acc1891754a123b0564c1be37392fa877957f26ea0f07"
+    },
+    {
+      "path": "function-fault-4/2-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-fault-4/2-apalache/command.json",
+      "sha256": "a48a156b598fe6f85404655c2ff8a5d22ded0158ec40a2bfda699580bdeb562d"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/MCviolation.out",
+      "sha256": "f38d21a15f30b38405d89207336a5c44b8779369b135d47144201f8eead36382"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/MCviolation1.out",
+      "sha256": "f38d21a15f30b38405d89207336a5c44b8779369b135d47144201f8eead36382"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/detailed.log",
+      "sha256": "183bd84d7a50840efbfb42eadcf12c9886d824cd8f04d490535db40db0b0a742"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/run.txt",
+      "sha256": "4383703c29eaa30cee55f036652a38fc3165b63d27dee47eef4fa3fbd2cac4a0"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation.itf.json",
+      "sha256": "446f9e7e1454fd0ffb1285a9407f17377c0d970a1a9f2ce52ce58193166b5ca7"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation.tla",
+      "sha256": "45c7b85ca3b1d256486c06641493007789b219abc6c991d4df824faa3bb32d22"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation1.itf.json",
+      "sha256": "446f9e7e1454fd0ffb1285a9407f17377c0d970a1a9f2ce52ce58193166b5ca7"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation1.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/2-apalache/output/Functions.tla/2026-11-15T17-47-06_17654311299701631752/violation1.tla",
+      "sha256": "45c7b85ca3b1d256486c06641493007789b219abc6c991d4df824faa3bb32d22"
+    },
+    {
+      "path": "function-fault-4/2-apalache/process.log",
+      "sha256": "f4f28b8d399c0943d1a4bb743cd76a69e9672a8c0dfdccae4e4d3366379fb34d"
+    },
+    {
+      "path": "function-fault-4/2-rtlc-ir/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/2-rtlc-source/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/3-apalache/Functions.tla",
+      "sha256": "9528cff6adc204cfce8acc1891754a123b0564c1be37392fa877957f26ea0f07"
+    },
+    {
+      "path": "function-fault-4/3-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-fault-4/3-apalache/command.json",
+      "sha256": "7c63dc283acf898d3613713e75714273d732f47b4f8768cd101226221756350b"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/MCviolation.out",
+      "sha256": "03333e328db4832f6e9e09dbcae79c9ff919532546b2f0e97a33baa0ab95d085"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/MCviolation1.out",
+      "sha256": "03333e328db4832f6e9e09dbcae79c9ff919532546b2f0e97a33baa0ab95d085"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/detailed.log",
+      "sha256": "ce7b638326d340cc960fcda5b43aaa51ea1d26f9147ba791eea1e78fcb20868e"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/run.txt",
+      "sha256": "f2bf5ac82e99e30fd75b63c0871128c8f92ec50a26e649894c1487ee196b5a59"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/violation.itf.json",
+      "sha256": "30fb938e014196456786be41fe39adc479f87803db03bd0d597e8992a30c3f2a"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/violation.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/violation.tla",
+      "sha256": "051cac619c43bcf8d8ba1f27b12e7d9c06bb6c4116be810f457e0ac23ec72a77"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/violation1.itf.json",
+      "sha256": "30fb938e014196456786be41fe39adc479f87803db03bd0d597e8992a30c3f2a"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/violation1.json",
+      "sha256": "50e6c41de0d4aacd7e41af1e359538926905d9eed46ed5c587de2654603879b9"
+    },
+    {
+      "path": "function-fault-4/3-apalache/output/Functions.tla/2026-11-15T17-47-07_16456111889950872743/violation1.tla",
+      "sha256": "051cac619c43bcf8d8ba1f27b12e7d9c06bb6c4116be810f457e0ac23ec72a77"
+    },
+    {
+      "path": "function-fault-4/3-apalache/process.log",
+      "sha256": "06190d4bd5a42f63effaaa4db9562719cf08f786fe60f430e717986cbaa37e7b"
+    },
+    {
+      "path": "function-fault-4/3-rtlc-ir/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/3-rtlc-source/process.log",
+      "sha256": "cdd77c5838db7f7afe6043a89dfa3218d5c67a79f56a6c595e6db92681cf9299"
+    },
+    {
+      "path": "function-fault-4/input.json",
+      "sha256": "da28f1fb690aa93a0b4ea1a18cb113d6999983b26ae09ce27178ba266a1942b1"
+    },
+    {
+      "path": "function-safe-4/0-apalache/Functions.tla",
+      "sha256": "c5d4cfdb8cad339c59aab0f23f7e5e6b3b1f9e894988cd1055b599acdaababca"
+    },
+    {
+      "path": "function-safe-4/0-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-safe-4/0-apalache/command.json",
+      "sha256": "ba515ec99cd4e9b57d240b6929137c193206e1839ea941dbdf761846d435ef0a"
+    },
+    {
+      "path": "function-safe-4/0-apalache/output/Functions.tla/2026-11-15T17-46-55_16506512249244628876/detailed.log",
+      "sha256": "67608c1d52b876ea3ebcffe4c540fa884ffcbb1f74582bf596c21fe7410a4567"
+    },
+    {
+      "path": "function-safe-4/0-apalache/output/Functions.tla/2026-11-15T17-46-55_16506512249244628876/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-safe-4/0-apalache/output/Functions.tla/2026-11-15T17-46-55_16506512249244628876/run.txt",
+      "sha256": "effa1984bb293b1077374083d0acf57098ed31ec7d399fc10c604bfd5d084b66"
+    },
+    {
+      "path": "function-safe-4/0-apalache/process.log",
+      "sha256": "03953d2634c245048d0ba743ea51f274aa4f7038db1ec10f454629ed9501e42f"
+    },
+    {
+      "path": "function-safe-4/0-rtlc-ir/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/0-rtlc-source/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/1-apalache/Functions.tla",
+      "sha256": "c5d4cfdb8cad339c59aab0f23f7e5e6b3b1f9e894988cd1055b599acdaababca"
+    },
+    {
+      "path": "function-safe-4/1-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-safe-4/1-apalache/command.json",
+      "sha256": "a08339c77935d4de4f149d06ee36c5244f705cb1cea6972182fd0186567a8151"
+    },
+    {
+      "path": "function-safe-4/1-apalache/output/Functions.tla/2026-11-15T17-46-57_7721468414217637211/detailed.log",
+      "sha256": "b8f716346d5504911c177fa847cc2f0e5a845de8e8676c5eded753af08e76af6"
+    },
+    {
+      "path": "function-safe-4/1-apalache/output/Functions.tla/2026-11-15T17-46-57_7721468414217637211/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-safe-4/1-apalache/output/Functions.tla/2026-11-15T17-46-57_7721468414217637211/run.txt",
+      "sha256": "50ab4348ad28208a7d35731532d52529ba09a7e622c5c29db95692ea9b19c047"
+    },
+    {
+      "path": "function-safe-4/1-apalache/process.log",
+      "sha256": "0dd9a99734d221ff2555fdb4ee31c19c8853bbfd8802d917934a8a34db2f7140"
+    },
+    {
+      "path": "function-safe-4/1-rtlc-ir/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/1-rtlc-source/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/2-apalache/Functions.tla",
+      "sha256": "c5d4cfdb8cad339c59aab0f23f7e5e6b3b1f9e894988cd1055b599acdaababca"
+    },
+    {
+      "path": "function-safe-4/2-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-safe-4/2-apalache/command.json",
+      "sha256": "31eb81a8e2ac84baf1f3c0ed05d456e1573fa0e626d9c55d344590fa1ce78d7b"
+    },
+    {
+      "path": "function-safe-4/2-apalache/output/Functions.tla/2026-11-15T17-46-59_14153505118104359277/detailed.log",
+      "sha256": "d3baf582f70c6c4de704ecc2e4e3617f967598c987375f9c4c778c921e22f59e"
+    },
+    {
+      "path": "function-safe-4/2-apalache/output/Functions.tla/2026-11-15T17-46-59_14153505118104359277/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-safe-4/2-apalache/output/Functions.tla/2026-11-15T17-46-59_14153505118104359277/run.txt",
+      "sha256": "c2bf9fb6602119d211ec89b9e9810a8a3636631e0dd9dba4d9f3bc16f2e02b2f"
+    },
+    {
+      "path": "function-safe-4/2-apalache/process.log",
+      "sha256": "87d13159a8a35baa2577b57f5a9e86b0da62981a2aff1f5c6845138ae4e79a77"
+    },
+    {
+      "path": "function-safe-4/2-rtlc-ir/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/2-rtlc-source/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/3-apalache/Functions.tla",
+      "sha256": "c5d4cfdb8cad339c59aab0f23f7e5e6b3b1f9e894988cd1055b599acdaababca"
+    },
+    {
+      "path": "function-safe-4/3-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "function-safe-4/3-apalache/command.json",
+      "sha256": "dfe9cc2592045882b83ef08108bb49d79c1a8d72a3ba74e630c566476781d0d9"
+    },
+    {
+      "path": "function-safe-4/3-apalache/output/Functions.tla/2026-11-15T17-47-01_16366752801003819531/detailed.log",
+      "sha256": "c625472cfc06aa8404fddba350390697821cab005380b4e45a19845872b1f689"
+    },
+    {
+      "path": "function-safe-4/3-apalache/output/Functions.tla/2026-11-15T17-47-01_16366752801003819531/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "function-safe-4/3-apalache/output/Functions.tla/2026-11-15T17-47-01_16366752801003819531/run.txt",
+      "sha256": "8922086469489e87efa9a3f88b89b2dd11baaa0bf6e539cb05ebb9ce3e92a554"
+    },
+    {
+      "path": "function-safe-4/3-apalache/process.log",
+      "sha256": "219003c829752688406d0d5f0f9e6b2823464de67eede27506a7119a085897cd"
+    },
+    {
+      "path": "function-safe-4/3-rtlc-ir/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/3-rtlc-source/process.log",
+      "sha256": "4719bb4a3ecbafca5e43fa5a9ce8ef91a1d4226e49d1ec0c0a8c7f460e229ddc"
+    },
+    {
+      "path": "function-safe-4/input.json",
+      "sha256": "22c21acce394240db583ddb38eda4b39c1f14abb198639da98b6824ed74b2ae6"
+    },
+    {
+      "path": "induction-base/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "induction-base/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "induction-base/command.json",
+      "sha256": "3be95c4d4d642d5b3172b19405617c8606ca358db7e0f597d70c6255a574ec95"
+    },
+    {
+      "path": "induction-base/output/Ring.tla/2026-11-15T17-47-08_3585230929077173511/detailed.log",
+      "sha256": "c71100f3a0808ff6f4aed36ee648feda512e8542269f55fa6eeee2063bf3fc14"
+    },
+    {
+      "path": "induction-base/output/Ring.tla/2026-11-15T17-47-08_3585230929077173511/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "induction-base/output/Ring.tla/2026-11-15T17-47-08_3585230929077173511/run.txt",
+      "sha256": "e243c51797b043e8437e7d0f108a62be0c6f9cb0e1e85b4e296c5cb11388fcda"
+    },
+    {
+      "path": "induction-base/process.log",
+      "sha256": "50113a67eda9754bec545a0c54dd7830d0f9f06431244c53365a7af1c7ac53ef"
+    },
+    {
+      "path": "induction-step/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "induction-step/Spec.cfg",
+      "sha256": "285c4c44fb2f628e0faa912dd72ee7e75190e15bdabc4491e6b0aa5a720a8480"
+    },
+    {
+      "path": "induction-step/command.json",
+      "sha256": "df22dbf6045e3f6672fde83b611fae17d16ca8747f4133036fbd45d91fb72743"
+    },
+    {
+      "path": "induction-step/output/Ring.tla/2026-11-15T17-47-09_15511322483396491252/detailed.log",
+      "sha256": "65831abfc317fdab6db1344d38e7474ce0936be6567fc6424dbbc6401426e579"
+    },
+    {
+      "path": "induction-step/output/Ring.tla/2026-11-15T17-47-09_15511322483396491252/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "induction-step/output/Ring.tla/2026-11-15T17-47-09_15511322483396491252/run.txt",
+      "sha256": "1f95f368426f2b8881cd59e5dfdfbd93d16d46d901e49d89b4a60415504c3789"
+    },
+    {
+      "path": "induction-step/process.log",
+      "sha256": "f01e0cf1bcfc520cb33dd4e1997fa6968947682864e4a2908dea0c4b3b37844d"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "a48907d4f69fb6a8ca1730eba670f0d050aff2776627e0affeea11db27774bed"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "5027b2a1975ba287f6a909df2ec2ed1c7a73028fbd2a588680853de5a312f2e3"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/command.json",
+      "sha256": "d6a546a1b175a2c0ab0dcdd77d09401fdac2d965ace4edf12a3abf1f00eaab62"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/output/Ring.tla/2026-11-15T17-46-45_17834164464726137839/detailed.log",
+      "sha256": "eb1be3b3a3af18bc73a726c706973dce452bb160d01d6d30abf1a66931e906d5"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/output/Ring.tla/2026-11-15T17-46-45_17834164464726137839/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/output/Ring.tla/2026-11-15T17-46-45_17834164464726137839/run.txt",
+      "sha256": "86b6cb1d8a65012f70267a2ebdd3ad4ec7fa41e4f973513d5c5176c265df84ad"
+    },
+    {
+      "path": "ring-fault-4/0-apalache/process.log",
+      "sha256": "960d77ee6a507e897df7172d8c44ad855681244fda2d244d191b979055ebd96f"
+    },
+    {
+      "path": "ring-fault-4/0-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/0-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/command.json",
+      "sha256": "8d0d1bae20440a0208552b88c8ff27e1b048b044751e9e014937993504fee586"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/output/Ring.tla/2026-11-15T17-46-46_2983858601788339840/detailed.log",
+      "sha256": "0c882cd767f4a76ed83dd439b084c67552410f22ac8faa4851e776cad41af7c6"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/output/Ring.tla/2026-11-15T17-46-46_2983858601788339840/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/output/Ring.tla/2026-11-15T17-46-46_2983858601788339840/run.txt",
+      "sha256": "d077cbf5bf9e727c6663f51892e9588736f1f3b9c61dc6432029bd27ac8ed399"
+    },
+    {
+      "path": "ring-fault-4/1-apalache/process.log",
+      "sha256": "d7aa4e153a4264206599040860ba7e588513ab69ea2451828c727c33e87732d8"
+    },
+    {
+      "path": "ring-fault-4/1-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/1-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/command.json",
+      "sha256": "be20fcde402a79398981c1f438e0dea6911caa6bd06580f0d206a2dd4a165d79"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/output/Ring.tla/2026-11-15T17-46-47_14836770176861991683/detailed.log",
+      "sha256": "be39293b663fe5039900a778f9bd7d04fa34d0d3cdc49cfd4d4f1533d1b243a8"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/output/Ring.tla/2026-11-15T17-46-47_14836770176861991683/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/output/Ring.tla/2026-11-15T17-46-47_14836770176861991683/run.txt",
+      "sha256": "315c60b56eb177715e38600db6f2faf92862238bbe5418c465c90042bd97d5c7"
+    },
+    {
+      "path": "ring-fault-4/2-apalache/process.log",
+      "sha256": "76edc6ff9e071cd24b4dc3f79dc453bbb797da6d17cf371fd3353b4c33f0fea1"
+    },
+    {
+      "path": "ring-fault-4/2-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/2-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/command.json",
+      "sha256": "9bc6f377e79815e19fc71ac39e03101e89d1e8135bdb675f50512299c861a81f"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/output/Ring.tla/2026-11-15T17-46-49_526344253571448924/detailed.log",
+      "sha256": "24f7dd11bd99e834c9fdc04d00403251f1c8fec5bc7f3aabfc514467874b5c14"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/output/Ring.tla/2026-11-15T17-46-49_526344253571448924/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/output/Ring.tla/2026-11-15T17-46-49_526344253571448924/run.txt",
+      "sha256": "557df7e749ae1395fd53b3be5a7516f82fd827cbab6bdd3cec2e9dd2704e0356"
+    },
+    {
+      "path": "ring-fault-4/3-apalache/process.log",
+      "sha256": "77845a1e15f49c80c5c6b62466bdddfbcc68fdc12ea214a43e372ee8b494732c"
+    },
+    {
+      "path": "ring-fault-4/3-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/3-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-fault-4/input.json",
+      "sha256": "4325b770f499261f1b8b572752d7898d94f3e95baba26926062eb2f660efa1ad"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/command.json",
+      "sha256": "98fbe412711fbe66dc8ec6707ddeba4e98ce1cb79542735cfb80a8aacfe122ae"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/MCviolation.out",
+      "sha256": "cbfc4c750774ec32a71673980c505c00dc292cbdd4262a938837bc442d02089c"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/MCviolation1.out",
+      "sha256": "cbfc4c750774ec32a71673980c505c00dc292cbdd4262a938837bc442d02089c"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/detailed.log",
+      "sha256": "c0a68f9b7e88e43db5d56f4d953be540260eee9238f0bde788dec973190e09f8"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/run.txt",
+      "sha256": "7f58cbf64eaee56109b5b8384a4648c37a32ffe6602ba2e777d0d86131929a17"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/violation.itf.json",
+      "sha256": "a0f6dfeb6a04500c71ebebf4b26b77a1921a54c5e40e0986842fe388fab47d1a"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/violation.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/violation.tla",
+      "sha256": "d4947889d25823a844a6dbf6c549ea180f3e33d6612635b0995104891f0d0db7"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/violation1.itf.json",
+      "sha256": "a0f6dfeb6a04500c71ebebf4b26b77a1921a54c5e40e0986842fe388fab47d1a"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/violation1.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/output/Ring.tla/2026-11-15T17-46-50_15086046353744838919/violation1.tla",
+      "sha256": "d4947889d25823a844a6dbf6c549ea180f3e33d6612635b0995104891f0d0db7"
+    },
+    {
+      "path": "ring-fault-8/0-apalache/process.log",
+      "sha256": "a1a7f1d309ce1d7aa4ce849977c2cd555a406124791d6a1f8ace1af0f0e29459"
+    },
+    {
+      "path": "ring-fault-8/0-rtlc-ir/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/0-rtlc-source/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/command.json",
+      "sha256": "23249d8e40555525639d1d0c13e695204747f028d4b627f7d1cbc5d56a608dec"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/MCviolation.out",
+      "sha256": "eecc2ffca9d3570aa5a2b23ee0d297508bad8d51b7a870cdf936ac2410e17870"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/MCviolation1.out",
+      "sha256": "eecc2ffca9d3570aa5a2b23ee0d297508bad8d51b7a870cdf936ac2410e17870"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/detailed.log",
+      "sha256": "17c39af8248e1ad8dc04df3097db2c1cfb2c080ee043beff59a5634d140214bd"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/run.txt",
+      "sha256": "27009918c92b6336d9e87e6e078b017f3544a4eeed9a8411c0e36da01970d715"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/violation.itf.json",
+      "sha256": "5c66bbb17353caa74b7bcd91b1308c5c9ef69bb91a22357a90dd6fee1e1da7b9"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/violation.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/violation.tla",
+      "sha256": "e72265f0d2ba6f9bf87d20791bd27cd7a476c474eb993772a046d8e735a108d3"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/violation1.itf.json",
+      "sha256": "5c66bbb17353caa74b7bcd91b1308c5c9ef69bb91a22357a90dd6fee1e1da7b9"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/violation1.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/output/Ring.tla/2026-11-15T17-46-51_7630713284419618472/violation1.tla",
+      "sha256": "e72265f0d2ba6f9bf87d20791bd27cd7a476c474eb993772a046d8e735a108d3"
+    },
+    {
+      "path": "ring-fault-8/1-apalache/process.log",
+      "sha256": "fa0a0e6cc4934753fd6014a578684b74f23392a8e528502bce8bbd6d89563c2e"
+    },
+    {
+      "path": "ring-fault-8/1-rtlc-ir/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/1-rtlc-source/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/command.json",
+      "sha256": "911a46be258b7c8e278f2af9a5f0cc9f07ee22174f733011be80319bd06afe45"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/MCviolation.out",
+      "sha256": "a3511e3939499acf3cdff7ceec64bd268c3989ef303e74e6720302d855b1ac9f"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/MCviolation1.out",
+      "sha256": "a3511e3939499acf3cdff7ceec64bd268c3989ef303e74e6720302d855b1ac9f"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/detailed.log",
+      "sha256": "1205578323941a5d853f84c120a328bc309bd7ffe06dee8221644497aa0233d8"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/run.txt",
+      "sha256": "8c22b07a769c90cad9cb2f47717d5874fd46db14521d0b92b3e338aaebd4fb08"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/violation.itf.json",
+      "sha256": "62df422092faeb7a87c1cf0afcb82d748e8445265cccddf0debb500fe4c9f2f8"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/violation.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/violation.tla",
+      "sha256": "586554656bed7acdf0a988d6590d8a73dbc0a9d303e8dc1da8deb701b8091421"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/violation1.itf.json",
+      "sha256": "62df422092faeb7a87c1cf0afcb82d748e8445265cccddf0debb500fe4c9f2f8"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/violation1.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/output/Ring.tla/2026-11-15T17-46-52_4459704764995253762/violation1.tla",
+      "sha256": "586554656bed7acdf0a988d6590d8a73dbc0a9d303e8dc1da8deb701b8091421"
+    },
+    {
+      "path": "ring-fault-8/2-apalache/process.log",
+      "sha256": "fe901b462f86598d6d16c4ef94bb3a0434645435012b4111a91577b54bc5bc39"
+    },
+    {
+      "path": "ring-fault-8/2-rtlc-ir/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/2-rtlc-source/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/Ring.tla",
+      "sha256": "751f9a4cb1c8a67354e0437223d2a426a8a75bf58438744d7b96b36141f12d65"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/command.json",
+      "sha256": "d934de626117cd0630bf67aa8a9ab6873dd4b96cc2810d549f6d7ffc85dd1cea"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/MCviolation.out",
+      "sha256": "2b2d361c364d2265ef32e460bdbca332dfeb8a66a30a80b5ee7ebcb4391f83ce"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/MCviolation1.out",
+      "sha256": "2b2d361c364d2265ef32e460bdbca332dfeb8a66a30a80b5ee7ebcb4391f83ce"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/detailed.log",
+      "sha256": "77a8ce2d62bc30a9ac891e73de542c8bcc900d5daa8de456f3d7fe2905d645fc"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/run.txt",
+      "sha256": "1cb78d4d0ce213e5db3c2b9e870beb8de7e51ef558cc8287a48feca5f175110f"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/violation.itf.json",
+      "sha256": "a85fdf8bcfee5014de2d86db0d64b679c90b496edb4c4340db62d21728ffadb2"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/violation.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/violation.tla",
+      "sha256": "568e0adfe2e3a4e38552d2d15f74e4b10a3b5b095471d0923f7c268d62c7081c"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/violation1.itf.json",
+      "sha256": "a85fdf8bcfee5014de2d86db0d64b679c90b496edb4c4340db62d21728ffadb2"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/violation1.json",
+      "sha256": "73d576f168c1a41300d41154636fb1b595b051af3d74bf3e7677b2f32f6b87b2"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/output/Ring.tla/2026-11-15T17-46-54_13165859483688559173/violation1.tla",
+      "sha256": "568e0adfe2e3a4e38552d2d15f74e4b10a3b5b095471d0923f7c268d62c7081c"
+    },
+    {
+      "path": "ring-fault-8/3-apalache/process.log",
+      "sha256": "2cca2a34ff2d50ccdb9f52ae3e06103f90fdb39cd1bf8af49b159dc465afb858"
+    },
+    {
+      "path": "ring-fault-8/3-rtlc-ir/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/3-rtlc-source/process.log",
+      "sha256": "a46a13f74be26ad26d338e3f2a0d52dc9ab22522f02e4bef6954658a174c2e7e"
+    },
+    {
+      "path": "ring-fault-8/input.json",
+      "sha256": "db3245a9ac6b0e5d74255f8c9d10dfcc1395ea5236748bbb761b5bd6624b69c4"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/command.json",
+      "sha256": "ee31f8147d5302b8aeb51440a152b57d9c571186678c1183b4b36c147314f434"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/output/Ring.tla/2026-11-15T17-46-40_199243946294635614/detailed.log",
+      "sha256": "b87133ef0a1f41dd2ea8f2054c2792132cc8cb0f43c9397b41fa9709395a339b"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/output/Ring.tla/2026-11-15T17-46-40_199243946294635614/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/output/Ring.tla/2026-11-15T17-46-40_199243946294635614/run.txt",
+      "sha256": "6b9d2f63626f2cba75aa52f1379e4c88cf2bfea676d602493aa8a818a3667790"
+    },
+    {
+      "path": "ring-safe-15/0-apalache/process.log",
+      "sha256": "15596cc3b5a631441db4aaf8ff5e872af5f8a6491d95128a101b7d63b429b429"
+    },
+    {
+      "path": "ring-safe-15/0-rtlc-ir/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/0-rtlc-source/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/command.json",
+      "sha256": "63605d48911e8678333000bf7f7441f8d4fa48fd925c78316390ed2f62951971"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/output/Ring.tla/2026-11-15T17-46-41_1388242065991402044/detailed.log",
+      "sha256": "944165cf66e9e9608ad511d5fb7cc88d0d6804f53374838e3553684e72380dd6"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/output/Ring.tla/2026-11-15T17-46-41_1388242065991402044/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/output/Ring.tla/2026-11-15T17-46-41_1388242065991402044/run.txt",
+      "sha256": "8d1fc3419477b80921ed159f44c94b3b721ffab1ad359461b57e483aa70fda6e"
+    },
+    {
+      "path": "ring-safe-15/1-apalache/process.log",
+      "sha256": "a9fd63e32da78b4838e04bd7a107426d45fe6b5caeb947e54bd0532b97be5d4e"
+    },
+    {
+      "path": "ring-safe-15/1-rtlc-ir/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/1-rtlc-source/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/command.json",
+      "sha256": "08682140eeccedd52c2384efa67aebd3bfe211ca526d53b2e402018db527c183"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/output/Ring.tla/2026-11-15T17-46-42_15939222190172807250/detailed.log",
+      "sha256": "2ef676f38958dff29a8f115af91fae44090ae23772d1003fed226e43539c75f2"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/output/Ring.tla/2026-11-15T17-46-42_15939222190172807250/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/output/Ring.tla/2026-11-15T17-46-42_15939222190172807250/run.txt",
+      "sha256": "f8ca7dec34090df84484a7712cf67a126cb358ff6822834a1f1bb6d5abe0e490"
+    },
+    {
+      "path": "ring-safe-15/2-apalache/process.log",
+      "sha256": "2b841eeb2c2fe9a612b253fa52f9000f6f7bf3a46a00842d8ab2e49b4eb06e3b"
+    },
+    {
+      "path": "ring-safe-15/2-rtlc-ir/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/2-rtlc-source/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/command.json",
+      "sha256": "84f8b49ae26d0b3c2744911f74d7f3096ba02180694bde13d1c74be54c8003f5"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/output/Ring.tla/2026-11-15T17-46-44_17536409279622671575/detailed.log",
+      "sha256": "6aad0032d25ff5982c176da2c9bcf4c00fddf88c79df35bf73763c979e94cc46"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/output/Ring.tla/2026-11-15T17-46-44_17536409279622671575/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/output/Ring.tla/2026-11-15T17-46-44_17536409279622671575/run.txt",
+      "sha256": "1443d47703d77164fa91006421b23e6545e6b39cb0419d6ae97a3ae188d61437"
+    },
+    {
+      "path": "ring-safe-15/3-apalache/process.log",
+      "sha256": "e98595404368a406d8b740cb94bef901410f8b8484d2ce79cf83abca20fb1ce0"
+    },
+    {
+      "path": "ring-safe-15/3-rtlc-ir/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/3-rtlc-source/process.log",
+      "sha256": "30b0f9bacb71cc495982b88d8d8dacbbbd09784a57e2e6853807e65e55b3b09d"
+    },
+    {
+      "path": "ring-safe-15/input.json",
+      "sha256": "06a452d39584101e057b1896629be5f0168cd6073ad969930c10b7a8f244f471"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/command.json",
+      "sha256": "1e605e66d8332cfaa91068b68b2ebbb48cbb73a372a6b452a854856ff1c7b163"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/output/Ring.tla/2026-11-15T17-46-34_7515313057001810644/detailed.log",
+      "sha256": "e77a26c9b2cf12fdb6dca4d333e8edc5113c282842623433b2d2d5ed10c347bb"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/output/Ring.tla/2026-11-15T17-46-34_7515313057001810644/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/output/Ring.tla/2026-11-15T17-46-34_7515313057001810644/run.txt",
+      "sha256": "b6bd820752226c75cff239e618899c97ae568fdef4439b4c284876aab8e7e830"
+    },
+    {
+      "path": "ring-safe-4/0-apalache/process.log",
+      "sha256": "621968b92169a2f213f4122501bff8a442a838bad1ce50e68357ca4e2300007a"
+    },
+    {
+      "path": "ring-safe-4/0-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/0-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/command.json",
+      "sha256": "54b1269d18d4abcdeef4c02267fe4715ded5cf0df8bce25e681d6d787ccfb5c7"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/output/Ring.tla/2026-11-15T17-46-36_2479339993722491387/detailed.log",
+      "sha256": "2145d1c80857376c67ba0522fab7ffef79cb304f3e5979fee4a25701183b405c"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/output/Ring.tla/2026-11-15T17-46-36_2479339993722491387/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/output/Ring.tla/2026-11-15T17-46-36_2479339993722491387/run.txt",
+      "sha256": "2c38320c74923dc89d8a2d4320c3d2487e876d1fd4acfd04bb6bab68cd4daf43"
+    },
+    {
+      "path": "ring-safe-4/1-apalache/process.log",
+      "sha256": "6fbfbb2292f7c15c4d4e2dd0786ad1747ee404dc1fc1135d8b26260212ad1342"
+    },
+    {
+      "path": "ring-safe-4/1-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/1-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/command.json",
+      "sha256": "a9760ab55995bf87074fa281b4f50e4679a47549e38a50260f002efe9ae05cdb"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/output/Ring.tla/2026-11-15T17-46-38_9828834310127711495/detailed.log",
+      "sha256": "e3539b48ea906ed7f60b569cd22c34615eb5ccf7ab9731c15fe77dae8cc8b379"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/output/Ring.tla/2026-11-15T17-46-38_9828834310127711495/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/output/Ring.tla/2026-11-15T17-46-38_9828834310127711495/run.txt",
+      "sha256": "92fe89706ecd1b74429f35b30df7b9e71b734fd90265e82f9c68cef4ab60dad2"
+    },
+    {
+      "path": "ring-safe-4/2-apalache/process.log",
+      "sha256": "f2ac3905883525213bb98fa3d14ecff251a6940219f81c0989213f9df17debf4"
+    },
+    {
+      "path": "ring-safe-4/2-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/2-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/Ring.tla",
+      "sha256": "a9aecce2186e4cb73cbaaf3027d207c7ee948880b9ae2c7d3563dd026ecf164d"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/Spec.cfg",
+      "sha256": "cd8b288725346dea6626c74be3003153122600d62cb1f0bbbd4da0452d0e5b9d"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/command.json",
+      "sha256": "a3c2c546e0a0b8597a3b07b6fb1473ad5794cea5bada87b8715b2e5b416c7c63"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/output/Ring.tla/2026-11-15T17-46-39_15479690459096064595/detailed.log",
+      "sha256": "b37a1a429b87c29125466f3bc502447fd8bd84dac51b02025d0f3c9dbbbfd48f"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/output/Ring.tla/2026-11-15T17-46-39_15479690459096064595/log0.smt",
+      "sha256": "c0a6e962b48d940e2c94211ebf831179df3ab27bac218e2147423717c09ea517"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/output/Ring.tla/2026-11-15T17-46-39_15479690459096064595/run.txt",
+      "sha256": "a1d0509789ebae5f0c488f6dbce834a9c976a5914a5c9221e392b765d01db966"
+    },
+    {
+      "path": "ring-safe-4/3-apalache/process.log",
+      "sha256": "4674228991a05667973ef1b942d333512678d0f3da1ff831bbb745d128491032"
+    },
+    {
+      "path": "ring-safe-4/3-rtlc-ir/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/3-rtlc-source/process.log",
+      "sha256": "7f8e4cf076a387ad1f72296c188a19a7dd5f5e93830b770586d65df2b9655986"
+    },
+    {
+      "path": "ring-safe-4/input.json",
+      "sha256": "899c40601fc53054a0b1c29be987b7d500dcaa6668037d1d1f6ea3d51d8675e1"
+    },
+    {
+      "path": "samples.json",
+      "sha256": "23688371afce1d7fc175ae577ecb8dc161366f7eb9e8c09b8b04895881ab32a2"
+    }
+  ]
+}
