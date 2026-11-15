@@ -1,0 +1,6369 @@
+[
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_LIA)(declare-const ttl Int)(declare-const elapsed Int)(assert (and (>= ttl 1)(<= ttl 10000)(>= elapsed 0)(<= elapsed 20000)(= elapsed ttl)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "elapsed": "1",
+          "ttl": "1"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 26,
+          "branches": 0,
+          "relaxations": 12
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_LIA)(declare-const amount Int)(declare-const other Int)(assert (and (> amount 0)(< amount 10)(= other 3)(= (+ amount other) 10)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "amount": "7",
+          "other": "3"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 18
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(declare-const y Int)(assert (= x 10000000000000000000000000000000000000000))(assert (= y (+ x 7)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x": "10000000000000000000000000000000000000000",
+          "y": "10000000000000000000000000000000000000007"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 21,
+          "branches": 0,
+          "relaxations": 12
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(declare-const y Int)(assert (< x y))(assert (<= y x))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 11,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (not (= x 0)))(assert (<= x 0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x": "-1"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 18,
+          "branches": 1,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (let ((x 2)(y x)) (and (= x 2)(= y 7))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x": "7"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 14,
+          "branches": 0,
+          "relaxations": 4
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const b0 Bool)(declare-const b1 Bool)(assert (ite b0 (not b1) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {},
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 6,
+          "branches": 1,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-fun |clock value| () Int)(assert (= |clock value| (- 4)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "clock value": "-4"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 9,
+          "branches": 0,
+          "relaxations": 4
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (and (= x 3)(= x 4)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 10,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (or (= x 3)(= x 4)))(assert (= x 4))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x": "4"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 17,
+          "branches": 1,
+          "relaxations": 4
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (< (+ x2 (- 2)) (+ x1 (- 1))) (xor (< (+ x2 (- 1)) (+ x1 1)) (or b0 b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 34,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 1) x2))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (distinct (+ x1 2) (+ x0 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 38,
+          "branches": 0,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (xor (< (+ x2 1) (+ x0 (- 1))) (or (<= x0 (+ x1 1)) (= (+ x2 (- 2)) (+ x2 (- 2))))) (or (<= (+ x0 2) (+ x0 (- 1))) (or (< (+ x1 1) (+ x1 2)) (= x0 (+ x0 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 49,
+          "branches": 3,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= x0 (+ x0 1)) (=> (distinct x0 x2) b0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 2)) (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 2) x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (and (or (<= (+ x0 1) (+ x2 (- 2))) (= (+ x0 (- 2)) (+ x2 1))) b1) (or (<= (+ x0 (- 2)) x1) (xor b0 (<= (+ x2 (- 2)) (+ x0 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": true
+        },
+        "stats": {
+          "work": 149,
+          "branches": 4,
+          "relaxations": 102
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (not (=> (<= x1 (+ x2 2)) (= x1 (+ x0 (- 2))))) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 34,
+          "branches": 1,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (<= (+ x1 (- 1)) (+ x2 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "2",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 40,
+          "branches": 0,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (not (not (< x0 (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= x2 (+ x2 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 18,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< x2 (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (not (or (<= (+ x2 2) (+ x0 (- 2))) (distinct (+ x2 1) (+ x1 2)))) (xor (= b1 b1) b0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 52,
+          "branches": 3,
+          "relaxations": 18
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x1 1) (+ x0 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 36,
+          "branches": 0,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 2) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 21,
+          "branches": 1,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (=> (=> (< (+ x1 (- 1)) (+ x0 1)) (distinct (+ x1 (- 1)) x0)) (or (< (+ x2 1) (+ x2 (- 1))) (= (+ x2 1) (+ x1 2)))) (xor (<= (+ x2 (- 1)) (+ x0 1)) (or b1 b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "0",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 62,
+          "branches": 3,
+          "relaxations": 32
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 (- 2)) (+ x0 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (<= (+ x2 2) (+ x0 2)) (= (not (= (+ x1 2) (+ x1 (- 1)))) (xor b0 (= (+ x0 (- 1)) x0)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (or (xor (<= (+ x2 (- 2)) (+ x2 1)) b1) b1) (<= x2 (+ x2 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 40,
+          "branches": 4,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (xor (not (< (+ x2 (- 1)) (+ x0 2))) (xor (< (+ x2 1) (+ x0 1)) (<= (+ x2 (- 1)) (+ x1 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 95,
+          "branches": 2,
+          "relaxations": 63
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 2)) x1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (<= (+ x0 2) (+ x1 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x1 2) (+ x0 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "-2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (+ x1 (- 1)) (+ x2 (- 2))) (= (not b0) (and (distinct (+ x1 (- 2)) x2) (distinct (+ x2 1) (+ x2 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 96,
+          "branches": 5,
+          "relaxations": 54
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (and (or (< (+ x1 1) (+ x2 2)) b1) (=> (distinct x2 (+ x2 (- 1))) (distinct (+ x2 (- 2)) (+ x0 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 36,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and b1 b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x2 (- 2)) (+ x0 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x2 2) (+ x0 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x2 2) (+ x1 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (and (= (distinct (+ x2 (- 2)) x1) (< (+ x1 (- 2)) (+ x2 (- 2)))) (= (= x2 (+ x2 (- 1))) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 69,
+          "branches": 3,
+          "relaxations": 40
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (or (and (distinct (+ x1 (- 1)) (+ x0 2)) (<= (+ x2 1) (+ x1 2))) (< (+ x2 2) x1)) (or (or (< (+ x1 (- 1)) (+ x1 (- 2))) (<= (+ x0 (- 1)) (+ x1 (- 2)))) (or (= (+ x2 2) (+ x2 (- 2))) (distinct (+ x1 2) x0)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 58,
+          "branches": 4,
+          "relaxations": 27
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (< (+ x1 2) (+ x0 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= x2 x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 0,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x0 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 18,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (< (+ x0 2) (+ x0 2)) (=> (= x1 (+ x2 (- 1))) (not (<= (+ x1 1) x2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 31,
+          "branches": 3,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (distinct x0 (+ x2 (- 2))) (= (xor (= (+ x2 1) (+ x1 1)) (distinct x1 (+ x1 1))) (= (< (+ x0 (- 2)) (+ x1 1)) (distinct x1 (+ x0 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 173,
+          "branches": 8,
+          "relaxations": 114
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x0 (- 1)) x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 20,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> b0 b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (not (xor (< (+ x1 2) (+ x1 (- 2))) b0)) b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (not (= x1 (+ x1 (- 2)))) (< x1 (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (+ x2 (- 2)) (+ x1 (- 1))) (and (xor (<= (+ x0 (- 1)) (+ x2 1)) (= (+ x0 (- 1)) (+ x1 1))) (xor (< (+ x2 2) (+ x0 (- 2))) b0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 115,
+          "branches": 4,
+          "relaxations": 77
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 1) (+ x0 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (distinct (+ x1 (- 2)) (+ x1 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 22,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x2 (- 1)) (+ x2 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (xor (<= (+ x1 1) x2) (=> (= (+ x1 (- 1)) x2) (<= (+ x1 (- 1)) x2))) b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 92,
+          "branches": 4,
+          "relaxations": 56
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (and b0 (and (< (+ x0 (- 2)) (+ x0 2)) (= (+ x2 (- 1)) (+ x0 1)))) (= (+ x0 (- 1)) (+ x1 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (xor (or (< (+ x2 2) (+ x2 2)) b1) (<= (+ x2 2) (+ x2 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 31,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (<= x0 (+ x0 (- 1))) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x0 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 18,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (and (and b0 (< (+ x0 1) (+ x0 2))) (= (+ x2 2) (+ x1 (- 2)))) (not (and (<= (+ x2 (- 2)) (+ x1 2)) (<= (+ x0 (- 1)) x0)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 3,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x0 1) (+ x1 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 1) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> b0 (and (= (= (+ x2 (- 2)) (+ x2 1)) (= (+ x1 2) (+ x2 (- 1)))) (= (+ x2 1) x0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= x1 x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 0,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (or (not b1) (distinct (+ x0 1) x2)) (= (xor (<= (+ x1 (- 2)) (+ x0 (- 2))) (<= (+ x0 (- 1)) (+ x2 (- 1)))) (not (= (+ x0 2) (+ x1 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 42,
+          "branches": 1,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (distinct (+ x2 2) (+ x0 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "2",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 46,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (=> (= (+ x0 (- 2)) (+ x2 2)) (distinct (+ x1 (- 1)) (+ x0 (- 1)))) (not (= (+ x0 1) x1))) (< (+ x0 1) (+ x1 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 179,
+          "branches": 6,
+          "relaxations": 135
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (not (and (<= (+ x1 1) x2) (<= (+ x0 (- 2)) (+ x2 (- 1))))) (not (<= x1 (+ x1 (- 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 2,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (and (or (= (+ x2 1) (+ x2 1)) (distinct (+ x2 2) (+ x0 1))) (= (<= (+ x1 2) (+ x2 2)) (<= (+ x2 (- 1)) (+ x0 (- 2))))) (<= (+ x0 (- 2)) x1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 38,
+          "branches": 4,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= x1 (+ x0 1)) (= x0 (+ x1 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 46,
+          "branches": 1,
+          "relaxations": 20
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (or (< (+ x1 (- 2)) (+ x0 (- 1))) (or (distinct x1 (+ x0 2)) (distinct (+ x0 2) (+ x0 (- 2))))) (<= (+ x2 (- 2)) (+ x0 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 30,
+          "branches": 1,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (=> (= (< (+ x0 (- 1)) x2) (= (+ x1 (- 1)) x2)) (or b0 (= (+ x2 2) x2))) (= (+ x2 (- 2)) (+ x0 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 94,
+          "branches": 5,
+          "relaxations": 63
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< x0 (+ x0 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (distinct (+ x1 (- 2)) (+ x0 (- 2))) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 35,
+          "branches": 2,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (< (+ x2 (- 1)) (+ x1 (- 1))) (< x2 (+ x2 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (< (+ x1 (- 1)) x2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 33,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 2) (+ x1 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (=> (not (distinct (+ x2 (- 2)) (+ x0 (- 2)))) (or (distinct (+ x0 (- 1)) (+ x2 2)) b1)) (= (+ x0 (- 2)) (+ x2 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 77,
+          "branches": 4,
+          "relaxations": 48
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x0 1) (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (not (<= (+ x1 (- 1)) (+ x0 (- 2)))) (=> (< (+ x2 1) (+ x1 1)) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 43,
+          "branches": 1,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (xor (=> (distinct (+ x0 2) x1) b1) b1) (distinct (+ x1 2) x2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 50,
+          "branches": 4,
+          "relaxations": 18
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x2 1) x1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 36,
+          "branches": 0,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (or b1 (not b1)) (or b0 (xor (= (+ x0 2) x0) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 25,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (<= x2 (+ x1 (- 1))) (not (or b1 (<= (+ x1 (- 2)) x2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (= (+ x2 (- 1)) (+ x1 (- 1))) b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 31,
+          "branches": 1,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x2 2) x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 39,
+          "branches": 0,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (not (or (= x1 x1) (< (+ x1 (- 2)) (+ x0 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 29,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (< x1 (+ x0 2)) (or (distinct (+ x1 (- 2)) (+ x2 (- 2))) (or (= x2 (+ x1 1)) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 40,
+          "branches": 2,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (xor (xor (<= (+ x0 2) x1) b1) (=> b0 b0)) (not (=> (<= (+ x2 (- 2)) (+ x1 (- 1))) (distinct (+ x0 1) (+ x1 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 84,
+          "branches": 5,
+          "relaxations": 30
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (=> b1 (or (= (+ x0 2) (+ x2 (- 2))) (<= (+ x2 (- 2)) x0))) (xor (xor (= (+ x1 (- 1)) x0) (= x1 (+ x0 (- 1)))) (=> b0 (= x0 (+ x0 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 51,
+          "branches": 2,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (and (= (<= (+ x0 (- 1)) (+ x1 2)) (= (+ x2 2) (+ x1 1))) (and (< (+ x2 (- 2)) x0) b1)) (not b0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 50,
+          "branches": 2,
+          "relaxations": 20
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< x1 (+ x0 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor b0 (xor (xor (= (+ x0 2) (+ x1 (- 1))) b1) (or b0 (< (+ x0 1) (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 54,
+          "branches": 4,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (<= (+ x1 (- 2)) (+ x1 (- 1))) (<= (+ x0 2) (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 35,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (+ x1 (- 1)) (+ x1 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (xor b0 (and (= x1 (+ x1 (- 1))) (distinct (+ x1 (- 1)) (+ x1 (- 2))))) (and (=> (<= (+ x0 1) (+ x1 1)) (< (+ x1 (- 2)) (+ x0 (- 1)))) b0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 45,
+          "branches": 5,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (and (= (<= (+ x2 (- 2)) (+ x0 1)) b0) (xor (= (+ x1 (- 1)) (+ x1 2)) b0)) (<= (+ x2 1) (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 4,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= x2 (+ x1 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x1 1) (+ x0 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 39,
+          "branches": 0,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x0 (- 1)) (+ x2 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> b0 (< (+ x2 2) (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (not (= (= (+ x2 2) (+ x0 (- 1))) (< (+ x1 1) (+ x0 2)))) (= x0 x0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 87,
+          "branches": 7,
+          "relaxations": 27
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (<= x1 x2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 33,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x1 (- 2)) (+ x2 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< x2 (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (<= (+ x0 2) x2) (not (=> b0 (distinct (+ x0 (- 2)) (+ x2 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 38,
+          "branches": 2,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (< (+ x0 (- 1)) (+ x0 1)) (or (= (+ x2 (- 1)) (+ x1 (- 2))) (= (+ x2 (- 2)) (+ x2 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 36,
+          "branches": 3,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (distinct (+ x1 1) (+ x2 1)) (=> (= b0 (distinct (+ x2 1) (+ x2 (- 2)))) (= (+ x0 1) (+ x1 (- 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 31,
+          "branches": 1,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (= (<= (+ x1 1) (+ x2 1)) (distinct (+ x0 (- 1)) (+ x2 (- 2)))) (not b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 37,
+          "branches": 3,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (not (or (<= x2 (+ x0 1)) b1)) (= (<= x0 (+ x1 2)) (< (+ x1 1) (+ x2 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 36,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (< x2 (+ x2 1)) (not (xor (= (+ x0 2) (+ x2 (- 1))) b0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 51,
+          "branches": 1,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (distinct (+ x0 (- 2)) (+ x0 (- 1))) (not (=> (< (+ x1 (- 2)) (+ x1 1)) (= x1 x1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 37,
+          "branches": 3,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= (+ x0 1) (+ x2 1)) (< (+ x2 1) (+ x2 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 35,
+          "branches": 2,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (= (= (+ x0 (- 1)) x0) (xor b0 (= (+ x0 (- 2)) x1))) (and (= x2 (+ x2 (- 1))) b1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 55,
+          "branches": 6,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (=> (and b1 b0) (=> (distinct (+ x2 2) x2) (<= (+ x1 (- 1)) (+ x2 (- 2))))) (=> (= b1 (< (+ x1 (- 2)) x2)) (=> b0 b0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": true
+        },
+        "stats": {
+          "work": 38,
+          "branches": 2,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 (- 1)) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (xor (and (= (+ x1 (- 1)) x2) b1) (distinct (+ x1 1) (+ x2 2))) (or (= (= (+ x2 (- 1)) (+ x2 1)) (distinct (+ x1 1) (+ x1 (- 2)))) (distinct x0 (+ x1 (- 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 72,
+          "branches": 6,
+          "relaxations": 22
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (not (= (< x0 (+ x2 (- 2))) (<= (+ x2 2) (+ x1 (- 1))))) (< (+ x0 2) (+ x2 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 96,
+          "branches": 2,
+          "relaxations": 63
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (+ x2 2) x2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 1) (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 34,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (not (and (= x0 (+ x2 (- 1))) (distinct (+ x2 2) (+ x0 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 45,
+          "branches": 1,
+          "relaxations": 18
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (distinct x0 (+ x0 2)) (< (+ x2 (- 1)) (+ x0 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (<= (+ x0 (- 1)) x1) (=> (not (< x0 (+ x2 2))) (= (distinct (+ x2 (- 2)) x0) b0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 1,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 2) x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (=> (<= x0 (+ x0 (- 1))) (<= (+ x1 1) x1)) (and b1 (distinct (+ x0 2) x2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 35,
+          "branches": 3,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (or (= b1 (= x1 (+ x0 (- 2)))) (<= (+ x1 1) (+ x0 (- 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 34,
+          "branches": 2,
+          "relaxations": 8
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 1) (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 34,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (not (xor b1 (= x1 (+ x1 2)))) (= (+ x2 (- 2)) (+ x1 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 48,
+          "branches": 4,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (= (+ x0 1) (+ x2 (- 2))) (= (= (= (+ x2 1) (+ x2 (- 1))) (= (+ x0 1) x1)) (= b0 (distinct (+ x1 (- 1)) x0)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 45,
+          "branches": 1,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor b0 (< (+ x0 2) (+ x1 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x0 2) (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (or (=> (<= (+ x2 (- 2)) (+ x0 2)) (distinct (+ x1 1) (+ x1 1))) (=> b0 (<= (+ x1 (- 2)) (+ x0 1)))) (= (=> (distinct (+ x2 (- 2)) (+ x0 (- 2))) (distinct (+ x0 (- 2)) (+ x2 (- 1)))) (< (+ x2 (- 2)) (+ x0 (- 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 57,
+          "branches": 1,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 (- 1)) (+ x0 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x2 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (<= (+ x2 (- 2)) (+ x1 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 33,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 1)) (+ x0 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 (- 2)) x1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (not (=> b1 b0)) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 29,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (xor (and b1 (= (+ x1 1) (+ x2 (- 2)))) (not (< (+ x1 (- 1)) (+ x1 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 52,
+          "branches": 1,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (=> (= (<= (+ x0 (- 1)) (+ x0 2)) (= (+ x1 2) x0)) (not (<= (+ x1 (- 2)) (+ x0 1)))) (not (xor (< (+ x2 1) x0) (<= (+ x2 2) (+ x1 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 92,
+          "branches": 5,
+          "relaxations": 54
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (or (= (< (+ x1 2) (+ x2 (- 2))) b0) (not (< (+ x2 (- 2)) x2))) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 63,
+          "branches": 2,
+          "relaxations": 35
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (not (and b1 (= (+ x0 (- 2)) (+ x0 2)))) (or (=> (<= (+ x1 2) x2) (= (+ x1 (- 1)) (+ x2 1))) (and (= (+ x0 2) (+ x0 1)) (< (+ x1 2) (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 121,
+          "branches": 7,
+          "relaxations": 80
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (= (= (+ x1 1) (+ x2 (- 2))) (<= (+ x1 (- 1)) (+ x0 2))) (=> (< (+ x2 (- 2)) x0) (< (+ x0 2) (+ x0 (- 2))))) (not (and (= (+ x1 (- 2)) (+ x0 (- 1))) (<= (+ x0 2) (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "-2",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 115,
+          "branches": 6,
+          "relaxations": 77
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= x1 (+ x1 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 1) (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "-2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 39,
+          "branches": 0,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (or (= (+ x0 2) (+ x1 2)) (or (< (+ x0 (- 1)) x1) b1)) (=> (and (= x2 (+ x0 (- 1))) (< x2 (+ x1 1))) (= (distinct x2 (+ x1 2)) (<= (+ x0 1) (+ x2 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 584,
+          "branches": 13,
+          "relaxations": 462
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x2 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 39,
+          "branches": 0,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x0 (- 2)) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "-2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (distinct (+ x2 2) (+ x2 (- 1))) (distinct (+ x1 2) (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 2,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or b1 (=> (not (distinct x1 (+ x2 2))) (= (+ x1 (- 1)) (+ x0 (- 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 24,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (not (<= (+ x2 (- 2)) x2)) (= (distinct (+ x2 1) (+ x1 2)) (<= (+ x0 (- 1)) (+ x1 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 49,
+          "branches": 3,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (distinct (+ x0 (- 2)) (+ x0 (- 2))) (not (and (distinct (+ x1 1) (+ x1 (- 1))) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 29,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x1 (- 2)) x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (not (or (= x0 (+ x0 1)) (= x2 (+ x1 2)))) (= (+ x1 (- 2)) (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "1",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 99,
+          "branches": 3,
+          "relaxations": 63
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (and (= b0 (< (+ x0 2) (+ x0 1))) (= (< (+ x0 1) x2) (= (+ x1 (- 2)) (+ x0 (- 2))))) (= (= x2 (+ x0 1)) (= (<= (+ x2 (- 1)) (+ x1 (- 1))) (<= (+ x0 (- 2)) (+ x0 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 133,
+          "branches": 6,
+          "relaxations": 70
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (= (+ x1 2) x2) (= (+ x2 (- 2)) x0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "-1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 52,
+          "branches": 2,
+          "relaxations": 27
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor b1 (distinct (+ x0 1) (+ x1 (- 2)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 48,
+          "branches": 1,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x2 (- 1)) (+ x2 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 21,
+          "branches": 1,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= (=> (<= (+ x1 1) (+ x2 (- 2))) (= x0 (+ x1 (- 2)))) (xor (= (+ x0 (- 2)) (+ x1 2)) (= (+ x0 (- 1)) (+ x1 1)))) (xor (distinct x0 (+ x1 (- 1))) (or b0 (< x2 (+ x2 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 188,
+          "branches": 7,
+          "relaxations": 143
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 1) (+ x0 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 34,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (= (distinct x1 (+ x2 1)) (and (= (+ x1 (- 1)) x0) (< (+ x0 (- 1)) (+ x2 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 43,
+          "branches": 4,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (and (<= (+ x1 1) (+ x1 (- 2))) (or (<= (+ x0 2) (+ x2 (- 2))) (distinct (+ x0 (- 1)) (+ x2 (- 2))))) (not (and b0 (< (+ x2 1) (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 29,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (and (or (distinct (+ x2 2) x2) (< (+ x2 (- 2)) (+ x1 (- 1)))) (xor b0 (distinct (+ x1 (- 2)) (+ x1 (- 1))))) (xor (and (< (+ x2 (- 2)) (+ x1 (- 1))) b0) (and (<= (+ x0 (- 2)) (+ x0 (- 1))) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 43,
+          "branches": 5,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (< (+ x1 (- 1)) (+ x0 (- 2))) b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 35,
+          "branches": 1,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (= (+ x0 1) (+ x0 2)) (=> (not (< x1 (+ x1 2))) (or b1 b0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 21,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (not (or (distinct x2 (+ x0 2)) (<= (+ x0 2) (+ x0 (- 2))))) (distinct (+ x2 (- 2)) x2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "1",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 45,
+          "branches": 3,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (and (not (distinct (+ x0 1) x1)) (= (<= (+ x0 (- 1)) x0) (<= (+ x1 1) (+ x0 (- 1))))) (= (=> (<= (+ x2 (- 1)) (+ x0 2)) (= (+ x0 (- 1)) (+ x0 1))) (distinct (+ x0 (- 2)) (+ x0 (- 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "-2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 142,
+          "branches": 11,
+          "relaxations": 64
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (=> (= (distinct (+ x2 1) (+ x1 (- 1))) b0) b0) (and (or (< (+ x2 1) (+ x2 (- 1))) (<= (+ x0 2) (+ x2 (- 1)))) (and (= (+ x1 2) (+ x2 2)) (<= (+ x1 (- 2)) (+ x0 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 263,
+          "branches": 7,
+          "relaxations": 176
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 23,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (=> (= (= (+ x2 (- 2)) x1) (distinct (+ x1 2) (+ x0 (- 2)))) (=> (distinct x2 (+ x1 2)) b1)) (or (= (+ x0 2) (+ x2 2)) (or (< (+ x2 2) (+ x0 (- 1))) (= (+ x0 (- 2)) (+ x1 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 60,
+          "branches": 3,
+          "relaxations": 30
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x2 2) (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 18,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (and (= (+ x1 1) (+ x0 (- 1))) (and (< x2 (+ x0 1)) b1)) (< x0 x1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 49,
+          "branches": 1,
+          "relaxations": 20
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x1 1) x1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 19,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 1) (+ x0 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= (not (< (+ x0 2) x0)) (=> (< x0 x1) b1)) (or (xor (= (+ x1 1) (+ x1 (- 1))) (< (+ x0 2) (+ x0 (- 1)))) (not b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 42,
+          "branches": 2,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct x0 (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct x2 (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (xor (and (<= (+ x1 (- 1)) (+ x0 (- 1))) (<= x0 (+ x0 1))) (not (= (+ x1 2) (+ x2 1)))) (and b1 (= (= (+ x2 2) (+ x1 (- 2))) b0))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 47,
+          "branches": 2,
+          "relaxations": 18
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 1)) x2))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x2 2) (+ x1 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (xor (and (< (+ x0 2) x1) (= (+ x2 1) (+ x2 (- 1)))) (not (= (+ x1 (- 1)) (+ x1 1)))) (<= (+ x2 1) x2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 43,
+          "branches": 4,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (xor (=> b0 (<= (+ x0 (- 1)) (+ x0 (- 1)))) (= (+ x0 (- 1)) (+ x0 (- 1)))) (= (+ x0 (- 1)) (+ x0 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 33,
+          "branches": 3,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x2 2) (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 26,
+          "branches": 1,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (= (=> (<= (+ x2 2) (+ x1 1)) (< (+ x0 (- 2)) x2)) (not (<= (+ x1 1) (+ x1 (- 2))))) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 34,
+          "branches": 2,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x1 2) (+ x0 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 39,
+          "branches": 0,
+          "relaxations": 21
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 1)) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (= b1 (=> (= x0 (+ x2 1)) b0)) (= (<= (+ x0 2) (+ x0 (- 2))) (< (+ x1 (- 2)) (+ x1 (- 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 39,
+          "branches": 4,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (or (and b0 (distinct (+ x2 1) (+ x2 (- 2)))) (not b0)) (< x0 (+ x0 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 33,
+          "branches": 3,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x0 (- 2)) (+ x1 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 (- 2)) x0))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (xor (not (<= x0 (+ x0 2))) (=> (distinct (+ x1 (- 2)) (+ x1 (- 2))) (distinct x0 (+ x0 (- 2))))) (=> (= (+ x1 (- 2)) (+ x2 (- 2))) (<= (+ x0 2) (+ x0 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 52,
+          "branches": 5,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (not (< (+ x1 (- 1)) x1)) (= (=> (<= x2 x1) (<= (+ x0 1) x1)) (not (= (+ x0 1) (+ x1 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-1",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 46,
+          "branches": 4,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (not (not (<= x1 (+ x0 2)))) (xor (xor (< (+ x2 (- 1)) (+ x0 (- 2))) (<= x0 (+ x0 (- 1)))) (and (< (+ x0 1) (+ x1 1)) (distinct (+ x0 2) (+ x0 1))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= (and (= (+ x2 2) (+ x0 (- 1))) (distinct (+ x1 2) (+ x1 2))) (xor (distinct (+ x2 2) (+ x1 1)) (<= (+ x1 2) (+ x2 1)))) (xor (and (< (+ x0 1) x0) b1) b0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 51,
+          "branches": 7,
+          "relaxations": 9
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (or (=> (distinct (+ x2 (- 1)) (+ x0 (- 1))) (distinct (+ x0 (- 1)) (+ x0 1))) (xor (distinct (+ x0 (- 2)) x0) b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 35,
+          "branches": 1,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (and (and (distinct (+ x2 2) (+ x2 2)) b0) (< (+ x2 (- 2)) x1)) (< x1 (+ x0 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 48,
+          "branches": 4,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x0 2) (+ x2 (- 2))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-2",
+          "x1": "2",
+          "x2": "2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x2 1) (+ x0 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 32,
+          "branches": 0,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (=> (not b1) (=> b1 (distinct (+ x1 1) (+ x1 1)))) (=> (not b1) (xor (< x1 (+ x0 2)) (= (+ x2 2) (+ x2 2))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": true
+        },
+        "stats": {
+          "work": 32,
+          "branches": 3,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< x2 (+ x2 (- 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 18,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (or (= b0 b0) (or (< x2 (+ x2 (- 2))) (= (+ x0 2) x2))) (< (+ x0 (- 1)) (+ x2 (- 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "-1",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 38,
+          "branches": 2,
+          "relaxations": 14
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (xor (xor (< x2 (+ x2 2)) b1) (= (<= (+ x1 2) x0) (< (+ x1 1) (+ x2 (- 2))))) (or (not (distinct (+ x0 1) (+ x1 (- 2)))) (and (<= (+ x2 (- 2)) x1) (<= x1 x1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "-2",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 46,
+          "branches": 4,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (= x1 (+ x0 (- 1))) (or (not (= (+ x0 (- 1)) (+ x2 1))) (or (<= x2 (+ x1 1)) (< (+ x1 2) (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "0",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 53,
+          "branches": 2,
+          "relaxations": 27
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= (and (distinct (+ x0 1) x2) (<= (+ x2 (- 2)) (+ x2 (- 1)))) (= b0 (< (+ x1 (- 2)) (+ x2 2)))) (not (distinct (+ x2 (- 1)) x1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "2",
+          "x1": "2",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 56,
+          "branches": 4,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (not (xor (< (+ x2 1) (+ x0 (- 1))) (distinct x1 (+ x1 (- 2))))) (not (or b0 b1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 40,
+          "branches": 3,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x0 (- 2)) (+ x1 1)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 44,
+          "branches": 0,
+          "relaxations": 24
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x0 2) x2))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 27,
+          "branches": 1,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (= x1 (+ x1 (- 1))) (< (+ x0 (- 2)) (+ x2 1))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unsat",
+        "values": {},
+        "booleans": {},
+        "stats": {
+          "work": 20,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 (- 2)) (+ x2 2)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 24,
+          "branches": 0,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (distinct x2 (+ x2 1)) b1))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 28,
+          "branches": 2,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 (- 2)) x2))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 25,
+          "branches": 0,
+          "relaxations": 7
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (distinct (+ x1 (- 1)) x2) (= (or b0 (< (+ x0 (- 1)) (+ x0 (- 2)))) b0)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "-1"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 39,
+          "branches": 1,
+          "relaxations": 16
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (not (=> (distinct (+ x0 (- 2)) x2) (< x2 (+ x1 (- 2))))) (=> (= (distinct (+ x0 (- 1)) (+ x0 1)) (= (+ x1 1) (+ x2 1))) (and (distinct (+ x2 1) (+ x0 2)) (<= x2 (+ x2 (- 2)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "1",
+          "x1": "-2",
+          "x2": "-2"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 126,
+          "branches": 5,
+          "relaxations": 78
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (=> (=> (distinct (+ x2 2) (+ x1 2)) b0) (distinct (+ x0 1) (+ x2 1)))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": false,
+          "b1": false
+        },
+        "stats": {
+          "work": 41,
+          "branches": 1,
+          "relaxations": 10
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (distinct x1 (+ x1 1)) (and (=> b0 b1) (or (< (+ x1 (- 2)) (+ x2 2)) (<= x0 (+ x1 (- 1)))))))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x0": "0",
+          "x1": "0",
+          "x2": "0"
+        },
+        "booleans": {
+          "b0": true,
+          "b1": false
+        },
+        "stats": {
+          "work": 34,
+          "branches": 3,
+          "relaxations": 6
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert (and))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "Boolean application needs an argument"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert (or))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "Boolean application needs an argument"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Real)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "sort"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (= (* x x) 2))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "operator *"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(declare-const y Int)(assert (= (+ x y) 7))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "constraint is not integer difference logic after constant substitution"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(push 1)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "command push"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (= x true))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "type",
+      "message": "equality operands have different sorts"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert missing)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "type",
+      "message": "undeclared symbol missing"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(declare-const x Int)(assert (forall ((y Int)) (= y x)))",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "expected built-in operator"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert true)(check-sat)(assert false)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "commands after check-sat"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert true) trailing",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "expected list"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert (and true)",
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "unexpected end"
+    }
+  },
+  {
+    "request": {
+      "kind": "solve",
+      "source": "(assert true)",
+      "maxWork": 0
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "unknown",
+        "values": {},
+        "booleans": {},
+        "reason": "work",
+        "stats": {
+          "work": 0,
+          "branches": 0,
+          "relaxations": 0
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "prepare",
+      "source": "(declare-const x Int)(assert (= x 7))"
+    },
+    "response": {
+      "kind": "prepared",
+      "handle": 1
+    }
+  },
+  {
+    "request": {
+      "kind": "check",
+      "handle": 1,
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "solution",
+      "result": {
+        "status": "sat",
+        "values": {
+          "x": "7"
+        },
+        "booleans": {},
+        "stats": {
+          "work": 9,
+          "branches": 0,
+          "relaxations": 4
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "kind": "release",
+      "handle": 1
+    },
+    "response": {
+      "kind": "released"
+    }
+  },
+  {
+    "request": {
+      "kind": "check",
+      "handle": 1,
+      "maxWork": 2000000
+    },
+    "response": {
+      "kind": "error",
+      "code": "protocol",
+      "message": "unknown handle"
+    }
+  }
+]

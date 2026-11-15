@@ -24,4 +24,4 @@ idealis check model.json history.json
 
 過去のplan、iteration、runとvendor/fixture原本は、その時点の名前とパスを残す。過去の速度測定を今回の名前変更で測り直した結果として扱わない。現在のビルドと利用方法はREADMEと各crateのガイドを使う。
 
-`just package`は新名のnpm/Cargo/Wasm archiveを生成し、展開した別consumerからTS/Rust/Goの利用とインストール済みCLIを検査する。CLIの適合、違反、不正な操作に対する終了コード0/1/2は維持する。
+`just package`は新名のnpm/Cargo/Wasm archiveを生成し、展開した別consumerからTS/Rustの利用とインストール済みCLIを検査する。Goの単独consumerは`just go-test`で検査する。CLIの適合、違反、不正な操作に対する終了コード0/1/2は維持する。

@@ -1,0 +1,9 @@
+pnpm rsmt:build
+
+> @mizchi/idealis@0.1.0-alpha.0 rsmt:build /Users/mz/ghq/github.com/mizchi/modelt
+> cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
+
+   Compiling idealis-smt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/idealis-smt)
+    Finished `release` profile [optimized] target(s) in 5.10s
+   Compiling idealis-smt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/idealis-smt)
+    Finished `release` profile [optimized] target(s) in 1.96s

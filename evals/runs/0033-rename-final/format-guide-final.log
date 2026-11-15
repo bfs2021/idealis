@@ -1,0 +1,50 @@
+
+> @mizchi/idealis@0.1.0-alpha.0 check /Users/mz/ghq/github.com/mizchi/idealis
+> biome check .
+
+evals/smt-subset/benchmark.ts:22:22 lint/correctness/noUnusedImports  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━
+
+  ! Several of these imports are unused.
+  
+    20 │   wasmPath,
+    21 │ } from "./clients.js";
+  > 22 │ import { benchmarks, type Input } from "./corpus.js";
+       │                      ^^^^^^^^^^
+    23 │ import { digest, fingerprint } from "./provenance.js";
+    24 │ import { createWasm } from "./wasm.js";
+  
+  i Unused imports might be the result of an incomplete refactoring.
+  
+  i Unsafe fix: Remove the unused imports.
+  
+    22 │ import·{·benchmarks,·type·Input·}·from·"./corpus.js";
+       │                      -----------                     
+
+src/backend.ts:470:5 lint/complexity/useOptionalChain  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Change to an optional chain.
+  
+    468 │   const first = obligations[0];
+    469 │   if (
+  > 470 │     !first ||
+        │     ^^^^^^^^^
+  > 471 │     first.query.kind !== "induction" ||
+        │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    472 │     first.query.obligation === "all"
+    473 │   )
+  
+  i An optional chain is shorter, and it avoids repeating the same expression in each check.
+  
+  i Unsafe fix: Change to an optional chain.
+  
+    468 468 │     const first = obligations[0];
+    469 469 │     if (
+    470     │ - ····!first·||
+    471     │ - ····first.query.kind·!==·"induction"·||
+        470 │ + ····first?.query.kind·!==·"induction"·||
+    472 471 │       first.query.obligation === "all"
+    473 472 │     )
+  
+
+Checked 356 files in 115ms. No fixes applied.
+Found 2 warnings.
