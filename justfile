@@ -1,6 +1,18 @@
 default:
   @just --list
 
+smt-build:
+  cargo build --release --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/smt-subset-rust/Cargo.toml
+
+smt-test:
+  cargo fmt --manifest-path evals/smt-subset-rust/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/smt-subset-rust/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+
+smt-criterion:
+  cargo bench --locked --manifest-path evals/smt-subset-rust/Cargo.toml --bench solver
+
 install:
   pnpm install --frozen-lockfile
 
