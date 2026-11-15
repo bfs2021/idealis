@@ -13,6 +13,7 @@ import { bounds } from "../single-model/cases.js";
 import { digest } from "../usable/provenance.js";
 import { inputs } from "./inputs.js";
 import { fingerprint } from "./provenance.js";
+import { executableDigest } from "./wasm-names.js";
 
 const backend = process.argv[2];
 const binary = process.argv[3];
@@ -35,26 +36,15 @@ const write = async (path: string, value: unknown) => {
 try {
   let sameWasmCode: boolean | null = null;
   if (backend === "wasm") {
-    for (const [name, path] of [
-      ["named", binary],
-      [
-        "production",
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
-      ],
-    ]) {
-      assert.ok(name && path);
-      execFileSync("wasm-tools", [
-        "strip",
-        "--all",
-        path,
-        "-o",
-        join(directory, `${name}.wasm`),
-      ]);
-      files.push(`${name}.wasm`);
-    }
     sameWasmCode =
-      digest(await readFile(join(directory, "named.wasm"))) ===
-      digest(await readFile(join(directory, "production.wasm")));
+      executableDigest(new Uint8Array(await readFile(binary))) ===
+      executableDigest(
+        new Uint8Array(
+          await readFile(
+            "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+          ),
+        ),
+      );
     assert.equal(
       sameWasmCode,
       true,
@@ -76,7 +66,9 @@ try {
     samplingIntervalUs: 1000,
     repetitions: 16,
     profileBuild:
-      "release opt-level=3/lto=true/codegen-units=1, CARGO_PROFILE_RELEASE_STRIP=none",
+      backend === "native"
+        ? "release opt-level=3/lto=true/codegen-units=1, CARGO_PROFILE_RELEASE_STRIP=none"
+        : "production bytes + validated name section from cargo rustc --release -- -C strip=none",
     timing: "Profile observations only, not performance measurements",
   });
   for (const input of inputs()) {
