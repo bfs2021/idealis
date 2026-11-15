@@ -13,6 +13,17 @@ smt-test:
 smt-criterion:
   cargo bench --locked --manifest-path evals/smt-subset-rust/Cargo.toml --bench solver
 
+smt-verify phase run parent="": smt-build
+  pnpm build
+  node dist/evals/smt-subset/verify-run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
+
+smt-bench run z3: smt-build
+  pnpm build
+  node dist/evals/smt-subset/benchmark.js {{quote(run)}} {{quote(z3)}}
+
+smt-browser: smt-build
+  pnpm exec playwright test --config smt-playwright.config.ts
+
 install:
   pnpm install --frozen-lockfile
 
