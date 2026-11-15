@@ -47,6 +47,18 @@ impl Hasher for ValueHasher {
     }
 }
 
+fn get_position(values: &[(Scalar, Scalar)], key: Scalar) -> Option<usize> {
+    if let Scalar::Int(integer) = key
+        && integer > 0
+    {
+        let position = integer as usize - 1;
+        if values.get(position).is_some_and(|entry| entry.0 == key) {
+            return Some(position);
+        }
+    }
+    values.iter().position(|entry| entry.0 == key)
+}
+
 type RegisteredMembership = HashMap<usize, Option<Option<Arc<MembershipSet>>>>;
 
 type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
@@ -593,10 +605,7 @@ impl<'scope> Arena<'scope> {
         let Cell::Function(values) = self.cell(function)? else {
             return Err(CoreError::protocol("Expected a function"));
         };
-        Ok(values
-            .iter()
-            .find(|entry| entry.0 == key)
-            .map(|entry| entry.1))
+        Ok(get_position(values, key).map(|position| values[position].1))
     }
     pub fn at(&self, function: Scalar, key: Scalar) -> Result<Scalar, CoreError> {
         self.select(function, key)?
@@ -647,7 +656,7 @@ impl<'scope> Arena<'scope> {
         let Cell::Function(entries) = self.cell(function)? else {
             return Err(CoreError::protocol("Expected a function"));
         };
-        let Some(position) = entries.iter().position(|entry| entry.0 == *first) else {
+        let Some(position) = get_position(entries, *first) else {
             return Ok(function);
         };
         let previous = entries[position].1;
@@ -885,5 +894,82 @@ mod tests {
                 .unwrap(),
             original
         );
+    }
+    #[test]
+    fn integer_positions_preserve_sparse_domains_and_missing_keys() {
+        let mut arena = Arena::new(1000);
+        let dense = arena
+            .function(
+                [4, 1, 3, 2]
+                    .into_iter()
+                    .map(|key| (Scalar::Int(key), Scalar::Int(key * 10)))
+                    .collect(),
+            )
+            .unwrap();
+        for key in 1..=4 {
+            assert_eq!(
+                arena.at(dense, Scalar::Int(key)).unwrap(),
+                Scalar::Int(key * 10)
+            );
+        }
+        let sparse = arena
+            .function(
+                [-3, 0, 2, 10]
+                    .into_iter()
+                    .map(|key| (Scalar::Int(key), Scalar::Int(key * 10)))
+                    .collect(),
+            )
+            .unwrap();
+        for key in [-3, 0, 2, 10] {
+            assert_eq!(
+                arena.at(sparse, Scalar::Int(key)).unwrap(),
+                Scalar::Int(key * 10)
+            );
+        }
+        for key in [i32::MIN, -1, 1, 3, i32::MAX] {
+            assert_eq!(arena.select(sparse, Scalar::Int(key)).unwrap(), None);
+        }
+        let updated = arena
+            .replace(sparse, &[Scalar::Int(2)], Scalar::Int(77))
+            .unwrap();
+        assert_eq!(arena.at(updated, Scalar::Int(2)).unwrap(), Scalar::Int(77));
+        assert_eq!(arena.at(updated, Scalar::Int(0)).unwrap(), Scalar::Int(0));
+        assert_eq!(arena.at(sparse, Scalar::Int(2)).unwrap(), Scalar::Int(20));
+        assert_eq!(
+            arena
+                .replace(updated, &[Scalar::Int(3)], Scalar::Int(99))
+                .unwrap(),
+            updated
+        );
+        let extreme = arena
+            .function(vec![
+                (Scalar::Int(i32::MIN), Scalar::Int(7)),
+                (Scalar::Int(i32::MAX), Scalar::Int(9)),
+            ])
+            .unwrap();
+        assert_eq!(
+            arena.at(extreme, Scalar::Int(i32::MIN)).unwrap(),
+            Scalar::Int(7)
+        );
+        assert_eq!(
+            arena.at(extreme, Scalar::Int(i32::MAX)).unwrap(),
+            Scalar::Int(9)
+        );
+        let string = arena.string("1".into()).unwrap();
+        let record = arena.function(vec![(string, Scalar::Bool(true))]).unwrap();
+        assert_eq!(arena.at(record, string).unwrap(), Scalar::Bool(true));
+        assert_eq!(arena.select(record, Scalar::Int(1)).unwrap(), None);
+        assert!(arena.at(record, Scalar::Int(1)).is_err());
+        let boolean = arena
+            .function(vec![
+                (Scalar::Bool(false), Scalar::Int(3)),
+                (Scalar::Bool(true), Scalar::Int(4)),
+            ])
+            .unwrap();
+        assert_eq!(
+            arena.at(boolean, Scalar::Bool(true)).unwrap(),
+            Scalar::Int(4)
+        );
+        assert_eq!(arena.select(boolean, Scalar::Int(1)).unwrap(), None);
     }
 }
