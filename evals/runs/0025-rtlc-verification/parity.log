@@ -1,0 +1,7 @@
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/rtlc-extraction/compare.js 'evals/runs/0025-rtlc-parity'
+964 native + 241 Wasm comparisons matched

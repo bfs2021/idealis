@@ -22,7 +22,7 @@ TLCの状態単位の並列展開はmodeltへ取り入れられる。ただし�
 
 ## 現在のmodeltとの違い
 
-`crates/modelt-core/src/safety.rs`のSearchは、StateStore・nodes・Arena・result・graphを1つの所有者が更新する。状態はflatなScalar配列で保持し、hashが一致しても状態全体を比較する。`safety_values.rs`のArenaは複合値にローカルなScalar::Refを割り当てる。
+`crates/rtlc/src/safety.rs`のSearchは、StateStore・nodes・Arena・result・graphを1つの所有者が更新する。状態はflatなScalar配列で保持し、hashが一致しても状態全体を比較する。`safety_values.rs`のArenaは複合値にローカルなScalar::Refを割り当てる。
 
 複数Arenaの同じRef番号が同じ値を表すとは限らない。workerの出力をRef番号のまま混ぜると、別の集合や関数を同じ状態として扱う危険がある。状態をworker間で渡す際には、共有したcanonical IDを使うか、worker固有の参照を明示してcommit時に変換する必要がある。
 

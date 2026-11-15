@@ -1,0 +1,273 @@
+{
+  "status": "complete",
+  "sourceVersion": "7f95b28ee51e6070b9972b144c13963db15ade735764ae27d16f744435b522f3",
+  "commit": "0686a0edf0752e05005c03def0ad8aecd5ce0831",
+  "environment": {
+    "node": "v24.22.2",
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+    "platform": "darwin/arm64"
+  },
+  "checks": [
+    {
+      "command": "crate missing before implementation",
+      "path": "red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "moved checker tests",
+      "path": "rtlc-green.log",
+      "status": "passed"
+    },
+    {
+      "command": "legacy API identity and delegation",
+      "path": "core-adapter-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just rtlc-test",
+      "path": "rtlc-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just rtlc-example",
+      "path": "example.log",
+      "status": "passed"
+    },
+    {
+      "command": "rtlc wasm32 release build",
+      "path": "rtlc-wasm.log",
+      "status": "passed"
+    },
+    {
+      "command": "modelt-core cargo fmt",
+      "path": "core-fmt.log",
+      "status": "passed"
+    },
+    {
+      "command": "modelt-core cargo clippy all targets",
+      "path": "core-clippy.log",
+      "status": "passed"
+    },
+    {
+      "command": "just portable-build",
+      "path": "portable-build.log",
+      "status": "passed"
+    },
+    {
+      "command": "just check",
+      "path": "check.log",
+      "status": "passed"
+    },
+    {
+      "command": "just browser",
+      "path": "browser.log",
+      "status": "passed"
+    },
+    {
+      "command": "just portable-test",
+      "path": "portable-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-build",
+      "path": "runtime-build.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-test",
+      "path": "runtime-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just safety-test",
+      "path": "safety-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just frontier-safety-test",
+      "path": "frontier-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "TLC small normal/fault controls",
+      "path": "tlc-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just evaluate",
+      "path": "evaluate.log",
+      "status": "passed"
+    },
+    {
+      "command": "just replay-evaluation",
+      "path": "replay-evaluation.log",
+      "status": "passed"
+    },
+    {
+      "command": "just criterion-test",
+      "path": "criterion-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just cross-test",
+      "path": "cross-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "temporary Cargo workspace package probe",
+      "path": "package-probe.log",
+      "status": "passed"
+    },
+    {
+      "command": "just package",
+      "path": "package-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "release metadata without publishing",
+      "path": "release-metadata.log",
+      "status": "passed"
+    },
+    {
+      "command": "just rtlc-compare evals/runs/0025-rtlc-parity",
+      "path": "parity.log",
+      "status": "passed"
+    }
+  ],
+  "parity": {
+    "run": "0025-rtlc-parity",
+    "nativeComparisons": 964,
+    "wasmComparisons": 241,
+    "parallelWorkCuts": "bounded/work/no violation/within cap; preserve scheduling-dependent prefixes"
+  },
+  "packaging": {
+    "rtlcIndependent": true,
+    "bothArchivesVerified": true,
+    "registryPublished": false,
+    "artifacts": [
+      {
+        "path": "mizchi-modelt-0.1.0-alpha.0.tgz",
+        "sha256": "ce45f242a30b62d3b795bbda7b4091632f2c7c2c18a505abe8268611531fbc3c"
+      },
+      {
+        "path": "modelt-core-0.1.0-alpha.0.crate",
+        "sha256": "eaf612f61f014482fd0a705d20ec40b35e42685a2d17bc67a178b1b98bc48a68"
+      },
+      {
+        "path": "rtlc-0.1.0-alpha.0.crate",
+        "sha256": "76696eddd7393a7286080dd4e96f841e55627c356fde424409648797b6d0d90d"
+      },
+      {
+        "path": "modelt-core.wasm",
+        "sha256": "65fcff96f031cce56684510d37a7653c600cf60f69afdc73fac105dfe061342c"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "red.log",
+      "sha256": "2d32023198b5573ca93fa48e2038f1b38b14e10d062027029d334d56ff4c5acc"
+    },
+    {
+      "path": "rtlc-green.log",
+      "sha256": "608028970fa30e651735d59a19519c12e14b8fb96b65ae344efff7c1748d57d6"
+    },
+    {
+      "path": "core-adapter-test.log",
+      "sha256": "9f83eb1868087ce6d93b3f8c93d15832ebf8e4ea93e27b611378a53888f21303"
+    },
+    {
+      "path": "rtlc-final.log",
+      "sha256": "e5dfaf0c69adbc734d364e843c9c090e1ca60cb9509a6e18ec5f2f56e7ebae8b"
+    },
+    {
+      "path": "example.log",
+      "sha256": "406c3737be589275be5d298c6e82213763906eaca359bc6956d86453583f502e"
+    },
+    {
+      "path": "rtlc-wasm.log",
+      "sha256": "3678c12fd3a684d7a87a2f182563342bc379f77232ab77ec8a208e54a82aa17e"
+    },
+    {
+      "path": "core-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "core-clippy.log",
+      "sha256": "e4d3ade8fe64ce10e59554addaab8fe9f910a3fa6862328f051c64c60f447d0c"
+    },
+    {
+      "path": "portable-build.log",
+      "sha256": "2113d52f96e404d1408d1b3d5ef3c6ed2f560964df14ea3bfe3b7e5ac62d4638"
+    },
+    {
+      "path": "check.log",
+      "sha256": "415510088b9efe538146d288c35725c0908fe846dc2194c773139e413f67b7f1"
+    },
+    {
+      "path": "browser.log",
+      "sha256": "bfd5bdc1949cbbe15ee7221970bb7349cb108e6c36bc87fa76ba8eebcd8cf12e"
+    },
+    {
+      "path": "portable-test.log",
+      "sha256": "689e86dd6d94f08002ded3dbf8a797da5db690b8fac36a5df77e1eff4bac59f3"
+    },
+    {
+      "path": "runtime-build.log",
+      "sha256": "df2022bd8c840e66e570fd7b9367911918afc45a14e9ceead3a501dacad179cf"
+    },
+    {
+      "path": "runtime-test.log",
+      "sha256": "654f90d0671bfb84e0cdb78a0a90fabb038dad2068e53fd9fa670c4e6a2e0e2e"
+    },
+    {
+      "path": "safety-test.log",
+      "sha256": "af8df53516c66852cbbab7232b086124673a6187ad3d93609328a96c57578952"
+    },
+    {
+      "path": "frontier-test.log",
+      "sha256": "660baa7e4b7ba19c5e88ed886a46f003042ea278b7a7753efe0fcf1a033dba28"
+    },
+    {
+      "path": "tlc-test.log",
+      "sha256": "847c1e7b640ecfe26f1225a2f3cc7db499bf3709dd5cd38307601779aa5252ce"
+    },
+    {
+      "path": "evaluate.log",
+      "sha256": "17920c94396d43af03ac969da1311e1b2ca0568e8883bccc7dcfff111b50f216"
+    },
+    {
+      "path": "replay-evaluation.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "criterion-test.log",
+      "sha256": "f86728f4572410c035905705251156abc38b0ce1165dbce34be8e6667553815e"
+    },
+    {
+      "path": "cross-test.log",
+      "sha256": "e7f32ed9a5fc576848ce9eb1480f0179fba8c0271020fe6d87088c577acd65e2"
+    },
+    {
+      "path": "package-probe.log",
+      "sha256": "663f1dd6fa6e876f636d421c6a1de5db52e803aabd3b52d12bf4b6c878533224"
+    },
+    {
+      "path": "package-test.log",
+      "sha256": "e6a3c3e951700f088296b9734c50328d26d7161f77f9d9c73721c145ea6ccbac"
+    },
+    {
+      "path": "release-metadata.log",
+      "sha256": "701700d5ba3fbfe55d874651208e7b74e1d517aaf2d5381e37694cbcdcd73982"
+    },
+    {
+      "path": "parity.log",
+      "sha256": "d2ec7633641cadab3efbd11ab51fd4873389395ae07b159fdea3ea7820920d6f"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "a5b0737db09f9eea3e24eab07795e14ebde5d69b5928774b9f7a16234cd2db95"
+    }
+  ]
+}
