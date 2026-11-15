@@ -2,7 +2,7 @@
 
 TLCの意味論に合わせた、有限TLA+ fragmentのモデル検査ライブラリ。コンパイル済みIRから状態を生成し、BFS、invariant/deadlock検査、最短反例、temporal property、WF/SFを検査する。nativeと`wasm32-unknown-unknown`で同じ実装を使う。
 
-実行コードは`idealis-core`へ依存しない。TLA+ソースの解析はidealisのTypeScript frontendが担当する。[対応範囲と制約](../../docs/rust-safety.md)を参照。TLC CLIやTLA+全体の互換性を示すcrateではない。
+実行コードは`idealis-core`へ依存しない。RustのTLA+経路ではrtlaが構文解析、rtla-compilerがIR生成を担当する。既存のTypeScript frontendも比較対象として残す。[対応範囲と制約](../../docs/rust-safety.md)を参照。TLC CLIやTLA+全体の互換性を示すcrateではない。
 
 ## Rustから使う
 
