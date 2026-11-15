@@ -1,17 +1,27 @@
 default:
   @just --list
 
-smt-build:
-  cargo build --release --locked --manifest-path evals/smt-subset-rust/Cargo.toml
-  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/smt-subset-rust/Cargo.toml
+rsmt-build:
+  pnpm rsmt:build
 
-smt-test:
-  cargo fmt --manifest-path evals/smt-subset-rust/Cargo.toml -- --check
-  cargo clippy --all-targets --locked --manifest-path evals/smt-subset-rust/Cargo.toml -- -D warnings
-  cargo test --all-targets --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+rsmt-test:
+  pnpm rsmt:test
 
-smt-criterion:
-  cargo bench --locked --manifest-path evals/smt-subset-rust/Cargo.toml --bench solver
+rsmt-example:
+  cargo run --example ttl --locked --manifest-path crates/rsmt/Cargo.toml
+
+rsmt-compare run baseline: rsmt-build
+  pnpm build
+  node dist/evals/rsmt-extraction/compare.js check {{quote(run)}} {{quote(baseline)}}
+
+rsmt-criterion:
+  cargo bench --locked --manifest-path crates/rsmt/Cargo.toml --bench solver
+
+smt-build: rsmt-build
+
+smt-test: rsmt-test
+
+smt-criterion: rsmt-criterion
 
 smt-verify phase run parent="": smt-build
   pnpm build

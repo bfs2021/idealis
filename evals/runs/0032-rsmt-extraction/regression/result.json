@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "phase": "check",
+  "parent": ".artifacts/rsmt-extraction/baseline",
+  "requests": 251,
+  "witnesses": 215,
+  "knownSeedsReusedForRegressionOnly": true,
+  "binaries": [
+    {
+      "path": "crates/rsmt/target/release/rsmt",
+      "sha256": "71f08e074fad0de745ac598a4abb9e62a32dff1af6f1088e2b655fbddc5e4ace"
+    },
+    {
+      "path": "crates/rsmt/target/wasm32-unknown-unknown/release/rsmt.wasm",
+      "sha256": "ce71786a035e20b00acbba1e15d98529af1ebebfaaa7894c4b443d18c4ecf725"
+    }
+  ]
+}

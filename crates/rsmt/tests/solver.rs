@@ -1,4 +1,4 @@
-use modelt_smt_subset::Problem;
+use rsmt::Problem;
 
 fn solve(source: &str) -> serde_json::Value {
     serde_json::to_value(Problem::parse(source).unwrap().solve(1_000_000)).unwrap()

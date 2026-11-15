@@ -1,6 +1,6 @@
 use std::io::{self, BufRead, Write};
 fn main() -> io::Result<()> {
-    let mut engine = modelt_smt_subset::Engine::default();
+    let mut engine = rsmt::Engine::default();
     let mut output = io::BufWriter::new(io::stdout().lock());
     for line in io::stdin().lock().lines() {
         let line = line?;

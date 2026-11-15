@@ -20,9 +20,12 @@ const rtlaCrate = files.find(
 const compilerCrate = files.find(
   (file) => file.startsWith("rtla-compiler-") && file.endsWith(".crate"),
 );
+const rsmtCrate = files.find(
+  (file) => file.startsWith("rsmt-") && file.endsWith(".crate"),
+);
 assert.ok(
-  tarball && crate && rtlcCrate && rtlaCrate && compilerCrate,
-  "Prepare npm and all four Rust packages first",
+  tarball && crate && rtlcCrate && rtlaCrate && compilerCrate && rsmtCrate,
+  "Prepare npm and all five Rust packages first, including standalone rsmt",
 );
 const consumer = await mkdtemp(join(tmpdir(), "modelt-consumer-"));
 await writeFile(
@@ -349,6 +352,40 @@ assert.ok(
       entry.name === "modelt-core" || entry.name === "rtlc",
   ),
 );
+const smtConsumer = await mkdtemp(join(tmpdir(), "rsmt-consumer-"));
+execFileSync("tar", ["-xzf", join(directory, rsmtCrate), "-C", smtConsumer]);
+await writeFile(
+  join(smtConsumer, "Cargo.toml"),
+  `[package]\nname="rsmt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nrsmt={path="rsmt-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+);
+await writeFile(
+  join(smtConsumer, "main.rs"),
+  await readFile(join(smtConsumer, `rsmt-${version}`, "examples", "ttl.rs")),
+);
+const rsmt = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+  cwd: smtConsumer,
+  stdio: "pipe",
+})
+  .toString()
+  .trim();
+assert.equal(rsmt, "standalone rsmt consumer checked");
+const smtMetadata = JSON.parse(
+  execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
+    cwd: smtConsumer,
+    stdio: "pipe",
+  }).toString(),
+);
+assert.ok(
+  smtMetadata.packages.some((entry: { name: string }) => entry.name === "rsmt"),
+);
+assert.ok(
+  !smtMetadata.packages.some((entry: { name: string }) =>
+    ["modelt-core", "rtlc", "rtla", "rtla-compiler", "z3", "z3-sys"].includes(
+      entry.name,
+    ),
+  ),
+  "rsmt must remain independent of modelt hosts, TLA frontends and Z3",
+);
 const result = {
   status: "complete",
   node,
@@ -356,10 +393,14 @@ const result = {
   rust,
   rtlc,
   rtla,
+  rsmt,
+  rsmtDependencies: smtMetadata.packages
+    .map((entry: { name: string }) => entry.name)
+    .sort(),
   parserWasm: "packaged rtla Wasm parsed without solvers",
   cliExitCodes: [0, 1, 2],
   consumer,
-  artifacts: [tarball, crate, rtlcCrate, rtlaCrate, compilerCrate],
+  artifacts: [tarball, crate, rtlcCrate, rtlaCrate, compilerCrate, rsmtCrate],
 };
 await writeFile(
   join(directory, "consumer-result.json"),

@@ -1,8 +1,12 @@
 [package]
-name = "modelt-smt-subset"
-version = "0.0.0"
+name = "rsmt"
+version = "0.1.0-alpha.0"
 edition = "2024"
-publish = false
+description = "Portable SMT-LIB subset solver for Boolean and integer difference constraints"
+repository = "https://github.com/mizchi/modelt"
+readme = "README.md"
+license = "MIT"
+include = ["src/**", "tests/**", "examples/**", "benches/**", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE"]
 
 [lib]
 crate-type = ["rlib", "cdylib"]

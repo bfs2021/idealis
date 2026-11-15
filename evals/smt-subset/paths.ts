@@ -1,5 +1,4 @@
-export const nativePath =
-  "evals/smt-subset-rust/target/release/modelt-smt-subset";
+export const nativePath = "crates/rsmt/target/release/rsmt";
 export const wasmPath =
-  "evals/smt-subset-rust/target/wasm32-unknown-unknown/release/modelt_smt_subset.wasm";
+  "crates/rsmt/target/wasm32-unknown-unknown/release/rsmt.wasm";
 export const maxWork = 2_000_000;

@@ -94,8 +94,10 @@
     "usable:test": "pnpm build && node --test dist/evals/usable/contract-test.js",
     "usable:eval": "pnpm build && node dist/evals/usable/evaluate.js",
     "usable:replay": "pnpm build && node dist/evals/usable/replay.js",
-    "package:prepare": "pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js",
-    "package:test": "node dist/scripts/package-test.js"
+    "package:prepare": "pnpm rsmt:build && pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js",
+    "package:test": "node dist/scripts/package-test.js",
+    "rsmt:build": "cargo build --release --locked --manifest-path crates/rsmt/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rsmt/Cargo.toml",
+    "rsmt:test": "cargo fmt --manifest-path crates/rsmt/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rsmt/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rsmt/Cargo.toml"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",

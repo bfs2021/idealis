@@ -1,0 +1,192 @@
+{
+  "status": "complete",
+  "sourceVersion": "2de0f7d843099e7b3a6399ffec9973839bf487cd9aaa5d4d5d9d40464b8a8e28",
+  "counts": {
+    "requests": 251,
+    "revalidatedSatWitnesses": 215,
+    "sharedTestsPerRunner": 77,
+    "rustTests": 5,
+    "criterionKernels": 6,
+    "nodeContractTests": 2,
+    "privateBrowserTests": 1,
+    "crateArchives": 5
+  },
+  "checks": [
+    {
+      "path": "package-red.log",
+      "command": "standalone rsmt archive required before extraction",
+      "status": "expected-red"
+    },
+    {
+      "path": "rsmt-test.log",
+      "command": "just rsmt-test: fmt, clippy, 5 tests, 6 Criterion smoke",
+      "status": "passed"
+    },
+    {
+      "path": "rsmt-build.log",
+      "command": "just rsmt-build",
+      "status": "passed"
+    },
+    {
+      "path": "example.log",
+      "command": "just rsmt-example",
+      "status": "passed"
+    },
+    {
+      "path": "compare.log",
+      "command": "251 old native/new native/new Wasm replies, 215 Z3 model checks",
+      "status": "passed"
+    },
+    {
+      "path": "contracts.log",
+      "command": "Node Z3 contracts and known TTL fault reproduction",
+      "status": "passed"
+    },
+    {
+      "path": "browser-smt.log",
+      "command": "just smt-browser",
+      "status": "passed"
+    },
+    {
+      "path": "package.log",
+      "command": "just package: five archives and isolated consumers",
+      "status": "passed"
+    },
+    {
+      "path": "package-consumer-final.log",
+      "command": "final consumer result includes rsmt dependency graph",
+      "status": "passed"
+    },
+    {
+      "path": "release-metadata.log",
+      "command": "release metadata verification without publish",
+      "status": "passed"
+    },
+    {
+      "path": "check.log",
+      "command": "just check: formatting, typecheck, both shared test runners",
+      "status": "passed"
+    },
+    {
+      "path": "browser-core.log",
+      "command": "just browser",
+      "status": "passed"
+    },
+    {
+      "path": "runtime-build.log",
+      "command": "just runtime-build",
+      "status": "passed"
+    },
+    {
+      "path": "runtime-test.log",
+      "command": "just runtime-test",
+      "status": "passed"
+    },
+    {
+      "path": "evaluate.log",
+      "command": "just evaluate",
+      "status": "passed"
+    },
+    {
+      "path": "replay.log",
+      "command": "just replay-evaluation",
+      "status": "passed"
+    }
+  ],
+  "algorithmChanged": false,
+  "newPerformanceMeasurement": false,
+  "files": [
+    {
+      "path": "baseline/records.json",
+      "sha256": "8a9c8460aca8f7ac562147c4e477686524748689a8087b94952bb7ec4d374f46"
+    },
+    {
+      "path": "baseline/result.json",
+      "sha256": "7075aad18d1780e13069a54af0091404d7317b836e40b91ee2757202ec2d162d"
+    },
+    {
+      "path": "browser-core.log",
+      "sha256": "e75df19f202b1479ce73a1cd37457b4734a8c477716090da453a90693a5aa4cc"
+    },
+    {
+      "path": "browser-smt.log",
+      "sha256": "0c568371e33c571b9ba1e55f77ac99632e355332ed285fc6979a8a7f81afe0ea"
+    },
+    {
+      "path": "check.log",
+      "sha256": "7fa0d734b98e0235a056a7fa153c97430a1ab25f1089fa7ea7072d9022672d6c"
+    },
+    {
+      "path": "compare.log",
+      "sha256": "2a05c11c5d5e5c8d3d3529478b79e3c34c58a56bc542b16071150ee5c2fbf584"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "8591ae119b8c03199e335aecd8a718971f030a9e60059a99e27853dede5e2f98"
+    },
+    {
+      "path": "contracts.log",
+      "sha256": "5e0b8f28717b1d8d937cc25cda67a1ee21ea93bf6702cbcf7a59610dc2532563"
+    },
+    {
+      "path": "evaluate.log",
+      "sha256": "fa9464ce2c1997494b606942c944045d6525c18733a748e7f112a70e0e03643e"
+    },
+    {
+      "path": "example.log",
+      "sha256": "43bfb453236b6e1450a1aec4220d723c77bae3f40f9a358c23ee9a8ef999594e"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "862ecb20229c090b32d6351699454ee6a283179775566e5b1a3c229bcfb43921"
+    },
+    {
+      "path": "package-consumer-final.log",
+      "sha256": "bcb4ba836f92085625873fc5da84e84d26c51a670f4fa50c3ed6e117b8babb0d"
+    },
+    {
+      "path": "package-red.log",
+      "sha256": "be9c49b2e62301149b69ee5a172699c5621e910e6a55fdd29c619a4b6813e0ab"
+    },
+    {
+      "path": "package.log",
+      "sha256": "70c168844ad10e23697916b19323084a0a3e53737d584abb05507e1a431d1e7b"
+    },
+    {
+      "path": "regression/records.json",
+      "sha256": "8a9c8460aca8f7ac562147c4e477686524748689a8087b94952bb7ec4d374f46"
+    },
+    {
+      "path": "regression/result.json",
+      "sha256": "dc73fbd583d1c4701d9b9d28bb7457db0b2922316e321e66fb3f683548e0b369"
+    },
+    {
+      "path": "release-metadata.log",
+      "sha256": "701700d5ba3fbfe55d874651208e7b74e1d517aaf2d5381e37694cbcdcd73982"
+    },
+    {
+      "path": "replay.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "rsmt-build.log",
+      "sha256": "c42849109caaee162bf2524b2ff44e3da0d96ea689f2c5293449181b6d8f98c5"
+    },
+    {
+      "path": "rsmt-manifest.json",
+      "sha256": "56f464b1831020889be6ef3758eed6545077eacd3341d30c90d5f03976e2e822"
+    },
+    {
+      "path": "rsmt-test.log",
+      "sha256": "461e828e0514d32f9f90b019de788152fcda9bbb787bb7aad5619260005303a7"
+    },
+    {
+      "path": "runtime-build.log",
+      "sha256": "8007f0ab9f693c94e6749d67ef6e5a1c420d7a191fbb12c5c58582dc1cdd32f9"
+    },
+    {
+      "path": "runtime-test.log",
+      "sha256": "77fa7cbd3ae76ef410507c0b045704616e26a5eed61b86233388b8c369a4d073"
+    }
+  ]
+}

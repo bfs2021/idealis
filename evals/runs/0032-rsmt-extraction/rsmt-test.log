@@ -1,0 +1,57 @@
+pnpm rsmt:test
+
+> @mizchi/modelt@0.1.0-alpha.0 rsmt:test /Users/mz/ghq/github.com/mizchi/modelt
+> cargo fmt --manifest-path crates/rsmt/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rsmt/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rsmt/Cargo.toml
+
+    Checking rsmt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rsmt)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.50s
+   Compiling rsmt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/modelt/crates/rsmt)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.00s
+     Running unittests src/lib.rs (crates/rsmt/target/debug/deps/rsmt-8c122f5c5a53d011)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (crates/rsmt/target/debug/deps/rsmt-aeee5d6d7fc828bf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/solver.rs (crates/rsmt/target/debug/deps/solver-1d7d41ea8785d06c)
+
+running 5 tests
+test empty_boolean_applications_are_syntax_errors ... ok
+test existing_integer_input_generation_is_supported ... ok
+test unbounded_difference_constraints_have_exact_witnesses ... ok
+test budget_cuts_and_unsupported_theories_are_not_unsat ... ok
+test boolean_polarity_and_let_scope_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running benches/solver.rs (crates/rsmt/target/debug/deps/solver-71a238dde3040036)
+Testing parse-solve-4
+Success
+
+Testing prepared-4
+Success
+
+Testing parse-solve-32
+Success
+
+Testing prepared-32
+Success
+
+Testing parse-solve-128
+Success
+
+Testing prepared-128
+Success
+
+     Running unittests examples/ttl.rs (crates/rsmt/target/debug/examples/ttl-a4b2d00dd2a846b7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
