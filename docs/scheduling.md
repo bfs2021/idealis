@@ -1,13 +1,13 @@
 # 独立した検査を常駐workerへ配る
 
-`@mizchi/modelt/scheduling` は、実測profileと時間・メモリ予算からworker数を選び、独立したtaskを配布する。共通層はNode API、Wasm、TLA parser、solverに依存しない。Nodeやブラウザのworkerを作る処理はadapterに置く。
+`@mizchi/idealis/scheduling` は、実測profileと時間・メモリ予算からworker数を選び、独立したtaskを配布する。共通層はNode API、Wasm、TLA parser、solverに依存しない。Nodeやブラウザのworkerを作る処理はadapterに置く。
 
 現在の対象は、複数モデル・定数設定・seed・故障ケースの並列実行。1つのTLAモデルのBFSやtemporal検査は各workerの中で逐次実行する。同じモデルを複数回検査した件数を、追加の状態coverageへ加えない。
 
 ## 予算から計画を作る
 
 ```ts
-import { planSchedule, runSchedule } from "@mizchi/modelt/scheduling";
+import { planSchedule, runSchedule } from "@mizchi/idealis/scheduling";
 
 const plan = planSchedule(
   jobs,

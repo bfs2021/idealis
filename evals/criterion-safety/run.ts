@@ -13,7 +13,7 @@ import { basename, dirname, join } from "node:path";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { digest } from "../usable/provenance.js";
 
-const plan = process.env.MODELT_CRITERION_PLAN ?? "0023-criterion-safety";
+const plan = process.env.IDEALIS_CRITERION_PLAN ?? "0023-criterion-safety";
 assert.match(plan, /^\d{4}-[a-z0-9-]+$/);
 const stage = process.argv[2];
 const directory = process.argv[3];

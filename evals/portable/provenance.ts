@@ -17,7 +17,7 @@ export const portableFingerprint = async () => {
         "src",
         "examples",
         "evals/portable",
-        "crates/modelt-core",
+        "crates/idealis-core",
         "crates/rtlc",
         "crates/rtla",
         "crates/rtla-compiler",

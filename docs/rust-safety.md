@@ -1,14 +1,14 @@
 # TLA+ の有限モデルを Rust で探索する
 
-検査器は独立した[`rtlc` crate](../crates/rtlc)に置く。`rtlc::ir`が公開IR、`SafetyProgram::check` / nativeの`check_parallel`が実行API。modelt-coreはこのbackendを利用し、既存のRust APIとJSONL/Wasm ABIを維持する。TLA+ソースを読むTypeScript frontendはmodelt側にある。
+検査器は独立した[`rtlc` crate](../crates/rtlc)に置く。`rtlc::ir`が公開IR、`SafetyProgram::check` / nativeの`check_parallel`が実行API。idealis-coreはこのbackendを利用し、既存のRust APIとJSONL/Wasm ABIを維持する。TLA+ソースを読むTypeScript frontendはidealis側にある。
 
 独立した[`rtla` crate](../crates/rtla)は、TLA+／TLC設定を型付きASTへ解析する。[`rtla-compiler`](rust-frontend.md)が名前解決とIR生成を担当し、`compileTlaSource` / `checkTlaSource`でRustだけの経路を呼べる。既存の`compileTlaSafety`はtla-ts parserを継続利用する。rtla単独のnative/Wasm解析は`just rtla-test` / `just rtla-browser`で検査できる。
 
 `compileTlaSafety` は tla-ts の parser が返す構文木から、有限モデル用 IR を作る。Rust コアが式を評価し、Init / Next の状態生成、BFS、重複排除、不変条件・deadlock の検査、反例復元を実行する。temporal property がある場合は、有限グラフと否定した性質の generalized Büchi automaton の積から、受理する SCC を探す。全状態グラフを TS で先に列挙する必要はなく、探索中に JS へ戻らない。
 
 ```ts
-import { compileTlaSafety } from "@mizchi/modelt/tla";
-import { checkSafety, createPortableWasm } from "@mizchi/modelt/portable";
+import { compileTlaSafety } from "@mizchi/idealis/tla";
+import { checkSafety, createPortableWasm } from "@mizchi/idealis/portable";
 
 const core = await createPortableWasm(wasmBytes);
 const program = compileTlaSafety({
@@ -29,7 +29,7 @@ const result = checkSafety(core, program, {
 // invariant-violation、x=0,1,2,3 の最短反例。
 ```
 
-ブラウザでは `wasmBytes` を fetch で読み込める。compiler は optional peer の tla-ts を使い、その公開エントリを browser bundle にする場合は既存の [browser test](../tests/browser.spec.ts) と同じ `node:zlib` → `fflate` の alias と未使用の `bun:jsc` の除外が必要。生成した `modelt.safety-program` v1 の JSON を保存すれば、実行側は tla-ts やこれらの alias を必要としない。Rust native の `modelt-core` binary は `{"version":1,"request":{"kind":"check-safety","program":...,"bounds":...}}` を1行の JSON として受け取る。Rust library は deserialize した `SafetyProgram` に `check(SafetyBounds)` を呼ぶ。native と Wasm は同じ探索コードを使う。
+ブラウザでは `wasmBytes` を fetch で読み込める。compiler は optional peer の tla-ts を使い、その公開エントリを browser bundle にする場合は既存の [browser test](../tests/browser.spec.ts) と同じ `node:zlib` → `fflate` の alias と未使用の `bun:jsc` の除外が必要。生成した `modelt.safety-program` v1 の JSON を保存すれば、実行側は tla-ts やこれらの alias を必要としない。Rust native の `idealis-core` binary は `{"version":1,"request":{"kind":"check-safety","program":...,"bounds":...}}` を1行の JSON として受け取る。Rust library は deserialize した `SafetyProgram` に `check(SafetyBounds)` を呼ぶ。native と Wasm は同じ探索コードを使う。
 
 ## nativeの並列探索
 

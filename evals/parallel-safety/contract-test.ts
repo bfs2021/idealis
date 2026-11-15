@@ -13,7 +13,7 @@ import { createNodePool } from "./node-pool.js";
 import type { SafetyJob } from "./protocol.js";
 
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 const core = await createPortableWasm(bytes);
 const complex = await import("../collections-temporal/cases.js");

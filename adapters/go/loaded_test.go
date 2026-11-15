@@ -1,9 +1,9 @@
-package modelt_test
+package idealis_test
 
 import (
 	"context"
 	"encoding/json"
-	modelt "github.com/mizchi/modelt/adapters/go"
+	idealis "github.com/mizchi/idealis/adapters/go"
 	"testing"
 )
 
@@ -16,7 +16,7 @@ func TestLoadedModelLifetimeAndPendingHistory(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, outcome := range []string{"unknown", "cancel", "fail"} {
-		history := modelt.ConcurrentHistory{Format: "modelt.concurrent-history", Version: 1, Model: "register", Initial: value(t, 0), Events: []modelt.HistoryEvent{
+		history := idealis.ConcurrentHistory{Format: "modelt.concurrent-history", Version: 1, Model: "register", Initial: value(t, 0), Events: []idealis.HistoryEvent{
 			{Kind: "invoke", ID: "w", Action: value(t, "write")}, {Kind: outcome, ID: "w"},
 			{Kind: "invoke", ID: "r", Action: value(t, "read")}, {Kind: "return", ID: "r", Observation: value(t, 1)},
 		}}
@@ -32,12 +32,12 @@ func TestLoadedModelLifetimeAndPendingHistory(t *testing.T) {
 			t.Fatalf("%s: %+v", outcome, result)
 		}
 	}
-	trace := modelt.Trace{Format: "modelt.portable-trace", Version: 1, Model: "register", Initial: value(t, 0)}
-	original, err := core.CheckHistories(ctx, artifact, []modelt.Trace{trace})
+	trace := idealis.Trace{Format: "modelt.portable-trace", Version: 1, Model: "register", Initial: value(t, 0)}
+	original, err := core.CheckHistories(ctx, artifact, []idealis.Trace{trace})
 	if err != nil {
 		t.Fatal(err)
 	}
-	prepared, err := handle.CheckHistories(ctx, []modelt.Trace{trace})
+	prepared, err := handle.CheckHistories(ctx, []idealis.Trace{trace})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestLoadedModelLifetimeAndPendingHistory(t *testing.T) {
 	if err := handle.Close(ctx); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := handle.CheckHistories(ctx, []modelt.Trace{trace}); err == nil {
+	if _, err := handle.CheckHistories(ctx, []idealis.Trace{trace}); err == nil {
 		t.Fatal("released handle accepted")
 	}
 }

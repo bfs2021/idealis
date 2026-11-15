@@ -1,10 +1,12 @@
-# modelt
+# idealis
 
-TypeScript のモデルと実装を比較する試作ライブラリ。モデルからのオラクル生成、差分テスト、反例を縮小する property-based testing を、Vitest・`node:test`・ブラウザで実行する。
+形式モデルを基準に、モデル検査と実装の適合性検査を行うポータブルなツールキット。モデルからのオラクル生成、差分テスト、反例を縮小する property-based testing を、Vitest・`node:test`・ブラウザで実行する。
+
+CLI は `idealis`、npm package は `@mizchi/idealis`。Rust のホストは `idealis-core`、SMT サブセットは `idealis-smt`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。
 
 TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT adapterとして利用する。Quint Connectのモデルと実装をつなぐアプローチを参考に、TSの`Driver`を実装との境界にした。Quint言語やApalacheの再実装ではない。
 
-[独立した`rsmt` crate](crates/rsmt)は、整数の差分制約とBoolean式をnative/Wasmで解く。[対応するSMT-LIBサブセット](docs/smt-subset.md)を明示し、modeltの他crateやZ3には依存しない。Z3を再利用した比較でも小さいTTL・amount・schedulerはnativeで約3.0-3.4倍速い一方、Boolean UNSATには後退と予算切れが残る。[全17入力の比較](evals/iterations/0031-smt-reuse.md)は切り出し前の測定で、modeltの公開backendへの組み込みは保留している。
+[独立した`idealis-smt` crate](crates/idealis-smt)は、整数の差分制約とBoolean式をnative/Wasmで解く。[対応するSMT-LIBサブセット](docs/smt-subset.md)を明示し、idealisの他crateやZ3には依存しない。Z3を再利用した比較でも小さいTTL・amount・schedulerはnativeで約3.0-3.4倍速い一方、Boolean UNSATには後退と予算切れが残る。[全17入力の比較](evals/iterations/0031-smt-reuse.md)は切り出し前の測定で、idealisの公開backendへの組み込みは保留している。
 
 ## 実行
 
@@ -35,14 +37,14 @@ just browser
 
 同じTLA+ source/configを各回別processで解析し、完全探索した起動込み時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、TLC v1.7.4 / Temurin 21.0.13+9で測った。
 
-| モデル      |    状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | modelt Wasm 1 worker | modelt native 1 worker | modelt native 8 workers |
-| ----------- | --------: | --------------: | -----------: | ------------: | -------------------: | ---------------------: | ----------------------: |
-| カウンタ群  | 5,308,416 |           5.190 |        6.134 |         6.476 |                3.818 |                  2.851 |                   3.646 |
-| Boolean関数 | 1,048,576 |           5.388 |       12.647 |         4.444 |               18.666 |                  9.345 |                   5.101 |
-| チャネル群  | 2,097,152 |          16.371 |       23.825 |         6.807 |               31.415 |                 20.733 |                   9.537 |
-| 幅1のring   | 1,000,000 |           0.410 |        0.900 |         1.440 |                0.244 |                  0.186 |                   0.187 |
+| モデル      |    状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | idealis Wasm 1 worker | idealis native 1 worker | idealis native 8 workers |
+| ----------- | --------: | --------------: | -----------: | ------------: | --------------------: | ----------------------: | -----------------------: |
+| カウンタ群  | 5,308,416 |           5.190 |        6.134 |         6.476 |                 3.818 |                   2.851 |                    3.646 |
+| Boolean関数 | 1,048,576 |           5.388 |       12.647 |         4.444 |                18.666 |                   9.345 |                    5.101 |
+| チャネル群  | 2,097,152 |          16.371 |       23.825 |         6.807 |                31.415 |                  20.733 |                    9.537 |
+| 幅1のring   | 1,000,000 |           0.410 |        0.900 |         1.440 |                 0.244 |                   0.186 |                    0.187 |
 
-Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。modeltは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
+Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。idealisは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
 
 [全sample・最小/最大・条件と再実行](evals/iterations/0022-readme-comparison.md)を保存した。表は同じrunから生成し、過去の値を混在させていない。常駐APIの比較は[別の0016測定](evals/iterations/0016-checker-benchmark.md#apiを再利用した全探索)を参照。上の起動込み時間と同じ指標として扱わない。
 
@@ -82,13 +84,13 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 [TLA+ の Rust backend](docs/rust-safety.md) は `compileTlaSafety` と `checkSafety`。整数・集合・関数・record・sequence の有限モデル、temporal property、WF / SF を IR に変換し、状態生成・BFS・SCC 検査・反例復元を native / Wasm 内で実行する。全 TLA+ 互換ではなく、対応外のモデルは既存の tla-ts を使う。
 
-検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、modelt-coreへの依存はない。modelt-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
+検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、idealis-coreへの依存はない。idealis-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
 
 構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で4つのcrateとparser/coreのWasmを確認できる。
 
 [Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
 
-[`@mizchi/modelt/backend`](docs/backend-contract.md)は、完全探索、有界の反例なし、帰納性を区別する共通契約。model/property/意味論/仮定/backend版を結果へ結びつけ、空の初期集合・資源切れ・unknownを検査成功へ変換しない。rtlcのnative/Wasm bridgeを提供する。Apalacheの汎用adapterとSMT encodingは今後の対象。[契約と保存応答の検査](evals/iterations/0028-backend-contract.md)に結果を記録した。
+[`@mizchi/idealis/backend`](docs/backend-contract.md)は、完全探索、有界の反例なし、帰納性を区別する共通契約。model/property/意味論/仮定/backend版を結果へ結びつけ、空の初期集合・資源切れ・unknownを検査成功へ変換しない。rtlcのnative/Wasm bridgeを提供する。Apalacheの汎用adapterとSMT encodingは今後の対象。[契約と保存応答の検査](evals/iterations/0028-backend-contract.md)に結果を記録した。
 
 ```ts
 import { checkConformance, checkModel, checkTrace } from "./src/index.js";

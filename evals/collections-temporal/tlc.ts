@@ -50,7 +50,7 @@ export const runTlc = async (
   await writeFile(join(directory, `${moduleName}.cfg`), input.config, {
     flag: "wx",
   });
-  const scratch = await mkdtemp(join(tmpdir(), "modelt-tlc-"));
+  const scratch = await mkdtemp(join(tmpdir(), "idealis-tlc-"));
   const result = spawnSync(
     resolve(java),
     [

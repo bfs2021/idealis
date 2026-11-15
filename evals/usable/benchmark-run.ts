@@ -27,7 +27,7 @@ const modelBytes = await readFile(join(input, "model.json"));
 const model = parseFiniteModel(JSON.parse(modelBytes.toString()));
 const fingerprint = await usableFingerprint();
 const wasm = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 await writeFile(
   join(target, "manifest.json"),

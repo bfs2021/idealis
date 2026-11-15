@@ -37,7 +37,7 @@ const manifest = JSON.parse(
 );
 assert.equal(manifest.sourceVersion, result.sourceVersion);
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 assert.equal(digest(bytes), manifest.wasmSha256);
 const core = await createPortableWasm(bytes);

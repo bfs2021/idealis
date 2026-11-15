@@ -7,10 +7,10 @@ import { check } from "tla-ts";
 import { cases, fault } from "./cases.js";
 import { prepare, runTool, verify } from "./runner.js";
 
-const java = process.env.MODELT_TLC_JAVA;
-const jar = process.env.MODELT_TLC_JAR;
-assert.ok(java && jar, "Set MODELT_TLC_JAVA and MODELT_TLC_JAR");
-const root = await mkdtemp(join(tmpdir(), "modelt-single-model-"));
+const java = process.env.IDEALIS_TLC_JAVA;
+const jar = process.env.IDEALIS_TLC_JAR;
+assert.ok(java && jar, "Set IDEALIS_TLC_JAVA and IDEALIS_TLC_JAR");
+const root = await mkdtemp(join(tmpdir(), "idealis-single-model-"));
 await mkdir(".artifacts/single-model-tests", { recursive: true });
 for (const input of cases("small"))
   test(`${input.name}: closed graph and delayed invariant faults agree`, async () => {

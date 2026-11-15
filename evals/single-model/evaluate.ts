@@ -113,7 +113,7 @@ try {
       wall: "Process spawn through exit and JSON decode",
       tlcInterval:
         "stdout receipts: init generation start through success; includes final FP check",
-      modeltInterval:
+      idealisInterval:
         "checkSafety API, includes IR validation, serialization and initial generation",
     },
     upstreamChannelSha256: digest(

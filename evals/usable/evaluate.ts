@@ -52,7 +52,7 @@ const write = (name: string, value: unknown) =>
   });
 const fingerprint = await usableFingerprint();
 const wasmBytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 await write("manifest.json", {
   version: 1,

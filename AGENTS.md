@@ -1,4 +1,4 @@
-# modelt
+# idealis
 
 ユーザーには日本語で答える。Node.js 24+ と pnpm を使う。
 

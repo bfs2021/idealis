@@ -148,7 +148,7 @@ try {
         "stdout receipts: init generation start through success; includes final FP check",
       tlaTsInterval:
         "check API including source/config parse and model checking",
-      modeltInterval:
+      idealisInterval:
         "checkSafety API including IR validation, serialization and initial generation; excludes frontend compile",
     },
     upstreamChannelSha256: digest(

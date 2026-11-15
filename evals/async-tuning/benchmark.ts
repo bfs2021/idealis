@@ -59,7 +59,7 @@ export const benchmark = async () => {
   const started = performance.now();
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const startupMs = performance.now() - started;
@@ -133,7 +133,7 @@ export const benchmark = async () => {
       execFileSync(
         ".artifacts/go/finite-bench",
         [
-          "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+          "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
         ],
         {
           input: JSON.stringify({ model: fixture.model, trace: fixture.trace }),

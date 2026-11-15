@@ -56,7 +56,7 @@ export const renderComparison = (result: {
   for (const input of rows) for (const route of routes) get(input.name, route);
   return {
     combined: [
-      "| モデル | 状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | modelt Wasm 1 worker | modelt native 1 worker | modelt native 8 workers |",
+      "| モデル | 状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | idealis Wasm 1 worker | idealis native 1 worker | idealis native 8 workers |",
       "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
       ...rows.map(
         (input, index) =>
@@ -64,7 +64,7 @@ export const renderComparison = (result: {
       ),
     ].join("\n"),
     sequential: [
-      "| モデル | 状態数 | tla-ts 1 worker | TLC 1 worker | modelt Wasm 1 worker | modelt native 1 worker |",
+      "| モデル | 状態数 | tla-ts 1 worker | TLC 1 worker | idealis Wasm 1 worker | idealis native 1 worker |",
       "| --- | ---: | ---: | ---: | ---: | ---: |",
       ...rows.map(
         (input, index) =>
@@ -72,7 +72,7 @@ export const renderComparison = (result: {
       ),
     ].join("\n"),
     parallel: [
-      "| モデル | TLC 1 worker | TLC 8 workers | modelt native 1 worker | modelt native 8 workers |",
+      "| モデル | TLC 1 worker | TLC 8 workers | idealis native 1 worker | idealis native 8 workers |",
       "| --- | ---: | ---: | ---: | ---: |",
       ...rows.map(
         (input, index) =>

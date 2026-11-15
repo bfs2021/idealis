@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	modelt "github.com/mizchi/modelt/adapters/go"
+	idealis "github.com/mizchi/idealis/adapters/go"
 	"io"
 	"os"
 	"reflect"
@@ -24,7 +24,7 @@ func run() error {
 	}
 	var input struct {
 		Model json.RawMessage `json:"model"`
-		Trace modelt.Trace    `json:"trace"`
+		Trace idealis.Trace   `json:"trace"`
 	}
 	bytes, err := io.ReadAll(os.Stdin)
 	if err != nil {
@@ -39,7 +39,7 @@ func run() error {
 	}
 	ctx := context.Background()
 	started := time.Now()
-	core, err := modelt.New(ctx, wasm)
+	core, err := idealis.New(ctx, wasm)
 	if err != nil {
 		return err
 	}
@@ -66,9 +66,9 @@ func run() error {
 	}
 	defer loaded.Close(ctx)
 	profiles := []profile{}
-	var reference modelt.Result
+	var reference idealis.Result
 	for _, batch := range []int{1, 16, 64} {
-		traces := make([]modelt.Trace, batch)
+		traces := make([]idealis.Trace, batch)
 		for index := range traces {
 			traces[index] = input.Trace
 		}
@@ -81,7 +81,7 @@ func run() error {
 			}
 			for _, mode := range modes {
 				started = time.Now()
-				var results []modelt.Result
+				var results []idealis.Result
 				if mode == "wire" {
 					results, err = core.CheckHistories(ctx, input.Model, traces)
 				} else {

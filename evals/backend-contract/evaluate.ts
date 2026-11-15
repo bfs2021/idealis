@@ -84,7 +84,7 @@ await writeFile(
 const native: PortableCore = {
   request: (command) => {
     const execution = spawnSync(
-      "crates/modelt-core/target/release/modelt-core",
+      "crates/idealis-core/target/release/idealis-core",
       [],
       { input: `${JSON.stringify(command)}\n`, encoding: "utf8" },
     );
@@ -107,7 +107,7 @@ const nativeBackend = createRtlcBackend(native, { version: "0.1.0-alpha.0" });
 const wasmBackend = createRtlcBackend(
   await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   ),
   { version: "0.1.0-alpha.0" },

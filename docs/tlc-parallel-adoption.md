@@ -1,6 +1,6 @@
-# TLCの内部並列化をmodeltへ取り入れる
+# TLCの内部並列化をidealisへ取り入れる
 
-TLCの状態単位の並列展開はmodeltへ取り入れられる。ただし、共有キューを追加するだけでは関数・recordの評価を並列化できない。現在のArenaが値の生成・intern・literal cache・work予算を共有可変データとして持つため、まず値の保持とworkerの評価用領域を分ける必要がある。nativeに層同期BFSの明示的な経路を実装した。既存Arenaを借用し、workerが作った値だけを統合する。初回の共有workカウンタ方式は遅くなったため、workerごとに256 tick分を予約する方式へ変更し、関数・チャネルで同APIの1→8 workerが中央値約1.8倍になった。counterの退行とばらつきがあるためdefaultは逐次のままにしている。[予算予約の評価](../evals/iterations/0021-worker-budget.md)を参照。[初回評価と制約](../evals/iterations/0020-frontier-safety.md)、[APIの使い方](rust-safety.md#nativeの並列探索)を参照。以下はTLCのソース調査と採用時の検討で、ブラウザ共有memoryやlivenessの内部並列化は未実装。
+TLCの状態単位の並列展開はidealisへ取り入れられる。ただし、共有キューを追加するだけでは関数・recordの評価を並列化できない。現在のArenaが値の生成・intern・literal cache・work予算を共有可変データとして持つため、まず値の保持とworkerの評価用領域を分ける必要がある。nativeに層同期BFSの明示的な経路を実装した。既存Arenaを借用し、workerが作った値だけを統合する。初回の共有workカウンタ方式は遅くなったため、workerごとに256 tick分を予約する方式へ変更し、関数・チャネルで同APIの1→8 workerが中央値約1.8倍になった。counterの退行とばらつきがあるためdefaultは逐次のままにしている。[予算予約の評価](../evals/iterations/0021-worker-budget.md)を参照。[初回評価と制約](../evals/iterations/0020-frontier-safety.md)、[APIの使い方](rust-safety.md#nativeの並列探索)を参照。以下はTLCのソース調査と採用時の検討で、ブラウザ共有memoryやlivenessの内部並列化は未実装。
 
 [単一モデルの実測](../evals/iterations/0019-single-model-scaling.md)では、TLCの1→8 workerで関数cubeが12.81→4.72 s、チャネル群が24.08→6.27 sになった。nativeは8.89 sと19.86 sなので、TLC 8 workerへ並ぶにはそれぞれ約1.9倍、約3.2倍の改善が必要。これは必要改善率であり、移植後の速度の予測ではない。
 
@@ -8,7 +8,7 @@ TLCの状態単位の並列展開はmodeltへ取り入れられる。ただし�
 
 調査対象は測定したjarと同じtag、commit `5a47802b5c391f59ecdd44117981f4ff8c0656ba`。masterの実装と混ぜない。
 
-| 機構                     | 確認した動作                                                                                                               | modeltへ取り入れる点                                          |
+| 機構                     | 確認した動作                                                                                                               | idealisへ取り入れる点                                         |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | 共有状態キュー           | 各WorkerがsDequeueで1状態を取り、Nextを展開する。Worker.runはwork stealingではない                                         | 独立した現在状態を並列展開する                                |
 | 競合に対応した既訪問判定 | FPSet.putが既出か判定して登録する。HeapBasedDiskFPSetはstriped read/write lockで検索と挿入を同期し、書き込み時に再確認する | 全体を単一Mutexで囲まず、分割した索引で重複排除する           |
@@ -20,13 +20,13 @@ TLCの状態単位の並列展開はmodeltへ取り入れられる。ただし�
 
 新状態の処理順は、状態の妥当性確認、既訪問判定と新状態の親情報記録、未訪問状態のinvariant検査、action property検査、キューへの公開となる。既訪問状態への遷移にもaction propertyを適用する。deadlockは新状態数ではなく、Nextが生成したsuccessorの有無で判断する。循環や自己遷移をdeadlockとして扱わない。
 
-## 現在のmodeltとの違い
+## 現在のidealisとの違い
 
 `crates/rtlc/src/safety.rs`のSearchは、StateStore・nodes・Arena・result・graphを1つの所有者が更新する。状態はflatなScalar配列で保持し、hashが一致しても状態全体を比較する。`safety_values.rs`のArenaは複合値にローカルなScalar::Refを割り当てる。
 
 複数Arenaの同じRef番号が同じ値を表すとは限らない。workerの出力をRef番号のまま混ぜると、別の集合や関数を同じ状態として扱う危険がある。状態をworker間で渡す際には、共有したcanonical IDを使うか、worker固有の参照を明示してcommit時に変換する必要がある。
 
-TLCのfingerprintによる分割と同期は参考になる。一方、modeltでは現在の状態全体による等価性判定を保つ。hashだけで既訪問と判断する変更を同じ最適化として混ぜない。
+TLCのfingerprintによる分割と同期は参考になる。一方、idealisでは現在の状態全体による等価性判定を保つ。hashだけで既訪問と判断する変更を同じ最適化として混ぜない。
 
 ## nativeで試す方式
 

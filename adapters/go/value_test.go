@@ -1,4 +1,4 @@
-package modelt_test
+package idealis_test
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	modelt "github.com/mizchi/modelt/adapters/go"
+	idealis "github.com/mizchi/idealis/adapters/go"
 )
 
 func TestSharedPortableValues(t *testing.T) {
@@ -19,12 +19,12 @@ func TestSharedPortableValues(t *testing.T) {
 	var fixture struct {
 		Valid []struct {
 			Name      string
-			Input     modelt.Value
+			Input     idealis.Value
 			Canonical string
 		}
 		Invalid []struct {
 			Name  string
-			Input modelt.Value
+			Input idealis.Value
 			JSON  string
 		}
 	}
@@ -46,7 +46,7 @@ func TestSharedPortableValues(t *testing.T) {
 		t.Run(entry.Name, func(t *testing.T) {
 			input := entry.Input
 			if entry.JSON != "" {
-				input = modelt.Value(entry.JSON)
+				input = idealis.Value(entry.JSON)
 			}
 			if _, err := core.Canonicalize(context.Background(), input); err == nil {
 				t.Fatal("invalid value accepted")
@@ -76,7 +76,7 @@ func TestGoValueEncoding(t *testing.T) {
 		{map[string]any{}, `{"type":"record","value":[]}`},
 		{map[string]any{"😀": false, "\ue000": 2}, `{"type":"record","value":[["",{"type":"int","value":"2"}],["😀",{"type":"bool","value":false}]]}`},
 	} {
-		actual, err := modelt.ValueOf(entry.Input)
+		actual, err := idealis.ValueOf(entry.Input)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -87,7 +87,7 @@ func TestGoValueEncoding(t *testing.T) {
 	cycle := map[string]any{}
 	cycle["self"] = cycle
 	for _, input := range []any{1.5, string([]byte{255}), map[string]any{string([]byte{255}): 1}, map[int]int{1: 2}, struct{ Field int }{1}, (*big.Int)(nil), cycle} {
-		if _, err := modelt.ValueOf(input); err == nil {
+		if _, err := idealis.ValueOf(input); err == nil {
 			t.Fatalf("unsupported input accepted: %T", input)
 		}
 	}

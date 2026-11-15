@@ -1,4 +1,4 @@
-package modelt
+package idealis
 
 import (
 	"context"

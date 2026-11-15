@@ -1,0 +1,32 @@
+[package]
+name = "idealis-core"
+version = "0.1.0-alpha.0"
+edition = "2024"
+description = "Portable finite models, conformance checking and trace replay"
+repository = "https://github.com/mizchi/idealis"
+readme = "README.md"
+include = ["src/**", "examples/counter.rs", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE"]
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+bench = false
+
+[[bin]]
+name = "idealis-core"
+path = "src/main.rs"
+bench = false
+
+[dependencies]
+rtla = { version = "0.1.0-alpha.0", path = "../rtla" }
+rtla-compiler = { version = "0.1.0-alpha.0", path = "../rtla-compiler" }
+rtlc = { version = "0.1.0-alpha.0", path = "../rtlc" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

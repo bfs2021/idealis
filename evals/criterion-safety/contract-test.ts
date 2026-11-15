@@ -7,7 +7,7 @@ import { cases } from "../single-model/cases.js";
 import { prepare, runTool, verify } from "../single-model/runner.js";
 
 test("comparison uses the requested binary and never falls back", async () => {
-  const root = await mkdtemp(join(tmpdir(), "modelt-binary-"));
+  const root = await mkdtemp(join(tmpdir(), "idealis-binary-"));
   const input = cases("small")[0];
   assert.ok(input);
   const directory = join(root, "missing");

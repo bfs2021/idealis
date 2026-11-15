@@ -1,5 +1,5 @@
-// Package modelt connects Go models and implementations to modelt's portable Wasm core.
-package modelt
+// Package idealis connects Go models and implementations to idealis's portable Wasm core.
+package idealis
 
 import (
 	"context"
@@ -98,4 +98,4 @@ type CoreError struct {
 func (err *CoreError) Error() string { return err.Code + ": " + err.Message }
 
 // ErrBusy means this instance already has an active operation. Use one Core per worker.
-var ErrBusy = errors.New("modelt: core is busy")
+var ErrBusy = errors.New("idealis: core is busy")

@@ -21,22 +21,22 @@ export const binaries = async () => {
     {
       stage: "before",
       backend: "native",
-      path: ".artifacts/criterion-safety/before/modelt-core",
+      path: ".artifacts/criterion-safety/before/idealis-core",
     },
     {
       stage: "before",
       backend: "wasm",
-      path: ".artifacts/criterion-safety/before/modelt_core.wasm",
+      path: ".artifacts/criterion-safety/before/idealis_core.wasm",
     },
     {
       stage: "after",
       backend: "native",
-      path: "crates/modelt-core/target/release/modelt-core",
+      path: "crates/idealis-core/target/release/idealis-core",
     },
     {
       stage: "after",
       backend: "wasm",
-      path: "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      path: "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     },
   ];
   const result = await Promise.all(

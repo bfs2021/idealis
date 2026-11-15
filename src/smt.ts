@@ -22,7 +22,7 @@ export class SmtValueError extends Error {
 }
 
 export const createSmtOracle = (runtime: SmtRuntime): SmtOracle => {
-  const context = new runtime.Context("modelt");
+  const context = new runtime.Context("idealis");
   let pending: Promise<void> = Promise.resolve();
   return {
     solve: (assertions, integers) => {

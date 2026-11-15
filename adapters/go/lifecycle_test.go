@@ -1,4 +1,4 @@
-package modelt_test
+package idealis_test
 
 import (
 	"bytes"
@@ -7,56 +7,56 @@ import (
 	"os"
 	"testing"
 
-	modelt "github.com/mizchi/modelt/adapters/go"
+	idealis "github.com/mizchi/idealis/adapters/go"
 )
 
 func TestHistoryCandidatesAndInvalidActions(t *testing.T) {
 	core := loadCore(t)
-	model := modelt.Model{
+	model := idealis.Model{
 		Name: "branches",
-		Initial: func(context.Context) ([]modelt.Transition, error) {
-			return []modelt.Transition{
+		Initial: func(context.Context) ([]idealis.Transition, error) {
+			return []idealis.Transition{
 				{Key: "left", State: value(t, "left"), Observation: value(t, 0)},
 				{Key: "right", State: value(t, "right"), Observation: value(t, 0)},
 			}, nil
 		},
-		Step: func(_ context.Context, states []modelt.State, action modelt.Value) ([]modelt.Transition, error) {
+		Step: func(_ context.Context, states []idealis.State, action idealis.Value) ([]idealis.Transition, error) {
 			if string(action) != string(value(t, "next")) {
 				return nil, nil
 			}
-			transitions := make([]modelt.Transition, 0, len(states))
+			transitions := make([]idealis.Transition, 0, len(states))
 			for _, state := range states {
 				observation := 1
 				if state.Key == "right" {
 					observation = 2
 				}
-				transitions = append(transitions, modelt.Transition{Key: state.Key, State: state.State, Observation: value(t, observation)})
+				transitions = append(transitions, idealis.Transition{Key: state.Key, State: state.State, Observation: value(t, observation)})
 			}
 			return transitions, nil
 		},
 	}
 	current := 0
-	driver := modelt.Driver{
-		Reset: func(context.Context) (modelt.Value, error) { current = 0; return value(t, current), nil },
-		Step:  func(context.Context, modelt.Value) (modelt.Value, error) { current++; return value(t, current), nil },
+	driver := idealis.Driver{
+		Reset: func(context.Context) (idealis.Value, error) { current = 0; return value(t, current), nil },
+		Step:  func(context.Context, idealis.Value) (idealis.Value, error) { current++; return value(t, current), nil },
 	}
-	result, err := core.Check(context.Background(), model, driver, []modelt.Value{value(t, "next"), value(t, "next")})
+	result, err := core.Check(context.Background(), model, driver, []idealis.Value{value(t, "next"), value(t, "next")})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if result.Status != "mismatch" || result.CheckedSteps != 2 {
 		t.Fatalf("inconsistent history accepted: %+v", result)
 	}
-	result, err = core.Check(context.Background(), model, driver, []modelt.Value{value(t, "unknown")})
+	result, err = core.Check(context.Background(), model, driver, []idealis.Value{value(t, "unknown")})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if result.Status != "invalid" || current != 0 {
 		t.Fatalf("invalid action executed: %+v, current %d", result, current)
 	}
-	model.Initial = func(context.Context) ([]modelt.Transition, error) { return nil, nil }
+	model.Initial = func(context.Context) ([]idealis.Transition, error) { return nil, nil }
 	resets := 0
-	driver.Reset = func(context.Context) (modelt.Value, error) {
+	driver.Reset = func(context.Context) (idealis.Value, error) {
 		resets++
 		return value(t, 7), nil
 	}
@@ -79,19 +79,21 @@ func TestCallbackFailuresCancelAndDispose(t *testing.T) {
 			driver := counterDriver(t, true, &disposed)
 			switch location {
 			case "initial":
-				model.Initial = func(context.Context) ([]modelt.Transition, error) { return nil, failure }
+				model.Initial = func(context.Context) ([]idealis.Transition, error) { return nil, failure }
 			case "model-step":
-				model.Step = func(context.Context, []modelt.State, modelt.Value) ([]modelt.Transition, error) { return nil, failure }
+				model.Step = func(context.Context, []idealis.State, idealis.Value) ([]idealis.Transition, error) {
+					return nil, failure
+				}
 			case "reset":
-				driver.Reset = func(context.Context) (modelt.Value, error) { return nil, failure }
+				driver.Reset = func(context.Context) (idealis.Value, error) { return nil, failure }
 			case "driver-step":
-				driver.Step = func(context.Context, modelt.Value) (modelt.Value, error) { return nil, failure }
+				driver.Step = func(context.Context, idealis.Value) (idealis.Value, error) { return nil, failure }
 			case "invalid-value":
-				driver.Step = func(context.Context, modelt.Value) (modelt.Value, error) {
-					return modelt.Value(`{"type":"int","value":"01"}`), nil
+				driver.Step = func(context.Context, idealis.Value) (idealis.Value, error) {
+					return idealis.Value(`{"type":"int","value":"01"}`), nil
 				}
 			case "cancel":
-				driver.Step = func(context.Context, modelt.Value) (modelt.Value, error) { cancel(); return value(t, 1), nil }
+				driver.Step = func(context.Context, idealis.Value) (idealis.Value, error) { cancel(); return value(t, 1), nil }
 			}
 			driver.Dispose = func(cleanup context.Context) error {
 				if err := cleanup.Err(); err != nil {
@@ -100,7 +102,7 @@ func TestCallbackFailuresCancelAndDispose(t *testing.T) {
 				disposed++
 				return disposeFailure
 			}
-			_, err := core.Check(ctx, model, driver, []modelt.Value{value(t, "add")})
+			_, err := core.Check(ctx, model, driver, []idealis.Value{value(t, "add")})
 			if err == nil || !errors.Is(err, disposeFailure) || disposed != 1 {
 				t.Fatalf("lost error/cleanup: %v, %d", err, disposed)
 			}
@@ -122,14 +124,14 @@ func TestPanicStillDisposesAndCancels(t *testing.T) {
 	core := loadCore(t)
 	disposed := 0
 	driver := counterDriver(t, true, &disposed)
-	driver.Step = func(context.Context, modelt.Value) (modelt.Value, error) { panic("SUT panic") }
+	driver.Step = func(context.Context, idealis.Value) (idealis.Value, error) { panic("SUT panic") }
 	func() {
 		defer func() {
 			if recovered := recover(); recovered != "SUT panic" {
 				t.Errorf("unexpected panic %v", recovered)
 			}
 		}()
-		_, _ = core.Check(context.Background(), counterModel(t), driver, []modelt.Value{value(t, "add")})
+		_, _ = core.Check(context.Background(), counterModel(t), driver, []idealis.Value{value(t, "add")})
 	}()
 	if disposed != 1 {
 		t.Fatal("panic skipped cleanup")
@@ -145,8 +147,8 @@ func TestConcurrentAndReentrantUseIsRejected(t *testing.T) {
 	disposed := 0
 	driver := counterDriver(t, true, &disposed)
 	entered, release := make(chan struct{}), make(chan struct{})
-	driver.Reset = func(ctx context.Context) (modelt.Value, error) {
-		if _, err := core.Canonicalize(ctx, value(t, 0)); !errors.Is(err, modelt.ErrBusy) {
+	driver.Reset = func(ctx context.Context) (idealis.Value, error) {
+		if _, err := core.Canonicalize(ctx, value(t, 0)); !errors.Is(err, idealis.ErrBusy) {
 			t.Errorf("reentry: %v", err)
 		}
 		close(entered)
@@ -156,10 +158,10 @@ func TestConcurrentAndReentrantUseIsRejected(t *testing.T) {
 	done := make(chan error, 1)
 	go func() { _, err := core.Check(context.Background(), counterModel(t), driver, nil); done <- err }()
 	<-entered
-	if err := core.Close(context.Background()); !errors.Is(err, modelt.ErrBusy) {
+	if err := core.Close(context.Background()); !errors.Is(err, idealis.ErrBusy) {
 		t.Errorf("close during session: %v", err)
 	}
-	if _, err := core.Check(context.Background(), counterModel(t), modelt.Driver{}, nil); !errors.Is(err, modelt.ErrBusy) {
+	if _, err := core.Check(context.Background(), counterModel(t), idealis.Driver{}, nil); !errors.Is(err, idealis.ErrBusy) {
 		t.Errorf("concurrent start: %v", err)
 	}
 	close(release)
@@ -173,7 +175,7 @@ func TestConcurrentAndReentrantUseIsRejected(t *testing.T) {
 
 func TestInvalidModulesAndClosedRuntime(t *testing.T) {
 	for _, wasm := range [][]byte{nil, {0, 97, 115, 109, 1, 0, 0, 0}} {
-		if core, err := modelt.New(context.Background(), wasm); err == nil {
+		if core, err := idealis.New(context.Background(), wasm); err == nil {
 			_ = core.Close(context.Background())
 			t.Fatal("non-core module accepted")
 		}
@@ -190,11 +192,11 @@ func TestInvalidModulesAndClosedRuntime(t *testing.T) {
 func TestMalformedArtifactsAndEmptyReplay(t *testing.T) {
 	core := loadCore(t)
 	ctx := context.Background()
-	if _, err := core.CheckHistories(ctx, modelt.Value(`{"format":"modelt.finite-model","version":2}`), nil); err == nil {
+	if _, err := core.CheckHistories(ctx, idealis.Value(`{"format":"modelt.finite-model","version":2}`), nil); err == nil {
 		t.Fatal("malformed model accepted")
 	}
 	disposed := 0
-	trace := modelt.Trace{Format: "modelt.portable-trace", Version: 1, Model: "empty", Initial: value(t, 0)}
+	trace := idealis.Trace{Format: "modelt.portable-trace", Version: 1, Model: "empty", Initial: value(t, 0)}
 	result, err := core.Replay(ctx, trace, counterDriver(t, true, &disposed))
 	if err != nil || result.Status != "matched" || disposed != 1 {
 		t.Fatalf("empty replay: %+v %v", result, err)
@@ -221,13 +223,13 @@ func TestInvalidUnicodeDoesNotCollapseModelKeys(t *testing.T) {
 		case "name":
 			model.Name = string([]byte{255})
 		case "key":
-			model.Initial = func(context.Context) ([]modelt.Transition, error) {
-				return []modelt.Transition{{Key: string([]byte{255}), State: value(t, 0), Observation: value(t, 0)}}, nil
+			model.Initial = func(context.Context) ([]idealis.Transition, error) {
+				return []idealis.Transition{{Key: string([]byte{255}), State: value(t, 0), Observation: value(t, 0)}}, nil
 			}
 		}
 		var err error
 		if location == "trace" {
-			_, err = core.Replay(context.Background(), modelt.Trace{Format: "modelt.portable-trace", Version: 1, Model: string([]byte{255}), Initial: value(t, 0)}, counterDriver(t, true, &disposed))
+			_, err = core.Replay(context.Background(), idealis.Trace{Format: "modelt.portable-trace", Version: 1, Model: string([]byte{255}), Initial: value(t, 0)}, counterDriver(t, true, &disposed))
 		} else {
 			_, err = core.Check(context.Background(), model, counterDriver(t, true, &disposed), nil)
 		}
@@ -238,7 +240,7 @@ func TestInvalidUnicodeDoesNotCollapseModelKeys(t *testing.T) {
 }
 
 func TestRequiresExportedABIMemory(t *testing.T) {
-	wasm, err := os.ReadFile("../../crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm")
+	wasm, err := os.ReadFile("../../crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -247,7 +249,7 @@ func TestRequiresExportedABIMemory(t *testing.T) {
 		t.Fatal("expected exactly one ABI memory export")
 	}
 	wasm = bytes.Replace(wasm, export, []byte{6, 'h', 'i', 'd', 'd', 'e', 'n', 2, 0}, 1)
-	if core, err := modelt.New(context.Background(), wasm); err == nil {
+	if core, err := idealis.New(context.Background(), wasm); err == nil {
 		_ = core.Close(context.Background())
 		t.Fatal("module without the ABI memory export was accepted")
 	}

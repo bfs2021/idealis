@@ -27,7 +27,7 @@ export const createNativeComparison = async (bytes: Uint8Array) => {
     verify: () => {
       const start = performance.now();
       const native = execFileSync(
-        "crates/modelt-core/target/release/modelt-core",
+        "crates/idealis-core/target/release/idealis-core",
         {
           input: commands.map((command) => JSON.stringify(command)).join("\n"),
           maxBuffer: 64 * 1024 * 1024,

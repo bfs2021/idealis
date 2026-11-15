@@ -1,4 +1,4 @@
-package modelt_test
+package idealis_test
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	modelt "github.com/mizchi/modelt/adapters/go"
+	idealis "github.com/mizchi/idealis/adapters/go"
 )
 
 func assertJSONEqual(t *testing.T, actual, expected any) {
@@ -44,23 +44,23 @@ func TestTSFiniteModelsAndHostTapes(t *testing.T) {
 			Name  string
 			Model json.RawMessage
 			Cases []struct {
-				History  modelt.Trace
-				Expected modelt.Result
+				History  idealis.Trace
+				Expected idealis.Result
 			}
 		}
 		Host struct {
 			Tape     json.RawMessage
-			Snapshot modelt.Value
+			Snapshot idealis.Value
 		}
 		Candidates []struct {
 			Length uint32
-			Ranges []modelt.DeletionRange
+			Ranges []idealis.DeletionRange
 		}
 	}
 	if err := json.Unmarshal(bytes, &fixture); err != nil {
 		t.Fatal(err)
 	}
-	wasm, err := os.ReadFile("../../crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm")
+	wasm, err := os.ReadFile("../../crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +72,7 @@ func TestTSFiniteModelsAndHostTapes(t *testing.T) {
 	comparisons := 0
 	for _, batch := range fixture.Batches {
 		t.Run(batch.Name, func(t *testing.T) {
-			traces := make([]modelt.Trace, len(batch.Cases))
+			traces := make([]idealis.Trace, len(batch.Cases))
 			for index, entry := range batch.Cases {
 				traces[index] = entry.History
 			}
@@ -87,9 +87,9 @@ func TestTSFiniteModelsAndHostTapes(t *testing.T) {
 				assertJSONEqual(t, results[index], entry.Expected)
 				comparisons++
 				position, disposed := 0, 0
-				driver := modelt.Driver{
-					Reset: func(context.Context) (modelt.Value, error) { position = 0; return entry.History.Initial, nil },
-					Step: func(_ context.Context, action modelt.Value) (modelt.Value, error) {
+				driver := idealis.Driver{
+					Reset: func(context.Context) (idealis.Value, error) { position = 0; return entry.History.Initial, nil },
+					Step: func(_ context.Context, action idealis.Value) (idealis.Value, error) {
 						if position >= len(entry.History.Steps) {
 							t.Fatal("unexpected SUT step")
 						}
@@ -100,7 +100,7 @@ func TestTSFiniteModelsAndHostTapes(t *testing.T) {
 					},
 					Dispose: func(context.Context) error { disposed++; return nil },
 				}
-				actions := make([]modelt.Value, len(entry.History.Steps))
+				actions := make([]idealis.Value, len(entry.History.Steps))
 				for index, step := range entry.History.Steps {
 					actions[index] = step.Action
 				}

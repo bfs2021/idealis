@@ -9,14 +9,14 @@ import { startNative } from "../usable/native.js";
 import { bounds, type Input, type WarmRoute } from "./protocol.js";
 
 export const wasmPath =
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm";
-export const nativePath = "crates/modelt-core/target/release/modelt-core";
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm";
+export const nativePath = "crates/idealis-core/target/release/idealis-core";
 
 export const loadEngines = async (routes: readonly WarmRoute[]) => {
-  const core = routes.includes("modelt-wasm")
+  const core = routes.includes("idealis-wasm")
     ? await createPortableWasm(await readFile(wasmPath))
     : undefined;
-  const native = routes.includes("modelt-native") ? startNative() : undefined;
+  const native = routes.includes("idealis-native") ? startNative() : undefined;
   return {
     run: async (route: WarmRoute, input: Input) => {
       if (route === "tla-ts") {
@@ -35,7 +35,7 @@ export const loadEngines = async (routes: readonly WarmRoute[]) => {
         };
       }
       const program = compileTlaSafety(input);
-      if (route === "modelt-wasm") {
+      if (route === "idealis-wasm") {
         assert.ok(core);
         return checkSafety(core, program, bounds);
       }

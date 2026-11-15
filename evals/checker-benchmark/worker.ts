@@ -6,7 +6,7 @@ import type { Input } from "./protocol.js";
 const route = process.argv[2];
 const path = process.argv[3];
 assert.ok(
-  route === "tla-ts" || route === "modelt-wasm" || route === "modelt-native",
+  route === "tla-ts" || route === "idealis-wasm" || route === "idealis-native",
 );
 assert.ok(path);
 const input: Input = JSON.parse(await readFile(path, "utf8"));

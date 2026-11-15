@@ -21,19 +21,19 @@
 
 NSDI 2026 の [Fest](https://www.usenix.org/conference/nsdi26/presentation/li) は、P の分散モデルを対象に、記録した選択を変更してスケジュールを生成する。イベント間の happens-before を抽象化した timeline coverage と、指定シナリオへの近さを探索に使う。[論文](https://www.usenix.org/system/files/conference/nsdi26/nsdi26spring_li_prepub.pdf) と [artifact](https://github.com/aoli-al/Fest-artifact) が公開されている。
 
-modelt への提案は、単純な seed の反復から、選択列と因果イベントを保存する corpus へ進めること。コードの分岐が増えなくても、異なるメッセージ順序を探索する価値がある。ただし現時点ではこの探索器を実装していない。論文の性能値を modelt の性能として扱わない。
+idealis への提案は、単純な seed の反復から、選択列と因果イベントを保存する corpus へ進めること。コードの分岐が増えなくても、異なるメッセージ順序を探索する価値がある。ただし現時点ではこの探索器を実装していない。論文の性能値を idealis の性能として扱わない。
 
 ## 実装とモデルの接続
 
-[Quint Connect の紹介](https://quint.sh/posts/quint_connect) と [公式 MBT ドキュメント](https://quint.sh/docs/model-based-testing) は、モデルで得た期待動作を実装へ渡す流れを示す。modelt は同じ接続面を TS の Driver として持つ。Quint CLI / Rust を必須依存にせず、TLA+ と TS モデルの witness を使う。ITF 連携は未実装で、将来は [Apalache の ITF](https://apalache-mc.org/docs/adr/015adr-trace.html) に対応する。整数・集合・写像・loop の表現を保った専用アダプターにする。
+[Quint Connect の紹介](https://quint.sh/posts/quint_connect) と [公式 MBT ドキュメント](https://quint.sh/docs/model-based-testing) は、モデルで得た期待動作を実装へ渡す流れを示す。idealis は同じ接続面を TS の Driver として持つ。Quint CLI / Rust を必須依存にせず、TLA+ と TS モデルの witness を使う。ITF 連携は未実装で、将来は [Apalache の ITF](https://apalache-mc.org/docs/adr/015adr-trace.html) に対応する。整数・集合・写像・loop の表現を保った専用アダプターにする。
 
-2025年の preprint [Model-based Testing of Practical Distributed Systems in Actor Model](https://arxiv.org/abs/2512.08698) も、検証済みモデルと実装の間の隔たりを扱う。有限状態機械から状態・遷移を覆うテストを生成する方向を参考にできる。ただし modelt の visited による代表 witness だけでは、実装の全隠れ状態を区別するテスト集合にならない。リセットの信頼性、状態識別列、実装側の有限性などの追加前提を別途定義する必要がある。
+2025年の preprint [Model-based Testing of Practical Distributed Systems in Actor Model](https://arxiv.org/abs/2512.08698) も、検証済みモデルと実装の間の隔たりを扱う。有限状態機械から状態・遷移を覆うテストを生成する方向を参考にできる。ただし idealis の visited による代表 witness だけでは、実装の全隠れ状態を区別するテスト集合にならない。リセットの信頼性、状態識別列、実装側の有限性などの追加前提を別途定義する必要がある。
 
 ## 再現可能な並行実行
 
-[fast-check の scheduler](https://fast-check.dev/docs/advanced/race-conditions/) は、ラップした Promise の解決順序を制御し、非同期実装の順序依存を調べるために使える。[stateful commands](https://fast-check.dev/docs/advanced/model-based-testing/) は前提条件付き操作を生成・縮小する。modelt の現在の Driver は逐次 await するので、これだけで重なり合う呼び出しを検査したことにはならない。次は begin / complete / deliver のように実行境界を操作へ分ける。
+[fast-check の scheduler](https://fast-check.dev/docs/advanced/race-conditions/) は、ラップした Promise の解決順序を制御し、非同期実装の順序依存を調べるために使える。[stateful commands](https://fast-check.dev/docs/advanced/model-based-testing/) は前提条件付き操作を生成・縮小する。idealis の現在の Driver は逐次 await するので、これだけで重なり合う呼び出しを検査したことにはならない。次は begin / complete / deliver のように実行境界を操作へ分ける。
 
-[Turmoil](https://github.com/tokio-rs/turmoil) は制御したホスト・ネットワーク・ファイルシステムを実行する Rust の枠組み。[Antithesis の DST の説明](https://antithesis.com/docs/resources/deterministic_simulation_testing/) も時計、乱数、スケジューリング等の制御を重要な条件とする。modelt ではこの設計をホスト契約へ取り込む。seed があるだけでは、実 OS の未制御な I/O の再現性を保証できない。
+[Turmoil](https://github.com/tokio-rs/turmoil) は制御したホスト・ネットワーク・ファイルシステムを実行する Rust の枠組み。[Antithesis の DST の説明](https://antithesis.com/docs/resources/deterministic_simulation_testing/) も時計、乱数、スケジューリング等の制御を重要な条件とする。idealis ではこの設計をホスト契約へ取り込む。seed があるだけでは、実 OS の未制御な I/O の再現性を保証できない。
 
 [Coyote](https://microsoft.github.io/coyote/overview/how/) は .NET の Task 等を instrument して実行順を制御する。TS でも変換によるフックは考えられるが、Promise 全体の意味論を透過的に置き換える段階には進めず、明示的な注入境界を先に定義する。
 

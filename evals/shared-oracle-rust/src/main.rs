@@ -1,7 +1,7 @@
-use modelt_core::{
+use idealis_core::{
     ConformanceResult, CoreError, Effect, FiniteModel, Response, Session, Status, Trace, Value,
 };
-use modelt_shared_oracle::{Action, Counter, Fault, Observation};
+use idealis_shared_oracle::{Action, Counter, Fault, Observation};
 use serde::{Deserialize, Serialize};
 use std::io::{self, Read};
 

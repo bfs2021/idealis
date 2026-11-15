@@ -1,13 +1,13 @@
 # 有限モデル・縮小・ホスト
 
-公開前は `just package` で作った `.tgz` を consumer に `pnpm add /path/to/mizchi-modelt-0.1.0-alpha.0.tgz` で導入する。Node 24+ を使う。コア利用だけならソルバーは不要。PBT は `fast-check`、TLA+ は `tla-ts`、SMT は `z3-solver` を別途導入する。ブラウザの TLA+ 用 alias には `fflate` も必要。
+公開前は `just package` で作った `.tgz` を consumer に `pnpm add /path/to/mizchi-idealis-0.1.0-alpha.0.tgz` で導入する。Node 24+ を使う。コア利用だけならソルバーは不要。PBT は `fast-check`、TLA+ は `tla-ts`、SMT は `z3-solver` を別途導入する。ブラウザの TLA+ 用 alias には `fflate` も必要。
 
 ## モデルを artifact にする
 
 ```ts
 import { writeFile } from "node:fs/promises";
-import type { Model } from "@mizchi/modelt";
-import { compileFiniteModel } from "@mizchi/modelt/finite";
+import type { Model } from "@mizchi/idealis";
+import { compileFiniteModel } from "@mizchi/idealis/finite";
 
 const model: Model<number, "tick", number> = {
   name: "one-shot",
@@ -26,7 +26,7 @@ await writeFile("model.json", JSON.stringify(compiled.model));
 
 `compileFiniteModel().status === "complete"` は、列挙した actions に対してグラフが閉じて artifact を作れた意味。不変条件がすべて成立するという意味ではない。深さ・状態数で打ち切ると `bounded`、初期状態なしは `empty` となり、artifact を返さない。actions に列挙しない入力は、この artifact では検査できない。
 
-不変条件の式を翻訳する機能はない。TS で各到達状態を評価した違反ラベルを保存する。artifact の不変条件検査は `checkModel(createFiniteModel(artifact), bounds)` または `modelt model model.json` で行う。これは与えた有限表とラベルに対する検査。
+不変条件の式を翻訳する機能はない。TS で各到達状態を評価した違反ラベルを保存する。artifact の不変条件検査は `checkModel(createFiniteModel(artifact), bounds)` または `idealis model model.json` で行う。これは与えた有限表とラベルに対する検査。
 
 ## TS / Rust から同じモデルを使う
 
@@ -36,11 +36,11 @@ import {
   createPortableWasm,
   checkFiniteHistories,
   decodePortableTrace,
-} from "@mizchi/modelt/portable";
-import { parseFiniteModel } from "@mizchi/modelt/finite";
+} from "@mizchi/idealis/portable";
+import { parseFiniteModel } from "@mizchi/idealis/finite";
 
 const core = await createPortableWasm(
-  await readFile(new URL(import.meta.resolve("@mizchi/modelt/core.wasm"))),
+  await readFile(new URL(import.meta.resolve("@mizchi/idealis/core.wasm"))),
 );
 const model = parseFiniteModel(
   JSON.parse(await readFile("model.json", "utf8")),
@@ -54,8 +54,8 @@ console.log(checkFiniteHistories(core, model, [history]));
 Rust は `FiniteModel` を deserialize / normalize し、`check_history(trace)` を呼ぶ。入力・出力は Node CLI と同じ契約で、モデル言語のランタイムを必要としない。raw JSON の接続には `Engine::dispatch(bytes)` を使える。
 
 ```sh
-modelt check model.json history.json
-modelt model model.json
+idealis check model.json history.json
+idealis model model.json
 ```
 
 終了コードは matched / complete が0、mismatch / violation が1、invalid / bounded / empty が2。schema や I/O の例外も失敗として終了する。
@@ -73,7 +73,7 @@ modelt model model.json
 `createSimulationHost` は論理時計、seed 付き選択、並べ替え・破棄できるメッセージキュー、volatile / durable storage を提供する。I/O の入口をこれらへ委譲する Driver を書く。
 
 ```ts
-import { createSimulationHost } from "@mizchi/modelt/host";
+import { createSimulationHost } from "@mizchi/idealis/host";
 const host = createSimulationHost({ seed: 3 });
 host.write("counter", 1);
 host.persist();

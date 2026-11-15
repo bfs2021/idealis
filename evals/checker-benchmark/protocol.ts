@@ -18,11 +18,11 @@ export const bounds = {
 export const routes = [
   "tla-ts",
   "tlc",
-  "modelt-wasm",
-  "modelt-native",
+  "idealis-wasm",
+  "idealis-native",
 ] as const;
 export type Route = (typeof routes)[number];
-export const warmRoutes = ["tla-ts", "modelt-wasm", "modelt-native"] as const;
+export const warmRoutes = ["tla-ts", "idealis-wasm", "idealis-native"] as const;
 export type WarmRoute = (typeof warmRoutes)[number];
 
 export const cases = (): readonly Input[] => {

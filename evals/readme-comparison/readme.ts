@@ -33,7 +33,7 @@ const section = `${start}
 
 ${tables.combined}
 
-Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。modeltは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
+Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。idealisは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
 
 [全sample・最小/最大・条件と再実行](evals/iterations/0022-readme-comparison.md)を保存した。表は同じrunから生成し、過去の値を混在させていない。常駐APIの比較は[別の0016測定](evals/iterations/0016-checker-benchmark.md#apiを再利用した全探索)を参照。上の起動込み時間と同じ指標として扱わない。
 

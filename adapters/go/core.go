@@ -1,4 +1,4 @@
-package modelt
+package idealis
 
 import (
 	"context"
@@ -39,12 +39,12 @@ func New(ctx context.Context, wasm []byte) (*Core, error) {
 		function := module.ExportedFunction(name)
 		if function == nil || len(function.Definition().ParamTypes()) != signature[0] || len(function.Definition().ResultTypes()) != signature[1] {
 			_ = core.Close(context.WithoutCancel(ctx))
-			return nil, fmt.Errorf("modelt: invalid ABI export %s", name)
+			return nil, fmt.Errorf("idealis: invalid ABI export %s", name)
 		}
 		for _, kind := range append(append([]api.ValueType{}, function.Definition().ParamTypes()...), function.Definition().ResultTypes()...) {
 			if kind != api.ValueTypeI32 {
 				_ = core.Close(context.WithoutCancel(ctx))
-				return nil, fmt.Errorf("modelt: non-i32 ABI export %s", name)
+				return nil, fmt.Errorf("idealis: non-i32 ABI export %s", name)
 			}
 		}
 	}
@@ -54,7 +54,7 @@ func New(ctx context.Context, wasm []byte) (*Core, error) {
 		if err != nil {
 			return nil, err
 		}
-		return nil, fmt.Errorf("modelt: unsupported Wasm ABI")
+		return nil, fmt.Errorf("idealis: unsupported Wasm ABI")
 	}
 	return core, nil
 }
@@ -114,14 +114,14 @@ func (core *Core) exchange(ctx context.Context, request any) (message, error) {
 		return message{}, err
 	}
 	if uint64(len(input)) > math.MaxUint32 {
-		return message{}, fmt.Errorf("modelt: command exceeds ABI length")
+		return message{}, fmt.Errorf("idealis: command exceeds ABI length")
 	}
 	pointer, err := core.call(ctx, "modelt_input_resize", uint64(len(input)))
 	if err != nil {
 		return message{}, err
 	}
 	if !core.memory.Write(pointer, input) {
-		return message{}, fmt.Errorf("modelt: input outside Wasm memory")
+		return message{}, fmt.Errorf("idealis: input outside Wasm memory")
 	}
 	if _, err := core.call(ctx, "modelt_dispatch"); err != nil {
 		return message{}, err
@@ -136,7 +136,7 @@ func (core *Core) exchange(ctx context.Context, request any) (message, error) {
 	}
 	output, ok := core.memory.Read(pointer, length)
 	if !ok {
-		return message{}, fmt.Errorf("modelt: output outside Wasm memory")
+		return message{}, fmt.Errorf("idealis: output outside Wasm memory")
 	}
 	var result message
 	if err := json.Unmarshal(append([]byte(nil), output...), &result); err != nil {
@@ -206,7 +206,7 @@ func (core *Core) request(ctx context.Context, request any, expected string) (me
 		return message{}, err
 	}
 	if result.Kind != expected {
-		return message{}, fmt.Errorf("modelt: expected %s, received %s", expected, result.Kind)
+		return message{}, fmt.Errorf("idealis: expected %s, received %s", expected, result.Kind)
 	}
 	return result, nil
 }

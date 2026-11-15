@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	modelt "github.com/mizchi/modelt/adapters/go"
+	idealis "github.com/mizchi/idealis/adapters/go"
 	"io"
 	"os"
 )
@@ -32,7 +32,7 @@ func run() error {
 		return err
 	}
 	ctx := context.Background()
-	core, err := modelt.New(ctx, wasm)
+	core, err := idealis.New(ctx, wasm)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func run() error {
 		return err
 	}
 	defer model.Close(ctx)
-	results := make([]modelt.ConcurrentResult, 0, len(input.Cases))
+	results := make([]idealis.ConcurrentResult, 0, len(input.Cases))
 	for _, entry := range input.Cases {
 		result, err := model.CheckHistoryJSON(ctx, entry.History, entry.MaxNodes)
 		if err != nil {

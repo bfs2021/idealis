@@ -86,7 +86,7 @@ for (const revision of ["before", "after"] as const) {
 const host = createSimulationHost({ seed: 3 });
 exerciseHost(host);
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 await mkdir(".artifacts/go", { recursive: true });
 const fixture = {

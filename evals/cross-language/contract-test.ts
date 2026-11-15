@@ -41,11 +41,11 @@ test("a changed expected observation is rejected before live execution", async (
   };
   await assert.rejects(executeSuite(parseSuite(changed)), /oracle/i);
   for (const [command, arguments_] of [
-    ["evals/shared-oracle-rust/target/release/modelt-shared-oracle", []],
+    ["evals/shared-oracle-rust/target/release/idealis-shared-oracle", []],
     [
       ".artifacts/go/counter-replay",
       [
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
       ],
     ],
   ] as const) {

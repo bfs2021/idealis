@@ -15,7 +15,7 @@ rtlcは有限状態を列挙して到達グラフを検査するRust library、A
 | 整数と値           | SMT整数を使い、record/tuple/function等を型で区別する             | signed 32 bit。overflowはエラー。record/sequenceは有限関数としてTLC互換の等価性を使う |
 | temporal           | liveness-to-safety変換。対応表ではENABLED、WF/SFは手動で記述する | 対応fragmentで積グラフ/SCCを検査し、列挙可能なENABLEDとWF/SFを処理する                |
 | 実行要件           | JVMとSMT solver。Z3が既定で、CVC5も選べる                        | Rust native / Wasm。実行部はJVM/solverに依存しない                                    |
-| 実装テストとの接続 | ITF出力、checker/explorer serverによる外部連携                   | modelt側にoracle、照合、履歴、縮小、障害注入、TS/Rust/Go adapterがある                |
+| 実装テストとの接続 | ITF出力、checker/explorer serverによる外部連携                   | idealis側にoracle、照合、履歴、縮小、障害注入、TS/Rust/Go adapterがある               |
 
 Apalacheの[方式](https://apalache-mc.org/docs/apalache/theory.html)、[BMCと帰納性](https://apalache-mc.org/docs/apalache/running.html)、[対応表](https://apalache-mc.org/docs/apalache/features.html)、[型付け](https://apalache-mc.org/docs/apalache/principles/index.html)を参照。rtlcの欄は[実装と対応範囲](rust-safety.md)を基準にする。どちらも全TLA+の互換実装とは扱わない。
 
@@ -29,7 +29,7 @@ ApalacheのBMCで反例がなくても、長さを超えた実行については
 
 [計画](../evals/plans/0027-apalache-comparison.md)を先に固定し、同じsource/configを使用した。型注釈はcommentなので両frontendへ同じsourceを渡している。16状態ringと、8要素の0/1関数を全初期状態とする256状態モデルを使った。各条件で1 warmupと3測定、計54測定と18 warmupを行い、backendの順を交互に変えた。
 
-Apple M5、arm64、32 GiB、Node v24.22.2、rustc 1.98.0、Temurin Java 21.0.13。Apalacheはfresh JVM、heap上限4096 MiB、incremental、Z3、oopsla19 encoding。公式はJava 25を推奨し、Java 21以上のbytecode互換を維持している。[実行要件](https://apalache-mc.org/docs/apalache/installation/jvm.html)を参照。rtlcは逐次のmodelt-core JSONL driverを使った。メモリ消費量の実測はしていない。
+Apple M5、arm64、32 GiB、Node v24.22.2、rustc 1.98.0、Temurin Java 21.0.13。Apalacheはfresh JVM、heap上限4096 MiB、incremental、Z3、oopsla19 encoding。公式はJava 25を推奨し、Java 21以上のbytecode互換を維持している。[実行要件](https://apalache-mc.org/docs/apalache/installation/jvm.html)を参照。rtlcは逐次のidealis-core JSONL driverを使った。メモリ消費量の実測はしていない。
 
 時間はprocess起動から結果判定まで。下表は中央値と括弧内に最小-最大、単位ms。rtlcのsource経路はfresh Node、TLA+解析・IR生成、native processを含む。IR経路は事前IRからnative processを起動する。ApalacheはTLA+解析・型検査・SMTを含む。反例の検証とarchiveのI/Oは時間から除いた。
 
@@ -61,9 +61,9 @@ fresh processの比較で、warmupは常駐JVMのJIT warmupではない。起動
 
 正常ringではApalacheで`Init => Safe`をlength=0、`Safe /\ Next => Safe'`をlength=1で別に検査し、両方が成立した。これは固定16状態のモデルに対する帰納性で、任意パラメータの証明ではない。性能表へ追加sampleとして混ぜていない。
 
-## modeltへ取り込む候補
+## idealisへ取り込む候補
 
-1. ITFのimport/exportを先に評価する。ApalacheとQuintの反例をmodeltのoracle/照合へ渡せる。[ITF仕様](https://apalache-mc.org/docs/adr/015adr-trace.html)は整数・集合・map・loopを記述する。今回のreaderは整数と固定domainの関数だけで、汎用adapterではない。model value、record、整数幅、actionの対応も定義する必要がある。
+1. ITFのimport/exportを先に評価する。ApalacheとQuintの反例をidealisのoracle/照合へ渡せる。[ITF仕様](https://apalache-mc.org/docs/adr/015adr-trace.html)は整数・集合・map・loopを記述する。今回のreaderは整数と固定domainの関数だけで、汎用adapterではない。model value、record、整数幅、actionの対応も定義する必要がある。
 2. backendの保証を明示する。`explicit-complete`、`bounded-no-counterexample(k)`、`inductive`と、empty/error/unknownを区別する契約を検討する。予算切れやSMTのunknownを合格にしない。現行public APIの変更は今回行っていない。
 3. SMT backendの設計は独立に行う。rtlcの有限IRをそのままZ3へ渡してもApalache相当にはならない。型検査、整数の意味、集合/関数のSMT encoding、有界実行、temporal変換、反例の再構成が必要。z3-wasmを使う場合も、この変換層の実装・評価が必要になる。
 

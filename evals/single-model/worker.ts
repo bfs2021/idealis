@@ -52,7 +52,7 @@ if (backend === "tla-ts") {
       ? await createPortableWasm(
           await readFile(
             binary ??
-              "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+              "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
           ),
         )
       : undefined;

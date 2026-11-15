@@ -7,9 +7,11 @@ import { compileTlaSafety } from "../src/tla-safety.js";
 
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
 const files = await readdir(directory);
-const tarball = files.find((file) => file.endsWith(".tgz"));
+const tarball = files.find(
+  (file) => file.startsWith("mizchi-idealis-") && file.endsWith(".tgz"),
+);
 const crate = files.find(
-  (file) => file.startsWith("modelt-core-") && file.endsWith(".crate"),
+  (file) => file.startsWith("idealis-core-") && file.endsWith(".crate"),
 );
 const rtlcCrate = files.find(
   (file) => file.startsWith("rtlc-") && file.endsWith(".crate"),
@@ -21,16 +23,16 @@ const compilerCrate = files.find(
   (file) => file.startsWith("rtla-compiler-") && file.endsWith(".crate"),
 );
 const rsmtCrate = files.find(
-  (file) => file.startsWith("rsmt-") && file.endsWith(".crate"),
+  (file) => file.startsWith("idealis-smt-") && file.endsWith(".crate"),
 );
 assert.ok(
   tarball && crate && rtlcCrate && rtlaCrate && compilerCrate && rsmtCrate,
-  "Prepare npm and all five Rust packages first, including standalone rsmt",
+  "Prepare npm and all five Rust packages first, including standalone idealis-smt",
 );
-const consumer = await mkdtemp(join(tmpdir(), "modelt-consumer-"));
+const consumer = await mkdtemp(join(tmpdir(), "idealis-consumer-"));
 await writeFile(
   join(consumer, "package.json"),
-  JSON.stringify({ name: "modelt-consumer", private: true, type: "module" }),
+  JSON.stringify({ name: "idealis-consumer", private: true, type: "module" }),
 );
 execFileSync(
   "pnpm",
@@ -108,14 +110,14 @@ await writeFile(
   join(consumer, "consumer.mjs"),
   `import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/modelt/portable';
-import {createHistoryRecorder} from '@mizchi/modelt/history';
-import {parseFiniteModel} from '@mizchi/modelt/finite';
-import {createSimulationHost} from '@mizchi/modelt/host';
-import {planSchedule,runSchedule} from '@mizchi/modelt/scheduling';
-import {createRtlcBackend,runBackend,parseBackendResult} from '@mizchi/modelt/backend';
-const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/modelt/core.wasm'))));
-const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/modelt/rtla.wasm'))));
+import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/idealis/portable';
+import {createHistoryRecorder} from '@mizchi/idealis/history';
+import {parseFiniteModel} from '@mizchi/idealis/finite';
+import {createSimulationHost} from '@mizchi/idealis/host';
+import {planSchedule,runSchedule} from '@mizchi/idealis/scheduling';
+import {createRtlcBackend,runBackend,parseBackendResult} from '@mizchi/idealis/backend';
+const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/core.wasm'))));
+const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/idealis/rtla.wasm'))));
 assert.deepEqual(WebAssembly.Module.imports(parserModule),[]);
 const parser=(await WebAssembly.instantiate(parserModule,{})).exports;
 assert.equal(parser.rtla_abi_version(),1);
@@ -154,13 +156,13 @@ const node = execFileSync(process.execPath, [join(consumer, "consumer.mjs")], {
   .trim();
 await writeFile(
   join(consumer, "consumer.ts"),
-  `import type {Model} from '@mizchi/modelt';
-import {compileFiniteModel,createFiniteModel} from '@mizchi/modelt/finite';
-import {createSimulationHost} from '@mizchi/modelt/host';
-import {createPortableWasm,compileTlaSource,checkTlaSource} from '@mizchi/modelt/portable';
-import {planSchedule} from '@mizchi/modelt/scheduling';
-import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/modelt/history';
-import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/modelt/backend';
+  `import type {Model} from '@mizchi/idealis';
+import {compileFiniteModel,createFiniteModel} from '@mizchi/idealis/finite';
+import {createSimulationHost} from '@mizchi/idealis/host';
+import {createPortableWasm,compileTlaSource,checkTlaSource} from '@mizchi/idealis/portable';
+import {planSchedule} from '@mizchi/idealis/scheduling';
+import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/idealis/history';
+import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/idealis/backend';
 const model:Model<number,'tick',number>={name:'typed',initial:()=>[{state:0,observation:0}],actions:()=>['tick'],step:()=>[{state:0,observation:0}],key:String};
 const compiled=compileFiniteModel(model,{maxDepth:1,maxStates:1});
 if(compiled.model){createFiniteModel(compiled.model);checkConcurrentHistory(compiled.model,createHistoryRecorder(model.name,{type:'int',value:'0'}).snapshot(),100);}
@@ -185,10 +187,10 @@ execFileSync(
   ],
   { cwd: consumer, stdio: "pipe" },
 );
-const cli = join(consumer, "node_modules/@mizchi/modelt/dist/cli/modelt.js");
+const cli = join(consumer, "node_modules/.bin/idealis");
 const checked = spawnSync(
-  process.execPath,
-  [cli, "check", join(consumer, "model.json"), join(consumer, "history.json")],
+  cli,
+  ["check", join(consumer, "model.json"), join(consumer, "history.json")],
   { encoding: "utf8" },
 );
 assert.equal(checked.status, 0, checked.stderr);
@@ -201,8 +203,7 @@ await writeFile(
   }),
 );
 assert.equal(
-  spawnSync(process.execPath, [
-    cli,
+  spawnSync(cli, [
     "check",
     join(consumer, "model.json"),
     join(consumer, "history.json"),
@@ -219,8 +220,7 @@ await writeFile(
   }),
 );
 assert.equal(
-  spawnSync(process.execPath, [
-    cli,
+  spawnSync(cli, [
     "check",
     join(consumer, "model.json"),
     join(consumer, "history.json"),
@@ -234,12 +234,12 @@ execFileSync("tar", ["-xzf", join(directory, compilerCrate), "-C", consumer]);
 const version = JSON.parse(await readFile("package.json", "utf8")).version;
 await writeFile(
   join(consumer, "Cargo.toml"),
-  `[package]\nname="modelt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nmodelt-core={path="modelt-core-${version}"}\nrtlc={path="rtlc-${version}"}\nserde_json="1.0"\n[patch.crates-io]\nrtlc={path="rtlc-${version}"}\nrtla={path="rtla-${version}"}\nrtla-compiler={path="rtla-compiler-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,
+  `[package]\nname="idealis-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-core={path="idealis-core-${version}"}\nrtlc={path="rtlc-${version}"}\nserde_json="1.0"\n[patch.crates-io]\nrtlc={path="rtlc-${version}"}\nrtla={path="rtla-${version}"}\nrtla-compiler={path="rtla-compiler-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,
 );
 await writeFile(
   join(consumer, "consumer.rs"),
-  `use modelt_core::{Engine,Message,Status};
-fn main(){let source:serde_json::Value=serde_json::from_slice(&std::fs::read("source.json").unwrap()).unwrap();let program=modelt_core::compile_tla(source["source"].as_str().unwrap(),source["config"].as_str().unwrap()).unwrap();let checked=program.check(modelt_core::SafetyBounds{max_depth:10,max_states:100,max_work:10000,max_temporal_nodes:None}).unwrap();assert_eq!(checked.violation.unwrap().trace.len(),4);let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: modelt_core::Command = serde_json::from_slice(&bytes).unwrap(); if let modelt_core::Request::CheckSafety { program, bounds } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check(bounds).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; println!("packaged Rust consumer matched");}
+  `use idealis_core::{Engine,Message,Status};
+fn main(){let source:serde_json::Value=serde_json::from_slice(&std::fs::read("source.json").unwrap()).unwrap();let program=idealis_core::compile_tla(source["source"].as_str().unwrap(),source["config"].as_str().unwrap()).unwrap();let checked=program.check(idealis_core::SafetyBounds{max_depth:10,max_states:100,max_work:10000,max_temporal_nodes:None}).unwrap();assert_eq!(checked.violation.unwrap().trace.len(),4);let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: idealis_core::Command = serde_json::from_slice(&bytes).unwrap(); if let idealis_core::Request::CheckSafety { program, bounds } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check(bounds).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; println!("packaged Rust consumer matched");}
 `,
 );
 const rust = execFileSync(
@@ -301,9 +301,9 @@ assert.ok(
 );
 assert.ok(
   !metadata.packages.some(
-    (entry: { name: string }) => entry.name === "modelt-core",
+    (entry: { name: string }) => entry.name === "idealis-core",
   ),
-  "rtlc must remain independent of the modelt host",
+  "rtlc must remain independent of the idealis host",
 );
 const parserConsumer = join(consumer, "rtla-only");
 await mkdir(parserConsumer);
@@ -349,18 +349,20 @@ const parserMetadata = JSON.parse(
 assert.ok(
   !parserMetadata.packages.some(
     (entry: { name: string }) =>
-      entry.name === "modelt-core" || entry.name === "rtlc",
+      entry.name === "idealis-core" || entry.name === "rtlc",
   ),
 );
-const smtConsumer = await mkdtemp(join(tmpdir(), "rsmt-consumer-"));
+const smtConsumer = await mkdtemp(join(tmpdir(), "idealis-smt-consumer-"));
 execFileSync("tar", ["-xzf", join(directory, rsmtCrate), "-C", smtConsumer]);
 await writeFile(
   join(smtConsumer, "Cargo.toml"),
-  `[package]\nname="rsmt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nrsmt={path="rsmt-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+  `[package]\nname="idealis-smt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-smt={path="idealis-smt-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
 );
 await writeFile(
   join(smtConsumer, "main.rs"),
-  await readFile(join(smtConsumer, `rsmt-${version}`, "examples", "ttl.rs")),
+  await readFile(
+    join(smtConsumer, `idealis-smt-${version}`, "examples", "ttl.rs"),
+  ),
 );
 const rsmt = execFileSync("cargo", ["run", "--offline", "--quiet"], {
   cwd: smtConsumer,
@@ -368,7 +370,7 @@ const rsmt = execFileSync("cargo", ["run", "--offline", "--quiet"], {
 })
   .toString()
   .trim();
-assert.equal(rsmt, "standalone rsmt consumer checked");
+assert.equal(rsmt, "standalone idealis-smt consumer checked");
 const smtMetadata = JSON.parse(
   execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
     cwd: smtConsumer,
@@ -376,15 +378,17 @@ const smtMetadata = JSON.parse(
   }).toString(),
 );
 assert.ok(
-  smtMetadata.packages.some((entry: { name: string }) => entry.name === "rsmt"),
+  smtMetadata.packages.some(
+    (entry: { name: string }) => entry.name === "idealis-smt",
+  ),
 );
 assert.ok(
   !smtMetadata.packages.some((entry: { name: string }) =>
-    ["modelt-core", "rtlc", "rtla", "rtla-compiler", "z3", "z3-sys"].includes(
+    ["idealis-core", "rtlc", "rtla", "rtla-compiler", "z3", "z3-sys"].includes(
       entry.name,
     ),
   ),
-  "rsmt must remain independent of modelt hosts, TLA frontends and Z3",
+  "idealis-smt must remain independent of idealis hosts, TLA frontends and Z3",
 );
 const result = {
   status: "complete",

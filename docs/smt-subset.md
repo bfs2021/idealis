@@ -1,6 +1,6 @@
 # RustでSMT-LIBの一部を解く実験
 
-整数の差分制約とBoolean式を解く独立した[`rsmt` crate](../crates/rsmt)を提供する。実験用crateから移し、nativeとホストimport不要のWasmを同じソースから生成する。modeltの他crateへ依存せず、modeltの公開backendや既存のZ3 adapterには接続していない。
+整数の差分制約とBoolean式を解く独立した[`idealis-smt` crate](../crates/idealis-smt)を提供する。実験用crateから移し、nativeとホストimport不要のWasmを同じソースから生成する。idealisの他crateへ依存せず、idealisの公開backendや既存のZ3 adapterには接続していない。
 
 Z3を再利用する比較でも、小さいTTL・amount・schedulerのnative問い合わせは約3.0-3.4倍速かった。Boolean UNSATでは約34倍遅い例と予算切れが残る。[比較条件と全17入力](../evals/iterations/0031-smt-reuse.md)を確認してから用途を判断する。
 
@@ -46,7 +46,7 @@ workは式の処理と制約の緩和を数える。parserの費用やwall clock
 
 ## 実験用のAPI
 
-Rustは`rsmt::Problem::parse(source)`と`Problem::solve(max_work)`を持つ。nativeの`rsmt` binaryと`rsmt.wasm`は共通の`Engine`を使う。[TS側のwire型](../evals/smt-subset/wire.ts)がリクエストと応答を定義する。
+Rustは`idealis_smt::Problem::parse(source)`と`Problem::solve(max_work)`を持つ。nativeの`idealis-smt` binaryと`idealis-smt.wasm`は共通の`Engine`を使う。[TS側のwire型](../evals/smt-subset/wire.ts)がリクエストと応答を定義する。
 
 ```json
 {
@@ -82,7 +82,7 @@ just smt-bench .artifacts/smt-bench /absolute/path/to/z3
 
 Z3 nativeは[公式5.4.1 release](https://github.com/Z3Prover/z3/releases/tag/z3-5.4.1)を使う。比較対象のnpm `z3-solver`も5.4.1。評価に使ったmacOS arm64 archiveのSHA-256は`a4a878121e81dfc297d027dd0b51dc4f08feb4296d6ecace42bfbc87a29d6d58`で、記録した実行binaryのhashとは区別する。
 
-`smt-build` / `smt-test` / `smt-criterion`は既存の呼び出し用に残す。`just package`はrsmtのcrate archive、WasmとABI manifestも作り、archiveだけを展開したRust consumerで検査する。過去の0030/0031の性能値は移動前の測定として保持する。
+`smt-build` / `smt-test` / `smt-criterion`は既存の呼び出し用に残す。`just package`はidealis-smtのcrate archive、WasmとABI manifestも作り、archiveだけを展開したRust consumerで検査する。過去の0030/0031の性能値は移動前の測定として保持する。
 
 ## 採否
 

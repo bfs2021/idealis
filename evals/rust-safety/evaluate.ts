@@ -46,7 +46,7 @@ const runNative = (
   bounds: SafetyBounds,
 ): SafetyResult => {
   const output: unknown = JSON.parse(
-    execFileSync("crates/modelt-core/target/release/modelt-core", {
+    execFileSync("crates/idealis-core/target/release/idealis-core", {
       input: JSON.stringify({
         version: 1,
         request: { kind: "check-safety", program, bounds },
@@ -79,7 +79,7 @@ const write = (name: string, value: unknown) =>
     flag: "wx",
   });
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 const source = await fingerprint();
 const started = performance.now();

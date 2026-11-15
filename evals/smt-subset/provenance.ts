@@ -12,7 +12,7 @@ export const fingerprint = async () => {
     "--exclude-standard",
     "--",
     "evals/smt-subset",
-    "crates/rsmt",
+    "crates/idealis-smt",
     "evals/plans/0030-smt-subset.md",
     "evals/plans/0031-smt-reuse.md",
     "evals/plans/0032-rsmt-extraction.md",

@@ -13,7 +13,7 @@ export const runProcess = async (
   java: string,
   jar: string,
 ) => {
-  const scratch = await mkdtemp(join(tmpdir(), "modelt-benchmark-"));
+  const scratch = await mkdtemp(join(tmpdir(), "idealis-benchmark-"));
   const moduleName = /^---- MODULE (\w+) ----/m.exec(input.source)?.[1];
   assert.ok(moduleName);
   const command = route === "tlc" ? resolve(java) : process.execPath;

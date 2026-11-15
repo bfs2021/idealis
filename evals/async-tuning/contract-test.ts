@@ -38,7 +38,7 @@ const artifact = model.model;
 test("indexed handles and concurrent histories agree across TS native Wasm and Go", async () => {
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const loaded = loadFiniteModel(core, artifact);
@@ -61,20 +61,23 @@ test("indexed handles and concurrent histories agree across TS native Wasm and G
     cases.map((entry) => loaded.checkHistory(entry.history, entry.maxNodes)),
     expected,
   );
-  const native = execFileSync("crates/modelt-core/target/release/modelt-core", {
-    input: [
-      JSON.stringify({
-        version: 1,
-        request: { kind: "load-model", model: artifact },
-      }),
-      ...cases.map((entry) =>
+  const native = execFileSync(
+    "crates/idealis-core/target/release/idealis-core",
+    {
+      input: [
         JSON.stringify({
           version: 1,
-          request: { kind: "check-history", handle: 1, ...entry },
+          request: { kind: "load-model", model: artifact },
         }),
-      ),
-    ].join("\n"),
-  })
+        ...cases.map((entry) =>
+          JSON.stringify({
+            version: 1,
+            request: { kind: "check-history", handle: 1, ...entry },
+          }),
+        ),
+      ].join("\n"),
+    },
+  )
     .toString()
     .trim()
     .split("\n")
@@ -85,7 +88,7 @@ test("indexed handles and concurrent histories agree across TS native Wasm and G
     execFileSync(
       ".artifacts/go/history-check",
       [
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
       ],
       { input: JSON.stringify({ model: artifact, cases }) },
     ).toString(),
@@ -151,7 +154,7 @@ test("feedback preserves enabled workloads, budgets and deterministic replay", (
 test("all history transports reject malformed ids and unknown fields", async () => {
   const core = await createPortableWasm(
     await readFile(
-      "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     ),
   );
   const loaded = loadFiniteModel(core, artifact);
@@ -199,7 +202,7 @@ test("all history transports reject malformed ids and unknown fields", async () 
       },
     ];
     const result = execFileSync(
-      "crates/modelt-core/target/release/modelt-core",
+      "crates/idealis-core/target/release/idealis-core",
       { input: lines.map((line) => JSON.stringify(line)).join("\n") },
     )
       .toString()
@@ -211,7 +214,7 @@ test("all history transports reject malformed ids and unknown fields", async () 
     const go = spawnSync(
       ".artifacts/go/history-check",
       [
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
       ],
       {
         input: JSON.stringify({

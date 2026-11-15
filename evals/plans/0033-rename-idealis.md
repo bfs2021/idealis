@@ -1,6 +1,6 @@
 # 0033: プロジェクト名と配布名をidealisへ変える
 
-プロジェクトとCLIをidealis、npmを@ mizchi/idealis（実際のpackage名では空白なし）、Rust hostをidealis-core、SMT crateをidealis-smtにする。GitHub repositoryをmizchi/idealisへrenameし、originとghqのcheckout名も合わせる。rtla、rtla-compiler、rtlcの独立名は維持する。
+プロジェクトとCLIをidealis、npmを`@mizchi/idealis`、Rust hostをidealis-core、SMT crateをidealis-smtにする。GitHub repositoryをmizchi/idealisへrenameし、originとghqのcheckout名も合わせる。rtla、rtla-compiler、rtlcの独立名は維持する。
 
 保存済みのformat ID、Wasm ABI v1のexport名、過去のplan/iteration/run、vendor/fixture原本は変えない。現在のimport、crate/module、CLI、artifact、workflow、利用ガイドを更新する。未公開のregistryへのpublishは行わない。
 

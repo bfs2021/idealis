@@ -49,7 +49,7 @@ const sourceVersion = digest(JSON.stringify(sources));
 const binaryPaths = [
   java,
   jar,
-  "crates/modelt-core/target/release/modelt-core",
+  "crates/idealis-core/target/release/idealis-core",
 ];
 const binaries = await Promise.all(
   binaryPaths.map(async (path) => ({
@@ -243,7 +243,7 @@ try {
           const command =
             backend === "rtlc-source"
               ? process.execPath
-              : "crates/modelt-core/target/release/modelt-core";
+              : "crates/idealis-core/target/release/idealis-core";
           const args =
             backend === "rtlc-source"
               ? ["dist/evals/apalache-comparison/source-worker.js", inputPath]

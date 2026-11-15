@@ -1,6 +1,6 @@
 # 検査backendの契約
 
-`@mizchi/modelt/backend`は、検査方式ごとの保証と対象を結びつける共通契約。`modelt.backend-request` / `modelt.backend-result` v1のJSONとして扱える。Node、test runner、solverをコアへ持ち込まず、実行はadapterへ委ねる。
+`@mizchi/idealis/backend`は、検査方式ごとの保証と対象を結びつける共通契約。`modelt.backend-request` / `modelt.backend-result` v1のJSONとして扱える。Node、test runner、solverをコアへ持ち込まず、実行はadapterへ委ねる。
 
 ## 結果が表すもの
 
@@ -35,7 +35,7 @@ scopeは次を持つ。
 ## 実行する
 
 ```ts
-import { createRtlcBackend, runBackend } from "@mizchi/modelt/backend";
+import { createRtlcBackend, runBackend } from "@mizchi/idealis/backend";
 
 const backend = createRtlcBackend(core, { version: "0.1.0-alpha.0" });
 const result = await runBackend(backend, {
@@ -72,7 +72,7 @@ const result = await runBackend(backend, {
 3. `implication`: `IndInv => Property`。
 
 ```ts
-import { completeInduction } from "@mizchi/modelt/backend";
+import { completeInduction } from "@mizchi/idealis/backend";
 
 const result = completeInduction([initResult, stepResult, implicationResult]);
 ```
@@ -89,7 +89,7 @@ const result = completeInduction([initResult, stepResult, implicationResult]);
 
 今回のpublic adapterはrtlcだけ。Apalacheの汎用process/RPC adapter、SMT encoding、ITF importerは含まない。[0027の保存した実応答](../evals/runs/0027-apalache-pilot/result.json)を契約へ載せる検査を[0028](../evals/iterations/0028-backend-contract.md)に置く。保存したpilotでの初期集合の非空性は具体的な列挙で確認したもので、汎用のNoError変換ではない。
 
-公開entryは`@mizchi/modelt/backend`に限定した。共通型、runner、wire decoder、帰納性集約、rtlc bridgeを提供し、既存root APIと結果型を維持する。
+公開entryは`@mizchi/idealis/backend`に限定した。共通型、runner、wire decoder、帰納性集約、rtlc bridgeを提供し、既存root APIと結果型を維持する。
 
 ```sh
 just backend-test

@@ -19,11 +19,11 @@ const engines = await Promise.all(
   [
     {
       name: "before",
-      path: ".artifacts/profile-tuning/before/modelt_core.wasm",
+      path: ".artifacts/profile-tuning/before/idealis_core.wasm",
     },
     {
       name: "after",
-      path: "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+      path: "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
     },
   ].map(async (entry) => ({
     ...entry,

@@ -46,7 +46,7 @@ const memory = () => {
       const match = /^\s*(\d+)\s+(\d+)\s+(\d+)\s+(.+)$/.exec(line);
       return match &&
         Number(match[2]) === process.pid &&
-        match[4]?.endsWith("modelt-core")
+        match[4]?.endsWith("idealis-core")
         ? [{ pid: Number(match[1]), rss: Number(match[3]) * 1024 }]
         : [];
     });

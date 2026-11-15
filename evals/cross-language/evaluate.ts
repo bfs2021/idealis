@@ -27,7 +27,7 @@ const ledger = async (value: unknown) => {
 };
 const sources = await fingerprint();
 const wasm = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
 const seeds =
   phase === "development"
@@ -75,7 +75,7 @@ await write("manifest.json", {
   wasmSha256: digest(wasm),
   nativeSha256: digest(
     await readFile(
-      "evals/shared-oracle-rust/target/release/modelt-shared-oracle",
+      "evals/shared-oracle-rust/target/release/idealis-shared-oracle",
     ),
   ),
   goSha256: digest(await readFile(".artifacts/go/counter-replay")),

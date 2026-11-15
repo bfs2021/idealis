@@ -98,7 +98,7 @@ export const runTool = async (
             return fields &&
               (Number(fields[1]) === root ||
                 (Number(fields[2]) === root &&
-                  fields[4]?.endsWith("modelt-core")))
+                  fields[4]?.endsWith("idealis-core")))
               ? sum + Number(fields[3]) * 1024
               : sum;
           }, 0);

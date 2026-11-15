@@ -51,9 +51,9 @@ const writeJson = async (name: string, value: unknown) =>
   });
 const fingerprint = await runtimeFingerprint();
 const wasmPath = resolve(
-  "evals/rust-probe/target/wasm32-unknown-unknown/release/modelt_runtime_probe.wasm",
+  "evals/rust-probe/target/wasm32-unknown-unknown/release/idealis_runtime_probe.wasm",
 );
-const binary = resolve("evals/rust-probe/target/release/modelt-runtime-probe");
+const binary = resolve("evals/rust-probe/target/release/idealis-runtime-probe");
 const manifest = {
   version: 1,
   startedAt: new Date().toISOString(),

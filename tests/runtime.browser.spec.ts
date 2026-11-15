@@ -17,7 +17,7 @@ test.beforeAll(async () => {
   const output = bundle.outputFiles[0];
   if (!output) throw new Error("No browser runtime bundle");
   const wasm = await readFile(
-    "evals/rust-probe/target/wasm32-unknown-unknown/release/modelt_runtime_probe.wasm",
+    "evals/rust-probe/target/wasm32-unknown-unknown/release/idealis_runtime_probe.wasm",
   );
   server = createServer((request, response) => {
     response.setHeader(
@@ -33,7 +33,7 @@ test.beforeAll(async () => {
         ? wasm
         : request.url === "/bundle.js"
           ? output.contents
-          : '<!doctype html><title>modelt Rust runtime</title><script src="/bundle.js"></script>',
+          : '<!doctype html><title>idealis Rust runtime</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));

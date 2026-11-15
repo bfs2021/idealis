@@ -41,10 +41,10 @@ const sources = [
 ].sort((left, right) => left.path.localeCompare(right.path));
 const sourceVersion = digest(JSON.stringify(sources));
 const paths = [
-  ".artifacts/rtlc-extraction/before/modelt-core",
-  "crates/modelt-core/target/release/modelt-core",
-  ".artifacts/rtlc-extraction/before/modelt_core.wasm",
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  ".artifacts/rtlc-extraction/before/idealis-core",
+  "crates/idealis-core/target/release/idealis-core",
+  ".artifacts/rtlc-extraction/before/idealis_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 ];
 const binaries = await Promise.all(
   paths.map(async (path) => ({ path, sha256: digest(await readFile(path)) })),

@@ -13,7 +13,7 @@ export const fingerprint = async () => {
     "src",
     "scripts",
     "tests",
-    "crates/modelt-core",
+    "crates/idealis-core",
     "crates/rtlc",
     "crates/rtla",
     "crates/rtla-compiler",

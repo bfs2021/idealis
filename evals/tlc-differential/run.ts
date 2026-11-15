@@ -24,9 +24,9 @@ assert.ok(
 );
 const source = await fingerprint();
 const bytes = await readFile(
-  "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+  "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
-const nativePath = "crates/modelt-core/target/release/modelt-core";
+const nativePath = "crates/idealis-core/target/release/idealis-core";
 const artifacts = {
   wasmSha256: digest(bytes),
   nativeSha256: digest(await readFile(nativePath)),
@@ -106,7 +106,7 @@ try {
   assert.equal(
     digest(
       await readFile(
-        "crates/modelt-core/target/wasm32-unknown-unknown/release/modelt_core.wasm",
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
       ),
     ),
     artifacts.wasmSha256,
