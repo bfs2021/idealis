@@ -1,0 +1,49 @@
+cargo fmt --manifest-path evals/smt-subset-rust/Cargo.toml -- --check
+cargo clippy --all-targets --locked --manifest-path evals/smt-subset-rust/Cargo.toml -- -D warnings
+    Checking modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.28s
+cargo test --all-targets --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+   Compiling modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running unittests src/lib.rs (evals/smt-subset-rust/target/debug/deps/modelt_smt_subset-dde85ab19aca6323)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (evals/smt-subset-rust/target/debug/deps/modelt_smt_subset-23b8648fa15abcff)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/solver.rs (evals/smt-subset-rust/target/debug/deps/solver-0113c478ca25994a)
+
+running 5 tests
+test empty_boolean_applications_are_syntax_errors ... ok
+test budget_cuts_and_unsupported_theories_are_not_unsat ... ok
+test unbounded_difference_constraints_have_exact_witnesses ... ok
+test existing_integer_input_generation_is_supported ... ok
+test boolean_polarity_and_let_scope_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running benches/solver.rs (evals/smt-subset-rust/target/debug/deps/solver-6e68154744d92bc6)
+Testing parse-solve-4
+Success
+
+Testing prepared-4
+Success
+
+Testing parse-solve-32
+Success
+
+Testing prepared-32
+Success
+
+Testing parse-solve-128
+Success
+
+Testing prepared-128
+Success
+

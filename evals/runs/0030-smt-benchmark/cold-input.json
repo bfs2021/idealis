@@ -1,0 +1,1 @@
+{"name":"ttl","family":"ttl","integers":["ttl","elapsed"],"booleans":[],"source":"(set-logic QF_LIA)(declare-const ttl Int)(declare-const elapsed Int)(assert (and (>= ttl 1)(<= ttl 10000)(>= elapsed 0)(<= elapsed 20000)(= elapsed ttl)))","expected":"sat","iterations":32}

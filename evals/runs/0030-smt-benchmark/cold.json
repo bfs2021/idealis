@@ -1,0 +1,212 @@
+[
+  {
+    "backend": "rust-native",
+    "sample": 0,
+    "totalMs": 2.3167079999984708,
+    "answer": {
+      "booleans": {},
+      "stats": {
+        "branches": 0,
+        "relaxations": 12,
+        "work": 26
+      },
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      }
+    },
+    "stdout": "{\"kind\":\"solution\",\"result\":{\"booleans\":{},\"stats\":{\"branches\":0,\"relaxations\":12,\"work\":26},\"status\":\"sat\",\"values\":{\"elapsed\":\"1\",\"ttl\":\"1\"}}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "rust-wasm",
+    "sample": 0,
+    "totalMs": 27.156417000001966,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      },
+      "booleans": {},
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 12
+      }
+    },
+    "stdout": "{\"status\":\"sat\",\"values\":{\"elapsed\":\"1\",\"ttl\":\"1\"},\"booleans\":{},\"stats\":{\"work\":26,\"branches\":0,\"relaxations\":12}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "z3-native",
+    "sample": 0,
+    "totalMs": 6.957958999999391,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "ttl": "4273",
+        "elapsed": "4273"
+      },
+      "booleans": {}
+    },
+    "stdout": "sat\n((|ttl| 4273)\n (|elapsed| 4273))\n",
+    "stderr": ""
+  },
+  {
+    "backend": "z3-wasm",
+    "sample": 0,
+    "totalMs": 286.41283300000214,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "ttl": "4273",
+        "elapsed": "4273"
+      },
+      "booleans": {}
+    },
+    "stdout": "{\"status\":\"sat\",\"values\":{\"ttl\":\"4273\",\"elapsed\":\"4273\"},\"booleans\":{}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "rust-native",
+    "sample": 1,
+    "totalMs": 2.1157919999968726,
+    "answer": {
+      "booleans": {},
+      "stats": {
+        "branches": 0,
+        "relaxations": 12,
+        "work": 26
+      },
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      }
+    },
+    "stdout": "{\"kind\":\"solution\",\"result\":{\"booleans\":{},\"stats\":{\"branches\":0,\"relaxations\":12,\"work\":26},\"status\":\"sat\",\"values\":{\"elapsed\":\"1\",\"ttl\":\"1\"}}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "rust-wasm",
+    "sample": 1,
+    "totalMs": 28.414457999999286,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      },
+      "booleans": {},
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 12
+      }
+    },
+    "stdout": "{\"status\":\"sat\",\"values\":{\"elapsed\":\"1\",\"ttl\":\"1\"},\"booleans\":{},\"stats\":{\"work\":26,\"branches\":0,\"relaxations\":12}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "z3-native",
+    "sample": 1,
+    "totalMs": 7.435832999999548,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "ttl": "4273",
+        "elapsed": "4273"
+      },
+      "booleans": {}
+    },
+    "stdout": "sat\n((|ttl| 4273)\n (|elapsed| 4273))\n",
+    "stderr": ""
+  },
+  {
+    "backend": "z3-wasm",
+    "sample": 1,
+    "totalMs": 278.3406670000004,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "ttl": "4273",
+        "elapsed": "4273"
+      },
+      "booleans": {}
+    },
+    "stdout": "{\"status\":\"sat\",\"values\":{\"ttl\":\"4273\",\"elapsed\":\"4273\"},\"booleans\":{}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "rust-native",
+    "sample": 2,
+    "totalMs": 2.491416000000754,
+    "answer": {
+      "booleans": {},
+      "stats": {
+        "branches": 0,
+        "relaxations": 12,
+        "work": 26
+      },
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      }
+    },
+    "stdout": "{\"kind\":\"solution\",\"result\":{\"booleans\":{},\"stats\":{\"branches\":0,\"relaxations\":12,\"work\":26},\"status\":\"sat\",\"values\":{\"elapsed\":\"1\",\"ttl\":\"1\"}}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "rust-wasm",
+    "sample": 2,
+    "totalMs": 27.706708000001527,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      },
+      "booleans": {},
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 12
+      }
+    },
+    "stdout": "{\"status\":\"sat\",\"values\":{\"elapsed\":\"1\",\"ttl\":\"1\"},\"booleans\":{},\"stats\":{\"work\":26,\"branches\":0,\"relaxations\":12}}\n",
+    "stderr": ""
+  },
+  {
+    "backend": "z3-native",
+    "sample": 2,
+    "totalMs": 7.296916999999667,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "ttl": "4273",
+        "elapsed": "4273"
+      },
+      "booleans": {}
+    },
+    "stdout": "sat\n((|ttl| 4273)\n (|elapsed| 4273))\n",
+    "stderr": ""
+  },
+  {
+    "backend": "z3-wasm",
+    "sample": 2,
+    "totalMs": 274.7501250000023,
+    "answer": {
+      "status": "sat",
+      "values": {
+        "ttl": "4273",
+        "elapsed": "4273"
+      },
+      "booleans": {}
+    },
+    "stdout": "{\"status\":\"sat\",\"values\":{\"ttl\":\"4273\",\"elapsed\":\"4273\"},\"booleans\":{}}\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,25 @@
+✖ native/Wasm subset, Z3 and known fault reproduction agree (338.815667ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 400.083542
+
+✖ failing tests:
+
+test at dist/evals/smt-subset/contract-test.js:7:1
+✖ native/Wasm subset, Z3 and known fault reproduction agree (338.815667ms)
+  Error: (error "line 1 column 13: invalid function application, arguments missing")
+  
+      at throwIfError (/Users/mz/ghq/github.com/mizchi/modelt/node_modules/.pnpm/z3-solver@5.4.1/node_modules/z3-solver/build/high-level/high-level.js:132:23)
+      at SolverImpl.fromString (/Users/mz/ghq/github.com/mizchi/modelt/node_modules/.pnpm/z3-solver@5.4.1/node_modules/z3-solver/build/high-level/high-level.js:1656:17)
+      at prepare (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/smt-subset/clients.js:81:16)
+      at Object.solve (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/smt-subset/clients.js:114:29)
+      at verify (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/smt-subset/verify.js:16:40)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/smt-subset/contract-test.js:8:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

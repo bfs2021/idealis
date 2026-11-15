@@ -1,0 +1,27 @@
+cargo build --release --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.05s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/smt-subset-rust/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.02s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/smt-subset/benchmark.js 'evals/runs/0031-smt-scoped-benchmark' '.artifacts/smt-subset/z3-native/z3-5.4.1-arm64-osx-13.3/bin/z3'
+ttl: sat
+amount: sat
+chain-4-sat: sat
+chain-4-unsat: unsat
+chain-32-sat: sat
+chain-32-unsat: unsat
+chain-128-sat: sat
+chain-128-unsat: unsat
+chain-512-sat: sat
+chain-512-unsat: unsat
+boolean-4-sat: sat
+boolean-4-unsat: unsat
+boolean-8-sat: sat
+boolean-8-unsat: unsat
+boolean-12-sat: sat
+boolean-12-unsat: unknown
+scheduler: sat

@@ -1,0 +1,548 @@
+{
+  "status": "complete",
+  "sourceVersion": "bd322de224d68fc6d4cfe64d50884247dc989300bbae6450eedb37fa9f401620",
+  "counts": {
+    "developmentCases": 74,
+    "confirmationCases": 170,
+    "negativeControlsPerRun": 12,
+    "sharedTestsPerRunner": 77,
+    "rustTests": 5,
+    "criterionKernels": 6,
+    "nodeContractTests": 2,
+    "privateChromiumTests": 1,
+    "benchmarkInputs": 17,
+    "measuredSamples0031": 1020,
+    "warmups0031": 204,
+    "coldSamples0031": 12
+  },
+  "knownFault": {
+    "name": "TTL boundary",
+    "broken": "mismatch",
+    "fixed": "matched",
+    "unknownProjectBugsFound": 0
+  },
+  "checks": [
+    {
+      "command": "Rust crate API before implementation",
+      "path": "red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "reject empty Boolean applications regression",
+      "path": "empty-boolean-red.log",
+      "status": "expected-red"
+    },
+    {
+      "command": "Z3 differential found empty Boolean syntax mismatch",
+      "path": "contract.log",
+      "status": "expected-failure"
+    },
+    {
+      "command": "Z3 parser declaration state survives Solver.pop",
+      "path": "reuse-contract-red.log",
+      "status": "expected-failure"
+    },
+    {
+      "command": "just smt-test: fmt, clippy, Rust tests and Criterion smoke",
+      "path": "rust-test-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just smt-build",
+      "path": "build-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "node --test dist/evals/smt-subset/contract-test.js",
+      "path": "contract-scoped-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "Z3 native scoped queries x=1,x=2,x=1 and pinned witnesses",
+      "path": "scoped-native-control.log",
+      "status": "passed"
+    },
+    {
+      "command": "just smt-browser",
+      "path": "browser-scoped-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "just check: pnpm check, typecheck, test",
+      "path": "check-scoped.log",
+      "status": "passed"
+    },
+    {
+      "command": "just browser",
+      "path": "browser-core-scoped.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-build, unchanged Rust after this check",
+      "path": "runtime-build.log",
+      "status": "passed"
+    },
+    {
+      "command": "just runtime-test, unchanged Rust after this check",
+      "path": "runtime-test.log",
+      "status": "passed"
+    },
+    {
+      "command": "just evaluate",
+      "path": "evaluate-scoped.log",
+      "status": "passed"
+    },
+    {
+      "command": "just replay-evaluation",
+      "path": "replay-scoped.log",
+      "status": "passed"
+    },
+    {
+      "command": "biome check experimental harness",
+      "path": "format-scoped-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "0030 development correctness",
+      "path": "development-final.log",
+      "status": "passed"
+    },
+    {
+      "command": "0030 held-out correctness, not counted again in 0031",
+      "path": "confirmation.log",
+      "status": "passed"
+    },
+    {
+      "command": "0030 Rust Criterion 6 kernels",
+      "path": "criterion.log",
+      "status": "passed"
+    },
+    {
+      "command": "0030 four paths and lifecycle costs",
+      "path": "benchmark.log",
+      "status": "passed"
+    },
+    {
+      "command": "0031 three modes with scoped Z3",
+      "path": "scoped-benchmark.log",
+      "status": "passed"
+    }
+  ],
+  "files": [
+    {
+      "path": "benchmark.log",
+      "sha256": "13379da83604350035e1e2743f7be2b43ad993ac434ac2c92be2e7f02057fafb"
+    },
+    {
+      "path": "browser-core-scoped.log",
+      "sha256": "70bcdb1dd1964b48e0ffc7c5a1b475c71911fca86b89a7cdfe345000a49b1bb2"
+    },
+    {
+      "path": "browser-scoped-final.log",
+      "sha256": "93a47fa6372c6f933f2d1a3c87d73c982a6b6520516179067c493a597e63acfe"
+    },
+    {
+      "path": "build-final.log",
+      "sha256": "711ec3cdd046c094c39260b3db43b98eed8848bf867c3e0308aa7e1123d80b1a"
+    },
+    {
+      "path": "check-scoped.log",
+      "sha256": "c16ed85f5eff1e46554c662fe8d52a81deb7ae4b101a160b845623ed7aaffc98"
+    },
+    {
+      "path": "confirmation.log",
+      "sha256": "f17a93ca96a9913967948b5087dabdefbc1e30c21a9d291e5ec99e0dcbcec239"
+    },
+    {
+      "path": "contract-scoped-final.log",
+      "sha256": "0a780eb0fb1a3568be6406481057869001df56e4204ad260f6ecdd63e967c000"
+    },
+    {
+      "path": "contract.log",
+      "sha256": "7c2007110fed10e6299d306e0a65e3c4d2c12da4cc4cfd3e8fc947b39f3b120b"
+    },
+    {
+      "path": "criterion.log",
+      "sha256": "c54fd97f9c5184670ed01626eb2e1a532bf30564b963a5fa8011846bc15b930e"
+    },
+    {
+      "path": "development-final.log",
+      "sha256": "3273a0b980d8b58eac6972c1d8cd506e4ab94555e20ddd99f8d1e0633a76a8f9"
+    },
+    {
+      "path": "empty-boolean-red.log",
+      "sha256": "d1bbc12ba6c2973392a562b7407e2805f293eb63a74f74e52dcbff26bbc875c1"
+    },
+    {
+      "path": "evaluate-scoped.log",
+      "sha256": "be85648b8e48d686373c940a2c7e2bc726e5457f271a97dfc8116985dd94027b"
+    },
+    {
+      "path": "existing-evaluation/pbt.csv",
+      "sha256": "77b5588c5a0b90130dac24883900f4e7972113ad5a11cf0f37662916d0d9eb23"
+    },
+    {
+      "path": "existing-evaluation/pbt.json",
+      "sha256": "fbf77bf0134c2a274bd897524d34adbcfd2a8aa0c7f8d7641cb4d493937ac041"
+    },
+    {
+      "path": "existing-evaluation/search.csv",
+      "sha256": "6ec02c2e2785e9218604911b8d687b976be9504aea6682113489379303f9c74d"
+    },
+    {
+      "path": "existing-evaluation/summary.json",
+      "sha256": "ff42046e20195e565cf7f58565820f8f414de6af8d3822d1cc1ccdda28f565be"
+    },
+    {
+      "path": "existing-evaluation/witnesses.json",
+      "sha256": "5e0c6ce5eccbaf947298232f8567c3128bc8740b53e9a26a75041571a02bdec9"
+    },
+    {
+      "path": "format-scoped-final.log",
+      "sha256": "d0c0f332d77f30e46820bd477bab07c1f5db4c1a71512197fa5df3fbd4ae2553"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "cb2348f7bb9943647221a9752d63b1f1f818e5432d2457bd640d21c12138285a"
+    },
+    {
+      "path": "red.log",
+      "sha256": "cfa8d8a776882cfff2b8c9b4aa47cf4a8ec25b19efbd2be30c9062c1df3d9c5c"
+    },
+    {
+      "path": "replay-scoped.log",
+      "sha256": "2f0c7dee978072a501080374819f6d3c09a15fde0d371827177fe31e55d94d70"
+    },
+    {
+      "path": "reuse-contract-red.log",
+      "sha256": "4fba1b1f6914699f69d1ad0a0de094bd1d0194201903c3f21793fdd77203461b"
+    },
+    {
+      "path": "runtime-build.log",
+      "sha256": "33842ff0412c1469b1773d24f98011d499385d4a18018991321155be3bb21592"
+    },
+    {
+      "path": "runtime-test.log",
+      "sha256": "6508d0830320d70bc884d6ef2a5e214c75a8511218874294140228a43692d7d5"
+    },
+    {
+      "path": "rust-test-final.log",
+      "sha256": "b63790aefcc24c4cb69e3d8d143f795e13aaef06843c76d55f1fd46a9c947b99"
+    },
+    {
+      "path": "scoped-benchmark.log",
+      "sha256": "8e61375e6ece59f39783c45a93d0ba8ff631ab52eb85b40ebda5f48bf9559796"
+    },
+    {
+      "path": "scoped-native-control.log",
+      "sha256": "01fe35ff195f7ae338399137aa2013a7dc49058a35645737ba0558384b86aef4"
+    },
+    {
+      "path": "z3-release.json",
+      "sha256": "8d18b9a41deca8cf9d05c9116a0fe6a2b85b25f8a1ff512a7d2281039999350f"
+    }
+  ],
+  "externalRunFiles": [
+    {
+      "path": "evals/runs/0030-smt-development-initial/inputs.json",
+      "sha256": "122570560faec1a512931905d4c15b571f363c517d30734e7d5b1228273fd08a"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-initial/manifest.json",
+      "sha256": "d674a986100fe1a4d2bba34dedc2ee22d495d61086b9461bbf0d989f20348643"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-initial/records.json",
+      "sha256": "9245957b89547545be721cc35c18b809026d8fe5669bc13ff9f1130bcd383959"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-initial/result.json",
+      "sha256": "a83ad129a3136ade71460aca5c0e26ee0c4009060c6ecc31caf1bcc42a90793d"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-final/inputs.json",
+      "sha256": "e2dac2cb5e3f8ec9bf9b96b499b9078ca0f1abbd0fe18f17b922834eec7bf928"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-final/manifest.json",
+      "sha256": "bb34ca534721b1dd7e856dabf789ac566128754f72ad0b4096d6747c6de12ad7"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-final/records.json",
+      "sha256": "036d7a62a80441db996b8921b3667a3b81a566800e057b549010197787734b77"
+    },
+    {
+      "path": "evals/runs/0030-smt-development-final/result.json",
+      "sha256": "e2bbb729c04d8ae5d67ad247afa2990476a9929cc5057196227230b41dacb4ed"
+    },
+    {
+      "path": "evals/runs/0030-smt-confirmation/inputs.json",
+      "sha256": "bfa159d7b0c5ecc791afe16f68f50120414eb0da3a9112611f2bbedee732f272"
+    },
+    {
+      "path": "evals/runs/0030-smt-confirmation/manifest.json",
+      "sha256": "f19079c208c956618a99a1c2865d5f698734efe837f6430d66c84e21e993d7d8"
+    },
+    {
+      "path": "evals/runs/0030-smt-confirmation/records.json",
+      "sha256": "2dafe200b3fc1626e6e76cdc4042a61333b18565f40f760b3240a7a37b796357"
+    },
+    {
+      "path": "evals/runs/0030-smt-confirmation/result.json",
+      "sha256": "a98beb21f0e4bd985662e2ee9f296ec84ef857b9c83ecb65136c77d8061e1c0c"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/base/benchmark.json",
+      "sha256": "ba4da14d504a94e683d5a625ee660ce3085a76230d8061b433f7253a0c8bf5d2"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/base/estimates.json",
+      "sha256": "a310019b22813c7fcac44459fbb2d349255c8f475dc401b922121ea732d6a25e"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/base/sample.json",
+      "sha256": "e977bba9b71a923127334d63ea1e4ff6fcdb42b909617be2b728c70d3fb4e4cc"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/base/tukey.json",
+      "sha256": "a6d0f7ec57c7cce1328b408f33491a2f2894adb87988628b2499bd9db8b6e8d7"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/new/benchmark.json",
+      "sha256": "ba4da14d504a94e683d5a625ee660ce3085a76230d8061b433f7253a0c8bf5d2"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/new/estimates.json",
+      "sha256": "a310019b22813c7fcac44459fbb2d349255c8f475dc401b922121ea732d6a25e"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/new/sample.json",
+      "sha256": "e977bba9b71a923127334d63ea1e4ff6fcdb42b909617be2b728c70d3fb4e4cc"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-128/new/tukey.json",
+      "sha256": "a6d0f7ec57c7cce1328b408f33491a2f2894adb87988628b2499bd9db8b6e8d7"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/base/benchmark.json",
+      "sha256": "81fde64928315d398afdb110739a9783b2256985baad6c6fd6e9ae1bb92ddfd6"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/base/estimates.json",
+      "sha256": "0d94dec90eb4f441b984f3b3b9da5f8303b6811875b390cd8aaedabf8e8196bc"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/base/sample.json",
+      "sha256": "99c4d8d9217dfc0f2d4168ff7a1d7d4eee2ec817dad7b3cfee7ed838c48fd1ef"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/base/tukey.json",
+      "sha256": "f1820175cbc3a7654a568e338c7369fa51498757b6824383f8af72e0d4e31ed0"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/new/benchmark.json",
+      "sha256": "81fde64928315d398afdb110739a9783b2256985baad6c6fd6e9ae1bb92ddfd6"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/new/estimates.json",
+      "sha256": "0d94dec90eb4f441b984f3b3b9da5f8303b6811875b390cd8aaedabf8e8196bc"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/new/sample.json",
+      "sha256": "99c4d8d9217dfc0f2d4168ff7a1d7d4eee2ec817dad7b3cfee7ed838c48fd1ef"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-32/new/tukey.json",
+      "sha256": "f1820175cbc3a7654a568e338c7369fa51498757b6824383f8af72e0d4e31ed0"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/base/benchmark.json",
+      "sha256": "44d6c3a87819d24da8eb9aedb44542c94137b83aa515f2dcaeb135e292a45e79"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/base/estimates.json",
+      "sha256": "7e91eeb3d1d7c6fd7868dba43fc76dfdce47c729e8274be461c5e36096cf4bd6"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/base/sample.json",
+      "sha256": "736f650a4cb3ecc238d3d1807cc8ccea0ea45a6775cf50145eed7728808fe32b"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/base/tukey.json",
+      "sha256": "2db7466ba01757bad8816df98e03aa318a9c3c0c14a606217b5d9f7996329ff3"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/new/benchmark.json",
+      "sha256": "44d6c3a87819d24da8eb9aedb44542c94137b83aa515f2dcaeb135e292a45e79"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/new/estimates.json",
+      "sha256": "7e91eeb3d1d7c6fd7868dba43fc76dfdce47c729e8274be461c5e36096cf4bd6"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/new/sample.json",
+      "sha256": "736f650a4cb3ecc238d3d1807cc8ccea0ea45a6775cf50145eed7728808fe32b"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/parse-solve-4/new/tukey.json",
+      "sha256": "2db7466ba01757bad8816df98e03aa318a9c3c0c14a606217b5d9f7996329ff3"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/base/benchmark.json",
+      "sha256": "bbe44d7ebb1d0e783bf0d55071fb95252e2114ec068a12967ded160be1b6bf5b"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/base/estimates.json",
+      "sha256": "cb534ba1cbb10d7a22fdf971dc0ad75dd9cc0bb003213bd198c7e1d7facdccf6"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/base/sample.json",
+      "sha256": "c5a9ea4f05f9ec3949321e84c1475636b200416daf0063d1480091a7f2a371e7"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/base/tukey.json",
+      "sha256": "249a296222f7ad2c3b7698cb983d7bd8a0d1562900db6845575b7ab12bf88fe2"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/new/benchmark.json",
+      "sha256": "bbe44d7ebb1d0e783bf0d55071fb95252e2114ec068a12967ded160be1b6bf5b"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/new/estimates.json",
+      "sha256": "cb534ba1cbb10d7a22fdf971dc0ad75dd9cc0bb003213bd198c7e1d7facdccf6"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/new/sample.json",
+      "sha256": "c5a9ea4f05f9ec3949321e84c1475636b200416daf0063d1480091a7f2a371e7"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-128/new/tukey.json",
+      "sha256": "249a296222f7ad2c3b7698cb983d7bd8a0d1562900db6845575b7ab12bf88fe2"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/base/benchmark.json",
+      "sha256": "ac5c5f8506e9d015484f1b4600e6b75485651d07b486544be28fd24b78b2cf47"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/base/estimates.json",
+      "sha256": "f6c17b7a9ae579987760986dcbb3ea6e9c25e1817360d388e6a7fe28a64b32ea"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/base/sample.json",
+      "sha256": "8776cf9b26013ac2214e9991671e0e33dffbffbf36e214154a308bc7b899a2ac"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/base/tukey.json",
+      "sha256": "c8af8a8f57231bc8edd50477b5ba11e2de99275faad78334ac7eb315793a81ca"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/new/benchmark.json",
+      "sha256": "ac5c5f8506e9d015484f1b4600e6b75485651d07b486544be28fd24b78b2cf47"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/new/estimates.json",
+      "sha256": "f6c17b7a9ae579987760986dcbb3ea6e9c25e1817360d388e6a7fe28a64b32ea"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/new/sample.json",
+      "sha256": "8776cf9b26013ac2214e9991671e0e33dffbffbf36e214154a308bc7b899a2ac"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-32/new/tukey.json",
+      "sha256": "c8af8a8f57231bc8edd50477b5ba11e2de99275faad78334ac7eb315793a81ca"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/base/benchmark.json",
+      "sha256": "23dce8d8a95b2f3f05511fbe8ffc6e4ee6f1200b2232a98358862b7110813dd5"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/base/estimates.json",
+      "sha256": "7e27ab23516f1f0a119e1b3032f4d88d7a6a721372398490dc4708207705a7f8"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/base/sample.json",
+      "sha256": "f660a5f721645a49706ed1e4530dc00b341d28c5522d2f1cb696feb01c2c7c34"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/base/tukey.json",
+      "sha256": "6aa1a202f0479002e60229a77d29d6cd6e879bb8bec2eb83c19aafc7e9dd9e88"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/new/benchmark.json",
+      "sha256": "23dce8d8a95b2f3f05511fbe8ffc6e4ee6f1200b2232a98358862b7110813dd5"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/new/estimates.json",
+      "sha256": "7e27ab23516f1f0a119e1b3032f4d88d7a6a721372398490dc4708207705a7f8"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/new/sample.json",
+      "sha256": "f660a5f721645a49706ed1e4530dc00b341d28c5522d2f1cb696feb01c2c7c34"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion/prepared-4/new/tukey.json",
+      "sha256": "6aa1a202f0479002e60229a77d29d6cd6e879bb8bec2eb83c19aafc7e9dd9e88"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/criterion.log",
+      "sha256": "c54fd97f9c5184670ed01626eb2e1a532bf30564b963a5fa8011846bc15b930e"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/manifest.json",
+      "sha256": "f8cb07a0d4fcf40de1b5b75adce6d24ed776702bf6befb009dfdfeba74b72bde"
+    },
+    {
+      "path": "evals/runs/0030-smt-criterion/result.json",
+      "sha256": "44231eb599ed3cc8860cebfdfa8a0ecb0fe4c59148ba8922fe64fc745a1f24da"
+    },
+    {
+      "path": "evals/runs/0030-smt-benchmark/cold-input.json",
+      "sha256": "499a2411faa20bdef9c97917caed28e3fd0f80f1ded9200b70c07b6dabb8986c"
+    },
+    {
+      "path": "evals/runs/0030-smt-benchmark/cold.json",
+      "sha256": "edcd265c17fc44e4ebdd2769a3f26b2163384374f4eac6f01a41c561add021da"
+    },
+    {
+      "path": "evals/runs/0030-smt-benchmark/manifest.json",
+      "sha256": "525d0f0775fde560f24f01a6be76626aed5854065c95b4b0fec195f8f0e87ea4"
+    },
+    {
+      "path": "evals/runs/0030-smt-benchmark/preflight.json",
+      "sha256": "7faa4a9e8bfba2b7e6a1b56b6090c305995127e38827c211a35a329a07e206c5"
+    },
+    {
+      "path": "evals/runs/0030-smt-benchmark/result.json",
+      "sha256": "5e67e64acce33b80c50a5d1a29210aec196d0fb89d438217bfc6a77e9006044e"
+    },
+    {
+      "path": "evals/runs/0030-smt-benchmark/trials.json",
+      "sha256": "44f41734fa8953bc80648a03c14e351151528d2c6dc593a29cdbfe56edc6be01"
+    },
+    {
+      "path": "evals/runs/0031-smt-scoped-benchmark/cold-input.json",
+      "sha256": "499a2411faa20bdef9c97917caed28e3fd0f80f1ded9200b70c07b6dabb8986c"
+    },
+    {
+      "path": "evals/runs/0031-smt-scoped-benchmark/cold.json",
+      "sha256": "e695711f21d79266486f47a754a869bfbf478b7081a9db4b1203204b5b301637"
+    },
+    {
+      "path": "evals/runs/0031-smt-scoped-benchmark/manifest.json",
+      "sha256": "e0e55ca43011476b82ffde0788409473c678ac615b81cdd0c5a398111593a3d5"
+    },
+    {
+      "path": "evals/runs/0031-smt-scoped-benchmark/preflight.json",
+      "sha256": "7faa4a9e8bfba2b7e6a1b56b6090c305995127e38827c211a35a329a07e206c5"
+    },
+    {
+      "path": "evals/runs/0031-smt-scoped-benchmark/result.json",
+      "sha256": "dac3337d42cdbe55db0e83856ffc96523a29f1278027797c8368c25a13c152a6"
+    },
+    {
+      "path": "evals/runs/0031-smt-scoped-benchmark/trials.json",
+      "sha256": "18aa362604c45214f3a4cfd46f8cc639720b50051959970755e247642869d582"
+    }
+  ],
+  "adoption": "candidate for integer difference logic only; public integration deferred; Boolean UNSAT regression and work-limited unknown retained"
+}

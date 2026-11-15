@@ -1,0 +1,2021 @@
+{
+  "status": "complete",
+  "sourceVersion": "bd322de224d68fc6d4cfe64d50884247dc989300bbae6450eedb37fa9f401620",
+  "z3Version": "5.4.1.0 145c0c51570a357cc558ce898ce77573ba9d4fbf z3-5.4.1",
+  "measuredSamples": 1020,
+  "warmups": 204,
+  "coldSamples": 12,
+  "medians": [
+    {
+      "case": "ttl",
+      "family": "ttl",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.027463562500003036,
+          "minMs": 0.02458984374999318,
+          "maxMs": 0.0297916562499978,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.016303406249996044,
+          "minMs": 0.015092468750005139,
+          "maxMs": 0.01854037500000061,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 2.963661468749997,
+          "minMs": 2.8422968750000024,
+          "maxMs": 3.0832330624999997,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 5.310160156249999,
+          "minMs": 5.126734374999998,
+          "maxMs": 5.375199218749998,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "ttl",
+      "family": "ttl",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.01630206250000299,
+          "minMs": 0.014240906250009289,
+          "maxMs": 0.02536978124999223,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.006009125000005611,
+          "minMs": 0.00568359374999261,
+          "maxMs": 0.0070390624999987494,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.4416002812499897,
+          "minMs": 1.3345156250000088,
+          "maxMs": 1.4595169374999983,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.404743468750013,
+          "minMs": 3.3763476562500045,
+          "maxMs": 3.512460937499995,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "ttl",
+      "family": "ttl",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.02543878124998855,
+          "minMs": 0.01942318750000993,
+          "maxMs": 0.03377474999999208,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.015925781249990223,
+          "minMs": 0.015391937499998676,
+          "maxMs": 0.018014312500000074,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.08217709375000481,
+          "minMs": 0.07742449999999224,
+          "maxMs": 0.10227734374998931,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.6330325312499951,
+          "minMs": 1.5849349062499982,
+          "maxMs": 1.6955091249999867,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "amount",
+      "family": "amount",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.02311850000000959,
+          "minMs": 0.022248718750006446,
+          "maxMs": 0.027225250000000756,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.014098937500023112,
+          "minMs": 0.013134124999993446,
+          "maxMs": 0.015332031249982947,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.7180169375000105,
+          "minMs": 1.6245546875000088,
+          "maxMs": 2.009052062500004,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.2275846249999915,
+          "minMs": 3.194183593749983,
+          "maxMs": 3.3185898437500043,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "amount",
+      "family": "amount",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.02056899999999473,
+          "minMs": 0.015661437500000375,
+          "maxMs": 0.021244812500015087,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.007960937500001819,
+          "minMs": 0.006352843749994008,
+          "maxMs": 0.00944659374999901,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.1669296875000157,
+          "minMs": 0.15209893749999992,
+          "maxMs": 0.20140625000001933,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.820476562500005,
+          "minMs": 1.7069648437500007,
+          "maxMs": 1.8526705937500196,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "amount",
+      "family": "amount",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03194271875000254,
+          "minMs": 0.02343096875000583,
+          "maxMs": 0.03942446874998495,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.018221374999995987,
+          "minMs": 0.015955749999989166,
+          "maxMs": 0.01886068749999481,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.1072356874999798,
+          "minMs": 0.08913803124997344,
+          "maxMs": 0.11644662499998049,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.6436276249999935,
+          "minMs": 1.6339804687499964,
+          "maxMs": 1.6716966250000098,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-4-sat",
+      "family": "chain-sat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03588543750004192,
+          "minMs": 0.02328643750001902,
+          "maxMs": 0.040320312500000455,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.01645312499999818,
+          "minMs": 0.014596374999996442,
+          "maxMs": 0.01850518750001129,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.3892031249999945,
+          "minMs": 1.2764426875000368,
+          "maxMs": 1.7153124999999818,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.327562499999999,
+          "minMs": 3.2512786249999976,
+          "maxMs": 3.4081484375000173,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-4-sat",
+      "family": "chain-sat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.01948437499999045,
+          "minMs": 0.015950562499995158,
+          "maxMs": 0.023382812499960437,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.008270812500029479,
+          "minMs": 0.006734374999950887,
+          "maxMs": 0.011552062500015836,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.11008856249998189,
+          "minMs": 0.10211456249999173,
+          "maxMs": 0.12052862500001993,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.780427125000017,
+          "minMs": 1.7164973750000172,
+          "maxMs": 1.8611588124999798,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-4-sat",
+      "family": "chain-sat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03461981250001145,
+          "minMs": 0.03397137500002145,
+          "maxMs": 0.048028625000029024,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.021562499999959073,
+          "minMs": 0.018705687500016666,
+          "maxMs": 0.02427081249999219,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.12276043750000554,
+          "minMs": 0.11110937500001228,
+          "maxMs": 0.13755206250004903,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.7532317499999976,
+          "minMs": 1.6834218750000218,
+          "maxMs": 1.7886197499999525,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-4-unsat",
+      "family": "chain-unsat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03686718749997908,
+          "minMs": 0.03325518750000356,
+          "maxMs": 0.0391328124999859,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.015656250000006366,
+          "minMs": 0.013875000000041382,
+          "maxMs": 0.018835937500000455,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.477460937499984,
+          "minMs": 1.3136353749999898,
+          "maxMs": 1.5900182500000142,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.2066145625000217,
+          "minMs": 3.012692687500021,
+          "maxMs": 3.6999948124999946,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-4-unsat",
+      "family": "chain-unsat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.0173203124999759,
+          "minMs": 0.014872375000038573,
+          "maxMs": 0.02465625000002092,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.006281250000029104,
+          "minMs": 0.0048568125000088,
+          "maxMs": 0.009411499999998796,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.05934893749997627,
+          "minMs": 0.05389324999998735,
+          "maxMs": 0.06605206249997764,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.5352083749999679,
+          "minMs": 1.4115755624999906,
+          "maxMs": 1.617854125000008,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-4-unsat",
+      "family": "chain-unsat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03782031250000273,
+          "minMs": 0.03221350000001166,
+          "maxMs": 0.04269012499997871,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.01802868749996378,
+          "minMs": 0.017888062500048818,
+          "maxMs": 0.022289062500021828,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.07612237500001129,
+          "minMs": 0.07456250000001319,
+          "maxMs": 0.11828124999999545,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.4632656250000196,
+          "minMs": 1.414940124999987,
+          "maxMs": 1.5543385624999928,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-32-sat",
+      "family": "chain-sat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.10084118750000926,
+          "minMs": 0.0973724374999847,
+          "maxMs": 0.10448962499998515,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.08500518749997354,
+          "minMs": 0.08394275000000562,
+          "maxMs": 0.11889062500000591,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.7607916874999887,
+          "minMs": 1.6929895625000313,
+          "maxMs": 1.991119812500017,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 4.263091125000017,
+          "minMs": 4.17366662500001,
+          "maxMs": 5.013028687500025,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-32-sat",
+      "family": "chain-sat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.046010374999980286,
+          "minMs": 0.04060937500003092,
+          "maxMs": 0.048859375000006366,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.034403625000038573,
+          "minMs": 0.0339739375000363,
+          "maxMs": 0.04274743749999743,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.2184062499999868,
+          "minMs": 0.21502087499999334,
+          "maxMs": 0.5915182499999787,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.32389062499999,
+          "minMs": 2.3061301875000026,
+          "maxMs": 2.460950500000024,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-32-sat",
+      "family": "chain-sat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.09698693749999165,
+          "minMs": 0.0930338750000601,
+          "maxMs": 0.11972656249997726,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.0811693124999806,
+          "minMs": 0.0786353749999762,
+          "maxMs": 0.09224218750000546,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.40560681250002517,
+          "minMs": 0.3808698125000092,
+          "maxMs": 0.4104635625000128,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.153979187499999,
+          "minMs": 3.13858074999996,
+          "maxMs": 3.2432629999999563,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-32-unsat",
+      "family": "chain-unsat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.08829687499996908,
+          "minMs": 0.08620837500006928,
+          "maxMs": 0.09852343750003456,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.06988281250005457,
+          "minMs": 0.06798174999994444,
+          "maxMs": 0.07749218749995634,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.5322213749999491,
+          "minMs": 1.4344557499999837,
+          "maxMs": 1.5775364375000436,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.546632812499979,
+          "minMs": 3.4713124999999536,
+          "maxMs": 3.7706223749999026,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-32-unsat",
+      "family": "chain-unsat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03711193750007169,
+          "minMs": 0.03438800000003539,
+          "maxMs": 0.040458312499936255,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.0274557499999446,
+          "minMs": 0.025867187500011823,
+          "maxMs": 0.03221093749993997,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.08107293750003919,
+          "minMs": 0.0708228749999762,
+          "maxMs": 0.09564062499998727,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.8287473750000345,
+          "minMs": 1.7322864999999865,
+          "maxMs": 1.8383073124999783,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-32-unsat",
+      "family": "chain-unsat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.10298181250004745,
+          "minMs": 0.0890078124999718,
+          "maxMs": 0.10542968750007731,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.0858906250000473,
+          "minMs": 0.08020049999993262,
+          "maxMs": 0.08927081249998992,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.3059453125000573,
+          "minMs": 0.26845575000004374,
+          "maxMs": 0.3166927500000156,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.6773645624999745,
+          "minMs": 2.60385156250004,
+          "maxMs": 2.7093645625000136,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-128-sat",
+      "family": "chain-sat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.5385624999998981,
+          "minMs": 0.5289790000006178,
+          "maxMs": 0.5647294999998849,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.5663749999994252,
+          "minMs": 0.5171040000004723,
+          "maxMs": 0.589833500000168,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 2.8408540000000357,
+          "minMs": 2.6281669999998485,
+          "maxMs": 3.0451044999999795,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 7.326958000000559,
+          "minMs": 7.232979499999601,
+          "maxMs": 7.489687499999491,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-128-sat",
+      "family": "chain-sat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.3677914999998393,
+          "minMs": 0.2844999999997526,
+          "maxMs": 0.43964600000072096,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.36993749999965075,
+          "minMs": 0.35356249999949796,
+          "maxMs": 0.4098954999999478,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.8903334999995423,
+          "minMs": 0.8102294999998776,
+          "maxMs": 0.9242710000007719,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 4.656916500000079,
+          "minMs": 4.454020500000297,
+          "maxMs": 5.124041499999294,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-128-sat",
+      "family": "chain-sat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.7172709999995277,
+          "minMs": 0.5609789999998611,
+          "maxMs": 0.8766249999998763,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.6056040000003122,
+          "minMs": 0.5751044999997248,
+          "maxMs": 0.7548749999996289,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 2.0626664999999775,
+          "minMs": 1.8743959999992512,
+          "maxMs": 2.2688954999994166,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 10.205333499999142,
+          "minMs": 10.027291499999592,
+          "maxMs": 10.431874999999309,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-128-unsat",
+      "family": "chain-unsat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.5108540000001085,
+          "minMs": 0.4728750000003856,
+          "maxMs": 0.5563540000002831,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.5418955000004644,
+          "minMs": 0.48389550000047166,
+          "maxMs": 0.6323334999997314,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 2.6936670000004597,
+          "minMs": 2.3756249999996726,
+          "maxMs": 3.2040624999999636,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 5.850750000000517,
+          "minMs": 5.7167499999995925,
+          "maxMs": 5.923687499999687,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-128-unsat",
+      "family": "chain-unsat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.24797950000083802,
+          "minMs": 0.22214600000006612,
+          "maxMs": 0.2553539999998975,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.29760450000048877,
+          "minMs": 0.2853959999993094,
+          "maxMs": 0.303979000000254,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.2072920000000522,
+          "minMs": 0.1491249999999127,
+          "maxMs": 0.32293750000008004,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.592937499999607,
+          "minMs": 2.4822290000001885,
+          "maxMs": 2.659812499999134,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-128-unsat",
+      "family": "chain-unsat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.48922899999979563,
+          "minMs": 0.4812085000003208,
+          "maxMs": 0.5057085000007646,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.4999375000006694,
+          "minMs": 0.4904164999998102,
+          "maxMs": 0.5519164999996065,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.2029789999996865,
+          "minMs": 1.0603959999998551,
+          "maxMs": 1.4787710000000516,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 7.487771000000066,
+          "minMs": 7.070708499999455,
+          "maxMs": 7.519916500000363,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-512-sat",
+      "family": "chain-sat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 4.260728999999628,
+          "minMs": 4.046187500000087,
+          "maxMs": 5.209583500000008,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 5.587749999999687,
+          "minMs": 5.481687500000589,
+          "maxMs": 9.620979000000261,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 9.079125000000204,
+          "minMs": 7.45922949999931,
+          "maxMs": 10.01635400000032,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 19.884166499999992,
+          "minMs": 19.645916499999657,
+          "maxMs": 23.41089599999941,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-512-sat",
+      "family": "chain-sat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 3.3651249999993524,
+          "minMs": 3.2498750000004293,
+          "maxMs": 3.439770999999382,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 4.838125000000218,
+          "minMs": 4.566687499999716,
+          "maxMs": 4.990146000000095,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 3.896520999999666,
+          "minMs": 3.6392500000001746,
+          "maxMs": 4.673603999999614,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 13.06439599999976,
+          "minMs": 12.280479000000014,
+          "maxMs": 14.507395499999802,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-512-sat",
+      "family": "chain-sat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 4.171583500000452,
+          "minMs": 4.10058299999946,
+          "maxMs": 4.227729499999441,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 5.537187499999163,
+          "minMs": 5.532020500000726,
+          "maxMs": 5.593229500000234,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 11.534270499999366,
+          "minMs": 10.682770500000515,
+          "maxMs": 12.002395499999693,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 42.17793749999964,
+          "minMs": 41.623750000000655,
+          "maxMs": 42.9087085000001,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-512-unsat",
+      "family": "chain-unsat",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 3.838875000000371,
+          "minMs": 3.7527085000001534,
+          "maxMs": 3.9869165000000066,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 5.161270999999942,
+          "minMs": 5.09643750000032,
+          "maxMs": 5.351792000000387,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 4.556208499999229,
+          "minMs": 4.1410415000000285,
+          "maxMs": 4.9911459999993895,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 12.224667000000409,
+          "minMs": 11.626291499999752,
+          "maxMs": 12.577478999999585,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-512-unsat",
+      "family": "chain-unsat",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 2.943187500000022,
+          "minMs": 2.8480625000001965,
+          "maxMs": 3.1338125000002037,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 4.519145500000377,
+          "minMs": 4.347042000000329,
+          "maxMs": 4.691520500000479,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.5902915000006033,
+          "minMs": 0.5605420000001686,
+          "maxMs": 0.6498959999998988,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 5.640646000000743,
+          "minMs": 5.235770499999489,
+          "maxMs": 5.830667000000176,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "chain-512-unsat",
+      "family": "chain-unsat",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 3.807166500000676,
+          "minMs": 3.6957915000002686,
+          "maxMs": 3.8874164999997447,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 5.142041500000232,
+          "minMs": 5.0931875000005675,
+          "maxMs": 5.24035399999957,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 7.813500000000204,
+          "minMs": 7.382333499999731,
+          "maxMs": 8.425145999999586,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 35.731416499999796,
+          "minMs": 34.52695849999964,
+          "maxMs": 36.746979000000465,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-4-sat",
+      "family": "boolean",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.022395812500008105,
+          "minMs": 0.01968231249998098,
+          "maxMs": 0.027914062500030923,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.010885375000043496,
+          "minMs": 0.009773437499916326,
+          "maxMs": 0.013333375000001979,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.6019870000000083,
+          "minMs": 1.41439062500001,
+          "maxMs": 2.202578125000059,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.7577187500000946,
+          "minMs": 2.566208374999974,
+          "maxMs": 3.2566224375000274,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-4-sat",
+      "family": "boolean",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.016476562499974534,
+          "minMs": 0.014908812500038948,
+          "maxMs": 0.019270874999961052,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.005864562500050852,
+          "minMs": 0.005523437500073669,
+          "maxMs": 0.007492187500020009,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.09961718749991633,
+          "minMs": 0.08345574999998462,
+          "maxMs": 0.11142449999999826,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.8093724374999738,
+          "minMs": 1.8030703124999263,
+          "maxMs": 1.8465442499999654,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-4-sat",
+      "family": "boolean",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.019408874999953696,
+          "minMs": 0.019130249999989246,
+          "maxMs": 0.030096312499949818,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.009533812499967098,
+          "minMs": 0.007833312499997191,
+          "maxMs": 0.03033331250003357,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.076010437500031,
+          "minMs": 0.06039062499996817,
+          "maxMs": 0.09944275000009384,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.6057864375000008,
+          "minMs": 1.5281458749999501,
+          "maxMs": 2.2194583750000447,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-4-unsat",
+      "family": "boolean",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.035312499999918145,
+          "minMs": 0.0339921874999618,
+          "maxMs": 0.036031250000064574,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.015130249999970147,
+          "minMs": 0.013736999999991895,
+          "maxMs": 0.021174500000029184,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.3844323124999391,
+          "minMs": 1.237210937499981,
+          "maxMs": 1.6321224375000156,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.906343750000019,
+          "minMs": 1.8623619374999407,
+          "maxMs": 2.038664062500061,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-4-unsat",
+      "family": "boolean",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.024237000000084663,
+          "minMs": 0.01677087500002017,
+          "maxMs": 0.045174499999916407,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.011015625000027285,
+          "minMs": 0.008510437499921863,
+          "maxMs": 0.011684875000014472,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.04039843750001637,
+          "minMs": 0.037567687499972635,
+          "maxMs": 0.054882812499954525,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.2604609374999427,
+          "minMs": 1.2018697500000144,
+          "maxMs": 1.3167604375000792,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-4-unsat",
+      "family": "boolean",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.034992187499938154,
+          "minMs": 0.032122437499992884,
+          "maxMs": 0.05555468750003456,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.018786437499898057,
+          "minMs": 0.017919249999977183,
+          "maxMs": 0.021226562499919055,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.031705749999900945,
+          "minMs": 0.02817450000009103,
+          "maxMs": 0.042658875000029184,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.2807838124999762,
+          "minMs": 1.1986979375000146,
+          "maxMs": 1.308752625000011,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-8-sat",
+      "family": "boolean",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.08427049999954761,
+          "minMs": 0.07449999999971624,
+          "maxMs": 0.09227050000026793,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.036229000000275846,
+          "minMs": 0.029166499999519147,
+          "maxMs": 0.049687500000800355,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 2.2051455000000715,
+          "minMs": 1.8525204999996276,
+          "maxMs": 2.5313960000003135,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.1545624999998836,
+          "minMs": 2.6640415000001667,
+          "maxMs": 3.4791044999992664,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-8-sat",
+      "family": "boolean",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.04197900000053778,
+          "minMs": 0.019021000000066124,
+          "maxMs": 0.044729000000188535,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.012375000000247383,
+          "minMs": 0.00639599999976781,
+          "maxMs": 0.01929149999978108,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.14116649999959918,
+          "minMs": 0.09666649999962829,
+          "maxMs": 0.15416699999968841,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.967458500000248,
+          "minMs": 1.9163539999999557,
+          "maxMs": 2.007104000000254,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-8-sat",
+      "family": "boolean",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.05812499999956344,
+          "minMs": 0.020291499999984808,
+          "maxMs": 0.06272900000021764,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.020104000000173983,
+          "minMs": 0.013500000000021828,
+          "maxMs": 0.022041999999601103,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.11068749999958527,
+          "minMs": 0.08145849999982602,
+          "maxMs": 0.1249790000001667,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.6552920000003724,
+          "minMs": 1.6381249999994907,
+          "maxMs": 1.686291999999412,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-8-unsat",
+      "family": "boolean",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 1.4594999999999345,
+          "minMs": 1.4024790000003122,
+          "maxMs": 1.551729499999965,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 1.3375419999993028,
+          "minMs": 1.2851665000007415,
+          "maxMs": 1.420583500000248,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.597896000000219,
+          "minMs": 1.587624999999207,
+          "maxMs": 1.9542709999996077,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.1155210000006264,
+          "minMs": 2.0058749999998327,
+          "maxMs": 2.192166499999985,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-8-unsat",
+      "family": "boolean",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 1.3715000000001965,
+          "minMs": 1.316291999999521,
+          "maxMs": 1.409853999999541,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 1.2898749999994834,
+          "minMs": 1.2770419999997102,
+          "maxMs": 1.3165415000003122,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.04881250000016735,
+          "minMs": 0.0423545000003287,
+          "maxMs": 0.06739600000037171,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.2967499999995198,
+          "minMs": 1.2713960000000952,
+          "maxMs": 1.3008959999997387,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-8-unsat",
+      "family": "boolean",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 1.4246044999999867,
+          "minMs": 1.3633545000002414,
+          "maxMs": 1.5819375000000946,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 1.297458000000006,
+          "minMs": 1.2774374999999054,
+          "maxMs": 1.3379375000004075,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.04150000000026921,
+          "minMs": 0.03777099999933853,
+          "maxMs": 0.043395499999860476,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.2895625000001019,
+          "minMs": 1.2761875000005602,
+          "maxMs": 1.3627914999997301,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-12-sat",
+      "family": "boolean",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.07858349999969505,
+          "minMs": 0.056833499999811465,
+          "maxMs": 0.47775000000001455,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.03193749999991269,
+          "minMs": 0.02172900000005029,
+          "maxMs": 0.037541499999861117,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.6701459999994768,
+          "minMs": 1.396896000000197,
+          "maxMs": 5.801603999999315,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.953875000000153,
+          "minMs": 2.76306250000016,
+          "maxMs": 3.171562499999709,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-12-sat",
+      "family": "boolean",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.03779149999991205,
+          "minMs": 0.017729499999404652,
+          "maxMs": 0.04724999999962165,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.011937500000385626,
+          "minMs": 0.009812500000407454,
+          "maxMs": 0.016104500000437838,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.12491700000009587,
+          "minMs": 0.10189600000012433,
+          "maxMs": 0.14162500000020373,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.9648329999999987,
+          "minMs": 1.9587915000001885,
+          "maxMs": 1.9933750000000146,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-12-sat",
+      "family": "boolean",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.05631249999987631,
+          "minMs": 0.030166499999722873,
+          "maxMs": 0.06312499999967258,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.021312500000021828,
+          "minMs": 0.018312500000320142,
+          "maxMs": 0.024604499999441032,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.11135399999966467,
+          "minMs": 0.10472949999984849,
+          "maxMs": 0.11681250000037835,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.692291500000465,
+          "minMs": 1.1636875000003783,
+          "maxMs": 1.736354499999834,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-12-unsat",
+      "family": "boolean",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 39.74195849999978,
+          "minMs": 38.44858299999942,
+          "maxMs": 40.81116699999984,
+          "statuses": [
+            "unknown"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 39.96324999999979,
+          "minMs": 39.484041499999876,
+          "maxMs": 40.76354150000043,
+          "statuses": [
+            "unknown"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.7770000000000437,
+          "minMs": 1.6282704999994166,
+          "maxMs": 1.8168329999998605,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.167437500000233,
+          "minMs": 2.1328125,
+          "maxMs": 2.256354499999361,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-12-unsat",
+      "family": "boolean",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 39.94316700000127,
+          "minMs": 38.8560624999991,
+          "maxMs": 57.480125000000044,
+          "statuses": [
+            "unknown"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 39.79466649999995,
+          "minMs": 38.679417000001195,
+          "maxMs": 64.41391649999969,
+          "statuses": [
+            "unknown"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.11818750000020373,
+          "minMs": 0.10339600000042992,
+          "maxMs": 0.22856249999949796,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.5553545000002487,
+          "minMs": 1.412521000000197,
+          "maxMs": 1.842396000000008,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "boolean-12-unsat",
+      "family": "boolean",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 38.7780625000014,
+          "minMs": 38.553124999998545,
+          "maxMs": 39.94193749999977,
+          "statuses": [
+            "unknown"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 40.31281250000029,
+          "minMs": 39.494832999998835,
+          "maxMs": 41.36650000000009,
+          "statuses": [
+            "unknown"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.09681249999994179,
+          "minMs": 0.07306249999965075,
+          "maxMs": 0.11427100000037171,
+          "statuses": [
+            "unsat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.4833329999983107,
+          "minMs": 1.4568959999996878,
+          "maxMs": 1.5972920000003796,
+          "statuses": [
+            "unsat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "scheduler",
+      "family": "scheduler",
+      "mode": "parse-solve",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.02942968750005548,
+          "minMs": 0.02777212499995585,
+          "maxMs": 0.03299478124995403,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.014028656250047788,
+          "minMs": 0.012833312499992644,
+          "maxMs": 0.01423828125007276,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 1.7912265624999009,
+          "minMs": 1.644244781249995,
+          "maxMs": 2.007505187499987,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 3.966792968750042,
+          "minMs": 3.7850039062499263,
+          "maxMs": 4.638085937500023,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "scheduler",
+      "family": "scheduler",
+      "mode": "prepared",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.01609246875000281,
+          "minMs": 0.01322265625003638,
+          "maxMs": 0.0178789062499618,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.005815125000026455,
+          "minMs": 0.005309874999966269,
+          "maxMs": 0.006932312499998261,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.2875312500000291,
+          "minMs": 0.2512591249999332,
+          "maxMs": 0.3697148437499891,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 2.2996471249999786,
+          "minMs": 2.236093750000009,
+          "maxMs": 2.3831614687500178,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    },
+    {
+      "case": "scheduler",
+      "family": "scheduler",
+      "mode": "scoped",
+      "backends": {
+        "rust-native": {
+          "medianMs": 0.036500000000046384,
+          "minMs": 0.026059874999987187,
+          "maxMs": 0.04889715624995006,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "rust-wasm": {
+          "medianMs": 0.017273437500080036,
+          "minMs": 0.013661468750001404,
+          "maxMs": 0.018000000000029104,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-native": {
+          "medianMs": 0.11031512500005647,
+          "minMs": 0.09099090624999917,
+          "maxMs": 0.11793881250002869,
+          "statuses": [
+            "sat"
+          ]
+        },
+        "z3-wasm": {
+          "medianMs": 1.735278624999978,
+          "minMs": 1.6305169375000332,
+          "maxMs": 1.8633541562500113,
+          "statuses": [
+            "sat"
+          ]
+        }
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "e0e55ca43011476b82ffde0788409473c678ac615b81cdd0c5a398111593a3d5"
+    },
+    {
+      "path": "preflight.json",
+      "sha256": "7faa4a9e8bfba2b7e6a1b56b6090c305995127e38827c211a35a329a07e206c5"
+    },
+    {
+      "path": "trials.json",
+      "sha256": "18aa362604c45214f3a4cfd46f8cc639720b50051959970755e247642869d582"
+    },
+    {
+      "path": "cold.json",
+      "sha256": "e695711f21d79266486f47a754a869bfbf478b7081a9db4b1203204b5b301637"
+    },
+    {
+      "path": "cold-input.json",
+      "sha256": "499a2411faa20bdef9c97917caed28e3fd0f80f1ded9200b70c07b6dabb8986c"
+    }
+  ]
+}

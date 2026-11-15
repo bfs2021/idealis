@@ -1,0 +1,24 @@
+✔ native/Wasm subset, Z3 and known fault reproduction agree (413.242916ms)
+✖ scoped Z3 queries restore assertions after pop (170.91275ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 641.04775
+
+✖ failing tests:
+
+test at dist/evals/smt-subset/contract-test.js:11:1
+✖ scoped Z3 queries restore assertions after pop (170.91275ms)
+  Error: (error "line 1 column 12: the logic has already been set")
+  (error "line 1 column 39: invalid declaration, constant 'x' (with the given signature) already declared")
+  
+      at throwIfError (/Users/mz/ghq/github.com/mizchi/modelt/node_modules/.pnpm/z3-solver@5.4.1/node_modules/z3-solver/build/high-level/high-level.js:132:23)
+      at SolverImpl.fromString (/Users/mz/ghq/github.com/mizchi/modelt/node_modules/.pnpm/z3-solver@5.4.1/node_modules/z3-solver/build/high-level/high-level.js:1656:17)
+      at Object.check (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/smt-subset/clients.js:117:28)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/modelt/dist/evals/smt-subset/contract-test.js:25:41)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
