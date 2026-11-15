@@ -81,6 +81,15 @@ fn relation_algebra_and_predicate_calls_work() {
 }
 
 #[test]
+fn polymorphic_empty_relations_preserve_arity() {
+    assert_eq!(
+        analyze("sig N { r: set N } run { r = none + none no ^(none & none) } for 1 but 0 Int")
+            .status,
+        Status::Instance
+    );
+}
+
+#[test]
 fn budget_and_unsupported_input_never_become_success() {
     let model = Model::parse("sig N { r: set N } run { some r } for 2 but 0 Int").unwrap();
     let result = model.analyze(0, 0).unwrap();
@@ -96,6 +105,7 @@ fn budget_and_unsupported_input_never_become_success() {
         "sig A {} pred P { P } run {}",
         "sig A {} fact { A } run {}",
         "sig A {} run { unknown in A }",
+        "sig A {} run { all x: none | no ^x }",
         "one sig A {} run {} for 2 but 2 A",
         "sig A {} run {} for 1 but 1 A, 2 A",
     ] {

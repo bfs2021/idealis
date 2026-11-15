@@ -213,6 +213,15 @@ impl Evaluator<'_> {
         right: Relation,
     ) -> Result<Value, ()> {
         let count = self.world.names.len();
+        if matches!(left, Relation::Empty)
+            && matches!(right, Relation::Empty)
+            && matches!(
+                operator,
+                Binary::Union | Binary::Difference | Binary::Intersection
+            )
+        {
+            return Ok(Value::Relation(Relation::Empty));
+        }
         if matches!(operator, Binary::Product) {
             let left = left.set();
             let right = right.set();

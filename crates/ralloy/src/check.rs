@@ -371,8 +371,10 @@ impl Checker<'_> {
                 let mut locals = locals.clone();
                 let mut seen = BTreeSet::new();
                 for declaration in declarations {
-                    let domain = self.expression(&declaration.domain, &locals, depth + 1)?;
-                    if domain.clone().columns()?.len() != 1 {
+                    let domain = self
+                        .expression(&declaration.domain, &locals, depth + 1)?
+                        .columns()?;
+                    if domain.len() != 1 {
                         return Err(Error::new(
                             ErrorKind::Unsupported,
                             "quantifier domain must be unary",
@@ -385,7 +387,7 @@ impl Checker<'_> {
                                 "duplicate quantified variable",
                             ));
                         }
-                        locals.insert(name.clone(), domain.clone());
+                        locals.insert(name.clone(), Type::Relation(domain.clone()));
                     }
                 }
                 self.expression(body, &locals, depth + 1)?.boolean()?;
