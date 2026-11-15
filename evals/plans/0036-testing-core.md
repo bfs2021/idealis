@@ -1,0 +1,17 @@
+# 0036: Rustで生成・縮小・差分比較・再生を管理する
+
+優先順は、可搬なtesting契約、SAT/CNF、制御された並行実行、構造fuzzing、必要になった時のBDDとする。このiterationでは最初の基盤を`crates/idealis-testing`へ作る。後段の採用は、Wasmでの動作、検出追加、正常対照、停止予算、再現費用をそれぞれ別のplanで評価する。
+
+新crateはserde/serde_jsonだけに依存し、TLA/Alloy/SMT、OS、テストランナーから独立させる。有限状態機械からの操作列生成、削除による縮小、固定caseの再生、オラクルと複数実装のJSON構造比較を扱う。callbackをRustへ埋め込まず、Evaluate effectとfeedbackをホストが駆動する。Rust/native/WasmとTSのDriverは同じ契約を使う。高階の任意Strategy、scalar縮小、内部threadの探索、Go専用wrapperは今回の対象外。
+
+生成器は有限の初期状態とaction/targetを持ち、状態遷移はSUTの観測から作らない。seedと乱数アルゴリズムのversion、generator ID/version、生成番号、全actionをcaseに保存する。caseの再生はseedで再生成せず、保存済みactionを使う。JSONの構造で比較し、集合や任意精度整数等はホストで既存PortableValueへ正規化してから渡す。
+
+最初のmismatchから縮小を始め、同じfailure signatureだけを保持する。候補は既存TSのdeletionCandidatesと同じ順にし、有限生成器で実行可能な列だけを評価する。最後に同じsignatureで再現を確認する。minimalは単一削除で同じ失敗を保持できない意味に限定し、予算切れをminimalへ変換しない。hostのinvalid/unknown/errorと非再現を合格へ変換しない。validケース数を満たして初めてpassedとし、無効ケースだけの試行はexhausted、work切れはinconclusiveにする。
+
+差分比較では、referenceの許可値集合と各実装の観測を比較する。referenceまたは実装のinvalid/unknown/errorをmatchedへ変換せず、対象ごとの結果を残す。期待値を多数決やSUTの観測から合成しない。空の対象や空の許可値集合を成功へしない。
+
+Rust APIを先にRedにする。再現・縮小、状態機械の事前条件、invalidだけの生成、unknown/error、異なるsignature、非再現、無効feedbackとcorrelation ID、保存caseの再生、差分の対照を検査する。TS参照の生成器と既存shrinkCounterexampleを同一corpusへ適用し、native/Wasmの全effectと結果を照合する。有限状態機械の生成はfast-checkの任意Strategyやseed互換とは主張しない。
+
+実SUTには既存durable counterの正常版と永続化を欠く既知故障版を使い、TSのcheckConformance/checkDifferentialと比較する。故障検出は人工故障の再現で、未知バグ発見には数えない。開発seed0x36a1から16件、確認seed0x36c3から32件を予約する。case・最終trace・source/binary hash・全effectとfeedbackを新規runへ保存し、確認は開発と同じソースで実行する。
+
+fmt/clippy/Rust tests、native/Wasm、node:test/Vitest、実Chromium、check/browser、runtime-build/test、usable-test/eval/replay、evaluate/replay、mutation、packageの別consumerを検査する。Rustの契約とTS adapter/評価/配布を別stack層に分ける。mergeとregistry publishは行わない。
