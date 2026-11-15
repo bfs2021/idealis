@@ -257,3 +257,7 @@ rtlc-test:
 
 rtlc-example:
   cargo run --example counter --locked --manifest-path crates/rtlc/Cargo.toml
+
+rtlc-compare run:
+  pnpm build
+  node dist/evals/rtlc-extraction/compare.js {{quote(run)}}
