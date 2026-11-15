@@ -237,3 +237,17 @@ profile-criterion stage run: criterion-prepare
 profile-record backend binary run:
   pnpm build
   node dist/evals/profile-tuning/record.js {{quote(backend)}} {{quote(binary)}} {{quote(run)}}
+
+profile-test: criterion-prepare
+  node --test dist/evals/profile-tuning/hotspots-test.js dist/evals/profile-tuning/wasm-names-test.js
+
+profile-summary saved run:
+  pnpm build
+  node dist/evals/profile-tuning/summarize.js {{quote(saved)}} {{quote(run)}}
+
+profile-scalar run: safety-build
+  node dist/evals/profile-tuning/scalar-compare.js {{quote(run)}}
+
+profile-replay saved run:
+  pnpm build
+  node dist/evals/profile-tuning/scalar-compare.js {{quote(run)}} {{quote(saved)}}
