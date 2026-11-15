@@ -1,0 +1,26 @@
+   Compiling modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.92s
+     Running tests/solver.rs (evals/smt-subset-rust/target/debug/deps/solver-0113c478ca25994a)
+
+running 5 tests
+test empty_boolean_applications_are_syntax_errors ... FAILED
+test existing_integer_input_generation_is_supported ... ok
+test budget_cuts_and_unsupported_theories_are_not_unsat ... ok
+test boolean_polarity_and_let_scope_are_preserved ... ok
+test unbounded_difference_constraints_have_exact_witnesses ... ok
+
+failures:
+
+---- empty_boolean_applications_are_syntax_errors stdout ----
+
+thread 'empty_boolean_applications_are_syntax_errors' (46158902) panicked at tests/solver.rs:73:9:
+(assert (and))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    empty_boolean_applications_are_syntax_errors
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test solver`

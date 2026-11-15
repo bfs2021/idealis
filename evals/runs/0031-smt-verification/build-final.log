@@ -1,0 +1,6 @@
+cargo build --release --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+   Compiling modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)
+    Finished `release` profile [optimized] target(s) in 4.45s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/smt-subset-rust/Cargo.toml
+   Compiling modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)
+    Finished `release` profile [optimized] target(s) in 1.76s

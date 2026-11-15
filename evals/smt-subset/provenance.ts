@@ -14,6 +14,7 @@ export const fingerprint = async () => {
     "evals/smt-subset",
     "evals/smt-subset-rust",
     "evals/plans/0030-smt-subset.md",
+    "evals/plans/0031-smt-reuse.md",
     "evals/harness/ttl.ts",
     "src/conformance.ts",
     "src/contracts.ts",
@@ -39,6 +40,7 @@ export const fingerprint = async () => {
           path.endsWith(".yml") ||
           path.endsWith(".json") ||
           path.endsWith("0030-smt-subset.md") ||
+          path.endsWith("0031-smt-reuse.md") ||
           path === "justfile"),
     );
   const sources = await Promise.all(

@@ -1,0 +1,3 @@
+{"query":{"name":"native-scope-1","family":"reuse","integers":["x"],"booleans":[],"source":"(set-logic QF_IDL)(declare-const x Int)(assert (= x 1))","expected":"sat","iterations":1},"answer":{"status":"sat","values":{"x":"1"},"booleans":{}}}
+{"query":{"name":"native-scope-2","family":"reuse","integers":["x"],"booleans":[],"source":"(set-logic QF_IDL)(declare-const x Int)(assert (= x 2))","expected":"sat","iterations":1},"answer":{"status":"sat","values":{"x":"2"},"booleans":{}}}
+{"query":{"name":"native-scope-1","family":"reuse","integers":["x"],"booleans":[],"source":"(set-logic QF_IDL)(declare-const x Int)(assert (= x 1))","expected":"sat","iterations":1},"answer":{"status":"sat","values":{"x":"1"},"booleans":{}}}

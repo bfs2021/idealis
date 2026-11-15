@@ -82,6 +82,9 @@ await writeFile(
         warmups: 1,
         samples: 5,
         order: "rotate backend order each sample",
+        scoped:
+          "Z3 declarations/logic parsed once per case; assertions parsed inside push/pop; Rust parses full source",
+        plan: "0031-smt-reuse",
         primary:
           "parse+solve+complete model, including JSONL/ABI/JS API transport",
         prepared: "parse excluded, solver and model retrieval retained",
@@ -130,7 +133,7 @@ try {
     if (wasm.status === "sat") await z3.validate(input, wasm);
     if (nativeReference.status === "sat")
       await z3.validate(input, nativeReference);
-    for (const mode of ["parse-solve", "prepared"]) {
+    for (const mode of ["parse-solve", "prepared", "scoped"]) {
       const handle = core.request({ kind: "prepare", source: input.source });
       const nativeHandle = await rust.request({
         kind: "prepare",
@@ -138,7 +141,9 @@ try {
       });
       assert.ok(handle.kind === "prepared" && nativeHandle.kind === "prepared");
       const prepared = z3.prepare(input);
-      await nativeZ3.prepare(input);
+      const scoped = z3.scoped(input);
+      if (mode === "scoped") await nativeZ3.prepareScope(input);
+      else await nativeZ3.prepare(input);
       const backends = [
         {
           name: "rust-native",
@@ -165,12 +170,20 @@ try {
         {
           name: "z3-native",
           execute: (): Promise<Answer> =>
-            mode === "prepared" ? nativeZ3.check(input) : nativeZ3.solve(input),
+            mode === "prepared"
+              ? nativeZ3.check(input)
+              : mode === "scoped"
+                ? nativeZ3.scoped(input)
+                : nativeZ3.solve(input),
         },
         {
           name: "z3-wasm",
           execute: (): Promise<Answer> =>
-            mode === "prepared" ? prepared.check() : z3.solve(input),
+            mode === "prepared"
+              ? prepared.check()
+              : mode === "scoped"
+                ? scoped.check(input)
+                : z3.solve(input),
         },
       ];
       try {
@@ -204,6 +217,7 @@ try {
           }
       } finally {
         prepared.close();
+        scoped.close();
         core.request({ kind: "release", handle: handle.handle });
         await rust.request({ kind: "release", handle: nativeHandle.handle });
       }
@@ -291,7 +305,7 @@ try {
     flag: "wx",
   });
   const medians = inputs.flatMap((input) =>
-    ["parse-solve", "prepared"].map((mode) => ({
+    ["parse-solve", "prepared", "scoped"].map((mode) => ({
       case: input.name,
       family: input.family,
       mode,

@@ -1,0 +1,6045 @@
+[
+  {
+    "input": {
+      "name": "seed-12449-0",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b1)",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "boolean",
+        "slot": 1
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 23,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 23,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-1",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (< (+ x2 (- 2)) (+ x1 (- 1))) (xor (< (+ x2 (- 1)) (+ x1 1)) (or b0 b1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "compare",
+          "op": "<",
+          "left": {
+            "variable": 2,
+            "offset": -2
+          },
+          "right": {
+            "variable": 1,
+            "offset": -1
+          }
+        },
+        "right": {
+          "kind": "xor",
+          "left": {
+            "kind": "compare",
+            "op": "<",
+            "left": {
+              "variable": 2,
+              "offset": -1
+            },
+            "right": {
+              "variable": 1,
+              "offset": 1
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "boolean",
+              "slot": 0
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 34,
+        "branches": 1,
+        "relaxations": 14
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 34,
+        "branches": 1,
+        "relaxations": 14
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-2",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 1) x2))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 0,
+          "offset": 1
+        },
+        "right": {
+          "variable": 2,
+          "offset": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-3",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (distinct (+ x1 2) (+ x0 1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "compare",
+          "op": "distinct",
+          "left": {
+            "variable": 1,
+            "offset": 2
+          },
+          "right": {
+            "variable": 0,
+            "offset": 1
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 38,
+        "branches": 0,
+        "relaxations": 16
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 38,
+        "branches": 0,
+        "relaxations": 16
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-4",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (xor (< (+ x2 1) (+ x0 (- 1))) (or (<= x0 (+ x1 1)) (= (+ x2 (- 2)) (+ x2 (- 2))))) (or (<= (+ x0 2) (+ x0 (- 1))) (or (< (+ x1 1) (+ x1 2)) (= x0 (+ x0 2))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "xor",
+          "left": {
+            "kind": "compare",
+            "op": "<",
+            "left": {
+              "variable": 2,
+              "offset": 1
+            },
+            "right": {
+              "variable": 0,
+              "offset": -1
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": 0
+              },
+              "right": {
+                "variable": 1,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": -2
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "or",
+          "left": {
+            "kind": "compare",
+            "op": "<=",
+            "left": {
+              "variable": 0,
+              "offset": 2
+            },
+            "right": {
+              "variable": 0,
+              "offset": -1
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 1,
+                "offset": 1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": 0
+              },
+              "right": {
+                "variable": 0,
+                "offset": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "1",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 49,
+        "branches": 3,
+        "relaxations": 24
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "1",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 49,
+        "branches": 3,
+        "relaxations": 24
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-5",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (= x0 (+ x0 1)) (=> (distinct x0 x2) b0)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "compare",
+          "op": "=",
+          "left": {
+            "variable": 0,
+            "offset": 0
+          },
+          "right": {
+            "variable": 0,
+            "offset": 1
+          }
+        },
+        "right": {
+          "kind": "=>",
+          "left": {
+            "kind": "compare",
+            "op": "distinct",
+            "left": {
+              "variable": 0,
+              "offset": 0
+            },
+            "right": {
+              "variable": 2,
+              "offset": 0
+            }
+          },
+          "right": {
+            "kind": "boolean",
+            "slot": 0
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-6",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 2)) (+ x2 (- 2))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<",
+        "left": {
+          "variable": 1,
+          "offset": -2
+        },
+        "right": {
+          "variable": 2,
+          "offset": -2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-7",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 2) x0))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 2,
+          "offset": 2
+        },
+        "right": {
+          "variable": 0,
+          "offset": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-8",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (and (or (<= (+ x0 1) (+ x2 (- 2))) (= (+ x0 (- 2)) (+ x2 1))) b1) (or (<= (+ x0 (- 2)) x1) (xor b0 (<= (+ x2 (- 2)) (+ x0 (- 2)))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "xor",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": 1
+              },
+              "right": {
+                "variable": 2,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": 1
+              }
+            }
+          },
+          "right": {
+            "kind": "boolean",
+            "slot": 1
+          }
+        },
+        "right": {
+          "kind": "or",
+          "left": {
+            "kind": "compare",
+            "op": "<=",
+            "left": {
+              "variable": 0,
+              "offset": -2
+            },
+            "right": {
+              "variable": 1,
+              "offset": 0
+            }
+          },
+          "right": {
+            "kind": "xor",
+            "left": {
+              "kind": "boolean",
+              "slot": 0
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 0,
+                "offset": -2
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": true
+      },
+      "stats": {
+        "work": 149,
+        "branches": 4,
+        "relaxations": 102
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": true
+      },
+      "stats": {
+        "work": 149,
+        "branches": 4,
+        "relaxations": 102
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-9",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x1 2)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 0,
+          "offset": 2
+        },
+        "right": {
+          "variable": 1,
+          "offset": 2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-10",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (not (=> (<= x1 (+ x2 2)) (= x1 (+ x0 (- 2))))) b1))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "and",
+        "left": {
+          "kind": "not",
+          "value": {
+            "kind": "=>",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 1,
+                "offset": 0
+              },
+              "right": {
+                "variable": 2,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 1,
+                "offset": 0
+              },
+              "right": {
+                "variable": 0,
+                "offset": -2
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "boolean",
+          "slot": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 34,
+        "branches": 1,
+        "relaxations": 8
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 34,
+        "branches": 1,
+        "relaxations": 8
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-11",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (<= (+ x1 (- 1)) (+ x2 2))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "compare",
+          "op": "<=",
+          "left": {
+            "variable": 1,
+            "offset": -1
+          },
+          "right": {
+            "variable": 2,
+            "offset": 2
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 40,
+        "branches": 0,
+        "relaxations": 21
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 40,
+        "branches": 0,
+        "relaxations": 21
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-12",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (not (not (< x0 (+ x1 (- 1)))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "not",
+          "value": {
+            "kind": "not",
+            "value": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 0,
+                "offset": 0
+              },
+              "right": {
+                "variable": 1,
+                "offset": -1
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-13",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= x2 (+ x2 (- 1))))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 2,
+          "offset": 0
+        },
+        "right": {
+          "variable": 2,
+          "offset": -1
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 18,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 18,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-14",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< x2 (+ x2 2)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<",
+        "left": {
+          "variable": 2,
+          "offset": 0
+        },
+        "right": {
+          "variable": 2,
+          "offset": 2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 24,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 24,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-15",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (not (or (<= (+ x2 2) (+ x0 (- 2))) (distinct (+ x2 1) (+ x1 2)))) (xor (= b1 b1) b0)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=",
+        "left": {
+          "kind": "not",
+          "value": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 2,
+                "offset": 2
+              },
+              "right": {
+                "variable": 0,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "xor",
+          "left": {
+            "kind": "=",
+            "left": {
+              "kind": "boolean",
+              "slot": 1
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          },
+          "right": {
+            "kind": "boolean",
+            "slot": 0
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 52,
+        "branches": 3,
+        "relaxations": 18
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 52,
+        "branches": 3,
+        "relaxations": 18
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-16",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x1 1) (+ x0 2)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "=",
+        "left": {
+          "variable": 1,
+          "offset": 1
+        },
+        "right": {
+          "variable": 0,
+          "offset": 2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 36,
+        "branches": 0,
+        "relaxations": 16
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 36,
+        "branches": 0,
+        "relaxations": 16
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-17",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 2) (+ x1 2)))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "distinct",
+        "left": {
+          "variable": 1,
+          "offset": 2
+        },
+        "right": {
+          "variable": 1,
+          "offset": 2
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 21,
+        "branches": 1,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 21,
+        "branches": 1,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-18",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (=> (=> (< (+ x1 (- 1)) (+ x0 1)) (distinct (+ x1 (- 1)) x0)) (or (< (+ x2 1) (+ x2 (- 1))) (= (+ x2 1) (+ x1 2)))) (xor (<= (+ x2 (- 1)) (+ x0 1)) (or b1 b1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "=>",
+          "left": {
+            "kind": "=>",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 0
+              }
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 2,
+                "offset": -1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "xor",
+          "left": {
+            "kind": "compare",
+            "op": "<=",
+            "left": {
+              "variable": 2,
+              "offset": -1
+            },
+            "right": {
+              "variable": 0,
+              "offset": 1
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "boolean",
+              "slot": 1
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 62,
+        "branches": 3,
+        "relaxations": 32
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 62,
+        "branches": 3,
+        "relaxations": 32
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-19",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x2 (- 2)) (+ x0 2)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 2,
+          "offset": -2
+        },
+        "right": {
+          "variable": 0,
+          "offset": 2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-20",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (<= (+ x2 2) (+ x0 2)) (= (not (= (+ x1 2) (+ x1 (- 1)))) (xor b0 (= (+ x0 (- 1)) x0)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "or",
+        "left": {
+          "kind": "compare",
+          "op": "<=",
+          "left": {
+            "variable": 2,
+            "offset": 2
+          },
+          "right": {
+            "variable": 0,
+            "offset": 2
+          }
+        },
+        "right": {
+          "kind": "=",
+          "left": {
+            "kind": "not",
+            "value": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 1,
+                "offset": 2
+              },
+              "right": {
+                "variable": 1,
+                "offset": -1
+              }
+            }
+          },
+          "right": {
+            "kind": "xor",
+            "left": {
+              "kind": "boolean",
+              "slot": 0
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 1,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 1,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-21",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "boolean",
+        "slot": 0
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      },
+      "stats": {
+        "work": 23,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      },
+      "stats": {
+        "work": 23,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-22",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (or (xor (<= (+ x2 (- 2)) (+ x2 1)) b1) b1) (<= x2 (+ x2 (- 1)))))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=",
+        "left": {
+          "kind": "or",
+          "left": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          },
+          "right": {
+            "kind": "boolean",
+            "slot": 1
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "op": "<=",
+          "left": {
+            "variable": 2,
+            "offset": 0
+          },
+          "right": {
+            "variable": 2,
+            "offset": -1
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 40,
+        "branches": 4,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 40,
+        "branches": 4,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-23",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (xor (not (< (+ x2 (- 1)) (+ x0 2))) (xor (< (+ x2 1) (+ x0 1)) (<= (+ x2 (- 1)) (+ x1 2))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "xor",
+          "left": {
+            "kind": "not",
+            "value": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 2,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 2
+              }
+            }
+          },
+          "right": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 2,
+                "offset": -1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "1",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 95,
+        "branches": 2,
+        "relaxations": 63
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "1",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 95,
+        "branches": 2,
+        "relaxations": 63
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-2",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-24",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 (- 2)) x1))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<",
+        "left": {
+          "variable": 1,
+          "offset": -2
+        },
+        "right": {
+          "variable": 1,
+          "offset": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 24,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 24,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-25",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (<= (+ x0 2) (+ x1 (- 2)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "compare",
+          "op": "<=",
+          "left": {
+            "variable": 0,
+            "offset": 2
+          },
+          "right": {
+            "variable": 1,
+            "offset": -2
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-26",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x1 2) (+ x0 (- 2))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "=",
+        "left": {
+          "variable": 1,
+          "offset": 2
+        },
+        "right": {
+          "variable": 0,
+          "offset": -2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "-2",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 44,
+        "branches": 0,
+        "relaxations": 24
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "-2",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 44,
+        "branches": 0,
+        "relaxations": 24
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "-2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-27",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (+ x1 (- 1)) (+ x2 (- 2))) (= (not b0) (and (distinct (+ x1 (- 2)) x2) (distinct (+ x2 1) (+ x2 2))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=",
+        "left": {
+          "kind": "compare",
+          "op": "=",
+          "left": {
+            "variable": 1,
+            "offset": -1
+          },
+          "right": {
+            "variable": 2,
+            "offset": -2
+          }
+        },
+        "right": {
+          "kind": "=",
+          "left": {
+            "kind": "not",
+            "value": {
+              "kind": "boolean",
+              "slot": 0
+            }
+          },
+          "right": {
+            "kind": "and",
+            "left": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": 0
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 96,
+        "branches": 5,
+        "relaxations": 54
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 96,
+        "branches": 5,
+        "relaxations": 54
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-28",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (and (or (< (+ x1 1) (+ x2 2)) b1) (=> (distinct x2 (+ x2 (- 1))) (distinct (+ x2 (- 2)) (+ x0 1))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "and",
+          "left": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 1,
+                "offset": 1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          },
+          "right": {
+            "kind": "=>",
+            "left": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 2,
+                "offset": 0
+              },
+              "right": {
+                "variable": 2,
+                "offset": -1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 0,
+                "offset": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "-1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 36,
+        "branches": 1,
+        "relaxations": 14
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "-1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 36,
+        "branches": 1,
+        "relaxations": 14
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-29",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and b1 b1))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "and",
+        "left": {
+          "kind": "boolean",
+          "slot": 1
+        },
+        "right": {
+          "kind": "boolean",
+          "slot": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-30",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x2 (- 2)) (+ x0 (- 1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<",
+        "left": {
+          "variable": 2,
+          "offset": -2
+        },
+        "right": {
+          "variable": 0,
+          "offset": -1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-31",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x2 2) (+ x0 1)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "distinct",
+        "left": {
+          "variable": 2,
+          "offset": 2
+        },
+        "right": {
+          "variable": 0,
+          "offset": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-32",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x2 2) (+ x1 (- 1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "=",
+        "left": {
+          "variable": 2,
+          "offset": 2
+        },
+        "right": {
+          "variable": 1,
+          "offset": -1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "1",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 44,
+        "branches": 0,
+        "relaxations": 24
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "1",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 44,
+        "branches": 0,
+        "relaxations": 24
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "2",
+        "x2": "-1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-33",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (and (= (distinct (+ x2 (- 2)) x1) (< (+ x1 (- 2)) (+ x2 (- 2)))) (= (= x2 (+ x2 (- 1))) b1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "and",
+          "left": {
+            "kind": "=",
+            "left": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 1,
+                "offset": 0
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 1,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": -2
+              }
+            }
+          },
+          "right": {
+            "kind": "=",
+            "left": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": 0
+              },
+              "right": {
+                "variable": 2,
+                "offset": -1
+              }
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 69,
+        "branches": 3,
+        "relaxations": 40
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 69,
+        "branches": 3,
+        "relaxations": 40
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-34",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (or (and (distinct (+ x1 (- 1)) (+ x0 2)) (<= (+ x2 1) (+ x1 2))) (< (+ x2 2) x1)) (or (or (< (+ x1 (- 1)) (+ x1 (- 2))) (<= (+ x0 (- 1)) (+ x1 (- 2)))) (or (= (+ x2 2) (+ x2 (- 2))) (distinct (+ x1 2) x0)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "and",
+        "left": {
+          "kind": "or",
+          "left": {
+            "kind": "and",
+            "left": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "op": "<",
+            "left": {
+              "variable": 2,
+              "offset": 2
+            },
+            "right": {
+              "variable": 1,
+              "offset": 0
+            }
+          }
+        },
+        "right": {
+          "kind": "or",
+          "left": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 1,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": -1
+              },
+              "right": {
+                "variable": 1,
+                "offset": -2
+              }
+            }
+          },
+          "right": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": 2
+              },
+              "right": {
+                "variable": 2,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": 2
+              },
+              "right": {
+                "variable": 0,
+                "offset": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "2",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 58,
+        "branches": 4,
+        "relaxations": 27
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "2",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 58,
+        "branches": 4,
+        "relaxations": 27
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "1",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-35",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (< (+ x1 2) (+ x0 1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "compare",
+          "op": "<",
+          "left": {
+            "variable": 1,
+            "offset": 2
+          },
+          "right": {
+            "variable": 0,
+            "offset": 1
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-36",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= x2 x0))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "=",
+        "left": {
+          "variable": 2,
+          "offset": 0
+        },
+        "right": {
+          "variable": 0,
+          "offset": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 0,
+        "relaxations": 8
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 0,
+        "relaxations": 8
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-37",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x0 (- 2))))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 0,
+          "offset": 2
+        },
+        "right": {
+          "variable": 0,
+          "offset": -2
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 18,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 18,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-38",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (< (+ x0 2) (+ x0 2)) (=> (= x1 (+ x2 (- 1))) (not (<= (+ x1 1) x2)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "or",
+        "left": {
+          "kind": "compare",
+          "op": "<",
+          "left": {
+            "variable": 0,
+            "offset": 2
+          },
+          "right": {
+            "variable": 0,
+            "offset": 2
+          }
+        },
+        "right": {
+          "kind": "=>",
+          "left": {
+            "kind": "compare",
+            "op": "=",
+            "left": {
+              "variable": 1,
+              "offset": 0
+            },
+            "right": {
+              "variable": 2,
+              "offset": -1
+            }
+          },
+          "right": {
+            "kind": "not",
+            "value": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 1,
+                "offset": 1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 31,
+        "branches": 3,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 31,
+        "branches": 3,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-39",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (xor (distinct x0 (+ x2 (- 2))) (= (xor (= (+ x2 1) (+ x1 1)) (distinct x1 (+ x1 1))) (= (< (+ x0 (- 2)) (+ x1 1)) (distinct x1 (+ x0 1))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "xor",
+        "left": {
+          "kind": "compare",
+          "op": "distinct",
+          "left": {
+            "variable": 0,
+            "offset": 0
+          },
+          "right": {
+            "variable": 2,
+            "offset": -2
+          }
+        },
+        "right": {
+          "kind": "=",
+          "left": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": 1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": 0
+              },
+              "right": {
+                "variable": 1,
+                "offset": 1
+              }
+            }
+          },
+          "right": {
+            "kind": "=",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 0,
+                "offset": -2
+              },
+              "right": {
+                "variable": 1,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": 0
+              },
+              "right": {
+                "variable": 0,
+                "offset": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 173,
+        "branches": 8,
+        "relaxations": 114
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 173,
+        "branches": 8,
+        "relaxations": 114
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-40",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (+ x0 (- 1)) x0))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "=",
+        "left": {
+          "variable": 0,
+          "offset": -1
+        },
+        "right": {
+          "variable": 0,
+          "offset": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 20,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 20,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-41",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> b0 b1))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "boolean",
+          "slot": 0
+        },
+        "right": {
+          "kind": "boolean",
+          "slot": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-42",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (and (not (xor (< (+ x1 2) (+ x1 (- 2))) b0)) b0))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "and",
+        "left": {
+          "kind": "not",
+          "value": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 1,
+                "offset": 2
+              },
+              "right": {
+                "variable": 1,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 0
+            }
+          }
+        },
+        "right": {
+          "kind": "boolean",
+          "slot": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 26,
+        "branches": 1,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 26,
+        "branches": 1,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-43",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (not (= x1 (+ x1 (- 2)))) (< x1 (+ x2 1))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "or",
+        "left": {
+          "kind": "not",
+          "value": {
+            "kind": "compare",
+            "op": "=",
+            "left": {
+              "variable": 1,
+              "offset": 0
+            },
+            "right": {
+              "variable": 1,
+              "offset": -2
+            }
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "op": "<",
+          "left": {
+            "variable": 1,
+            "offset": 0
+          },
+          "right": {
+            "variable": 2,
+            "offset": 1
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-44",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (+ x2 (- 2)) (+ x1 (- 1))) (and (xor (<= (+ x0 (- 1)) (+ x2 1)) (= (+ x0 (- 1)) (+ x1 1))) (xor (< (+ x2 2) (+ x0 (- 2))) b0))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=",
+        "left": {
+          "kind": "compare",
+          "op": "=",
+          "left": {
+            "variable": 2,
+            "offset": -2
+          },
+          "right": {
+            "variable": 1,
+            "offset": -1
+          }
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": -1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": -1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 1
+              }
+            }
+          },
+          "right": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 2,
+                "offset": 2
+              },
+              "right": {
+                "variable": 0,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 0
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "-1"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      },
+      "stats": {
+        "work": 115,
+        "branches": 4,
+        "relaxations": 77
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "-2",
+        "x2": "-1"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      },
+      "stats": {
+        "work": 115,
+        "branches": 4,
+        "relaxations": 77
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-45",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (< (+ x1 1) (+ x0 1)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<",
+        "left": {
+          "variable": 1,
+          "offset": 1
+        },
+        "right": {
+          "variable": 0,
+          "offset": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-1",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 0,
+        "relaxations": 14
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-46",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (distinct (+ x1 (- 2)) (+ x1 (- 1)))))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "compare",
+          "op": "distinct",
+          "left": {
+            "variable": 1,
+            "offset": -2
+          },
+          "right": {
+            "variable": 1,
+            "offset": -1
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 22,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 22,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-47",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert b0)",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "boolean",
+        "slot": 0
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      },
+      "stats": {
+        "work": 23,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      },
+      "stats": {
+        "work": 23,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-48",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x2 (- 1)) (+ x2 1)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "distinct",
+        "left": {
+          "variable": 2,
+          "offset": -1
+        },
+        "right": {
+          "variable": 2,
+          "offset": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-49",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (or (xor (<= (+ x1 1) x2) (=> (= (+ x1 (- 1)) x2) (<= (+ x1 (- 1)) x2))) b0))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "or",
+        "left": {
+          "kind": "xor",
+          "left": {
+            "kind": "compare",
+            "op": "<=",
+            "left": {
+              "variable": 1,
+              "offset": 1
+            },
+            "right": {
+              "variable": 2,
+              "offset": 0
+            }
+          },
+          "right": {
+            "kind": "=>",
+            "left": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 0
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 0
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "boolean",
+          "slot": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 92,
+        "branches": 4,
+        "relaxations": 56
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 92,
+        "branches": 4,
+        "relaxations": 56
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "2",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-50",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (and b0 (and (< (+ x0 (- 2)) (+ x0 2)) (= (+ x2 (- 1)) (+ x0 1)))) (= (+ x0 (- 1)) (+ x1 2))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "boolean",
+            "slot": 0
+          },
+          "right": {
+            "kind": "and",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 0,
+                "offset": -2
+              },
+              "right": {
+                "variable": 0,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 1
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "op": "=",
+          "left": {
+            "variable": 0,
+            "offset": -1
+          },
+          "right": {
+            "variable": 1,
+            "offset": 2
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-51",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (xor (or (< (+ x2 2) (+ x2 2)) b1) (<= (+ x2 2) (+ x2 2)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "xor",
+          "left": {
+            "kind": "or",
+            "left": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 2,
+                "offset": 2
+              },
+              "right": {
+                "variable": 2,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "op": "<=",
+            "left": {
+              "variable": 2,
+              "offset": 2
+            },
+            "right": {
+              "variable": 2,
+              "offset": 2
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 31,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 31,
+        "branches": 2,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-52",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not b1))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "boolean",
+          "slot": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 24,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 24,
+        "branches": 0,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-53",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (<= x0 (+ x0 (- 1))) b1))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "compare",
+          "op": "<=",
+          "left": {
+            "variable": 0,
+            "offset": 0
+          },
+          "right": {
+            "variable": 0,
+            "offset": -1
+          }
+        },
+        "right": {
+          "kind": "boolean",
+          "slot": 1
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 26,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-54",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (<= (+ x0 2) (+ x0 (- 2))))",
+      "expected": "unsat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "<=",
+        "left": {
+          "variable": 0,
+          "offset": 2
+        },
+        "right": {
+          "variable": 0,
+          "offset": -2
+        }
+      }
+    },
+    "wasm": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 18,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "native": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {},
+      "stats": {
+        "work": 18,
+        "branches": 0,
+        "relaxations": 0
+      }
+    },
+    "reference": {
+      "status": "unsat",
+      "values": {},
+      "booleans": {}
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-55",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (and (and b0 (< (+ x0 1) (+ x0 2))) (= (+ x2 2) (+ x1 (- 2)))) (not (and (<= (+ x2 (- 2)) (+ x1 2)) (<= (+ x0 (- 1)) x0)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "and",
+          "left": {
+            "kind": "and",
+            "left": {
+              "kind": "boolean",
+              "slot": 0
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<",
+              "left": {
+                "variable": 0,
+                "offset": 1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 2
+              }
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "op": "=",
+            "left": {
+              "variable": 2,
+              "offset": 2
+            },
+            "right": {
+              "variable": 1,
+              "offset": -2
+            }
+          }
+        },
+        "right": {
+          "kind": "not",
+          "value": {
+            "kind": "and",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 3,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 3,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": true,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-56",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x0 1) (+ x1 (- 2))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "distinct",
+        "left": {
+          "variable": 0,
+          "offset": 1
+        },
+        "right": {
+          "variable": 1,
+          "offset": -2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "2",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-57",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (distinct (+ x1 1) (+ x1 2)))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "distinct",
+        "left": {
+          "variable": 1,
+          "offset": 1
+        },
+        "right": {
+          "variable": 1,
+          "offset": 2
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 27,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-58",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> b0 (and (= (= (+ x2 (- 2)) (+ x2 1)) (= (+ x1 2) (+ x2 (- 1)))) (= (+ x2 1) x0))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "boolean",
+          "slot": 0
+        },
+        "right": {
+          "kind": "and",
+          "left": {
+            "kind": "=",
+            "left": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 2,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": 1
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 1,
+                "offset": 2
+              },
+              "right": {
+                "variable": 2,
+                "offset": -1
+              }
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "op": "=",
+            "left": {
+              "variable": 2,
+              "offset": 1
+            },
+            "right": {
+              "variable": 0,
+              "offset": 0
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 25,
+        "branches": 1,
+        "relaxations": 6
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "-2",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-59",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= x1 x0))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "compare",
+        "op": "=",
+        "left": {
+          "variable": 1,
+          "offset": 0
+        },
+        "right": {
+          "variable": 0,
+          "offset": 0
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 0,
+        "relaxations": 8
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 28,
+        "branches": 0,
+        "relaxations": 8
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-60",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (=> (or (not b1) (distinct (+ x0 1) x2)) (= (xor (<= (+ x1 (- 2)) (+ x0 (- 2))) (<= (+ x0 (- 1)) (+ x2 (- 1)))) (not (= (+ x0 2) (+ x1 2))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=>",
+        "left": {
+          "kind": "or",
+          "left": {
+            "kind": "not",
+            "value": {
+              "kind": "boolean",
+              "slot": 1
+            }
+          },
+          "right": {
+            "kind": "compare",
+            "op": "distinct",
+            "left": {
+              "variable": 0,
+              "offset": 1
+            },
+            "right": {
+              "variable": 2,
+              "offset": 0
+            }
+          }
+        },
+        "right": {
+          "kind": "=",
+          "left": {
+            "kind": "xor",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 1,
+                "offset": -2
+              },
+              "right": {
+                "variable": 0,
+                "offset": -2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": -1
+              },
+              "right": {
+                "variable": 2,
+                "offset": -1
+              }
+            }
+          },
+          "right": {
+            "kind": "not",
+            "value": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": 2
+              },
+              "right": {
+                "variable": 1,
+                "offset": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 42,
+        "branches": 1,
+        "relaxations": 16
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      },
+      "stats": {
+        "work": 42,
+        "branches": 1,
+        "relaxations": 16
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "1",
+        "x2": "2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": true
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-61",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (not (distinct (+ x2 2) (+ x0 (- 2)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "not",
+        "value": {
+          "kind": "compare",
+          "op": "distinct",
+          "left": {
+            "variable": 2,
+            "offset": 2
+          },
+          "right": {
+            "variable": 0,
+            "offset": -2
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 46,
+        "branches": 0,
+        "relaxations": 24
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 46,
+        "branches": 0,
+        "relaxations": 24
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "-2",
+        "x2": "-2"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-62",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (= (=> (= (+ x0 (- 2)) (+ x2 2)) (distinct (+ x1 (- 1)) (+ x0 (- 1)))) (not (= (+ x0 1) x1))) (< (+ x0 1) (+ x1 (- 1)))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=",
+        "left": {
+          "kind": "=",
+          "left": {
+            "kind": "=>",
+            "left": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": 2
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "distinct",
+              "left": {
+                "variable": 1,
+                "offset": -1
+              },
+              "right": {
+                "variable": 0,
+                "offset": -1
+              }
+            }
+          },
+          "right": {
+            "kind": "not",
+            "value": {
+              "kind": "compare",
+              "op": "=",
+              "left": {
+                "variable": 0,
+                "offset": 1
+              },
+              "right": {
+                "variable": 1,
+                "offset": 0
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "compare",
+          "op": "<",
+          "left": {
+            "variable": 0,
+            "offset": 1
+          },
+          "right": {
+            "variable": 1,
+            "offset": -1
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "1",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 179,
+        "branches": 6,
+        "relaxations": 135
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "-2",
+        "x1": "1",
+        "x2": "1"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 179,
+        "branches": 6,
+        "relaxations": 135
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "-1",
+        "x1": "2",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "input": {
+      "name": "seed-12449-63",
+      "family": "generated",
+      "integers": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "booleans": [
+        "b0",
+        "b1"
+      ],
+      "source": "(set-logic QF_IDL)(declare-const x0 Int)(declare-const x1 Int)(declare-const x2 Int)(declare-const b0 Bool)(declare-const b1 Bool)(assert (and (>= x0 (- 2))(<= x0 2)))(assert (and (>= x1 (- 2))(<= x1 2)))(assert (and (>= x2 (- 2))(<= x2 2)))(assert (= (not (and (<= (+ x1 1) x2) (<= (+ x0 (- 2)) (+ x2 (- 1))))) (not (<= x1 (+ x1 (- 1))))))",
+      "expected": "sat",
+      "iterations": 1,
+      "predicate": {
+        "kind": "=",
+        "left": {
+          "kind": "not",
+          "value": {
+            "kind": "and",
+            "left": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 1,
+                "offset": 1
+              },
+              "right": {
+                "variable": 2,
+                "offset": 0
+              }
+            },
+            "right": {
+              "kind": "compare",
+              "op": "<=",
+              "left": {
+                "variable": 0,
+                "offset": -2
+              },
+              "right": {
+                "variable": 2,
+                "offset": -1
+              }
+            }
+          }
+        },
+        "right": {
+          "kind": "not",
+          "value": {
+            "kind": "compare",
+            "op": "<=",
+            "left": {
+              "variable": 1,
+              "offset": 0
+            },
+            "right": {
+              "variable": 1,
+              "offset": -1
+            }
+          }
+        }
+      }
+    },
+    "wasm": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 2,
+        "relaxations": 7
+      }
+    },
+    "native": {
+      "status": "sat",
+      "values": {
+        "x0": "0",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      },
+      "stats": {
+        "work": 32,
+        "branches": 2,
+        "relaxations": 7
+      }
+    },
+    "reference": {
+      "status": "sat",
+      "values": {
+        "x0": "2",
+        "x1": "0",
+        "x2": "0"
+      },
+      "booleans": {
+        "b0": false,
+        "b1": false
+      }
+    }
+  },
+  {
+    "control": "(declare-const x Real)",
+    "reply": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "sort"
+    }
+  },
+  {
+    "control": "(declare-const x Int)(assert (= (* x x) 2))",
+    "reply": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "operator *"
+    }
+  },
+  {
+    "control": "(declare-const x Int)(declare-const y Int)(assert (= (+ x y) 7))",
+    "reply": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "constraint is not integer difference logic after constant substitution"
+    }
+  },
+  {
+    "control": "(push 1)",
+    "reply": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "command push"
+    }
+  },
+  {
+    "control": "(declare-const x Int)(assert (= x true))",
+    "reply": {
+      "kind": "error",
+      "code": "type",
+      "message": "equality operands have different sorts"
+    }
+  },
+  {
+    "control": "(assert missing)",
+    "reply": {
+      "kind": "error",
+      "code": "type",
+      "message": "undeclared symbol missing"
+    }
+  },
+  {
+    "control": "(declare-const x Int)(assert (forall ((y Int)) (= y x)))",
+    "reply": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "expected built-in operator"
+    }
+  },
+  {
+    "control": "(assert true)(check-sat)(assert false)",
+    "reply": {
+      "kind": "error",
+      "code": "unsupported",
+      "message": "commands after check-sat"
+    }
+  },
+  {
+    "control": "(assert true) trailing",
+    "reply": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "expected list"
+    }
+  },
+  {
+    "control": "(assert (and true)",
+    "reply": {
+      "kind": "error",
+      "code": "syntax",
+      "message": "unexpected end"
+    }
+  },
+  {
+    "budget": 0,
+    "reply": {
+      "status": "unknown",
+      "values": {},
+      "booleans": {},
+      "reason": "work",
+      "stats": {
+        "work": 0,
+        "branches": 0,
+        "relaxations": 0
+      }
+    }
+  },
+  {
+    "sut": "known TTL boundary fault",
+    "model": {
+      "status": "sat",
+      "values": {
+        "elapsed": "1",
+        "ttl": "1"
+      },
+      "booleans": {},
+      "stats": {
+        "work": 26,
+        "branches": 0,
+        "relaxations": 12
+      }
+    },
+    "actions": [
+      {
+        "type": "put",
+        "ttl": 1
+      },
+      {
+        "type": "advance",
+        "amount": 1
+      },
+      {
+        "type": "read"
+      }
+    ],
+    "broken": {
+      "status": "mismatch",
+      "checkedSteps": 3,
+      "actual": "cached",
+      "expected": [
+        null
+      ],
+      "trace": {
+        "version": 1,
+        "model": "ttl-expiry",
+        "initial": "ok",
+        "steps": [
+          {
+            "action": {
+              "type": "put",
+              "ttl": 1
+            },
+            "observation": "ok"
+          },
+          {
+            "action": {
+              "type": "advance",
+              "amount": 1
+            },
+            "observation": "ok"
+          },
+          {
+            "action": {
+              "type": "read"
+            },
+            "observation": "cached"
+          }
+        ]
+      }
+    },
+    "fixed": {
+      "status": "matched",
+      "checkedSteps": 3,
+      "actual": null,
+      "expected": [
+        null
+      ],
+      "trace": {
+        "version": 1,
+        "model": "ttl-expiry",
+        "initial": "ok",
+        "steps": [
+          {
+            "action": {
+              "type": "put",
+              "ttl": 1
+            },
+            "observation": "ok"
+          },
+          {
+            "action": {
+              "type": "advance",
+              "amount": 1
+            },
+            "observation": "ok"
+          },
+          {
+            "action": {
+              "type": "read"
+            },
+            "observation": null
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,11 @@
+cargo build --release --locked --manifest-path evals/smt-subset-rust/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.07s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/smt-subset-rust/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.02s
+pnpm build
+
+> @mizchi/modelt@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/modelt
+> tsc -p tsconfig.build.json
+
+node dist/evals/smt-subset/verify-run.js 'confirmation' 'evals/runs/0030-smt-confirmation' 'evals/runs/0030-smt-development-final'
+{"sat":159,"unsat":11,"controls":12,"budgetUnknown":true,"sut":{"broken":"mismatch","fixed":"matched"},"z3Version":"5.4.1.0 145c0c51570a357cc558ce898ce77573ba9d4fbf z3-5.4.1"}

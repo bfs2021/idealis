@@ -4,6 +4,8 @@ TypeScript のモデルと実装を比較する試作ライブラリ。モデル
 
 TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT adapterとして利用する。Quint Connectのモデルと実装をつなぐアプローチを参考に、TSの`Driver`を実装との境界にした。Quint言語やApalacheの再実装ではない。
 
+[Rust製SMT-LIBサブセットの実験](docs/smt-subset.md)も追加した。整数の差分制約とBoolean式をnative/Wasmで解く。Z3を再利用した比較でも小さいTTL・amount・schedulerはnativeで約3.0-3.4倍速い一方、Boolean UNSATには後退と予算切れが残る。[全17入力の比較](evals/iterations/0031-smt-reuse.md)を保存し、公開APIへの組み込みは保留している。
+
 ## 実行
 
 観測付きの有限モデルを TS / Rust で共有する方法、反例の縮小、時計・通信・永続化の注入は [利用ガイド](docs/using-models.md) を参照。`just package` で solver を必須にしない npm/Cargo/Wasm archive と CLI を作り、別 consumer で検証できる。[公開手順と CI の分割](docs/releasing.md) は別途記載している。

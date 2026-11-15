@@ -1,0 +1,54 @@
+{
+  "status": "complete",
+  "commitBeforeFix": "6da5e2e812d01b918a20901d663ed29f8aa9258b",
+  "createdAt": "2026-11-15T16:28:52.681142+00:00",
+  "sourceVersion": "bd322de224d68fc6d4cfe64d50884247dc989300bbae6450eedb37fa9f401620",
+  "cause": "The three final Markdown tables were added after the last full check and were not formatted. CI failed at pnpm check. Only document formatting was changed.",
+  "failedRun": "https://github.com/mizchi/modelt/actions/runs/43735477920",
+  "runtimeSourcesUnchanged": true,
+  "checks": [
+    {
+      "command": "GitHub Actions pnpm check before documentation formatting",
+      "status": "expected-failure",
+      "path": "ci-format-red.log"
+    },
+    {
+      "command": "biome check --write on three experiment documents",
+      "status": "passed",
+      "path": "docs-format.log"
+    },
+    {
+      "command": "just check after documentation formatting",
+      "status": "passed",
+      "path": "check-after-docs.log"
+    }
+  ],
+  "documentDigests": [
+    {
+      "path": "docs/smt-subset.md",
+      "sha256": "75516d70f43b548a5a15ed1f97567ab9bda408b28d1f8055ce27fae2a74ffa75"
+    },
+    {
+      "path": "evals/iterations/0030-smt-subset.md",
+      "sha256": "5dee2d45a9df6e3e766fe3da52e628bb74c07175fc75a567b062a2597028eb95"
+    },
+    {
+      "path": "evals/iterations/0031-smt-reuse.md",
+      "sha256": "95c2f3d1c5b1624ed535ab34bb4882d464bbfc362d8ec66420eb049af1140cf7"
+    }
+  ],
+  "files": [
+    {
+      "path": "check-after-docs.log",
+      "sha256": "19eb5b8878e74b9e1b57990ce2691905a0d5b57bac257e564a33234640731822"
+    },
+    {
+      "path": "ci-format-red.log",
+      "sha256": "89055d3d4ad7115d33965f058bbfcecbca890874d7586211de476098fcc85987"
+    },
+    {
+      "path": "docs-format.log",
+      "sha256": "1c7be2df892ce4c8c3f534118dd01155cf82cf9bfacbff9eff8355f3fb50cad4"
+    }
+  ]
+}

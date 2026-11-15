@@ -1,0 +1,112 @@
+cargo bench --locked --manifest-path evals/smt-subset-rust/Cargo.toml --bench solver
+warning: output filename collision at /Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust/target/release/deps/libmodelt_smt_subset.rlib
+  |
+  = note: the lib target `modelt_smt_subset` in package `modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)` has the same output filename as the lib target `modelt_smt_subset` in package `modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+warning: output filename collision at /Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust/target/release/deps/libmodelt_smt_subset.dylib
+  |
+  = note: the lib target `modelt_smt_subset` in package `modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)` has the same output filename as the lib target `modelt_smt_subset` in package `modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+warning: output filename collision at /Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust/target/release/deps/libmodelt_smt_subset.dylib.dSYM
+  |
+  = note: the lib target `modelt_smt_subset` in package `modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)` has the same output filename as the lib target `modelt_smt_subset` in package `modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling zerocopy v0.8.63
+   Compiling find-msvc-tools v0.1.15
+   Compiling shlex v2.0.1
+   Compiling zmij v1.0.23
+   Compiling cfg-if v1.0.5
+   Compiling num-traits v0.2.19
+   Compiling memchr v2.8.3
+   Compiling cc v1.11.2
+   Compiling libc v0.2.191
+   Compiling itoa v1.0.19
+   Compiling anstyle v1.0.14
+   Compiling clap_lex v1.1.1
+   Compiling ciborium-io v0.2.2
+   Compiling regex-syntax v0.8.11
+   Compiling either v1.19.0
+   Compiling clap_builder v4.6.7
+   Compiling itertools v0.13.0
+   Compiling alloca v0.4.0
+   Compiling regex-automata v0.4.18
+   Compiling num-integer v0.1.47
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+   Compiling serde_json v1.0.154
+   Compiling cast v0.3.0
+   Compiling same-file v1.0.6
+   Compiling walkdir v2.5.0
+   Compiling regex v1.13.1
+   Compiling criterion-plot v0.8.2
+   Compiling page_size v0.6.0
+   Compiling num-bigint v0.4.8
+   Compiling clap v4.6.7
+   Compiling anes v0.1.6
+   Compiling oorandom v11.1.5
+   Compiling serde_derive v1.0.229
+   Compiling zerocopy-derive v0.8.63
+   Compiling tinytemplate v1.2.1
+   Compiling modelt-smt-subset v0.0.0 (/Users/mz/ghq/github.com/mizchi/modelt/evals/smt-subset-rust)
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.8.2
+    Finished `bench` profile [optimized] target(s) in 19.92s
+     Running benches/solver.rs (evals/smt-subset-rust/target/release/deps/solver-003cb0c41a0843c1)
+Benchmarking parse-solve-4
+Benchmarking parse-solve-4: Warming up for 1.0000 s
+Benchmarking parse-solve-4: Collecting 20 samples in estimated 2.0011 s (355k iterations)
+Benchmarking parse-solve-4: Analyzing
+parse-solve-4           time:   [5.5649 µs 5.5994 µs 5.6611 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking prepared-4
+Benchmarking prepared-4: Warming up for 1.0000 s
+Benchmarking prepared-4: Collecting 20 samples in estimated 2.0001 s (3.1M iterations)
+Benchmarking prepared-4: Analyzing
+prepared-4              time:   [643.96 ns 646.99 ns 650.34 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking parse-solve-32
+Benchmarking parse-solve-32: Warming up for 1.0000 s
+Benchmarking parse-solve-32: Collecting 20 samples in estimated 2.0029 s (34k iterations)
+Benchmarking parse-solve-32: Analyzing
+parse-solve-32          time:   [58.086 µs 58.208 µs 58.335 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) low mild
+
+Benchmarking prepared-32
+Benchmarking prepared-32: Warming up for 1.0000 s
+Benchmarking prepared-32: Collecting 20 samples in estimated 2.0001 s (140k iterations)
+Benchmarking prepared-32: Analyzing
+prepared-32             time:   [14.187 µs 14.212 µs 14.239 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) low severe
+  1 (5.00%) high mild
+
+Benchmarking parse-solve-128
+Benchmarking parse-solve-128: Warming up for 1.0000 s
+Benchmarking parse-solve-128: Collecting 20 samples in estimated 2.0051 s (5460 iterations)
+Benchmarking parse-solve-128: Analyzing
+parse-solve-128         time:   [364.76 µs 366.90 µs 368.38 µs]
+
+Benchmarking prepared-128
+Benchmarking prepared-128: Warming up for 1.0000 s
+Benchmarking prepared-128: Collecting 20 samples in estimated 2.0094 s (11k iterations)
+Benchmarking prepared-128: Analyzing
+prepared-128            time:   [184.85 µs 187.62 µs 190.52 µs]
+Found 4 outliers among 20 measurements (20.00%)
+  3 (15.00%) high mild
+  1 (5.00%) high severe
+
