@@ -1,0 +1,9 @@
+# 0031: Z3の再利用でRust試作との差が変わるか
+
+0030では小さいparse+solveの差が大きく、preparedのUNSATではZ3 nativeが速かった。native CLIのresetと、WasmのSolver生成費用が混ざっているため、Rust言語やsolver kernel自体の差として解釈しない。
+
+0030の17入力、work予算、batch回数、warmup 1/sample 5、順序回転を保つ。同じrunでparse+solve/preparedに加え、Z3 native/Wasmのsolverをpush/popで再利用し、各回sourceを再parseするscoped経路を測る。Rustはscopedでも既存のparse+solveを使い、追加cacheを設けない。native Z3はcaseごとにlogicを設定し、問い合わせごとのset-logicだけを外す。model取得は維持する。
+
+追加の再利用APIは、矛盾する2問い合わせを連続して実行し、popによる分離を確認する。各sat modelはタイマー外で元のsourceへ戻してZ3で検査する。Rustのparser/solverを変更せず、0030のrunは編集しない。これは固定入力の費用に対する追加実験で、確認用seedの新しい独立評価ではない。
+
+採用判断はscoped経路との比較も含める。複数の小さい入力familyでRust nativeの1.5倍以上の利益とWasmの利益が残れば、限定したfast pathの候補とする。Booleanの予算切れとlarge/preparedでの後退は残し、Z3を既定から置き換える決定にはしない。
