@@ -95,6 +95,12 @@ export const compare = async () => {
   }
   const limitRecords = [];
   for (const request of [
+    {
+      kind: "expression",
+      source: Array.from({ length: 130 }, () => "1").join("+"),
+    },
+    { kind: "expression", source: `x${"'".repeat(130)}` },
+    { kind: "expression", source: `x${".a".repeat(130)}` },
     { kind: "expression", source: `${"(".repeat(130)}TRUE${")".repeat(130)}` },
     {
       kind: "config",

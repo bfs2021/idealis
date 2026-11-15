@@ -29,7 +29,7 @@ fn main() -> Result<(), rtla::ParseError> {
 
 名前解決、モジュールの読込、型/level検査、標準operatorの評価、ASTからIRへの変換、モデル検査は行わない。設定に制約や置換が存在してもASTとして保持するため、実行側は対応可否を別途検査する。
 
-proof、INSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析は64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。
+proof、INSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析とASTの深さは64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。
 
 IR生成は既存のmodeltのTS frontendに残る。`rtla`のASTを直接`rtlc::SafetyProgram`として実行することはできない。既存の`compileTlaSafety`は引き続きtla-ts parserを使う。
 

@@ -40,6 +40,102 @@ fn infix(operator: &str) -> Option<Precedence> {
     })
 }
 
+fn within_ast_limit(expression: &Expression) -> bool {
+    let mut pending = vec![(expression, 1)];
+    while let Some((expression, depth)) = pending.pop() {
+        if depth > crate::MAX_NESTING {
+            return false;
+        }
+        let children: Vec<&Expression> = match &expression.node {
+            ExpressionKind::Prime { expression }
+            | ExpressionKind::Unchanged { expression }
+            | ExpressionKind::Enabled { expression }
+            | ExpressionKind::Always { expression }
+            | ExpressionKind::Eventually { expression } => vec![expression],
+            ExpressionKind::Apply { args, .. } | ExpressionKind::Bracket { args } => {
+                args.iter().collect()
+            }
+            ExpressionKind::And { operands, .. } | ExpressionKind::Or { operands, .. } => {
+                operands.iter().collect()
+            }
+            ExpressionKind::SetEnumeration { elements } | ExpressionKind::Tuple { elements } => {
+                elements.iter().collect()
+            }
+            ExpressionKind::Product { factors } => factors.iter().collect(),
+            ExpressionKind::If {
+                condition,
+                consequent,
+                alternative,
+            } => vec![condition, consequent, alternative],
+            ExpressionKind::Case { arms, other } => arms
+                .iter()
+                .flat_map(|arm| [&arm.condition, &arm.body])
+                .chain(other.iter().map(Box::as_ref))
+                .collect(),
+            ExpressionKind::Forall { bounds, body }
+            | ExpressionKind::Exists { bounds, body }
+            | ExpressionKind::FunctionConstruction { bounds, body }
+            | ExpressionKind::SetMap {
+                expression: body,
+                bounds,
+            } => bounds
+                .iter()
+                .map(|bound| &bound.set)
+                .chain(std::iter::once(body.as_ref()))
+                .collect(),
+            ExpressionKind::UnboundedQuantifier { body, .. }
+            | ExpressionKind::Label { body, .. } => vec![body],
+            ExpressionKind::Let { definitions, body } => {
+                let mut children = vec![body.as_ref()];
+                for definition in definitions {
+                    children.push(&definition.body);
+                    if let DefinitionKind::Function { bounds } = &definition.head {
+                        children.extend(bounds.iter().map(|bound| &bound.set));
+                    }
+                }
+                children
+            }
+            ExpressionKind::Choose { set, body, .. } => set
+                .iter()
+                .map(Box::as_ref)
+                .chain(std::iter::once(body.as_ref()))
+                .collect(),
+            ExpressionKind::SetFilter { bound, predicate } => vec![&bound.set, predicate],
+            ExpressionKind::FunctionSet { domain, range } => vec![domain, range],
+            ExpressionKind::Record { fields } | ExpressionKind::RecordSet { fields } => {
+                fields.iter().map(|field| &field.value).collect()
+            }
+            ExpressionKind::Except { function, updates } => {
+                let mut children = vec![function.as_ref()];
+                for update in updates {
+                    children.push(&update.value);
+                    for part in &update.path {
+                        if let ExceptPath::Index { args } = part {
+                            children.extend(args);
+                        }
+                    }
+                }
+                children
+            }
+            ExpressionKind::FunctionApplication { function, args } => {
+                std::iter::once(function.as_ref()).chain(args).collect()
+            }
+            ExpressionKind::FieldAccess { record, .. } => vec![record],
+            ExpressionKind::BoxAction { action, subscript }
+            | ExpressionKind::AngleAction { action, subscript }
+            | ExpressionKind::WeakFairness { subscript, action }
+            | ExpressionKind::StrongFairness { subscript, action } => vec![action, subscript],
+            ExpressionKind::Number { .. }
+            | ExpressionKind::Decimal { .. }
+            | ExpressionKind::String { .. }
+            | ExpressionKind::Identifier { .. }
+            | ExpressionKind::ExceptAt => vec![],
+        };
+        pending.extend(children.into_iter().map(|child| (child, depth + 1)));
+    }
+    true
+}
+
 pub(crate) struct Parser {
     pub tokens: Vec<Token>,
     pub cursor: usize,
@@ -124,6 +220,9 @@ impl Parser {
         let mut left = self.prefix()?;
         let mut previous: Option<(String, Precedence)> = None;
         loop {
+            if !within_ast_limit(&left) {
+                return Err(self.unsupported("AST nesting exceeds 64"));
+            }
             if self.blocked() || self.raw().kind != Kind::Symbol {
                 break;
             }

@@ -132,3 +132,16 @@ fn reports_resource_limits_without_claiming_the_tla_syntax_is_invalid() {
         ExpressionKind::Identifier { .. }
     ));
 }
+
+#[test]
+fn bounds_ast_depth_for_flat_operator_and_postfix_chains() {
+    for source in [
+        std::iter::repeat_n("1", 130).collect::<Vec<_>>().join("+"),
+        format!("x{}", "'".repeat(130)),
+        format!("x{}", ".a".repeat(130)),
+    ] {
+        assert!(
+            matches!(parse_expression(&source), Err(error) if error.kind == ErrorKind::Unsupported)
+        );
+    }
+}
