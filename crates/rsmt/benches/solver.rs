@@ -1,5 +1,5 @@
 use criterion::{Criterion, criterion_group, criterion_main};
-use modelt_smt_subset::Problem;
+use rsmt::Problem;
 use std::{hint::black_box, time::Duration};
 
 fn cases(criterion: &mut Criterion) {

@@ -202,17 +202,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 
 [[package]]
-name = "modelt-smt-subset"
-version = "0.0.0"
-dependencies = [
- "criterion",
- "num-bigint",
- "num-traits",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "num-bigint"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -302,6 +291,17 @@ name = "regex-syntax"
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+
+[[package]]
+name = "rsmt"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "criterion",
+ "num-bigint",
+ "num-traits",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "same-file"

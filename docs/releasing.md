@@ -31,6 +31,7 @@ cargo publish --locked --manifest-path crates/rtla/Cargo.toml
 cargo publish --locked --manifest-path crates/rtlc/Cargo.toml
 cargo publish --locked --manifest-path crates/rtla-compiler/Cargo.toml
 cargo publish --locked --manifest-path crates/modelt-core/Cargo.toml
+cargo publish --locked --manifest-path crates/rsmt/Cargo.toml
 ```
 
 この手順は crate registry への公開を行う。Cargo の自動公開は未設定で、GitHub Release に `.crate` を添付する構成。
@@ -54,3 +55,5 @@ PR は1ジョブで TS / Rust / ブラウザ / mutation / 実バグ評価 / cons
 `rtla`は独立した`rtla-<version>.crate`、`rtla.wasm`、SHA256/ABI manifestを追加する。同じ一時workspaceで4つのcrateを検証し、parser単独consumerの依存graphにrtlc/modelt-coreが入らないことを確認する。npmでは`@mizchi/modelt/rtla.wasm`を解決し、solverがない別consumerで解析する。registry初回登録は上の手動手順を使い、package検証からpublishは実行しない。
 
 `rtla-compiler`のarchiveはrtlaのASTをrtlcのIRへ変換する。modelt-core consumerは未公開のrtla・rtla-compiler・rtlcを`[patch.crates-io]`で解決し、ソースからのコンパイルと検査も実行する。parserとcheckerの単独consumerは従来の独立性を検査する。
+
+`rsmt`は5つ目の独立crate。`rsmt-<version>.crate`、`rsmt.wasm`、`rsmt-manifest.json`を配布物に加える。rsmtのarchiveだけを別ディレクトリへ展開し、SAT、UNSAT、unknown、未対応を検査する。依存graphへmodelt-core、rtla、rtlc、Z3が入らないことも確認する。npmのSMT backendへの接続は追加していない。

@@ -34,7 +34,7 @@ await writeFile(
 );
 execFileSync("pnpm", ["pack", "--pack-destination", target], { stdio: "pipe" });
 const workspace = await mkdtemp(resolve(target, "cargo-workspace-"));
-for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core"]) {
+for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core", "rsmt"]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
     "src",
@@ -45,6 +45,7 @@ for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core"]) {
     "README.md",
     "LICENSE",
     ...(name === "rtla" ? ["NOTICE"] : []),
+    ...(name === "rsmt" ? ["benches"] : []),
   ])
     await cp(`crates/${name}/${file}`, resolve(workspace, name, file), {
       recursive: true,
@@ -52,7 +53,7 @@ for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core"]) {
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","modelt-core"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","modelt-core","rsmt"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -80,7 +81,7 @@ execFileSync(
   ],
   { stdio: "pipe" },
 );
-for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core"]) {
+for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core", "rsmt"]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
     resolve(workspace, "target/package", crate),
@@ -94,6 +95,14 @@ await copyFile(
   "assets/rtla-manifest.json",
   resolve(target, "rtla-manifest.json"),
 );
+const smt = await readFile(
+  "crates/rsmt/target/wasm32-unknown-unknown/release/rsmt.wasm",
+);
+await writeFile(resolve(target, "rsmt.wasm"), smt);
+await writeFile(
+  resolve(target, "rsmt-manifest.json"),
+  `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(smt).digest("hex"), bytes: smt.length }, null, 2)}\n`,
+);
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/modelt-core Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/modelt-core/rsmt Cargo and Wasm artifacts: ${target}`,
 );

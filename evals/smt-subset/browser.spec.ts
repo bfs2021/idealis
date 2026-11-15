@@ -16,7 +16,7 @@ test("pure Rust SMT subset runs in Chromium without cross-origin isolation", asy
   const javascript = bundle.outputFiles[0];
   if (!javascript) throw new Error("Missing browser bundle");
   const wasm = await readFile(
-    "evals/smt-subset-rust/target/wasm32-unknown-unknown/release/modelt_smt_subset.wasm",
+    "crates/rsmt/target/wasm32-unknown-unknown/release/rsmt.wasm",
   );
   await page.route("http://smt.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;

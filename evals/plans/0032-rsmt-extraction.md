@@ -1,0 +1,9 @@
+# 0032: SMTサブセットをrsmt crateへ切り出す
+
+既存のSMT試作を`crates/rsmt`へ移し、modeltの他crateやTSへ依存しないRustライブラリにする。Problem、Solution、Error、Engineの契約とJSONL/Wasm ABI v1を保つ。parserと求解アルゴリズムは変更しない。範囲の拡張や性能改善の実験とは分ける。
+
+packageの単独consumerへrsmtの検査を先に追加し、archiveがないRedを記録する。rsmtのarchiveだけを別ディレクトリへ展開し、SATの具体値、UNSAT、unknown、未対応をRust APIで検査する。cargo metadataでmodelt-core、rtla、rtlcへ依存しないことも確認する。
+
+既存の固定入力と既知seedを移動前後のnativeで比較し、JSON応答の完全一致を要求する。移動後Wasmも同じ応答を要求し、Z3への既存のSAT witness検査を実行する。これは既知入力の回帰検査であり、独立した確認用seedの実験とは数えない。過去runは編集しない。
+
+新しいcrateのfmt/clippy/test、Criterion smoke、単独example、native/Wasm、実Chromium、package consumerを検査する。check/browser、runtime-build/test、evaluate/replayも実行する。公開APIへ新しいSMT backendを接続せず、registry publishやmergeは行わない。
