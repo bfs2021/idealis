@@ -230,3 +230,10 @@ criterion-compare run: safety-build
 criterion-replay saved run:
   pnpm build
   node dist/evals/criterion-safety/compare.js {{quote(run)}} {{quote(saved)}}
+
+profile-criterion stage run: criterion-prepare
+  MODELT_CRITERION_PLAN=0024-profile-tuning node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+profile-record backend binary run:
+  pnpm build
+  node dist/evals/profile-tuning/record.js {{quote(backend)}} {{quote(binary)}} {{quote(run)}}
