@@ -49,7 +49,7 @@ export const differential = async (
       version: 1,
       request: {
         kind: "check-safety",
-        program: compileTlaSafety(input),
+        program: frontend(input),
         bounds,
       },
     });
@@ -119,7 +119,7 @@ export const differential = async (
             violation: { ...ours.result.violation, name: "__HasNext" },
           }
         : ours.result;
-    const forced = traceInput(model, compileTlaSafety(input), result);
+    const forced = traceInput(model, frontend(input), result);
     const replay = await runTlc(
       java,
       jar,

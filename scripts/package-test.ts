@@ -76,11 +76,13 @@ const history = {
 };
 await writeFile(join(consumer, "model.json"), JSON.stringify(artifact));
 await writeFile(join(consumer, "history.json"), JSON.stringify(history));
-const safety = compileTlaSafety({
+const sourceInput = {
   source:
     "---- MODULE PackageSafety ----\nEXTENDS Naturals\nVARIABLE x\nInit == x = 0\nNext == x' = x + 1\nSafe == x < 3\n====",
   config: "INIT Init\nNEXT Next\nINVARIANT Safe",
-});
+};
+const safety = compileTlaSafety(sourceInput);
+await writeFile(join(consumer, "source.json"), JSON.stringify(sourceInput));
 await writeFile(
   join(consumer, "safety-request.json"),
   JSON.stringify({
@@ -133,7 +135,7 @@ const backendResult=await runBackend(createRtlcBackend(core,{version:'0.1.0-alph
 assert.equal(backendResult.outcome.kind,'counterexample');assert.equal(backendResult.outcome.witness.kind,'behavior');
 assert.deepEqual(parseBackendResult(JSON.parse(JSON.stringify(backendResult))),backendResult);
 assert.equal(checkSafety(core,safety.program,safety.bounds).violation.trace.length,4);
-const source={source: "---- MODULE Source ----\\nEXTENDS Naturals\\nVARIABLE x\\nInit == x = 0\\nNext == x' = x + 1\\nSafe == x < 3\\n====", config: "INIT Init\\nNEXT Next\\nINVARIANT Safe"};
+const source=JSON.parse(await readFile('source.json','utf8'));
 const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'Source');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
 const scheduled=await runSchedule(planned,[{execute:async ids=>ids.map(id=>({id,result:checkSafety(core,safety.program,safety.bounds)}))}]);
@@ -152,7 +154,7 @@ await writeFile(
   `import type {Model} from '@mizchi/modelt';
 import {compileFiniteModel,createFiniteModel} from '@mizchi/modelt/finite';
 import {createSimulationHost} from '@mizchi/modelt/host';
-import {createPortableWasm} from '@mizchi/modelt/portable';
+import {createPortableWasm,compileTlaSource,checkTlaSource} from '@mizchi/modelt/portable';
 import {planSchedule} from '@mizchi/modelt/scheduling';
 import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/modelt/history';
 import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/modelt/backend';
@@ -160,7 +162,7 @@ const model:Model<number,'tick',number>={name:'typed',initial:()=>[{state:0,obse
 const compiled=compileFiniteModel(model,{maxDepth:1,maxStates:1});
 if(compiled.model){createFiniteModel(compiled.model);checkConcurrentHistory(compiled.model,createHistoryRecorder(model.name,{type:'int',value:'0'}).snapshot(),100);}
 createSimulationHost({seed:1});
-void createPortableWasm;
+void createPortableWasm;void compileTlaSource;void checkTlaSource;
 void planSchedule;
 const backendTypes:(value:unknown)=>BackendResult=parseBackendResult;
 void backendTypes;void createRtlcBackend;void runBackend;
@@ -234,7 +236,7 @@ await writeFile(
 await writeFile(
   join(consumer, "consumer.rs"),
   `use modelt_core::{Engine,Message,Status};
-fn main(){let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: modelt_core::Command = serde_json::from_slice(&bytes).unwrap(); if let modelt_core::Request::CheckSafety { program, bounds } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check(bounds).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; println!("packaged Rust consumer matched");}
+fn main(){let source:serde_json::Value=serde_json::from_slice(&std::fs::read("source.json").unwrap()).unwrap();let program=modelt_core::compile_tla(source["source"].as_str().unwrap(),source["config"].as_str().unwrap()).unwrap();let checked=program.check(modelt_core::SafetyBounds{max_depth:10,max_states:100,max_work:10000,max_temporal_nodes:None}).unwrap();assert_eq!(checked.violation.unwrap().trace.len(),4);let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: modelt_core::Command = serde_json::from_slice(&bytes).unwrap(); if let modelt_core::Request::CheckSafety { program, bounds } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check(bounds).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; println!("packaged Rust consumer matched");}
 `,
 );
 const rust = execFileSync(

@@ -75,6 +75,7 @@ const native = startNative();
 const reports = [];
 try {
   for (const input of inputs) {
+    await mkdir(join(directory, input.name));
     const report = await differential(
       input,
       core,
