@@ -464,22 +464,33 @@ impl Expression {
         }
         Ok(())
     }
+    #[inline]
     pub(crate) fn eval(
         &self,
         ctx: EvalContext<'_>,
         arena: &mut Arena,
     ) -> Result<Scalar, CoreError> {
-        Ok(match self {
-            Self::Literal { value } => *value,
-            Self::Data { value } => arena.data(value)?,
-            Self::Read { slot, next } => ctx.read(*slot, *next)?,
-            Self::Bound { slot } => *ctx
+        match self {
+            Self::Literal { value } => Ok(*value),
+            Self::Read { slot, next } => ctx.read(*slot, *next),
+            Self::Bound { slot } => ctx
                 .locals
                 .get(*slot)
-                .ok_or_else(|| CoreError::protocol("Unbound quantified variable"))?,
+                .copied()
+                .ok_or_else(|| CoreError::protocol("Unbound quantified variable")),
             Self::Old => ctx
                 .old
-                .ok_or_else(|| CoreError::protocol("Unbound EXCEPT @"))?,
+                .ok_or_else(|| CoreError::protocol("Unbound EXCEPT @")),
+            _ => self.eval_operator(ctx, arena),
+        }
+    }
+    #[inline(never)]
+    fn eval_operator(&self, ctx: EvalContext<'_>, arena: &mut Arena) -> Result<Scalar, CoreError> {
+        Ok(match self {
+            Self::Literal { .. } | Self::Read { .. } | Self::Bound { .. } | Self::Old => {
+                return self.eval(ctx, arena);
+            }
+            Self::Data { value } => arena.data(value)?,
             Self::Prime { argument } => argument.eval(EvalContext { prime: true, ..ctx }, arena)?,
             Self::Not { argument } => Scalar::Bool(!argument.eval(ctx, arena)?.boolean()?),
             Self::Neg { argument } => Scalar::Int(
@@ -1467,5 +1478,89 @@ mod tests {
                 .eval(EvalContext::new(&[value], &[]), &mut arena)
                 .is_err()
         );
+    }
+    #[test]
+    fn leaf_evaluation_preserves_context_errors_and_lazy_branches() {
+        let current = [Scalar::Int(3)];
+        let next = [Some(Scalar::Int(7))];
+        let locals = [Scalar::Bool(true)];
+        let context = EvalContext {
+            current: &current,
+            next: &next,
+            locals: &locals,
+            old: Some(Scalar::Int(-1)),
+            prime: false,
+        };
+        let mut arena = Arena::new(0);
+        for (expression, expected) in [
+            (
+                Expression::Literal {
+                    value: Scalar::Bool(false),
+                },
+                Scalar::Bool(false),
+            ),
+            (
+                Expression::Read {
+                    slot: 0,
+                    next: false,
+                },
+                Scalar::Int(3),
+            ),
+            (
+                Expression::Read {
+                    slot: 0,
+                    next: true,
+                },
+                Scalar::Int(7),
+            ),
+            (Expression::Bound { slot: 0 }, Scalar::Bool(true)),
+            (Expression::Old, Scalar::Int(-1)),
+            (
+                Expression::Prime {
+                    argument: Box::new(Expression::Read {
+                        slot: 0,
+                        next: false,
+                    }),
+                },
+                Scalar::Int(7),
+            ),
+        ] {
+            assert_eq!(expression.eval(context, &mut arena).unwrap(), expected);
+        }
+        let empty = EvalContext::new(&[], &[]);
+        for (expression, expected) in [
+            (
+                Expression::Read {
+                    slot: 0,
+                    next: false,
+                },
+                "Read of a missing current variable",
+            ),
+            (
+                Expression::Read {
+                    slot: 0,
+                    next: true,
+                },
+                "Read of an unassigned next variable",
+            ),
+            (Expression::Bound { slot: 0 }, "Unbound quantified variable"),
+            (Expression::Old, "Unbound EXCEPT @"),
+        ] {
+            assert_eq!(
+                expression.eval(empty, &mut arena).unwrap_err().message,
+                expected
+            );
+        }
+        let expression = Expression::If {
+            condition: Box::new(Expression::Literal {
+                value: Scalar::Bool(false),
+            }),
+            consequent: Box::new(Expression::Old),
+            alternative: Box::new(Expression::Literal {
+                value: Scalar::Int(42),
+            }),
+        };
+        assert_eq!(expression.eval(empty, &mut arena).unwrap(), Scalar::Int(42));
+        assert_eq!(arena.work, 0);
     }
 }
