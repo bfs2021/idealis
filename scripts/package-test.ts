@@ -17,9 +17,12 @@ const rtlcCrate = files.find(
 const rtlaCrate = files.find(
   (file) => file.startsWith("rtla-") && file.endsWith(".crate"),
 );
+const compilerCrate = files.find(
+  (file) => file.startsWith("rtla-compiler-") && file.endsWith(".crate"),
+);
 assert.ok(
-  tarball && crate && rtlcCrate && rtlaCrate,
-  "Prepare npm and all three Rust packages first",
+  tarball && crate && rtlcCrate && rtlaCrate && compilerCrate,
+  "Prepare npm and all four Rust packages first",
 );
 const consumer = await mkdtemp(join(tmpdir(), "modelt-consumer-"));
 await writeFile(
@@ -100,7 +103,7 @@ await writeFile(
   join(consumer, "consumer.mjs"),
   `import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/modelt/portable';
+import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/modelt/portable';
 import {createHistoryRecorder} from '@mizchi/modelt/history';
 import {parseFiniteModel} from '@mizchi/modelt/finite';
 import {createSimulationHost} from '@mizchi/modelt/host';
@@ -130,6 +133,8 @@ const backendResult=await runBackend(createRtlcBackend(core,{version:'0.1.0-alph
 assert.equal(backendResult.outcome.kind,'counterexample');assert.equal(backendResult.outcome.witness.kind,'behavior');
 assert.deepEqual(parseBackendResult(JSON.parse(JSON.stringify(backendResult))),backendResult);
 assert.equal(checkSafety(core,safety.program,safety.bounds).violation.trace.length,4);
+const source={source: "---- MODULE Source ----\\nEXTENDS Naturals\\nVARIABLE x\\nInit == x = 0\\nNext == x' = x + 1\\nSafe == x < 3\\n====", config: "INIT Init\\nNEXT Next\\nINVARIANT Safe"};
+const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'Source');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
 const scheduled=await runSchedule(planned,[{execute:async ids=>ids.map(id=>({id,result:checkSafety(core,safety.program,safety.bounds)}))}]);
 assert.equal(scheduled.executionStatus,'complete');assert.equal(scheduled.completed[0].result.status,'invariant-violation');
@@ -220,10 +225,11 @@ assert.equal(
 execFileSync("tar", ["-xzf", join(directory, crate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlcCrate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlaCrate), "-C", consumer]);
+execFileSync("tar", ["-xzf", join(directory, compilerCrate), "-C", consumer]);
 const version = JSON.parse(await readFile("package.json", "utf8")).version;
 await writeFile(
   join(consumer, "Cargo.toml"),
-  `[package]\nname="modelt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nmodelt-core={path="modelt-core-${version}"}\nrtlc={path="rtlc-${version}"}\nserde_json="1.0"\n[patch.crates-io]\nrtlc={path="rtlc-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,
+  `[package]\nname="modelt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nmodelt-core={path="modelt-core-${version}"}\nrtlc={path="rtlc-${version}"}\nserde_json="1.0"\n[patch.crates-io]\nrtlc={path="rtlc-${version}"}\nrtla={path="rtla-${version}"}\nrtla-compiler={path="rtla-compiler-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,
 );
 await writeFile(
   join(consumer, "consumer.rs"),
@@ -351,7 +357,7 @@ const result = {
   parserWasm: "packaged rtla Wasm parsed without solvers",
   cliExitCodes: [0, 1, 2],
   consumer,
-  artifacts: [tarball, crate, rtlcCrate, rtlaCrate],
+  artifacts: [tarball, crate, rtlcCrate, rtlaCrate, compilerCrate],
 };
 await writeFile(
   join(directory, "consumer-result.json"),

@@ -34,7 +34,7 @@ await writeFile(
 );
 execFileSync("pnpm", ["pack", "--pack-destination", target], { stdio: "pipe" });
 const workspace = await mkdtemp(resolve(target, "cargo-workspace-"));
-for (const name of ["rtla", "rtlc", "modelt-core"]) {
+for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core"]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
     "src",
@@ -52,7 +52,7 @@ for (const name of ["rtla", "rtlc", "modelt-core"]) {
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtla","rtlc","modelt-core"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","modelt-core"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -80,7 +80,7 @@ execFileSync(
   ],
   { stdio: "pipe" },
 );
-for (const name of ["rtla", "rtlc", "modelt-core"]) {
+for (const name of ["rtla", "rtlc", "rtla-compiler", "modelt-core"]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
     resolve(workspace, "target/package", crate),
@@ -95,5 +95,5 @@ await copyFile(
   resolve(target, "rtla-manifest.json"),
 );
 console.log(
-  `Verified npm, rtla/rtlc/modelt-core Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/modelt-core Cargo and Wasm artifacts: ${target}`,
 );

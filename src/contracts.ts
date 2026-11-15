@@ -114,6 +114,17 @@ export interface PortableCommand {
   readonly version: 1;
   readonly request:
     | {
+        readonly kind: "compile-tla";
+        readonly source: string;
+        readonly config: string;
+      }
+    | {
+        readonly kind: "check-tla";
+        readonly source: string;
+        readonly config: string;
+        readonly bounds: SafetyBounds;
+      }
+    | {
         readonly kind: "check-safety-parallel";
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
@@ -170,6 +181,7 @@ export interface PortableCommand {
 }
 
 export type PortableOutput =
+  | { readonly kind: "compiled"; readonly program: SafetyProgram }
   | { readonly kind: "safety"; readonly result: SafetyResult }
   | { readonly kind: "loaded"; readonly handle: number }
   | { readonly kind: "released" }

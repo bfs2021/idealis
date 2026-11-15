@@ -6,7 +6,7 @@ description = "Lower rtla syntax into rtlc finite model checking IR"
 repository = "https://github.com/mizchi/modelt"
 license = "MIT"
 readme = "README.md"
-include = ["src/**", "tests/**", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE"]
+include = ["src/**", "tests/**", "examples/**", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE"]
 
 [dependencies]
 rtla = { path = "../rtla", version = "0.1.0-alpha.0" }

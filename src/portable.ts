@@ -54,3 +54,4 @@ export {
 } from "./portable-wasm.js";
 export { checkSafety } from "./safety.js";
 export { deletionCandidates, shrinkCounterexample } from "./shrink.js";
+export { checkTlaSource, compileTlaSource } from "./tla-source.js";
