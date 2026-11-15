@@ -1,0 +1,1039 @@
+{
+  "status": "complete",
+  "saved": "evals/runs/0024-profile-wasm-after",
+  "profileSourceVersion": "ca828d4f4d0cf9dfefd9fea92bbe8055cb98c3f4b2ac89fa0bad85fb1403d2aa",
+  "sourceResultSha256": "31a391288f4312d8bcb24c75eecbacccb89741d400ef9151ce9458d814a89203",
+  "selfUnit": "V8 sample count / native sample weight. Native cpu uses recorded thread CPU delta (microseconds). Inclusive counts recursion once per function.",
+  "summaries": [
+    {
+      "input": "counter-product",
+      "workers": 1,
+      "samples": {
+        "totalWeight": 2851,
+        "hotspots": [
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::visit_branch::<<modelt_core[dd9c490578d432f3]::safety::Search>::walk::{closure#0}>",
+            "self": 990,
+            "inclusive": 2558
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator",
+            "self": 905,
+            "inclusive": 1368
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval",
+            "self": 557,
+            "inclusive": 1498
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&u64>",
+            "self": 107,
+            "inclusive": 166
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Domain>::contains",
+            "self": 92,
+            "inclusive": 292
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::hash::sip::Hasher<core[f0fd674eaa06beef]::hash::sip::Sip13Rounds> as core[f0fd674eaa06beef]::hash::Hasher>::write",
+            "self": 73,
+            "inclusive": 73
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::expand",
+            "self": 65,
+            "inclusive": 2567
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(u64, usize)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<u64, usize, std[2b356c9112ee3216]::hash::random::RandomState>::{closure#0}>",
+            "self": 25,
+            "inclusive": 63
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Scalar>::integer",
+            "self": 12,
+            "inclusive": 12
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::run",
+            "self": 11,
+            "inclusive": 2584
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rdl_realloc",
+            "self": 10,
+            "inclusive": 10
+          },
+          {
+            "name": "(garbage collector)",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error> as serde_core[da4e9efdc71c9d28]::de::Deserializer>::deserialize_any::<<modelt_core[dd9c490578d432f3]::Request as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::__Visitor>",
+            "self": 1,
+            "inclusive": 2
+          },
+          {
+            "name": "post",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "",
+            "self": 0,
+            "inclusive": 2588
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rust_realloc",
+            "self": 0,
+            "inclusive": 10
+          },
+          {
+            "name": "(root)",
+            "self": 0,
+            "inclusive": 2851
+          },
+          {
+            "name": "<<alloc[ae94343a5edb5677]::vec::Vec<_> as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::VecVisitor<modelt_core[dd9c490578d432f3]::safety::Branch> as serde_core[da4e9efdc71c9d28]::de::Visitor>::visit_seq::<&mut serde[c8c7d25775f35b2]::private::de::content::SeqDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVec<core[f0fd674eaa06beef]::option::Option<usize>>>::grow_one",
+            "self": 0,
+            "inclusive": 2
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVecInner<_>>::reserve::do_reserve_and_handle::<alloc[ae94343a5edb5677]::alloc::Global>",
+            "self": 0,
+            "inclusive": 8
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVecInner>::finish_grow",
+            "self": 0,
+            "inclusive": 10
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<alloc[ae94343a5edb5677]::vec::Vec<modelt_core[dd9c490578d432f3]::safety::Step>> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<modelt_core[dd9c490578d432f3]::Request> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<&mut serde_json[f8f93ad2478ca2ec]::de::Deserializer<serde_json[f8f93ad2478ca2ec]::read::SliceRead>>",
+            "self": 0,
+            "inclusive": 2
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<modelt_core[dd9c490578d432f3]::safety::SafetyProgram> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<modelt_core[dd9c490578d432f3]::safety::Step> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::dispatch",
+            "self": 0,
+            "inclusive": 2587
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::handle",
+            "self": 0,
+            "inclusive": 2585
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::SafetyProgram>::check",
+            "self": 0,
+            "inclusive": 2585
+          },
+          {
+            "name": "<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error> as serde_core[da4e9efdc71c9d28]::de::Deserializer>::deserialize_any::<<modelt_core[dd9c490578d432f3]::safety::Expression as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::__Visitor>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<serde[c8c7d25775f35b2]::private::de::content::MapDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error> as serde_core[da4e9efdc71c9d28]::de::MapAccess>::next_value::<alloc[ae94343a5edb5677]::vec::Vec<modelt_core[dd9c490578d432f3]::safety::Branch>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::thread::local::LocalKey<core[f0fd674eaa06beef]::cell::RefCell<modelt_core[dd9c490578d432f3]::wasm::Instance>>>::with_borrow_mut::<modelt_core[dd9c490578d432f3]::wasm::modelt_dispatch::{closure#0}, ()>::{closure#0}",
+            "self": 0,
+            "inclusive": 2587
+          },
+          {
+            "name": "call",
+            "self": 0,
+            "inclusive": 2587
+          },
+          {
+            "name": "checkSafety",
+            "self": 0,
+            "inclusive": 2587
+          },
+          {
+            "name": "fn",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "js-to-wasm::i",
+            "self": 0,
+            "inclusive": 2587
+          },
+          {
+            "name": "modelt_dispatch",
+            "self": 0,
+            "inclusive": 2587
+          },
+          {
+            "name": "request",
+            "self": 0,
+            "inclusive": 2587
+          }
+        ]
+      },
+      "cpu": null
+    },
+    {
+      "input": "function-cube",
+      "workers": 1,
+      "samples": {
+        "totalWeight": 3948,
+        "hotspots": [
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::find",
+            "self": 1181,
+            "inclusive": 1181
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator",
+            "self": 411,
+            "inclusive": 3097
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::visit_branch::<<modelt_core[dd9c490578d432f3]::safety::Search>::walk::{closure#0}>",
+            "self": 381,
+            "inclusive": 3653
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval",
+            "self": 244,
+            "inclusive": 3188
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::intern",
+            "self": 219,
+            "inclusive": 1448
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::visit_bindings::<<modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator::{closure#4}>",
+            "self": 177,
+            "inclusive": 264
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::replace",
+            "self": 150,
+            "inclusive": 1604
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::equal",
+            "self": 120,
+            "inclusive": 120
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::malloc",
+            "self": 115,
+            "inclusive": 119
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>::contains",
+            "self": 95,
+            "inclusive": 291
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::hash::sip::Hasher<core[f0fd674eaa06beef]::hash::sip::Sip13Rounds> as core[f0fd674eaa06beef]::hash::Hasher>::write",
+            "self": 86,
+            "inclusive": 86
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::select",
+            "self": 71,
+            "inclusive": 87
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::free",
+            "self": 66,
+            "inclusive": 95
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::iter::adapters::map::Map<core[f0fd674eaa06beef]::slice::iter::Iter<modelt_core[dd9c490578d432f3]::safety::Expression>, <modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator::{closure#2}> as core[f0fd674eaa06beef]::iter::traits::iterator::Iterator>::try_fold::<(), <core[f0fd674eaa06beef]::iter::adapters::GenericShunt<core[f0fd674eaa06beef]::iter::adapters::map::Map<core[f0fd674eaa06beef]::slice::iter::Iter<modelt_core[dd9c490578d432f3]::safety::Expression>, <modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator::{closure#2}>, core[f0fd674eaa06beef]::result::Result<core[f0fd674eaa06beef]::convert::Infallible, modelt_core[dd9c490578d432f3]::value::CoreError>> as core[f0fd674eaa06beef]::iter::traits::iterator::Iterator>::try_fold<(), core[f0fd674eaa06beef]::iter::traits::iterator::Iterator::try_for_each::call<modelt_core[dd9c490578d432f3]::safety::Scalar, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>::Break>::{closure#0}, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>>::{closure#0}, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>>>",
+            "self": 65,
+            "inclusive": 81
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&u64>",
+            "self": 65,
+            "inclusive": 113
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::contains",
+            "self": 64,
+            "inclusive": 153
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::cell",
+            "self": 58,
+            "inclusive": 58
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::check_tuple",
+            "self": 45,
+            "inclusive": 45
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::comparable",
+            "self": 35,
+            "inclusive": 35
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Domain>::values",
+            "self": 35,
+            "inclusive": 41
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::total",
+            "self": 34,
+            "inclusive": 34
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::unlink_chunk",
+            "self": 24,
+            "inclusive": 24
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::ordered",
+            "self": 19,
+            "inclusive": 88
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::insert_large_chunk",
+            "self": 17,
+            "inclusive": 17
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_values::get_position",
+            "self": 16,
+            "inclusive": 16
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVecInner>::finish_grow",
+            "self": 12,
+            "inclusive": 26
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(u64, u32)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<u64, u32, core[f0fd674eaa06beef]::hash::BuildHasherDefault<modelt_core[dd9c490578d432f3]::safety_values::ValueHasher>>::{closure#0}>",
+            "self": 11,
+            "inclusive": 11
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>::new",
+            "self": 11,
+            "inclusive": 36
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::prepared_membership",
+            "self": 11,
+            "inclusive": 24
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rust_dealloc",
+            "self": 10,
+            "inclusive": 34
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::entries",
+            "self": 10,
+            "inclusive": 13
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::set",
+            "self": 10,
+            "inclusive": 148
+          },
+          {
+            "name": "core[f0fd674eaa06beef]::slice::sort::shared::smallsort::insertion_sort_shift_left::<modelt_core[dd9c490578d432f3]::safety::Scalar, <[modelt_core[dd9c490578d432f3]::safety::Scalar]>::sort_by<<modelt_core[dd9c490578d432f3]::safety_values::Arena>::ordered::{closure#0}>::{closure#0}>",
+            "self": 10,
+            "inclusive": 41
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rdl_dealloc",
+            "self": 9,
+            "inclusive": 31
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>::eval",
+            "self": 9,
+            "inclusive": 491
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(u64, usize)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<u64, usize, std[2b356c9112ee3216]::hash::random::RandomState>::{closure#0}>",
+            "self": 8,
+            "inclusive": 17
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&usize>",
+            "self": 8,
+            "inclusive": 13
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rdl_realloc",
+            "self": 7,
+            "inclusive": 10
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVecInner>::try_allocate_in",
+            "self": 7,
+            "inclusive": 7
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::expand",
+            "self": 6,
+            "inclusive": 3646
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rust_alloc",
+            "self": 3,
+            "inclusive": 29
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::sync::Arc<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>>::drop_slow",
+            "self": 3,
+            "inclusive": 8
+          },
+          {
+            "name": "core[f0fd674eaa06beef]::ptr::drop_glue::<modelt_core[dd9c490578d432f3]::safety_values::Arena>",
+            "self": 3,
+            "inclusive": 15
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVec<core[f0fd674eaa06beef]::option::Option<usize>>>::grow_one",
+            "self": 2,
+            "inclusive": 9
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::run",
+            "self": 2,
+            "inclusive": 3648
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::sys::System as dlmalloc[ceec1d21c86e99f3]::Allocator>::alloc",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "post",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "request",
+            "self": 1,
+            "inclusive": 3665
+          },
+          {
+            "name": "",
+            "self": 0,
+            "inclusive": 3666
+          },
+          {
+            "name": "(root)",
+            "self": 0,
+            "inclusive": 3948
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::dispatch",
+            "self": 0,
+            "inclusive": 3664
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::handle",
+            "self": 0,
+            "inclusive": 3664
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::SafetyProgram>::check",
+            "self": 0,
+            "inclusive": 3664
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::walk",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::thread::local::LocalKey<core[f0fd674eaa06beef]::cell::RefCell<modelt_core[dd9c490578d432f3]::wasm::Instance>>>::with_borrow_mut::<modelt_core[dd9c490578d432f3]::wasm::modelt_dispatch::{closure#0}, ()>::{closure#0}",
+            "self": 0,
+            "inclusive": 3664
+          },
+          {
+            "name": "call",
+            "self": 0,
+            "inclusive": 3664
+          },
+          {
+            "name": "checkSafety",
+            "self": 0,
+            "inclusive": 3665
+          },
+          {
+            "name": "fn",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "js-to-wasm::i",
+            "self": 0,
+            "inclusive": 3664
+          },
+          {
+            "name": "modelt_dispatch",
+            "self": 0,
+            "inclusive": 3664
+          }
+        ]
+      },
+      "cpu": null
+    },
+    {
+      "input": "parallel-channels",
+      "workers": 1,
+      "samples": {
+        "totalWeight": 2604,
+        "hotspots": [
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator",
+            "self": 405,
+            "inclusive": 1845
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::visit_branch::<<modelt_core[dd9c490578d432f3]::safety::Search>::walk::{closure#0}>",
+            "self": 255,
+            "inclusive": 2303
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval",
+            "self": 254,
+            "inclusive": 1915
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_values::get_position",
+            "self": 222,
+            "inclusive": 222
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::hash::sip::Hasher<core[f0fd674eaa06beef]::hash::sip::Sip13Rounds> as core[f0fd674eaa06beef]::hash::Hasher>::write",
+            "self": 176,
+            "inclusive": 176
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::find",
+            "self": 122,
+            "inclusive": 122
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::select",
+            "self": 119,
+            "inclusive": 353
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::replace",
+            "self": 116,
+            "inclusive": 339
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::cell",
+            "self": 81,
+            "inclusive": 81
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::malloc",
+            "self": 76,
+            "inclusive": 76
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::intern",
+            "self": 75,
+            "inclusive": 206
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&modelt_core[dd9c490578d432f3]::value::Value>",
+            "self": 62,
+            "inclusive": 191
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::data",
+            "self": 61,
+            "inclusive": 285
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::equal",
+            "self": 49,
+            "inclusive": 49
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::free",
+            "self": 46,
+            "inclusive": 47
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&u64>",
+            "self": 39,
+            "inclusive": 67
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Domain>::values",
+            "self": 38,
+            "inclusive": 83
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::value::Value as core[f0fd674eaa06beef]::hash::Hash>::hash::<std[2b356c9112ee3216]::hash::random::DefaultHasher>",
+            "self": 38,
+            "inclusive": 123
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::at",
+            "self": 36,
+            "inclusive": 288
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::iter::adapters::map::Map<core[f0fd674eaa06beef]::slice::iter::Iter<modelt_core[dd9c490578d432f3]::safety::Expression>, <modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator::{closure#2}> as core[f0fd674eaa06beef]::iter::traits::iterator::Iterator>::try_fold::<(), <core[f0fd674eaa06beef]::iter::adapters::GenericShunt<core[f0fd674eaa06beef]::iter::adapters::map::Map<core[f0fd674eaa06beef]::slice::iter::Iter<modelt_core[dd9c490578d432f3]::safety::Expression>, <modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator::{closure#2}>, core[f0fd674eaa06beef]::result::Result<core[f0fd674eaa06beef]::convert::Infallible, modelt_core[dd9c490578d432f3]::value::CoreError>> as core[f0fd674eaa06beef]::iter::traits::iterator::Iterator>::try_fold<(), core[f0fd674eaa06beef]::iter::traits::iterator::Iterator::try_for_each::call<modelt_core[dd9c490578d432f3]::safety::Scalar, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>::Break>::{closure#0}, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>>::{closure#0}, core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<core[f0fd674eaa06beef]::ops::control_flow::ControlFlow<modelt_core[dd9c490578d432f3]::safety::Scalar>>>",
+            "self": 32,
+            "inclusive": 46
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::visit_bindings::<<modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator::{closure#4}>",
+            "self": 31,
+            "inclusive": 48
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::value::Value as core[f0fd674eaa06beef]::cmp::PartialEq>::eq",
+            "self": 25,
+            "inclusive": 44
+          },
+          {
+            "name": "memcmp",
+            "self": 23,
+            "inclusive": 23
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::total",
+            "self": 21,
+            "inclusive": 21
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::check_tuple",
+            "self": 18,
+            "inclusive": 18
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&(u64, modelt_core[dd9c490578d432f3]::safety::Scalar)>",
+            "self": 18,
+            "inclusive": 44
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rdl_dealloc",
+            "self": 17,
+            "inclusive": 34
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>::contains",
+            "self": 16,
+            "inclusive": 78
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::ordered",
+            "self": 16,
+            "inclusive": 48
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::comparable",
+            "self": 14,
+            "inclusive": 14
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rdl_realloc",
+            "self": 13,
+            "inclusive": 18
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVec<core[f0fd674eaa06beef]::option::Option<usize>>>::grow_one",
+            "self": 9,
+            "inclusive": 27
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>::eval",
+            "self": 8,
+            "inclusive": 104
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::entries",
+            "self": 8,
+            "inclusive": 8
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::membership_result",
+            "self": 7,
+            "inclusive": 51
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rust_alloc",
+            "self": 6,
+            "inclusive": 35
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::expand",
+            "self": 6,
+            "inclusive": 2303
+          },
+          {
+            "name": "core[f0fd674eaa06beef]::slice::sort::shared::smallsort::insertion_sort_shift_left::<modelt_core[dd9c490578d432f3]::safety::Scalar, <[modelt_core[dd9c490578d432f3]::safety::Scalar]>::sort_by<<modelt_core[dd9c490578d432f3]::safety_values::Arena>::ordered::{closure#0}>::{closure#0}>",
+            "self": 6,
+            "inclusive": 23
+          },
+          {
+            "name": "__rustc[4b1ee1ef74718a7b]::__rust_dealloc",
+            "self": 5,
+            "inclusive": 35
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>::new",
+            "self": 5,
+            "inclusive": 11
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Scalar>::boolean",
+            "self": 5,
+            "inclusive": 5
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVecInner>::try_allocate_in",
+            "self": 4,
+            "inclusive": 10
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(u64, usize)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<u64, usize, std[2b356c9112ee3216]::hash::random::RandomState>::{closure#0}>",
+            "self": 4,
+            "inclusive": 11
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::prepared_membership",
+            "self": 4,
+            "inclusive": 9
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::raw_vec::RawVecInner>::finish_grow",
+            "self": 3,
+            "inclusive": 25
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(u64, u32)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<u64, u32, core[f0fd674eaa06beef]::hash::BuildHasherDefault<modelt_core[dd9c490578d432f3]::safety_values::ValueHasher>>::{closure#0}>",
+            "self": 3,
+            "inclusive": 3
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&usize>",
+            "self": 2,
+            "inclusive": 5
+          },
+          {
+            "name": "<alloc[ae94343a5edb5677]::sync::Arc<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>>::drop_slow",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<dlmalloc[ceec1d21c86e99f3]::dlmalloc::Dlmalloc<dlmalloc[ceec1d21c86e99f3]::sys::System>>::insert_large_chunk",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(usize, core[f0fd674eaa06beef]::option::Option<core[f0fd674eaa06beef]::option::Option<alloc[ae94343a5edb5677]::sync::Arc<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>>>)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<usize, core[f0fd674eaa06beef]::option::Option<core[f0fd674eaa06beef]::option::Option<alloc[ae94343a5edb5677]::sync::Arc<modelt_core[dd9c490578d432f3]::safety_expressions::MembershipSet>>>, std[2b356c9112ee3216]::hash::random::RandomState>::{closure#0}>",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::run",
+            "self": 1,
+            "inclusive": 2305
+          },
+          {
+            "name": "post",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "",
+            "self": 0,
+            "inclusive": 2307
+          },
+          {
+            "name": "(root)",
+            "self": 0,
+            "inclusive": 2604
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::dispatch",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::handle",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety_values::Arena>::set",
+            "self": 0,
+            "inclusive": 26
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::SafetyProgram>::check",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::thread::local::LocalKey<core[f0fd674eaa06beef]::cell::RefCell<modelt_core[dd9c490578d432f3]::wasm::Instance>>>::with_borrow_mut::<modelt_core[dd9c490578d432f3]::wasm::modelt_dispatch::{closure#0}, ()>::{closure#0}",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "call",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "checkSafety",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "core[f0fd674eaa06beef]::ptr::drop_glue::<modelt_core[dd9c490578d432f3]::safety_values::Arena>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "fn",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "js-to-wasm::i",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::register_memberships::<<modelt_core[dd9c490578d432f3]::safety_values::Arena>::register_memberships::{closure#0}>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::register_memberships::register_type::<<modelt_core[dd9c490578d432f3]::safety_values::Arena>::register_memberships::{closure#0}>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "modelt_dispatch",
+            "self": 0,
+            "inclusive": 2306
+          },
+          {
+            "name": "request",
+            "self": 0,
+            "inclusive": 2306
+          }
+        ]
+      },
+      "cpu": null
+    },
+    {
+      "input": "linear-ring",
+      "workers": 1,
+      "samples": {
+        "totalWeight": 191,
+        "hotspots": [
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval_operator",
+            "self": 61,
+            "inclusive": 93
+          },
+          {
+            "name": "modelt_core[dd9c490578d432f3]::safety_expressions::visit_branch::<<modelt_core[dd9c490578d432f3]::safety::Search>::walk::{closure#0}>",
+            "self": 43,
+            "inclusive": 158
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression>::eval",
+            "self": 34,
+            "inclusive": 101
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::hash::random::RandomState as core[f0fd674eaa06beef]::hash::BuildHasher>::hash_one::<&u64>",
+            "self": 16,
+            "inclusive": 24
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Domain>::contains",
+            "self": 13,
+            "inclusive": 32
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::hash::sip::Hasher<core[f0fd674eaa06beef]::hash::sip::Sip13Rounds> as core[f0fd674eaa06beef]::hash::Hasher>::write",
+            "self": 10,
+            "inclusive": 10
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::expand",
+            "self": 7,
+            "inclusive": 164
+          },
+          {
+            "name": "<hashbrown[b4533bff845e867b]::raw::RawTable<(u64, usize)>>::reserve_rehash::<hashbrown[b4533bff845e867b]::map::make_hasher<u64, usize, std[2b356c9112ee3216]::hash::random::RandomState>::{closure#0}>",
+            "self": 3,
+            "inclusive": 13
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Expression as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Scalar>::integer",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::Search>::run",
+            "self": 1,
+            "inclusive": 160
+          },
+          {
+            "name": "post",
+            "self": 1,
+            "inclusive": 1
+          },
+          {
+            "name": "",
+            "self": 0,
+            "inclusive": 164
+          },
+          {
+            "name": "(root)",
+            "self": 0,
+            "inclusive": 191
+          },
+          {
+            "name": "<<alloc[ae94343a5edb5677]::vec::Vec<_> as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::VecVisitor<modelt_core[dd9c490578d432f3]::safety::Branch> as serde_core[da4e9efdc71c9d28]::de::Visitor>::visit_seq::<&mut serde[c8c7d25775f35b2]::private::de::content::SeqDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<alloc[ae94343a5edb5677]::vec::Vec<modelt_core[dd9c490578d432f3]::safety::Step>> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<modelt_core[dd9c490578d432f3]::Request> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<&mut serde_json[f8f93ad2478ca2ec]::de::Deserializer<serde_json[f8f93ad2478ca2ec]::read::SliceRead>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<modelt_core[dd9c490578d432f3]::safety::SafetyProgram> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<core[f0fd674eaa06beef]::marker::PhantomData<modelt_core[dd9c490578d432f3]::safety::Step> as serde_core[da4e9efdc71c9d28]::de::DeserializeSeed>::deserialize::<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::dispatch",
+            "self": 0,
+            "inclusive": 163
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::Engine>::handle",
+            "self": 0,
+            "inclusive": 162
+          },
+          {
+            "name": "<modelt_core[dd9c490578d432f3]::safety::SafetyProgram>::check",
+            "self": 0,
+            "inclusive": 162
+          },
+          {
+            "name": "<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error> as serde_core[da4e9efdc71c9d28]::de::Deserializer>::deserialize_any::<<modelt_core[dd9c490578d432f3]::Request as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::__Visitor>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<serde[c8c7d25775f35b2]::private::de::content::ContentDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error> as serde_core[da4e9efdc71c9d28]::de::Deserializer>::deserialize_any::<<modelt_core[dd9c490578d432f3]::safety::Expression as serde_core[da4e9efdc71c9d28]::de::Deserialize>::deserialize::__Visitor>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<serde[c8c7d25775f35b2]::private::de::content::MapDeserializer<serde_json[f8f93ad2478ca2ec]::error::Error> as serde_core[da4e9efdc71c9d28]::de::MapAccess>::next_value::<alloc[ae94343a5edb5677]::vec::Vec<modelt_core[dd9c490578d432f3]::safety::Branch>>",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "<std[2b356c9112ee3216]::thread::local::LocalKey<core[f0fd674eaa06beef]::cell::RefCell<modelt_core[dd9c490578d432f3]::wasm::Instance>>>::with_borrow_mut::<modelt_core[dd9c490578d432f3]::wasm::modelt_dispatch::{closure#0}, ()>::{closure#0}",
+            "self": 0,
+            "inclusive": 163
+          },
+          {
+            "name": "call",
+            "self": 0,
+            "inclusive": 163
+          },
+          {
+            "name": "checkSafety",
+            "self": 0,
+            "inclusive": 163
+          },
+          {
+            "name": "fn",
+            "self": 0,
+            "inclusive": 1
+          },
+          {
+            "name": "js-to-wasm::i",
+            "self": 0,
+            "inclusive": 163
+          },
+          {
+            "name": "modelt_dispatch",
+            "self": 0,
+            "inclusive": 163
+          },
+          {
+            "name": "request",
+            "self": 0,
+            "inclusive": 163
+          }
+        ]
+      },
+      "cpu": null
+    }
+  ]
+}
