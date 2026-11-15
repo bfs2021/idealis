@@ -48,7 +48,7 @@ export const withNames = (
 ): Uint8Array<ArrayBuffer> => {
   const original = sections(production);
   const named = sections(symbols);
-  for (const id of [1, 3, 10]) {
+  for (const id of [1, 2, 3, 10]) {
     assert.deepEqual(
       original.find((section) => section.id === id)?.payload,
       named.find((section) => section.id === id)?.payload,
