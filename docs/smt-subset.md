@@ -8,14 +8,14 @@ Z3を再利用する比較でも、小さいTTL・amount・schedulerのnative問
 
 SMT-LIBは入力形式で、対応範囲はその一部。[SMT-LIBの定義](https://smt-lib.org/logics.shtml)ではQF_IDLは整数の差分制約、QF_LIAは一般の線形整数式を扱う。この試作は`set-logic QF_LIA`も受け付けるが、定数代入後に差分制約へ変換できる式だけを解く。
 
-| 項目 | 対応範囲 |
-| --- | --- |
-| 宣言 | `Int` / `Bool`の`declare-const`、引数なしの`declare-fun` |
+| 項目     | 対応範囲                                                                                     |
+| -------- | -------------------------------------------------------------------------------------------- |
+| 宣言     | `Int` / `Bool`の`declare-const`、引数なしの`declare-fun`                                     |
 | コマンド | `set-logic QF_IDL` / `QF_LIA`、`assert`、末尾の任意の単一`check-sat`、`:produce-models true` |
-| 整数 | 任意精度の整数、加減算、`<` / `<=` / `>` / `>=` / `=` / `distinct` |
-| Boolean | `and` / `or`、`not`、`xor`、`=>`、等価、Booleanの`ite` |
-| 束縛 | 同時束縛の`let`、ASCIIの引用識別子、コメント |
-| 正規化 | 無条件の整数定数等式を代入し、`x - y <= c`へ変換 |
+| 整数     | 任意精度の整数、加減算、`<` / `<=` / `>` / `>=` / `=` / `distinct`                           |
+| Boolean  | `and` / `or`、`not`、`xor`、`=>`、等価、Booleanの`ite`                                       |
+| 束縛     | 同時束縛の`let`、ASCIIの引用識別子、コメント                                                 |
+| 正規化   | 無条件の整数定数等式を代入し、`x - y <= c`へ変換                                             |
 
 例えば次の式は`other = 3`を代入できるため、`amount = 7`を返す。
 
@@ -49,7 +49,14 @@ workは式の処理と制約の緩和を数える。parserの費用やwall clock
 Rustは`Problem::parse(source)`と`Problem::solve(max_work)`を持つ。nativeのJSONLとWasm ABIは共通の`Engine`を使う。[TS側のwire型](../evals/smt-subset/wire.ts)がリクエストと応答を定義する。
 
 ```json
-{"version":1,"request":{"kind":"solve","source":"(declare-const x Int)(assert (= x 7))","maxWork":2000000}}
+{
+  "version": 1,
+  "request": {
+    "kind": "solve",
+    "source": "(declare-const x Int)(assert (= x 7))",
+    "maxWork": 2000000
+  }
+}
 ```
 
 `prepare {source}`は解析した式のhandleを返す。`check {handle,maxWork}`で再求解し、`release {handle}`で破棄する。prepareは回答をcacheしない。解放済みhandleを使うとerrorになる。

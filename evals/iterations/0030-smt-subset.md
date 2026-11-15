@@ -4,10 +4,10 @@
 
 ## 正しさと実装の故障再現
 
-| run | 入力 | SAT | UNSAT | 拒否対照 |
-| --- | ---: | ---: | ---: | ---: |
-| [開発最終](../runs/0030-smt-development-final/result.json) | 74 | 64 | 10 | 12 |
-| [確認](../runs/0030-smt-confirmation/result.json) | 170 | 159 | 11 | 12 |
+| run                                                        | 入力 | SAT | UNSAT | 拒否対照 |
+| ---------------------------------------------------------- | ---: | --: | ----: | -------: |
+| [開発最終](../runs/0030-smt-development-final/result.json) |   74 |  64 |    10 |       12 |
+| [確認](../runs/0030-smt-confirmation/result.json)          |  170 | 159 |    11 |       12 |
 
 開発はseed `0x30a1`の64件、確認は`0x30c3`の160件。それぞれ固定10件を加えた。生成入力は独立したTS evaluatorで3整数の`-2..2`と2真偽値を列挙し、期待する充足性を決める。Rust native/WasmとZ3 5.4.1の結果が一致し、Rustが返した全SATモデルを元の式に固定してZ3でも検査した。
 
