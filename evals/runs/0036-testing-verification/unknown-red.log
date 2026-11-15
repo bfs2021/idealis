@@ -1,0 +1,40 @@
+   Compiling idealis-testing v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-testing)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s
+     Running unittests src/lib.rs (crates/idealis-testing/target/debug/deps/idealis_testing-54e6bf9eb27a6b9c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (crates/idealis-testing/target/debug/deps/idealis_testing-0909d7c22ec4a373)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/compare.rs (crates/idealis-testing/target/debug/deps/compare-e4ad456eb22b3482)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/session.rs (crates/idealis-testing/target/debug/deps/session-b2fa16d5a3f6a968)
+
+running 1 test
+test unknown_shrink_candidates_remain_bounded_even_when_empty_fails ... FAILED
+
+failures:
+
+---- unknown_shrink_candidates_remain_bounded_even_when_empty_fails stdout ----
+
+thread 'unknown_shrink_candidates_remain_bounded_even_when_empty_fails' (47088298) panicked at tests/session.rs:183:5:
+shrinking did not finish within its candidates
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    unknown_shrink_candidates_remain_bounded_even_when_empty_fails
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test session`

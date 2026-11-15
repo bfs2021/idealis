@@ -1,0 +1,252 @@
+{
+  "sources": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "ed570bf8bc39cc8aa61c4c7a1e7861c3236bdab97646377030af814e78d87f6d"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "d24d7b8d492905b49ae9bce63d25e3a9afc43499140c770901e77c251f7c191f"
+    },
+    {
+      "path": "crates/idealis-testing/Cargo.lock",
+      "sha256": "54371340804e289bd3b9b2e43af6492e21015c8aae5c468715971d763334bb9a"
+    },
+    {
+      "path": "crates/idealis-testing/Cargo.toml",
+      "sha256": "8cda1890eadebb57cc0a8fd696451f6c08cfc511d841a3483659242c3d9049f0"
+    },
+    {
+      "path": "crates/idealis-testing/examples/counter.rs",
+      "sha256": "d66cd07c2d01d3a083678949719a2e6cb44e9520d5c566091e4f41636b009686"
+    },
+    {
+      "path": "crates/idealis-testing/src/compare.rs",
+      "sha256": "0655a4155cebec729340c939abaf367e41f826f461e1492c0fcb8cb469a81c42"
+    },
+    {
+      "path": "crates/idealis-testing/src/engine.rs",
+      "sha256": "4c2c0cff2a33cc615dc3bac3a4f7d6b915e6ba3f90e0dd9a7b4372c7a2fdfb9d"
+    },
+    {
+      "path": "crates/idealis-testing/src/generator.rs",
+      "sha256": "0a959323d312f3cf5241286e95661adb07eeafe58a948d805729e428f666b737"
+    },
+    {
+      "path": "crates/idealis-testing/src/lib.rs",
+      "sha256": "23235ec5ba8c3e01dfacc06b3122b58bd24f43d68e8665ee67b32b04a0b40451"
+    },
+    {
+      "path": "crates/idealis-testing/src/main.rs",
+      "sha256": "e21ebd6e989ae76723c0d57a767a86dd62c6db206de2690e1a6e05f1cd576186"
+    },
+    {
+      "path": "crates/idealis-testing/src/session.rs",
+      "sha256": "34b6151b4625b8d7e016e6f03b44ba44c79f75d16069ef22a09b684dd9fde431"
+    },
+    {
+      "path": "crates/idealis-testing/src/shrink.rs",
+      "sha256": "a6814f9c4f9f16c51b810a140225cc8ee2eafd156ed987ffbdb3ba011c63166a"
+    },
+    {
+      "path": "crates/idealis-testing/src/wasm.rs",
+      "sha256": "71ad6555d5188f5335bad36197337afdf7fe8780940cce895f7e97a65ea5049e"
+    },
+    {
+      "path": "crates/idealis-testing/tests/compare.rs",
+      "sha256": "71009c89c87fc1a038e423f09a50868c0da73848a798d058ac9c2a44695840b1"
+    },
+    {
+      "path": "crates/idealis-testing/tests/protocol.rs",
+      "sha256": "20e91da97e714bb08353456cbb1e7b03d031158049be609afb56b770fc34c94e"
+    },
+    {
+      "path": "crates/idealis-testing/tests/session.rs",
+      "sha256": "969fbf55edbbeea4dbd7ad853476233bcf36eb451ae575023db3c5dd1e4dff31"
+    },
+    {
+      "path": "evals/plans/0036-testing-core.md",
+      "sha256": "4d0048722e91883bacb144a4fde82f26f8b2c82dac460896fa1450a32923243b"
+    },
+    {
+      "path": "evals/smt-subset/clients.ts",
+      "sha256": "04d57e75c694ca1f476d60cf8d9c022324dc2c0b75e49ae9d415a3d634c582d1"
+    },
+    {
+      "path": "evals/testing-core/browser-entry.ts",
+      "sha256": "9bc17184af270d6eed2f43d3ffa2320390d0e92192214a2e8cb03762314b1698"
+    },
+    {
+      "path": "evals/testing-core/browser.spec.ts",
+      "sha256": "6be44c5498ce35763e2b289345c028a466361fe9ac27fecfb3fc704644b837b9"
+    },
+    {
+      "path": "evals/testing-core/clients.ts",
+      "sha256": "2562d125b116984bad848c851a6fd1e1a8d3729c39eae229619764e9b1015e4b"
+    },
+    {
+      "path": "evals/testing-core/contract-test.ts",
+      "sha256": "030d27d393e951a47b2a2575311fb8404524415e412e8196da5d084d621d1bba"
+    },
+    {
+      "path": "evals/testing-core/contract.ts",
+      "sha256": "3c798442ae009e3af166428226cd7ea5dbcff339cd1e3cfc853baca5ca594443"
+    },
+    {
+      "path": "evals/testing-core/driver.ts",
+      "sha256": "637fbc06b07546127793789c9d267f49b87d532f197e2275eafdb7cdcecde6ae"
+    },
+    {
+      "path": "evals/testing-core/fixture.ts",
+      "sha256": "3b40bb553e23c822a9e08841f79515c19ff2c7bd90a6d1731d06ddb14d7015d8"
+    },
+    {
+      "path": "evals/testing-core/provenance.ts",
+      "sha256": "39d8c7f111f8b6ca259e58ec54a59a69cb8c900780115c7e5bcc98f2d4051243"
+    },
+    {
+      "path": "evals/testing-core/reference.ts",
+      "sha256": "89766b608d3683f0888dcc01009d9f9ff66ec2cb4c393638205ad1e27546c2ed"
+    },
+    {
+      "path": "evals/testing-core/replay.ts",
+      "sha256": "fc2f38f76d08bddc1030520e8908562606a213b34033a6b656b6f26d03e4caa2"
+    },
+    {
+      "path": "evals/testing-core/run.ts",
+      "sha256": "6b9e8d064f2671df72cdb28a86dc62314772111bcbf18131d01823fafe4bab78"
+    },
+    {
+      "path": "evals/testing-core/runner.vitest.ts",
+      "sha256": "cad5e7e0fe870db395af14cdeccd966a25758f91d42716147f9e36ed04922a9a"
+    },
+    {
+      "path": "evals/testing-core/scenario.ts",
+      "sha256": "a8bdd88af3dd4302b225dc8b576932771b407c07a5876c259367c08ecaf6ee4a"
+    },
+    {
+      "path": "evals/testing-core/verify.ts",
+      "sha256": "9bdd574f68263b7a672ad142944976c6c62018b71130e8f2ba86af736f5a6f0b"
+    },
+    {
+      "path": "examples/counter-model.ts",
+      "sha256": "8635f088a3fdf9e0b1bf4ea1f96790d56d578766d6e3c3c81a483cd9127f7721"
+    },
+    {
+      "path": "examples/durable-counter.ts",
+      "sha256": "5f77b4b8dbbb815b71dc31f121d220623484f67e36efad0c4114996ee444521c"
+    },
+    {
+      "path": "justfile",
+      "sha256": "a6d0b8ba9d304c7ff3255bc491c48eeb432e92c35efd0c7f6a472cc847440c68"
+    },
+    {
+      "path": "package.json",
+      "sha256": "99aa0f5b95329bc25d677c49921698731c5c9ae103fdcd22109c1c13c1965078"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "27d1f2216d738d57e5a7a277158ba006f03e821df60606865915c54884fd6274"
+    },
+    {
+      "path": "scripts/package-test.ts",
+      "sha256": "3a4cc92e79cf605da1e067236d4aa26ace9a92f7f39571eecba45bad130aab91"
+    },
+    {
+      "path": "scripts/package.ts",
+      "sha256": "81f4f77701643aa9cf045116d4c6bae4bb4a83a262fd8ff61b65b380fdbd2104"
+    },
+    {
+      "path": "scripts/release.ts",
+      "sha256": "f9f5d402302e67c2515fa9d060cc0971988046f4c482d6a5181ddb77acbb0dde"
+    },
+    {
+      "path": "src/conformance.ts",
+      "sha256": "fde9957b697b171e252b9abc6fdbd765f283389212684d99b262617a3bb12326"
+    },
+    {
+      "path": "src/contracts.ts",
+      "sha256": "8bdd897dd9ab2c996966f85e36d52c78babbde325eee255909894d2025c2521d"
+    },
+    {
+      "path": "src/shrink.ts",
+      "sha256": "2b0cfe9a1586a1b52e106695df11378acbcd61c2e6e967349c2cc03dda5cf57c"
+    },
+    {
+      "path": "src/testing-wire.ts",
+      "sha256": "3cc732504689b53cfb6262871eb6dfc6d08466c3f4307c50b738dfc798b74e4b"
+    },
+    {
+      "path": "src/testing.ts",
+      "sha256": "0a801d7b42fcd041c7331b3e2e0b9db96db111517f435c901a072eaf13e10dc7"
+    },
+    {
+      "path": "src/trace.ts",
+      "sha256": "0a20a45ba0d84841139bec2dd8178c40585276fffc75e536d33ea1ca2c077cf3"
+    },
+    {
+      "path": "testing-playwright.config.ts",
+      "sha256": "f763386a45ff84023fe7e99660d97e035087f8219518a6c6955c6c5e798538fa"
+    },
+    {
+      "path": "testing-vitest.config.ts",
+      "sha256": "f7f1c4697258e5d49541c152455aff24b50790eae763c8fa37ad4641bf3878d4"
+    }
+  ],
+  "sourceVersion": "abf6736b4c094ed0cb4ed698a95dd69a55248793d13cc2d59550f74600aa6393",
+  "phase": "confirmation",
+  "seeds": [
+    14019,
+    14020,
+    14021,
+    14022,
+    14023,
+    14024,
+    14025,
+    14026,
+    14027,
+    14028,
+    14029,
+    14030,
+    14031,
+    14032,
+    14033,
+    14034,
+    14035,
+    14036,
+    14037,
+    14038,
+    14039,
+    14040,
+    14041,
+    14042,
+    14043,
+    14044,
+    14045,
+    14046,
+    14047,
+    14048,
+    14049,
+    14050
+  ],
+  "binaries": [
+    {
+      "path": "crates/idealis-testing/target/release/idealis-testing",
+      "sha256": "7be9948362146458b4e37f928d124dd8dca9d5a24be8ed1f6c26326e694e2fd3",
+      "bytes": 534384
+    },
+    {
+      "path": "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+      "sha256": "d91392b9548102c4a53dffd98cb8ab6855ff6b7a43591971f9243525e786e15b",
+      "bytes": 350919
+    }
+  ],
+  "parent": "evals/runs/0036-testing-development",
+  "commit": "19e05f102d5e758a837a9f98b74c619ba23894f9",
+  "environment": {
+    "node": "v24.22.2",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "comparison": "native/Wasm effect records, TS generator, existing TS shrinker and stateful counter oracle"
+}
