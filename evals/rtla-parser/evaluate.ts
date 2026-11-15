@@ -9,6 +9,7 @@ import { basename, dirname, join, resolve } from "node:path";
 import { digest } from "../usable/provenance.js";
 import { compare } from "./compare.js";
 import { archived } from "./corpus.js";
+import { classifySany } from "./sany.js";
 import { syntaxCases } from "./syntax.js";
 
 const directory = process.argv[2];
@@ -119,24 +120,12 @@ try {
     if (execution.error) throw execution.error;
     const output = execution.stdout + execution.stderr;
     await writeFile(join(path, "sany.log"), output, { flag: "wx" });
-    assert.ok(
-      output.includes("Parsing file"),
-      `${input.name}: SANY did not parse the file`,
-    );
-    assert.ok(
-      !output.includes("Semantic processing"),
-      "SANY must run without semantic analysis",
-    );
-    const syntaxError =
-      /\*\*\*Parse Error\*\*\*|Lexical error|lexical error|Token Manager Error/.test(
-        output,
-      );
     const expected = input.expected !== "syntax";
-    assert.equal(!syntaxError, expected, `${input.name}: ${output}`);
-    if (expected) {
-      assert.equal(execution.status, 0, input.name);
-      assert.ok(!output.includes("Fatal errors"), input.name);
-    }
+    assert.equal(
+      classifySany(output, execution.status),
+      expected ? "accepted" : "syntax",
+      `${input.name}: ${output}`,
+    );
     sany.push({
       name: input.name,
       expected: expected ? "accepted" : "syntax-error",

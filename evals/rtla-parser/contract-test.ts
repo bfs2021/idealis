@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { compare } from "./compare.js";
 import { normalize } from "./corpus.js";
+import { classifySany } from "./sany.js";
 
 test("rtla native/Wasm preserve the semantic AST of the fixed finite-fragment corpus", async () => {
   const result = await compare();
@@ -13,6 +15,18 @@ test("rtla native/Wasm preserve the semantic AST of the fixed finite-fragment co
       nativeWasm: result.nativeWasmComparisons,
     }),
   );
+});
+test("SANY lexical EOF errors remain syntax rejections and infrastructure failures remain errors", async () => {
+  const output = await readFile(
+    "evals/runs/0026-rtla-development/sany/missing-comment-end/sany.log",
+    "utf8",
+  );
+  assert.equal(classifySany(output, 0), "syntax");
+  assert.equal(
+    classifySany("Parsing file X\nFatal errors: could not find module", 1),
+    "infrastructure",
+  );
+  assert.equal(classifySany("", null), "infrastructure");
 });
 test("AST comparison keeps binding order, prime, operator, values and bullet nesting", () => {
   assert.notDeepEqual(
