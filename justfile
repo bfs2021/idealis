@@ -265,6 +265,11 @@ rtlc-compare run:
 rtla-build:
   pnpm rtla:build
 
+compiler-test:
+  cargo fmt --manifest-path crates/rtla-compiler/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
+
 rtla-test:
   pnpm rtla:test
 
