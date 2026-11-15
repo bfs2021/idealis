@@ -136,7 +136,7 @@ assert.equal(backendResult.outcome.kind,'counterexample');assert.equal(backendRe
 assert.deepEqual(parseBackendResult(JSON.parse(JSON.stringify(backendResult))),backendResult);
 assert.equal(checkSafety(core,safety.program,safety.bounds).violation.trace.length,4);
 const source=JSON.parse(await readFile('source.json','utf8'));
-const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'Source');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
+const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'PackageSafety');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
 const scheduled=await runSchedule(planned,[{execute:async ids=>ids.map(id=>({id,result:checkSafety(core,safety.program,safety.bounds)}))}]);
 assert.equal(scheduled.executionStatus,'complete');assert.equal(scheduled.completed[0].result.status,'invariant-violation');
