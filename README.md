@@ -15,6 +15,7 @@ CLI は `idealis`、npm package は `@mizchi/idealis`。Rust のホストは `id
 | [`rtlc`](crates/rtlc)                           | 検査用IR                                     | 状態を列挙し、invariant・deadlock・temporal property・fairnessを検査して反例を返す。nativeの探索並列化も担当する。 |
 | [`idealis-core`](crates/idealis-core)           | TLA+ソース、IR、有限モデル、実装の観測・履歴 | parser・compiler・checkerを接続し、実装照合、履歴検査、再生、縮小候補の生成とnative JSONL / Wasm境界を提供する。   |
 | [`idealis-smt`](crates/idealis-smt)（旧`rsmt`） | 対応するSMT-LIB式                            | 任意精度整数の差分制約とBoolean式を解き、SATの具体値、UNSAT、予算切れのunknownを返す独立した試作ソルバー。         |
+| [`ralloy`](crates/ralloy)                       | 静的なAlloyソースと有限scope                 | sig・二項関係・fact・assertを解析し、構造を列挙してinstanceや反例を返す。native/Wasmで動く独立した試作。           |
 | [`@mizchi/idealis`](src)                        | TSのモデルとDriver、各backendの入出力        | オラクル生成、実装との照合、差分・property-based test、反例縮小、スケジューリングとCLIを提供する。                 |
 | [Go adapter](adapters/go)                       | 共通コアのWasmとGoのモデル・実装・履歴       | CGOなしでRustコアへ接続し、同じ値・オラクル・観測を使って照合と再生を行う。                                        |
 
@@ -24,11 +25,13 @@ RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → 
 
 ## 対応範囲と統合状況
 
-TLA+とSMT-LIBの対応はサブセットに限られる。モデル検査が確認するのは、指定したモデル・仮定・探索範囲に対する性質。実装との照合は、実行した操作列と観測を対象にする。予算内で反例が見つからなかった結果や、実装との一致を、全入力・全実行の正しさの証明へ読み替えない。[検証範囲](#検証の範囲)と各crateの制約を確認する。
+TLA+・SMT-LIB・Alloyの対応はサブセットに限られる。モデル検査が確認するのは、指定したモデル・仮定・探索範囲に対する性質。実装との照合は、実行した操作列と観測を対象にする。予算内で反例が見つからなかった結果や、実装との一致を、全入力・全実行の正しさの証明へ読み替えない。[検証範囲](#検証の範囲)と各crateの制約を確認する。
 
 TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT adapterとして利用する。Quint Connectのモデルと実装をつなぐアプローチを参考に、TSの`Driver`を実装との境界にした。Quint言語やApalacheの再実装ではない。
 
 [独立した`idealis-smt` crate](crates/idealis-smt)は、整数の差分制約とBoolean式をnative/Wasmで解く。[対応するSMT-LIBサブセット](docs/smt-subset.md)を明示し、idealisの他crateやZ3には依存しない。Z3を再利用した比較でも小さいTTL・amount・schedulerはnativeで約3.0-3.4倍速い一方、Boolean UNSATには後退と予算切れが残る。[全17入力の比較](evals/iterations/0031-smt-reuse.md)は切り出し前の測定で、idealisの公開backendへの組み込みは保留している。
+
+[`ralloy`](crates/ralloy)は、静的なsig・二項field・関係演算・量化・run/checkを有限scope内で検査する独立crate。JVMやZ3に依存せず、nativeとホストimportのないWasmで同じ探索器を使う。Alloy AnalyzerのSAT変換、継承、時間・var、整数演算は未対応。公開backendへの接続は今後の対象で、[評価手順](evals/alloy-subset/README.md)を別途記載する。
 
 ## 実行
 

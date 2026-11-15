@@ -1,0 +1,36 @@
+[main] ERROR alloy - excuting sub command CLI:exec error Type error in /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0034-alloy-development/case-23/model.als at line 3 column 19:
+= can be used only between 2 expressions of the same arity, or between 2 integer expressions.
+Left type = {this/N->this/N}
+Right type = {none}
+Type error in /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0034-alloy-development/case-23/model.als at line 3 column 19:
+= can be used only between 2 expressions of the same arity, or between 2 integer expressions.
+Left type = {this/N->this/N}
+Right type = {none}
+	at edu.mit.csail.sdg.ast.ExprBinary.error(ExprBinary.java:106)
+	at edu.mit.csail.sdg.ast.ExprBinary$Op.make(ExprBinary.java:426)
+	at edu.mit.csail.sdg.parser.CompModule$Context.visit(CompModule.java:547)
+	at edu.mit.csail.sdg.parser.CompModule$Context.visit(CompModule.java:269)
+	at edu.mit.csail.sdg.ast.ExprBinary.accept(ExprBinary.java:758)
+	at edu.mit.csail.sdg.ast.VisitReturn.visitThis(VisitReturn.java:35)
+	at edu.mit.csail.sdg.parser.CompModule$Context.visit(CompModule.java:478)
+	at edu.mit.csail.sdg.parser.CompModule$Context.visit(CompModule.java:269)
+	at edu.mit.csail.sdg.ast.ExprList.accept(ExprList.java:341)
+	at edu.mit.csail.sdg.ast.VisitReturn.visitThis(VisitReturn.java:35)
+	at edu.mit.csail.sdg.parser.CompModule$Context.visit(CompModule.java:672)
+	at edu.mit.csail.sdg.parser.CompModule$Context.visit(CompModule.java:269)
+	at edu.mit.csail.sdg.ast.ExprUnary.accept(ExprUnary.java:526)
+	at edu.mit.csail.sdg.ast.VisitReturn.visitThis(VisitReturn.java:35)
+	at edu.mit.csail.sdg.parser.CompModule$Context.check(CompModule.java:410)
+	at edu.mit.csail.sdg.parser.CompModule.resolveFuncBody(CompModule.java:1737)
+	at edu.mit.csail.sdg.parser.CompModule.resolveAll(CompModule.java:2289)
+	at edu.mit.csail.sdg.parser.CompUtil.parseEverything_fromFile(CompUtil.java:385)
+	at org.alloytools.alloy.cli.CLI._exec(CLI.java:176)
+	at aQute.lib.getopt.CommandLine.execute(CommandLine.java:158)
+	at org.alloytools.alloy.core.infra.AlloyDispatcher.__alloy(AlloyDispatcher.java:154)
+	at aQute.lib.getopt.CommandLine.execute(CommandLine.java:158)
+	at org.alloytools.alloy.core.infra.AlloyDispatcher.main(AlloyDispatcher.java:110)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at org.alloytools.alloy.core.infra.Alloy.main(Alloy.java:85)
+Error
+  0. [ExprBinary.error] executing CLI:exec

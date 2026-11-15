@@ -1,0 +1,1 @@
+sig N { r: set N } run { no (none + none) } for 1 but 0 Int

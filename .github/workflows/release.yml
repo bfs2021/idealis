@@ -19,10 +19,12 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm package:prepare
+      - run: node --test dist/evals/alloy-subset/contract-test.js
       - run: pnpm portable:test
       - run: pnpm usable:test
       - run: pnpm package:test
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright test --config alloy-playwright.config.ts
       - run: pnpm portable:browser
       - run: npm install --global npm@11
       - run: node dist/scripts/release.js "$GITHUB_REF_NAME" --publish

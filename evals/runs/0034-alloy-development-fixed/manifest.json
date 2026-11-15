@@ -1,0 +1,690 @@
+{
+  "sources": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "ad475b2d031b0a052deb1c5139e4d6edc1918652218c72a9872fcf18cddbc8fe"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "317f7ca68429f6d2a8a2993f40f8faf9f921c164cc4356419b16cb9b650e3d50"
+    },
+    {
+      "path": "alloy-playwright.config.ts",
+      "sha256": "cfb6bdc165ccc7d84c6ce095e1056188a28c7dbfd89ba91be3eb0db3043b3a2f"
+    },
+    {
+      "path": "crates/ralloy/Cargo.lock",
+      "sha256": "8e1eb39c2b41fb531a487e40fa20c0f81a3435a283fef4b2104744de3afd9c0d"
+    },
+    {
+      "path": "crates/ralloy/Cargo.toml",
+      "sha256": "e323f3ef4aef854502cf5a9b71c55c5de3625f3d588a8977eddb9380d0160723"
+    },
+    {
+      "path": "crates/ralloy/examples/graph.rs",
+      "sha256": "c7217bd9e5a7792b416c7bc7dff5b8edfd7315a36dea518679dc7447a7730ead"
+    },
+    {
+      "path": "crates/ralloy/src/check.rs",
+      "sha256": "71d8398e326afd0b7abe78c88cec19a6d4f85c17901ad2299ed8ff5c8e71e81a"
+    },
+    {
+      "path": "crates/ralloy/src/engine.rs",
+      "sha256": "1ad19141cb3f52824a6774d980ecd7b0477cb61c32d3547f445e4d831e20bfc3"
+    },
+    {
+      "path": "crates/ralloy/src/eval.rs",
+      "sha256": "4e868e3a5bef7ea58696d0aa017658de1555f05df1d624cc1fe9cb0f2f25c366"
+    },
+    {
+      "path": "crates/ralloy/src/lib.rs",
+      "sha256": "c57721d6bf09bf30da3a164805149d3f767dd3e4dbeafada929bf48e3ed4aea4"
+    },
+    {
+      "path": "crates/ralloy/src/main.rs",
+      "sha256": "8ecca8ad3a3050954b31c22637edc934b187245aef1db53bed2e0c6dc5527605"
+    },
+    {
+      "path": "crates/ralloy/src/parser.rs",
+      "sha256": "17533617118ea14136c7450ff8b2a5cdb29904fddeac8fee37d94239c54c7dd4"
+    },
+    {
+      "path": "crates/ralloy/src/search.rs",
+      "sha256": "c4b247407c5c196eb26f9869044a349689fc27a293274d944d478bab0e396a56"
+    },
+    {
+      "path": "crates/ralloy/src/syntax.rs",
+      "sha256": "50ec0cb0425f86bbe39ed82ff67c3c68c27389deac581337b899929b8523a0a3"
+    },
+    {
+      "path": "crates/ralloy/src/wasm.rs",
+      "sha256": "b62d894d47b8d11a9fec8cbc4005e745cfce3548311ada09274fd045d58bf1b0"
+    },
+    {
+      "path": "crates/ralloy/tests/semantics.rs",
+      "sha256": "b8d23b9359e2cbea3ef31068b7368111497b062eaa92cd35ee026b09a8f64b42"
+    },
+    {
+      "path": "evals/alloy-subset/browser-entry.ts",
+      "sha256": "1d25a42eac26b08f711916205feecb4313f3ae0a3090e06f19bc98836c66dc38"
+    },
+    {
+      "path": "evals/alloy-subset/browser.spec.ts",
+      "sha256": "71482123f1de0d99e8ab9913ed86e631a078faddf1b43e29903900acd115e1b2"
+    },
+    {
+      "path": "evals/alloy-subset/clients.ts",
+      "sha256": "eb17b1259f4077e67b41680266dfefa6ca8204b9800dda26221f2c9cfc62669a"
+    },
+    {
+      "path": "evals/alloy-subset/contract-test.ts",
+      "sha256": "94ffb8c0556c9dbfd50c90f1b9c78bacb59eb061b935625b15f3226447583121"
+    },
+    {
+      "path": "evals/alloy-subset/corpus.ts",
+      "sha256": "f33b743fe5eb05d0aff6e48ada3fed5231e853bf7c5841fadaa0ef6434c7f3f8"
+    },
+    {
+      "path": "evals/alloy-subset/provenance.ts",
+      "sha256": "171bda486fc7c2191f2b21d8f3afb35025163999ba7e1f9591f7e2d72721ab80"
+    },
+    {
+      "path": "evals/alloy-subset/reference.ts",
+      "sha256": "a6136e7abdb6092eafe0fe8c5c0ffe10619e8415b81c6283b8d32bf40d1e5f87"
+    },
+    {
+      "path": "evals/alloy-subset/replay.ts",
+      "sha256": "750ccc4a460c72bd0de4a2f1b415b213fd87dfe5a2b9c4d00fa984a94cc0ec8f"
+    },
+    {
+      "path": "evals/alloy-subset/run.ts",
+      "sha256": "d3ba02e8437f3bc428c8ec9f8c80575933da6199390e96d127363d65ec84129d"
+    },
+    {
+      "path": "evals/alloy-subset/verify.ts",
+      "sha256": "86431bc2b9e99a817122d4a4d955dc6d294b43a3821b6635cc72525560130f61"
+    },
+    {
+      "path": "evals/alloy-subset/wasm.ts",
+      "sha256": "111272a6ee030a2fc56b59dadd269c00b5a3447b0f40eea907828147b97f5925"
+    },
+    {
+      "path": "evals/alloy-subset/wire.ts",
+      "sha256": "488036d6bb7f4d74b33b13505d022979dbecfd5da1c6a8d83bcb22905d164a79"
+    },
+    {
+      "path": "evals/plans/0034-alloy-subset.md",
+      "sha256": "e71c520a16c56b06bd8376ee5d2aff5c3ce25d348792d91784eb94c3f04a2fb8"
+    },
+    {
+      "path": "justfile",
+      "sha256": "aaa24a4b848fd54a7a2d1e8f59c5091e0b0477ac00d794f16d882689217952ce"
+    },
+    {
+      "path": "package.json",
+      "sha256": "a65f84c60cf4ef5cea8f4724fde5f8af7d40de0e30d15bdfd27d88cb97185d37"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "27d1f2216d738d57e5a7a277158ba006f03e821df60606865915c54884fd6274"
+    },
+    {
+      "path": "scripts/package-test.ts",
+      "sha256": "3b1aae0aee57603c97802074a2bbdebc652aed1becea706f382319c9d667cd73"
+    },
+    {
+      "path": "scripts/package.ts",
+      "sha256": "41074a10b0100e8658d63e1861268bc221d00ec32434da34885163e5b39535dc"
+    },
+    {
+      "path": "scripts/release.ts",
+      "sha256": "fd9c2eb84d2a9faa87fda0e94c767103bb33d40984dcfb6f333772c65adb3cb7"
+    },
+    {
+      "path": "src/trace.ts",
+      "sha256": "0a20a45ba0d84841139bec2dd8178c40585276fffc75e536d33ea1ca2c077cf3"
+    }
+  ],
+  "sourceVersion": "b6e0768c6355388557566d414d3a70aa0aad3654ac60b2d3cd696c5d71d9359f",
+  "binaries": [
+    {
+      "path": "crates/ralloy/target/release/ralloy",
+      "sha256": "ca5f64f2007bf1d3b19b7998ba3f262a346b6c22e97482f83f0fb6f9395fba28",
+      "bytes": 468112
+    },
+    {
+      "path": "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
+      "sha256": "46d6cb056b42f54934ebc43c793764954c70a7eeafd0776a72779f21f8fbb504",
+      "bytes": 261526
+    },
+    {
+      "path": ".artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java",
+      "sha256": "0f642542ea1f0be6957557c0db96653ec128113bb5a4aaa7c2534d1d72ddb51f",
+      "bytes": 70432
+    },
+    {
+      "path": ".artifacts/alloy-subset/org.alloytools.alloy.dist.jar",
+      "sha256": "6b8c1cb5bc93bedfc7c61435c4e1ab6e688a242dc702a394628d9a9801edb78d",
+      "bytes": 21062377
+    }
+  ],
+  "phase": "development",
+  "seed": 13473,
+  "inputs": [
+    {
+      "name": "two-cycle",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "no iden & edge",
+      "query": "no iden & ^edge",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "dag-control",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "no iden & ^edge",
+      "query": "all n: Node | n not in n.^edge",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "inconsistent-facts",
+      "prelude": "sig A {}",
+      "facts": "some A no A",
+      "query": "no A",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "field-default-one",
+      "prelude": "one sig A { edge: A }",
+      "facts": "",
+      "query": "no edge",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "lone-owner",
+      "prelude": "one sig Owner { resource: lone Resource } sig Resource {}",
+      "facts": "",
+      "query": "no resource",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "some-field-vacuity",
+      "prelude": "sig Owner { resource: some Resource } sig Resource {}",
+      "facts": "",
+      "query": "no Owner",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "some-field-nonempty",
+      "prelude": "one sig Owner { resource: some Resource } sig Resource {}",
+      "facts": "",
+      "query": "",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "pigeonhole",
+      "prelude": "sig Owner { resource: Resource } sig Resource {}",
+      "facts": "all disj a,b: Owner | no a.resource & b.resource",
+      "query": "",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Owner, exactly 2 Resource, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "one-scope-overall-zero",
+      "prelude": "one sig A {}",
+      "facts": "",
+      "query": "some A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "lone-scope-overall-zero",
+      "prelude": "lone sig A {}",
+      "facts": "",
+      "query": "some A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "default-int-universe",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "no Int",
+      "kind": "run",
+      "scope": "for 0",
+      "expected": "no-instance"
+    },
+    {
+      "name": "zero-bit-universe",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "no univ",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "int-field-witness",
+      "prelude": "one sig A { value: Int }",
+      "facts": "",
+      "query": "some value",
+      "kind": "run",
+      "scope": "for 0",
+      "expected": "instance"
+    },
+    {
+      "name": "empty-all",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "all a: A | a in A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "empty-some",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "some a: A | a in A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "one-tuples",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "one a,b: A | a = b",
+      "kind": "run",
+      "scope": "for 1 but exactly 1 A, 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "disjoint-ordered-tuples",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "one disj a,b: A | a in A",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 A, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "transpose-join",
+      "prelude": "sig N { edge: set N }",
+      "facts": "edge = ~edge",
+      "query": "edge.edge in N -> N",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "reflexive",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "all n: N | n in n.*edge",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "predicate",
+      "prelude": "sig N { edge: set N } pred Cyclic { some n: N | n in n.^edge }",
+      "facts": "",
+      "query": "Cyclic[]",
+      "kind": "run",
+      "scope": "for 2 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "restriction",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "all n: N | (n <: edge) = (n -> n.edge) and (edge :> n) = ((edge.n) -> n)",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "declaration-scope",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "all n: N, m: n.edge | m in N",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "explicit-scopes-only",
+      "prelude": "sig A {} sig B {}",
+      "facts": "",
+      "query": "some A and no B",
+      "kind": "run",
+      "scope": "for exactly 1 A, 0 B, 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "empty-relation-arity",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "edge = (none -> none) and no ^(none -> none) and no (none + none)",
+      "kind": "run",
+      "scope": "for 1 but 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "generated-34a1-0",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no ((none -> none) & (iden & (none -> none))))",
+      "query": "(((~edge) - (none -> none)) = edge)",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "generated-34a1-1",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one (^(none -> none)))",
+      "query": "((((Node -> Node) in edge) iff (((iden . edge) & (^edge)) in ((edge . (none -> none)) & ((Node -> Node) + (Node -> Node))))) or ((((iden & (none -> none)) + (~edge)) in (~(*edge))) iff (some (((none -> none) + edge) & iden))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-2",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone edge)",
+      "query": "(no (((none -> none) + iden) - (*(none -> none))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "generated-34a1-3",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((edge - (Node -> Node)) . ((Node -> Node) + edge)) = (*iden))",
+      "query": "(no ((~(Node -> Node)) . (^edge)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-4",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((none -> none) = (none -> none))",
+      "query": "(((none -> none) in (Node -> Node)) implies ((no (*(none -> none))) implies (no (((Node -> Node) . (Node -> Node)) . (iden + (none -> none))))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "generated-34a1-5",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((none -> none) = (none -> none))",
+      "query": "(one (none -> none))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "generated-34a1-6",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((lone (~(none -> none))) iff (lone ((edge + (Node -> Node)) & (none -> none))))",
+      "query": "((((~iden) in (~(*edge))) implies (one ((iden + (Node -> Node)) . (Node -> Node)))) or (no (((Node -> Node) & (Node -> Node)) . (~(Node -> Node)))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "generated-34a1-7",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not ((Node -> Node) in (^(edge . edge))))",
+      "query": "(lone (Node -> Node))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-8",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (some (*(*(Node -> Node)))))",
+      "query": "((one edge) and (no (none -> none)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-9",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no (Node -> Node))",
+      "query": "(iden = (((Node -> Node) - iden) + (iden & edge)))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-10",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no ((none -> none) - (none -> none)))",
+      "query": "((some ((iden - edge) + edge)) iff ((no (~(~iden))) and (some (^(edge . edge)))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-11",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no ((^iden) - iden)) iff (iden = (((none -> none) . (Node -> Node)) + (none -> none))))",
+      "query": "(no (none -> none))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-12",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no (Node -> Node))",
+      "query": "(one (~((Node -> Node) + (Node -> Node))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-13",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((*(iden - iden)) = iden) and (no (*(Node -> Node))))",
+      "query": "(one (Node -> Node))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-14",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(edge in iden)",
+      "query": "((one ((*(Node -> Node)) & ((Node -> Node) - edge))) or (((iden . (iden & iden)) = ((*iden) + (Node -> Node))) and (some (edge + ((none -> none) . (Node -> Node))))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-15",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (one (none -> none)))",
+      "query": "((not (some edge)) or ((one ((Node -> Node) . ((Node -> Node) . (none -> none)))) iff (((~edge) + ((none -> none) + edge)) = (*((Node -> Node) - iden)))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "generated-34a1-16",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (no (~(edge + edge))))",
+      "query": "(some (^(^edge)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "generated-34a1-17",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((Node -> Node) in (~(^iden)))",
+      "query": "(((Node -> Node) & (edge + iden)) in (edge & (Node -> Node)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-18",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((^(*(Node -> Node))) in (~((Node -> Node) - iden)))",
+      "query": "(no ((^(Node -> Node)) + (none -> none)))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-19",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one edge) implies (edge in (^((none -> none) + iden))))",
+      "query": "(some (^iden))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "generated-34a1-20",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((((none -> none) - ((Node -> Node) + edge)) = (edge & (iden - (Node -> Node)))) or (((~iden) - (none -> none)) = ((~edge) + edge)))",
+      "query": "(iden = (^(*edge)))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "generated-34a1-21",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one (Node -> Node))",
+      "query": "(((no ((none -> none) . ((Node -> Node) . (Node -> Node)))) iff (some (Node -> Node))) implies ((iden = (*(~(Node -> Node)))) and ((^(^(none -> none))) in (~(^edge)))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-22",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((((~(none -> none)) & iden) = ((Node -> Node) + ((Node -> Node) - iden))) iff (lone ((^iden) + ((none -> none) - (Node -> Node)))))",
+      "query": "(some (~(none -> none)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-23",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (*(none -> none))) iff (one iden))",
+      "query": "(some (none -> none))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "generated-34a1-24",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no (^(~(Node -> Node))))",
+      "query": "(not ((lone (~(~(Node -> Node)))) or (one (^((none -> none) - (Node -> Node))))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-25",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one (((Node -> Node) . (none -> none)) . (~(Node -> Node)))) and (((Node -> Node) + ((Node -> Node) & (Node -> Node))) = iden))",
+      "query": "((no ((^(none -> none)) - ((Node -> Node) . iden))) and (((^(^(none -> none))) = iden) or (no (((Node -> Node) - (Node -> Node)) + edge))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-26",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((^(*edge)) in edge)",
+      "query": "(some ((edge & edge) . (^iden)))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    {
+      "name": "generated-34a1-27",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone (none -> none))",
+      "query": "(((none -> none) = (((none -> none) + (Node -> Node)) - (none -> none))) or ((no (iden . ((none -> none) & edge))) implies (no (Node -> Node))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-28",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one (Node -> Node))",
+      "query": "(some (iden + (*(Node -> Node))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    {
+      "name": "generated-34a1-29",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((*(none -> none)) & (none -> none)) in (~(*(none -> none))))",
+      "query": "(not ((((none -> none) . edge) + ((none -> none) - iden)) = (edge & (^edge))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    {
+      "name": "generated-34a1-30",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone (none -> none))",
+      "query": "(((Node -> Node) + (edge + edge)) = edge)",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    {
+      "name": "generated-34a1-31",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((none -> none) in (Node -> Node))",
+      "query": "(not ((lone ((edge - (none -> none)) - (*(none -> none)))) iff (no (~((Node -> Node) + (Node -> Node))))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    }
+  ],
+  "maxWork": 2000000,
+  "commit": "27f1a72935fc5c04e5ca2642cfaa12922d99b42c",
+  "environment": {
+    "node": "v24.22.2",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "reference": "Alloy 6.2.0 / SAT4J",
+  "referenceSource": "59ba2033993449d483d54acad0e11a7bbf20354f",
+  "referenceDownload": "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v6.2.0/org.alloytools.alloy.dist.jar",
+  "referenceChecksum": "locally observed SHA256, release asset has no published digest"
+}

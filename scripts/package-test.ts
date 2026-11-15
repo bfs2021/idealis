@@ -25,9 +25,18 @@ const compilerCrate = files.find(
 const rsmtCrate = files.find(
   (file) => file.startsWith("idealis-smt-") && file.endsWith(".crate"),
 );
+const ralloyCrate = files.find(
+  (file) => file.startsWith("ralloy-") && file.endsWith(".crate"),
+);
 assert.ok(
-  tarball && crate && rtlcCrate && rtlaCrate && compilerCrate && rsmtCrate,
-  "Prepare npm and all five Rust packages first, including standalone idealis-smt",
+  tarball &&
+    crate &&
+    rtlcCrate &&
+    rtlaCrate &&
+    compilerCrate &&
+    rsmtCrate &&
+    ralloyCrate,
+  "Prepare npm and all six Rust packages first, including standalone ralloy",
 );
 const consumer = await mkdtemp(join(tmpdir(), "idealis-consumer-"));
 await writeFile(
@@ -390,6 +399,58 @@ assert.ok(
   ),
   "idealis-smt must remain independent of idealis hosts, TLA frontends and Z3",
 );
+const alloyConsumer = await mkdtemp(join(tmpdir(), "ralloy-consumer-"));
+execFileSync("tar", [
+  "-xzf",
+  join(directory, ralloyCrate),
+  "-C",
+  alloyConsumer,
+]);
+await writeFile(
+  join(alloyConsumer, "Cargo.toml"),
+  `[package]\nname="ralloy-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nralloy={path="ralloy-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+);
+await writeFile(
+  join(alloyConsumer, "main.rs"),
+  await readFile(
+    join(alloyConsumer, `ralloy-${version}`, "examples", "graph.rs"),
+  ),
+);
+const ralloy = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+  cwd: alloyConsumer,
+  stdio: "pipe",
+})
+  .toString()
+  .trim();
+assert.equal(ralloy, "standalone ralloy consumer checked");
+const alloyMetadata = JSON.parse(
+  execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
+    cwd: alloyConsumer,
+    stdio: "pipe",
+  }).toString(),
+);
+assert.ok(
+  alloyMetadata.packages.some(
+    (entry: { name: string }) => entry.name === "ralloy",
+  ),
+);
+assert.ok(
+  !alloyMetadata.packages.some((entry: { name: string }) =>
+    [
+      "idealis-core",
+      "idealis-smt",
+      "rtla",
+      "rtla-compiler",
+      "rtlc",
+      "z3",
+      "z3-sys",
+    ].includes(entry.name),
+  ),
+);
+const alloyModule = await WebAssembly.compile(
+  new Uint8Array(await readFile(join(directory, "ralloy.wasm"))).buffer,
+);
+assert.deepEqual(WebAssembly.Module.imports(alloyModule), []);
 const result = {
   status: "complete",
   node,
@@ -398,13 +459,25 @@ const result = {
   rtlc,
   rtla,
   rsmt,
+  ralloy,
+  ralloyDependencies: alloyMetadata.packages
+    .map((entry: { name: string }) => entry.name)
+    .sort(),
   rsmtDependencies: smtMetadata.packages
     .map((entry: { name: string }) => entry.name)
     .sort(),
   parserWasm: "packaged rtla Wasm parsed without solvers",
   cliExitCodes: [0, 1, 2],
   consumer,
-  artifacts: [tarball, crate, rtlcCrate, rtlaCrate, compilerCrate, rsmtCrate],
+  artifacts: [
+    tarball,
+    crate,
+    rtlcCrate,
+    rtlaCrate,
+    compilerCrate,
+    rsmtCrate,
+    ralloyCrate,
+  ],
 };
 await writeFile(
   join(directory, "consumer-result.json"),

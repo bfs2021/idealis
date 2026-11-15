@@ -21,6 +21,11 @@ jobs:
       - run: pnpm check
       - run: pnpm typecheck
       - run: pnpm test
+      - run: cargo fmt --manifest-path crates/ralloy/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/ralloy/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path crates/ralloy/Cargo.toml
+      - run: pnpm ralloy:build
+      - run: node --test dist/evals/alloy-subset/contract-test.js
       - run: cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
@@ -73,6 +78,7 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:browser
       - run: pnpm exec playwright test --config smt-playwright.config.ts
+      - run: pnpm exec playwright test --config alloy-playwright.config.ts
       - run: pnpm portable:browser
       - run: pnpm runtime:browser
       - run: pnpm test:mutation

@@ -1,0 +1,9 @@
+Warnings
+  0. line 3, column 36 (3,36), filename=/Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0034-alloy-development-fixed/case-45/model.als The join operation here always yields an empty set.
+Left type = {none->none}
+Right type = {this/Node->this/Node}
+  1. line 3, column 148 (3,148), filename=/Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0034-alloy-development-fixed/case-45/model.als ^ none -> none is redundant since its domain and range are disjoint: {none->none}
+  2. line 3, column 146 (3,146), filename=/Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0034-alloy-development-fixed/case-45/model.als ^ ^ none -> none is redundant since its domain and range are disjoint: {none->none}
+  3. line 3, column 166 (3,167), filename=/Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0034-alloy-development-fixed/case-45/model.als Subset operator is redundant, because the left subexpression is always empty.
+Left type = {none->none}
+Right type = {this/Node->this/Node}

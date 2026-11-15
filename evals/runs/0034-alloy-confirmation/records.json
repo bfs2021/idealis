@@ -1,0 +1,4107 @@
+[
+  {
+    "input": {
+      "name": "two-cycle",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "no iden & edge",
+      "query": "no iden & ^edge",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$0",
+              "Node$1"
+            ],
+            [
+              "Node$1",
+              "Node$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 157,
+        "candidates": 10,
+        "factInstances": 4
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "dag-control",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "no iden & ^edge",
+      "query": "all n: Node | n not in n.^edge",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 405,
+        "candidates": 19,
+        "factInstances": 5
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "inconsistent-facts",
+      "prelude": "sig A {}",
+      "facts": "some A no A",
+      "query": "no A",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 23,
+        "candidates": 3,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "field-default-one",
+      "prelude": "one sig A { edge: A }",
+      "facts": "",
+      "query": "no edge",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 1,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 10,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "lone-owner",
+      "prelude": "one sig Owner { resource: lone Resource } sig Resource {}",
+      "facts": "",
+      "query": "no resource",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Owner",
+              "maximum": 1,
+              "exact": true
+            },
+            {
+              "name": "Resource",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Owner": [
+            "Owner$0"
+          ],
+          "Resource": []
+        },
+        "fields": {
+          "resource": []
+        }
+      },
+      "stats": {
+        "work": 10,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "some-field-vacuity",
+      "prelude": "sig Owner { resource: some Resource } sig Resource {}",
+      "facts": "",
+      "query": "no Owner",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Owner",
+              "maximum": 0,
+              "exact": false
+            },
+            {
+              "name": "Resource",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Owner": [],
+          "Resource": []
+        },
+        "fields": {
+          "resource": []
+        }
+      },
+      "stats": {
+        "work": 9,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "some-field-nonempty",
+      "prelude": "one sig Owner { resource: some Resource } sig Resource {}",
+      "facts": "",
+      "query": "",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Owner",
+              "maximum": 1,
+              "exact": true
+            },
+            {
+              "name": "Resource",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 5,
+        "candidates": 0,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "pigeonhole",
+      "prelude": "sig Owner { resource: Resource } sig Resource {}",
+      "facts": "all disj a,b: Owner | no a.resource & b.resource",
+      "query": "",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Owner, exactly 2 Resource, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Owner",
+              "maximum": 3,
+              "exact": true
+            },
+            {
+              "name": "Resource",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 418,
+        "candidates": 8,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "one-scope-overall-zero",
+      "prelude": "one sig A {}",
+      "facts": "",
+      "query": "some A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 1,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": [
+            "A$0"
+          ]
+        },
+        "fields": {}
+      },
+      "stats": {
+        "work": 8,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "lone-scope-overall-zero",
+      "prelude": "lone sig A {}",
+      "facts": "",
+      "query": "some A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 1,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": [
+            "A$0"
+          ]
+        },
+        "fields": {}
+      },
+      "stats": {
+        "work": 15,
+        "candidates": 2,
+        "factInstances": 2
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "default-int-universe",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "no Int",
+      "kind": "run",
+      "scope": "for 0",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 4
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 8,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "zero-bit-universe",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "no univ",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": []
+        },
+        "fields": {}
+      },
+      "stats": {
+        "work": 8,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "int-field-witness",
+      "prelude": "one sig A { value: Int }",
+      "facts": "",
+      "query": "some value",
+      "kind": "run",
+      "scope": "for 0",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 1,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 4
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": [
+            "A$0"
+          ]
+        },
+        "fields": {
+          "value": [
+            [
+              "A$0",
+              "-8"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 10,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "empty-all",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "all a: A | a in A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": []
+        },
+        "fields": {}
+      },
+      "stats": {
+        "work": 9,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "empty-some",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "some a: A | a in A",
+      "kind": "run",
+      "scope": "for 0 but 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 9,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "one-tuples",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "one a,b: A | a = b",
+      "kind": "run",
+      "scope": "for 1 but exactly 1 A, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 1,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": [
+            "A$0"
+          ]
+        },
+        "fields": {}
+      },
+      "stats": {
+        "work": 16,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "disjoint-ordered-tuples",
+      "prelude": "sig A {}",
+      "facts": "",
+      "query": "one disj a,b: A | a in A",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 A, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 23,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "transpose-join",
+      "prelude": "sig N { edge: set N }",
+      "facts": "edge = ~edge",
+      "query": "edge.edge in N -> N",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 405,
+        "candidates": 19,
+        "factInstances": 11
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "reflexive",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "all n: N | n in n.*edge",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 667,
+        "candidates": 19,
+        "factInstances": 19
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "predicate",
+      "prelude": "sig N { edge: set N } pred Cyclic { some n: N | n in n.^edge }",
+      "facts": "",
+      "query": "Cyclic[]",
+      "kind": "run",
+      "scope": "for 2 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "N": [
+            "N$0"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "N$0",
+              "N$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 55,
+        "candidates": 3,
+        "factInstances": 3
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "restriction",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "all n: N | (n <: edge) = (n -> n.edge) and (edge :> n) = ((edge.n) -> n)",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 1275,
+        "candidates": 19,
+        "factInstances": 19
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "declaration-scope",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "all n: N, m: n.edge | m in N",
+      "kind": "check",
+      "scope": "for 2 but 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 2,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 599,
+        "candidates": 19,
+        "factInstances": 19
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "explicit-scopes-only",
+      "prelude": "sig A {} sig B {}",
+      "facts": "",
+      "query": "some A and no B",
+      "kind": "run",
+      "scope": "for exactly 1 A, 0 B, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "A",
+              "maximum": 1,
+              "exact": true
+            },
+            {
+              "name": "B",
+              "maximum": 0,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "A": [
+            "A$0"
+          ],
+          "B": []
+        },
+        "fields": {}
+      },
+      "stats": {
+        "work": 12,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "empty-relation-arity",
+      "prelude": "sig N { edge: set N }",
+      "facts": "",
+      "query": "edge = (none -> none) and no ^(none -> none) and no (none + none)",
+      "kind": "run",
+      "scope": "for 1 but 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "N",
+              "maximum": 1,
+              "exact": false
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "N": []
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 23,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-0",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not ((^(none -> none)) in ((*iden) . (edge . edge))))",
+      "query": "((some (^(none -> none))) and (iden in edge))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 28307,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-1",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (edge - (none -> none))) or (one iden))",
+      "query": "((edge in iden) implies (lone edge))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 8347,
+        "candidates": 512,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-2",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((^iden) in (*((none -> none) . (none -> none)))) and (some (none -> none)))",
+      "query": "(no (^iden))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 25747,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-3",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (lone (none -> none)))",
+      "query": "((some iden) or (no (^edge)))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 4755,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-4",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no (~((none -> none) + (Node -> Node))))",
+      "query": "(some ((iden + edge) + (Node -> Node)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 315,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-5",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one ((^(none -> none)) + iden))",
+      "query": "((((~edge) & (iden - iden)) = edge) and ((*(none -> none)) = ((^(none -> none)) . (*iden))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 283,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-6",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((Node -> Node) in (~((none -> none) . (none -> none))))",
+      "query": "(lone (*(^iden)))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 427,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-7",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((lone (((Node -> Node) - (Node -> Node)) + iden)) or (lone ((^edge) - (*edge))))",
+      "query": "(no ((iden . iden) + (Node -> Node)))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 55,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-8",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (*(~iden))) or (no (Node -> Node)))",
+      "query": "((((((none -> none) . iden) & (^iden)) in (edge - (*edge))) iff (no (^(^edge)))) iff (some (Node -> Node)))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 347,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-9",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(some ((edge & edge) - (none -> none)))",
+      "query": "((some (*(none -> none))) iff (iden in edge))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$1",
+              "Node$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 53,
+        "candidates": 2,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-10",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((*edge) . iden) in (^((Node -> Node) + iden)))",
+      "query": "(lone (^edge))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 44,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-11",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one (none -> none)) or (((iden . edge) + (edge & edge)) in (~(Node -> Node))))",
+      "query": "(not ((some (^((none -> none) - iden))) and (no ((edge - iden) & ((Node -> Node) & (Node -> Node))))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 56,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-12",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((some (((Node -> Node) + edge) + (iden + iden))) or (some (Node -> Node)))",
+      "query": "((*(none -> none)) = (edge + (~(Node -> Node))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 30867,
+        "candidates": 512,
+        "factInstances": 512
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-13",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((*(none -> none)) + iden) in (~(none -> none)))",
+      "query": "((Node -> Node) = iden)",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 20115,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-14",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((none -> none) in iden) and (no ((~(Node -> Node)) . (*(none -> none)))))",
+      "query": "(some (((Node -> Node) - edge) - (Node -> Node)))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 555,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-15",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (~(edge . (none -> none)))) and (some ((^edge) - ((none -> none) + (Node -> Node)))))",
+      "query": "((some ((none -> none) . (^(Node -> Node)))) or (some (^(^(none -> none)))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 28819,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-16",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (one ((^(Node -> Node)) . iden)))",
+      "query": "(lone (iden & (edge & (Node -> Node))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 38,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-17",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((^(Node -> Node)) = ((*(Node -> Node)) & (*iden)))",
+      "query": "(not (lone (*(none -> none))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 523,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-18",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no ((iden - (Node -> Node)) & ((Node -> Node) . edge))) iff (one (~edge)))",
+      "query": "((Node -> Node) = ((^iden) + (iden - (Node -> Node))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 22954,
+        "candidates": 512,
+        "factInstances": 9
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-19",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((~(Node -> Node)) in (((none -> none) + (Node -> Node)) . (*edge))) and (((iden & (none -> none)) . (iden . iden)) in edge))",
+      "query": "((((edge . iden) = ((iden & (Node -> Node)) & ((Node -> Node) . (Node -> Node)))) iff (no iden)) or (no (((none -> none) . (none -> none)) - (edge . (none -> none)))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 1555,
+        "candidates": 16,
+        "factInstances": 16
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-20",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((iden in ((edge & (Node -> Node)) + (edge - edge))) implies ((*(Node -> Node)) in edge))",
+      "query": "(((some (~(~(Node -> Node)))) or (some (iden & (~edge)))) or (not (some (none -> none))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 27758,
+        "candidates": 512,
+        "factInstances": 449
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-21",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((some (((none -> none) - iden) & ((none -> none) . iden))) or ((edge - iden) in (^((none -> none) & iden))))",
+      "query": "(((*iden) . ((none -> none) + (Node -> Node))) = (*(iden + (Node -> Node))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 86,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-22",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one (none -> none))",
+      "query": "((((iden & edge) - (^edge)) in iden) and (some iden))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 4243,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-23",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((some (^iden)) or (one ((edge - edge) & (*edge))))",
+      "query": "(((no ((edge . (Node -> Node)) + (^edge))) and (some (none -> none))) or ((no ((~edge) & edge)) implies ((^((Node -> Node) + edge)) = (Node -> Node))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 805,
+        "candidates": 16,
+        "factInstances": 16
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-24",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone (Node -> Node))",
+      "query": "(((^iden) . (Node -> Node)) = (~(edge - edge)))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 4243,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-25",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((lone (^(*edge))) implies (some (iden - (edge + (Node -> Node)))))",
+      "query": "(((some edge) and ((((none -> none) - iden) . ((none -> none) & edge)) = (iden & (none -> none)))) iff (one ((~(Node -> Node)) & (^(Node -> Node)))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$2",
+              "Node$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 171,
+        "candidates": 2,
+        "factInstances": 2
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-26",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not ((iden - (~edge)) = (none -> none)))",
+      "query": "(one iden)",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 15827,
+        "candidates": 512,
+        "factInstances": 448
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-27",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one (~(edge - iden))) or (lone ((none -> none) - (~(none -> none)))))",
+      "query": "(((lone (Node -> Node)) iff (some (Node -> Node))) and ((one (none -> none)) implies (lone ((Node -> Node) - ((none -> none) . (none -> none))))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 47,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-28",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((lone (edge + (edge . (Node -> Node)))) and (lone (^(edge & (Node -> Node)))))",
+      "query": "((not (one (none -> none))) iff (((~iden) - (iden + edge)) = ((edge - (none -> none)) & (*(none -> none)))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 79,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-29",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(some (^(none -> none)))",
+      "query": "(((one (Node -> Node)) and (((Node -> Node) + (iden - iden)) = iden)) and (some (iden - (edge . edge))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 9363,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-30",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no (*(^(none -> none))))",
+      "query": "((no (*((Node -> Node) & (none -> none)))) or (not (lone (~((Node -> Node) + iden)))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 299,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-31",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one (Node -> Node))",
+      "query": "(((Node -> Node) & ((none -> none) - (none -> none))) = ((~(none -> none)) . iden))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 4243,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-32",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((Node -> Node) = iden)",
+      "query": "(some ((^edge) & edge))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 6291,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-33",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(edge = (~(*iden)))",
+      "query": "(not (not (no (((none -> none) + edge) - (Node -> Node)))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 15526,
+        "candidates": 512,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-34",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone (none -> none))",
+      "query": "(((some (Node -> Node)) implies ((^iden) = (none -> none))) iff (((^(iden - (Node -> Node))) = (edge - (none -> none))) or (no iden)))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$2",
+              "Node$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 137,
+        "candidates": 2,
+        "factInstances": 2
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-35",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one ((edge + (none -> none)) - edge))",
+      "query": "(((lone (*(^edge))) implies (((~(Node -> Node)) & edge) in iden)) or ((some edge) and (edge in (*(edge + edge)))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 9363,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-36",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((Node -> Node) in ((iden . (none -> none)) . (Node -> Node)))",
+      "query": "(((Node -> Node) in ((iden & edge) + (^edge))) and ((one (^(~(none -> none)))) or (some (~edge))))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 443,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-37",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one (iden . (edge + iden))) or (((*(Node -> Node)) & (*(Node -> Node))) = (none -> none)))",
+      "query": "(lone (*iden))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 683,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-38",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((~(none -> none)) in (~(edge & (Node -> Node))))",
+      "query": "((no (Node -> Node)) implies ((lone ((^(Node -> Node)) - (iden - iden))) and (lone (((Node -> Node) . (Node -> Node)) . (^edge)))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 23187,
+        "candidates": 512,
+        "factInstances": 512
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-39",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no iden) iff (one (none -> none)))",
+      "query": "(some (*(edge . (none -> none))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 443,
+        "candidates": 16,
+        "factInstances": 16
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-40",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((*(none -> none)) = (*((none -> none) . edge))) or (some edge))",
+      "query": "((~(^(Node -> Node))) in (none -> none))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 811,
+        "candidates": 16,
+        "factInstances": 16
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-41",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one (edge . (*(none -> none)))) or (((^iden) + (Node -> Node)) = ((*(none -> none)) . edge)))",
+      "query": "(lone (*(iden & edge)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 739,
+        "candidates": 16,
+        "factInstances": 5
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-42",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((((Node -> Node) + (Node -> Node)) & (Node -> Node)) in (^(~(Node -> Node))))",
+      "query": "((not (((none -> none) . iden) in (none -> none))) or ((some (((Node -> Node) + (Node -> Node)) . (Node -> Node))) iff (one ((Node -> Node) . (Node -> Node)))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 58515,
+        "candidates": 512,
+        "factInstances": 512
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-43",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(one (iden + (Node -> Node)))",
+      "query": "(no (iden . iden))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 6803,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-44",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (~(~(none -> none)))) and ((iden . iden) = ((iden . iden) + (*(none -> none)))))",
+      "query": "(iden in (~iden))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-counterexample",
+      "instance": null,
+      "stats": {
+        "work": 46739,
+        "candidates": 512,
+        "factInstances": 512
+      }
+    },
+    "reference": {
+      "status": "no-counterexample",
+      "querySat": false,
+      "factsSat": true,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-45",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(some ((none -> none) + iden))",
+      "query": "((no ((Node -> Node) . (^edge))) and (one ((edge + iden) & (none -> none))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 46,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-46",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone (^(~edge)))",
+      "query": "(some (~(edge . (Node -> Node))))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$2",
+              "Node$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 111,
+        "candidates": 2,
+        "factInstances": 2
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-47",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((((Node -> Node) - iden) - (none -> none)) in (*iden))",
+      "query": "((one (~(iden . (Node -> Node)))) implies ((some (~(*(none -> none)))) or (some (*((Node -> Node) . (none -> none))))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 427,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-48",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no (((Node -> Node) - edge) + (^iden)))",
+      "query": "(((some ((Node -> Node) & (iden & (none -> none)))) or (some edge)) implies ((some (^((none -> none) - (Node -> Node)))) iff (((~(none -> none)) & edge) in (*(^iden)))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 14483,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-49",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((iden + edge) & (~(Node -> Node))) = (*(iden + (none -> none))))",
+      "query": "(((^edge) & (~iden)) in (edge + (^edge)))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 103,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-50",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (lone (Node -> Node)))",
+      "query": "(edge in (edge . ((Node -> Node) - (Node -> Node))))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$1",
+              "Node$0"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 63,
+        "candidates": 2,
+        "factInstances": 2
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-51",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (~((Node -> Node) . iden))) and ((*(~iden)) = (^(*iden))))",
+      "query": "(some edge)",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 15507,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-52",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((Node -> Node) = (*iden))",
+      "query": "(some edge)",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 11411,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-53",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (some ((Node -> Node) & ((Node -> Node) . iden))))",
+      "query": "(lone (~(^iden)))",
+      "kind": "run",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 347,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-54",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((lone iden) and (lone (^(*edge))))",
+      "query": "(lone (^((none -> none) . (none -> none))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 3731,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-55",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (lone (*(iden & iden))))",
+      "query": "(((~iden) - edge) = (none -> none))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 53,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-56",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(not (no iden))",
+      "query": "(lone ((none -> none) & edge))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 24,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-57",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((some (*(*iden))) and (edge in iden))",
+      "query": "(one ((~iden) + iden))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 58,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-58",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(no ((~edge) . (none -> none)))",
+      "query": "(some (^(Node -> Node)))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "instance",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 51,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "instance",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-59",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(lone edge)",
+      "query": "(one iden)",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1"
+          ]
+        },
+        "fields": {
+          "edge": []
+        }
+      },
+      "stats": {
+        "work": 14,
+        "candidates": 1,
+        "factInstances": 1
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-60",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((one (((none -> none) - (Node -> Node)) - (none -> none))) and (some iden))",
+      "query": "(not ((^(edge . iden)) in (^iden)))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 347,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-61",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((no (Node -> Node)) implies (some ((~(Node -> Node)) + (*(none -> none)))))",
+      "query": "((edge & (iden + iden)) = (~((none -> none) & (Node -> Node))))",
+      "kind": "check",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "counterexample"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "counterexample",
+      "instance": {
+        "signatures": {
+          "Node": [
+            "Node$0",
+            "Node$1",
+            "Node$2"
+          ]
+        },
+        "fields": {
+          "edge": [
+            [
+              "Node$2",
+              "Node$2"
+            ]
+          ]
+        }
+      },
+      "stats": {
+        "work": 232,
+        "candidates": 5,
+        "factInstances": 5
+      }
+    },
+    "reference": {
+      "status": "counterexample",
+      "querySat": true,
+      "factsSat": true,
+      "pinned": true
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-62",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "((some (Node -> Node)) iff ((~(*iden)) = (((none -> none) + iden) . (none -> none))))",
+      "query": "(lone (^edge))",
+      "kind": "check",
+      "scope": "for 2 but exactly 2 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "check",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 2,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 619,
+        "candidates": 16,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "input": {
+      "name": "generated-34c3-63",
+      "prelude": "sig Node { edge: set Node }",
+      "facts": "(((*(*(Node -> Node))) in (none -> none)) and (one edge))",
+      "query": "(not (some ((*iden) - edge)))",
+      "kind": "run",
+      "scope": "for 3 but exactly 3 Node, 0 Int",
+      "expected": "no-instance"
+    },
+    "result": {
+      "command": {
+        "label": "Query",
+        "kind": "run",
+        "scope": {
+          "signatures": [
+            {
+              "name": "Node",
+              "maximum": 3,
+              "exact": true
+            }
+          ],
+          "integerBitwidth": 0
+        }
+      },
+      "status": "no-instance",
+      "instance": null,
+      "stats": {
+        "work": 18067,
+        "candidates": 512,
+        "factInstances": 0
+      }
+    },
+    "reference": {
+      "status": "no-instance",
+      "querySat": false,
+      "factsSat": false,
+      "pinned": false
+    }
+  },
+  {
+    "control": "sig A { r: set A } run { r = none }",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "relation arity mismatch"
+      }
+    }
+  },
+  {
+    "control": "sig A { r: set A } run { r = none + none }",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "relation arity mismatch"
+      }
+    }
+  },
+  {
+    "control": "sig A {} run { no ^none }",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "closure/transpose requires binary relation"
+      }
+    }
+  },
+  {
+    "control": "var sig A {} run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "unsupported",
+        "message": "paragraph var"
+      }
+    }
+  },
+  {
+    "control": "sig A {} sig B extends A {} run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "syntax",
+        "message": "expected {, got extends at token 6"
+      }
+    }
+  },
+  {
+    "control": "sig A {} sig B in A {} run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "syntax",
+        "message": "expected {, got in at token 6"
+      }
+    }
+  },
+  {
+    "control": "open util/ordering[A] sig A {} run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "unsupported",
+        "message": "token at byte 9"
+      }
+    }
+  },
+  {
+    "control": "sig A {} pred P[x:A] {} run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "syntax",
+        "message": "expected ], got x at token 7"
+      }
+    }
+  },
+  {
+    "control": "sig A { r: A -> A } run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "unsupported",
+        "message": "only named unary field ranges are supported"
+      }
+    }
+  },
+  {
+    "control": "sig A {} run { #A = 1 }",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "unsupported",
+        "message": "token at byte 15"
+      }
+    }
+  },
+  {
+    "control": "sig A {} pred P { P } run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "unsupported",
+        "message": "recursive predicates"
+      }
+    }
+  },
+  {
+    "control": "sig A {} pred P { unknown in A } run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "unknown predicate unknown"
+      }
+    }
+  },
+  {
+    "control": "sig A {} fact { A } run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "expected formula"
+      }
+    }
+  },
+  {
+    "control": "sig A {} run { ^A = A }",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "closure/transpose requires binary relation"
+      }
+    }
+  },
+  {
+    "control": "sig A { r: Missing } run {}",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "unknown field range"
+      }
+    }
+  },
+  {
+    "control": "sig A {} run { missing in A }",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "type",
+        "message": "unknown predicate missing"
+      }
+    }
+  },
+  {
+    "control": "one sig A {} run {} for 2 but 2 A",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "scope",
+        "message": "scope conflicts with signature multiplicity"
+      }
+    }
+  },
+  {
+    "control": "sig A {} run {} for 1 but 1 A, 2 A",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "scope",
+        "message": "duplicate signature scope"
+      }
+    }
+  },
+  {
+    "control": "sig A {} sig B {} run {} for 1 A",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "scope",
+        "message": "missing scope for B"
+      }
+    }
+  },
+  {
+    "control": "some sig A {} run {} for 1 but 0 A",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "scope",
+        "message": "scope conflicts with signature multiplicity"
+      }
+    }
+  },
+  {
+    "control": "sig A {} run {} for 1 but 6 Int",
+    "result": {
+      "kind": "error",
+      "error": {
+        "kind": "resource",
+        "message": "supported scope: 0-8 atoms per signature, 0-5 integer bits"
+      }
+    }
+  }
+]
