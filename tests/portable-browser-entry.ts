@@ -1,5 +1,6 @@
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
+import { createRtlcBackend, runBackend } from "../src/backend.js";
 import { checkConformance } from "../src/conformance.js";
 import type {
   SafetyBounds,
@@ -38,6 +39,29 @@ export const run = async (): Promise<Record<string, unknown>> => {
     maxStates: 5,
     maxWork: 100,
   });
+  const backendResult = await runBackend(
+    createRtlcBackend(core, { version: "0.1.0-alpha.0" }),
+    {
+      format: "modelt.backend-request",
+      version: 1,
+      scope: {
+        modelId: "browser-safety-v1",
+        propertyId: "Safe-v1",
+        semantics: "tlc-1.7.4-int32",
+        assumptions: [],
+      },
+      query: {
+        kind: "explicit",
+        bounds: { maxDepth: 4, maxStates: 5, maxWork: 100 },
+      },
+      input: program,
+    },
+  );
+  if (
+    backendResult.outcome.kind !== "counterexample" ||
+    backendResult.outcome.witness.kind !== "behavior"
+  )
+    throw new Error("Browser backend contract differs");
   if (
     safety.status !== "invariant-violation" ||
     safety.violation?.trace.length !== 4
@@ -153,6 +177,7 @@ export const run = async (): Promise<Record<string, unknown>> => {
   )
     throw new Error("Rust browser host replay differs");
   return {
+    backend: backendResult.outcome.kind,
     normal: normal.status,
     broken: broken.status,
     replay: replay.status,

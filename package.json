@@ -9,6 +9,10 @@
     "node": ">=24"
   },
   "exports": {
+    "./backend": {
+      "types": "./dist/src/backend.d.ts",
+      "default": "./dist/src/backend.js"
+    },
     "./scheduling": {
       "types": "./dist/src/scheduling.d.ts",
       "default": "./dist/src/scheduling.js"

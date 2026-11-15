@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import { registerAdvancedContract } from "./advanced-contract.js";
 import { registerAsyncContract } from "./async-contract.js";
+import { registerBackendContract } from "./backend-contract.js";
 import { registerBudgetContract } from "./budget-contract.js";
 import { registerContract } from "./contract.js";
 import { registerEvalLoopContract } from "./eval-loop-contract.js";
@@ -14,6 +15,9 @@ import { registerShardingContract } from "./sharding-contract.js";
 import { registerUsableContract } from "./usable-contract.js";
 
 registerContract((name, run) => {
+  test(name, run);
+});
+registerBackendContract((name, run) => {
   test(name, run);
 });
 registerAdvancedContract((name, run) => {

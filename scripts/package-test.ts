@@ -105,6 +105,7 @@ import {createHistoryRecorder} from '@mizchi/modelt/history';
 import {parseFiniteModel} from '@mizchi/modelt/finite';
 import {createSimulationHost} from '@mizchi/modelt/host';
 import {planSchedule,runSchedule} from '@mizchi/modelt/scheduling';
+import {createRtlcBackend,runBackend,parseBackendResult} from '@mizchi/modelt/backend';
 const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/modelt/core.wasm'))));
 const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/modelt/rtla.wasm'))));
 assert.deepEqual(WebAssembly.Module.imports(parserModule),[]);
@@ -125,6 +126,9 @@ recorded.invoke('tick',trace.steps[0].action);recorded.returned('tick',trace.ste
 assert.equal(loaded.checkHistory(recorded.snapshot(),100).status,'linearizable');loaded.release();
 assert.equal(createSimulationHost().now(),0);
 const safety=JSON.parse(await readFile('safety-request.json','utf8')).request;
+const backendResult=await runBackend(createRtlcBackend(core,{version:'0.1.0-alpha.0'}),{format:'modelt.backend-request',version:1,scope:{modelId:'package-safety-v1',propertyId:'Safe-v1',semantics:'tlc-1.7.4-int32',assumptions:[]},query:{kind:'explicit',bounds:safety.bounds},input:safety.program});
+assert.equal(backendResult.outcome.kind,'counterexample');assert.equal(backendResult.outcome.witness.kind,'behavior');
+assert.deepEqual(parseBackendResult(JSON.parse(JSON.stringify(backendResult))),backendResult);
 assert.equal(checkSafety(core,safety.program,safety.bounds).violation.trace.length,4);
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
 const scheduled=await runSchedule(planned,[{execute:async ids=>ids.map(id=>({id,result:checkSafety(core,safety.program,safety.bounds)}))}]);
@@ -146,12 +150,15 @@ import {createSimulationHost} from '@mizchi/modelt/host';
 import {createPortableWasm} from '@mizchi/modelt/portable';
 import {planSchedule} from '@mizchi/modelt/scheduling';
 import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/modelt/history';
+import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/modelt/backend';
 const model:Model<number,'tick',number>={name:'typed',initial:()=>[{state:0,observation:0}],actions:()=>['tick'],step:()=>[{state:0,observation:0}],key:String};
 const compiled=compileFiniteModel(model,{maxDepth:1,maxStates:1});
 if(compiled.model){createFiniteModel(compiled.model);checkConcurrentHistory(compiled.model,createHistoryRecorder(model.name,{type:'int',value:'0'}).snapshot(),100);}
 createSimulationHost({seed:1});
 void createPortableWasm;
 void planSchedule;
+const backendTypes:(value:unknown)=>BackendResult=parseBackendResult;
+void backendTypes;void createRtlcBackend;void runBackend;
 `,
 );
 execFileSync(

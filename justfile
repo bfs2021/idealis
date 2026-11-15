@@ -282,3 +282,12 @@ apalache-test:
 apalache-eval run java jar: portable-build
   pnpm build
   node dist/evals/apalache-comparison/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+backend-test: portable-build
+  pnpm build
+  pnpm exec vitest run tests/backend.vitest.test.ts
+  node --test dist/evals/backend-contract/integration-test.js
+
+backend-eval run: portable-build
+  pnpm build
+  node dist/evals/backend-contract/evaluate.js {{quote(run)}}

@@ -185,6 +185,106 @@ export interface PortableCore {
   readonly request: (command: PortableCommand) => PortableOutput;
 }
 
+export interface BackendIdentity {
+  readonly id: string;
+  readonly version: string;
+}
+
+export interface BackendScope {
+  readonly modelId: string;
+  readonly propertyId: string;
+  readonly semantics: string;
+  readonly assumptions: readonly string[];
+}
+
+export type BackendQuery =
+  | { readonly kind: "explicit"; readonly bounds: SafetyBounds }
+  | { readonly kind: "bounded"; readonly maxDepth: number }
+  | {
+      readonly kind: "induction";
+      readonly invariantId: string;
+      readonly obligation: "init" | "step" | "implication" | "all";
+    };
+
+export interface BackendRequest<Input = unknown> {
+  readonly format: "modelt.backend-request";
+  readonly version: 1;
+  readonly scope: BackendScope;
+  readonly query: BackendQuery;
+  readonly input: Input;
+}
+
+export interface BackendBehaviorWitness {
+  readonly kind: "behavior";
+  readonly violation:
+    | "invariant-violation"
+    | "property-violation"
+    | "liveness-violation"
+    | "deadlock";
+  readonly name: string;
+  readonly variables: readonly string[];
+  readonly trace: NonNullable<SafetyResult["violation"]>["trace"];
+  readonly loopStart?: number;
+  readonly loopAction?: string;
+}
+
+export type BackendOutcome =
+  | { readonly kind: "explicit-complete"; readonly states: number }
+  | { readonly kind: "bounded-no-counterexample"; readonly maxDepth: number }
+  | { readonly kind: "obligation-holds" }
+  | {
+      readonly kind: "inductive";
+      readonly obligations: readonly BackendResult[];
+    }
+  | {
+      readonly kind: "counterexample";
+      readonly witness:
+        | BackendBehaviorWitness
+        | { readonly kind: "obligation"; readonly assignment: PortableValue };
+    }
+  | { readonly kind: "empty" }
+  | {
+      readonly kind: "inconclusive";
+      readonly reason:
+        | "depth"
+        | "states"
+        | "work"
+        | "temporal"
+        | "solver-unknown"
+        | "cancelled"
+        | "unsupported"
+        | "initialization-unknown"
+        | "obligations";
+      readonly obligations?: readonly BackendResult[];
+    }
+  | { readonly kind: "error"; readonly code: string; readonly message: string };
+
+export interface BackendResult {
+  readonly format: "modelt.backend-result";
+  readonly version: 1;
+  readonly backend: BackendIdentity;
+  readonly scope: BackendScope;
+  readonly query: BackendQuery;
+  readonly initialization: "nonempty" | "empty" | "unknown";
+  readonly outcome: BackendOutcome;
+  readonly progress?: {
+    readonly states: number;
+    readonly generated: number;
+    readonly depth: number;
+    readonly work: number;
+  };
+}
+
+export interface BackendDescriptor extends BackendIdentity {
+  readonly queries: readonly BackendQuery["kind"][];
+  readonly semantics: readonly string[];
+}
+
+export interface VerificationBackend<Input = unknown> {
+  readonly descriptor: BackendDescriptor;
+  readonly check: (request: BackendRequest<Input>) => Promise<BackendResult>;
+}
+
 export type SafetyScalar =
   | { readonly type: "int"; readonly value: string }
   | { readonly type: "bool"; readonly value: boolean };
