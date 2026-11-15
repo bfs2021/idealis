@@ -101,9 +101,48 @@ export const bindings = (answer: Answer): string =>
     ),
   ].join("");
 
+const sourceParts = (input: Input) => {
+  const index = input.source.indexOf("(assert");
+  assert.ok(
+    index >= 0,
+    "Fixed scoped cases must have declarations before assertions",
+  );
+  return {
+    declarations: input.source.slice(0, index),
+    assertions: input.source.slice(index),
+  };
+};
+
 export const createZ3 = async () => {
   const api = await init();
   const context = new api.Context("smt-subset-eval");
+  const check = async (
+    solver: InstanceType<typeof context.Solver>,
+    input: Input,
+  ): Promise<Answer> => {
+    const status = await solver.check();
+    if (status !== "sat") return { status, values: {}, booleans: {} };
+    const model = solver.model();
+    try {
+      const values = Object.fromEntries(
+        input.integers.map((name) => {
+          const value = model.eval(context.Int.const(name), true);
+          assert.ok(context.isIntVal(value));
+          return [name, value.value().toString()];
+        }),
+      );
+      const booleans = Object.fromEntries(
+        input.booleans.map((name) => {
+          const value = model.eval(context.Bool.const(name), true).toString();
+          assert.ok(value === "true" || value === "false");
+          return [name, value === "true"];
+        }),
+      );
+      return { status, values, booleans };
+    } finally {
+      model.release();
+    }
+  };
   const prepare = (input: Input) => {
     const solver = new context.Solver();
     try {
@@ -112,31 +151,22 @@ export const createZ3 = async () => {
       solver.release();
       throw error;
     }
+    return { check: () => check(solver, input), close: () => solver.release() };
+  };
+  const scoped = (initial: Input) => {
+    const solver = new context.Solver();
+    const initialParts = sourceParts(initial);
+    solver.fromString(initialParts.declarations);
     return {
-      check: async (): Promise<Answer> => {
-        const status = await solver.check();
-        if (status !== "sat") return { status, values: {}, booleans: {} };
-        const model = solver.model();
+      check: async (input: Input): Promise<Answer> => {
+        const parts = sourceParts(input);
+        assert.equal(parts.declarations, initialParts.declarations);
+        solver.push();
         try {
-          const values = Object.fromEntries(
-            input.integers.map((name) => {
-              const value = model.eval(context.Int.const(name), true);
-              assert.ok(context.isIntVal(value));
-              return [name, value.value().toString()];
-            }),
-          );
-          const booleans = Object.fromEntries(
-            input.booleans.map((name) => {
-              const value = model
-                .eval(context.Bool.const(name), true)
-                .toString();
-              assert.ok(value === "true" || value === "false");
-              return [name, value === "true"];
-            }),
-          );
-          return { status, values, booleans };
+          solver.fromString(parts.assertions);
+          return await check(solver, input);
         } finally {
-          model.release();
+          solver.pop();
         }
       },
       close: () => solver.release(),
@@ -145,6 +175,7 @@ export const createZ3 = async () => {
   return {
     version: api.getFullVersion(),
     prepare,
+    scoped,
     solve: async (input: Input): Promise<Answer> => {
       const problem = prepare(input);
       try {
@@ -241,9 +272,27 @@ export const createNativeZ3 = (path: string) => {
   };
   const check = async (input: Input): Promise<Answer> =>
     parseZ3(await client.request(`(check-sat)${modelQuery(input)}`), input);
+  const prepareScope = async (input: Input) => {
+    const parts = sourceParts(input);
+    const output = await client.request(
+      `(reset)(set-option :produce-models true)${parts.declarations}`,
+    );
+    assert.equal(output.trim(), "", output);
+  };
+  const scoped = async (input: Input): Promise<Answer> => {
+    const parts = sourceParts(input);
+    return parseZ3(
+      await client.request(
+        `(push 1)${parts.assertions}(check-sat)${modelQuery(input)}(pop 1)`,
+      ),
+      input,
+    );
+  };
   return {
     prepare,
     check,
+    prepareScope,
+    scoped,
     solve: async (input: Input): Promise<Answer> =>
       parseZ3(
         await client.request(
