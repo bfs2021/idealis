@@ -67,7 +67,12 @@
       "types": "./dist/src/alloy.d.ts",
       "default": "./dist/src/alloy.js"
     },
-    "./ralloy.wasm": "./assets/ralloy.wasm"
+    "./ralloy.wasm": "./assets/ralloy.wasm",
+    "./testing": {
+      "types": "./dist/src/testing.d.ts",
+      "default": "./dist/src/testing.js"
+    },
+    "./testing.wasm": "./assets/idealis-testing.wasm"
   },
   "scripts": {
     "rtla:build": "cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml",
@@ -99,11 +104,12 @@
     "usable:test": "pnpm build && node --test dist/evals/usable/contract-test.js",
     "usable:eval": "pnpm build && node dist/evals/usable/evaluate.js",
     "usable:replay": "pnpm build && node dist/evals/usable/replay.js",
-    "package:prepare": "pnpm ralloy:build && pnpm rsmt:build && pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js",
+    "package:prepare": "pnpm testing:build && pnpm ralloy:build && pnpm rsmt:build && pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js",
     "package:test": "node dist/scripts/package-test.js",
     "rsmt:build": "cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml",
     "rsmt:test": "cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml",
-    "ralloy:build": "cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml"
+    "ralloy:build": "cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml",
+    "testing:build": "cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",

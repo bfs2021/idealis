@@ -756,3 +756,169 @@ export interface AlloyRuntime {
     instance: AlloyInstance,
   ) => AlloyInstanceCheck;
 }
+export interface TestingJsonObject {
+  readonly [name: string]: TestingJson;
+}
+export type TestingJson =
+  | null
+  | boolean
+  | number
+  | string
+  | readonly TestingJson[]
+  | TestingJsonObject;
+export interface TestingGenerator {
+  readonly id: string;
+  readonly version: string;
+  readonly initial: readonly string[];
+  readonly states: Readonly<
+    Record<
+      string,
+      readonly { readonly action: TestingJson; readonly target: string }[]
+    >
+  >;
+  readonly minLength: number;
+  readonly maxLength: number;
+}
+export interface TestingCase {
+  readonly format: "idealis.test-case";
+  readonly version: 1;
+  readonly rng: "xorshift32-v1";
+  readonly generatorId: string;
+  readonly generatorVersion: string;
+  readonly seed: number;
+  readonly index: number;
+  readonly actions: readonly TestingJson[];
+}
+export interface TestingPlan {
+  readonly generator: TestingGenerator;
+  readonly seed: number;
+  readonly cases: number;
+  readonly maxAttempts: number;
+  readonly maxShrinkChecks: number;
+  readonly maxWork: number;
+}
+export type TestingVerdict =
+  | { readonly status: "matched" | "invalid" }
+  | { readonly status: "mismatch"; readonly signature: string }
+  | { readonly status: "unknown"; readonly reason: string }
+  | { readonly status: "error"; readonly message: string };
+export type TestingPhase =
+  | "generation"
+  | "baseline"
+  | "shrink"
+  | "confirmation"
+  | "replay";
+export interface TestingTrial {
+  readonly id: number;
+  readonly phase: TestingPhase;
+  readonly case: TestingCase;
+  readonly verdict: TestingVerdict;
+}
+export interface TestingResult {
+  readonly status:
+    | "passed"
+    | "failed"
+    | "exhausted"
+    | "inconclusive"
+    | "error"
+    | "not-failing";
+  readonly reason: string | null;
+  readonly seed: number;
+  readonly attempts: number;
+  readonly cases: number;
+  readonly skips: number;
+  readonly work: number;
+  readonly shrink: {
+    readonly status: "minimal" | "bounded";
+    readonly checks: number;
+  } | null;
+  readonly counterexample: TestingCase | null;
+  readonly signature: string | null;
+  readonly trials: readonly TestingTrial[];
+}
+export type TestingEffect =
+  | {
+      readonly kind: "evaluate";
+      readonly id: number;
+      readonly phase: TestingPhase;
+      readonly case: TestingCase;
+    }
+  | { readonly kind: "done"; readonly result: TestingResult };
+export type TestingObservation =
+  | { readonly kind: "allowed"; readonly values: readonly TestingJson[] }
+  | { readonly kind: "value"; readonly value: TestingJson }
+  | { readonly kind: "invalid" | "unknown"; readonly reason: string }
+  | { readonly kind: "error"; readonly message: string };
+export interface TestingTarget {
+  readonly id: string;
+  readonly outcome: TestingObservation;
+}
+export type TestingComparisonStatus =
+  | "matched"
+  | "mismatch"
+  | "invalid"
+  | "unknown"
+  | "error";
+export interface TestingComparison {
+  readonly id: string;
+  readonly status: TestingComparisonStatus;
+  readonly expected: readonly TestingJson[];
+  readonly actual: TestingJson | null;
+  readonly reason: string | null;
+  readonly outcome: TestingObservation;
+}
+export interface TestingDifferential {
+  readonly status: TestingComparisonStatus;
+  readonly oracle: TestingObservation;
+  readonly comparisons: readonly TestingComparison[];
+}
+export type TestingRequest =
+  | { readonly kind: "property"; readonly plan: TestingPlan }
+  | {
+      readonly kind: "shrink";
+      readonly generator: TestingGenerator;
+      readonly case: TestingCase;
+      readonly maxChecks: number;
+      readonly maxWork: number;
+    }
+  | {
+      readonly kind: "replay";
+      readonly case: TestingCase;
+      readonly expectedSignature: string | null;
+    }
+  | {
+      readonly kind: "resume";
+      readonly id: number;
+      readonly verdict: TestingVerdict;
+    }
+  | { readonly kind: "cancel" }
+  | {
+      readonly kind: "compare";
+      readonly oracle: TestingObservation;
+      readonly targets: readonly TestingTarget[];
+    };
+export type TestingEvaluator = (
+  testCase: TestingCase,
+  phase: TestingPhase,
+) => TestingVerdict | Promise<TestingVerdict>;
+export interface TestingRuntime {
+  readonly property: (
+    plan: TestingPlan,
+    evaluate: TestingEvaluator,
+  ) => Promise<TestingResult>;
+  readonly shrink: (
+    generator: TestingGenerator,
+    testCase: TestingCase,
+    evaluate: TestingEvaluator,
+    budget: { readonly maxChecks: number; readonly maxWork: number },
+  ) => Promise<TestingResult>;
+  readonly replay: (
+    testCase: TestingCase,
+    evaluate: TestingEvaluator,
+    expectedSignature?: string,
+  ) => Promise<TestingResult>;
+  readonly compare: (
+    oracle: TestingObservation,
+    targets: readonly TestingTarget[],
+  ) => Promise<TestingDifferential>;
+}
