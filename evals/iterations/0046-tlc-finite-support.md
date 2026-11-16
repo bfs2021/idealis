@@ -67,3 +67,9 @@ check、browser、portable-test、safety-test、GoのCGO無効/race/vetと独立
 Jevの28比較と保存記録を同期した。Rust sourceだけでなく、同梱JSON/TLA/CFG fixtureも判定の鮮度へ結び付ける。staged fixtureの変更で保存した判定を拒否する回帰を追加した。モデルのsupports判定はこの宣言範囲の同期確認であり、テストや形式検証の代用ではない。
 
 次はSYMMETRY/VIEWによる探索削減を別の計画で評価する。公平性と反例の復元を保持できる条件を定め、削減前の同じグラフと比較する。checkpointやdiskへの退避は、これらと別の探索・永続化契約として扱う。
+
+## PR依存の統合
+
+マージ準備でPR #53/#54の追加修正を取り込んだ。集合foldの共有cellを一度だけ訪問してworkへ課金する処理と、関数のkey/valueを交互に等価比較する処理を保持し、model valueの拒否をその探索へ追加した。依存するチェックリストの判定も再生成した。
+
+上のベンチマーク値は各runに保存したsource versionに対する結果であり、この統合後の再測定ではない。統合したコードはRustの回帰、追加の有限対応ケース、TLCの保存golden、native/Wasmを含むCIで検査する。保存済みrunは変更しない。
