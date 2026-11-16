@@ -46,6 +46,8 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 開発用の[構造付きfuzzing](evals/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
 
+[SAT/CNF候補の評価](evals/iterations/0037-sat-foundation.md)では、Varisat 0.2.2のnative/Wasmを独立全列挙と照合し、実ブラウザの動作を確認した。実行バジェットを保証するbackendへの採用は保留中。`ralloy`や`idealis-smt`には組み込まず、非公開のeval crateとして分離している。
+
 ## 実行
 
 観測付きの有限モデルを TS / Rust で共有する方法、反例の縮小、時計・通信・永続化の注入は [利用ガイド](docs/using-models.md) を参照。`just package` で solver を必須にしない npm/Cargo/Wasm archive と CLI を作り、別 consumer で検証できる。[公開手順と CI の分割](docs/releasing.md) は別途記載している。

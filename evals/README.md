@@ -20,6 +20,8 @@
 
 [0039: 構造付きfuzzing](iterations/0039-structured-fuzz.md)は、testing protocolと保存caseをASanで検査する。生JSONLとの到達性比較、状態破損を注入した対照、保存corpusのnative/Wasm再生を記録した。
 
+[0037: SAT/CNF候補](iterations/0037-sat-foundation.md)は、Varisatのnative/Wasmを独立全代入列挙へ照合した。実Chromiumでも動く候補として残し、solver内部の実行バジェットを保証するbackendへの採用は保留している。
+
 ```sh
 just eval-loop
 just replay-loop
