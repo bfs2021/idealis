@@ -1,0 +1,42 @@
+[
+  {
+    "phase": "development",
+    "records": 2458,
+    "dispatches": 55256,
+    "differentDetails": 0,
+    "wrongIdErrors": 2185,
+    "maxCorpusBytes": 2476,
+    "fuzz": [
+      {
+        "target": "raw",
+        "executed": 10000,
+        "peakRssMb": 479
+      },
+      {
+        "target": "structured",
+        "executed": 10000,
+        "peakRssMb": 536
+      }
+    ]
+  },
+  {
+    "phase": "confirmation",
+    "records": 2694,
+    "dispatches": 57464,
+    "differentDetails": 0,
+    "wrongIdErrors": 2184,
+    "maxCorpusBytes": 2476,
+    "fuzz": [
+      {
+        "target": "raw",
+        "executed": 10000,
+        "peakRssMb": 490
+      },
+      {
+        "target": "structured",
+        "executed": 10000,
+        "peakRssMb": 535
+      }
+    ]
+  }
+]

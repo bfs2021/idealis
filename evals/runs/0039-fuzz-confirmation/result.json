@@ -1,0 +1,110 @@
+{
+  "status": "complete",
+  "sourceVersion": "a918bae9465e5991f4a8db5e3aa8dd57be41637b780fedbca24621d5a94d8ff4",
+  "phase": "confirmation",
+  "seed": 14787,
+  "runsPerTarget": 10000,
+  "corpus": 2182,
+  "artifacts": 0,
+  "summary": [
+    {
+      "source": "probe",
+      "mode": "raw",
+      "inputs": 256,
+      "engineCalls": 1442,
+      "errors": 721,
+      "bounded": 0,
+      "phaseInputs": {
+        "generation": 0,
+        "baseline": 0,
+        "shrink": 0,
+        "confirmation": 0,
+        "replay": 0
+      },
+      "terminalInputs": 0
+    },
+    {
+      "source": "probe",
+      "mode": "structured",
+      "inputs": 256,
+      "engineCalls": 10740,
+      "errors": 2078,
+      "bounded": 4,
+      "phaseInputs": {
+        "generation": 119,
+        "baseline": 111,
+        "shrink": 97,
+        "confirmation": 102,
+        "replay": 105
+      },
+      "terminalInputs": 185
+    },
+    {
+      "source": "corpus",
+      "mode": "raw",
+      "inputs": 962,
+      "engineCalls": 48796,
+      "errors": 9307,
+      "bounded": 42,
+      "phaseInputs": {
+        "generation": 387,
+        "baseline": 0,
+        "shrink": 165,
+        "confirmation": 108,
+        "replay": 151
+      },
+      "terminalInputs": 419
+    },
+    {
+      "source": "corpus",
+      "mode": "structured",
+      "inputs": 1220,
+      "engineCalls": 100295,
+      "errors": 20856,
+      "bounded": 242,
+      "phaseInputs": {
+        "generation": 858,
+        "baseline": 202,
+        "shrink": 381,
+        "confirmation": 505,
+        "replay": 368
+      },
+      "terminalInputs": 1011
+    }
+  ],
+  "elapsedMs": 46854.099500000004,
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "b3167fc1c8013796f05d498dac21d3d91c2fe30460db575b79f6a3a40643e396"
+    },
+    {
+      "path": "raw.json",
+      "sha256": "9c2cf8f511303780ca13f0e56256abada1c02fc14630a6c94d9bf6aa398e2175"
+    },
+    {
+      "path": "structured.json",
+      "sha256": "e47423d42cd12f5e8dd9460d0b40ad10726f290fbd041005310ab6cafef0c9a3"
+    },
+    {
+      "path": "control.json",
+      "sha256": "6265b9dc9750a2ba6053c2f6db5ae74fc8cd8e4f6c9652ad89a96bce0676a083"
+    },
+    {
+      "path": "corpus.json.gz",
+      "sha256": "c7ed9673f538cfbc51fef87b601c4f4f64900f486371b87b03f6c5ac96f0092e"
+    },
+    {
+      "path": "artifacts.json.gz",
+      "sha256": "b49153039ab3d17e6eb1256bc1076131c306b30f3b77e951232beb47748fa564"
+    },
+    {
+      "path": "records.json.gz",
+      "sha256": "982d0f7213c683e4af2219ee433cb271699043c85bd3fbf1b55d93a684900b41"
+    },
+    {
+      "path": "asan-replay.json.gz",
+      "sha256": "b34eba91987887a644cdf2def3efbd7337340a69851b914133e5e3f18780a8b0"
+    }
+  ]
+}

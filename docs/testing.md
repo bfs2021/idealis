@@ -123,4 +123,4 @@ just testing-example
 just package
 ```
 
-基礎契約の採用評価は[0036](../evals/iterations/0036-testing-core.md)、明示した並行スケジュールは[0038](../evals/iterations/0038-controlled-schedules.md)。構造fuzzingは別の評価で追加する。
+基礎契約の採用評価は[0036](../evals/iterations/0036-testing-core.md)、明示した並行スケジュールは[0038](../evals/iterations/0038-controlled-schedules.md)。開発用の[protocol fuzzing](../evals/structured-fuzz/README.md)は、不正要求後のsession保持や保存caseのnative/Wasm再生を検査する。fuzzerが合成したfeedbackの整合性を扱い、実SUTの全動作を検査済みとはしない。

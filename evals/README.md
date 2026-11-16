@@ -12,6 +12,8 @@
 
 [0038: 明示した並行スケジュール](iterations/0038-controlled-schedules.md)は、actor列の生成器をnative/Wasmで共有する。TSのasync処理とgateした実Rust threadを同じ順序で進め、逐次対照に対するlost updateの追加検出、Loomの参照、縮小と再生を検査した。
 
+[0039: 構造付きfuzzing](iterations/0039-structured-fuzz.md)は、testing protocolと保存caseをASanで検査する。生JSONLとの到達性比較、状態破損を注入した対照、保存corpusのnative/Wasm再生を記録した。
+
 ```sh
 just eval-loop
 just replay-loop
