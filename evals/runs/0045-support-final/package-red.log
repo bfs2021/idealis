@@ -1,0 +1,20 @@
+
+> @mizchi/idealis@0.1.0-alpha.0 package:test /Users/mz/ghq/github.com/mizchi/idealis
+> node dist/scripts/package-test.js
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: idealis-core-0.1.0-alpha.0.crate: missing capability checklist
+    at file:///Users/mz/ghq/github.com/mizchi/idealis/dist/scripts/package-test.js:210:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.2
+ ELIFECYCLE  Command failed with exit code 1.

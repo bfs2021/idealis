@@ -1,0 +1,279 @@
+{
+  "status": "complete",
+  "qualityVerdict": "UNREVIEWED",
+  "crates": 7,
+  "comparisons": 28,
+  "usd": 0.0057473640000000005,
+  "entries": [
+    {
+      "crate": "idealis-core",
+      "status": "complete",
+      "coverage": {
+        "expected": 4,
+        "selected": 4,
+        "answered": 4,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 4,
+        "inputTokens": 16619,
+        "usd": 0.000697998
+      }
+    },
+    {
+      "crate": "idealis-smt",
+      "status": "complete",
+      "coverage": {
+        "expected": 4,
+        "selected": 4,
+        "answered": 4,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 4,
+        "inputTokens": 19293,
+        "usd": 0.0008103060000000001
+      }
+    },
+    {
+      "crate": "idealis-testing",
+      "status": "complete",
+      "coverage": {
+        "expected": 5,
+        "selected": 5,
+        "answered": 5,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 5,
+        "inputTokens": 16452,
+        "usd": 0.0006909840000000001
+      }
+    },
+    {
+      "crate": "ralloy",
+      "status": "complete",
+      "coverage": {
+        "expected": 4,
+        "selected": 4,
+        "answered": 4,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 4,
+        "inputTokens": 23665,
+        "usd": 0.00099393
+      }
+    },
+    {
+      "crate": "rtla-compiler",
+      "status": "complete",
+      "coverage": {
+        "expected": 3,
+        "selected": 3,
+        "answered": 3,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 3,
+        "inputTokens": 17963,
+        "usd": 0.0007544460000000001
+      }
+    },
+    {
+      "crate": "rtla",
+      "status": "complete",
+      "coverage": {
+        "expected": 3,
+        "selected": 3,
+        "answered": 3,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 3,
+        "inputTokens": 14307,
+        "usd": 0.000600894
+      }
+    },
+    {
+      "crate": "rtlc",
+      "status": "complete",
+      "coverage": {
+        "expected": 5,
+        "selected": 5,
+        "answered": 5,
+        "missing": 0,
+        "contradictions": 0,
+        "unassessed": 0,
+        "deferred": 0,
+        "issues": 0,
+        "unboundDocuments": 0
+      },
+      "usage": {
+        "requests": 5,
+        "inputTokens": 28543,
+        "usd": 0.001198806
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "browser.log",
+      "sha256": "31937ccbe5a849cffb1fa317b17881c154cf711ddc6a5a0bdcd23397de8359fc"
+    },
+    {
+      "path": "check.log",
+      "sha256": "5166ed02152b22cdb90467a52c13f4bd584ed21b44bae6503ac5c9177908002c"
+    },
+    {
+      "path": "controls-replay.log",
+      "sha256": "68cc6fb8619e9d5331903c442f465623867b0fbd6fe87aa778e53a9bd13e7f88"
+    },
+    {
+      "path": "evaluate.log",
+      "sha256": "1a56100f4c3c0a1d2b4e4e542c2d8b4c2dc111c875746e17c09543250e62240f"
+    },
+    {
+      "path": "idealis-core.input.json",
+      "sha256": "fd21dcca8b85692eff3b4f52f7a91e411f9bc853bb2a162ad68b01cff95c378f"
+    },
+    {
+      "path": "idealis-core.manifest.json",
+      "sha256": "59a3e10d6756d92b3e2619d452602df326f855a74cb925859be8c2c7f914f873"
+    },
+    {
+      "path": "idealis-core.record.json",
+      "sha256": "b596af2cafca2ad4d05472e7c947d5e8524c293d8f4dbd2324f77e4569f562da"
+    },
+    {
+      "path": "idealis-smt.input.json",
+      "sha256": "3cb0fc144f3d26266d4ca6c24c8d037109445008818d9a22df1266cc43b7821d"
+    },
+    {
+      "path": "idealis-smt.manifest.json",
+      "sha256": "77dae9912b9c2f1af5f24b287307c002e163d171849053cbeeeebb17970fcf62"
+    },
+    {
+      "path": "idealis-smt.record.json",
+      "sha256": "b3482d9f6174010f3260667d0e000f8de29866d864dccdd7499c3bd28bf20c31"
+    },
+    {
+      "path": "idealis-testing.input.json",
+      "sha256": "e1b18ac3c5a2cda0fcd2cd93458747b7d1a09f7f73c6e8ff7a96c6e7adbcf7aa"
+    },
+    {
+      "path": "idealis-testing.manifest.json",
+      "sha256": "b4788be2978c6b306a379e654f564397672b61a8b97f589422a5fa175c09dabd"
+    },
+    {
+      "path": "idealis-testing.record.json",
+      "sha256": "481e82953117cf14f6f0fe2d7bfcfbc9dcf1a2a69319202ae473e6f5eb15d609"
+    },
+    {
+      "path": "live.log",
+      "sha256": "853290cecd9822c1d5e77ca980ac2b9d429793441d2e50303a6c61a773b1efa0"
+    },
+    {
+      "path": "package-red.log",
+      "sha256": "6a02e751289fbcc5e3b74d78339c4aa4d6561d3b55686787705c36edf0a44146"
+    },
+    {
+      "path": "package.log",
+      "sha256": "e345e648b4f2ce65dacdde080a807e73cf9e33d6aa7637f18ed82c836452069e"
+    },
+    {
+      "path": "ralloy.input.json",
+      "sha256": "cf9aaec0920df4040b91d3d9843c017431c617c45167fb2b721d8019b13a66ed"
+    },
+    {
+      "path": "ralloy.manifest.json",
+      "sha256": "7d14f2296f713eecf3c753877187f04dcd5ef823baf9a3592f4fd745eb404507"
+    },
+    {
+      "path": "ralloy.record.json",
+      "sha256": "b9844b2be9e4cd68f09881bc32072017be02d9ff00964cf561bb0ff426b7f2b7"
+    },
+    {
+      "path": "replay-evaluation.log",
+      "sha256": "726981d4697b24e2a613fba5f4379f0e2dfa82348043181862831a63053d077d"
+    },
+    {
+      "path": "replay.log",
+      "sha256": "fc6772a389ae339b9080a94a4b4dae85546d6832b37f16146a69918f62f7a129"
+    },
+    {
+      "path": "rtla-compiler.input.json",
+      "sha256": "44234edcf4591bdb04c10f60ffce2a0dfbe3b9de5efa7b4bacec3b066f8213bd"
+    },
+    {
+      "path": "rtla-compiler.manifest.json",
+      "sha256": "4b2f8002901b371b12e503f0b7213760d2f4ce98292bd6d45950a511b7a70095"
+    },
+    {
+      "path": "rtla-compiler.record.json",
+      "sha256": "0f3e2f10551dbd812175a93cff8c4a3b8d6d00ab16634a214c4102ce119c77f1"
+    },
+    {
+      "path": "rtla.input.json",
+      "sha256": "445df3288459fc49a7fd09710f0ded5d298df397b461489498489a8b08979589"
+    },
+    {
+      "path": "rtla.manifest.json",
+      "sha256": "ba79563c1010546e727e1314d795616013d70c6e7899891b08842d3b9c544461"
+    },
+    {
+      "path": "rtla.record.json",
+      "sha256": "327cdae9390ae96dc7c8c416f513ee4512b4a879fa9d7a9be95c439bf1e370dd"
+    },
+    {
+      "path": "rtlc.input.json",
+      "sha256": "0291b1c58e845f51be8ae377c42f413d06715ce38d2e459387661cf47dd443c8"
+    },
+    {
+      "path": "rtlc.manifest.json",
+      "sha256": "cd7efb07be3215bbb2ce43b7737a9f65f0e93c4a9884b62dfc7aa165e0df7afa"
+    },
+    {
+      "path": "rtlc.record.json",
+      "sha256": "8c6b5df78e8796e7470b7e1d6f5365316a14c7ad1deaf375a09efabd43db0f2a"
+    },
+    {
+      "path": "stale-red.log",
+      "sha256": "411f2db9873530f09a6cd977d363347285cb3733cac059c21de76f7bf56c83f2"
+    },
+    {
+      "path": "tests.log",
+      "sha256": "c5206c1ac50aaf5df403a8b59fcb32f4980f2a746ad413eb8e6e8f62e94f6db0"
+    }
+  ]
+}

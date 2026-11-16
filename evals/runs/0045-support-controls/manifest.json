@@ -1,0 +1,36 @@
+{
+  "plan": "0045-crate-checklists",
+  "cases": [
+    {
+      "id": "smt-clean",
+      "crate": "idealis-smt",
+      "expected": "supports",
+      "remove": null,
+      "addition": null
+    },
+    {
+      "id": "smt-real",
+      "crate": "idealis-smt",
+      "expected": "contradicts",
+      "remove": "- [ ] Real/LRA、Real/Int混合。",
+      "addition": "- [x] Real/LRAの一般的な式とReal/Int混合を求解できる。"
+    },
+    {
+      "id": "testing-clean",
+      "crate": "idealis-testing",
+      "expected": "supports",
+      "remove": null,
+      "addition": null
+    },
+    {
+      "id": "testing-scalar",
+      "crate": "idealis-testing",
+      "expected": "contradicts",
+      "remove": "- [ ] scalar値の縮小、任意の高階Strategy、Proptest/fast-checkのStrategyやseedとの互換性。",
+      "addition": "- [x] 整数・文字列などのscalar値も縮小する。"
+    }
+  ],
+  "commit": "f5a7e50f429c8657a773e89faf8e6e85f9b47d1d",
+  "dirty": " M .github/workflows/ci.yml\n M AGENTS.md\n M README.md\n M crates/idealis-core/README.md\n M crates/idealis-smt/README.md\nRM docs/smt-checklist.md -> crates/idealis-smt/SUPPORT.md\n M crates/idealis-testing/README.md\n M crates/ralloy/README.md\n M crates/rtla-compiler/README.md\n M crates/rtla/README.md\n M crates/rtlc/README.md\n M justfile\n M package.json\n M pnpm-lock.yaml\n?? .jev-lint/\n?? crates/idealis-core/SUPPORT.md\n?? crates/idealis-testing/SUPPORT.md\n?? crates/ralloy/SUPPORT.md\n?? crates/rtla-compiler/SUPPORT.md\n?? crates/rtla/SUPPORT.md\n?? crates/rtlc/SUPPORT.md\n?? docs/crate-checklists.md\n?? docs/smt-checklist.md\n?? evals/crate-checklists/\n?? evals/runs/0045-support-context/\n?? evals/runs/0045-support-development/\n?? scripts/check-support-test.ts\n?? scripts/check-support.ts\n",
+  "model": "jev-1.14.0"
+}

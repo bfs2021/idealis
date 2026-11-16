@@ -1,6 +1,38 @@
 default:
   @just --list
 
+support-check:
+  node --experimental-strip-types scripts/check-support.ts
+
+support-check-staged:
+  node --experimental-strip-types scripts/check-support.ts --staged
+
+support-plan:
+  node --experimental-strip-types scripts/check-support.ts --dry-run
+
+support-sync:
+  node --experimental-strip-types scripts/check-support.ts --sync
+  pnpm exec biome format --write .jev-lint/checklists
+
+support-sync-staged:
+  node --experimental-strip-types scripts/check-support.ts --sync --staged
+  pnpm exec biome format --write .jev-lint/checklists
+
+support-hooks:
+  node --experimental-strip-types scripts/check-support.ts --install-hook
+
+support-test:
+  pnpm build
+  node --test dist/scripts/check-support-test.js
+
+support-eval run:
+  pnpm build
+  node dist/evals/crate-checklists/run.js {{quote(run)}}
+
+support-replay run:
+  pnpm build
+  node dist/evals/crate-checklists/run.js {{quote(run)}} --replay
+
 fuzz-build: testing-build
   cargo build --release --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
   cargo +nightly-2026-08-27 metadata --locked --format-version 1 --manifest-path evals/structured-fuzz/fuzz/Cargo.toml > /dev/null

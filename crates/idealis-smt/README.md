@@ -1,5 +1,7 @@
 # idealis-smt
 
+[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
+
 任意精度整数の差分制約とBoolean式を解く、SMT-LIBサブセットのRustライブラリ。idealisの他crate、Node、Z3には依存しない。nativeとホストimport不要のWasmを同じソースから生成する。
 
 `QF_IDL`と、無条件の定数代入や同じ係数の定数倍を正規化して差分制約へ変換できる`QF_LIA`の一部を扱う。Boolean分岐とBellman-Fordの負閉路検査を使う。一般の線形整数式、Real、BitVec、配列、量化は対象外。[対応範囲・制約・実測結果](https://github.com/mizchi/idealis/blob/main/docs/smt-subset.md)を参照。

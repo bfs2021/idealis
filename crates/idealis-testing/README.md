@@ -1,5 +1,7 @@
 # idealis-testing
 
+[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
+
 有限状態機械からの操作列生成、削除による縮小、保存caseの再生、差分比較を行うRustライブラリ。serde/serde_jsonだけに依存し、同じ実装をnativeとホストimport不要のWasmで使う。SUTのI/Oやテストランナーはホストが担当する。alpha版で、registryには未公開。
 
 ## セッションを駆動する

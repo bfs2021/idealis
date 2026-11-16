@@ -1,0 +1,20 @@
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node --test dist/scripts/check-support-test.js
+✔ a real index is authoritative over unstaged checklist edits (272.994083ms)
+✔ missing checklists, new crates and dangling staged evidence are rejected (250.919459ms)
+✔ staged symlink sources are not followed (127.616208ms)
+✔ installing a hook is repeatable and preserves another tool's hook (120.806958ms)
+✔ a checklist made only of examples in a code fence is not a support declaration (129.447709ms)
+✔ the real offline gate rejects stale, missing and corrupted staged Jev evidence (18857.442833ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19809.273458

@@ -265,6 +265,23 @@ execFileSync("tar", ["-xzf", join(directory, rtlcCrate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlaCrate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, compilerCrate), "-C", consumer]);
 const version = JSON.parse(await readFile("package.json", "utf8")).version;
+for (const archive of [
+  crate,
+  rtlcCrate,
+  rtlaCrate,
+  compilerCrate,
+  rsmtCrate,
+  ralloyCrate,
+  testingCrate,
+]) {
+  const entries = execFileSync("tar", ["-tzf", join(directory, archive)])
+    .toString()
+    .split("\n");
+  assert.ok(
+    entries.some((entry) => entry.endsWith("/SUPPORT.md")),
+    `${archive}: missing capability checklist`,
+  );
+}
 await writeFile(
   join(consumer, "Cargo.toml"),
   `[package]\nname="idealis-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-core={path="idealis-core-${version}"}\nrtlc={path="rtlc-${version}"}\nserde_json="1.0"\n[patch.crates-io]\nrtlc={path="rtlc-${version}"}\nrtla={path="rtla-${version}"}\nrtla-compiler={path="rtla-compiler-${version}"}\n[[bin]]\nname="consumer"\npath="consumer.rs"\n`,

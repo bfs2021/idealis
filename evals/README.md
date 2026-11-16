@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0045: crateチェックリストの同期](iterations/0045-crate-checklists.md)は、Jevによる宣言した28比較と、staged snapshotへのオフライン再生を確認する。未確定の記録、人工的な矛盾2件と正常対照、部分stage・古い記録・配布artifactも検査した。
+
 [0044: Quint生成TLA+](iterations/0044-quint-generated.md)は、実コンパイラの6生成物・12設定をTLC/native/Wasmで照合する。生成物を変更せず、反例のTLC再生、Chromiumと保存fixtureの回帰を確認する。
 
 [0042: SMTのCriterionと解析費用](iterations/0042-smt-tuning.md)は、14ケースの固定benchmarkで不変な解析結果の共有を評価する。profile、改善前後の順序を入れ替えた測定、ばらつきの再確認、旧版との完全応答とZ3照合を記録した。

@@ -1,5 +1,7 @@
 # ralloy
 
+[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
+
 静的なAlloy関係モデルを、有限スコープ内で検査する実験用Rustライブラリ。Node、JVM、Z3、idealisの他crateへ依存せず、同じ実装をnativeとホストimport不要のWasmへビルドする。Alloy AnalyzerのSAT変換やAlloy全体を移植したものではない。
 
 ## Rustから使う

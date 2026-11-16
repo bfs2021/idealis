@@ -1,5 +1,7 @@
 # rtla-compiler
 
+[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
+
 rtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust frontend。parserとcheckerを別crateに保ち、両者の公開契約をつなぐ。Nodeやsolverには依存しない。
 
 `compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。INSTANCE、ユーザーモジュール、一般の高階・再帰operator、無限集合の列挙、symmetry、state/action constraintは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
