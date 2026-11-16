@@ -1,0 +1,11 @@
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+evals/smt-scripts/corpus.ts(36,32): error TS2339: Property 'assumptions' does not exist on type '{ readonly kind: "pop" | "push"; readonly count: number; } | { readonly kind: "check"; readonly expected: "sat" | "unsat"; readonly assumptions?: readonly Assumption[]; }'.
+  Property 'assumptions' does not exist on type '{ readonly kind: "pop" | "push"; readonly count: number; }'.
+evals/smt-scripts/corpus.ts(36,50): error TS7006: Parameter 'value' implicitly has an 'any' type.
+evals/smt-scripts/corpus.ts(54,24): error TS2339: Property 'expected' does not exist on type '{ readonly kind: "pop" | "push"; readonly count: number; } | { readonly kind: "check"; readonly expected: "sat" | "unsat"; readonly assumptions?: readonly Assumption[]; }'.
+  Property 'expected' does not exist on type '{ readonly kind: "pop" | "push"; readonly count: number; }'.
+evals/smt-scripts/verify.ts(64,15): error TS7022: 'result' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+ ELIFECYCLE  Command failed with exit code 2.

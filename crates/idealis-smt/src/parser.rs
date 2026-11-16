@@ -1,6 +1,6 @@
-use crate::{Edge, Error, Formula, Problem, Result, Variable};
+use crate::{Assumption, Edge, Error, Formula, Problem, Result, Solver, Variable};
 use num_bigint::BigInt;
-use num_traits::Zero;
+use num_traits::{Signed, Zero};
 use std::{collections::BTreeMap, sync::Arc};
 
 #[derive(Clone)]
@@ -120,31 +120,111 @@ fn parse(source: &str) -> Result<Vec<Node>> {
 #[derive(Clone, Default)]
 struct Linear {
     constant: BigInt,
-    coefficients: BTreeMap<usize, i64>,
+    coefficients: BTreeMap<usize, BigInt>,
 }
 impl Linear {
-    fn add(&mut self, other: &Self, sign: i64) -> Result<()> {
+    fn add(&mut self, other: &Self, sign: i64) {
         self.constant += &other.constant * sign;
         for (slot, value) in &other.coefficients {
-            let addition = value
-                .checked_mul(sign)
-                .ok_or_else(|| Error::new("resource", "coefficient overflow"))?;
-            let entry = self.coefficients.entry(*slot).or_default();
-            *entry = entry
-                .checked_add(addition)
-                .ok_or_else(|| Error::new("resource", "coefficient overflow"))?;
+            *self.coefficients.entry(*slot).or_default() += value * sign;
         }
-        self.coefficients.retain(|_, value| *value != 0);
-        Ok(())
+        self.coefficients.retain(|_, value| !value.is_zero());
+    }
+    fn scaled(&self, factor: &BigInt) -> Self {
+        Self {
+            constant: &self.constant * factor,
+            coefficients: self
+                .coefficients
+                .iter()
+                .map(|(slot, value)| (*slot, value * factor))
+                .filter(|(_, value)| !value.is_zero())
+                .collect(),
+        }
     }
 }
 #[derive(Clone)]
+struct IntCase {
+    guard: Arc<Formula>,
+    value: Linear,
+}
+#[derive(Clone)]
+struct Integer {
+    cases: Vec<IntCase>,
+}
+impl Integer {
+    fn plain(value: Linear) -> Self {
+        Self {
+            cases: vec![IntCase {
+                guard: Arc::new(Formula::Constant(true)),
+                value,
+            }],
+        }
+    }
+    fn combine(
+        &self,
+        other: &Self,
+        operation: impl Fn(&Linear, &Linear) -> Result<Linear>,
+    ) -> Result<Self> {
+        if self.cases.len() * other.cases.len() > 256 {
+            return Err(Error::new("resource", "integer alternatives exceed 256"));
+        }
+        let mut cases = Vec::new();
+        for left in &self.cases {
+            for right in &other.cases {
+                cases.push(IntCase {
+                    guard: conjunction(vec![left.guard.clone(), right.guard.clone()]),
+                    value: operation(&left.value, &right.value)?,
+                });
+            }
+        }
+        Ok(Self { cases })
+    }
+}
+fn conjunction(values: Vec<Arc<Formula>>) -> Arc<Formula> {
+    let mut values: Vec<_> = values
+        .into_iter()
+        .filter(|value| !matches!(value.as_ref(), Formula::Constant(true)))
+        .collect();
+    if values.is_empty() {
+        return Arc::new(Formula::Constant(true));
+    }
+    if values.len() == 1 {
+        values.pop().expect("one guard")
+    } else {
+        Arc::new(Formula::And(values))
+    }
+}
+fn integer_predicate(
+    left: &Integer,
+    right: &Integer,
+    predicate: impl Fn(&Linear, &Linear) -> Result<Arc<Formula>>,
+) -> Result<Arc<Formula>> {
+    if left.cases.len() * right.cases.len() > 256 {
+        return Err(Error::new("resource", "integer alternatives exceed 256"));
+    }
+    let mut choices = Vec::new();
+    for left in &left.cases {
+        for right in &right.cases {
+            choices.push(conjunction(vec![
+                left.guard.clone(),
+                right.guard.clone(),
+                predicate(&left.value, &right.value)?,
+            ]));
+        }
+    }
+    Ok(if choices.len() == 1 {
+        choices.pop().expect("one comparison")
+    } else {
+        Arc::new(Formula::Or(choices))
+    })
+}
+#[derive(Clone)]
 enum Term {
-    Int(Linear),
+    Int(Integer),
     Bool(Arc<Formula>),
 }
 impl Term {
-    fn integer(self) -> Result<Linear> {
+    fn integer(self) -> Result<Integer> {
         match self {
             Self::Int(value) => Ok(value),
             _ => Err(Error::new("type", "expected Int")),
@@ -167,7 +247,7 @@ fn name(node: &Node) -> Result<String> {
     if value.is_empty()
         || [
             "true", "false", "let", "and", "or", "not", "xor", "ite", "=>", "=", "distinct", "+",
-            "-", "<", ">", "<=", ">=",
+            "-", "*", "<", ">", "<=", ">=",
         ]
         .contains(&value)
         || matches!(node, Node::Atom(_, false))
@@ -194,7 +274,7 @@ fn constant(node: &Node) -> Option<BigInt> {
                 Node::Atom(value, false) => value.as_str(),
                 _ => return None,
             };
-            if !["+", "-"].contains(&operator) {
+            if !["+", "-", "*"].contains(&operator) {
                 return None;
             }
             let mut args = values[1..].iter().map(constant);
@@ -202,11 +282,13 @@ fn constant(node: &Node) -> Option<BigInt> {
             if operator == "-" && values.len() == 2 {
                 return Some(-result);
             }
-            if operator == "+" && values.len() < 3 {
+            if ["+", "*"].contains(&operator) && values.len() < 3 {
                 return None;
             }
             for value in args {
-                if operator == "+" {
+                if operator == "*" {
+                    result *= value?;
+                } else if operator == "+" {
                     result += value?;
                 } else {
                     result -= value?;
@@ -245,20 +327,32 @@ fn collect_constants(
 }
 
 fn inequality(mut left: Linear, right: &Linear, strict: bool) -> Result<Arc<Formula>> {
-    left.add(right, -1)?;
-    let bound = -left.constant - BigInt::from(u8::from(strict));
+    left.add(right, -1);
+    let raw_bound = -left.constant - BigInt::from(u8::from(strict));
+    let scale = left
+        .coefficients
+        .values()
+        .next()
+        .map(|value| value.abs())
+        .unwrap_or_else(|| BigInt::from(1));
+    let quotient = &raw_bound / &scale;
+    let bound = if raw_bound < BigInt::zero() && &raw_bound % &scale != BigInt::zero() {
+        quotient - 1
+    } else {
+        quotient
+    };
     let mut from = 0;
     let mut to = 0;
     for (slot, coefficient) in left.coefficients {
-        match coefficient {
-            1 if to == 0 => to = slot,
-            -1 if from == 0 => from = slot,
-            _ => {
-                return Err(Error::new(
-                    "unsupported",
-                    "constraint is not integer difference logic after constant substitution",
-                ));
-            }
+        if coefficient == scale && to == 0 {
+            to = slot;
+        } else if coefficient == -&scale && from == 0 {
+            from = slot;
+        } else {
+            return Err(Error::new(
+                "unsupported",
+                "constraint is not integer difference logic after constant substitution",
+            ));
         }
     }
     Ok(Arc::new(if from == 0 && to == 0 {
@@ -268,14 +362,16 @@ fn inequality(mut left: Linear, right: &Linear, strict: bool) -> Result<Arc<Form
     }))
 }
 fn equality(left: Term, right: Term) -> Result<Arc<Formula>> {
-    Ok(Arc::new(match (left, right) {
-        (Term::Bool(left), Term::Bool(right)) => Formula::Iff(left, right),
-        (Term::Int(left), Term::Int(right)) => Formula::And(vec![
-            inequality(left.clone(), &right, false)?,
-            inequality(right, &left, false)?,
-        ]),
-        _ => return Err(Error::new("type", "equality operands have different sorts")),
-    }))
+    match (left, right) {
+        (Term::Bool(left), Term::Bool(right)) => Ok(Arc::new(Formula::Iff(left, right))),
+        (Term::Int(left), Term::Int(right)) => integer_predicate(&left, &right, |left, right| {
+            Ok(Arc::new(Formula::And(vec![
+                inequality(left.clone(), right, false)?,
+                inequality(right.clone(), left, false)?,
+            ])))
+        }),
+        _ => Err(Error::new("type", "equality operands have different sorts")),
+    }
 }
 impl Compiler {
     fn term(&self, node: &Node, locals: &BTreeMap<String, Term>, depth: usize) -> Result<Term> {
@@ -289,10 +385,10 @@ impl Compiler {
             Node::Atom(value, false) if value.chars().all(|c| c.is_ascii_digit()) => {
                 let value =
                     constant(node).ok_or_else(|| Error::new("syntax", "invalid numeral"))?;
-                Ok(Term::Int(Linear {
+                Ok(Term::Int(Integer::plain(Linear {
                     constant: value,
                     ..Linear::default()
-                }))
+                })))
             }
             Node::Atom(name, _) => {
                 if let Some(value) = locals.get(name) {
@@ -310,19 +406,19 @@ impl Compiler {
                 }
                 Ok(match variable {
                     Variable::Bool(slot) => Term::Bool(Arc::new(Formula::Boolean(*slot))),
-                    Variable::Int(slot) => {
-                        Term::Int(if let Some(value) = self.constants.get(name) {
+                    Variable::Int(slot) => Term::Int(Integer::plain(
+                        if let Some(value) = self.constants.get(name) {
                             Linear {
                                 constant: value.clone(),
                                 ..Linear::default()
                             }
                         } else {
                             Linear {
-                                coefficients: BTreeMap::from([(*slot, 1)]),
+                                coefficients: BTreeMap::from([(*slot, BigInt::from(1))]),
                                 ..Linear::default()
                             }
-                        })
-                    }
+                        },
+                    )),
                 })
             }
             Node::List(nodes) => {
@@ -358,8 +454,8 @@ impl Compiler {
                     .map(|node| self.term(node, locals, depth + 1))
                     .collect::<Result<Vec<_>>>()?;
                 match operator {
-                    "+" | "-" => {
-                        if terms.is_empty() || (operator == "+" && terms.len() < 2) {
+                    "+" | "-" | "*" => {
+                        if terms.is_empty() || (["+", "*"].contains(&operator) && terms.len() < 2) {
                             return Err(Error::new("type", "arithmetic arity"));
                         }
                         let mut values = terms.into_iter().map(Term::integer);
@@ -367,21 +463,39 @@ impl Compiler {
                             .next()
                             .ok_or_else(|| Error::new("type", "arithmetic arity"))??;
                         if operator == "-" && args.len() == 1 {
-                            let mut negated = Linear::default();
-                            negated.add(&result, -1)?;
-                            return Ok(Term::Int(negated));
+                            return Ok(Term::Int(Integer {
+                                cases: result
+                                    .cases
+                                    .into_iter()
+                                    .map(|case| IntCase {
+                                        guard: case.guard,
+                                        value: case.value.scaled(&BigInt::from(-1)),
+                                    })
+                                    .collect(),
+                            }));
                         }
                         for value in values {
-                            result.add(&value?, if operator == "+" { 1 } else { -1 })?;
+                            result = result.combine(&value?, |left, right| {
+                                if operator == "*" {
+                                    if left.coefficients.is_empty() {
+                                        Ok(right.scaled(&left.constant))
+                                    } else if right.coefficients.is_empty() {
+                                        Ok(left.scaled(&right.constant))
+                                    } else {
+                                        Err(Error::new("unsupported", "nonlinear multiplication"))
+                                    }
+                                } else {
+                                    let mut value = left.clone();
+                                    value.add(right, if operator == "+" { 1 } else { -1 });
+                                    Ok(value)
+                                }
+                            })?;
                         }
                         Ok(Term::Int(result))
                     }
                     "and" | "or" => {
                         if terms.is_empty() {
-                            return Err(Error::new(
-                                "syntax",
-                                "Boolean application needs an argument",
-                            ));
+                            return Err(Error::new("type", "Boolean application needs arguments"));
                         }
                         let values = terms
                             .into_iter()
@@ -441,15 +555,42 @@ impl Compiler {
                             return Err(Error::new("type", "ite arity"));
                         }
                         let condition = terms[0].clone().boolean()?;
-                        let consequent = terms[1].clone().boolean()?;
-                        let alternative = terms[2].clone().boolean()?;
-                        Ok(Term::Bool(Arc::new(Formula::Or(vec![
-                            Arc::new(Formula::And(vec![condition.clone(), consequent])),
-                            Arc::new(Formula::And(vec![
-                                Arc::new(Formula::Not(condition)),
-                                alternative,
-                            ])),
-                        ]))))
+                        match (terms[1].clone(), terms[2].clone()) {
+                            (Term::Bool(consequent), Term::Bool(alternative)) => {
+                                Ok(Term::Bool(Arc::new(Formula::Or(vec![
+                                    Arc::new(Formula::And(vec![condition.clone(), consequent])),
+                                    Arc::new(Formula::And(vec![
+                                        Arc::new(Formula::Not(condition)),
+                                        alternative,
+                                    ])),
+                                ]))))
+                            }
+                            (Term::Int(consequent), Term::Int(alternative)) => {
+                                if consequent.cases.len() + alternative.cases.len() > 256 {
+                                    return Err(Error::new(
+                                        "resource",
+                                        "integer alternatives exceed 256",
+                                    ));
+                                }
+                                let cases = consequent
+                                    .cases
+                                    .into_iter()
+                                    .map(|case| IntCase {
+                                        guard: conjunction(vec![condition.clone(), case.guard]),
+                                        value: case.value,
+                                    })
+                                    .chain(alternative.cases.into_iter().map(|case| IntCase {
+                                        guard: conjunction(vec![
+                                            Arc::new(Formula::Not(condition.clone())),
+                                            case.guard,
+                                        ]),
+                                        value: case.value,
+                                    }))
+                                    .collect();
+                                Ok(Term::Int(Integer { cases }))
+                            }
+                            _ => Err(Error::new("type", "ite branches have different sorts")),
+                        }
                     }
                     "=" | "distinct" => {
                         if terms.len() < 2 {
@@ -488,7 +629,9 @@ impl Compiler {
                             } else {
                                 (&pair[0], &pair[1])
                             };
-                            comparisons.push(inequality(left.clone(), right, operator.len() == 1)?);
+                            comparisons.push(integer_predicate(left, right, |left, right| {
+                                inequality(left.clone(), right, operator.len() == 1)
+                            })?);
                         }
                         Ok(Term::Bool(Arc::new(Formula::And(comparisons))))
                     }
@@ -623,4 +766,118 @@ pub(super) fn compile(source: &str) -> Result<Problem> {
         integers,
         booleans,
     })
+}
+
+fn render(node: &Node) -> String {
+    match node {
+        Node::Atom(value, true) => format!("|{value}|"),
+        Node::Atom(value, false) => value.clone(),
+        Node::List(nodes) => format!(
+            "({})",
+            nodes.iter().map(render).collect::<Vec<_>>().join(" ")
+        ),
+    }
+}
+pub(super) fn session_source(source: &str) -> Result<String> {
+    let mut nodes = parse(source)?;
+    if matches!(nodes.last(), Some(Node::List(command)) if matches!(command.first(), Some(Node::Atom(name,false)) if name == "check-sat"))
+    {
+        nodes.pop();
+    }
+    let source = nodes.iter().map(render).collect::<Vec<_>>().join("\n");
+    if source.len() > 1_048_576 {
+        return Err(Error::new("resource", "normalized source exceeds 1 MiB"));
+    }
+    Ok(source)
+}
+pub(super) fn assertion(expression: &str) -> Result<String> {
+    let nodes = parse(expression)?;
+    if nodes.len() != 1 {
+        return Err(Error::new("syntax", "assert needs a single expression"));
+    }
+    Ok(format!("(assert {})", render(&nodes[0])))
+}
+
+pub(super) fn script(source: &str) -> Result<Vec<(Arc<Problem>, Vec<Assumption>)>> {
+    let nodes = parse(source)?;
+    let mut prefix = String::new();
+    let mut solver = None;
+    let mut queries = Vec::new();
+    for node in &nodes {
+        let command = list(node)?;
+        let operator = match command.first() {
+            Some(Node::Atom(operator, false)) => operator.as_str(),
+            _ => return Err(Error::new("syntax", "expected command")),
+        };
+        if ["set-logic", "set-option", "declare-const", "declare-fun"].contains(&operator) {
+            if solver.is_some() {
+                return Err(Error::new(
+                    "unsupported",
+                    "declarations and options must precede script operations",
+                ));
+            }
+            prefix.push_str(&render(node));
+            prefix.push('\n');
+            continue;
+        }
+        if solver.is_none() {
+            solver = Some(Solver::parse(&prefix)?);
+        }
+        let context = solver.as_mut().expect("initialized script context");
+        match operator {
+            "assert" if command.len() == 2 => context.assert(&render(&command[1]))?,
+            "push" | "pop" if command.len() == 2 => {
+                let numeral = match &command[1] {
+                    Node::Atom(value, false)
+                        if value == "0"
+                            || !value.starts_with('0')
+                                && value.chars().all(|character| character.is_ascii_digit()) =>
+                    {
+                        value
+                    }
+                    _ => return Err(Error::new("syntax", "scope count must be a numeral")),
+                };
+                let count = numeral
+                    .parse::<u32>()
+                    .map_err(|_| Error::new("resource", "scope count exceeds u32"))?;
+                if operator == "push" {
+                    context.push(count)?;
+                } else {
+                    context.pop(count)?;
+                }
+            }
+            "check-sat" | "check-sat-assuming" => {
+                if queries.len() == 256 {
+                    return Err(Error::new("resource", "script checks exceed 256"));
+                }
+                let assumptions = if operator == "check-sat" && command.len() == 1 {
+                    vec![]
+                } else if operator == "check-sat-assuming" && command.len() == 2 {
+                    let literals = list(&command[1])?;
+                    if literals.len() > 256 {
+                        return Err(Error::new("resource", "assumptions exceed 256"));
+                    }
+                    literals.iter().map(|literal| match literal {
+                        Node::Atom(value, _) => Ok(Assumption { symbol: value.clone(), positive: true }),
+                        Node::List(parts) if parts.len() == 2 && matches!(&parts[0], Node::Atom(operator, false) if operator == "not") && matches!(&parts[1], Node::Atom(_, _)) => Ok(Assumption { symbol: symbol(&parts[1])?.to_string(), positive: false }),
+                        _ => Err(Error::new("unsupported", "script assumptions require Bool literals")),
+                    }).collect::<Result<Vec<_>>>()?
+                } else {
+                    return Err(Error::new("syntax", "check command arity"));
+                };
+                queries.push((context.snapshot(), assumptions));
+            }
+            "assert" | "push" | "pop" => return Err(Error::new("syntax", "script command arity")),
+            _ => {
+                return Err(Error::new(
+                    "unsupported",
+                    format!("script command {operator}"),
+                ));
+            }
+        }
+    }
+    if solver.is_none() {
+        Solver::parse(&prefix)?;
+    }
+    Ok(queries)
 }

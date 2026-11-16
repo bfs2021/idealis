@@ -1,0 +1,1962 @@
+[
+  {
+    "name": "existing-idl-control",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (< x y))(assert (<= (- y x) 2))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "positive-rounding",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (* 2 x) 7))(assert (> x 3))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "negative-rounding-unsat",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (* 2 x) (- 3)))(assert (>= x (- 1)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "negative-rounding-sat",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (* 2 x) (- 3)))(assert (>= x (- 2)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "negative-factor-strict",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (< (* (- 3) x) 4))(assert (<= x (- 2)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "nondivisible-equality",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (= (* 2 x) 7))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "zero-factor",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (= (* 0 x) 0))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "scaled-difference",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (* 3 (- x y)) (- 4)))(assert (>= (- x y) (- 1)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "large-factor",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (>= (* 10000000000000000000000000000000000000000 x) 1))(assert (<= x 0))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "integer-ite-let",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert b)(assert (let ((v (ite b (+ x 1) (- x 1)))) (= (* 2 v) 6)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "integer-ite-negation",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (not (> (ite b 5 6) 3)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "nested-integer-ite",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (= x (ite (> y 0) (ite b 2 3) 4)))(assert (> y 0))(assert b)(assert (not (= x 2)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-0",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 14))(assert (>= (- x y) 14))(assert b)(assert (distinct (* 1 (- (ite b (+ x (- 5)) (- x (- 5))) y)) 9))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-1",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 5)))(assert (>= (- x y) (- 5)))(assert (not b))(assert (> (- (* 8 (ite b (+ x 0) (- x 0))) (* 8 y)) (- 39)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-2",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 14))(assert (>= (- x y) 14))(assert b)(assert (> (* 4 (- (ite b (+ x (- 1)) (- x (- 1))) y)) 51))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-3",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 4))(assert (>= (- x y) 4))(assert (not b))(assert (> (- (* 3 (ite b (+ x (- 5)) (- x (- 5)))) (* 3 y)) 26))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-4",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 2))(assert (>= (- x y) 2))(assert b)(assert (< (* 8 (- (ite b (+ x 1) (- x 1)) y)) 24))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-5",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 14))(assert (>= (- x y) 14))(assert (not b))(assert (distinct (- (* (- 6) (ite b (+ x 5) (- x 5))) (* (- 6) y)) (- 56)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-6",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 2)))(assert (>= (- x y) (- 2)))(assert (not b))(assert (distinct (* (- 2) (- (ite b (+ x 1) (- x 1)) y)) 4))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-7",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 13)))(assert (>= (- x y) (- 13)))(assert b)(assert (< (- (* 5 (ite b (+ x 4) (- x 4))) (* 5 y)) (- 47)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-8",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 2))(assert (>= (- x y) 2))(assert (not b))(assert (= (* 7 (- (ite b (+ x 3) (- x 3)) y)) (- 9)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-9",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 10))(assert (>= (- x y) 10))(assert b)(assert (<= (- (* (- 9) (ite b (+ x 4) (- x 4))) (* (- 9) y)) (- 125)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-10",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 6))(assert (>= (- x y) 6))(assert (not b))(assert (>= (* (- 1) (- (ite b (+ x 1) (- x 1)) y)) (- 5)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-11",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 0))(assert (>= (- x y) 0))(assert b)(assert (distinct (- (* 5 (ite b (+ x 0) (- x 0))) (* 5 y)) (- 2)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-12",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 8))(assert (>= (- x y) 8))(assert b)(assert (> (* 6 (- (ite b (+ x 2) (- x 2)) y)) 60))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-13",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 12)))(assert (>= (- x y) (- 12)))(assert (not b))(assert (<= (- (* 4 (ite b (+ x 3) (- x 3))) (* 4 y)) (- 62)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-14",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 14))(assert (>= (- x y) 14))(assert (not b))(assert (<= (* 3 (- (ite b (+ x (- 1)) (- x (- 1))) y)) 43))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-15",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 2)))(assert (>= (- x y) (- 2)))(assert (not b))(assert (>= (- (* (- 1) (ite b (+ x 4) (- x 4))) (* (- 1) y)) 8))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-16",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 8)))(assert (>= (- x y) (- 8)))(assert b)(assert (= (* (- 2) (- (ite b (+ x 2) (- x 2)) y)) 13))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-17",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 12)))(assert (>= (- x y) (- 12)))(assert (not b))(assert (= (- (* 3 (ite b (+ x (- 3)) (- x (- 3)))) (* 3 y)) (- 25)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-18",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 2))(assert (>= (- x y) 2))(assert (not b))(assert (<= (* (- 2) (- (ite b (+ x (- 4)) (- x (- 4))) y)) (- 11)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-19",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 14)))(assert (>= (- x y) (- 14)))(assert (not b))(assert (<= (- (* (- 4) (ite b (+ x (- 1)) (- x (- 1)))) (* (- 4) y)) 52))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-20",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 6))(assert (>= (- x y) 6))(assert (not b))(assert (< (* (- 2) (- (ite b (+ x 0) (- x 0)) y)) (- 13)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-21",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 3)))(assert (>= (- x y) (- 3)))(assert b)(assert (= (- (* 1 (ite b (+ x (- 3)) (- x (- 3)))) (* 1 y)) (- 5)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-22",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 11))(assert (>= (- x y) 11))(assert (not b))(assert (>= (* (- 8) (- (ite b (+ x (- 2)) (- x (- 2))) y)) (- 103)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-23",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 12)))(assert (>= (- x y) (- 12)))(assert (not b))(assert (> (- (* (- 8) (ite b (+ x 5) (- x 5))) (* (- 8) y)) 135))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-24",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert (not b))(assert (= (* 5 (- (ite b (+ x (- 5)) (- x (- 5))) y)) (- 25)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-25",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 6)))(assert (>= (- x y) (- 6)))(assert (not b))(assert (<= (- (* (- 1) (ite b (+ x (- 5)) (- x (- 5)))) (* (- 1) y)) (- 1)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-26",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 4)))(assert (>= (- x y) (- 4)))(assert b)(assert (<= (* (- 6) (- (ite b (+ x (- 1)) (- x (- 1))) y)) 28))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-27",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 2))(assert (>= (- x y) 2))(assert (not b))(assert (<= (- (* (- 3) (ite b (+ x 5) (- x 5))) (* (- 3) y)) 11))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-28",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 5))(assert (>= (- x y) 5))(assert (not b))(assert (< (* (- 8) (- (ite b (+ x 0) (- x 0)) y)) (- 42)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-29",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 12))(assert (>= (- x y) 12))(assert (not b))(assert (= (- (* 3 (ite b (+ x (- 1)) (- x (- 1)))) (* 3 y)) 39))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-30",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 3)))(assert (>= (- x y) (- 3)))(assert b)(assert (= (* (- 5) (- (ite b (+ x (- 5)) (- x (- 5))) y)) 40))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-31",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert (not b))(assert (>= (- (* 4 (ite b (+ x (- 4)) (- x (- 4)))) (* 4 y)) 69))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-32",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 7)))(assert (>= (- x y) (- 7)))(assert (not b))(assert (< (* 9 (- (ite b (+ x (- 1)) (- x (- 1))) y)) (- 53)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-33",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 5)))(assert (>= (- x y) (- 5)))(assert (not b))(assert (< (- (* 2 (ite b (+ x 4) (- x 4))) (* 2 y)) (- 19)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-34",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 7))(assert (>= (- x y) 7))(assert (not b))(assert (> (* (- 2) (- (ite b (+ x 5) (- x 5)) y)) (- 2)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-35",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 14)))(assert (>= (- x y) (- 14)))(assert b)(assert (= (- (* 1 (ite b (+ x (- 4)) (- x (- 4)))) (* 1 y)) (- 18)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-36",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 12))(assert (>= (- x y) 12))(assert (not b))(assert (distinct (* 0 (- (ite b (+ x (- 4)) (- x (- 4))) y)) (- 2)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-37",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 13)))(assert (>= (- x y) (- 13)))(assert (not b))(assert (> (- (* 3 (ite b (+ x (- 2)) (- x (- 2)))) (* 3 y)) (- 35)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-38",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 6)))(assert (>= (- x y) (- 6)))(assert b)(assert (<= (* (- 5) (- (ite b (+ x (- 1)) (- x (- 1))) y)) 33))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-39",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert (not b))(assert (< (- (* 2 (ite b (+ x (- 2)) (- x (- 2)))) (* 2 y)) 21))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-40",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert (not b))(assert (= (* 0 (- (ite b (+ x (- 2)) (- x (- 2))) y)) 2))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-41",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 3))(assert (>= (- x y) 3))(assert (not b))(assert (distinct (- (* (- 6) (ite b (+ x 5) (- x 5))) (* (- 6) y)) 11))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-42",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 15))(assert (>= (- x y) 15))(assert (not b))(assert (< (* 1 (- (ite b (+ x (- 1)) (- x (- 1))) y)) 14))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-43",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert (not b))(assert (>= (- (* 9 (ite b (+ x (- 2)) (- x (- 2)))) (* 9 y)) (- 72)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-44",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 5)))(assert (>= (- x y) (- 5)))(assert (not b))(assert (= (* (- 3) (- (ite b (+ x 0) (- x 0)) y)) 14))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-45",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 5)))(assert (>= (- x y) (- 5)))(assert b)(assert (<= (- (* (- 7) (ite b (+ x (- 5)) (- x (- 5)))) (* (- 7) y)) 68))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-46",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert b)(assert (distinct (* (- 4) (- (ite b (+ x (- 5)) (- x (- 5))) y)) (- 15)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-47",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 7)))(assert (>= (- x y) (- 7)))(assert b)(assert (= (- (* (- 9) (ite b (+ x 0) (- x 0))) (* (- 9) y)) 63))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-48",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 12))(assert (>= (- x y) 12))(assert (not b))(assert (= (* 6 (- (ite b (+ x 2) (- x 2)) y)) 60))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-49",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert b)(assert (> (- (* 3 (ite b (+ x (- 2)) (- x (- 2)))) (* 3 y)) 34))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-50",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert b)(assert (= (* 1 (- (ite b (+ x 0) (- x 0)) y)) (- 9)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-51",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 6))(assert (>= (- x y) 6))(assert (not b))(assert (= (- (* (- 9) (ite b (+ x (- 2)) (- x (- 2)))) (* (- 9) y)) (- 73)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-52",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 15)))(assert (>= (- x y) (- 15)))(assert b)(assert (= (* 6 (- (ite b (+ x (- 2)) (- x (- 2))) y)) (- 104)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-53",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 13)))(assert (>= (- x y) (- 13)))(assert (not b))(assert (<= (- (* 2 (ite b (+ x (- 3)) (- x (- 3)))) (* 2 y)) (- 20)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-54",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert (not b))(assert (distinct (* (- 9) (- (ite b (+ x 1) (- x 1)) y)) (- 72)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-55",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert b)(assert (distinct (- (* 9 (ite b (+ x 4) (- x 4))) (* 9 y)) 117))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-56",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert b)(assert (> (* (- 3) (- (ite b (+ x 5) (- x 5)) y)) 15))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-57",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 13)))(assert (>= (- x y) (- 13)))(assert b)(assert (= (- (* (- 6) (ite b (+ x 2) (- x 2))) (* (- 6) y)) 67))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-58",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert b)(assert (> (* (- 5) (- (ite b (+ x (- 5)) (- x (- 5))) y)) (- 41)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-59",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 4))(assert (>= (- x y) 4))(assert b)(assert (= (- (* 6 (ite b (+ x 1) (- x 1))) (* 6 y)) 28))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-60",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 7)))(assert (>= (- x y) (- 7)))(assert (not b))(assert (>= (* (- 3) (- (ite b (+ x (- 3)) (- x (- 3))) y)) 12))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-61",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 3)))(assert (>= (- x y) (- 3)))(assert b)(assert (< (- (* 4 (ite b (+ x (- 3)) (- x (- 3)))) (* 4 y)) (- 22)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-62",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 7))(assert (>= (- x y) 7))(assert b)(assert (= (* 3 (- (ite b (+ x (- 3)) (- x (- 3))) y)) 12))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-63",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 12)))(assert (>= (- x y) (- 12)))(assert (not b))(assert (>= (- (* (- 3) (ite b (+ x 2) (- x 2))) (* (- 3) y)) 41))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-64",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 5))(assert (>= (- x y) 5))(assert (not b))(assert (= (* (- 3) (- (ite b (+ x 1) (- x 1)) y)) (- 12)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-65",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 14)))(assert (>= (- x y) (- 14)))(assert (not b))(assert (>= (- (* (- 5) (ite b (+ x (- 4)) (- x (- 4)))) (* (- 5) y)) 48))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-66",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 0))(assert (>= (- x y) 0))(assert (not b))(assert (= (* (- 4) (- (ite b (+ x 1) (- x 1)) y)) 4))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-67",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 6)))(assert (>= (- x y) (- 6)))(assert b)(assert (distinct (- (* 3 (ite b (+ x (- 2)) (- x (- 2)))) (* 3 y)) (- 23)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-68",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 4)))(assert (>= (- x y) (- 4)))(assert (not b))(assert (>= (* (- 9) (- (ite b (+ x 0) (- x 0)) y)) 37))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-69",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert b)(assert (<= (- (* 8 (ite b (+ x 4) (- x 4))) (* 8 y)) 26))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-70",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert b)(assert (< (* (- 2) (- (ite b (+ x (- 2)) (- x (- 2))) y)) 8))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-71",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 12)))(assert (>= (- x y) (- 12)))(assert b)(assert (= (- (* (- 4) (ite b (+ x 5) (- x 5))) (* (- 4) y)) 27))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-72",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert (not b))(assert (< (* (- 9) (- (ite b (+ x (- 3)) (- x (- 3))) y)) (- 143)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-73",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 10))(assert (>= (- x y) 10))(assert b)(assert (>= (- (* (- 5) (ite b (+ x (- 4)) (- x (- 4)))) (* (- 5) y)) (- 28)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-74",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 7)))(assert (>= (- x y) (- 7)))(assert (not b))(assert (<= (* (- 5) (- (ite b (+ x 2) (- x 2)) y)) 47))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-75",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 13)))(assert (>= (- x y) (- 13)))(assert (not b))(assert (< (- (* (- 2) (ite b (+ x 2) (- x 2))) (* (- 2) y)) 28))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-76",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 12))(assert (>= (- x y) 12))(assert (not b))(assert (<= (* 6 (- (ite b (+ x 2) (- x 2)) y)) 62))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-77",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 7))(assert (>= (- x y) 7))(assert b)(assert (> (- (* 4 (ite b (+ x (- 1)) (- x (- 1)))) (* 4 y)) 25))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-78",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 11))(assert (>= (- x y) 11))(assert (not b))(assert (= (* (- 5) (- (ite b (+ x (- 4)) (- x (- 4))) y)) (- 74)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-79",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 8))(assert (>= (- x y) 8))(assert (not b))(assert (< (- (* 5 (ite b (+ x 0) (- x 0))) (* 5 y)) 40))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-80",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 6)))(assert (>= (- x y) (- 6)))(assert (not b))(assert (= (* 7 (- (ite b (+ x 3) (- x 3)) y)) (- 61)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-81",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 9)))(assert (>= (- x y) (- 9)))(assert b)(assert (distinct (- (* (- 2) (ite b (+ x 2) (- x 2))) (* (- 2) y)) 15))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-82",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 8)))(assert (>= (- x y) (- 8)))(assert (not b))(assert (> (* 3 (- (ite b (+ x 4) (- x 4)) y)) (- 37)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-83",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 9)))(assert (>= (- x y) (- 9)))(assert b)(assert (< (- (* (- 3) (ite b (+ x 4) (- x 4))) (* (- 3) y)) 15))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-84",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert b)(assert (<= (* 0 (- (ite b (+ x (- 1)) (- x (- 1))) y)) 0))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-85",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert (not b))(assert (>= (- (* 1 (ite b (+ x 3) (- x 3))) (* 1 y)) 11))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-86",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 7)))(assert (>= (- x y) (- 7)))(assert b)(assert (<= (* 4 (- (ite b (+ x 2) (- x 2)) y)) (- 22)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-87",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert b)(assert (> (- (* 0 (ite b (+ x 3) (- x 3))) (* 0 y)) (- 1)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-88",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert (not b))(assert (= (* 7 (- (ite b (+ x 2) (- x 2)) y)) (- 85)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-89",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert b)(assert (= (- (* 5 (ite b (+ x (- 3)) (- x (- 3)))) (* 5 y)) 29))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-90",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 3))(assert (>= (- x y) 3))(assert (not b))(assert (distinct (* 0 (- (ite b (+ x 3) (- x 3)) y)) 2))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-91",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert (not b))(assert (>= (- (* 7 (ite b (+ x 5) (- x 5))) (* 7 y)) (- 43)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-92",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 7)))(assert (>= (- x y) (- 7)))(assert b)(assert (distinct (* (- 5) (- (ite b (+ x 5) (- x 5)) y)) 10))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-93",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 6))(assert (>= (- x y) 6))(assert b)(assert (<= (- (* (- 6) (ite b (+ x (- 2)) (- x (- 2)))) (* (- 6) y)) (- 26)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-94",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 9)))(assert (>= (- x y) (- 9)))(assert b)(assert (distinct (* 4 (- (ite b (+ x 1) (- x 1)) y)) (- 32)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-95",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 15))(assert (>= (- x y) 15))(assert b)(assert (= (- (* (- 5) (ite b (+ x 2) (- x 2))) (* (- 5) y)) (- 84)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-96",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 11)))(assert (>= (- x y) (- 11)))(assert b)(assert (> (* 1 (- (ite b (+ x 1) (- x 1)) y)) (- 12)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-97",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert b)(assert (<= (- (* (- 2) (ite b (+ x (- 5)) (- x (- 5)))) (* (- 2) y)) 31))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-98",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 1))(assert (>= (- x y) 1))(assert (not b))(assert (> (* 3 (- (ite b (+ x (- 3)) (- x (- 3))) y)) 10))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-99",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 4))(assert (>= (- x y) 4))(assert (not b))(assert (distinct (- (* (- 3) (ite b (+ x (- 2)) (- x (- 2)))) (* (- 3) y)) (- 17)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-100",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert (not b))(assert (> (* (- 4) (- (ite b (+ x (- 1)) (- x (- 1))) y)) 1))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-101",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 5)))(assert (>= (- x y) (- 5)))(assert b)(assert (< (- (* 7 (ite b (+ x (- 2)) (- x (- 2)))) (* 7 y)) (- 50)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-102",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert (not b))(assert (distinct (* (- 6) (- (ite b (+ x 0) (- x 0)) y)) (- 55)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-103",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 4)))(assert (>= (- x y) (- 4)))(assert (not b))(assert (>= (- (* 4 (ite b (+ x 2) (- x 2))) (* 4 y)) (- 22)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-104",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 10)))(assert (>= (- x y) (- 10)))(assert (not b))(assert (< (* (- 8) (- (ite b (+ x (- 3)) (- x (- 3))) y)) 56))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-105",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 0))(assert (>= (- x y) 0))(assert b)(assert (> (- (* (- 8) (ite b (+ x 2) (- x 2))) (* (- 8) y)) (- 16)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-106",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 9))(assert (>= (- x y) 9))(assert b)(assert (< (* 8 (- (ite b (+ x (- 1)) (- x (- 1))) y)) 64))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-107",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 11))(assert (>= (- x y) 11))(assert b)(assert (distinct (- (* (- 2) (ite b (+ x 1) (- x 1))) (* (- 2) y)) (- 25)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-108",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 1)))(assert (>= (- x y) (- 1)))(assert b)(assert (> (* (- 1) (- (ite b (+ x 5) (- x 5)) y)) (- 5)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-109",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 5))(assert (>= (- x y) 5))(assert (not b))(assert (> (- (* 9 (ite b (+ x 0) (- x 0))) (* 9 y)) 46))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-110",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 15))(assert (>= (- x y) 15))(assert b)(assert (= (* 2 (- (ite b (+ x 4) (- x 4)) y)) 39))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-111",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 0))(assert (>= (- x y) 0))(assert (not b))(assert (<= (- (* 7 (ite b (+ x 2) (- x 2))) (* 7 y)) (- 14)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-112",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 8)))(assert (>= (- x y) (- 8)))(assert (not b))(assert (<= (* (- 8) (- (ite b (+ x 4) (- x 4)) y)) 94))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-113",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 11)))(assert (>= (- x y) (- 11)))(assert (not b))(assert (distinct (- (* (- 1) (ite b (+ x 5) (- x 5))) (* (- 1) y)) 16))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-114",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 3))(assert (>= (- x y) 3))(assert b)(assert (distinct (* 8 (- (ite b (+ x (- 5)) (- x (- 5))) y)) (- 15)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-115",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 5))(assert (>= (- x y) 5))(assert (not b))(assert (= (- (* (- 5) (ite b (+ x 2) (- x 2))) (* (- 5) y)) (- 15)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-116",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 9)))(assert (>= (- x y) (- 9)))(assert b)(assert (= (* 0 (- (ite b (+ x 2) (- x 2)) y)) 2))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-117",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 11))(assert (>= (- x y) 11))(assert (not b))(assert (> (- (* 9 (ite b (+ x (- 4)) (- x (- 4)))) (* 9 y)) 134))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-118",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 8))(assert (>= (- x y) 8))(assert b)(assert (distinct (* 5 (- (ite b (+ x (- 3)) (- x (- 3))) y)) 25))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-119",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert (not b))(assert (< (- (* 0 (ite b (+ x 3) (- x 3))) (* 0 y)) (- 2)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-120",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 12))(assert (>= (- x y) 12))(assert b)(assert (distinct (* (- 9) (- (ite b (+ x (- 3)) (- x (- 3))) y)) (- 79)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-121",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 8))(assert (>= (- x y) 8))(assert b)(assert (>= (- (* (- 2) (ite b (+ x (- 3)) (- x (- 3)))) (* (- 2) y)) (- 9)))",
+    "expected": "unsat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-122",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 9)))(assert (>= (- x y) (- 9)))(assert (not b))(assert (< (* (- 9) (- (ite b (+ x 3) (- x 3)) y)) 110))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-123",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 2))(assert (>= (- x y) 2))(assert b)(assert (<= (- (* 6 (ite b (+ x (- 3)) (- x (- 3)))) (* 6 y)) (- 5)))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-124",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 13))(assert (>= (- x y) 13))(assert b)(assert (> (* 3 (- (ite b (+ x (- 5)) (- x (- 5))) y)) 23))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-125",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 7))(assert (>= (- x y) 7))(assert (not b))(assert (distinct (- (* 9 (ite b (+ x 0) (- x 0))) (* 9 y)) 65))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-126",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) (- 11)))(assert (>= (- x y) (- 11)))(assert (not b))(assert (distinct (* (- 6) (- (ite b (+ x 4) (- x 4)) y)) 91))",
+    "expected": "sat",
+    "iterations": 1
+  },
+  {
+    "name": "generated-16579-127",
+    "family": "smt-expansion",
+    "integers": [
+      "x",
+      "y"
+    ],
+    "booleans": [
+      "b"
+    ],
+    "source": "(declare-const x Int)(declare-const y Int)(declare-const b Bool)(assert (<= (- x y) 3))(assert (>= (- x y) 3))(assert b)(assert (distinct (- (* 1 (ite b (+ x (- 4)) (- x (- 4)))) (* 1 y)) (- 3)))",
+    "expected": "sat",
+    "iterations": 1
+  }
+]

@@ -1,0 +1,9 @@
+   Compiling idealis-smt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-smt)
+error[E0432]: unresolved import `idealis_smt::Script`
+ --> tests/scripts.rs:1:27
+  |
+1 | use idealis_smt::{Engine, Script};
+  |                           ^^^^^^ no `Script` in the root
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `idealis-smt` (test "scripts") due to 1 previous error

@@ -1,0 +1,30 @@
+pnpm rsmt:test
+
+> @mizchi/idealis@0.1.0-alpha.0 rsmt:test /Users/mz/ghq/github.com/mizchi/idealis
+> cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
+
+Diff in /Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-smt/examples/ttl.rs:24:
+     let mut solver = Solver::parse("(declare-const x Int)(declare-const b Bool)")?;
+     solver.push(1)?;
+     solver.assert("(= (* 2 x) (ite b 6 8))")?;
+-    let assumptions = [Assumption { symbol: "b".into(), positive: true }];
+-    assert_eq!(solver.check_assuming(&assumptions, 100_000)?.values["x"], "3");
++    let assumptions = [Assumption {
++        symbol: "b".into(),
++        positive: true,
++    }];
++    assert_eq!(
++        solver.check_assuming(&assumptions, 100_000)?.values["x"],
++        "3"
++    );
+     solver.assert("(= x 4)")?;
+-    assert_eq!(solver.check_assuming(&assumptions, 100_000)?.status, "unsat");
++    assert_eq!(
++        solver.check_assuming(&assumptions, 100_000)?.status,
++        "unsat"
++    );
+     assert_eq!(solver.check(100_000).values["x"], "4");
+     solver.pop(1)?;
+     solver.assert("(= x 9)")?;
+ ELIFECYCLE  Command failed with exit code 1.
+error: Recipe `rsmt-test` failed on line 128 with exit code 1

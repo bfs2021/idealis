@@ -1,0 +1,3712 @@
+{
+  "samples": {
+    "totalWeight": 4991,
+    "hotspots": [
+      {
+        "name": "madvise",
+        "self": 317,
+        "inclusive": 317
+      },
+      {
+        "name": "idealis_smt::parser::parse",
+        "self": 306,
+        "inclusive": 2034
+      },
+      {
+        "name": "0x2a15c",
+        "self": 211,
+        "inclusive": 211
+      },
+      {
+        "name": "_platform_memmove",
+        "self": 205,
+        "inclusive": 205
+      },
+      {
+        "name": "_platform_memcmp",
+        "self": 167,
+        "inclusive": 167
+      },
+      {
+        "name": "0x2b134",
+        "self": 157,
+        "inclusive": 157
+      },
+      {
+        "name": "0x2b4fc",
+        "self": 149,
+        "inclusive": 149
+      },
+      {
+        "name": "0x2a1cc",
+        "self": 106,
+        "inclusive": 106
+      },
+      {
+        "name": "0x31994",
+        "self": 96,
+        "inclusive": 96
+      },
+      {
+        "name": "idealis_smt::parser::parse::node",
+        "self": 93,
+        "inclusive": 474
+      },
+      {
+        "name": "mach_absolute_time",
+        "self": 87,
+        "inclusive": 87
+      },
+      {
+        "name": "__bzero",
+        "self": 82,
+        "inclusive": 82
+      },
+      {
+        "name": "<idealis_smt::parser::Compiler>::term",
+        "self": 77,
+        "inclusive": 1826
+      },
+      {
+        "name": "0x2a958",
+        "self": 70,
+        "inclusive": 70
+      },
+      {
+        "name": "0x300e0",
+        "self": 70,
+        "inclusive": 70
+      },
+      {
+        "name": "0x2b738",
+        "self": 62,
+        "inclusive": 62
+      },
+      {
+        "name": "0x3acd0",
+        "self": 58,
+        "inclusive": 58
+      },
+      {
+        "name": "<alloc::raw_vec::RawVecInner>::finish_grow",
+        "self": 57,
+        "inclusive": 801
+      },
+      {
+        "name": "<idealis_smt::Problem>::parse",
+        "self": 56,
+        "inclusive": 4656
+      },
+      {
+        "name": "<num_bigint::bigint::BigInt as core::ops::arith::AddAssign>::add_assign",
+        "self": 52,
+        "inclusive": 52
+      },
+      {
+        "name": "0x3a0c8",
+        "self": 50,
+        "inclusive": 50
+      },
+      {
+        "name": "0x2ff94",
+        "self": 49,
+        "inclusive": 49
+      },
+      {
+        "name": "<alloc::collections::btree::map::IntoIter<(usize, alloc::string::String), &clap_builder::builder::arg::Arg>>::dying_next",
+        "self": 46,
+        "inclusive": 156
+      },
+      {
+        "name": "0x3003c",
+        "self": 46,
+        "inclusive": 46
+      },
+      {
+        "name": "0x2b3c4",
+        "self": 45,
+        "inclusive": 45
+      },
+      {
+        "name": "0x16c138",
+        "self": 44,
+        "inclusive": 44
+      },
+      {
+        "name": "0x2b1dc",
+        "self": 43,
+        "inclusive": 43
+      },
+      {
+        "name": "_platform_memset",
+        "self": 42,
+        "inclusive": 42
+      },
+      {
+        "name": "idealis_smt::parser::inequality",
+        "self": 40,
+        "inclusive": 296
+      },
+      {
+        "name": "<&num_bigint::bigint::BigInt as core::ops::arith::Mul<i64>>::mul",
+        "self": 38,
+        "inclusive": 42
+      },
+      {
+        "name": "<idealis_smt::parser::Linear>::add",
+        "self": 36,
+        "inclusive": 139
+      },
+      {
+        "name": "0x2b190",
+        "self": 36,
+        "inclusive": 36
+      },
+      {
+        "name": "0x2ff48",
+        "self": 36,
+        "inclusive": 36
+      },
+      {
+        "name": "0x16c1c8",
+        "self": 35,
+        "inclusive": 35
+      },
+      {
+        "name": "0x2b34c",
+        "self": 35,
+        "inclusive": 35
+      },
+      {
+        "name": "0x2b5f0",
+        "self": 35,
+        "inclusive": 35
+      },
+      {
+        "name": "0x301dc",
+        "self": 34,
+        "inclusive": 34
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<idealis_smt::parser::Node>>",
+        "self": 33,
+        "inclusive": 607
+      },
+      {
+        "name": "0x2aa10",
+        "self": 32,
+        "inclusive": 32
+      },
+      {
+        "name": "0x2b258",
+        "self": 32,
+        "inclusive": 32
+      },
+      {
+        "name": "0x3a134",
+        "self": 32,
+        "inclusive": 32
+      },
+      {
+        "name": "0x3acf4",
+        "self": 32,
+        "inclusive": 32
+      },
+      {
+        "name": "0x2b12c",
+        "self": 31,
+        "inclusive": 31
+      },
+      {
+        "name": "0x3ad1c",
+        "self": 31,
+        "inclusive": 31
+      },
+      {
+        "name": "0x3a0e8",
+        "self": 30,
+        "inclusive": 30
+      },
+      {
+        "name": "0x2a230",
+        "self": 29,
+        "inclusive": 29
+      },
+      {
+        "name": "0x2b1f4",
+        "self": 28,
+        "inclusive": 28
+      },
+      {
+        "name": "0x2b420",
+        "self": 27,
+        "inclusive": 27
+      },
+      {
+        "name": "0x301c8",
+        "self": 26,
+        "inclusive": 26
+      },
+      {
+        "name": "0x30274",
+        "self": 25,
+        "inclusive": 25
+      },
+      {
+        "name": "0x3a10c",
+        "self": 24,
+        "inclusive": 24
+      },
+      {
+        "name": "0x2a1e4",
+        "self": 23,
+        "inclusive": 23
+      },
+      {
+        "name": "0x30058",
+        "self": 23,
+        "inclusive": 23
+      },
+      {
+        "name": "0x2b218",
+        "self": 22,
+        "inclusive": 22
+      },
+      {
+        "name": "idealis_smt::parser::collect_constants",
+        "self": 22,
+        "inclusive": 76
+      },
+      {
+        "name": "idealis_smt::parser::equality",
+        "self": 21,
+        "inclusive": 634
+      },
+      {
+        "name": "<alloc::collections::btree::map::BTreeMap<_, _, _> as core::clone::Clone>::clone::clone_subtree::<usize, num_bigint::bigint::BigInt, alloc::alloc::Global>",
+        "self": 20,
+        "inclusive": 126
+      },
+      {
+        "name": "<idealis_smt::parser::Linear as core::clone::Clone>::clone",
+        "self": 20,
+        "inclusive": 146
+      },
+      {
+        "name": "0x2aa94",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "0x2aaa0",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "0x2b220",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "0x30038",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "0x300f8",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "0x30110",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "0x30150",
+        "self": 20,
+        "inclusive": 20
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::Formula>",
+        "self": 20,
+        "inclusive": 163
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<idealis_smt::parser::Term>>",
+        "self": 19,
+        "inclusive": 182
+      },
+      {
+        "name": "num_bigint::biguint::division::div_rem_cow",
+        "self": 19,
+        "inclusive": 19
+      },
+      {
+        "name": "0x2aa04",
+        "self": 18,
+        "inclusive": 18
+      },
+      {
+        "name": "0x2ffa4",
+        "self": 18,
+        "inclusive": 18
+      },
+      {
+        "name": "core::iter::adapters::try_process::<core::iter::adapters::map::Map<core::slice::iter::Iter<idealis_smt::parser::Node>, <idealis_smt::parser::Compiler>::term::{closure#3}>, idealis_smt::parser::Term, core::result::Result<core::convert::Infallible, idealis_smt::Error>, <core::result::Result<alloc::vec::Vec<idealis_smt::parser::Term>, idealis_smt::Error> as core::iter::traits::collect::FromIterator<core::result::Result<idealis_smt::parser::Term, idealis_smt::Error>>>::from_iter<core::iter::adapters::map::Map<core::slice::iter::Iter<idealis_smt::parser::Node>, <idealis_smt::parser::Compiler>::term::{closure#3}>>::{closure#0}, alloc::vec::Vec<idealis_smt::parser::Term>>",
+        "self": 18,
+        "inclusive": 816
+      },
+      {
+        "name": "idealis_smt::parser::constant",
+        "self": 18,
+        "inclusive": 73
+      },
+      {
+        "name": "<alloc::vec::Vec<idealis_smt::parser::Node> as core::clone::Clone>::clone",
+        "self": 17,
+        "inclusive": 146
+      },
+      {
+        "name": "0x2b3cc",
+        "self": 17,
+        "inclusive": 17
+      },
+      {
+        "name": "0x30074",
+        "self": 17,
+        "inclusive": 17
+      },
+      {
+        "name": "0x4287c",
+        "self": 17,
+        "inclusive": 17
+      },
+      {
+        "name": "<alloc::raw_vec::RawVecInner<_>>::reserve::do_reserve_and_handle::<alloc::alloc::Global>",
+        "self": 16,
+        "inclusive": 284
+      },
+      {
+        "name": "0x2a968",
+        "self": 16,
+        "inclusive": 16
+      },
+      {
+        "name": "0x2b4d8",
+        "self": 16,
+        "inclusive": 16
+      },
+      {
+        "name": "0x30050",
+        "self": 16,
+        "inclusive": 16
+      },
+      {
+        "name": "0x300a8",
+        "self": 16,
+        "inclusive": 16
+      },
+      {
+        "name": "0x3acdc",
+        "self": 16,
+        "inclusive": 16
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::parser::IntCase>",
+        "self": 16,
+        "inclusive": 173
+      },
+      {
+        "name": "0x3acfc",
+        "self": 15,
+        "inclusive": 15
+      },
+      {
+        "name": "0x16c1d4",
+        "self": 14,
+        "inclusive": 14
+      },
+      {
+        "name": "0x2aa08",
+        "self": 14,
+        "inclusive": 14
+      },
+      {
+        "name": "0x2b278",
+        "self": 14,
+        "inclusive": 14
+      },
+      {
+        "name": "0x2ffe0",
+        "self": 14,
+        "inclusive": 14
+      },
+      {
+        "name": "0x2a1c0",
+        "self": 13,
+        "inclusive": 13
+      },
+      {
+        "name": "0x2a22c",
+        "self": 13,
+        "inclusive": 13
+      },
+      {
+        "name": "0x2ffe4",
+        "self": 13,
+        "inclusive": 13
+      },
+      {
+        "name": "0x30048",
+        "self": 13,
+        "inclusive": 13
+      },
+      {
+        "name": "<alloc::vec::Vec<idealis_smt::parser::IntCase> as core::clone::Clone>::clone",
+        "self": 12,
+        "inclusive": 127
+      },
+      {
+        "name": "<idealis_smt::parser::Integer>::combine::<<idealis_smt::parser::Compiler>::term::{closure#6}>",
+        "self": 12,
+        "inclusive": 160
+      },
+      {
+        "name": "<idealis_smt::parser::Integer>::plain",
+        "self": 12,
+        "inclusive": 131
+      },
+      {
+        "name": "0x2b118",
+        "self": 12,
+        "inclusive": 12
+      },
+      {
+        "name": "0x30140",
+        "self": 12,
+        "inclusive": 12
+      },
+      {
+        "name": "0x30238",
+        "self": 12,
+        "inclusive": 12
+      },
+      {
+        "name": "0x2ff98",
+        "self": 11,
+        "inclusive": 11
+      },
+      {
+        "name": "0x35594",
+        "self": 11,
+        "inclusive": 11
+      },
+      {
+        "name": "idealis_smt::parser::conjunction",
+        "self": 11,
+        "inclusive": 79
+      },
+      {
+        "name": "0x2af28",
+        "self": 10,
+        "inclusive": 10
+      },
+      {
+        "name": "<alloc::sync::Arc<idealis_smt::Formula>>::drop_slow",
+        "self": 9,
+        "inclusive": 167
+      },
+      {
+        "name": "0x30154",
+        "self": 9,
+        "inclusive": 9
+      },
+      {
+        "name": "0x3a0fc",
+        "self": 9,
+        "inclusive": 9
+      },
+      {
+        "name": "0x3af48",
+        "self": 9,
+        "inclusive": 9
+      },
+      {
+        "name": "__posix_spawn",
+        "self": 8,
+        "inclusive": 8
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<idealis_smt::parser::Node>>::grow_one",
+        "self": 8,
+        "inclusive": 458
+      },
+      {
+        "name": "0x2ff54",
+        "self": 8,
+        "inclusive": 8
+      },
+      {
+        "name": "0x30278",
+        "self": 8,
+        "inclusive": 8
+      },
+      {
+        "name": "0x3561c",
+        "self": 8,
+        "inclusive": 8
+      },
+      {
+        "name": "<alloc::collections::btree::map::BTreeMap<alloc::string::String, num_bigint::bigint::BigInt>>::get::<alloc::string::String>",
+        "self": 7,
+        "inclusive": 14
+      },
+      {
+        "name": "0x16c1e0",
+        "self": 7,
+        "inclusive": 7
+      },
+      {
+        "name": "0x16c3b4",
+        "self": 7,
+        "inclusive": 7
+      },
+      {
+        "name": "0x2ab9c",
+        "self": 7,
+        "inclusive": 7
+      },
+      {
+        "name": "0x2ff9c",
+        "self": 7,
+        "inclusive": 7
+      },
+      {
+        "name": "0x30060",
+        "self": 7,
+        "inclusive": 7
+      },
+      {
+        "name": "0x3a694",
+        "self": 7,
+        "inclusive": 7
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::collections::btree::map::BTreeMap<usize, num_bigint::bigint::BigInt>>",
+        "self": 7,
+        "inclusive": 12
+      },
+      {
+        "name": "<idealis_smt::parser::Term>::integer",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "<num_bigint::bigint::BigInt as num_integer::Integer>::div_rem",
+        "self": 6,
+        "inclusive": 26
+      },
+      {
+        "name": "0x2a200",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "0x2b140",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "0x3008c",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "0x3a6f4",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "0x3ad20",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "0x3adb0",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<alloc::sync::Arc<idealis_smt::Formula>>>",
+        "self": 6,
+        "inclusive": 6
+      },
+      {
+        "name": "idealis_smt::parser::name",
+        "self": 6,
+        "inclusive": 42
+      },
+      {
+        "name": "<alloc::collections::btree::map::IntoIter<alloc::string::String, alloc::string::String>>::dying_next",
+        "self": 5,
+        "inclusive": 9
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<idealis_smt::parser::IntCase>>::grow_one",
+        "self": 5,
+        "inclusive": 28
+      },
+      {
+        "name": "<alloc::vec::Vec<alloc::sync::Arc<idealis_smt::Formula>>>::push_mut",
+        "self": 5,
+        "inclusive": 25
+      },
+      {
+        "name": "<num_bigint::big_digit::BigDigits>::normalize",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2accc",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2ad18",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2b128",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2b138",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2b148",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2b35c",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x2b3e4",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x35714",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x3a0f4",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "0x3a6bc",
+        "self": 5,
+        "inclusive": 5
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<idealis_smt::parser::IntCase>>",
+        "self": 5,
+        "inclusive": 114
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::Problem>",
+        "self": 5,
+        "inclusive": 67
+      },
+      {
+        "name": "0x2abc0",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x2abc8",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x2ae84",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x2af3c",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x2b1f8",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x2b248",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x2ffd8",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x355d4",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x356f0",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x3a740",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x3ad64",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "0x3ae48",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "core::fmt::write",
+        "self": 4,
+        "inclusive": 28
+      },
+      {
+        "name": "core::ptr::drop_glue::<[idealis_smt::parser::Node]>",
+        "self": 4,
+        "inclusive": 103
+      },
+      {
+        "name": "core::ptr::drop_glue::<core::iter::adapters::filter::Filter<alloc::vec::into_iter::IntoIter<alloc::sync::Arc<idealis_smt::Formula>>, idealis_smt::parser::conjunction::{closure#0}>>",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "num_bigint::biguint::multiplication::scalar_mul",
+        "self": 4,
+        "inclusive": 4
+      },
+      {
+        "name": "<alloc::collections::btree::map::BTreeMap<usize, num_bigint::bigint::BigInt> as core::convert::From<[(usize, num_bigint::bigint::BigInt); 1]>>::from",
+        "self": 3,
+        "inclusive": 63
+      },
+      {
+        "name": "0x2abd4",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2ac8c",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2afc0",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2b028",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2b120",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2b194",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2b27c",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2b3b8",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x2b424",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x30c00",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x35520",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x35560",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x355b0",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3562c",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x35768",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3577c",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3a0bc",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3a118",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3ad3c",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3ae20",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "0x3c5c",
+        "self": 3,
+        "inclusive": 3
+      },
+      {
+        "name": "<alloc::collections::btree::map::entry::Entry<alloc::string::String, num_bigint::bigint::BigInt>>::or_insert",
+        "self": 2,
+        "inclusive": 4
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<alloc::sync::Arc<idealis_smt::Formula>>>::grow_one",
+        "self": 2,
+        "inclusive": 53
+      },
+      {
+        "name": "<alloc::string::String as core::fmt::Write>::write_str.754",
+        "self": 2,
+        "inclusive": 24
+      },
+      {
+        "name": "0x16c134",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x16c1c4",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x16c1e4",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2abb4",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2abdc",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2ac58",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2ad24",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2ad94",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2ada0",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2af9c",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b024",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b19c",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b1bc",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b200",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b4f8",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b590",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b64c",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x2b728",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x30114",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x30158",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x317e8",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x31bf0",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x32934",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x352cc",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x35568",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x357e8",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3a6e0",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3a70c",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3a714",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3ad60",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3ad74",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3ad90",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "0x3aee8",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::collections::btree::map::BTreeMap<alloc::string::String, idealis_smt::parser::Term>>",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::into_iter::IntoIter<idealis_smt::parser::Term>>",
+        "self": 2,
+        "inclusive": 2
+      },
+      {
+        "name": "<alloc::collections::btree::map::IntoIter<alloc::string::String, idealis_smt::Variable>>::dying_next",
+        "self": 1,
+        "inclusive": 2
+      },
+      {
+        "name": "<alloc::vec::Vec<alloc::string::String> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<alloc::string::String, core::iter::adapters::map::Map<core::slice::iter::Iter<idealis_smt::parser::Node>, idealis_smt::parser::render>>>::from_iter",
+        "self": 1,
+        "inclusive": 12
+      },
+      {
+        "name": "<regex_syntax::hir::literal::Extractor>::extract",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x16c1d0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x16c1ec",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2a164",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2a1d4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2a1f0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2a960",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2a964",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2aaa4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ab84",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ab94",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ac64",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2aca8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2acdc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2acf8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ad14",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2aef4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2af4c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2afb8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2aff4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b014",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b130",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b1f0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b214",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b21c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b244",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b268",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b348",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b360",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b3b4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b3bc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b460",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b488",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b4f4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b5e8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b6bc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2b71c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ff40",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ff80",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ffbc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x2ffd0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x30004",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x300c4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x30148",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x301c4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x30ac0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x318bc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x318dc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x31fa4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x32870",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x336f0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x34148",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x34f5c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3525c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3552c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x355b4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x355b8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x355d8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x355dc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x355e8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35600",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35624",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35628",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35690",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x356a0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35728",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35748",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35778",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x35780",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a0cc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a0d0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a0dc",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a0ec",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a114",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a11c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a664",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a678",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a67c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a6b4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a6c8",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3a700",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3acd4",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3ad08",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3ad7c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3aef0",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3af14",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x4289c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "0x42b9c",
+        "self": 1,
+        "inclusive": 1
+      },
+      {
+        "name": "alloc::boxed::box_new_uninit.1190",
+        "self": 1,
+        "inclusive": 24
+      },
+      {
+        "name": "alloc::str::join_generic_copy::<str, u8, alloc::string::String>",
+        "self": 1,
+        "inclusive": 2
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<(idealis_smt::parser::Node, usize)>>",
+        "self": 1,
+        "inclusive": 132
+      },
+      {
+        "name": "core::slice::sort::stable::drift::sort::<(alloc::string::String, idealis_smt::Variable), <[(alloc::string::String, idealis_smt::Variable)]>::sort_by<<alloc::collections::btree::map::BTreeMap<alloc::string::String, idealis_smt::Variable> as core::iter::traits::collect::FromIterator<(alloc::string::String, idealis_smt::Variable)>>::from_iter<core::iter::adapters::map::Map<alloc::collections::btree::map::IntoIter<alloc::string::String, (idealis_smt::Variable, usize)>, idealis_smt::parser::compile::{closure#0}>>::{closure#0}>::{closure#0}>",
+        "self": 1,
+        "inclusive": 7
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<(idealis_smt::parser::Node, usize)>>::grow_one",
+        "self": 0,
+        "inclusive": 7
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<(idealis_smt::Problem, alloc::vec::Vec<idealis_smt::Assumption>)>>::grow_one",
+        "self": 0,
+        "inclusive": 2
+      },
+      {
+        "name": "<alloc::string::String as core::clone::Clone>::clone",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "<criterion::bencher::Bencher>::iter::<idealis_smt::script::Script, solver::cases::{closure#4}::{closure#0}>",
+        "self": 0,
+        "inclusive": 4974
+      },
+      {
+        "name": "<criterion::Criterion as core::default::Default>::default",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<criterion::Criterion>::configure_from_args",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "<criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::bench",
+        "self": 0,
+        "inclusive": 3566
+      },
+      {
+        "name": "<criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::profile",
+        "self": 0,
+        "inclusive": 4974
+      },
+      {
+        "name": "<criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::warm_up",
+        "self": 0,
+        "inclusive": 1408
+      },
+      {
+        "name": "<idealis_smt::Problem>::solve_with",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "<idealis_smt::script::Script>::parse",
+        "self": 0,
+        "inclusive": 4822
+      },
+      {
+        "name": "<idealis_smt::script::Script>::solve",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "<idealis_smt::solver::Solver>::assert",
+        "self": 0,
+        "inclusive": 1142
+      },
+      {
+        "name": "<idealis_smt::solver::Solver>::parse",
+        "self": 0,
+        "inclusive": 22
+      },
+      {
+        "name": "<regex_automata::meta::regex::Builder>::build",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "<regex::regex::string::Regex>::new",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "<std::process::Command>::output",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::initialize::<<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::get_or_init<criterion_plot::version>::{closure#0}, !>",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::initialize::<<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::get_or_init<criterion::default_plotting_backend::{closure#0}>::{closure#0}, !>",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<std::sync::once::Once>::call_once_force::<<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::initialize<<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::get_or_init<criterion_plot::version>::{closure#0}, !>::{closure#0}>::{closure#0}",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<std::sync::once::Once>::call_once_force::<<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::initialize<<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::get_or_init<criterion::default_plotting_backend::{closure#0}>::{closure#0}, !>::{closure#0}>::{closure#0}",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<std::sys::process::unix::common::Command>::spawn",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "<std::sys::sync::once::queue::Once>::call",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "0x1dbc7",
+        "self": 0,
+        "inclusive": 317
+      },
+      {
+        "name": "0x2aeab",
+        "self": 0,
+        "inclusive": 17
+      },
+      {
+        "name": "0x2aef3",
+        "self": 0,
+        "inclusive": 139
+      },
+      {
+        "name": "0x2af0b",
+        "self": 0,
+        "inclusive": 162
+      },
+      {
+        "name": "0x2b277",
+        "self": 0,
+        "inclusive": 141
+      },
+      {
+        "name": "0x2b52f",
+        "self": 0,
+        "inclusive": 88
+      },
+      {
+        "name": "0x3136b",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "0x31797",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "0x317e3",
+        "self": 0,
+        "inclusive": 4
+      },
+      {
+        "name": "0x32023",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "0x320cb",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3228f",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3393b",
+        "self": 0,
+        "inclusive": 116
+      },
+      {
+        "name": "0x339f7",
+        "self": 0,
+        "inclusive": 1
+      },
+      {
+        "name": "0x3418f",
+        "self": 0,
+        "inclusive": 201
+      },
+      {
+        "name": "0x3a6f7",
+        "self": 0,
+        "inclusive": 404
+      },
+      {
+        "name": "0x3ae4b",
+        "self": 0,
+        "inclusive": 69
+      },
+      {
+        "name": "0x3af13",
+        "self": 0,
+        "inclusive": 438
+      },
+      {
+        "name": "alloc::fmt::format::format_inner",
+        "self": 0,
+        "inclusive": 29
+      },
+      {
+        "name": "alloca::trampoline::<alloca::with_alloca<(), <criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::bench::{closure#0}>::{closure#0}>",
+        "self": 0,
+        "inclusive": 3566
+      },
+      {
+        "name": "c_with_alloca",
+        "self": 0,
+        "inclusive": 3566
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<(alloc::sync::Arc<idealis_smt::Formula>, bool)>>",
+        "self": 0,
+        "inclusive": 130
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::script::Script>",
+        "self": 0,
+        "inclusive": 157
+      },
+      {
+        "name": "core::slice::sort::stable::driftsort_main::<(alloc::string::String, idealis_smt::Variable), <[(alloc::string::String, idealis_smt::Variable)]>::sort_by<<alloc::collections::btree::map::BTreeMap<alloc::string::String, idealis_smt::Variable> as core::iter::traits::collect::FromIterator<(alloc::string::String, idealis_smt::Variable)>>::from_iter<core::iter::adapters::map::Map<alloc::collections::btree::map::IntoIter<alloc::string::String, (idealis_smt::Variable, usize)>, idealis_smt::parser::compile::{closure#0}>>::{closure#0}>::{closure#0}, alloc::vec::Vec<(alloc::string::String, idealis_smt::Variable)>>",
+        "self": 0,
+        "inclusive": 7
+      },
+      {
+        "name": "criterion_plot::version",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "idealis_smt::parser::render",
+        "self": 0,
+        "inclusive": 26
+      },
+      {
+        "name": "main",
+        "self": 0,
+        "inclusive": 4991
+      },
+      {
+        "name": "posix_spawn",
+        "self": 0,
+        "inclusive": 8
+      },
+      {
+        "name": "solver::cases",
+        "self": 0,
+        "inclusive": 4982
+      },
+      {
+        "name": "solver::main",
+        "self": 0,
+        "inclusive": 4991
+      },
+      {
+        "name": "start",
+        "self": 0,
+        "inclusive": 4991
+      },
+      {
+        "name": "std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>",
+        "self": 0,
+        "inclusive": 4991
+      }
+    ]
+  },
+  "cpu": {
+    "totalWeight": 4911030,
+    "hotspots": [
+      {
+        "name": "madvise",
+        "self": 312279,
+        "inclusive": 312279
+      },
+      {
+        "name": "idealis_smt::parser::parse",
+        "self": 301716,
+        "inclusive": 2005023
+      },
+      {
+        "name": "0x2a15c",
+        "self": 208022,
+        "inclusive": 208022
+      },
+      {
+        "name": "_platform_memmove",
+        "self": 201573,
+        "inclusive": 201573
+      },
+      {
+        "name": "_platform_memcmp",
+        "self": 164402,
+        "inclusive": 164402
+      },
+      {
+        "name": "0x2b134",
+        "self": 153816,
+        "inclusive": 153816
+      },
+      {
+        "name": "0x2b4fc",
+        "self": 146214,
+        "inclusive": 146214
+      },
+      {
+        "name": "0x2a1cc",
+        "self": 104493,
+        "inclusive": 104493
+      },
+      {
+        "name": "0x31994",
+        "self": 94676,
+        "inclusive": 94676
+      },
+      {
+        "name": "idealis_smt::parser::parse::node",
+        "self": 91275,
+        "inclusive": 466709
+      },
+      {
+        "name": "mach_absolute_time",
+        "self": 85782,
+        "inclusive": 85782
+      },
+      {
+        "name": "__bzero",
+        "self": 80633,
+        "inclusive": 80633
+      },
+      {
+        "name": "<idealis_smt::parser::Compiler>::term",
+        "self": 75457,
+        "inclusive": 1789664
+      },
+      {
+        "name": "0x2a958",
+        "self": 69017,
+        "inclusive": 69017
+      },
+      {
+        "name": "0x300e0",
+        "self": 68721,
+        "inclusive": 68721
+      },
+      {
+        "name": "0x2b738",
+        "self": 60904,
+        "inclusive": 60904
+      },
+      {
+        "name": "0x3acd0",
+        "self": 57111,
+        "inclusive": 57111
+      },
+      {
+        "name": "<alloc::raw_vec::RawVecInner>::finish_grow",
+        "self": 56301,
+        "inclusive": 788856
+      },
+      {
+        "name": "<idealis_smt::Problem>::parse",
+        "self": 55409,
+        "inclusive": 4575228
+      },
+      {
+        "name": "<num_bigint::bigint::BigInt as core::ops::arith::AddAssign>::add_assign",
+        "self": 50726,
+        "inclusive": 50726
+      },
+      {
+        "name": "0x3a0c8",
+        "self": 48745,
+        "inclusive": 48745
+      },
+      {
+        "name": "0x2ff94",
+        "self": 48302,
+        "inclusive": 48302
+      },
+      {
+        "name": "0x3003c",
+        "self": 45684,
+        "inclusive": 45684
+      },
+      {
+        "name": "<alloc::collections::btree::map::IntoIter<(usize, alloc::string::String), &clap_builder::builder::arg::Arg>>::dying_next",
+        "self": 45075,
+        "inclusive": 152755
+      },
+      {
+        "name": "0x2b3c4",
+        "self": 44337,
+        "inclusive": 44337
+      },
+      {
+        "name": "0x16c138",
+        "self": 43072,
+        "inclusive": 43072
+      },
+      {
+        "name": "0x2b1dc",
+        "self": 42482,
+        "inclusive": 42482
+      },
+      {
+        "name": "_platform_memset",
+        "self": 40987,
+        "inclusive": 40987
+      },
+      {
+        "name": "idealis_smt::parser::inequality",
+        "self": 39239,
+        "inclusive": 290278
+      },
+      {
+        "name": "<&num_bigint::bigint::BigInt as core::ops::arith::Mul<i64>>::mul",
+        "self": 37411,
+        "inclusive": 41317
+      },
+      {
+        "name": "0x2ff48",
+        "self": 35535,
+        "inclusive": 35535
+      },
+      {
+        "name": "0x2b190",
+        "self": 35501,
+        "inclusive": 35501
+      },
+      {
+        "name": "<idealis_smt::parser::Linear>::add",
+        "self": 35457,
+        "inclusive": 136352
+      },
+      {
+        "name": "0x16c1c8",
+        "self": 34734,
+        "inclusive": 34734
+      },
+      {
+        "name": "0x2b5f0",
+        "self": 34492,
+        "inclusive": 34492
+      },
+      {
+        "name": "0x2b34c",
+        "self": 34415,
+        "inclusive": 34415
+      },
+      {
+        "name": "0x301dc",
+        "self": 33358,
+        "inclusive": 33358
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<idealis_smt::parser::Node>>",
+        "self": 32313,
+        "inclusive": 594994
+      },
+      {
+        "name": "0x3a134",
+        "self": 31465,
+        "inclusive": 31465
+      },
+      {
+        "name": "0x2aa10",
+        "self": 31350,
+        "inclusive": 31350
+      },
+      {
+        "name": "0x2b258",
+        "self": 31342,
+        "inclusive": 31342
+      },
+      {
+        "name": "0x3acf4",
+        "self": 31062,
+        "inclusive": 31062
+      },
+      {
+        "name": "0x2b12c",
+        "self": 30608,
+        "inclusive": 30608
+      },
+      {
+        "name": "0x3ad1c",
+        "self": 30554,
+        "inclusive": 30554
+      },
+      {
+        "name": "0x3a0e8",
+        "self": 29440,
+        "inclusive": 29440
+      },
+      {
+        "name": "0x2a230",
+        "self": 28702,
+        "inclusive": 28702
+      },
+      {
+        "name": "0x2b1f4",
+        "self": 27573,
+        "inclusive": 27573
+      },
+      {
+        "name": "0x2b420",
+        "self": 26623,
+        "inclusive": 26623
+      },
+      {
+        "name": "0x301c8",
+        "self": 25657,
+        "inclusive": 25657
+      },
+      {
+        "name": "0x30274",
+        "self": 24662,
+        "inclusive": 24662
+      },
+      {
+        "name": "0x3a10c",
+        "self": 23600,
+        "inclusive": 23600
+      },
+      {
+        "name": "0x30058",
+        "self": 22669,
+        "inclusive": 22669
+      },
+      {
+        "name": "0x2a1e4",
+        "self": 22281,
+        "inclusive": 22281
+      },
+      {
+        "name": "idealis_smt::parser::collect_constants",
+        "self": 21367,
+        "inclusive": 74874
+      },
+      {
+        "name": "0x2b218",
+        "self": 21337,
+        "inclusive": 21337
+      },
+      {
+        "name": "idealis_smt::parser::equality",
+        "self": 20654,
+        "inclusive": 620583
+      },
+      {
+        "name": "0x30150",
+        "self": 19780,
+        "inclusive": 19780
+      },
+      {
+        "name": "0x2aa94",
+        "self": 19765,
+        "inclusive": 19765
+      },
+      {
+        "name": "<idealis_smt::parser::Linear as core::clone::Clone>::clone",
+        "self": 19702,
+        "inclusive": 143161
+      },
+      {
+        "name": "0x30110",
+        "self": 19675,
+        "inclusive": 19675
+      },
+      {
+        "name": "<alloc::collections::btree::map::BTreeMap<_, _, _> as core::clone::Clone>::clone::clone_subtree::<usize, num_bigint::bigint::BigInt, alloc::alloc::Global>",
+        "self": 19648,
+        "inclusive": 123459
+      },
+      {
+        "name": "0x2b220",
+        "self": 19629,
+        "inclusive": 19629
+      },
+      {
+        "name": "0x30038",
+        "self": 19566,
+        "inclusive": 19566
+      },
+      {
+        "name": "0x2aaa0",
+        "self": 19561,
+        "inclusive": 19561
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::Formula>",
+        "self": 19392,
+        "inclusive": 160120
+      },
+      {
+        "name": "0x300f8",
+        "self": 19227,
+        "inclusive": 19227
+      },
+      {
+        "name": "num_bigint::biguint::division::div_rem_cow",
+        "self": 18682,
+        "inclusive": 18682
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<idealis_smt::parser::Term>>",
+        "self": 18656,
+        "inclusive": 178940
+      },
+      {
+        "name": "0x2ffa4",
+        "self": 17757,
+        "inclusive": 17757
+      },
+      {
+        "name": "0x2aa04",
+        "self": 17743,
+        "inclusive": 17743
+      },
+      {
+        "name": "core::iter::adapters::try_process::<core::iter::adapters::map::Map<core::slice::iter::Iter<idealis_smt::parser::Node>, <idealis_smt::parser::Compiler>::term::{closure#3}>, idealis_smt::parser::Term, core::result::Result<core::convert::Infallible, idealis_smt::Error>, <core::result::Result<alloc::vec::Vec<idealis_smt::parser::Term>, idealis_smt::Error> as core::iter::traits::collect::FromIterator<core::result::Result<idealis_smt::parser::Term, idealis_smt::Error>>>::from_iter<core::iter::adapters::map::Map<core::slice::iter::Iter<idealis_smt::parser::Node>, <idealis_smt::parser::Compiler>::term::{closure#3}>>::{closure#0}, alloc::vec::Vec<idealis_smt::parser::Term>>",
+        "self": 17718,
+        "inclusive": 800027
+      },
+      {
+        "name": "idealis_smt::parser::constant",
+        "self": 17716,
+        "inclusive": 71843
+      },
+      {
+        "name": "<alloc::vec::Vec<idealis_smt::parser::Node> as core::clone::Clone>::clone",
+        "self": 16779,
+        "inclusive": 143960
+      },
+      {
+        "name": "0x30074",
+        "self": 16718,
+        "inclusive": 16718
+      },
+      {
+        "name": "0x4287c",
+        "self": 16692,
+        "inclusive": 16692
+      },
+      {
+        "name": "0x2b3cc",
+        "self": 16388,
+        "inclusive": 16388
+      },
+      {
+        "name": "0x3acdc",
+        "self": 15782,
+        "inclusive": 15782
+      },
+      {
+        "name": "0x2b4d8",
+        "self": 15781,
+        "inclusive": 15781
+      },
+      {
+        "name": "0x30050",
+        "self": 15737,
+        "inclusive": 15737
+      },
+      {
+        "name": "0x300a8",
+        "self": 15699,
+        "inclusive": 15699
+      },
+      {
+        "name": "0x2a968",
+        "self": 15686,
+        "inclusive": 15686
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::parser::IntCase>",
+        "self": 15626,
+        "inclusive": 169425
+      },
+      {
+        "name": "<alloc::raw_vec::RawVecInner<_>>::reserve::do_reserve_and_handle::<alloc::alloc::Global>",
+        "self": 15086,
+        "inclusive": 279029
+      },
+      {
+        "name": "0x3acfc",
+        "self": 14729,
+        "inclusive": 14729
+      },
+      {
+        "name": "__posix_spawn",
+        "self": 14583,
+        "inclusive": 14583
+      },
+      {
+        "name": "0x16c1d4",
+        "self": 13837,
+        "inclusive": 13837
+      },
+      {
+        "name": "0x2ffe0",
+        "self": 13804,
+        "inclusive": 13804
+      },
+      {
+        "name": "0x2aa08",
+        "self": 13773,
+        "inclusive": 13773
+      },
+      {
+        "name": "0x2b278",
+        "self": 13754,
+        "inclusive": 13754
+      },
+      {
+        "name": "0x2a1c0",
+        "self": 12897,
+        "inclusive": 12897
+      },
+      {
+        "name": "0x2ffe4",
+        "self": 12884,
+        "inclusive": 12884
+      },
+      {
+        "name": "0x2a22c",
+        "self": 12811,
+        "inclusive": 12811
+      },
+      {
+        "name": "0x30048",
+        "self": 12795,
+        "inclusive": 12795
+      },
+      {
+        "name": "0x30140",
+        "self": 11874,
+        "inclusive": 11874
+      },
+      {
+        "name": "0x30238",
+        "self": 11836,
+        "inclusive": 11836
+      },
+      {
+        "name": "0x2b118",
+        "self": 11815,
+        "inclusive": 11815
+      },
+      {
+        "name": "<idealis_smt::parser::Integer>::combine::<<idealis_smt::parser::Compiler>::term::{closure#6}>",
+        "self": 11812,
+        "inclusive": 156740
+      },
+      {
+        "name": "<alloc::vec::Vec<idealis_smt::parser::IntCase> as core::clone::Clone>::clone",
+        "self": 11796,
+        "inclusive": 124425
+      },
+      {
+        "name": "<idealis_smt::parser::Integer>::plain",
+        "self": 11760,
+        "inclusive": 128583
+      },
+      {
+        "name": "0x35594",
+        "self": 10824,
+        "inclusive": 10824
+      },
+      {
+        "name": "0x2ff98",
+        "self": 10808,
+        "inclusive": 10808
+      },
+      {
+        "name": "idealis_smt::parser::conjunction",
+        "self": 10734,
+        "inclusive": 77407
+      },
+      {
+        "name": "0x2af28",
+        "self": 9828,
+        "inclusive": 9828
+      },
+      {
+        "name": "<alloc::sync::Arc<idealis_smt::Formula>>::drop_slow",
+        "self": 8921,
+        "inclusive": 164039
+      },
+      {
+        "name": "0x3af48",
+        "self": 8904,
+        "inclusive": 8904
+      },
+      {
+        "name": "0x3a0fc",
+        "self": 8803,
+        "inclusive": 8803
+      },
+      {
+        "name": "0x30154",
+        "self": 8298,
+        "inclusive": 8298
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<idealis_smt::parser::Node>>::grow_one",
+        "self": 8034,
+        "inclusive": 451617
+      },
+      {
+        "name": "0x3561c",
+        "self": 7919,
+        "inclusive": 7919
+      },
+      {
+        "name": "0x30278",
+        "self": 7902,
+        "inclusive": 7902
+      },
+      {
+        "name": "0x2ff54",
+        "self": 7890,
+        "inclusive": 7890
+      },
+      {
+        "name": "0x3a694",
+        "self": 6929,
+        "inclusive": 6929
+      },
+      {
+        "name": "0x16c1e0",
+        "self": 6917,
+        "inclusive": 6917
+      },
+      {
+        "name": "0x16c3b4",
+        "self": 6910,
+        "inclusive": 6910
+      },
+      {
+        "name": "0x2ab9c",
+        "self": 6909,
+        "inclusive": 6909
+      },
+      {
+        "name": "0x2ff9c",
+        "self": 6901,
+        "inclusive": 6901
+      },
+      {
+        "name": "0x30060",
+        "self": 6892,
+        "inclusive": 6892
+      },
+      {
+        "name": "<alloc::collections::btree::map::BTreeMap<alloc::string::String, num_bigint::bigint::BigInt>>::get::<alloc::string::String>",
+        "self": 6878,
+        "inclusive": 13452
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::collections::btree::map::BTreeMap<usize, num_bigint::bigint::BigInt>>",
+        "self": 6873,
+        "inclusive": 11780
+      },
+      {
+        "name": "0x2a200",
+        "self": 5964,
+        "inclusive": 5964
+      },
+      {
+        "name": "idealis_smt::parser::name",
+        "self": 5949,
+        "inclusive": 41384
+      },
+      {
+        "name": "0x3a6f4",
+        "self": 5943,
+        "inclusive": 5943
+      },
+      {
+        "name": "0x3adb0",
+        "self": 5936,
+        "inclusive": 5936
+      },
+      {
+        "name": "0x2b140",
+        "self": 5919,
+        "inclusive": 5919
+      },
+      {
+        "name": "<num_bigint::bigint::BigInt as num_integer::Integer>::div_rem",
+        "self": 5880,
+        "inclusive": 25471
+      },
+      {
+        "name": "<idealis_smt::parser::Term>::integer",
+        "self": 5876,
+        "inclusive": 5876
+      },
+      {
+        "name": "0x3008c",
+        "self": 5876,
+        "inclusive": 5876
+      },
+      {
+        "name": "0x3ad20",
+        "self": 5876,
+        "inclusive": 5876
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<alloc::sync::Arc<idealis_smt::Formula>>>",
+        "self": 5830,
+        "inclusive": 5830
+      },
+      {
+        "name": "0x3a6bc",
+        "self": 4954,
+        "inclusive": 4954
+      },
+      {
+        "name": "0x2accc",
+        "self": 4952,
+        "inclusive": 4952
+      },
+      {
+        "name": "0x35714",
+        "self": 4942,
+        "inclusive": 4942
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<idealis_smt::parser::IntCase>>",
+        "self": 4931,
+        "inclusive": 111844
+      },
+      {
+        "name": "0x2b128",
+        "self": 4930,
+        "inclusive": 4930
+      },
+      {
+        "name": "0x2b138",
+        "self": 4927,
+        "inclusive": 4927
+      },
+      {
+        "name": "0x3a0f4",
+        "self": 4923,
+        "inclusive": 4923
+      },
+      {
+        "name": "0x2ad18",
+        "self": 4912,
+        "inclusive": 4912
+      },
+      {
+        "name": "<alloc::vec::Vec<alloc::sync::Arc<idealis_smt::Formula>>>::push_mut",
+        "self": 4910,
+        "inclusive": 24570
+      },
+      {
+        "name": "0x2b3e4",
+        "self": 4908,
+        "inclusive": 4908
+      },
+      {
+        "name": "0x2b148",
+        "self": 4891,
+        "inclusive": 4891
+      },
+      {
+        "name": "<num_bigint::big_digit::BigDigits>::normalize",
+        "self": 4845,
+        "inclusive": 4845
+      },
+      {
+        "name": "<alloc::collections::btree::map::IntoIter<alloc::string::String, alloc::string::String>>::dying_next",
+        "self": 4748,
+        "inclusive": 8678
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::Problem>",
+        "self": 4634,
+        "inclusive": 65686
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<idealis_smt::parser::IntCase>>::grow_one",
+        "self": 4607,
+        "inclusive": 27107
+      },
+      {
+        "name": "0x2b35c",
+        "self": 4574,
+        "inclusive": 4574
+      },
+      {
+        "name": "core::fmt::write",
+        "self": 3984,
+        "inclusive": 27138
+      },
+      {
+        "name": "0x2af3c",
+        "self": 3979,
+        "inclusive": 3979
+      },
+      {
+        "name": "0x2abc8",
+        "self": 3978,
+        "inclusive": 3978
+      },
+      {
+        "name": "0x2ffd8",
+        "self": 3964,
+        "inclusive": 3964
+      },
+      {
+        "name": "0x3ae48",
+        "self": 3963,
+        "inclusive": 3963
+      },
+      {
+        "name": "0x3ad64",
+        "self": 3961,
+        "inclusive": 3961
+      },
+      {
+        "name": "0x2ae84",
+        "self": 3960,
+        "inclusive": 3960
+      },
+      {
+        "name": "0x2b248",
+        "self": 3957,
+        "inclusive": 3957
+      },
+      {
+        "name": "0x356f0",
+        "self": 3956,
+        "inclusive": 3956
+      },
+      {
+        "name": "0x3a740",
+        "self": 3955,
+        "inclusive": 3955
+      },
+      {
+        "name": "0x2b1f8",
+        "self": 3948,
+        "inclusive": 3948
+      },
+      {
+        "name": "0x2abc0",
+        "self": 3946,
+        "inclusive": 3946
+      },
+      {
+        "name": "0x355d4",
+        "self": 3942,
+        "inclusive": 3942
+      },
+      {
+        "name": "core::ptr::drop_glue::<[idealis_smt::parser::Node]>",
+        "self": 3931,
+        "inclusive": 101045
+      },
+      {
+        "name": "core::ptr::drop_glue::<core::iter::adapters::filter::Filter<alloc::vec::into_iter::IntoIter<alloc::sync::Arc<idealis_smt::Formula>>, idealis_smt::parser::conjunction::{closure#0}>>",
+        "self": 3912,
+        "inclusive": 3912
+      },
+      {
+        "name": "num_bigint::biguint::multiplication::scalar_mul",
+        "self": 3906,
+        "inclusive": 3906
+      },
+      {
+        "name": "0x2b194",
+        "self": 2995,
+        "inclusive": 2995
+      },
+      {
+        "name": "0x355b0",
+        "self": 2986,
+        "inclusive": 2986
+      },
+      {
+        "name": "0x35768",
+        "self": 2983,
+        "inclusive": 2983
+      },
+      {
+        "name": "0x2abd4",
+        "self": 2981,
+        "inclusive": 2981
+      },
+      {
+        "name": "0x2afc0",
+        "self": 2977,
+        "inclusive": 2977
+      },
+      {
+        "name": "0x3562c",
+        "self": 2977,
+        "inclusive": 2977
+      },
+      {
+        "name": "0x2ac8c",
+        "self": 2976,
+        "inclusive": 2976
+      },
+      {
+        "name": "0x30c00",
+        "self": 2972,
+        "inclusive": 2972
+      },
+      {
+        "name": "0x3a0bc",
+        "self": 2970,
+        "inclusive": 2970
+      },
+      {
+        "name": "0x3ae20",
+        "self": 2968,
+        "inclusive": 2968
+      },
+      {
+        "name": "0x35520",
+        "self": 2966,
+        "inclusive": 2966
+      },
+      {
+        "name": "0x3c5c",
+        "self": 2966,
+        "inclusive": 2966
+      },
+      {
+        "name": "0x3a118",
+        "self": 2965,
+        "inclusive": 2965
+      },
+      {
+        "name": "0x2b028",
+        "self": 2964,
+        "inclusive": 2964
+      },
+      {
+        "name": "0x2b27c",
+        "self": 2963,
+        "inclusive": 2963
+      },
+      {
+        "name": "0x3ad3c",
+        "self": 2962,
+        "inclusive": 2962
+      },
+      {
+        "name": "0x35560",
+        "self": 2959,
+        "inclusive": 2959
+      },
+      {
+        "name": "0x2b424",
+        "self": 2949,
+        "inclusive": 2949
+      },
+      {
+        "name": "0x2b3b8",
+        "self": 2946,
+        "inclusive": 2946
+      },
+      {
+        "name": "0x2b120",
+        "self": 2944,
+        "inclusive": 2944
+      },
+      {
+        "name": "0x3577c",
+        "self": 2934,
+        "inclusive": 2934
+      },
+      {
+        "name": "<alloc::collections::btree::map::BTreeMap<usize, num_bigint::bigint::BigInt> as core::convert::From<[(usize, num_bigint::bigint::BigInt); 1]>>::from",
+        "self": 2927,
+        "inclusive": 61751
+      },
+      {
+        "name": "0x3aee8",
+        "self": 2076,
+        "inclusive": 2076
+      },
+      {
+        "name": "0x2ad24",
+        "self": 1990,
+        "inclusive": 1990
+      },
+      {
+        "name": "0x3a6e0",
+        "self": 1989,
+        "inclusive": 1989
+      },
+      {
+        "name": "0x3ad90",
+        "self": 1989,
+        "inclusive": 1989
+      },
+      {
+        "name": "0x16c1e4",
+        "self": 1984,
+        "inclusive": 1984
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::into_iter::IntoIter<idealis_smt::parser::Term>>",
+        "self": 1984,
+        "inclusive": 1984
+      },
+      {
+        "name": "0x2b4f8",
+        "self": 1983,
+        "inclusive": 1983
+      },
+      {
+        "name": "0x2abdc",
+        "self": 1982,
+        "inclusive": 1982
+      },
+      {
+        "name": "0x2abb4",
+        "self": 1981,
+        "inclusive": 1981
+      },
+      {
+        "name": "0x3a714",
+        "self": 1981,
+        "inclusive": 1981
+      },
+      {
+        "name": "0x2b200",
+        "self": 1980,
+        "inclusive": 1980
+      },
+      {
+        "name": "0x3a70c",
+        "self": 1980,
+        "inclusive": 1980
+      },
+      {
+        "name": "0x2b590",
+        "self": 1977,
+        "inclusive": 1977
+      },
+      {
+        "name": "0x3ad74",
+        "self": 1977,
+        "inclusive": 1977
+      },
+      {
+        "name": "0x16c134",
+        "self": 1975,
+        "inclusive": 1975
+      },
+      {
+        "name": "0x2ad94",
+        "self": 1975,
+        "inclusive": 1975
+      },
+      {
+        "name": "0x2b19c",
+        "self": 1975,
+        "inclusive": 1975
+      },
+      {
+        "name": "0x30158",
+        "self": 1975,
+        "inclusive": 1975
+      },
+      {
+        "name": "0x16c1c4",
+        "self": 1974,
+        "inclusive": 1974
+      },
+      {
+        "name": "0x31bf0",
+        "self": 1974,
+        "inclusive": 1974
+      },
+      {
+        "name": "0x2af9c",
+        "self": 1972,
+        "inclusive": 1972
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::collections::btree::map::BTreeMap<alloc::string::String, idealis_smt::parser::Term>>",
+        "self": 1971,
+        "inclusive": 1971
+      },
+      {
+        "name": "0x2b1bc",
+        "self": 1970,
+        "inclusive": 1970
+      },
+      {
+        "name": "0x357e8",
+        "self": 1970,
+        "inclusive": 1970
+      },
+      {
+        "name": "0x3ad60",
+        "self": 1970,
+        "inclusive": 1970
+      },
+      {
+        "name": "<alloc::collections::btree::map::entry::Entry<alloc::string::String, num_bigint::bigint::BigInt>>::or_insert",
+        "self": 1966,
+        "inclusive": 3954
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<alloc::sync::Arc<idealis_smt::Formula>>>::grow_one",
+        "self": 1965,
+        "inclusive": 51886
+      },
+      {
+        "name": "0x32934",
+        "self": 1965,
+        "inclusive": 1965
+      },
+      {
+        "name": "<alloc::string::String as core::fmt::Write>::write_str.754",
+        "self": 1964,
+        "inclusive": 23154
+      },
+      {
+        "name": "0x2b024",
+        "self": 1964,
+        "inclusive": 1964
+      },
+      {
+        "name": "0x35568",
+        "self": 1964,
+        "inclusive": 1964
+      },
+      {
+        "name": "0x2b64c",
+        "self": 1963,
+        "inclusive": 1963
+      },
+      {
+        "name": "0x352cc",
+        "self": 1955,
+        "inclusive": 1955
+      },
+      {
+        "name": "0x2b728",
+        "self": 1953,
+        "inclusive": 1953
+      },
+      {
+        "name": "0x30114",
+        "self": 1813,
+        "inclusive": 1813
+      },
+      {
+        "name": "0x2ada0",
+        "self": 1678,
+        "inclusive": 1678
+      },
+      {
+        "name": "0x2ac58",
+        "self": 1636,
+        "inclusive": 1636
+      },
+      {
+        "name": "0x317e8",
+        "self": 1466,
+        "inclusive": 1466
+      },
+      {
+        "name": "0x3525c",
+        "self": 1056,
+        "inclusive": 1056
+      },
+      {
+        "name": "0x2b6bc",
+        "self": 1003,
+        "inclusive": 1003
+      },
+      {
+        "name": "0x300c4",
+        "self": 1002,
+        "inclusive": 1002
+      },
+      {
+        "name": "0x2aef4",
+        "self": 1000,
+        "inclusive": 1000
+      },
+      {
+        "name": "0x2b488",
+        "self": 1000,
+        "inclusive": 1000
+      },
+      {
+        "name": "0x336f0",
+        "self": 1000,
+        "inclusive": 1000
+      },
+      {
+        "name": "0x3ad7c",
+        "self": 1000,
+        "inclusive": 1000
+      },
+      {
+        "name": "0x35600",
+        "self": 999,
+        "inclusive": 999
+      },
+      {
+        "name": "0x3a67c",
+        "self": 999,
+        "inclusive": 999
+      },
+      {
+        "name": "0x318bc",
+        "self": 998,
+        "inclusive": 998
+      },
+      {
+        "name": "0x2b014",
+        "self": 997,
+        "inclusive": 997
+      },
+      {
+        "name": "0x30148",
+        "self": 997,
+        "inclusive": 997
+      },
+      {
+        "name": "0x3a114",
+        "self": 995,
+        "inclusive": 995
+      },
+      {
+        "name": "0x42b9c",
+        "self": 995,
+        "inclusive": 995
+      },
+      {
+        "name": "0x2acdc",
+        "self": 994,
+        "inclusive": 994
+      },
+      {
+        "name": "0x2aff4",
+        "self": 994,
+        "inclusive": 994
+      },
+      {
+        "name": "0x318dc",
+        "self": 994,
+        "inclusive": 994
+      },
+      {
+        "name": "0x3552c",
+        "self": 994,
+        "inclusive": 994
+      },
+      {
+        "name": "0x356a0",
+        "self": 994,
+        "inclusive": 994
+      },
+      {
+        "name": "0x3a0cc",
+        "self": 994,
+        "inclusive": 994
+      },
+      {
+        "name": "0x2a960",
+        "self": 993,
+        "inclusive": 993
+      },
+      {
+        "name": "0x2aca8",
+        "self": 993,
+        "inclusive": 993
+      },
+      {
+        "name": "0x2afb8",
+        "self": 993,
+        "inclusive": 993
+      },
+      {
+        "name": "0x355b4",
+        "self": 993,
+        "inclusive": 993
+      },
+      {
+        "name": "0x35628",
+        "self": 993,
+        "inclusive": 993
+      },
+      {
+        "name": "0x35748",
+        "self": 993,
+        "inclusive": 993
+      },
+      {
+        "name": "alloc::str::join_generic_copy::<str, u8, alloc::string::String>",
+        "self": 993,
+        "inclusive": 1975
+      },
+      {
+        "name": "<alloc::collections::btree::map::IntoIter<alloc::string::String, idealis_smt::Variable>>::dying_next",
+        "self": 992,
+        "inclusive": 1982
+      },
+      {
+        "name": "0x2b268",
+        "self": 992,
+        "inclusive": 992
+      },
+      {
+        "name": "0x31fa4",
+        "self": 992,
+        "inclusive": 992
+      },
+      {
+        "name": "0x34148",
+        "self": 992,
+        "inclusive": 992
+      },
+      {
+        "name": "<alloc::vec::Vec<alloc::string::String> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<alloc::string::String, core::iter::adapters::map::Map<core::slice::iter::Iter<idealis_smt::parser::Node>, idealis_smt::parser::render>>>::from_iter",
+        "self": 991,
+        "inclusive": 11888
+      },
+      {
+        "name": "0x2af4c",
+        "self": 991,
+        "inclusive": 991
+      },
+      {
+        "name": "0x3a664",
+        "self": 991,
+        "inclusive": 991
+      },
+      {
+        "name": "0x16c1d0",
+        "self": 990,
+        "inclusive": 990
+      },
+      {
+        "name": "0x2b3bc",
+        "self": 990,
+        "inclusive": 990
+      },
+      {
+        "name": "0x2b1f0",
+        "self": 989,
+        "inclusive": 989
+      },
+      {
+        "name": "0x30004",
+        "self": 989,
+        "inclusive": 989
+      },
+      {
+        "name": "0x355e8",
+        "self": 989,
+        "inclusive": 989
+      },
+      {
+        "name": "0x35690",
+        "self": 989,
+        "inclusive": 989
+      },
+      {
+        "name": "0x3a0d0",
+        "self": 989,
+        "inclusive": 989
+      },
+      {
+        "name": "0x3af14",
+        "self": 989,
+        "inclusive": 989
+      },
+      {
+        "name": "0x2b21c",
+        "self": 988,
+        "inclusive": 988
+      },
+      {
+        "name": "0x3a6c8",
+        "self": 988,
+        "inclusive": 988
+      },
+      {
+        "name": "0x2a1d4",
+        "self": 987,
+        "inclusive": 987
+      },
+      {
+        "name": "0x2a964",
+        "self": 987,
+        "inclusive": 987
+      },
+      {
+        "name": "0x2b130",
+        "self": 987,
+        "inclusive": 987
+      },
+      {
+        "name": "0x355dc",
+        "self": 987,
+        "inclusive": 987
+      },
+      {
+        "name": "0x3aef0",
+        "self": 986,
+        "inclusive": 986
+      },
+      {
+        "name": "0x2ac64",
+        "self": 985,
+        "inclusive": 985
+      },
+      {
+        "name": "0x2acf8",
+        "self": 985,
+        "inclusive": 985
+      },
+      {
+        "name": "0x32870",
+        "self": 985,
+        "inclusive": 985
+      },
+      {
+        "name": "0x34f5c",
+        "self": 985,
+        "inclusive": 985
+      },
+      {
+        "name": "0x3a700",
+        "self": 985,
+        "inclusive": 985
+      },
+      {
+        "name": "alloc::boxed::box_new_uninit.1190",
+        "self": 985,
+        "inclusive": 23531
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<(idealis_smt::parser::Node, usize)>>",
+        "self": 985,
+        "inclusive": 129479
+      },
+      {
+        "name": "0x2ab94",
+        "self": 984,
+        "inclusive": 984
+      },
+      {
+        "name": "0x2b5e8",
+        "self": 984,
+        "inclusive": 984
+      },
+      {
+        "name": "0x2ffbc",
+        "self": 984,
+        "inclusive": 984
+      },
+      {
+        "name": "0x35728",
+        "self": 984,
+        "inclusive": 984
+      },
+      {
+        "name": "0x2b460",
+        "self": 983,
+        "inclusive": 983
+      },
+      {
+        "name": "0x2b4f4",
+        "self": 983,
+        "inclusive": 983
+      },
+      {
+        "name": "0x355b8",
+        "self": 983,
+        "inclusive": 983
+      },
+      {
+        "name": "0x35780",
+        "self": 983,
+        "inclusive": 983
+      },
+      {
+        "name": "0x2a164",
+        "self": 982,
+        "inclusive": 982
+      },
+      {
+        "name": "0x2ad14",
+        "self": 982,
+        "inclusive": 982
+      },
+      {
+        "name": "0x3a0dc",
+        "self": 982,
+        "inclusive": 982
+      },
+      {
+        "name": "0x3a11c",
+        "self": 982,
+        "inclusive": 982
+      },
+      {
+        "name": "0x4289c",
+        "self": 982,
+        "inclusive": 982
+      },
+      {
+        "name": "core::slice::sort::stable::drift::sort::<(alloc::string::String, idealis_smt::Variable), <[(alloc::string::String, idealis_smt::Variable)]>::sort_by<<alloc::collections::btree::map::BTreeMap<alloc::string::String, idealis_smt::Variable> as core::iter::traits::collect::FromIterator<(alloc::string::String, idealis_smt::Variable)>>::from_iter<core::iter::adapters::map::Map<alloc::collections::btree::map::IntoIter<alloc::string::String, (idealis_smt::Variable, usize)>, idealis_smt::parser::compile::{closure#0}>>::{closure#0}>::{closure#0}>",
+        "self": 982,
+        "inclusive": 6872
+      },
+      {
+        "name": "0x2ff40",
+        "self": 981,
+        "inclusive": 981
+      },
+      {
+        "name": "0x35624",
+        "self": 981,
+        "inclusive": 981
+      },
+      {
+        "name": "0x3a678",
+        "self": 981,
+        "inclusive": 981
+      },
+      {
+        "name": "0x3a6b4",
+        "self": 981,
+        "inclusive": 981
+      },
+      {
+        "name": "0x3a0ec",
+        "self": 980,
+        "inclusive": 980
+      },
+      {
+        "name": "0x2b3b4",
+        "self": 979,
+        "inclusive": 979
+      },
+      {
+        "name": "0x2ab84",
+        "self": 978,
+        "inclusive": 978
+      },
+      {
+        "name": "0x2b214",
+        "self": 978,
+        "inclusive": 978
+      },
+      {
+        "name": "0x35778",
+        "self": 977,
+        "inclusive": 977
+      },
+      {
+        "name": "0x355d8",
+        "self": 975,
+        "inclusive": 975
+      },
+      {
+        "name": "0x2aaa4",
+        "self": 972,
+        "inclusive": 972
+      },
+      {
+        "name": "0x3ad08",
+        "self": 966,
+        "inclusive": 966
+      },
+      {
+        "name": "0x16c1ec",
+        "self": 965,
+        "inclusive": 965
+      },
+      {
+        "name": "0x2a1f0",
+        "self": 961,
+        "inclusive": 961
+      },
+      {
+        "name": "0x2b360",
+        "self": 956,
+        "inclusive": 956
+      },
+      {
+        "name": "0x2ff80",
+        "self": 916,
+        "inclusive": 916
+      },
+      {
+        "name": "0x30ac0",
+        "self": 894,
+        "inclusive": 894
+      },
+      {
+        "name": "0x2ffd0",
+        "self": 820,
+        "inclusive": 820
+      },
+      {
+        "name": "<regex_syntax::hir::literal::Extractor>::extract",
+        "self": 726,
+        "inclusive": 726
+      },
+      {
+        "name": "0x2b244",
+        "self": 675,
+        "inclusive": 675
+      },
+      {
+        "name": "0x2b71c",
+        "self": 668,
+        "inclusive": 668
+      },
+      {
+        "name": "0x3acd4",
+        "self": 618,
+        "inclusive": 618
+      },
+      {
+        "name": "0x301c4",
+        "self": 593,
+        "inclusive": 593
+      },
+      {
+        "name": "0x2b348",
+        "self": 581,
+        "inclusive": 581
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<(idealis_smt::parser::Node, usize)>>::grow_one",
+        "self": 0,
+        "inclusive": 6925
+      },
+      {
+        "name": "<alloc::raw_vec::RawVec<(idealis_smt::Problem, alloc::vec::Vec<idealis_smt::Assumption>)>>::grow_one",
+        "self": 0,
+        "inclusive": 1984
+      },
+      {
+        "name": "<alloc::string::String as core::clone::Clone>::clone",
+        "self": 0,
+        "inclusive": 992
+      },
+      {
+        "name": "<criterion::bencher::Bencher>::iter::<idealis_smt::script::Script, solver::cases::{closure#4}::{closure#0}>",
+        "self": 0,
+        "inclusive": 4887919
+      },
+      {
+        "name": "<criterion::Criterion as core::default::Default>::default",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<criterion::Criterion>::configure_from_args",
+        "self": 0,
+        "inclusive": 726
+      },
+      {
+        "name": "<criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::bench",
+        "self": 0,
+        "inclusive": 3499573
+      },
+      {
+        "name": "<criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::profile",
+        "self": 0,
+        "inclusive": 4887919
+      },
+      {
+        "name": "<criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::warm_up",
+        "self": 0,
+        "inclusive": 1388346
+      },
+      {
+        "name": "<idealis_smt::Problem>::solve_with",
+        "self": 0,
+        "inclusive": 978
+      },
+      {
+        "name": "<idealis_smt::script::Script>::parse",
+        "self": 0,
+        "inclusive": 4738306
+      },
+      {
+        "name": "<idealis_smt::script::Script>::solve",
+        "self": 0,
+        "inclusive": 978
+      },
+      {
+        "name": "<idealis_smt::solver::Solver>::assert",
+        "self": 0,
+        "inclusive": 1119696
+      },
+      {
+        "name": "<idealis_smt::solver::Solver>::parse",
+        "self": 0,
+        "inclusive": 21736
+      },
+      {
+        "name": "<regex_automata::meta::regex::Builder>::build",
+        "self": 0,
+        "inclusive": 726
+      },
+      {
+        "name": "<regex::regex::string::Regex>::new",
+        "self": 0,
+        "inclusive": 726
+      },
+      {
+        "name": "<std::process::Command>::output",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::initialize::<<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::get_or_init<criterion_plot::version>::{closure#0}, !>",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::initialize::<<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::get_or_init<criterion::default_plotting_backend::{closure#0}>::{closure#0}, !>",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<std::sync::once::Once>::call_once_force::<<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::initialize<<std::sync::once_lock::OnceLock<core::result::Result<criterion_plot::Version, criterion_plot::VersionError>>>::get_or_init<criterion_plot::version>::{closure#0}, !>::{closure#0}>::{closure#0}",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<std::sync::once::Once>::call_once_force::<<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::initialize<<std::sync::once_lock::OnceLock<criterion::PlottingBackend>>::get_or_init<criterion::default_plotting_backend::{closure#0}>::{closure#0}, !>::{closure#0}>::{closure#0}",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<std::sys::process::unix::common::Command>::spawn",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "<std::sys::sync::once::queue::Once>::call",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "0x1dbc7",
+        "self": 0,
+        "inclusive": 312279
+      },
+      {
+        "name": "0x2aeab",
+        "self": 0,
+        "inclusive": 16157
+      },
+      {
+        "name": "0x2aef3",
+        "self": 0,
+        "inclusive": 136316
+      },
+      {
+        "name": "0x2af0b",
+        "self": 0,
+        "inclusive": 160637
+      },
+      {
+        "name": "0x2b277",
+        "self": 0,
+        "inclusive": 138312
+      },
+      {
+        "name": "0x2b52f",
+        "self": 0,
+        "inclusive": 86777
+      },
+      {
+        "name": "0x3136b",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "0x31797",
+        "self": 0,
+        "inclusive": 984
+      },
+      {
+        "name": "0x317e3",
+        "self": 0,
+        "inclusive": 3947
+      },
+      {
+        "name": "0x32023",
+        "self": 0,
+        "inclusive": 979
+      },
+      {
+        "name": "0x320cb",
+        "self": 0,
+        "inclusive": 990
+      },
+      {
+        "name": "0x3228f",
+        "self": 0,
+        "inclusive": 986
+      },
+      {
+        "name": "0x3393b",
+        "self": 0,
+        "inclusive": 113760
+      },
+      {
+        "name": "0x339f7",
+        "self": 0,
+        "inclusive": 985
+      },
+      {
+        "name": "0x3418f",
+        "self": 0,
+        "inclusive": 198519
+      },
+      {
+        "name": "0x3a6f7",
+        "self": 0,
+        "inclusive": 397492
+      },
+      {
+        "name": "0x3ae4b",
+        "self": 0,
+        "inclusive": 68136
+      },
+      {
+        "name": "0x3af13",
+        "self": 0,
+        "inclusive": 431148
+      },
+      {
+        "name": "alloc::fmt::format::format_inner",
+        "self": 0,
+        "inclusive": 28120
+      },
+      {
+        "name": "alloca::trampoline::<alloca::with_alloca<(), <criterion::routine::Function<criterion::measurement::WallTime, <criterion::benchmark_group::BenchmarkGroup<criterion::measurement::WallTime>>::bench_function<criterion::benchmark_group::BenchmarkId, solver::cases::{closure#4}>::{closure#0}, ()> as criterion::routine::Routine<criterion::measurement::WallTime, ()>>::bench::{closure#0}>::{closure#0}>",
+        "self": 0,
+        "inclusive": 3499573
+      },
+      {
+        "name": "c_with_alloca",
+        "self": 0,
+        "inclusive": 3499573
+      },
+      {
+        "name": "core::ptr::drop_glue::<alloc::vec::Vec<(alloc::sync::Arc<idealis_smt::Formula>, bool)>>",
+        "self": 0,
+        "inclusive": 127805
+      },
+      {
+        "name": "core::ptr::drop_glue::<idealis_smt::script::Script>",
+        "self": 0,
+        "inclusive": 154547
+      },
+      {
+        "name": "core::slice::sort::stable::driftsort_main::<(alloc::string::String, idealis_smt::Variable), <[(alloc::string::String, idealis_smt::Variable)]>::sort_by<<alloc::collections::btree::map::BTreeMap<alloc::string::String, idealis_smt::Variable> as core::iter::traits::collect::FromIterator<(alloc::string::String, idealis_smt::Variable)>>::from_iter<core::iter::adapters::map::Map<alloc::collections::btree::map::IntoIter<alloc::string::String, (idealis_smt::Variable, usize)>, idealis_smt::parser::compile::{closure#0}>>::{closure#0}>::{closure#0}, alloc::vec::Vec<(alloc::string::String, idealis_smt::Variable)>>",
+        "self": 0,
+        "inclusive": 6872
+      },
+      {
+        "name": "criterion_plot::version",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "idealis_smt::parser::render",
+        "self": 0,
+        "inclusive": 25672
+      },
+      {
+        "name": "main",
+        "self": 0,
+        "inclusive": 4911030
+      },
+      {
+        "name": "posix_spawn",
+        "self": 0,
+        "inclusive": 14583
+      },
+      {
+        "name": "solver::cases",
+        "self": 0,
+        "inclusive": 4895721
+      },
+      {
+        "name": "solver::main",
+        "self": 0,
+        "inclusive": 4911030
+      },
+      {
+        "name": "start",
+        "self": 0,
+        "inclusive": 4911030
+      },
+      {
+        "name": "std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>",
+        "self": 0,
+        "inclusive": 4911030
+      }
+    ]
+  }
+}

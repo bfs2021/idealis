@@ -174,6 +174,11 @@ export const createZ3 = async () => {
   };
   return {
     version: api.getFullVersion(),
+    script: (source: string): Promise<string> =>
+      api.Z3.eval_smtlib2_string(
+        context.ptr,
+        `(reset)(set-option :print-success false)${source}`,
+      ),
     prepare,
     scoped,
     solve: async (input: Input): Promise<Answer> => {

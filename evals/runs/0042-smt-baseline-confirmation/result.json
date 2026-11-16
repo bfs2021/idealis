@@ -1,0 +1,328 @@
+{
+  "status": "complete",
+  "stage": "baseline-confirmation",
+  "results": [
+    {
+      "name": "parse-solve-4",
+      "medianNs": 6616.281158682142,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 6602.611115569824,
+        "upper_bound": 6655.832062600321
+      },
+      "meanNs": 6635.731500002694
+    },
+    {
+      "name": "prepared-4",
+      "medianNs": 675.8565336953495,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 672.0832604421786,
+        "upper_bound": 687.3211231750706
+      },
+      "meanNs": 704.6635947471013
+    },
+    {
+      "name": "parse-solve-32",
+      "medianNs": 69009.22373188406,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 68871.00327550872,
+        "upper_bound": 69423.55857487922
+      },
+      "meanNs": 69415.41627228158
+    },
+    {
+      "name": "prepared-32",
+      "medianNs": 14451.332418083512,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 14400.318735003691,
+        "upper_bound": 14597.403723698782
+      },
+      "meanNs": 15042.027073330635
+    },
+    {
+      "name": "parse-solve-128",
+      "medianNs": 423322.6914285715,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 418555.19125000003,
+        "upper_bound": 424596.1334008097
+      },
+      "meanNs": 423626.7041981363
+    },
+    {
+      "name": "prepared-128",
+      "medianNs": 189724.57826923078,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 188692.63666666666,
+        "upper_bound": 190962.69736842107
+      },
+      "meanNs": 189959.30942836712
+    },
+    {
+      "name": "parse-solve-ite",
+      "medianNs": 3050.703833955507,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 3029.7061150060194,
+        "upper_bound": 3106.7259666454215
+      },
+      "meanNs": 3203.5084629109797
+    },
+    {
+      "name": "script-parse-repeat-64",
+      "medianNs": 4841623.645833334,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 4740234.428571429,
+        "upper_bound": 5192678.841666667
+      },
+      "meanNs": 5291330.198304778
+    },
+    {
+      "name": "script-prepared-repeat-64",
+      "medianNs": 2607676.966666667,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 1040008.8121693122,
+        "upper_bound": 3162792.142361111
+      },
+      "meanNs": 2337184.930035618
+    },
+    {
+      "name": "script-parse-scopes-32",
+      "medianNs": 836552.6785714286,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 666510.7616666667,
+        "upper_bound": 942330.6648026316
+      },
+      "meanNs": 816446.9661647545
+    },
+    {
+      "name": "script-prepared-scopes-32",
+      "medianNs": 32728.777666053782,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 30251.27354959451,
+        "upper_bound": 36876.39276498611
+      },
+      "meanNs": 37161.99201441532
+    },
+    {
+      "name": "script-parse-ite-64",
+      "medianNs": 263076.00114889705,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 256455.6223958333,
+        "upper_bound": 274702.734375
+      },
+      "meanNs": 281908.30588207126
+    },
+    {
+      "name": "script-prepared-ite-64",
+      "medianNs": 24639.84598092643,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 24382.813540720555,
+        "upper_bound": 24854.109162814813
+      },
+      "meanNs": 24677.79786463077
+    },
+    {
+      "name": "context-scopes-32",
+      "medianNs": 3855368.0588235296,
+      "confidence": {
+        "confidence_level": 0.95,
+        "lower_bound": 3833497.898809524,
+        "upper_bound": 3998181.430555556
+      },
+      "meanNs": 3983807.671607909
+    }
+  ],
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "d6942dc4807a6d2fc307cac0f688308514bf8a9721677dfdf8f7b1f2916ce4f0"
+    },
+    {
+      "path": "stdout.log",
+      "sha256": "0fa0b01ab8add5a655cf05c31f390f78061d1b313cabb9a5f4d6658d09bfbe91"
+    },
+    {
+      "path": "stderr.log",
+      "sha256": "ddba619e887cfd13f4c7915646e69cbb1cb3041ff3469e46b8b4073aeb3ae054"
+    },
+    {
+      "path": "criterion/parse-solve-4/new/estimates.json",
+      "sha256": "63b30092a91ae25ae80ad8bfbe05b0e3508b6e2020be1f89af75a222250119c5"
+    },
+    {
+      "path": "criterion/parse-solve-4/new/sample.json",
+      "sha256": "32f254b24238d743527f052c875f37cab7a0a8520df79600d91cf656cad7181a"
+    },
+    {
+      "path": "criterion/parse-solve-4/new/benchmark.json",
+      "sha256": "44d6c3a87819d24da8eb9aedb44542c94137b83aa515f2dcaeb135e292a45e79"
+    },
+    {
+      "path": "criterion/prepared-4/new/estimates.json",
+      "sha256": "755714dd624d0de325ffb7516203b481b4e4a24be67211cb02573c955f270191"
+    },
+    {
+      "path": "criterion/prepared-4/new/sample.json",
+      "sha256": "46415ec36a0365e14cd69d7815d7147f04611f3dd52a2a755e4883f8fca76229"
+    },
+    {
+      "path": "criterion/prepared-4/new/benchmark.json",
+      "sha256": "23dce8d8a95b2f3f05511fbe8ffc6e4ee6f1200b2232a98358862b7110813dd5"
+    },
+    {
+      "path": "criterion/parse-solve-32/new/estimates.json",
+      "sha256": "21366cbb36a353e44db64f899096cf6871b1d7b60e5cf10c049d42bb7e9d784a"
+    },
+    {
+      "path": "criterion/parse-solve-32/new/sample.json",
+      "sha256": "edd079404b4d52c78a3b8f177625f43982e5ded29e8f8edaf0e11a84d7002d14"
+    },
+    {
+      "path": "criterion/parse-solve-32/new/benchmark.json",
+      "sha256": "81fde64928315d398afdb110739a9783b2256985baad6c6fd6e9ae1bb92ddfd6"
+    },
+    {
+      "path": "criterion/prepared-32/new/estimates.json",
+      "sha256": "cf75ef5d358d6d837c46d568d6073faede2e24767a73559fcdddef0a3e74c201"
+    },
+    {
+      "path": "criterion/prepared-32/new/sample.json",
+      "sha256": "0ddbe44a4826b73d9aa8b489a63f8f74cb310dc98427032b29a8debd5444d2c9"
+    },
+    {
+      "path": "criterion/prepared-32/new/benchmark.json",
+      "sha256": "ac5c5f8506e9d015484f1b4600e6b75485651d07b486544be28fd24b78b2cf47"
+    },
+    {
+      "path": "criterion/parse-solve-128/new/estimates.json",
+      "sha256": "9286eb2787ea30df5fd3cf8b66f7b17d4c086a77235c0ac184dd13dc31251631"
+    },
+    {
+      "path": "criterion/parse-solve-128/new/sample.json",
+      "sha256": "200986295a1e1e0e2b0839eac235300bb6293a08ce9929ad256d5df133e0ceff"
+    },
+    {
+      "path": "criterion/parse-solve-128/new/benchmark.json",
+      "sha256": "ba4da14d504a94e683d5a625ee660ce3085a76230d8061b433f7253a0c8bf5d2"
+    },
+    {
+      "path": "criterion/prepared-128/new/estimates.json",
+      "sha256": "7a95c1f6abcd3a8c35ef8d4d99cce44f1f0e7fcede1bf6bcd0ddb2f609277ea7"
+    },
+    {
+      "path": "criterion/prepared-128/new/sample.json",
+      "sha256": "ee672ed60b9feca3705f4fcda2b38539281dcb90aa0a9e01421d60be519b1bf2"
+    },
+    {
+      "path": "criterion/prepared-128/new/benchmark.json",
+      "sha256": "bbe44d7ebb1d0e783bf0d55071fb95252e2114ec068a12967ded160be1b6bf5b"
+    },
+    {
+      "path": "criterion/parse-solve-ite/new/estimates.json",
+      "sha256": "a83920f4e8bd8d0759fcb0812e8b5bad042b3afeb4d92a565134a0a46743813a"
+    },
+    {
+      "path": "criterion/parse-solve-ite/new/sample.json",
+      "sha256": "ce9998f1cbcecfdcb751279875acea98a541cb375db3e408672014280eb4fddc"
+    },
+    {
+      "path": "criterion/parse-solve-ite/new/benchmark.json",
+      "sha256": "cf528203321f32e2f911a2ffb5e4aa1566e4231d92b29e623b1f93520a3c9020"
+    },
+    {
+      "path": "criterion/script-parse-repeat-64/new/estimates.json",
+      "sha256": "e02a4e89f7e9613501290ce2375fb1a6d7646dd01c5bcb4a67c44237453df8f8"
+    },
+    {
+      "path": "criterion/script-parse-repeat-64/new/sample.json",
+      "sha256": "3d65e8eef787921d69e0fdb5a698d01465b70f5032920f234a2975c425089a47"
+    },
+    {
+      "path": "criterion/script-parse-repeat-64/new/benchmark.json",
+      "sha256": "1a516aea7c8e69c22652ded8c7657dae0654ec5088bd26ba1b811e3335928662"
+    },
+    {
+      "path": "criterion/script-prepared-repeat-64/new/estimates.json",
+      "sha256": "993ae860b19e1728c4b711c89a15c5e2af5ecc27338917aac0770bbe93d834a7"
+    },
+    {
+      "path": "criterion/script-prepared-repeat-64/new/sample.json",
+      "sha256": "649b9e65be64bab2f88041652cd00b197eb35a20fecf54e77ee927208541e567"
+    },
+    {
+      "path": "criterion/script-prepared-repeat-64/new/benchmark.json",
+      "sha256": "4a9e53f6461f63c5a29d40025fb752d14b9689e574a157537d1ff6b82fa375e1"
+    },
+    {
+      "path": "criterion/script-parse-scopes-32/new/estimates.json",
+      "sha256": "b728051453d63f50bd58331a02d1140e2aa85fe4b2e3740833140e6f8118bc0d"
+    },
+    {
+      "path": "criterion/script-parse-scopes-32/new/sample.json",
+      "sha256": "84327b8afc13e059b30eeb5594fcbeb7d50aa26a8d4dcb0c2a3bee432905d5a0"
+    },
+    {
+      "path": "criterion/script-parse-scopes-32/new/benchmark.json",
+      "sha256": "217e264a2c6e7760e2ff9289e15734bd77a31b720380cfd0e65cdd36d7729124"
+    },
+    {
+      "path": "criterion/script-prepared-scopes-32/new/estimates.json",
+      "sha256": "54478d65bb1c3f07e571b0b247df079150b15dce164bdf5fc374209bd3ff2240"
+    },
+    {
+      "path": "criterion/script-prepared-scopes-32/new/sample.json",
+      "sha256": "a5c24253df2f7d46e6d08422e430f62ad3b23c7e19b2b57fd289f08c39871de8"
+    },
+    {
+      "path": "criterion/script-prepared-scopes-32/new/benchmark.json",
+      "sha256": "b4ae51afd7b02ebf8ac78f1569b878c2dfda60a718902a94eef2f0ece102791d"
+    },
+    {
+      "path": "criterion/script-parse-ite-64/new/estimates.json",
+      "sha256": "83cee7b3d05482f170bc1f5f16ee01457f562247efb068763607e72be98c4fc4"
+    },
+    {
+      "path": "criterion/script-parse-ite-64/new/sample.json",
+      "sha256": "edac661d2546f2ac65838840e26aa2b4cc76b95348063a4e9a31b63797ac0e3f"
+    },
+    {
+      "path": "criterion/script-parse-ite-64/new/benchmark.json",
+      "sha256": "440a934c92138fe02c8ee07e7b0dd240326d0b61f04b07e71c45797d634259f2"
+    },
+    {
+      "path": "criterion/script-prepared-ite-64/new/estimates.json",
+      "sha256": "254c58a9560e0bc809d67d29a3029ed54f802720bfaa5b220508512d933ec20e"
+    },
+    {
+      "path": "criterion/script-prepared-ite-64/new/sample.json",
+      "sha256": "9a8475e228368a0c13f6b9ee6955ad273d495c9e06bf7221b87f906c27254bbf"
+    },
+    {
+      "path": "criterion/script-prepared-ite-64/new/benchmark.json",
+      "sha256": "f43dedf9a9b3ad180a5437946c1e4f113caa66294ce4f5298a8f553e385bab08"
+    },
+    {
+      "path": "criterion/context-scopes-32/new/estimates.json",
+      "sha256": "dcd673ce137f8b6cf5f4aab04df285a2b814c4513981861199327116212324f0"
+    },
+    {
+      "path": "criterion/context-scopes-32/new/sample.json",
+      "sha256": "47ef51e3fefcc369a8391f13e6c0142ad30da8fd423a08096633183a63bd050c"
+    },
+    {
+      "path": "criterion/context-scopes-32/new/benchmark.json",
+      "sha256": "e4f3c73317363c6416f80b4d016ff1c44f33c5fc53c50d4ee9cd28b314541b31"
+    }
+  ]
+}

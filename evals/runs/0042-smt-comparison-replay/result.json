@@ -1,0 +1,503 @@
+{
+  "status": "complete",
+  "decision": "adopt",
+  "scope": "native microbenchmarks; no Z3 or Wasm speed claim",
+  "runs": [
+    "evals/runs/0042-smt-baseline-development",
+    "evals/runs/0042-smt-candidate-development",
+    "evals/runs/0042-smt-candidate-recheck",
+    "evals/runs/0042-smt-baseline-recheck"
+  ],
+  "rows": [
+    {
+      "name": "parse-solve-4",
+      "baselineNs": 6655.974309000709,
+      "candidateNs": 6551.577626683204,
+      "confirmationCandidateNs": 6601.572640480087,
+      "confirmationBaselineNs": 6497.059753316749,
+      "developmentRatio": 0.9843153417560022,
+      "confirmationRatio": 1.016086182231891,
+      "developmentSpeedup": 1.015934586792091,
+      "confirmationSpeedup": 0.9841684863811879,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 6598.082700772129,
+          "upper_bound": 6665.926559177888
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 6524.95904626911,
+          "upper_bound": 6609.376210725253
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 6589.728450627386,
+          "upper_bound": 6620.65875613748
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 6440.933567013418,
+          "upper_bound": 6513.382454610066
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "prepared-4",
+      "baselineNs": 649.6346457099573,
+      "candidateNs": 655.4570514920053,
+      "confirmationCandidateNs": 660.1417509650245,
+      "confirmationBaselineNs": 662.7914867717253,
+      "developmentRatio": 1.0089625850783943,
+      "confirmationRatio": 0.9960021577531012,
+      "developmentSpeedup": 0.9911170293022333,
+      "confirmationSpeedup": 1.004013889142487,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 648.9353681770187,
+          "upper_bound": 651.1601692927213
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 652.9798794146379,
+          "upper_bound": 656.8706093641435
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 653.9639575270105,
+          "upper_bound": 660.9908452772318
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 659.3268483932657,
+          "upper_bound": 664.3810264805354
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "parse-solve-32",
+      "baselineNs": 68947.86363049096,
+      "candidateNs": 68414.46822541967,
+      "confirmationCandidateNs": 68236.89506493506,
+      "confirmationBaselineNs": 69528.28201725282,
+      "developmentRatio": 0.9922637863309313,
+      "confirmationRatio": 0.9814264510088526,
+      "developmentSpeedup": 1.0077965292854985,
+      "confirmationSpeedup": 1.0189250544165127,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 67390.20179884715,
+          "upper_bound": 69781.75877192983
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 68257.37561529723,
+          "upper_bound": 68584.05755395684
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 68166.13388278388,
+          "upper_bound": 68377.54024234693
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 68856.27281021897,
+          "upper_bound": 69854.77554744526
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "prepared-32",
+      "baselineNs": 14810.865773848793,
+      "candidateNs": 14345.985815602837,
+      "confirmationCandidateNs": 14418.452610859727,
+      "confirmationBaselineNs": 15159.34249278676,
+      "developmentRatio": 0.9686122360877253,
+      "confirmationRatio": 0.9511265160557215,
+      "developmentSpeedup": 1.0324048806559079,
+      "confirmationSpeedup": 1.051384840101982,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 14696.367120497427,
+          "upper_bound": 14914.61695670414
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 14315.964548749123,
+          "upper_bound": 14399.484865754814
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 14399.135329959514,
+          "upper_bound": 14470.105185897435
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 15106.989649681529,
+          "upper_bound": 15265.396098726114
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "parse-solve-128",
+      "baselineNs": 433784.1826923077,
+      "candidateNs": 431518.1508152174,
+      "confirmationCandidateNs": 417518.1256396199,
+      "confirmationBaselineNs": 424381.9673913043,
+      "developmentRatio": 0.9947761306947016,
+      "confirmationRatio": 0.9838262643583167,
+      "developmentSpeedup": 1.0052513014175866,
+      "confirmationSpeedup": 1.016439625803477,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 420944.7875,
+          "upper_bound": 475886.54583333334
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 420721.3138998682,
+          "upper_bound": 436682.8321611253
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 414756.9821759259,
+          "upper_bound": 421410.80009920633
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 421111.3358163576,
+          "upper_bound": 425797.70386473427
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "prepared-128",
+      "baselineNs": 194182.56935817807,
+      "candidateNs": 207012.37685528758,
+      "confirmationCandidateNs": 188429.27962962963,
+      "confirmationBaselineNs": 200307.29253472225,
+      "developmentRatio": 1.0660708504348009,
+      "confirmationRatio": 0.9407010461037827,
+      "developmentSpeedup": 0.9380239592820181,
+      "confirmationSpeedup": 1.0630369809216467,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 191778.4713768116,
+          "upper_bound": 199728.59623745817
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 205420.36734693876,
+          "upper_bound": 208115.1727085571
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 188021.33197167754,
+          "upper_bound": 188640.73408000972
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 199484.62954260653,
+          "upper_bound": 200877.5326388889
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "parse-solve-ite",
+      "baselineNs": 3060.196251199616,
+      "candidateNs": 2971.9542012117345,
+      "confirmationCandidateNs": 3073.0884598953326,
+      "confirmationBaselineNs": 3034.5960489882855,
+      "developmentRatio": 0.9711645781040055,
+      "confirmationRatio": 1.0126845254807078,
+      "developmentSpeedup": 1.0296915914625815,
+      "confirmationSpeedup": 0.9874743563651409,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3053.651503518874,
+          "upper_bound": 3070.718662576995
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 2968.043834591128,
+          "upper_bound": 2980.0834343112247
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3042.7495427480508,
+          "upper_bound": 3098.5774991989747
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3031.5015073026016,
+          "upper_bound": 3043.489064164004
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "script-parse-repeat-64",
+      "baselineNs": 4787735.119047619,
+      "candidateNs": 1141773.0216049384,
+      "confirmationCandidateNs": 1182840.4074074074,
+      "confirmationBaselineNs": 4701180.777777778,
+      "developmentRatio": 0.2384787364410546,
+      "confirmationRatio": 0.25160496124689113,
+      "developmentSpeedup": 4.1932459678524525,
+      "confirmationSpeedup": 3.974484426079083,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 4764111.737373738,
+          "upper_bound": 4817942.366666667
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 1137382.1481481483,
+          "upper_bound": 1172810.5656565656
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 1178608.226851852,
+          "upper_bound": 1191054.0396825396
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 4681821.777777778,
+          "upper_bound": 4785895.5962962955
+        }
+      ],
+      "requiredRatio": 0.8,
+      "accepted": true
+    },
+    {
+      "name": "script-prepared-repeat-64",
+      "baselineNs": 943862.4686004785,
+      "candidateNs": 969408.9583333333,
+      "confirmationCandidateNs": 947216.2165869218,
+      "confirmationBaselineNs": 965067.7884615385,
+      "developmentRatio": 1.0270659026952667,
+      "confirmationRatio": 0.9815022612006616,
+      "developmentSpeedup": 0.9736473554187328,
+      "confirmationSpeedup": 1.0188463537279173,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 939056.4848484849,
+          "upper_bound": 953541.2997668998
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 957598.9681818181,
+          "upper_bound": 1016533.9524999999
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 943386.4545454546,
+          "upper_bound": 952894.1683316684
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 959653.9608333334,
+          "upper_bound": 967954.8203947368
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "script-parse-scopes-32",
+      "baselineNs": 416262.5308924485,
+      "candidateNs": 234979.98245614034,
+      "confirmationCandidateNs": 239002.32288037165,
+      "confirmationBaselineNs": 415169.5629338692,
+      "developmentRatio": 0.5644994805378077,
+      "confirmationRatio": 0.5756739997783542,
+      "developmentSpeedup": 1.7714808152653814,
+      "confirmationSpeedup": 1.7370942588774543,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 415136.65652173915,
+          "upper_bound": 417850.2922705314
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 233247.49240430622,
+          "upper_bound": 245635.915317139
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 238549.51572528883,
+          "upper_bound": 241150.54268292684
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 413402.3429951691,
+          "upper_bound": 417228.14673913043
+        }
+      ],
+      "requiredRatio": 0.9,
+      "accepted": true
+    },
+    {
+      "name": "script-prepared-scopes-32",
+      "baselineNs": 19697.209052951224,
+      "candidateNs": 20041.545554393306,
+      "confirmationCandidateNs": 19999.651019874476,
+      "confirmationBaselineNs": 20079.300129960695,
+      "developmentRatio": 1.017481486870369,
+      "confirmationRatio": 0.9960332725956234,
+      "developmentSpeedup": 0.9828188649170024,
+      "confirmationSpeedup": 1.0039825249954146,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 19535.806245781467,
+          "upper_bound": 19997.196102992348
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 19743.489474372385,
+          "upper_bound": 20092.085500482783
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 19792.200847075233,
+          "upper_bound": 20232.791782891676
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 19859.18046548117,
+          "upper_bound": 20302.456885873158
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "script-parse-ite-64",
+      "baselineNs": 214135.1851851852,
+      "candidateNs": 32042.050109110747,
+      "confirmationCandidateNs": 31776.36307442557,
+      "confirmationBaselineNs": 212743.19230019493,
+      "developmentRatio": 0.1496346809208427,
+      "confirmationRatio": 0.14936488792359096,
+      "developmentSpeedup": 6.682942709845478,
+      "confirmationSpeedup": 6.695013894507521,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 213071.98888888888,
+          "upper_bound": 216425.74982363317
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 31809.817415287627,
+          "upper_bound": 32831.44834689195
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 31663.102391926255,
+          "upper_bound": 32260.54967948718
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 211686.74047619046,
+          "upper_bound": 213406.7882352941
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "script-prepared-ite-64",
+      "baselineNs": 23397.490842490843,
+      "candidateNs": 22648.964090554255,
+      "confirmationCandidateNs": 24004.424653661295,
+      "confirmationBaselineNs": 23742.93758116883,
+      "developmentRatio": 0.9680082468254574,
+      "confirmationRatio": 1.0110132569568755,
+      "developmentSpeedup": 1.033049050232225,
+      "confirmationSpeedup": 0.9891067136052942,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 23127.825795172568,
+          "upper_bound": 23836.073200992556
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 22455.698647891273,
+          "upper_bound": 23400.762978142076
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 23858.825632784254,
+          "upper_bound": 24450.463642591505
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 23573.346850861555,
+          "upper_bound": 24172.220261828814
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    },
+    {
+      "name": "context-scopes-32",
+      "baselineNs": 3637005.456349206,
+      "candidateNs": 3702886.912698413,
+      "confirmationCandidateNs": 3712209.2962962966,
+      "confirmationBaselineNs": 3758304.4786324785,
+      "developmentRatio": 1.018114203330159,
+      "confirmationRatio": 0.9877351123097524,
+      "developmentSpeedup": 0.9822080830707312,
+      "confirmationSpeedup": 1.0124171830457327,
+      "confidenceIntervals": [
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3601331.3883928573,
+          "upper_bound": 3649310.447368421
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3667875.951388889,
+          "upper_bound": 3891890.0372549016
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3680261.34375,
+          "upper_bound": 3729568.011904762
+        },
+        {
+          "confidence_level": 0.95,
+          "lower_bound": 3743379.770833333,
+          "upper_bound": 3775632.7990740743
+        }
+      ],
+      "requiredRatio": 1.1,
+      "accepted": true
+    }
+  ]
+}

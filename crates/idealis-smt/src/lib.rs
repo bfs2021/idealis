@@ -1,12 +1,16 @@
 mod parser;
 mod protocol;
+mod script;
+mod solver;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
 use num_bigint::BigInt;
 use num_traits::Zero;
 pub use protocol::Engine;
-use serde::Serialize;
+pub use script::Script;
+use serde::{Deserialize, Serialize};
+pub use solver::Solver;
 use std::{collections::BTreeMap, sync::Arc};
 
 #[derive(Clone, Debug, Serialize)]
@@ -57,6 +61,12 @@ pub struct Problem {
     anchors: Vec<Edge>,
     integers: usize,
     booleans: usize,
+}
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Assumption {
+    pub symbol: String,
+    pub positive: bool,
 }
 #[derive(Default, Serialize)]
 pub struct Stats {
@@ -122,9 +132,31 @@ impl Problem {
         parser::compile(source)
     }
     pub fn solve(&self, max_work: u32) -> Solution {
+        self.solve_with(max_work, vec![(self.root.clone(), true)])
+    }
+    pub fn solve_assuming(&self, assumptions: &[Assumption], max_work: u32) -> Result<Solution> {
+        Ok(self.solve_with(max_work, self.assumption_todo(assumptions)?))
+    }
+    fn assumption_todo(&self, assumptions: &[Assumption]) -> Result<Vec<(Arc<Formula>, bool)>> {
+        if assumptions.len() > 256 {
+            return Err(Error::new("resource", "assumptions exceed 256"));
+        }
+        let mut todo = vec![(self.root.clone(), true)];
+        for assumption in assumptions {
+            match self.variables.get(&assumption.symbol) {
+                Some(Variable::Bool(slot)) => {
+                    todo.push((Arc::new(Formula::Boolean(*slot)), assumption.positive))
+                }
+                Some(_) => return Err(Error::new("type", "assumption needs a Bool symbol")),
+                None => return Err(Error::new("type", "undeclared assumption symbol")),
+            }
+        }
+        Ok(todo)
+    }
+    fn solve_with(&self, max_work: u32, todo: Vec<(Arc<Formula>, bool)>) -> Solution {
         let mut stats = Stats::default();
         let mut stack = vec![State {
-            todo: vec![(self.root.clone(), true)],
+            todo,
             edges: self.anchors.clone(),
             booleans: vec![None; self.booleans],
         }];

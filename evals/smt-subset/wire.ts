@@ -12,7 +12,16 @@ export interface Solution extends Answer {
     readonly relaxations: number;
   };
 }
+export interface Assumption {
+  readonly symbol: string;
+  readonly positive: boolean;
+}
 export type Request =
+  | {
+      readonly kind: "run-script";
+      readonly source: string;
+      readonly maxWork: number;
+    }
   | {
       readonly kind: "solve";
       readonly source: string;
@@ -23,15 +32,38 @@ export type Request =
       readonly kind: "check";
       readonly handle: number;
       readonly maxWork: number;
+      readonly assumptions?: readonly Assumption[];
+    }
+  | {
+      readonly kind: "assert";
+      readonly handle: number;
+      readonly expression: string;
+    }
+  | {
+      readonly kind: "push" | "pop";
+      readonly handle: number;
+      readonly count: number;
     }
   | { readonly kind: "release"; readonly handle: number };
 export type Reply =
+  | { readonly kind: "script-results"; readonly results: readonly Solution[] }
   | { readonly kind: "solution"; readonly result: Solution }
   | { readonly kind: "prepared"; readonly handle: number }
   | { readonly kind: "released" }
+  | { readonly kind: "updated" }
   | { readonly kind: "error"; readonly code: string; readonly message: string };
 export const decode = (input: unknown): Reply => {
   if (!isRecord(input)) throw new Error("Invalid SMT reply");
+  if (input.kind === "script-results") {
+    if (!Array.isArray(input.results) || input.results.length > 256)
+      throw new Error("Invalid SMT script results");
+    return {
+      kind: "script-results",
+      results: input.results.map((result) =>
+        solution(decode({ kind: "solution", result })),
+      ),
+    };
+  }
   if (
     input.kind === "error" &&
     typeof input.code === "string" &&
@@ -39,6 +71,7 @@ export const decode = (input: unknown): Reply => {
   )
     return { kind: "error", code: input.code, message: input.message };
   if (input.kind === "released") return { kind: "released" };
+  if (input.kind === "updated") return { kind: "updated" };
   if (
     input.kind === "prepared" &&
     typeof input.handle === "number" &&

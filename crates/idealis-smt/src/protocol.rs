@@ -1,4 +1,4 @@
-use crate::{Error, Problem};
+use crate::{Assumption, Error, Problem, Script, Solver};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -12,6 +12,11 @@ struct Command {
 #[derive(Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 enum Request {
+    RunScript {
+        source: String,
+        #[serde(rename = "maxWork")]
+        max_work: u32,
+    },
     Solve {
         source: String,
         #[serde(rename = "maxWork")]
@@ -24,6 +29,20 @@ enum Request {
         handle: u32,
         #[serde(rename = "maxWork")]
         max_work: u32,
+        #[serde(default)]
+        assumptions: Vec<Assumption>,
+    },
+    Assert {
+        handle: u32,
+        expression: String,
+    },
+    Push {
+        handle: u32,
+        count: u32,
+    },
+    Pop {
+        handle: u32,
+        count: u32,
     },
     Release {
         handle: u32,
@@ -32,7 +51,7 @@ enum Request {
 #[derive(Default)]
 pub struct Engine {
     next: u32,
-    problems: BTreeMap<u32, Problem>,
+    problems: BTreeMap<u32, Solver>,
 }
 impl Engine {
     pub fn dispatch(&mut self, bytes: &[u8]) -> Value {
@@ -48,11 +67,14 @@ impl Engine {
             return Err(Error::new("protocol", "unsupported version"));
         }
         match command.request {
+            Request::RunScript { source, max_work } => Ok(
+                json!({"kind":"script-results","results":Script::parse(&source)?.solve(max_work)}),
+            ),
             Request::Solve { source, max_work } => {
                 Ok(json!({"kind":"solution","result":Problem::parse(&source)?.solve(max_work)}))
             }
             Request::Prepare { source } => {
-                let problem = Problem::parse(&source)?;
+                let problem = Solver::parse(&source)?;
                 self.next = self
                     .next
                     .checked_add(1)
@@ -60,12 +82,39 @@ impl Engine {
                 self.problems.insert(self.next, problem);
                 Ok(json!({"kind":"prepared","handle":self.next}))
             }
-            Request::Check { handle, max_work } => {
+            Request::Check {
+                handle,
+                max_work,
+                assumptions,
+            } => {
                 let problem = self
                     .problems
                     .get(&handle)
                     .ok_or_else(|| Error::new("protocol", "unknown handle"))?;
-                Ok(json!({"kind":"solution","result":problem.solve(max_work)}))
+                Ok(
+                    json!({"kind":"solution","result":problem.check_assuming(&assumptions,max_work)?}),
+                )
+            }
+            Request::Assert { handle, expression } => {
+                self.problems
+                    .get_mut(&handle)
+                    .ok_or_else(|| Error::new("protocol", "unknown handle"))?
+                    .assert(&expression)?;
+                Ok(json!({"kind":"updated"}))
+            }
+            Request::Push { handle, count } => {
+                self.problems
+                    .get_mut(&handle)
+                    .ok_or_else(|| Error::new("protocol", "unknown handle"))?
+                    .push(count)?;
+                Ok(json!({"kind":"updated"}))
+            }
+            Request::Pop { handle, count } => {
+                self.problems
+                    .get_mut(&handle)
+                    .ok_or_else(|| Error::new("protocol", "unknown handle"))?
+                    .pop(count)?;
+                Ok(json!({"kind":"updated"}))
             }
             Request::Release { handle } => {
                 if self.problems.remove(&handle).is_none() {

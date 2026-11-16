@@ -1,0 +1,107 @@
+pnpm package:prepare
+
+> @mizchi/idealis@0.1.0-alpha.0 package:prepare /Users/mz/ghq/github.com/mizchi/idealis
+> pnpm testing:build && pnpm ralloy:build && pnpm rsmt:build && pnpm portable:build && pnpm rtla:build && pnpm build && node dist/scripts/package.js
+
+
+> @mizchi/idealis@0.1.0-alpha.0 testing:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.02s
+    Finished `release` profile [optimized] target(s) in 0.01s
+
+> @mizchi/idealis@0.1.0-alpha.0 ralloy:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.02s
+    Finished `release` profile [optimized] target(s) in 0.01s
+
+> @mizchi/idealis@0.1.0-alpha.0 rsmt:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+    Finished `release` profile [optimized] target(s) in 0.01s
+
+> @mizchi/idealis@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/idealis-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+    Finished `release` profile [optimized] target(s) in 0.01s
+
+> @mizchi/idealis@0.1.0-alpha.0 rtla:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.02s
+    Finished `release` profile [optimized] target(s) in 0.01s
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing Cargo and Wasm artifacts: /Users/mz/ghq/github.com/mizchi/idealis/.artifacts/packages
+pnpm package:test
+
+> @mizchi/idealis@0.1.0-alpha.0 package:test /Users/mz/ghq/github.com/mizchi/idealis
+> node dist/scripts/package-test.js
+
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: cargo run --offline --quiet
+error: failed to write /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps/rustcwcTehZ/lib.rmeta: No space left on device (os error 28)
+
+error: could not compile `serde_core` (lib) due to 1 previous error
+error: failed to build archive at `/private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps/libsyn-849f9c2c6bc7b349.rlib`: No space left on device (os error 28)
+
+error: could not compile `syn` (lib) due to 1 previous error
+error: failed to write to `/private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps/rmetaMsyVmP/full.rmeta`: No space left on device (os error 28)
+
+error: could not compile `serde_json` (lib) due to 1 previous error
+rustc-LLVM ERROR: IO failure on output stream: No space left on device
+error: could not compile `num-bigint` (lib)
+
+Caused by:
+  process didn't exit successfully: `/Users/mz/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc --crate-name num_bigint --edition=2021 /Users/mz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.4.8/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C split-debuginfo=unpacked --cfg 'feature="default"' --cfg 'feature="std"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("arbitrary", "default", "quickcheck", "rand", "serde", "std"))' -C metadata=1b8b6fe724b0b505 -C extra-filename=-ebd14b064cee324f --out-dir /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps -L dependency=/private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps --extern num_integer=/private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps/libnum_integer-420fdaf51c34ba1d.rmeta --extern num_traits=/private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-smt-consumer-0qNH2m/target/debug/deps/libnum_traits-17c0cd56451a81f6.rmeta --cap-lints allow` (exit status: 101)
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execFileSync (node:child_process:979:15)
+    at file:///Users/mz/ghq/github.com/mizchi/idealis/dist/scripts/package-test.js:278:14 {
+  status: 101,
+  signal: null,
+  output: [
+    null,
+    Buffer(0) [Uint8Array] [],
+    Buffer(2167) [Uint8Array] [
+      101, 114, 114, 111, 114,  58,  32, 102,  97, 105, 108, 101,
+      100,  32, 116, 111,  32, 119, 114, 105, 116, 101,  32,  47,
+      112, 114, 105, 118,  97, 116, 101,  47, 118,  97, 114,  47,
+      102, 111, 108, 100, 101, 114, 115,  47,  95, 104,  47,  95,
+      114, 102,  52,  53,  53, 120, 106,  52, 104,  51,  95,  51,
+      103,  54, 122,  56,  54, 112, 103,  50,  52,  52,  99,  48,
+       48,  48,  48, 103, 110,  47,  84,  47, 105, 100, 101,  97,
+      108, 105, 115,  45, 115, 109, 116,  45,  99, 111, 110, 115,
+      117, 109, 101, 114,
+      ... 2067 more items
+    ]
+  ],
+  pid: 40255,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(2167) [Uint8Array] [
+    101, 114, 114, 111, 114,  58,  32, 102,  97, 105, 108, 101,
+    100,  32, 116, 111,  32, 119, 114, 105, 116, 101,  32,  47,
+    112, 114, 105, 118,  97, 116, 101,  47, 118,  97, 114,  47,
+    102, 111, 108, 100, 101, 114, 115,  47,  95, 104,  47,  95,
+    114, 102,  52,  53,  53, 120, 106,  52, 104,  51,  95,  51,
+    103,  54, 122,  56,  54, 112, 103,  50,  52,  52,  99,  48,
+     48,  48,  48, 103, 110,  47,  84,  47, 105, 100, 101,  97,
+    108, 105, 115,  45, 115, 109, 116,  45,  99, 111, 110, 115,
+    117, 109, 101, 114,
+    ... 2067 more items
+  ]
+}
+
+Node.js v24.22.2
+ ELIFECYCLE  Command failed with exit code 1.
+error: Recipe `package` failed on line 284 with exit code 1

@@ -1,0 +1,11 @@
+   Compiling idealis-smt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-smt)
+error[E0432]: unresolved imports `idealis_smt::Assumption`, `idealis_smt::Solver`
+ --> tests/expansion.rs:1:19
+  |
+1 | use idealis_smt::{Assumption, Engine, Problem, Solver};
+  |                   ^^^^^^^^^^                   ^^^^^^ no `Solver` in the root
+  |                   |
+  |                   no `Assumption` in the root
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `idealis-smt` (test "expansion") due to 1 previous error

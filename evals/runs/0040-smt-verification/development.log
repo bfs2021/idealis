@@ -1,0 +1,14 @@
+pnpm rsmt:build
+
+> @mizchi/idealis@0.1.0-alpha.0 rsmt:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+    Finished `release` profile [optimized] target(s) in 0.01s
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node dist/evals/smt-expansion/run.js 'development' 'evals/runs/0040-smt-development' '.artifacts/smt-expansion/baseline/idealis-smt' ''
+{"sat":60,"unsat":37,"checks":97,"controls":11,"budgetUnknown":true,"baselineAccepted":1,"inputs":76,"z3Version":"5.4.1.0 145c0c51570a357cc558ce898ce77573ba9d4fbf z3-5.4.1"}

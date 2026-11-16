@@ -457,3 +457,55 @@ backend-test: portable-build
 backend-eval run: portable-build
   pnpm build
   node dist/evals/backend-contract/evaluate.js {{quote(run)}}
+
+# SMT expression and context expansion against Z3.
+smt-expansion-test: smt-build
+  pnpm build
+  node --test dist/evals/smt-expansion/contract-test.js
+  pnpm exec vitest run --config smt-vitest.config.ts
+
+smt-expansion-eval phase run baseline parent="": smt-build
+  pnpm build
+  node dist/evals/smt-expansion/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
+
+smt-expansion-replay run:
+  pnpm build
+  node dist/evals/smt-expansion/replay.js {{quote(run)}}
+
+# SMT-LIB scripts, ordered queries and a shared work budget.
+smt-script-test: smt-build
+  pnpm build
+  node --test dist/evals/smt-scripts/contract-test.js
+  pnpm exec vitest run --config smt-vitest.config.ts
+
+smt-script-eval phase run baseline parent="": smt-build
+  pnpm build
+  node dist/evals/smt-scripts/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
+
+smt-script-replay run:
+  pnpm build
+  node dist/evals/smt-scripts/replay.js {{quote(run)}}
+
+# Fixed SMT benchmarks and immutable before/after binaries.
+smt-tuning-build:
+  CARGO_PROFILE_BENCH_STRIP=none cargo bench --no-run --locked --manifest-path crates/idealis-smt/Cargo.toml --bench solver
+
+smt-tuning-capture binary output:
+  pnpm build
+  node dist/evals/smt-tuning/capture.js {{quote(binary)}} {{quote(output)}}
+
+smt-tuning-criterion stage provenance run:
+  pnpm build
+  node dist/evals/smt-tuning/criterion.js {{quote(stage)}} {{quote(provenance)}} {{quote(run)}}
+
+smt-tuning-compare before after confirmation after_before run:
+  pnpm build
+  node dist/evals/smt-tuning/compare.js {{quote(before)}} {{quote(after)}} {{quote(confirmation)}} {{quote(after_before)}} {{quote(run)}}
+
+smt-tuning-eval phase run baseline parent="": smt-build
+  pnpm build
+  node dist/evals/smt-tuning/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
+
+smt-tuning-replay run:
+  pnpm build
+  node dist/evals/smt-tuning/replay.js {{quote(run)}}

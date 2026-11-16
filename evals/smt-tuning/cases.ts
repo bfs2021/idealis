@@ -1,0 +1,16 @@
+export const cases = [
+  "parse-solve-4",
+  "prepared-4",
+  "parse-solve-32",
+  "prepared-32",
+  "parse-solve-128",
+  "prepared-128",
+  "parse-solve-ite",
+  "script-parse-repeat-64",
+  "script-prepared-repeat-64",
+  "script-parse-scopes-32",
+  "script-prepared-scopes-32",
+  "script-parse-ite-64",
+  "script-prepared-ite-64",
+  "context-scopes-32",
+] as const;

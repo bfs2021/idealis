@@ -6,16 +6,16 @@ Z3を再利用する比較でも、小さいTTL・amount・schedulerのnative問
 
 ## 対応する式
 
-SMT-LIBは入力形式で、対応範囲はその一部。[SMT-LIBの定義](https://smt-lib.org/logics.shtml)ではQF_IDLは整数の差分制約、QF_LIAは一般の線形整数式を扱う。この試作は`set-logic QF_LIA`も受け付けるが、定数代入後に差分制約へ変換できる式だけを解く。
+SMT-LIBは入力形式で、対応範囲はその一部。[SMT-LIBの定義](https://smt-lib.org/logics.shtml)ではQF_IDLは整数の差分制約、QF_LIAは一般の線形整数式を扱う。この試作は`set-logic QF_LIA`も受け付けるが、定数代入後に差分制約へ変換できる式だけを解く。定数倍は同じ係数の差分へ正規化できる範囲に対応する。[対応チェックリスト](smt-checklist.md)で残りを追跡する。
 
 | 項目     | 対応範囲                                                                                     |
 | -------- | -------------------------------------------------------------------------------------------- |
 | 宣言     | `Int` / `Bool`の`declare-const`、引数なしの`declare-fun`                                     |
 | コマンド | `set-logic QF_IDL` / `QF_LIA`、`assert`、末尾の任意の単一`check-sat`、`:produce-models true` |
-| 整数     | 任意精度の整数、加減算、`<` / `<=` / `>` / `>=` / `=` / `distinct`                           |
-| Boolean  | `and` / `or`、`not`、`xor`、`=>`、等価、Booleanの`ite`                                       |
+| 整数     | 任意精度の整数、加減算、定数倍、`<` / `<=` / `>` / `>=` / `=` / `distinct`                   |
+| Boolean  | `and` / `or`、`not`、`xor`、`=>`、等価、Bool / Intの`ite`                                    |
 | 束縛     | 同時束縛の`let`、ASCIIの引用識別子、コメント                                                 |
-| 正規化   | 無条件の整数定数等式を代入し、`x - y <= c`へ変換                                             |
+| 正規化   | 無条件の整数定数等式を代入し、`x - y <= c`へ変換。`k * (x - y) <= c`も整数の丸めで正規化     |
 
 例えば次の式は`other = 3`を代入できるため、`amount = 7`を返す。
 
@@ -29,7 +29,9 @@ SMT-LIBは入力形式で、対応範囲はその一部。[SMT-LIBの定義](htt
 (check-sat)
 ```
 
-`x + y = 7`だけでは両方が自由変数なので拒否する。Real、BitVec、配列、量化、乗除算、剰余、引数のある未解釈関数は対象外。SMT-LIBスクリプトの`push/pop`や`get-model`も実装していない。再利用は別のJSON protocolで行う。
+`x + y = 7`だけでは両方が自由変数なので拒否する。`2*x + 3*y <= 7`も一般LIAなので対象外。Real、BitVec、配列、量化、非線形乗算、除算、剰余、引数のある未解釈関数は対象外。SMT-LIB scriptの`get-model/get-value`やscope内の宣言は対象外。`push/pop`と複数checkは下記のScript APIで実行する。
+
+整数の`ite`はguard付きの選択肢へ変換する。算術・比較で選択肢が256を超えるとresource errorになる。各選択肢が対応する差分制約へ落ちる必要がある。空の`(and)` / `(or)`はZ3 5.4.1のSMT-LIB parserと同じく拒否する。
 
 入力には1 MiB、20万token、4096宣言などの上限がある。構文や型の検査もサブセットに限る。一般のSMT-LIB validatorとしては使わない。
 
@@ -46,7 +48,7 @@ workは式の処理と制約の緩和を数える。parserの費用やwall clock
 
 ## 実験用のAPI
 
-Rustは`idealis_smt::Problem::parse(source)`と`Problem::solve(max_work)`を持つ。nativeの`idealis-smt` binaryと`idealis-smt.wasm`は共通の`Engine`を使う。[TS側のwire型](../evals/smt-subset/wire.ts)がリクエストと応答を定義する。
+Rustは`idealis_smt::Problem::parse(source)`と`Problem::solve(max_work)`を持つ。`Problem::solve_assuming(&[Assumption], max_work)`は一時的なBool literalを加えて解く。`Assumption { symbol, positive }`は宣言済みBool名と極性を表す。nativeの`idealis-smt` binaryと`idealis-smt.wasm`は共通の`Engine`を使う。[TS側のwire型](../evals/smt-subset/wire.ts)がリクエストと応答を定義する。
 
 ```json
 {
@@ -59,9 +61,50 @@ Rustは`idealis_smt::Problem::parse(source)`と`Problem::solve(max_work)`を持�
 }
 ```
 
-`prepare {source}`は解析した式のhandleを返す。`check {handle,maxWork}`で再求解し、`release {handle}`で破棄する。prepareは回答をcacheしない。解放済みhandleを使うとerrorになる。
+`Solver::parse(source)`は変更可能なcontextを作る。`assert(expression)`、`push(count)`、`pop(count)`、`check(max_work)`、`check_assuming(assumptions, max_work)`を使う。宣言は初期sourceに固定する。push/popはassertionだけを追加・撤回する。変更に失敗した場合は元のcontextを保つ。
 
-[Wasm loader](../evals/smt-subset/wasm.ts)はNodeやZ3へ依存しない。実Chromiumで`crossOriginIsolated === false`のままSAT、UNSAT、unknown、未対応、再利用を検査した。今回の生Wasmは330,749 bytesで、Z3 Wasmは39,205,260 bytesだった。対応機能が異なるため、汎用ソルバー同士の容量比較にはしない。
+JSONの`prepare {source}`はcontextのhandleを返す。次のリクエストを使う。
+
+| kind           | 追加フィールド                  | 動作                                                          |
+| -------------- | ------------------------------- | ------------------------------------------------------------- |
+| `assert`       | `handle, expression`            | 単一Bool式を追加する。コマンドや複数式は拒否する。            |
+| `push` / `pop` | `handle, count`                 | scopeを保存・撤回する。成功時は`updated`を返す。              |
+| `check`        | `handle, maxWork, assumptions?` | 現在の式を求解する。assumptionsは`{symbol, positive}`の配列。 |
+| `release`      | `handle`                        | contextを破棄する。解放済みhandleはerror。                    |
+
+scopeとassumptionsはそれぞれ最大256件。pop underflow、未宣言/Intのassumption、不正shapeはerrorになる。assumptionsはそのcheckだけで有効。次のcheckや別handleへ持ち越さない。
+
+assert/pop時はsourceを再解析する。変更なしのcheckは解析結果を再利用するが、探索・学習状態や回答は再利用しない。SMT-LIB scriptの問い合わせ列は次のScript APIで扱う。
+
+### SMT-LIB scriptをまとめて実行する
+
+`Script::parse(source)`は全コマンドを検査し、各check時点の式を保持する。制約が同じcheckは不変な解析結果を共有する。`Script::solve(max_work)`はcheckの順に`Vec<Solution>`を返す。JSONは`run-script {source,maxWork}`を受け、`script-results {results:[...]}`を返す。単発の`solve`や既存handleの契約は変えない。
+
+```smt2
+(declare-const b Bool)
+(check-sat-assuming (b))
+(push 1)
+(assert (not b))
+(check-sat-assuming (b))
+(pop 1)
+(check-sat)
+```
+
+この入力はSAT、UNSAT、SATの3結果を返す。`check-sat-assuming`は宣言済みBool symbolか`(not symbol)`だけに対応する。空のassumptionsは通常checkと同じ。[SMT-LIB 2.7](https://smt-lib.org/papers/smt-lib-reference-v2.7-r2025-07-07.pdf)の任意Bool式への対応は今後の対象。
+
+Int/Boolの宣言と既存のlogic/optionは冒頭に固定する。assert/push/pop/check後の宣言やoption変更、define-fun、reset、exitは拒否する。各assertを追加した時点で対応する差分制約へ正規化できる必要がある。checkは最大256回、scopeとassumptionsは各256件。push/popのcountはu32のnumeralで、0はno-op。
+
+workは全checkで共有し、各結果の`stats.work`を差し引く。残り0のcheckはunknown/workと空モデルを返す。構文や型の不正は予算0でもerror。後続コマンドが不正なら部分的なSATを返さず、既存handleにも影響させない。checkのない入力は空の結果列で、仕様の検査が成功したとは扱わない。
+
+各checkは探索をやり直す。Scriptを再求解しても前回の消費やassumptionsを持ち越さず、学習状態や中断地点の再利用は行わない。
+
+[Wasm loader](../evals/smt-subset/wasm.ts)はNodeやZ3へ依存しない。実Chromiumで`crossOriginIsolated === false`のままSAT、UNSAT、unknown、未対応、再利用を検査した。0030で測定した生Wasmは330,749 bytesで、Z3 Wasmは39,205,260 bytesだった。対応機能が異なるため、汎用ソルバー同士の容量比較にはしない。
+
+[評価0040](../evals/iterations/0040-smt-expansion.md)では、定数倍・整数iteの確認用140式と21件のcontext問い合わせをZ3へ照合した。旧版が受理した式は1/140、新版は140/140。新機能を狙った人工入力の対応率で、実用入力全体の対応率や速度の比較ではない。
+
+[評価0041](../evals/iterations/0041-smt-scripts.md)では、確認用67 scriptの588 checkをZ3の逐次実行と独立したsnapshotへ照合し、全SATモデルを検査した。旧版の単発solveは同じsourceの1/67を受理した。既存のcontext APIの操作をSMT-LIB入力でも使えるようにした結果で、速度比較はしていない。
+
+[評価0042](../evals/iterations/0042-smt-tuning.md)ではcheckごとの再解析を除き、同じライブラリのnative解析を反復checkで約4.0倍、scope付きで約1.7倍、整数iteで約6.7倍に改善した。既存6ケースを残してCriterionを14ケースに増やし、同じ保存binaryで逆順・再確認も測定した。各checkの探索とwork/statsは変えない。WasmやZ3との速度比較は今回測っていない。
 
 ## 再実行
 
@@ -74,6 +117,8 @@ just rsmt-example
 pnpm build
 node --test dist/evals/smt-subset/contract-test.js
 just smt-browser
+just smt-expansion-test
+just smt-script-test
 just rsmt-criterion
 just smt-verify development .artifacts/smt-dev
 just smt-verify confirmation .artifacts/smt-confirm .artifacts/smt-dev
@@ -86,6 +131,6 @@ Z3 nativeは[公式5.4.1 release](https://github.com/Z3Prover/z3/releases/tag/z3
 
 ## 採否
 
-差分制約への限定経路は継続検討する。公開backendへの組み込みと自動fallbackは保留した。一般のLIA、Booleanが難しい問題、incrementalな再利用までZ3を置き換える判断はしていない。
+差分制約への限定経路は継続検討する。公開backendへの組み込みと自動fallbackは保留した。一般のLIAやBooleanが難しい問題でZ3を置き換える判断はしていない。context APIは追加したが、学習状態の再利用は未実装。
 
 次の実験は、既存のSMTオラクル用途から入力を集め、対応率と総実行時間を測る。サブセットの速さだけでなく、未対応やunknownでZ3へ戻る費用を含めて採否を決める。

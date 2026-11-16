@@ -1,0 +1,103 @@
+   Compiling idealis-smt v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/idealis-smt)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s
+     Running unittests src/lib.rs (crates/idealis-smt/target/debug/deps/idealis_smt-11ac9e5f05dbdc6c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (crates/idealis-smt/target/debug/deps/idealis_smt-27c3eb7640457310)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/benchmark.rs (crates/idealis-smt/target/debug/deps/benchmark-b9130ba0cdcf3966)
+
+running 1 test
+test criterion_fixtures_exercise_complete_queries_and_restored_contexts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/expansion.rs (crates/idealis-smt/target/debug/deps/expansion-8b445c68ef31324f)
+
+running 6 tests
+test json_handles_support_atomic_context_edits_and_assumptions ... ok
+test integer_ite_composes_with_let_arithmetic_and_boolean_polarity ... ok
+test scaled_constraints_use_integer_floor_for_both_signs ... ok
+test unsupported_nonlinear_and_excessive_piecewise_terms_remain_errors ... ok
+test scopes_and_temporary_assumptions_never_leak ... ok
+test malformed_assumptions_do_not_mutate_quoted_symbol_contexts ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scripts.rs (crates/idealis-smt/target/debug/deps/scripts-56bc727e45fbef3e)
+
+running 4 tests
+test work_is_shared_by_all_checks_and_repeated_solves_start_fresh ... ok
+test scripts_restore_scopes_and_temporary_assumptions_in_order ... ok
+test quoted_symbols_and_json_batch_errors_preserve_existing_handles ... ok
+test invalid_later_commands_and_resource_overflows_are_errors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/solver.rs (crates/idealis-smt/target/debug/deps/solver-339f12f1824ddf05)
+
+running 5 tests
+test empty_boolean_applications_are_syntax_errors ... ok
+test existing_integer_input_generation_is_supported ... ok
+test budget_cuts_and_unsupported_theories_are_not_unsat ... ok
+test unbounded_difference_constraints_have_exact_witnesses ... ok
+test boolean_polarity_and_let_scope_are_preserved ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running benches/solver.rs (crates/idealis-smt/target/debug/deps/solver-aa2d7af44c285c7e)
+Testing parse-solve-4
+Success
+
+Testing prepared-4
+Success
+
+Testing parse-solve-32
+Success
+
+Testing prepared-32
+Success
+
+Testing parse-solve-128
+Success
+
+Testing prepared-128
+Success
+
+Testing parse-solve-ite
+Success
+
+Testing script-parse-repeat-64
+Success
+
+Testing script-prepared-repeat-64
+Success
+
+Testing script-parse-scopes-32
+Success
+
+Testing script-prepared-scopes-32
+Success
+
+Testing script-parse-ite-64
+Success
+
+Testing script-prepared-ite-64
+Success
+
+Testing context-scopes-32
+Success
+
+     Running unittests examples/ttl.rs (crates/idealis-smt/target/debug/examples/ttl-2fd0aa2841a440f2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

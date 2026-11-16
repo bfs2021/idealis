@@ -1,0 +1,50 @@
+parse-solve-4           time:   [6.5896 µs 6.6158 µs 6.6418 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+prepared-4              time:   [637.69 ns 640.25 ns 642.86 ns]
+
+parse-solve-32          time:   [69.060 µs 75.195 µs 83.876 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) high mild
+  2 (10.00%) high severe
+
+prepared-32             time:   [14.716 µs 14.860 µs 15.098 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+parse-solve-128         time:   [423.15 µs 473.21 µs 539.37 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) high mild
+  2 (10.00%) high severe
+
+prepared-128            time:   [190.11 µs 190.47 µs 190.72 µs]
+
+parse-solve-ite         time:   [3.1118 µs 3.4391 µs 3.7587 µs]
+Found 4 outliers among 20 measurements (20.00%)
+  4 (20.00%) high severe
+
+script-parse-repeat-64  time:   [1.1722 ms 1.2107 ms 1.2640 ms]
+Found 4 outliers among 20 measurements (20.00%)
+  1 (5.00%) high mild
+  3 (15.00%) high severe
+
+script-prepared-repeat-64
+                        time:   [950.86 µs 961.73 µs 977.11 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high mild
+
+script-parse-scopes-32  time:   [234.14 µs 236.14 µs 239.45 µs]
+
+script-prepared-scopes-32
+                        time:   [19.607 µs 19.892 µs 20.142 µs]
+
+script-parse-ite-64     time:   [32.422 µs 33.497 µs 34.575 µs]
+
+script-prepared-ite-64  time:   [24.792 µs 24.977 µs 25.146 µs]
+
+context-scopes-32       time:   [3.7251 ms 3.7823 ms 3.8630 ms]
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) low mild
+  2 (10.00%) high severe
+
