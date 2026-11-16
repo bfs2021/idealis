@@ -59,7 +59,7 @@ maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが�
 
 ## 対応範囲
 
-基準は TLC v1.7.4 (`5a47802`)。state は signed 32 bit 整数、真偽値、文字列、有限集合、有限関数を扱う。tuple / sequence は1始まりの有限関数、record は文字列をキーにする有限関数として等価性を判定する。値は immutable な arena に intern し、state はその ID を保持する。hash が衝突しても、型付き値の完全一致で重複排除する。
+基準は TLC v1.7.4 (`5a47802`)。state は signed 32 bit 整数、真偽値、文字列、有限集合、有限関数を扱う。tuple / sequence は1始まりの有限関数、record は文字列をキーにする有限関数として等価性を判定する。関数の等価比較は要素数を確認した後、正規化済みの各 key とその値を交互に比較し、最初の不一致で FALSE、比較不能な値で評価エラーを返す。tuple / sequence は添字順、record は既存の field 正規化順で同じ判定を行う。値は immutable な arena に intern し、state はその ID を保持する。hash が衝突しても、型付き値の完全一致で重複排除する。
 
 主な演算は次の通り。
 

@@ -30,6 +30,11 @@ const foldValue = (
 });
 export const foldCases = (): readonly Input[] => [
   foldValue(
+    "equality-entry-error",
+    "ApaFoldSet(Op, FALSE, {F})",
+    "F == [i \\in {0, 2} |-> TRUE]\nG == [i \\in {0, 3} |-> 0]\nOp(a, b) == b = G",
+  ),
+  foldValue(
     "sequence-values",
     'ApaFoldSeqLeft(Op, <<>>, <<"z", [a |-> 1], "A">>)',
   ),
@@ -242,6 +247,12 @@ export const foldRejections = (): readonly Input[] => [
   },
 ];
 export const functionOrderCases = (): readonly Input[] => [
+  {
+    ...value("function-equality-entry-error", "F = G"),
+    goldenFrontendParity: true,
+    source:
+      "---- MODULE Differential ----\nEXTENDS Integers\nVARIABLE x\nF == [i \\in {0, 2} |-> TRUE]\nG == [i \\in {0, 3} |-> 0]\nInit == x = (F = G)\nNext == UNCHANGED x\nProp == x # x\n====",
+  },
   {
     ...value("function-initial-choice", "0"),
     goldenFrontendParity: true,
