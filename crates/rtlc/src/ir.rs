@@ -57,6 +57,13 @@ pub enum Expression {
         bounds: Vec<Binding>,
         body: Box<Self>,
     },
+    Fold {
+        accumulator: usize,
+        initial: Box<Self>,
+        collection: Box<Self>,
+        order: FoldOrder,
+        body: Box<Self>,
+    },
     Domain {
         argument: Box<Self>,
     },
@@ -197,6 +204,13 @@ pub enum Expression {
         value: Box<Self>,
         domain: Domain,
     },
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[serde(rename_all = "kebab-case")]
+pub enum FoldOrder {
+    SetMembers,
+    SequenceLeft,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]

@@ -17,3 +17,9 @@ native と Wasm は結果・trace・work を完全比較する。TLC とは API 
 並列回帰実行中の再実行で、標準モジュール解析の NullPointerException が1件発生した。同一入力は先行 run で型エラーを返していた。v1.7.4 の `SimpleFilenameToStream.read` は `java.io.tmpdir` 内の固定ファイル名へ書き、終了時に削除する。全 TLC 呼び出しに専用の一時ディレクトリを指定し、JVM の解析例外を input error とも model error とも区別する。失敗 run は保持する。検査器の binary・モデル・確認 seed 0x15C3 は変更せず、未実行の追加確認を続ける。
 
 CASE の追加回帰条件: OTHER のない式と action で、最初の真の arm を選ぶこと、全条件が偽なら到達時に評価エラーとソース位置を返すこと、未評価の分岐ではエラーにしないことを固定する。空の Init の invariant を事前評価しないこと、OTHER 付き action、後続 guard の短絡、未評価の action 分岐も含む小さい8入力を境界 corpus に追加し、同じ pinned TLC v1.7.4 (`5a47802`) の環境情報だけを置換したログと source / config / log / jar の SHA-256 を `evals/fixtures/tlc-case/` に保存する。TS / Rust frontend の IR と native / Wasm の結果を比較し、IR の location 検証も回帰で確認する。確認 seed や保存 run は変更せず、未知故障発見や全 TLA+ 互換の主張は追加しない。
+
+Apalache fold の core 回帰条件: root の直接の `EXTENDS Apalache` と、2つの零 arity 引数を持つ可視の非再帰 operator 名に限定する。累積値が第1引数、要素が第2引数。sequence は先頭から処理し、要素種を制限しない。集合は既存順序が pinned TLC と一致する整数・Boolean・tuple/sequence・集合と、それらの再帰的な組み合わせだけを受理する。文字列・record・非 sequence 関数を再帰的に含む集合は単一の unsupported エラーとする。既存の function 比較は変更しない。関数順序の整合、文字列/field の intern ID、整数 domain 幅の調査ログと期待値は後続の value-order 作業へ分離する。
+
+採取前に core corpus を固定する。既存の空集合・空列、LET、外側の bound capture、入れ子、Next の対照を残し、再帰的な受理と各未対応種の singleton・tuple 内・集合内の拒否、sequence の関数要素、EXTENDS なしの通常名前解決を追加する。意味論の期待値は TLC ログからのみ記録する。全 fold 入力に `goldenFrontendParity` を宣言し、IR または拒否の両 frontend 一致と native/Wasm の結果を比較する。重複した compiler/browser の意味論テストは削減し、IR 検証・scope・予算・frontend 制限の固有リスクを別途確認する。
+
+同じ pinned TLC v1.7.4 (`5a47802`) と Apalache 0.56.1 module（SHA-256 `a9115b404e72c58fd085f81bc59cc918f8adac49feabfb57f8e285bc7ab5cfac`）で、この枝に残す全 fold ログを逐次再採取する。環境情報は CASE fixture と同じ置換規則だけで除去し、source/config/log の全 digest を更新する。確認 seed、保存 run、ledger、探索上限は変更しない。新しい採用・性能・未知故障発見の主張は含めない。

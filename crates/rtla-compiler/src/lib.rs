@@ -163,11 +163,16 @@ fn unchanged(value: Json) -> Result<Vec<Json>> {
 
 /// Compile the selected finite TLA+ fragment. Parsing and execution remain separate.
 pub fn compile(module: &Module, config: &Config) -> Result<rtlc::SafetyProgram> {
-    if module
-        .extends
-        .iter()
-        .any(|name| !["Naturals", "Integers", "Sequences", "FiniteSets"].contains(&name.as_str()))
-    {
+    if module.extends.iter().any(|name| {
+        ![
+            "Naturals",
+            "Integers",
+            "Sequences",
+            "FiniteSets",
+            "Apalache",
+        ]
+        .contains(&name.as_str())
+    }) {
         return unsupported("EXTENDS");
     }
     if !config.constraints.is_empty()
@@ -606,6 +611,64 @@ impl Compiler<'_> {
             )),
         }
     }
+    fn fold(
+        &mut self,
+        sequence: bool,
+        args: &[Expression],
+        context: &Context,
+        child: &Context,
+    ) -> Result<Json> {
+        let E::Identifier { name } = &args[0].node else {
+            return unsupported("fold operator argument");
+        };
+        if context.locals.contains_key(name) {
+            return unsupported(format!("fold operator {name}"));
+        }
+        let entry = self.scopes[context.scope]
+            .get(name)
+            .cloned()
+            .ok_or_else(|| CompileError {
+                message: format!("operator {name}"),
+            })?;
+        if entry.definition.is_recursive || context.calls.iter().any(|item| item == name) {
+            return unsupported(format!("operator {name}"));
+        }
+        let DefinitionKind::Operator { params } = &entry.definition.head else {
+            return unsupported(format!("fold operator {name}"));
+        };
+        if params.len() != 2 || params.iter().any(|param| param.arity != 0) {
+            return unsupported(format!("fold operator {name}"));
+        }
+        let accumulator = context.bound;
+        if accumulator + 2 > 40 {
+            return unsupported("more than 40 bound variables");
+        }
+        let initial = self.expression(&args[1], child)?;
+        let collection = self.expression(&args[2], child)?;
+        let mut locals = entry.locals;
+        locals.insert(
+            params[0].name.clone(),
+            json!({"op":"bound","slot":accumulator}),
+        );
+        locals.insert(
+            params[1].name.clone(),
+            json!({"op":"bound","slot":accumulator + 1}),
+        );
+        let mut inner = child.nested()?;
+        inner.locals = locals;
+        inner.scope = entry.scope;
+        inner.calls.push(name.clone());
+        inner.bound = accumulator + 2;
+        let body = self.expression(&entry.definition.body, &inner)?;
+        Ok(json!({
+            "op": "fold",
+            "accumulator": accumulator,
+            "initial": initial,
+            "collection": collection,
+            "order": if sequence { "sequence-left" } else { "set-members" },
+            "body": body,
+        }))
+    }
     fn key(&mut self, args: &[Expression], context: &Context) -> Result<Json> {
         if args.len() == 1 {
             self.expression(&args[0], context)
@@ -623,6 +686,12 @@ impl Compiler<'_> {
         if self.has(context, operator) {
             let (body, expanded) = self.call(operator, args, context)?;
             return self.expression(&body, &expanded);
+        }
+        if self.extends("Apalache") && ["ApaFoldSet", "ApaFoldSeqLeft"].contains(&operator) {
+            if args.len() != 3 {
+                return unsupported("fold arity");
+            }
+            return self.fold(operator == "ApaFoldSeqLeft", args, context, child);
         }
         if args.len() == 1 && ["-.", "-"].contains(&operator) {
             if !self.extends("Integers") {
