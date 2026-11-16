@@ -446,14 +446,11 @@ impl<'scope> Arena<'scope> {
                     if size != Ordering::Equal {
                         return size;
                     }
-                    for ((left_key, _), (right_key, _)) in left.iter().zip(right) {
-                        let comparison = self.total(*left_key, *right_key);
-                        if comparison != Ordering::Equal {
-                            return comparison;
-                        }
-                    }
-                    for ((_, left_value), (_, right_value)) in left.iter().zip(right) {
-                        let comparison = self.total(*left_value, *right_value);
+                    for ((left_key, left_value), (right_key, right_value)) in left.iter().zip(right)
+                    {
+                        let comparison = self
+                            .total(*left_key, *right_key)
+                            .then_with(|| self.total(*left_value, *right_value));
                         if comparison != Ordering::Equal {
                             return comparison;
                         }
@@ -487,12 +484,7 @@ impl<'scope> Arena<'scope> {
             (Ok(Cell::Function(left)), Ok(Cell::Function(right))) if left.len() == right.len() => {
                 left.iter()
                     .zip(right)
-                    .map(|(left, right)| (left.0, right.0))
-                    .chain(
-                        left.iter()
-                            .zip(right)
-                            .map(|(left, right)| (left.1, right.1)),
-                    )
+                    .flat_map(|(left, right)| [(left.0, right.0), (left.1, right.1)])
                     .collect()
             }
             _ => vec![],
@@ -524,8 +516,6 @@ impl<'scope> Arena<'scope> {
                     if !self.equal(left.0, right.0)? {
                         return Ok(false);
                     }
-                }
-                for (left, right) in left.iter().zip(right) {
                     if !self.equal(left.1, right.1)? {
                         return Ok(false);
                     }
@@ -596,29 +586,58 @@ impl<'scope> Arena<'scope> {
         Ok(members)
     }
     fn check_fold_order(&mut self, values: &[Scalar]) -> Result<(), CoreError> {
-        let mut pending: Vec<_> = values.iter().rev().copied().collect();
+        let mut pending: Vec<_> = values.iter().rev().map(|value| (*value, false)).collect();
         let mut visited = HashSet::new();
-        while let Some(value) = pending.pop() {
+        let mut keys = None;
+        while let Some((value, is_key)) = pending.pop() {
+            if is_key {
+                let Scalar::Int(key) = value else {
+                    return Err(unsupported_fold_order());
+                };
+                keys = Some(match keys {
+                    Some((minimum, maximum)) => (key.min(minimum), key.max(maximum)),
+                    None => (key, key),
+                });
+                continue;
+            }
             if let Scalar::Ref(index) = value {
                 if !visited.insert(index) {
                     continue;
                 }
                 self.tick()?;
                 match self.cell(value)? {
-                    Cell::String(_) => return Err(unsupported_fold_order()),
-                    Cell::Set(values) => pending.extend(values.iter().rev().copied()),
+                    Cell::String(_) => {
+                        return Err(CoreError::protocol(
+                            "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR",
+                        ));
+                    }
+                    Cell::Set(values) => {
+                        pending.extend(values.iter().rev().map(|value| (*value, false)));
+                    }
                     Cell::Function(entries) => {
-                        if !entries
-                            .iter()
-                            .enumerate()
-                            .all(|(index, entry)| entry.0 == Scalar::Int((index + 1) as i32))
+                        if !entries.is_empty()
+                            && entries
+                                .iter()
+                                .all(|entry| matches!(self.cell(entry.0), Ok(Cell::String(_))))
                         {
-                            return Err(unsupported_fold_order());
+                            return Err(CoreError::protocol(
+                                "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR",
+                            ));
                         }
-                        pending.extend(entries.iter().rev().map(|(_, value)| *value));
+                        for (key, value) in entries.iter().rev() {
+                            pending.push((*value, false));
+                            pending.push((*key, true));
+                        }
                     }
                 }
             }
+        }
+        if let Some((minimum, maximum)) = keys
+            && maximum.abs_diff(minimum) > i32::MAX as u32
+        {
+            return Err(CoreError::protocol(
+                "Unsupported TLA input: set fold order for integer function domains spanning more than i32::MAX",
+            ));
         }
         Ok(())
     }
