@@ -1,5 +1,4 @@
 use idealis_testing::{Effect, Plan, Schedule, ScheduleActor, Session, TestStatus, Verdict};
-use serde_json::json;
 
 fn main() -> Result<(), idealis_testing::Error> {
     let generator = Schedule {
@@ -8,11 +7,11 @@ fn main() -> Result<(), idealis_testing::Error> {
         actors: vec![
             ScheduleActor {
                 id: "left".into(),
-                operations: vec![json!("read"), json!("write")],
+                operations: vec!["read".into(), "write".into()],
             },
             ScheduleActor {
                 id: "right".into(),
-                operations: vec![json!("read"), json!("write")],
+                operations: vec!["read".into(), "write".into()],
             },
         ],
     }
