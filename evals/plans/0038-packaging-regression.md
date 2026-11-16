@@ -1,0 +1,5 @@
+# 0038: 単独consumerの修正後に行う回帰
+
+0038の開発・確認を完了した後、単独Rust consumerが新しいschedule exampleの未宣言serde_json importで失敗した。exampleの文字列operationをIntoで作り、consumer側への依存追加を避ける。生成器、Session、TS/Rust SUTと期待値のロジックは変更しない。
+
+失敗ログと元のrunを残す。最終sourceで同じ開発16 seed・確認32 seedを再実行し、0038-packaging-regression-development/confirmationへ保存して全記録を再生する。これは観測済みseedの回帰であり、新しい独立した確認実験ではない。packageと単独consumerをやり直し、最終sourceVersionと元の実験を区別する。
