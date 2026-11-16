@@ -1,0 +1,37 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 72 and seed 9055674396559615483 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 43876] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0046-finite-verified/constraint-boundary-property/witness/Differential.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-fRj2l8/Integers.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-fRj2l8/FiniteSets.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-fRj2l8/Sequences.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-fRj2l8/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Differential
+Starting... (2026-11-17 02:39:13)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-11-17 02:39:13.
+Error: Action property Safe is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ __position = 0
+/\ x = 0
+
+State 2: <__TraceNext line 11, col 16 to line 11, col 246 of module Differential>
+/\ __position = 1
+/\ x = 1
+
+State 3: <__TraceNext line 11, col 16 to line 11, col 246 of module Differential>
+/\ __position = 2
+/\ x = 2
+
+State 4: <__TraceNext line 11, col 16 to line 11, col 246 of module Differential>
+/\ __position = 3
+/\ x = 3
+
+4 states generated, 4 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 4.
+The average outdegree of the complete state graph is 1 (minimum is 1, the maximum 1 and the 95th percentile is 1).
+Finished in 00s at (2026-11-17 02:39:13)

@@ -161,6 +161,9 @@ impl Domain {
                 if lower > upper {
                     return Ok(false);
                 }
+                if arena.model_membership(value)? {
+                    return Ok(false);
+                }
                 let value = value.integer()?;
                 Ok(lower <= value && value <= upper)
             }
@@ -230,6 +233,29 @@ pub(crate) fn validate_branches(
     Ok(())
 }
 
+pub(crate) fn validate_constant_bindings(
+    bindings: &[Binding],
+    variables: usize,
+    locals: usize,
+) -> Result<usize, CoreError> {
+    if bindings.is_empty() || locals + bindings.len() > 40 {
+        return Err(CoreError::protocol("Invalid temporal binding count"));
+    }
+    for (index, binding) in bindings.iter().enumerate() {
+        if binding.slot != locals + index || binding.tuple_size.is_some_and(|size| size > 256) {
+            return Err(CoreError::protocol("Invalid temporal binding slot"));
+        }
+        binding.domain.validate(Validation {
+            variables,
+            phase: 3,
+            depth: 0,
+            locals,
+            old: false,
+        })?;
+    }
+    Ok(locals + bindings.len())
+}
+
 impl Expression {
     #[cfg(not(target_arch = "wasm32"))]
     pub(crate) fn is_scalar_cost(&self) -> bool {
@@ -243,6 +269,9 @@ impl Expression {
             | Self::Add { .. }
             | Self::Sub { .. }
             | Self::Mul { .. }
+            | Self::Div { .. }
+            | Self::Mod { .. }
+            | Self::Pow { .. }
             | Self::Eq { .. }
             | Self::Ne { .. }
             | Self::Lt { .. }
@@ -284,6 +313,9 @@ impl Expression {
             Self::Add { left, right }
             | Self::Sub { left, right }
             | Self::Mul { left, right }
+            | Self::Div { left, right }
+            | Self::Mod { left, right }
+            | Self::Pow { left, right }
             | Self::Eq { left, right }
             | Self::Ne { left, right }
             | Self::Lt { left, right }
@@ -343,6 +375,11 @@ impl Expression {
                 body,
                 ..
             } => vec![initial, collection, body],
+            Self::Choose { binding, body } => {
+                let mut children = binding.domain.children();
+                children.push(body);
+                children
+            }
             Self::Subseq { sequence, from, to } => vec![sequence, from, to],
             Self::Enabled { .. } | Self::UnmatchedCase { .. } => vec![],
         }
@@ -378,6 +415,20 @@ impl Expression {
             phase,
             depth,
             locals: 0,
+            old: false,
+        })
+    }
+    pub(crate) fn validate_locals(
+        &self,
+        variables: usize,
+        phase: u8,
+        locals: usize,
+    ) -> Result<(), CoreError> {
+        self.validate_with(Validation {
+            variables,
+            phase,
+            locals,
+            depth: 0,
             old: false,
         })
     }
@@ -419,6 +470,20 @@ impl Expression {
                 if !ctx.old {
                     return Err(CoreError::protocol("Unbound EXCEPT @"));
                 }
+            }
+            Self::Choose { binding, body } => {
+                if binding.slot != ctx.locals
+                    || ctx.locals >= 40
+                    || binding.tuple_size.is_some_and(|size| size > 256)
+                {
+                    return Err(CoreError::protocol("Invalid CHOOSE variable slot"));
+                }
+                binding.domain.validate(ctx.child())?;
+                body.validate_with(Validation {
+                    locals: ctx.locals + 1,
+                    ..ctx.child()
+                })?;
+                return Ok(());
             }
             Self::Forall { bounds, body }
             | Self::Exists { bounds, body }
@@ -549,6 +614,43 @@ impl Expression {
                     .ok_or_else(|| CoreError::protocol("Safety integer overflow"))?,
                 )
             }
+            Self::Div { left, right } => {
+                let left = left.eval(ctx, arena)?.integer()?;
+                let right = right.eval(ctx, arena)?.integer()?;
+                if right == 0 {
+                    return Err(CoreError::protocol("Integer division by zero"));
+                }
+                let quotient = left
+                    .checked_div(right)
+                    .ok_or_else(|| CoreError::protocol("Safety integer overflow"))?;
+                Scalar::Int(if left % right != 0 && (left < 0) != (right < 0) {
+                    quotient - 1
+                } else {
+                    quotient
+                })
+            }
+            Self::Mod { left, right } => {
+                let left = left.eval(ctx, arena)?.integer()?;
+                let right = right.eval(ctx, arena)?.integer()?;
+                if right <= 0 {
+                    return Err(CoreError::protocol("Modulo requires a positive divisor"));
+                }
+                Scalar::Int(left.rem_euclid(right))
+            }
+            Self::Pow { left, right } => {
+                let left = left.eval(ctx, arena)?.integer()?;
+                let right = right.eval(ctx, arena)?.integer()?;
+                if right < 0 {
+                    return Err(CoreError::protocol("Power requires a natural exponent"));
+                }
+                if left == 0 && right == 0 {
+                    return Err(CoreError::protocol("Undefined 0^0"));
+                }
+                Scalar::Int(
+                    left.checked_pow(right as u32)
+                        .ok_or_else(|| CoreError::protocol("Safety integer overflow"))?,
+                )
+            }
             Self::Eq { left, right } | Self::Ne { left, right } => {
                 let left = left.eval(ctx, arena)?;
                 let right = right.eval(ctx, arena)?;
@@ -652,6 +754,26 @@ impl Expression {
                     }
                 })?;
                 Scalar::Bool(result)
+            }
+            Self::Choose { binding, body } => {
+                let mut selected = None;
+                visit_bindings(
+                    std::slice::from_ref(binding),
+                    0,
+                    ctx,
+                    arena,
+                    &mut |bound, arena| {
+                        if body.eval(bound, arena)?.boolean()? {
+                            selected = bound.locals.last().copied();
+                            Ok(false)
+                        } else {
+                            Ok(true)
+                        }
+                    },
+                )?;
+                selected.ok_or_else(|| {
+                    CoreError::protocol("CHOOSE: no element of the domain satisfied the predicate")
+                })?
             }
             Self::Function { bounds, body }
             | Self::Filter { bounds, body }
@@ -1119,6 +1241,13 @@ impl MembershipSet {
         Self::new(kind, self.cacheable)
     }
     fn contains_uncached(&self, value: Scalar, arena: &mut Arena) -> Result<bool, CoreError> {
+        if !matches!(
+            self.kind,
+            MembershipKind::Finite(_) | MembershipKind::Subsets(_)
+        ) && arena.model_membership(value)?
+        {
+            return Ok(false);
+        }
         match &self.kind {
             MembershipKind::Finite(set) => arena.contains(value, *set),
             MembershipKind::Subsets(set) => {
@@ -1177,7 +1306,7 @@ impl MembershipSet {
     }
 }
 
-fn visit_bindings(
+pub(crate) fn visit_bindings(
     bindings: &[Binding],
     position: usize,
     ctx: EvalContext<'_>,

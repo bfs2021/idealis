@@ -1,0 +1,35 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 100 and seed 1942273878691632472 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 23025] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0046-finite-pilot/temporal-fair/model/Differential.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-gFVnNT/Integers.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-gFVnNT/FiniteSets.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-gFVnNT/Sequences.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-gFVnNT/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Differential
+Semantic errors:
+
+*** Errors: 3
+
+line 5, col 9 to line 5, col 12 of module Differential
+
+Unknown operator: `Init'.
+
+
+line 5, col 20 to line 5, col 23 of module Differential
+
+Unknown operator: `Next'.
+
+
+line 5, col 36 to line 5, col 39 of module Differential
+
+Unknown operator: `Next'.
+
+
+
+Starting... (2026-11-17 02:22:44)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 02:22:44)

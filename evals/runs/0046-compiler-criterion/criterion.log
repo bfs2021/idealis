@@ -1,0 +1,146 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling serde v1.0.229
+   Compiling crossbeam-utils v0.8.23
+   Compiling serde_json v1.0.154
+   Compiling crossbeam-epoch v0.9.21
+   Compiling memchr v2.8.3
+   Compiling crossbeam-deque v0.8.8
+   Compiling either v1.19.0
+   Compiling itoa v1.0.19
+   Compiling zerocopy v0.8.63
+   Compiling find-msvc-tools v0.1.15
+   Compiling rayon-core v1.13.0
+   Compiling shlex v2.0.1
+   Compiling cc v1.11.2
+   Compiling autocfg v1.5.1
+   Compiling libc v0.2.191
+   Compiling cfg-if v1.0.5
+   Compiling alloca v0.4.0
+   Compiling num-traits v0.2.19
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+   Compiling clap_lex v1.1.1
+   Compiling ciborium-io v0.2.2
+   Compiling anstyle v1.0.14
+   Compiling regex-syntax v0.8.11
+   Compiling clap_builder v4.6.7
+   Compiling itertools v0.13.0
+   Compiling serde_derive v1.0.229
+   Compiling rayon v1.12.0
+   Compiling regex-automata v0.4.18
+   Compiling zerocopy-derive v0.8.63
+   Compiling same-file v1.0.6
+   Compiling cast v0.3.0
+   Compiling walkdir v2.5.0
+   Compiling criterion-plot v0.8.2
+   Compiling page_size v0.6.0
+   Compiling clap v4.6.7
+   Compiling anes v0.1.6
+   Compiling oorandom v11.1.5
+   Compiling regex v1.13.1
+   Compiling rtla v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/rtla)
+   Compiling tinytemplate v1.2.1
+   Compiling rtlc v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/rtlc)
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling rtla-compiler v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/rtla-compiler)
+   Compiling criterion v0.8.2
+    Finished `bench` profile [optimized] target(s) in 18.25s
+     Running benches/compatibility.rs (crates/rtla-compiler/target/release/deps/compatibility-f9686946d3db949d)
+Benchmarking compile/model-untyped
+Benchmarking compile/model-untyped: Warming up for 500.00 ms
+Benchmarking compile/model-untyped: Collecting 20 samples in estimated 1.0004 s (39k iterations)
+Benchmarking compile/model-untyped: Analyzing
+compile/model-untyped   time:   [19.568 µs 21.077 µs 23.009 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high mild
+
+Benchmarking check/model-untyped
+Benchmarking check/model-untyped: Warming up for 500.00 ms
+Benchmarking check/model-untyped: Collecting 20 samples in estimated 1.0002 s (667k iterations)
+Benchmarking check/model-untyped: Analyzing
+check/model-untyped     time:   [1.4166 µs 1.4408 µs 1.4773 µs]
+
+Benchmarking compile/state-constraint
+Benchmarking compile/state-constraint: Warming up for 500.00 ms
+Benchmarking compile/state-constraint: Collecting 20 samples in estimated 1.0003 s (88k iterations)
+Benchmarking compile/state-constraint: Analyzing
+compile/state-constraint
+                        time:   [11.655 µs 11.795 µs 11.941 µs]
+
+Benchmarking check/state-constraint
+Benchmarking check/state-constraint: Warming up for 500.00 ms
+Benchmarking check/state-constraint: Collecting 20 samples in estimated 1.0000 s (1.9M iterations)
+Benchmarking check/state-constraint: Analyzing
+check/state-constraint  time:   [521.46 ns 526.79 ns 532.53 ns]
+
+Benchmarking compile/action-constraint
+Benchmarking compile/action-constraint: Warming up for 500.00 ms
+Benchmarking compile/action-constraint: Collecting 20 samples in estimated 1.0018 s (87k iterations)
+Benchmarking compile/action-constraint: Analyzing
+compile/action-constraint
+                        time:   [12.541 µs 13.614 µs 14.450 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  3 (15.00%) high mild
+
+Benchmarking check/action-constraint
+Benchmarking check/action-constraint: Warming up for 500.00 ms
+Benchmarking check/action-constraint: Collecting 20 samples in estimated 1.0000 s (1.9M iterations)
+Benchmarking check/action-constraint: Analyzing
+check/action-constraint time:   [504.01 ns 510.11 ns 516.68 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking compile/choose-order
+Benchmarking compile/choose-order: Warming up for 500.00 ms
+Benchmarking compile/choose-order: Collecting 20 samples in estimated 1.0006 s (54k iterations)
+Benchmarking compile/choose-order: Analyzing
+compile/choose-order    time:   [18.031 µs 18.120 µs 18.217 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking check/choose-order
+Benchmarking check/choose-order: Warming up for 500.00 ms
+Benchmarking check/choose-order: Collecting 20 samples in estimated 1.0000 s (1.8M iterations)
+Benchmarking check/choose-order: Analyzing
+check/choose-order      time:   [562.91 ns 571.26 ns 580.19 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+
+Benchmarking compile/power-min
+Benchmarking compile/power-min: Warming up for 500.00 ms
+Benchmarking compile/power-min: Collecting 20 samples in estimated 1.0022 s (64k iterations)
+Benchmarking compile/power-min: Analyzing
+compile/power-min       time:   [15.336 µs 15.816 µs 16.196 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  2 (10.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking check/power-min
+Benchmarking check/power-min: Warming up for 500.00 ms
+Benchmarking check/power-min: Collecting 20 samples in estimated 1.0000 s (2.0M iterations)
+Benchmarking check/power-min: Analyzing
+check/power-min         time:   [495.67 ns 501.13 ns 509.17 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking compile/temporal-fair
+Benchmarking compile/temporal-fair: Warming up for 500.00 ms
+Benchmarking compile/temporal-fair: Collecting 20 samples in estimated 1.0035 s (21k iterations)
+Benchmarking compile/temporal-fair: Analyzing
+compile/temporal-fair   time:   [48.907 µs 50.746 µs 53.368 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking check/temporal-fair
+Benchmarking check/temporal-fair: Warming up for 500.00 ms
+Benchmarking check/temporal-fair: Collecting 20 samples in estimated 1.0025 s (76k iterations)
+Benchmarking check/temporal-fair: Analyzing
+check/temporal-fair     time:   [12.879 µs 13.254 µs 13.609 µs]
+

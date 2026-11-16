@@ -1,6 +1,13 @@
 import type { PortableTrace, PortableValue } from "./contracts.js";
 import { isRecord } from "./trace.js";
 
+class ModelValue {
+  readonly type = "model-value";
+  constructor(readonly value: string) {
+    Object.freeze(this);
+  }
+}
+
 export class PortableCoreError extends Error {
   override readonly name = "PortableCoreError";
   constructor(
@@ -57,6 +64,13 @@ export const normalizePortableValue = (value: unknown): PortableValue => {
           break;
         case "string":
           return { type: "string", value: scalarString(current.value) };
+        case "model-value":
+          if (
+            typeof current.value === "string" &&
+            /^[A-Za-z_][A-Za-z0-9_]*$/.test(current.value)
+          )
+            return { type: "model-value", value: current.value };
+          break;
         case "bytes":
           if (
             typeof current.value === "string" &&
@@ -122,6 +136,8 @@ export const normalizePortableValue = (value: unknown): PortableValue => {
 export const toPortableValue = (value: unknown): PortableValue => {
   const ancestors = new Set<object>();
   const visit = (current: unknown): PortableValue => {
+    if (current instanceof ModelValue)
+      return { type: "model-value", value: current.value };
     if (current === null) return { type: "null" };
     if (typeof current === "boolean") return { type: "bool", value: current };
     if (typeof current === "string")
@@ -191,6 +207,8 @@ export const fromPortableValue = (value: PortableValue): unknown => {
         return Uint8Array.from(current.value.match(/../g) ?? [], (byte) =>
           Number.parseInt(byte, 16),
         );
+      case "model-value":
+        return new ModelValue(current.value);
       case "list":
         return current.value.map(visit);
       case "set":

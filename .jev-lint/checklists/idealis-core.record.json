@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "59b961ddb06c9c3e456fbb7f78dec58c9da05329e844a6a5be65e860366877b2",
+  "snapshotDigest": "d44feea907a12958dcbd09fd5afa043c0cd7d9bff888ec6a6fd610aed6ea3d8f",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -23,19 +23,19 @@
         "source": "source3",
         "path": "crates/idealis-core/SUPPORT.md",
         "startLine": 1,
-        "endLine": 31,
-        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
-        "contentHash": "69809b8a229353d595931bee0acd8a22ec32b7a1bb1336f440378ede57db5b01"
+        "endLine": 32,
+        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
+        "contentHash": "fc3df1a68811ed7700d1df7f138e48c818793a301f61dabc0dfa040098c8657d"
       },
       "context": [],
-      "candidateId": "07a9968d00cdd28ca2739f565aec54571b011ba96c23530919ef6bdeea3b06e4",
-      "contextHash": "2fefbf5a660b80ae98d77c90179f96128aa04a6abacc599039100210297f0611",
+      "candidateId": "342008ad73ff82978d564d9f0065a08c0fd99e85e5ba8396783b79de62f482b5",
+      "contextHash": "b7bc04ee8c4992ba9eeb349b99006b0ed7cc8833a92b7c99f179da43fa6f4b63",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.92,
+        "confidence": 0.91,
         "probabilities": {
-          "supports": 0.94,
-          "contradicts": 0.05,
+          "supports": 0.93,
+          "contradicts": 0.06,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -57,19 +57,19 @@
         "source": "source3",
         "path": "crates/idealis-core/SUPPORT.md",
         "startLine": 1,
-        "endLine": 31,
-        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
-        "contentHash": "69809b8a229353d595931bee0acd8a22ec32b7a1bb1336f440378ede57db5b01"
+        "endLine": 32,
+        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
+        "contentHash": "fc3df1a68811ed7700d1df7f138e48c818793a301f61dabc0dfa040098c8657d"
       },
       "context": [],
-      "candidateId": "e4c35c651adaf5a8c4db91a1deae58db8a058eecaaba728fe02e0b5f933fe475",
-      "contextHash": "73b50699d156b105950e461b93ee3961212c98ac67813f8309e2669769b384e0",
+      "candidateId": "c6fa39cfdd5df6dc77514de6cced47cb0c7e1029691d9cbaab562ce706b1d923",
+      "contextHash": "f32a47564721e446ab5c41017740b38225268f19ab6f1f38bf7525f0c5ece3e8",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.84,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.88,
-          "contradicts": 0.07,
+          "supports": 0.87,
+          "contradicts": 0.08,
           "unrelated": 0,
           "insufficient_context": 0.05
         }
@@ -91,21 +91,21 @@
         "source": "source3",
         "path": "crates/idealis-core/SUPPORT.md",
         "startLine": 1,
-        "endLine": 31,
-        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
-        "contentHash": "69809b8a229353d595931bee0acd8a22ec32b7a1bb1336f440378ede57db5b01"
+        "endLine": 32,
+        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
+        "contentHash": "fc3df1a68811ed7700d1df7f138e48c818793a301f61dabc0dfa040098c8657d"
       },
       "context": [],
-      "candidateId": "48686f0f2c33acb26ff6044044a7f56d75d62412bb91fbe0a95cc91175c6f641",
-      "contextHash": "a68895aa356850468718ff75da8b7e8bee18cb9daa1bcb40c9d742744c42b077",
+      "candidateId": "4fea1676d4ea61c696d6863bf5c56bdf3242cb5d81d22cd09ab6ddaf9f43f33a",
+      "contextHash": "ee3081f3c23d920bcda9d13acbe57ebdb43f3b10d2a4bf2396fe9429a12887d1",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.56,
+        "confidence": 0.51,
         "probabilities": {
-          "supports": 0.67,
-          "contradicts": 0.29,
+          "supports": 0.63,
+          "contradicts": 0.32,
           "unrelated": 0,
-          "insufficient_context": 0.04
+          "insufficient_context": 0.05
         }
       }
     },
@@ -125,19 +125,19 @@
         "source": "source3",
         "path": "crates/idealis-core/SUPPORT.md",
         "startLine": 1,
-        "endLine": 31,
-        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
-        "contentHash": "69809b8a229353d595931bee0acd8a22ec32b7a1bb1336f440378ede57db5b01"
+        "endLine": 32,
+        "quote": "# idealis-coreの対応チェックリスト\n\nチェック済みは共通の値・有限モデル・観測をつなぐホスト機能。検査エンジンの再実装とは区別する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。\n- [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。\n- [x] version付きFiniteModelの読み込み・検査・準備と、観測付き遷移表への履歴照合。\n- [x] 有限モデルに対する並行履歴の検査。unknown/cancelと確定したreturn/failを区別し、予算切れを成功にしない。\n- [x] 状態付きmodel handleを再利用するprotocol。\n- [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。\n- [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。\n- [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。\n- [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。\n- [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。\n- [x] version 1のnative JSONLとホストimport不要のWasm境界。\n\n## 非対応・対象外\n\n- [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。\n- [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。\n- [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。\n- [ ] 一致した有限履歴だけからの一般的なrefinement証明やliveness保証。\n- [ ] 任意言語の埋め込みinvariantの注釈抽出・検証条件生成。\n\n## 制約と根拠\n\n- [x] モデルやDriverの効果は呼び出し側が評価する。Wasmコア自身はホストのI/O・時計・threadを要求しない。\n- [x] 未完了・無効・予算切れを適合性の成功に読み替えない。\n\n[README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。",
+        "contentHash": "fc3df1a68811ed7700d1df7f138e48c818793a301f61dabc0dfa040098c8657d"
       },
       "context": [],
-      "candidateId": "d9330beb95422428fd3886426804ef66f65e7395cbc9ad90145eeaa22e3e371d",
-      "contextHash": "6cc06a17a89f017c0c1890cfb225367751a8903501b18ad5d008b135fa12f4cb",
+      "candidateId": "6c0285bdc5f8845038963c4c437282c94995a0d1cc97628e470cda2c505eb0f7",
+      "contextHash": "20a11d01f8a63f07c99216fd59794d8d2979be8108ef1dea4f1e13f624329b5f",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.97,
+        "confidence": 0.96,
         "probabilities": {
-          "supports": 0.98,
-          "contradicts": 0.01,
+          "supports": 0.97,
+          "contradicts": 0.02,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -157,8 +157,8 @@
   },
   "usage": {
     "requests": 4,
-    "inputTokens": 16619,
-    "usd": 0.000697998
+    "inputTokens": 16855,
+    "usd": 0.00070791
   },
   "errors": []
 }

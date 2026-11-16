@@ -53,6 +53,8 @@ pub fn ring() -> SafetyProgram {
         check_deadlock: true,
         initial_properties: vec![],
         action_properties: vec![],
+        constraints: vec![],
+        action_constraints: vec![],
         properties: vec![],
         fairness: vec![],
     }

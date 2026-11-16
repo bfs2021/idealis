@@ -19,26 +19,38 @@
       "role": "document"
     },
     "source4": {
-      "path": "crates/rtla-compiler/examples/check.rs",
+      "path": "crates/rtla-compiler/benches/compatibility.rs",
       "role": "reference"
     },
     "source5": {
-      "path": "crates/rtla-compiler/src/lib.rs",
+      "path": "crates/rtla-compiler/examples/check.rs",
       "role": "reference"
     },
     "source6": {
-      "path": "crates/rtla-compiler/tests/compiler.rs",
+      "path": "crates/rtla-compiler/src/lib.rs",
       "role": "reference"
     },
     "source7": {
-      "path": "package.json",
+      "path": "crates/rtla-compiler/tests/compiler.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/rtla-compiler/tests/finite-support.json",
       "role": "reference"
     },
     "source9": {
+      "path": "crates/rtla-compiler/tests/finite_support.rs",
+      "role": "reference"
+    },
+    "source10": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source11": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source12": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -60,7 +72,7 @@
       "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
       "mode": "semantic",
       "reference": {
-        "source": "source5",
+        "source": "source6",
         "contains": "pub fn compile("
       },
       "target": {
@@ -73,7 +85,7 @@
       "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
       "mode": "semantic",
       "reference": {
-        "source": "source5",
+        "source": "source6",
         "contains": "fn apply("
       },
       "target": {

@@ -1,0 +1,33 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 19 and seed 2348013255772671388 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 37301] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0046-finite-final/model-subset-member/model/Differential.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-L1bXlF/Integers.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-L1bXlF/FiniteSets.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-L1bXlF/Sequences.tla
+Parsing file /private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-tlc-L1bXlF/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module Differential
+Starting... (2026-11-17 02:36:54)
+Computing initial states...
+Error: Attempted to check if the non-enumerable value
+alice
+is element of
+{{}, {1}, {2}, {1, 2}}
+While working on the initial state:
+x = alice
+
+Error: TLC was unable to fingerprint.
+
+Fingerprint Stack Trace:
+0) line 5, col 18 to line 5, col 29 of module Differential
+
+Reason:
+Attempted to check if the non-enumerable value
+alice
+is element of
+{{}, {1}, {2}, {1, 2}}
+1 states generated, 1 distinct states found, 1 states left on queue.
+Finished in 00s at (2026-11-17 02:36:54)

@@ -1,0 +1,336 @@
+{
+  "status": "complete",
+  "stage": "finite-control",
+  "sourceVersion": "2f3934a08f87e02035b8e19ce2226ed8d30785bd3933e9b50add87882bd53e99",
+  "exit": 0,
+  "sourceUnchanged": true,
+  "archiveError": null,
+  "estimates": [
+    {
+      "benchmark": "membership/function-cube",
+      "mean": 2424928.8947658734,
+      "lower": 2345658.9571524938,
+      "upper": 2525413.4380720286
+    },
+    {
+      "benchmark": "membership/parallel-channels",
+      "mean": 1094508.73,
+      "lower": 1007888.22875,
+      "upper": 1233241.3035
+    },
+    {
+      "benchmark": "search/counter-product/1",
+      "mean": 10155709.169999998,
+      "lower": 10042484.8755,
+      "upper": 10286398.781000001
+    },
+    {
+      "benchmark": "search/counter-product/8",
+      "mean": 10226843.719999999,
+      "lower": 10114884.765250001,
+      "upper": 10349326.439499997
+    },
+    {
+      "benchmark": "search/function-cube/1",
+      "mean": 10658005.010000002,
+      "lower": 10545919.236000001,
+      "upper": 10783614.818500001
+    },
+    {
+      "benchmark": "search/function-cube/8",
+      "mean": 9438582.44096472,
+      "lower": 9269895.409573715,
+      "upper": 9633583.261716396
+    },
+    {
+      "benchmark": "search/linear-ring/1",
+      "mean": 1184031.5146337384,
+      "lower": 1176858.6429276625,
+      "upper": 1191816.778855882
+    },
+    {
+      "benchmark": "search/linear-ring/8",
+      "mean": 1180705.9862036651,
+      "lower": 1175363.1535479676,
+      "upper": 1186473.6158830249
+    },
+    {
+      "benchmark": "search/parallel-channels/1",
+      "mean": 14864308.875,
+      "lower": 14796903.057812499,
+      "upper": 14932139.5878125
+    },
+    {
+      "benchmark": "search/parallel-channels/8",
+      "mean": 8846072.011955822,
+      "lower": 8752717.690614304,
+      "upper": 8971967.015776666
+    },
+    {
+      "benchmark": "values/except-function",
+      "mean": 535535.4637440855,
+      "lower": 527772.8772283995,
+      "upper": 541840.215670024
+    },
+    {
+      "benchmark": "values/except-record",
+      "mean": 4542058.490153011,
+      "lower": 4445584.564801883,
+      "upper": 4674702.405565789
+    },
+    {
+      "benchmark": "values/intern-existing-functions",
+      "mean": 521800.20209175657,
+      "lower": 509776.3953792887,
+      "upper": 535289.9574078891
+    },
+    {
+      "benchmark": "values/intern-new-functions",
+      "mean": 564146.9348298417,
+      "lower": 555010.5703337005,
+      "upper": 572378.9596806623
+    }
+  ],
+  "files": [
+    {
+      "path": "criterion/membership/function-cube/finite-control/benchmark.json",
+      "sha256": "0cf47ea1f18d5ac536250f61739cc59e492d64eca1006f9124bcefa820cebd22"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-control/estimates.json",
+      "sha256": "dc80c0f6bfb2a73e0f39362725da937ea7b35e23e11053d4b424c255432c2596"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-control/sample.json",
+      "sha256": "a5ffa591d2c08fe3cff91ff52d44456719c12cc542494fb87d9ff0565ed22c78"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-control/tukey.json",
+      "sha256": "3ff7992032f473104298d8f660573d2868865aee5d19e5a6620f51cc6fc87685"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-control/benchmark.json",
+      "sha256": "29ba1763563f8fbddc0488d87ffc7efd36ccbaed8503f21447735ba606506a79"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-control/estimates.json",
+      "sha256": "465b439665c1531993220dea79547881210350cb1b616a3c7d6cac53d5c221e3"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-control/sample.json",
+      "sha256": "0f8f905e1507400c1a63bcf8e80efd2814751ad8252caaaf0e1ad65df8e1e150"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-control/tukey.json",
+      "sha256": "86419cb3219ad829cee47370c0e1e4f620d6ee630f630ac70e11bd1c45be75f6"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-control/benchmark.json",
+      "sha256": "120e55a924ed6aa621bffe5f0e275e791da831071b21663235e72c67fbe12ad0"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-control/estimates.json",
+      "sha256": "b878431e0f5a6417d3bb53a29e1636e08ce97da663d230c84577539bcf3738c1"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-control/sample.json",
+      "sha256": "defda66df17015d46f324b131b1e822f88adca1d8448a548f37726b2993b81f4"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-control/tukey.json",
+      "sha256": "ed8ba2fd03416f85b7608b191efbae9651bec01bb699ce9cd491786f6fcaba7f"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-control/benchmark.json",
+      "sha256": "8d1caf3af184aa582fc43e4894d151a2688799a05f70fb0b35dd0c8e27e7e488"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-control/estimates.json",
+      "sha256": "8fa537efa21f6e2c8bfe627ed4824f8c2f3a459ff285414c6924873c60b3f1c1"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-control/sample.json",
+      "sha256": "da8e5d1f5885bf84830c3464a9b8a302cef1ea49c296d3ea2bc8390c62ea2dd0"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-control/tukey.json",
+      "sha256": "f0610d3215dd224b6b54ffc86560abf093d3a766fa1e7e3b2059bd8433de187c"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-control/benchmark.json",
+      "sha256": "9a1eb84a697cde96cfcf6d95618bf0bbeac0d34d6f69af8474fa61816da60f4f"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-control/estimates.json",
+      "sha256": "ba001cd5552b681bca252f83cae9123b5af5c7ff10c60107bd9953fb431b4f86"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-control/sample.json",
+      "sha256": "49c0de4ca8e5873e15b2a72e0feae082eac9a4b354bdfdcd33de0673893b4ab1"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-control/tukey.json",
+      "sha256": "ca92c2bc09587b84a81eb1635cb5e263018e28db0ed3a4286e8aec236e859764"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-control/benchmark.json",
+      "sha256": "a84980a0099bbf2676878353a36875f965291136a463c1d0d950ae51edd46b06"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-control/estimates.json",
+      "sha256": "2241cb07bb1eeeea915d7e3a8c5970890b9a02182692f85f5a0be7551bb9c743"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-control/sample.json",
+      "sha256": "4f45ccd8a71a82aa6d2eb18b82172eb9279147a5fa24567227571a13d41ba925"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-control/tukey.json",
+      "sha256": "80b1eef4af061885f0d49068481fda65b269ca13004fc6499570bcdd45c4df26"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-control/benchmark.json",
+      "sha256": "d95f4945a2767eee008aab813ba24de70abb58c6077095b88d04709105394b53"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-control/estimates.json",
+      "sha256": "7cff8870b0a89c7a124692e031e3e9d9315c5693080508298f1bfa5b3a713ce2"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-control/sample.json",
+      "sha256": "c137766923f762b53978f8ac14f5332a3944e591ac1dd05ce8bbdc970b8fdaed"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-control/tukey.json",
+      "sha256": "72e702cf948a2ac96806c5c37318d39f72cc3ade811f6f633645e84b95c09e55"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-control/benchmark.json",
+      "sha256": "b3b950e326c210ab5f767440cc1605c5f7833bbd9593889bc0cc29cdf06fdf47"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-control/estimates.json",
+      "sha256": "b6281fe607af6cb8d164a96d86ceeb5fbaec084de04264918e8628f03ad9e228"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-control/sample.json",
+      "sha256": "6913226699fd97da232d6966ee2e5342cc0888e043991598d129d00ae750c786"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-control/tukey.json",
+      "sha256": "620861dffaf44e875a99de90c631b03ed27eec01cab5e11dfc36506dc969894d"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-control/benchmark.json",
+      "sha256": "30d1fe70463c5d38a87a77df0bc948efba37dcca42ccaa16a703ba4059a31387"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-control/estimates.json",
+      "sha256": "a144982c069bb73bbdcdd167ddf51977261214c745e09bd8d356bcf36f4aee54"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-control/sample.json",
+      "sha256": "06b336c90cdd8a5757fb4e88f9feaf290a198602f53007df15e011104c81915f"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-control/tukey.json",
+      "sha256": "948542991c51bf36fbd3142fc2d1b765851d2ec76665d10fffd508642fe8fc5b"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-control/benchmark.json",
+      "sha256": "c562571d9ec67019552cda868a4c5df20ecfc97e93ee4478eb80cb91da03dc37"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-control/estimates.json",
+      "sha256": "b959fa5ed69b18cadb85cb713d5fd4e11dabb4ed899bd3944de49f59727b4d66"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-control/sample.json",
+      "sha256": "ea24d5da00615edf3768ef6a775d293b25da9141105caee5215b1cac1797e73f"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-control/tukey.json",
+      "sha256": "eeddf793b0bafecee202bf9829fbcd60b5d905637c7966d9edd1ed7a4644c8b9"
+    },
+    {
+      "path": "criterion/values/except-function/finite-control/benchmark.json",
+      "sha256": "0d653631af28ce397f8506d965c3f1dbad29e15c88c8e302a76ddb3669fd1e99"
+    },
+    {
+      "path": "criterion/values/except-function/finite-control/estimates.json",
+      "sha256": "ec3d50cf0fd1ff109700007df5c5f7ec457946493acff7a3b47b18fa8eaf6403"
+    },
+    {
+      "path": "criterion/values/except-function/finite-control/sample.json",
+      "sha256": "d1cde664ddd7a14cb7d3a4cc928b4b79360ad43d90cb5a16781c30fed631dcba"
+    },
+    {
+      "path": "criterion/values/except-function/finite-control/tukey.json",
+      "sha256": "496ba2552c443b7193259135b200f5d4a8eeff0a928d480acfaf8d4b4b2187b2"
+    },
+    {
+      "path": "criterion/values/except-record/finite-control/benchmark.json",
+      "sha256": "9c54005bdb65b73192a525c9b34d5be84126f5200374a5ed0481c615b5c1463d"
+    },
+    {
+      "path": "criterion/values/except-record/finite-control/estimates.json",
+      "sha256": "bea3bf4a4f5677038a9b4c6a101c169668f6572ca75a247e6173edac465f3973"
+    },
+    {
+      "path": "criterion/values/except-record/finite-control/sample.json",
+      "sha256": "e742feb3a8a7b4e9f355d7ae2a296cda34d01dba12059468554936031abae78a"
+    },
+    {
+      "path": "criterion/values/except-record/finite-control/tukey.json",
+      "sha256": "a2fb6017eb8133961485062ee4f42e5ab8293bbe757c99ec4918c7692b3c4c32"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-control/benchmark.json",
+      "sha256": "2f98f6f8304ff08556c1aeba917248a35c4e6ff6a879b2b188372f7cc95f6015"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-control/estimates.json",
+      "sha256": "703404eb6fd428e8beda8078042e10dce6eea525bc09a85c9ed8bcd3e9f934dd"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-control/sample.json",
+      "sha256": "0b6da1e044d0473da59d51d16f3a78412798459034b26f6bf0728de99f7f74de"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-control/tukey.json",
+      "sha256": "0f3f9ec1ca08106f8d69384ca79f983b000238f6fb2b882729c7aae58c2a979f"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-control/benchmark.json",
+      "sha256": "a9db83965d72162af188d92b5c155c09f977d9835dd655d48347e7dbc217971a"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-control/estimates.json",
+      "sha256": "597e9d498175c8ebd8d062a0d7417de9d87dfa669f4ff1234718d61f9d7dcfd1"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-control/sample.json",
+      "sha256": "9b2e5c7715e998ad3d4516ec83946fa4869aa878696e49ecb8fa5d5520ae2e25"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-control/tukey.json",
+      "sha256": "8e6e5b873bdf433e1423a8d95302f40b242e882e863e550620c9a84974ac525c"
+    },
+    {
+      "path": "criterion.log",
+      "sha256": "8e156043479e6608335c856edc84cae9d7737c0e530b835f36f12ddf6c0e340e"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "8c58dc1511940897556a36a2562ee8faaec6fcbb5205f2828a6cbf9546af06e2"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "d9a95e8abff4900e74ca918a9fbd9ae6d1b9fcb39d00a9759ef114044a85b835"
+    },
+    {
+      "path": "source.tar",
+      "sha256": "756ea825dc6590df65a93e55f6200882f2a671764c9f7975c9698b47ac978147"
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "status": "complete",
+  "stage": "finite-lazy",
+  "sourceVersion": "60ead3653916d4c9026628e4c40afe42acc6a491400651e6991014e3e4f62389",
+  "exit": 0,
+  "sourceUnchanged": true,
+  "archiveError": null,
+  "estimates": [
+    {
+      "benchmark": "membership/function-cube",
+      "mean": 2360208.0234063743,
+      "lower": 2310326.38535383,
+      "upper": 2419100.9640950467
+    },
+    {
+      "benchmark": "membership/parallel-channels",
+      "mean": 968896.9668638157,
+      "lower": 959985.4860996484,
+      "upper": 979841.2634746039
+    },
+    {
+      "benchmark": "search/counter-product/1",
+      "mean": 10674018.36,
+      "lower": 10522016.143,
+      "upper": 10881987.65175
+    },
+    {
+      "benchmark": "search/counter-product/8",
+      "mean": 10471177.91,
+      "lower": 10387858.267,
+      "upper": 10566293.71725
+    },
+    {
+      "benchmark": "search/function-cube/1",
+      "mean": 10622293.380000003,
+      "lower": 10561158.330500005,
+      "upper": 10698411.373750003
+    },
+    {
+      "benchmark": "search/function-cube/8",
+      "mean": 8790346.470790805,
+      "lower": 8692561.988844166,
+      "upper": 8893873.554614255
+    },
+    {
+      "benchmark": "search/linear-ring/1",
+      "mean": 1175420.1498763105,
+      "lower": 1168016.9601968648,
+      "upper": 1182034.0997763793
+    },
+    {
+      "benchmark": "search/linear-ring/8",
+      "mean": 1172556.079480993,
+      "lower": 1166676.320051713,
+      "upper": 1178464.4423798413
+    },
+    {
+      "benchmark": "search/parallel-channels/1",
+      "mean": 14087678.625,
+      "lower": 14004265.612187501,
+      "upper": 14167276.0509375
+    },
+    {
+      "benchmark": "search/parallel-channels/8",
+      "mean": 8661449.91827528,
+      "lower": 8612649.675147828,
+      "upper": 8708604.195212796
+    },
+    {
+      "benchmark": "values/except-function",
+      "mean": 521796.5240103391,
+      "lower": 516096.97406764777,
+      "upper": 527717.0225938915
+    },
+    {
+      "benchmark": "values/except-record",
+      "mean": 4291098.856497658,
+      "lower": 4247433.252064466,
+      "upper": 4345160.789823912
+    },
+    {
+      "benchmark": "values/intern-existing-functions",
+      "mean": 503413.7466997971,
+      "lower": 484541.6329280461,
+      "upper": 530134.4485226779
+    },
+    {
+      "benchmark": "values/intern-new-functions",
+      "mean": 533332.8608985421,
+      "lower": 529153.6062494633,
+      "upper": 537651.0125457468
+    }
+  ],
+  "files": [
+    {
+      "path": "criterion/membership/function-cube/finite-lazy/benchmark.json",
+      "sha256": "0cf47ea1f18d5ac536250f61739cc59e492d64eca1006f9124bcefa820cebd22"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-lazy/estimates.json",
+      "sha256": "e166e891f2e951255f866fcc19412252ddfc6e1d4b59262e7da9f89ff500c4bd"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-lazy/sample.json",
+      "sha256": "f69e9e4526784de7e54a81e25c2128ecc7d798785f3ef3994911e312aade3c4e"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-lazy/tukey.json",
+      "sha256": "0451c22e1fff859ff0769e7673167f82ef8fd572787e16b648c8314e85b00eee"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-lazy/benchmark.json",
+      "sha256": "29ba1763563f8fbddc0488d87ffc7efd36ccbaed8503f21447735ba606506a79"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-lazy/estimates.json",
+      "sha256": "935b869a9efe376fda0e11853dfb01146d2327573ac47349ed8b9415279177ba"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-lazy/sample.json",
+      "sha256": "66746e0cc4df52be0f050325784d662a53f3158ad808ac832c5242f313e43cb2"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-lazy/tukey.json",
+      "sha256": "c5c4ebff74b4c8d7599f0f03fa1144841daf92d1752fef077c2e2d1726465622"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-lazy/benchmark.json",
+      "sha256": "120e55a924ed6aa621bffe5f0e275e791da831071b21663235e72c67fbe12ad0"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-lazy/estimates.json",
+      "sha256": "b094534ec9881df5cd4935f10a53d4052416eb8706fafb5dce53cb43b0bc09c2"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-lazy/sample.json",
+      "sha256": "cd6af7da56e26a5c6c3825dfbaf8ed6f3d57eace7b90917031ae5223addccd56"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-lazy/tukey.json",
+      "sha256": "b8c86d3646c7f12dbd3a467b0830807594271b34c115d67aac17876d46eff80b"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-lazy/benchmark.json",
+      "sha256": "8d1caf3af184aa582fc43e4894d151a2688799a05f70fb0b35dd0c8e27e7e488"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-lazy/estimates.json",
+      "sha256": "66d878dfb4e780f617e44a9b3b8dafb704e7140fb774b8fcbea3eb4f9bd0f186"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-lazy/sample.json",
+      "sha256": "af98796dc1796c3a2501e7bcf30d3be273f9fbb9d8367695668b946d31f7a198"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-lazy/tukey.json",
+      "sha256": "dbb3cb604460d1b3335f89ec5f2715c98e975b4a948f85b1931464cc89613546"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-lazy/benchmark.json",
+      "sha256": "9a1eb84a697cde96cfcf6d95618bf0bbeac0d34d6f69af8474fa61816da60f4f"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-lazy/estimates.json",
+      "sha256": "065610f2610a97a68f90f233845106bf39727e8c9ae3a0f4062711d5c247ff21"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-lazy/sample.json",
+      "sha256": "fd2134f2b5b68e125cf7efc34daa748203621835340b36a1510e418ff05d9a76"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-lazy/tukey.json",
+      "sha256": "9a867670f766568ccc8e24226abfd4162b5399723efc1cc96b10855efd8e46e4"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-lazy/benchmark.json",
+      "sha256": "a84980a0099bbf2676878353a36875f965291136a463c1d0d950ae51edd46b06"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-lazy/estimates.json",
+      "sha256": "fdab885a7e760a25eeed226fc1784a29c54d86cedc051a5f4127584e8f0e033d"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-lazy/sample.json",
+      "sha256": "67cb39a03a49711dd9e53999b7cb14538c193c16bb3664a395bda0d657ab0f09"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-lazy/tukey.json",
+      "sha256": "59a835bea55ebd664900b990dcd28d1ad2568f7ce50005d59bfacc12f2324b95"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-lazy/benchmark.json",
+      "sha256": "d95f4945a2767eee008aab813ba24de70abb58c6077095b88d04709105394b53"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-lazy/estimates.json",
+      "sha256": "57e26d0440f34055ebd8da249b4c8121f721abd445af9bac3a10b04bd6f313a2"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-lazy/sample.json",
+      "sha256": "cc4b2a90888876776f565a6a2be9510daebe7f28a4745e0e6c2de913a5e3f486"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-lazy/tukey.json",
+      "sha256": "ac7eceaa5360cc1f7f5cbdfd58c484cdf298e102b592f840b998074eb7e9c0d6"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-lazy/benchmark.json",
+      "sha256": "b3b950e326c210ab5f767440cc1605c5f7833bbd9593889bc0cc29cdf06fdf47"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-lazy/estimates.json",
+      "sha256": "f2f6abf1ae5d1145a77775daa9b922a199ce4977d9a64a921570b81d3f82298f"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-lazy/sample.json",
+      "sha256": "a0c966f52deae832a2e1c0d9000e2d14c303ff20962fffb51889a9f6f4f3d9bb"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-lazy/tukey.json",
+      "sha256": "c5ab7e731973420867357f42fe46c954b02d37a77aef7121e1aa31ba0fc1a74d"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-lazy/benchmark.json",
+      "sha256": "30d1fe70463c5d38a87a77df0bc948efba37dcca42ccaa16a703ba4059a31387"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-lazy/estimates.json",
+      "sha256": "0339f91dae5ca43643af7eddc010746eb1bfe5561894ef2a33d06289013f4209"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-lazy/sample.json",
+      "sha256": "762486fee93f563d7b0bede15fc96b147c4cf4d0994d7d867b2cd89f605ee529"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-lazy/tukey.json",
+      "sha256": "8e3b03d6cfc471982ccf12432f6775b4d344438a487d6693df73cf15bf2e543b"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-lazy/benchmark.json",
+      "sha256": "c562571d9ec67019552cda868a4c5df20ecfc97e93ee4478eb80cb91da03dc37"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-lazy/estimates.json",
+      "sha256": "69cbecb649588ea2035e5719202e593c95062ca45ce4b5879212f43cc684e0e7"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-lazy/sample.json",
+      "sha256": "1b2e6e6f502dfea25b3fefce7e24593a008823d9348b41ba89008824d0ea7491"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-lazy/tukey.json",
+      "sha256": "30b94b81ee47f081658eaefc07bd12ab599c0b3c442f0eebaa0017eaffa883d4"
+    },
+    {
+      "path": "criterion/values/except-function/finite-lazy/benchmark.json",
+      "sha256": "0d653631af28ce397f8506d965c3f1dbad29e15c88c8e302a76ddb3669fd1e99"
+    },
+    {
+      "path": "criterion/values/except-function/finite-lazy/estimates.json",
+      "sha256": "fd62343e15aabfe98a4a9b1ce0c391e4738d4dbfa2d1dbb91ea2c0a9e6849004"
+    },
+    {
+      "path": "criterion/values/except-function/finite-lazy/sample.json",
+      "sha256": "a1af999b13ce33225bf3553f4fe1648257074c5ed96595e36e3341016aa639da"
+    },
+    {
+      "path": "criterion/values/except-function/finite-lazy/tukey.json",
+      "sha256": "34bdc873937862fe6be044a4f88cfa70dcc33039bf74623741b6d44f28de1f7f"
+    },
+    {
+      "path": "criterion/values/except-record/finite-lazy/benchmark.json",
+      "sha256": "9c54005bdb65b73192a525c9b34d5be84126f5200374a5ed0481c615b5c1463d"
+    },
+    {
+      "path": "criterion/values/except-record/finite-lazy/estimates.json",
+      "sha256": "b44e98fb40591b519d1d450aea3c859f54ec14da8ac308aec7a84fed584bcaa4"
+    },
+    {
+      "path": "criterion/values/except-record/finite-lazy/sample.json",
+      "sha256": "25dee6712554bbb38db060fe05bbcdf5ce2fbf3aee32e103c069314bd67756be"
+    },
+    {
+      "path": "criterion/values/except-record/finite-lazy/tukey.json",
+      "sha256": "a30ad018b20867e9bfd9333b0a3f564b39248039a05406b9e52798a17c8beaba"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-lazy/benchmark.json",
+      "sha256": "2f98f6f8304ff08556c1aeba917248a35c4e6ff6a879b2b188372f7cc95f6015"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-lazy/estimates.json",
+      "sha256": "133ea7fff3fbe0a6a86734e5ff6631b4fa3a4b413b19a8011227b5c9d2656a95"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-lazy/sample.json",
+      "sha256": "542602064bd95c7fe7772880ca960eb056cec02d1f1b94233338379111b83eb8"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-lazy/tukey.json",
+      "sha256": "712c6b7ea13557871aadd1f4e264dd43e3bb57c28f94e88208989ea6620a28f4"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-lazy/benchmark.json",
+      "sha256": "a9db83965d72162af188d92b5c155c09f977d9835dd655d48347e7dbc217971a"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-lazy/estimates.json",
+      "sha256": "53918e16fdff7b19b850fbac0cbaef7890c9b1d1a976ddd5502bfdbe99736440"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-lazy/sample.json",
+      "sha256": "5ebc0fc495d1941fe72bffa2d535e95930ccaff7f5c8051405fd3cfac6337716"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-lazy/tukey.json",
+      "sha256": "f0fc14e0df88347d42982b3fdfe0d4f7674b6466657c3cfbc0e7d67899e4a3f0"
+    },
+    {
+      "path": "criterion.log",
+      "sha256": "5e8f58d11bfb918c7639f83940b76e3945976432d6491bde4f75da6f163493ac"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "07a8331a14ff821faab98b0622c5a3742d8c3a7b37bf1ca550a4f52d1d6c03fa"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "d9a95e8abff4900e74ca918a9fbd9ae6d1b9fcb39d00a9759ef114044a85b835"
+    }
+  ]
+}

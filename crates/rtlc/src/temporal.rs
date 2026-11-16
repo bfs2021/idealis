@@ -3,23 +3,35 @@ use crate::ir::{
     Expression, SafetyBounds, SafetyProgram, SafetyTraceStep, SafetyViolation, Scalar,
     TemporalFormula,
 };
-use crate::safety_expressions::EvalContext;
+use crate::safety_expressions::{EvalContext, validate_constant_bindings, visit_bindings};
 use crate::safety_values::Arena;
 use std::collections::{HashMap, HashSet, VecDeque};
 
 impl TemporalFormula {
     pub(crate) fn validate(&self, variables: usize, depth: usize) -> Result<(), CoreError> {
+        self.validate_locals(variables, depth, 0)
+    }
+    fn validate_locals(
+        &self,
+        variables: usize,
+        depth: usize,
+        locals: usize,
+    ) -> Result<(), CoreError> {
         if depth > 40 {
             return Err(CoreError::protocol("Temporal formula nesting exceeds 40"));
         }
         match self {
-            Self::Atom { expression } => expression.validate(variables, 1, 0)?,
+            Self::Atom { expression } => expression.validate_locals(variables, 1, locals)?,
             Self::Not { formula } | Self::Always { formula } | Self::Eventually { formula } => {
-                formula.validate(variables, depth + 1)?
+                formula.validate_locals(variables, depth + 1, locals)?
             }
             Self::And { left, right } | Self::Or { left, right } => {
-                left.validate(variables, depth + 1)?;
-                right.validate(variables, depth + 1)?;
+                left.validate_locals(variables, depth + 1, locals)?;
+                right.validate_locals(variables, depth + 1, locals)?;
+            }
+            Self::Forall { bounds, formula } | Self::Exists { bounds, formula } => {
+                let locals = validate_constant_bindings(bounds, variables, locals)?;
+                formula.validate_locals(variables, depth + 1, locals)?;
             }
         }
         Ok(())
@@ -34,7 +46,7 @@ pub(crate) struct GraphEdge {
 enum Formula<'a> {
     True,
     False,
-    Atom(&'a Expression, bool),
+    Atom(&'a Expression, bool, Vec<Scalar>),
     And(usize, usize),
     Or(usize, usize),
     Until(usize, usize),
@@ -53,13 +65,22 @@ impl<'a> Pool<'a> {
         self.formulas.push(formula);
         index
     }
-    fn lower(&mut self, formula: &'a TemporalFormula, negative: bool) -> usize {
-        match formula {
-            TemporalFormula::Atom { expression } => self.add(Formula::Atom(expression, negative)),
-            TemporalFormula::Not { formula } => self.lower(formula, !negative),
+    fn lower(
+        &mut self,
+        formula: &'a TemporalFormula,
+        negative: bool,
+        locals: &[Scalar],
+        arena: &mut Arena,
+    ) -> Result<usize, CoreError> {
+        arena.tick()?;
+        Ok(match formula {
+            TemporalFormula::Atom { expression } => {
+                self.add(Formula::Atom(expression, negative, locals.to_vec()))
+            }
+            TemporalFormula::Not { formula } => self.lower(formula, !negative, locals, arena)?,
             TemporalFormula::And { left, right } | TemporalFormula::Or { left, right } => {
-                let left = self.lower(left, negative);
-                let right = self.lower(right, negative);
+                let left = self.lower(left, negative, locals, arena)?;
+                let right = self.lower(right, negative, locals, arena)?;
                 if matches!(formula, TemporalFormula::And { .. }) != negative {
                     self.add(Formula::And(left, right))
                 } else {
@@ -68,7 +89,7 @@ impl<'a> Pool<'a> {
             }
             TemporalFormula::Always { formula: inner }
             | TemporalFormula::Eventually { formula: inner } => {
-                let child = self.lower(inner, negative);
+                let child = self.lower(inner, negative, locals, arena)?;
                 if matches!(formula, TemporalFormula::Eventually { .. }) != negative {
                     let truth = self.add(Formula::True);
                     self.add(Formula::Until(truth, child))
@@ -77,7 +98,41 @@ impl<'a> Pool<'a> {
                     self.add(Formula::Release(falsity, child))
                 }
             }
-        }
+            TemporalFormula::Forall {
+                bounds,
+                formula: inner,
+            }
+            | TemporalFormula::Exists {
+                bounds,
+                formula: inner,
+            } => {
+                let conjunction = matches!(formula, TemporalFormula::Forall { .. }) != negative;
+                let mut result = self.add(if conjunction {
+                    Formula::True
+                } else {
+                    Formula::False
+                });
+                visit_bindings(
+                    bounds,
+                    0,
+                    EvalContext {
+                        locals,
+                        ..EvalContext::new(&[], &[])
+                    },
+                    arena,
+                    &mut |ctx, arena| {
+                        let child = self.lower(inner, negative, ctx.locals, arena)?;
+                        result = self.add(if conjunction {
+                            Formula::And(result, child)
+                        } else {
+                            Formula::Or(result, child)
+                        });
+                        Ok(true)
+                    },
+                )?;
+                result
+            }
+        })
     }
 }
 #[derive(Clone)]
@@ -113,8 +168,12 @@ fn expand(
             match &pool.formulas[id] {
                 Formula::True => {}
                 Formula::False => continue 'alternative,
-                Formula::Atom(expression, negative) => {
-                    if expression.eval(ctx, arena)?.boolean()? == *negative {
+                Formula::Atom(expression, negative, locals) => {
+                    if expression
+                        .eval(EvalContext { locals, ..ctx }, arena)?
+                        .boolean()?
+                        == *negative
+                    {
                         continue 'alternative;
                     }
                 }
@@ -367,10 +426,15 @@ pub(crate) fn check(
             formulas: vec![],
             until: vec![],
         };
-        let mut root = pool.lower(&property.formula, true);
+        let mut root = pool.lower(&property.formula, true, &[], arena)?;
         for fairness in &program.fairness {
-            let fairness = pool.lower(fairness, false);
+            let fairness = pool.lower(fairness, false, &[], arena)?;
             root = pool.add(Formula::And(fairness, root));
+        }
+        if matches!(pool.formulas[root], Formula::False) {
+            return Err(CoreError::protocol(
+                "Temporal formula is a tautology (its negation is unsatisfiable)",
+            ));
         }
         let mut product = Product {
             pool,

@@ -23,6 +23,7 @@ import {
   toPortableValue,
   verifyHostTape,
 } from "../src/portable.js";
+import { PortableCoreError } from "../src/portable-value.js";
 import { checkTlaSource, compileTlaSource } from "../src/tla-source.js";
 
 export const run = async (): Promise<Record<string, unknown>> => {
@@ -46,6 +47,34 @@ export const run = async (): Promise<Record<string, unknown>> => {
     sourceResult.violation?.trace.length !== 3
   )
     throw new Error("Rust source frontend differs in browser");
+  const finiteInputs: {
+    name: string;
+    source: string;
+    config: string;
+    expected: string;
+  }[] = await (await fetch("/finite.json")).json();
+  for (const input of finiteInputs) {
+    const program = compileTlaSource(core, input);
+    const bounds = {
+      maxDepth: 100,
+      maxStates: 1000,
+      maxWork: 1_000_000,
+      maxTemporalNodes: 10000,
+    };
+    const observe = (run: () => SafetyResult): string => {
+      try {
+        return run().status;
+      } catch (error) {
+        if (!(error instanceof PortableCoreError)) throw error;
+        return "model-error";
+      }
+    };
+    if (
+      observe(() => checkTlaSource(core, input, bounds)) !== input.expected ||
+      observe(() => checkSafety(core, program, bounds)) !== input.expected
+    )
+      throw new Error(`Finite TLC support differs in browser: ${input.name}`);
+  }
   const actions = [
     { type: "add", id: "a", amount: 1 },
     { type: "crash" },

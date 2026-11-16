@@ -18,6 +18,7 @@ pub enum Value {
     Record(Vec<(String, Value)>),
     Set(Vec<Value>),
     Map(Vec<(Value, Value)>),
+    ModelValue(String),
 }
 
 impl<'de> Deserialize<'de> for Value {
@@ -63,6 +64,7 @@ impl<'de> Deserialize<'de> for Value {
                     "set" => serde_json::from_value(payload).map(Value::Set),
                     "record" => serde_json::from_value(payload).map(Value::Record),
                     "map" => serde_json::from_value(payload).map(Value::Map),
+                    "model-value" => serde_json::from_value(payload).map(Value::ModelValue),
                     _ => return Err(serde::de::Error::custom("Unknown value kind")),
                 }
                 .map_err(serde::de::Error::custom)
@@ -101,6 +103,18 @@ impl std::error::Error for CoreError {}
 impl Value {
     pub fn normalize(self) -> Result<Self, CoreError> {
         match self {
+            Self::ModelValue(value) => {
+                if value.is_empty()
+                    || !value.bytes().enumerate().all(|(index, byte)| {
+                        byte.is_ascii_alphabetic()
+                            || byte == b'_'
+                            || (index > 0 && byte.is_ascii_digit())
+                    })
+                {
+                    return Err(CoreError::value("Invalid model value name"));
+                }
+                Ok(Self::ModelValue(value))
+            }
             Self::Int(value) => {
                 let digits = value.strip_prefix('-').unwrap_or(&value);
                 if value != "0"

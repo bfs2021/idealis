@@ -14,7 +14,7 @@ SUPPORT.mdはRustのcrate archiveにも同梱する。配布検査では7つのa
 | ralloy          | [静的Alloyと固定instance](../crates/ralloy/SUPPORT.md)                        |
 | idealis-testing | [生成・縮小・再生・差分比較](../crates/idealis-testing/SUPPORT.md)            |
 
-jev-lint 0.8.0のdocuments APIで、各READMEとチェックリスト、選択した実装境界の記述を比較する。比較箇所と全Rust source/test・Cargo manifest/lock等の内容digestは`.jev-lint/checklists/*.manifest.json`と`*.record.json`へ保存する。モデルはjev-1.14.0に固定する。
+jev-lint 0.8.0のdocuments APIで、各READMEとチェックリスト、選択した実装境界の記述を比較する。比較箇所と全Rust source/test/bench・同梱JSON/TLA/CFG fixture・Cargo manifest/lock等の内容digestは`.jev-lint/checklists/*.manifest.json`と`*.record.json`へ保存する。モデルはjev-1.14.0に固定する。
 
 ## 変更したとき
 

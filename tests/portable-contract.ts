@@ -51,6 +51,14 @@ export const registerPortableContract = (
     );
     assert.ok(typeof record === "object" && record !== null);
     assert.equal(Object.hasOwn(record, "__proto__"), true);
+    const model = { type: "model-value", value: "p_1" } as const;
+    assert.deepEqual(normalizePortableValue(fromPortableValue(model)), model);
+    assert.deepEqual(toPortableValue(fromPortableValue(model)), model);
+    assert.equal(toPortableValue(model).type, "record");
+    assert.notDeepEqual(
+      fromPortableValue(model),
+      fromPortableValue({ type: "string", value: "p_1" }),
+    );
   });
   test("portable values reject lossy or unsupported host values", () => {
     const cyclic: unknown[] = [];

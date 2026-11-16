@@ -293,7 +293,7 @@ const manifestFor = (view: SourceView, scope: CrateScope): DocumentManifest => {
       ...view.paths.filter(
         (path) =>
           path.startsWith(prefix) &&
-          (/\.(?:rs|toml|lock)$/.test(path) ||
+          (/\.(?:rs|toml|lock|json|tla|cfg)$/.test(path) ||
             ["README.md", "SUPPORT.md"].includes(path.slice(prefix.length))),
       ),
     ]),

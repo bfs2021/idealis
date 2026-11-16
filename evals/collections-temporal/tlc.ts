@@ -10,7 +10,11 @@ import type {
 } from "../../src/contracts.js";
 import type { Case } from "./cases.js";
 
-const valueExpression = (value: PortableValue, depth: number): string => {
+const valueExpression = (
+  value: PortableValue,
+  depth: number,
+  models: ReadonlyMap<string, string> = new Map(),
+): string => {
   switch (value.type) {
     case "int":
       return value.value;
@@ -18,10 +22,12 @@ const valueExpression = (value: PortableValue, depth: number): string => {
       return value.value ? "TRUE" : "FALSE";
     case "string":
       return JSON.stringify(value.value);
+    case "model-value":
+      return models.get(value.value) ?? value.value;
     case "list":
-      return `<<${value.value.map((inner) => valueExpression(inner, depth + 1)).join(",")}>>`;
+      return `<<${value.value.map((inner) => valueExpression(inner, depth + 1, models)).join(",")}>>`;
     case "set":
-      return `{${value.value.map((inner) => valueExpression(inner, depth + 1)).join(",")}}`;
+      return `{${value.value.map((inner) => valueExpression(inner, depth + 1, models)).join(",")}}`;
     case "record":
       return valueExpression(
         {
@@ -32,9 +38,10 @@ const valueExpression = (value: PortableValue, depth: number): string => {
           ]),
         },
         depth,
+        models,
       );
     case "map":
-      return `[__key${depth} \\in {${value.value.map(([key]) => valueExpression(key, depth + 1)).join(",")}} |-> ${value.value.reduceRight((otherwise, [key, inner]) => `IF __key${depth} = ${valueExpression(key, depth + 1)} THEN ${valueExpression(inner, depth + 1)} ELSE ${otherwise}`, "TRUE")}]`;
+      return `[__key${depth} \\in {${value.value.map(([key]) => valueExpression(key, depth + 1, models)).join(",")}} |-> ${value.value.reduceRight((otherwise, [key, inner]) => `IF __key${depth} = ${valueExpression(key, depth + 1, models)} THEN ${valueExpression(inner, depth + 1, models)} ELSE ${otherwise}`, "TRUE")}]`;
     default:
       throw new Error("Not a TLA value");
   }
@@ -114,11 +121,35 @@ export const traceInput = (
   const violation = result.violation;
   assert.ok(violation && violation.trace.length > 0);
   const length = violation.trace.length;
+  const models = new Map<string, string>();
+  const collect = (value: PortableValue): void => {
+    if (value.type === "model-value" && !models.has(value.value)) {
+      const name = `__IdealisModelValue${models.size}`;
+      assert.ok(
+        !input.source.includes(name),
+        "Model value replay name collision",
+      );
+      models.set(value.value, name);
+    } else if (value.type === "list" || value.type === "set")
+      value.value.forEach(collect);
+    else if (value.type === "record")
+      value.value.forEach((entry) => {
+        collect(entry[1]);
+      });
+    else if (value.type === "map")
+      value.value.forEach((entry) => {
+        collect(entry[0]);
+        collect(entry[1]);
+      });
+  };
+  violation.trace.forEach((step) => {
+    step.values.forEach(collect);
+  });
   const state = (index: number, primed: boolean) =>
     violation.trace[index]?.values
       .map(
         (value, slot) =>
-          `${program.variables[slot]}${primed ? "'" : ""} = ${tlaValue(value)}`,
+          `${program.variables[slot]}${primed ? "'" : ""} = ${valueExpression(value, 0, models)}`,
       )
       .join(" /\\ ");
   const next = violation.trace
@@ -146,7 +177,7 @@ export const traceInput = (
     input.source,
   )?.[1];
   const fairness = specBody?.match(/(?:WF_|SF_)[\s\S]*$/)?.[0];
-  const extra = `\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (${state(0, false)})\n__TraceNext == (${next}) /\\ (Next \\/ UNCHANGED ${originalVariables})\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_${variables} /\\ WF_${variables}(__TraceNext)\n${fairness ? `__OriginalFairness == ${fairness}\n` : ""}__Expected == ${expected}\n`;
+  const extra = `\n${models.size ? `CONSTANT ${[...models.values()].join(", ")}\n` : ""}VARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (${state(0, false)})\n__TraceNext == (${next}) /\\ (Next \\/ UNCHANGED ${originalVariables})\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_${variables} /\\ WF_${variables}(__TraceNext)\n${fairness ? `__OriginalFairness == ${fairness}\n` : ""}__Expected == ${expected}\n`;
   const source = input.source.replace(/=+\s*$/, () => `${extra}====`);
   const constants = input.config
     .split("\n")
@@ -155,6 +186,6 @@ export const traceInput = (
   return {
     source,
     expected: isAction ? "liveness-violation" : "complete",
-    config: `SPECIFICATION __TraceSpec\n${constants}\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE`,
+    config: `SPECIFICATION __TraceSpec\n${constants}\n${[...models].map(([value, name]) => `CONSTANT ${name} = ${value}`).join("\n")}\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE`,
   };
 };

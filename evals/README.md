@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0046: TLCの有限モデル対応](iterations/0046-tlc-finite-support.md)はmodel value、探索制約、有限CHOOSE、整数演算、定数有限domain上の時間論理量化をTLC/native/Wasmへ照合する。既存14本のCriterionと、追加6モデルのcompile/checkを分けた12本で費用を測る。
+
 [0045: crateチェックリストの同期](iterations/0045-crate-checklists.md)は、Jevによる宣言した28比較と、staged snapshotへのオフライン再生を確認する。未確定の記録、人工的な矛盾2件と正常対照、部分stage・古い記録・配布artifactも検査した。
 
 [0044: Quint生成TLA+](iterations/0044-quint-generated.md)は、実コンパイラの6生成物・12設定をTLC/native/Wasmで照合する。生成物を変更せず、反例のTLC再生、Chromiumと保存fixtureの回帰を確認する。

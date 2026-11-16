@@ -13,6 +13,7 @@ enum Cell {
     String(String),
     Set(Vec<Scalar>),
     Function(Vec<(Scalar, Scalar)>),
+    ModelValue(String),
 }
 
 struct ValueHasher(u64);
@@ -150,6 +151,7 @@ impl<'scope> Arena<'scope> {
         for cell in delta.cells {
             let cell = match cell {
                 Cell::String(value) => Cell::String(value),
+                Cell::ModelValue(value) => Cell::ModelValue(value),
                 Cell::Set(values) => {
                     Cell::Set(values.into_iter().map(|value| mapping.get(value)).collect())
                 }
@@ -339,7 +341,7 @@ impl<'scope> Arena<'scope> {
             _ => 0,
         };
         let depth = match &cell {
-            Cell::String(_) => 0,
+            Cell::String(_) | Cell::ModelValue(_) => 0,
             Cell::Set(values) => 1 + values.iter().map(depth).max().unwrap_or(0),
             Cell::Function(values) => {
                 1 + values
@@ -377,6 +379,10 @@ impl<'scope> Arena<'scope> {
         let result = match value {
             Value::Bool(_) | Value::Int(_) => Scalar::parse(value)?,
             Value::String(value) => self.string(value.clone())?,
+            Value::ModelValue(value) => {
+                Value::ModelValue(value.clone()).normalize()?;
+                self.intern(Cell::ModelValue(value.clone()))?
+            }
             Value::List(values) => {
                 let values = values
                     .iter()
@@ -416,12 +422,13 @@ impl<'scope> Arena<'scope> {
     }
     fn rank(&self, value: Scalar) -> u8 {
         match value {
-            Scalar::Bool(_) => 0,
-            Scalar::Int(_) => 1,
+            Scalar::Bool(_) => 1,
+            Scalar::Int(_) => 2,
             Scalar::Ref(_) => match self.cell(value) {
-                Ok(Cell::String(_)) => 2,
-                Ok(Cell::Set(_)) => 3,
-                _ => 4,
+                Ok(Cell::ModelValue(_)) => 0,
+                Ok(Cell::String(_)) => 3,
+                Ok(Cell::Set(_)) => 4,
+                _ => 5,
             },
         }
     }
@@ -437,6 +444,7 @@ impl<'scope> Arena<'scope> {
                 (Ok(Cell::String(left)), Ok(Cell::String(right))) => {
                     left.encode_utf16().cmp(right.encode_utf16())
                 }
+                (Ok(Cell::ModelValue(left)), Ok(Cell::ModelValue(right))) => left.cmp(right),
                 (Ok(Cell::Set(left)), Ok(Cell::Set(right))) => left
                     .len()
                     .cmp(&right.len())
@@ -470,7 +478,61 @@ impl<'scope> Arena<'scope> {
         }
         left.len().cmp(&right.len())
     }
+    pub fn model_membership(&self, value: Scalar) -> Result<bool, CoreError> {
+        if matches!(value, Scalar::Ref(_))
+            && let Cell::ModelValue(name) = self.cell(value)?
+        {
+            if name.len() > 2 && name.as_bytes()[1] == b'_' {
+                return Err(CoreError::protocol(
+                    "Cannot test a typed model value in a non-model type",
+                ));
+            }
+            return Ok(true);
+        }
+        Ok(false)
+    }
+    fn model_comparison(&self, left: Scalar, right: Scalar) -> Result<bool, CoreError> {
+        let name = |value| {
+            if matches!(value, Scalar::Ref(_)) {
+                match self.cell(value) {
+                    Ok(Cell::ModelValue(name)) => Some(name.as_str()),
+                    _ => None,
+                }
+            } else {
+                None
+            }
+        };
+        let left = name(left);
+        let right = name(right);
+        if left.is_none() && right.is_none() {
+            return Ok(false);
+        }
+        let kind = |name: Option<&str>| {
+            name.and_then(|name| {
+                (name.len() > 2 && name.as_bytes()[1] == b'_').then(|| name.as_bytes()[0])
+            })
+        };
+        if (kind(left).is_some()
+            && (right.is_none() || (kind(right).is_some() && kind(left) != kind(right))))
+            || (kind(right).is_some() && left.is_none())
+        {
+            return Err(CoreError::protocol("Incomparable typed model values"));
+        }
+        Ok(true)
+    }
     pub fn comparable(&self, left: Scalar, right: Scalar) -> Result<(), CoreError> {
+        if matches!(
+            (left, right),
+            (Scalar::Int(_), Scalar::Int(_)) | (Scalar::Bool(_), Scalar::Bool(_))
+        ) {
+            return Ok(());
+        }
+        if (matches!(left, Scalar::Ref(_)) && matches!(self.cell(left), Ok(Cell::ModelValue(_))))
+            || (matches!(right, Scalar::Ref(_))
+                && matches!(self.cell(right), Ok(Cell::ModelValue(_))))
+        {
+            return Ok(());
+        }
         if self.rank(left) != self.rank(right) {
             return Err(CoreError::protocol("Incomparable TLA values"));
         }
@@ -500,6 +562,15 @@ impl<'scope> Arena<'scope> {
     pub fn equal(&self, left: Scalar, right: Scalar) -> Result<bool, CoreError> {
         if left == right {
             return Ok(true);
+        }
+        if matches!(
+            (left, right),
+            (Scalar::Int(_), Scalar::Int(_)) | (Scalar::Bool(_), Scalar::Bool(_))
+        ) {
+            return Ok(false);
+        }
+        if self.model_comparison(left, right)? {
+            return Ok(false);
         }
         if self.rank(left) != self.rank(right) {
             return Err(CoreError::protocol("Incomparable TLA values"));
@@ -606,6 +677,11 @@ impl<'scope> Arena<'scope> {
                 }
                 self.tick()?;
                 match self.cell(value)? {
+                    Cell::ModelValue(_) => {
+                        return Err(CoreError::protocol(
+                            "Unsupported TLA input: set fold order for model values is not implemented",
+                        ));
+                    }
                     Cell::String(_) => {
                         return Err(CoreError::protocol(
                             "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR",
@@ -734,6 +810,7 @@ impl<'scope> Arena<'scope> {
             Scalar::Bool(value) => Value::Bool(value),
             _ => match self.cell(value)? {
                 Cell::String(value) => Value::String(value.clone()),
+                Cell::ModelValue(value) => Value::ModelValue(value.clone()),
                 Cell::Set(values) => Value::Set(
                     values
                         .iter()

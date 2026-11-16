@@ -54,6 +54,48 @@ fn parallel_diamond_deduplicates_and_keeps_bfs_counts() {
 }
 
 #[test]
+fn parallel_constraints_keep_boundary_violations_and_counts() {
+    let mut input = grid();
+    for branch in input["next"].as_array_mut().unwrap() {
+        branch["steps"][0]["value"]["condition"]["right"] = integer(31);
+        branch["steps"].as_array_mut().unwrap().insert(
+            0,
+            json!({"kind":"bind","slot":0,"domain":{"kind":"set","values":[integer(0)]}}),
+        );
+    }
+    input["invariants"][0]["expression"] = json!({"op":"le","left":{"op":"cardinality","argument":{"op":"set","values":[{"op":"read","slot":0,"next":false},{"op":"read","slot":1,"next":false}]}},"right":integer(2)});
+    input["constraints"] = json!([{"name":"Limit","expression":{"op":"lt","left":{"op":"add","left":{"op":"read","slot":0,"next":false},"right":{"op":"read","slot":1,"next":false}},"right":integer(20)}}]);
+    let limits = SafetyBounds {
+        max_states: 2000,
+        max_work: 10_000_000,
+        ..bounds()
+    };
+    let program: SafetyProgram = serde_json::from_value(input.clone()).unwrap();
+    let expected = program.check(limits).unwrap();
+    assert_eq!(expected.status, "complete");
+    assert_eq!(expected.states, 210);
+    assert_eq!(expected.generated, 421);
+    for workers in [2, 4, 8] {
+        let actual = program.check_parallel(limits, workers).unwrap();
+        assert_eq!(
+            (actual.status, actual.states, actual.generated),
+            (expected.status.clone(), 210, 421)
+        );
+    }
+    input["invariants"][0]["expression"] = input["constraints"][0]["expression"].clone();
+    let program: SafetyProgram = serde_json::from_value(input).unwrap();
+    let expected = program.check(limits).unwrap();
+    assert_eq!(expected.status, "invariant-violation");
+    assert_eq!(expected.violation.as_ref().unwrap().trace.len(), 21);
+    for workers in [2, 4, 8] {
+        assert_eq!(
+            program.check_parallel(limits, workers).unwrap().violation,
+            expected.violation
+        );
+    }
+}
+
+#[test]
 fn parallel_trace_is_the_same_shortest_trace() {
     let mut input = grid();
     input["invariants"][0]["expression"]["right"] = integer(1);

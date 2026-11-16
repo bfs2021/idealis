@@ -99,6 +99,10 @@ export const differential = async (
         readonly input: ReturnType<typeof traceInput>;
         readonly status: string;
         readonly states: number | null;
+        readonly tautologyTrace?: {
+          readonly status: string;
+          readonly states: number | null;
+        };
       }
     | undefined;
   if (ours.result?.violation?.trace.length) {
@@ -133,8 +137,42 @@ export const differential = async (
       states: replay.states,
     };
     if (
-      witness.status !== forced.expected ||
-      witness.states !== result.violation?.trace.length
+      forced.expected === "complete" &&
+      classifyTlc(replay) === "model-error" &&
+      replay.log.includes(
+        "Temporal formula is a tautology (its negation is unsatisfiable)",
+      )
+    ) {
+      const traceLength = result.violation?.trace.length;
+      assert.ok(traceLength);
+      const reached = await runTlc(
+        java,
+        jar,
+        `${directory}/witness-validity`,
+        {
+          source: forced.source.replace(
+            /=+\s*$/,
+            `__TraceReached == <> (__position = ${traceLength - 1})\n====`,
+          ),
+          config: forced.config.replace(
+            "PROPERTY __Expected",
+            "PROPERTY __TraceReached",
+          ),
+        },
+        "Differential",
+      );
+      witness = {
+        ...witness,
+        tautologyTrace: {
+          status: classifyTlc(reached),
+          states: reached.states,
+        },
+      };
+    }
+    if (
+      (witness.tautologyTrace?.status ?? witness.status) !== forced.expected ||
+      (witness.tautologyTrace?.states ?? witness.states) !==
+        result.violation?.trace.length
     )
       mismatches.push("witness");
   }
