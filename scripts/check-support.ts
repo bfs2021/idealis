@@ -386,6 +386,22 @@ const run = async () => {
     ),
     "Unknown support-check option",
   );
+  const sync = args.includes("--sync");
+  assert.ok(
+    !sync || !args.includes("--dry-run"),
+    "Use dry-run before sync, not together",
+  );
+  if (
+    sync &&
+    !args.includes("--install-hook") &&
+    !process.env.TYPESAFE_API_KEY &&
+    !process.env.TYPESAFEAI_API_KEY
+  ) {
+    console.warn(
+      "warning: Jev API key is not set (TYPESAFE_API_KEY / TYPESAFEAI_API_KEY); skipping live checklist review.",
+    );
+    return;
+  }
   const root = git(process.cwd(), ["rev-parse", "--show-toplevel"])
     .toString()
     .trim();
@@ -394,11 +410,6 @@ const run = async () => {
     return;
   }
   const staged = args.includes("--staged");
-  const sync = args.includes("--sync");
-  assert.ok(
-    !sync || !args.includes("--dry-run"),
-    "Use dry-run before sync, not together",
-  );
   const view = sourceView(root, staged);
   await checkSupport(
     view,
@@ -472,6 +483,12 @@ const run = async () => {
       await rm(directory, { recursive: true, force: true });
     }
   }
+  if (sync && code === 0)
+    execFileSync(
+      "pnpm",
+      ["exec", "biome", "format", "--write", ".jev-lint/checklists"],
+      { cwd: root, stdio: "inherit" },
+    );
   process.exitCode = code;
 };
 

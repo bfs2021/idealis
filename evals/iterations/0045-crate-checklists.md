@@ -15,3 +15,9 @@ jev-lint 0.8.0のdocuments APIとjev-1.14.0を固定し、README対チェック�
 配布用archiveにSUPPORT.mdがないRedを確認し、7 Cargo manifestとpackagerへ同梱を追加した。`just package`では7 archiveのチェックリストとnpm/Rust/Wasmの単独consumerが通過した。`just check`、`just browser`（3テスト）、`just support-test`（6テスト）、`support-check`、evaluate/replay-evaluationも通過した。generated manifestのformatter差分はsync recipeで整形し、意味とdigestを変えず再生できる。
 
 採用するのは、選択した比較箇所の意味をJevで確認し、その判定がコミット対象へまだ適用できるかを決定的に検査する仕組み。任意の実装変更の意味を完全に理解する検査ではない。sourceのコメントだけを変えた場合もdigestが変われば再確認を求める。既存のテスト・TLC/Z3差分・モデル検査を代替しない。
+
+## APIキー未設定時の扱い
+
+pre-commitとliveのsyncは、TYPESAFE_API_KEYとTYPESAFEAI_API_KEYの両方が未設定なら警告して正常終了でスキップする。明示したsupport-checkとCIのオフライン再生は従来どおり実行する。スキップは検査済みと表示せず、manifestや判定を変更しない。
+
+[変更の検証](../runs/0045-support-optional/result.json)では、キーなしsyncとhookの失敗するRedを先に確認し、両方のキー名に対応する回帰を追加した。8テスト、check/browser、evaluate/replay-evaluationと28比較の再生が通過した。実際のjust recipeとhookをキーなしで実行しても保存済み14ファイルの内容・更新時刻は変わらなかった。formatterもsyncが実行された場合だけ呼ぶ。

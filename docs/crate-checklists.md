@@ -25,7 +25,7 @@ git add crates .jev-lint/checklists
 just support-check-staged
 ```
 
-`support-plan`は送信する比較の件数・文字数を表示し、APIを呼ばない。`support-sync`は作業ツリーの対象箇所をJevへ送り、判定と使用量を保存する。TYPESAFE_API_KEYまたはTYPESAFEAI_API_KEYを環境へ設定してから実行する。キーは文書や記録へ書かない。
+`support-plan`は送信する比較の件数・文字数を表示し、APIを呼ばない。`support-sync`は作業ツリーの対象箇所をJevへ送り、判定と使用量を保存する。TYPESAFE_API_KEYまたはTYPESAFEAI_API_KEYが未設定なら警告してスキップし、判定やmanifestを書き換えない。再判定を実行するときは環境へキーを設定する。キーは文書や記録へ書かない。
 
 判定はsupports / contradicts / unrelated / insufficient_context。矛盾の候補は根拠を読んで修正し、未回答や文脈不足を整合へ読み替えない。記録を手で合格へ変更しない。ここで比較するのは宣言した箇所の意味であり、全ての実装の正しさや形式言語への完全互換性を証明しない。
 
@@ -41,6 +41,8 @@ just support-test
 
 `support-hooks`はGitのpre-commitへshimを設置し、追跡している`.jev-lint/hooks/pre-commit`を呼ぶ。他のhookがある場合は上書きせず、そこからこのhookを呼ぶ行を追加するよう案内する。別ブランチに追跡hookがない場合、shimは何も実行しない。
 
-pre-commitはstagedのチェックリストと証拠を、CIはcheckoutしたファイルを対象にする。保存したJev判定の再生なので、コミットとCIにAPIキーは不要。sourceやREADMEの変更、古い記録、判定の欠落・未確定・矛盾は非zero終了にし、再確認を求める。リファクタやコメントだけの変更でも、入力digestが変われば新しい記録が必要になる。全crateを無条件に対応済みとする検査ではない。
+pre-commitは両方のAPIキーが未設定なら警告してスキップし、コミットを妨げない。キーがある場合はstagedのチェックリストと証拠をオフラインで検査する。スキップを検査済みとは表示しない。
+
+明示的な`support-check` / `support-check-staged`とCIのオフライン再生は、APIキーなしでも実行する。CIはcheckoutしたファイルを対象にする。sourceやREADMEの変更、古い記録、判定の欠落・未確定・矛盾は非zero終了にし、再確認を求める。リファクタやコメントだけの変更でも、入力digestが変われば新しい記録が必要になる。全crateを無条件に対応済みとする検査ではない。
 
 新しいcrateを追加するときはSUPPORT.mdとREADMEを作り、`scripts/check-support.ts`のcatalogへ比較する実装箇所を追加する。チェックリストの欠落・参照切れや宣言一覧のずれは、Jevを呼ぶ前に決定的に検査する。

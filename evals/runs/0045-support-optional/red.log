@@ -1,0 +1,70 @@
+✖ sync without a Jev key warns and skips before reading or writing the repository (94.312333ms)
+✖ pre-commit skips without either key and continues when either alias is set (39.148208ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 195.043916
+
+✖ failing tests:
+
+test at dist/scripts/check-support-test.js:22:1
+✖ sync without a Jev key warns and skips before reading or writing the repository (94.312333ms)
+  AssertionError [ERR_ASSERTION]: fatal: not a git repository (or any of the parent directories): .git
+  Command failed: git rev-parse --show-toplevel
+  fatal: not a git repository (or any of the parent directories): .git
+  
+  Checklist review is incomplete. Run just support-sync (or support-sync-staged), inspect the findings, then stage SUPPORT.md and .jev-lint/checklists.
+  
+  
+  3 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/scripts/check-support-test.js:29:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at dist/scripts/check-support-test.js:38:1
+✖ pre-commit skips without either key and continues when either alias is set (39.148208ms)
+  AssertionError [ERR_ASSERTION]: fatal: not a git repository (or any of the parent directories): .git
+  node:internal/modules/cjs/loader:1568
+    throw err;
+    ^
+  
+  Error: Cannot find module '/private/var/folders/_h/_rf455xj4h3_3g6z86pg244c0000gn/T/idealis-support-hook-key-YDD3Mm/scripts/check-support.ts'
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+      at node:internal/main/run_main_module:33:47 {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: []
+  }
+  
+  Node.js v24.22.2
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/scripts/check-support-test.js:44:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

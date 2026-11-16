@@ -1,0 +1,125 @@
+{
+  "status": "complete",
+  "policy": "warn-and-skip-precommit-and-live-sync-without-api-key",
+  "tests": 8,
+  "offlineComparisons": 28,
+  "savedFilesUnchangedOnSkip": 14,
+  "sources": [
+    {
+      "path": "scripts/check-support.ts",
+      "sha256": "645a58fa89c455d659bc673b3dcb213e227ebd9ce012da91e4b7ec3559dd1623"
+    },
+    {
+      "path": "scripts/check-support-test.ts",
+      "sha256": "106c593a42998c80461cd812cd6538625654337c6ee4e7b368e0e8c27bb0af8f"
+    },
+    {
+      "path": ".jev-lint/hooks/pre-commit",
+      "sha256": "621a09665a44dc2172f66259bc1f3c6c00b322d1c78d6193bbbf4e133b4cbef5"
+    },
+    {
+      "path": "justfile",
+      "sha256": "da24afff7f5734891f57d7fa7d43d211c391bfd25826e16613f3ae374e0aa887"
+    }
+  ],
+  "records": [
+    {
+      "crate": "idealis-core",
+      "snapshotDigest": "59b961ddb06c9c3e456fbb7f78dec58c9da05329e844a6a5be65e860366877b2"
+    },
+    {
+      "crate": "idealis-smt",
+      "snapshotDigest": "bedbe875469458d54eb57fa10d5c256b3490525df2ba94b5eb04bf0651efd267"
+    },
+    {
+      "crate": "idealis-testing",
+      "snapshotDigest": "a80c02197c970b2e896095eb65844b1cad2077351a5684ebc2b95ff43becc85d"
+    },
+    {
+      "crate": "ralloy",
+      "snapshotDigest": "d08a4ca570e67612fda6219397c9ef0d01281ccbb8ac91745a8f0f7d5a10d3f8"
+    },
+    {
+      "crate": "rtla-compiler",
+      "snapshotDigest": "3e94915c8bd56e6b8ce4f175daab0a364bfef6fd24fd4e8c173c50c45f90138b"
+    },
+    {
+      "crate": "rtla",
+      "snapshotDigest": "b267cefdf4edf7bace40bbb94f589ecdc97efcf10f9914f6e7f568eb7ff888fe"
+    },
+    {
+      "crate": "rtlc",
+      "snapshotDigest": "42610929990799f4065f86c028fdcc8d812778a1b33174aa2732036e6db2be5d"
+    }
+  ],
+  "files": [
+    {
+      "path": "red.log",
+      "sha256": "769b320a133bb80b60db9fdd41dab0cf4480e34932f5700b3efe63105991f37b"
+    },
+    {
+      "path": "green.log",
+      "sha256": "15c28a61f5c59c3c13b491da246d850d19b31197d570ca3a17be2c3de9b3cc45"
+    },
+    {
+      "path": "tests.log",
+      "sha256": "fa7e5fff1287c8b0d28bca76299ea443b24b9b0adc97b6e86df295347d4777cd"
+    },
+    {
+      "path": "refresh.log",
+      "sha256": "dbb19d5a3732b412232b860076ee4585876f6f5a50efad3182074783eedaa7e4"
+    },
+    {
+      "path": "offline.log",
+      "sha256": "fc6772a389ae339b9080a94a4b4dae85546d6832b37f16146a69918f62f7a129"
+    },
+    {
+      "path": "check.log",
+      "sha256": "ad11f6bfe526a287ca20231801609c91ba6196e35e3ff3aa2f7b34e5e3892bfb"
+    },
+    {
+      "path": "browser.log",
+      "sha256": "6714ed0125f4413484535472bbee4d22b1cbe112cf628c58346245d985d237eb"
+    },
+    {
+      "path": "skip.log",
+      "sha256": "fe5e54eb49e5a57778d68420479b105f2a0f92616cb277b4920e4e540c51a349"
+    },
+    {
+      "path": "evaluate.log",
+      "sha256": "a6a7b00f058120e4dda798d3a2f7ace253fee800679a12985b6d6e833dff7062"
+    },
+    {
+      "path": "replay-evaluation.log",
+      "sha256": "726981d4697b24e2a613fba5f4379f0e2dfa82348043181862831a63053d077d"
+    },
+    {
+      "path": "idealis-core.record.json",
+      "sha256": "d6ff6f9cb700949b57ab48bf0d9fd33d0263089a85c55c671571aee07b65a302"
+    },
+    {
+      "path": "idealis-smt.record.json",
+      "sha256": "8eb96fc44fecaca1e92463ce4bd69af0fc8c79e71d234af65205372da4d44742"
+    },
+    {
+      "path": "idealis-testing.record.json",
+      "sha256": "509d33f7600dc62e61d0e0da778a22e8d61fec89f3488c1ef6b252c537c446c9"
+    },
+    {
+      "path": "ralloy.record.json",
+      "sha256": "a8ea79fb8b2832cfd1645719da04fcd451187c5862bfd0824fbb32be1b9bafd9"
+    },
+    {
+      "path": "rtla-compiler.record.json",
+      "sha256": "abaf3740ac5ade00d2b82748835bce5488a864a31d8d6c0b4d37501778d4ca94"
+    },
+    {
+      "path": "rtla.record.json",
+      "sha256": "1fa9f4a8a3456ae28054c451e88e2c4eadf6fc827782e99bba57854c8cb5add0"
+    },
+    {
+      "path": "rtlc.record.json",
+      "sha256": "1878af54d81cce694357aaa19f4a7f46d750d3f139a0f2f4fc22e565fe1b4129"
+    }
+  ]
+}

@@ -12,11 +12,9 @@ support-plan:
 
 support-sync:
   node --experimental-strip-types scripts/check-support.ts --sync
-  pnpm exec biome format --write .jev-lint/checklists
 
 support-sync-staged:
   node --experimental-strip-types scripts/check-support.ts --sync --staged
-  pnpm exec biome format --write .jev-lint/checklists
 
 support-hooks:
   node --experimental-strip-types scripts/check-support.ts --install-hook

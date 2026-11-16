@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { test } from "node:test";
@@ -33,6 +40,68 @@ const fixture = async () => {
   execFileSync("git", ["add", "."], { cwd: root });
   return root;
 };
+
+test("sync without a Jev key warns and skips before reading or writing the repository", async () => {
+  const root = await mkdtemp(join(tmpdir(), "idealis-support-no-key-"));
+  try {
+    for (const args of [["--sync"], ["--sync", "--staged"]]) {
+      const result = spawnSync(
+        process.execPath,
+        [
+          "--experimental-strip-types",
+          resolve("scripts/check-support.ts"),
+          ...args,
+        ],
+        {
+          cwd: root,
+          encoding: "utf8",
+          env: { ...process.env, TYPESAFE_API_KEY: "", TYPESAFEAI_API_KEY: "" },
+        },
+      );
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(result.stderr, /warning:.*Jev.*key.*skipping/i);
+      assert.deepEqual(await readdir(root), []);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("pre-commit skips without either key and continues when either alias is set", async () => {
+  const root = await mkdtemp(join(tmpdir(), "idealis-support-hook-key-"));
+  try {
+    const hook = resolve(".jev-lint/hooks/pre-commit");
+    const environment = {
+      ...process.env,
+      TYPESAFE_API_KEY: "",
+      TYPESAFEAI_API_KEY: "",
+    };
+    const skipped = spawnSync("sh", [hook], {
+      cwd: root,
+      encoding: "utf8",
+      env: environment,
+    });
+    assert.equal(skipped.status, 0, skipped.stderr);
+    assert.match(skipped.stderr, /warning:.*Jev.*key.*skipping/i);
+    for (const key of ["TYPESAFE_API_KEY", "TYPESAFEAI_API_KEY"]) {
+      const continued = spawnSync("sh", [hook], {
+        cwd: root,
+        encoding: "utf8",
+        env: { ...environment, [key]: "offline-hook-test" },
+      });
+      assert.notEqual(
+        continued.status,
+        0,
+        "the hook should reach Git when a key is present",
+      );
+      assert.doesNotMatch(continued.stderr, /skipping/i);
+      assert.match(continued.stderr, /not a git repository/i);
+    }
+    assert.deepEqual(await readdir(root), []);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 
 test("a real index is authoritative over unstaged checklist edits", async () => {
   const root = await fixture();
