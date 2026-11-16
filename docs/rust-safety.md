@@ -59,7 +59,7 @@ maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが�
 
 ## 対応範囲
 
-基準は TLC v1.7.4 (`5a47802`)。state は signed 32 bit 整数、真偽値、文字列、有限集合、有限関数を扱う。tuple / sequence は1始まりの有限関数、record は文字列をキーにする有限関数として等価性を判定する。値は immutable な arena に intern し、state はその ID を保持する。hash が衝突しても、型付き値の完全一致で重複排除する。
+基準は TLC v1.7.4 (`5a47802`)。state は signed 32 bit 整数、真偽値、文字列、有限集合、有限関数を扱う。tuple / sequence は1始まりの有限関数、record は文字列をキーにする有限関数として等価性を判定する。関数の等価比較は要素数を確認した後、正規化済みの各 key とその値を交互に比較し、最初の不一致で FALSE、比較不能な値で評価エラーを返す。tuple / sequence は添字順、record は既存の field 正規化順で同じ判定を行う。値は immutable な arena に intern し、state はその ID を保持する。hash が衝突しても、型付き値の完全一致で重複排除する。
 
 主な演算は次の通り。
 
@@ -72,7 +72,7 @@ maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが�
 
 root module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
 
-sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は既存の値順序が TLC v1.7.4 (`5a47802`) と一致する整数、Boolean、tuple / sequence、集合と、それらの再帰的な組み合わせだけを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順で比較する。集合要素に文字列・record・関数がどの深さでも含まれる場合は `Unsupported TLA input: set fold order for strings, records or functions` という評価時エラーで拒否する。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。既存の関数比較や整数 domain の範囲は変更しない。model value は従来どおり未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
+sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。model value は従来どおり未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
 primed variable は、同じ分岐で代入した後に読み取る。部分的な関数更新を左辺に置く式から、未代入の変数を逆算しない。ENABLED は列挙可能な action に限り、fairness の subscript は候補ごとに評価できる必要がある。未代入の next variable に任意の値を補わない。
 

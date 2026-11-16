@@ -544,7 +544,7 @@
       "logSha256": "38e440ae87eb654964964695a90cb863fa40090427da6cdd37bbbb2669e4cb6c",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR",
       "values": [
         {
           "type": "list",
@@ -565,7 +565,7 @@
       "logSha256": "ae45740f40d8fed768c3c77889348cc1e93f3084fd56040c237057865ed62890",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR",
       "values": [
         {
           "type": "list",
@@ -591,7 +591,7 @@
       "logSha256": "24b3dd6685c1144bedaa0cd9bba712118605db9c4b441e087a588440c09257d2",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR",
       "values": [
         {
           "type": "list",
@@ -617,7 +617,7 @@
       "logSha256": "5357621043ee9189767fae02ab0ceaa3ea83c6a054ad9e2c4d4bd7461da879ce",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
+      "unsupported": "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR",
       "values": [
         {
           "type": "list",
@@ -643,7 +643,7 @@
       "logSha256": "8f58a95f2ac0cfc2222b8dea2c179e73ce3f68a0771b601966f7aaa4bc5034ee",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
+      "unsupported": "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR",
       "values": [
         {
           "type": "list",
@@ -674,7 +674,7 @@
       "logSha256": "0f214a6e09ebc4200e547b7ac932abdd41d9ee6151cfc27cdb7f096ecde3302e",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
+      "unsupported": "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR",
       "values": [
         {
           "type": "list",
@@ -705,7 +705,6 @@
       "logSha256": "d8b38d949da095fb367a7371103b4d634a1fe144e84a0453ce23af5a88c1ed9f",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
       "values": [
         {
           "type": "list",
@@ -737,7 +736,6 @@
       "logSha256": "8fcd81558e2cd9331536e99b527e0e91b105b7d37837079d3658f95d32303a03",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
       "values": [
         {
           "type": "list",
@@ -774,7 +772,6 @@
       "logSha256": "33fc828683127deab6e654aa8d8372b17cc1cf81fbe3eb5806853ca7b41e04f3",
       "exit": 12,
       "status": "invariant-violation",
-      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions",
       "values": [
         {
           "type": "list",
@@ -910,6 +907,973 @@
       "logSha256": "50a815a49b4f88ac2b504e9b6eff55cc1e9515a7ac2a1e54a16b26a5fa958b8e",
       "exit": 150,
       "status": "input-error"
+    },
+    {
+      "name": "fold-set-functions",
+      "sourceSha256": "3dd5825e2583f572b20b6bde0c04216869937804313a1d344e9570a2a154ce3b",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-functions.log",
+      "logSha256": "ad0e9832d6a23b9f44246dac9b308ba76a45294b15372c20c28c628a4974c3b0",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "-1"
+                  }
+                ]
+              ]
+            },
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ],
+                [
+                  {
+                    "type": "int",
+                    "value": "3"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              ]
+            },
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "9"
+                  }
+                ],
+                [
+                  {
+                    "type": "int",
+                    "value": "2"
+                  },
+                  {
+                    "type": "int",
+                    "value": "9"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fold-set-interval-functions-safe",
+      "sourceSha256": "ac2a340ba0cd90651f1eacdda7e413f74410521c27204f0038f67268a43bf284",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-interval-functions-safe.log",
+      "logSha256": "0e22fbf18522d65fc7c6b59146f87ac7e43c3ff3d8ba78ea9c543bffcc832da7",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "-2147483647"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              ]
+            },
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fold-set-recursive-functions",
+      "sourceSha256": "c540a122911a59502b504f3431642bfc86032489182ba499619206bf8faef67c",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-recursive-functions.log",
+      "logSha256": "d2c08f587848cc30f689e6e2b40d099eefab2969a23d7b59789ae2a51da0a99c",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "set",
+                  "value": [
+                    {
+                      "type": "map",
+                      "value": [
+                        [
+                          {
+                            "type": "int",
+                            "value": "0"
+                          },
+                          {
+                            "type": "int",
+                            "value": "0"
+                          }
+                        ],
+                        [
+                          {
+                            "type": "int",
+                            "value": "3"
+                          },
+                          {
+                            "type": "int",
+                            "value": "0"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "set",
+                  "value": [
+                    {
+                      "type": "map",
+                      "value": [
+                        [
+                          {
+                            "type": "int",
+                            "value": "0"
+                          },
+                          {
+                            "type": "int",
+                            "value": "9"
+                          }
+                        ],
+                        [
+                          {
+                            "type": "int",
+                            "value": "2"
+                          },
+                          {
+                            "type": "int",
+                            "value": "9"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fold-set-wide-integers",
+      "sourceSha256": "36f39f631f73bd931a5f4462f38187f48a2e74f2ace61807ae28fb9946b61de3",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-wide-integers.log",
+      "logSha256": "091a2ef6b4f7f847b98b4a2a6e06521a0001d43272739a5288920ef19036fecb",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "int",
+              "value": "-2147483648"
+            },
+            {
+              "type": "int",
+              "value": "2147483647"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fold-set-wide-function-values",
+      "sourceSha256": "327b36385326143239ed6976a90a5c80c72d0eb7310430147cb16d12ccafea07",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-wide-function-values.log",
+      "logSha256": "e53eb740bd0586210cd529144b88b85c2e9caf3161128ee0e9a1823792f21331",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "-2147483648"
+                  }
+                ]
+              ]
+            },
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "2147483647"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fold-set-wide-tuple-values",
+      "sourceSha256": "d18d0a2771a88b18726db63eb0abbcdde8effba53426be92e688a84abb3eb72c",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-wide-tuple-values.log",
+      "logSha256": "b528dc543660285c1bccbe3e38c8c81eaa2be952ab76d2caea0f92c9df148eb1",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "int",
+                  "value": "-2147483648"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "int",
+                  "value": "2147483647"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fold-set-strings",
+      "sourceSha256": "40da4a965e57cd7ea09b36af711a50c2f4e1e307d9e439a754ff75cef8ae3376",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-strings.log",
+      "logSha256": "0a288f39d4575ddd4e6c377fd761ab94f118ad72cf561cbd3c0263e199d8d4e3",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "string",
+              "value": "a"
+            },
+            {
+              "type": "string",
+              "value": "b"
+            },
+            {
+              "type": "string",
+              "value": "A"
+            },
+            {
+              "type": "string",
+              "value": "aa"
+            },
+            {
+              "type": "string",
+              "value": "B"
+            },
+            {
+              "type": "string",
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-strings-reversed",
+      "sourceSha256": "5dc08c831ea4e1cafe96759eaa00f3f3a5b4ea423ef6e3b4a5c3d7caffb38058",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-strings-reversed.log",
+      "logSha256": "fe7c8673d1c418575df46e42779d33a4f3869d64a07b155bb55707da3856491b",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "string",
+              "value": "a"
+            },
+            {
+              "type": "string",
+              "value": "b"
+            },
+            {
+              "type": "string",
+              "value": ""
+            },
+            {
+              "type": "string",
+              "value": "B"
+            },
+            {
+              "type": "string",
+              "value": "aa"
+            },
+            {
+              "type": "string",
+              "value": "A"
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-records",
+      "sourceSha256": "cac349192da2f8559ca43eab56f15978d91bd77fa69e4f4223ee54e5c0cdf0d4",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-records.log",
+      "logSha256": "5958be226c6ecd7bd9f05de6d0ff8c185e5d8851ec804ab49088f5c9a9ab92cd",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "record",
+              "value": {
+                "a": {
+                  "type": "int",
+                  "value": "1"
+                }
+              }
+            },
+            {
+              "type": "record",
+              "value": {
+                "a": {
+                  "type": "int",
+                  "value": "2"
+                }
+              }
+            },
+            {
+              "type": "record",
+              "value": {
+                "a": {
+                  "type": "int",
+                  "value": "1"
+                },
+                "b": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-record-fields",
+      "sourceSha256": "edad57eaeda29e777b54f3f139623569b01e11dd3995a2c9a3039efb8a19f864",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-record-fields.log",
+      "logSha256": "1804bb429afe4d7662345551fb7928adc99c55c640e8f6cbd3c8ae56eb858588",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "record",
+              "value": {
+                "zeta": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            },
+            {
+              "type": "record",
+              "value": {
+                "alpha": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-nested-strings",
+      "sourceSha256": "e31683ede99fd7eb7506a88303ff719a0543870c7cd516c5e34755e658bd11b0",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-nested-strings.log",
+      "logSha256": "04dfbc98b77c5ed4d7d7ea8ca759978767decee2af8629666fd500c31421f5ac",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "string",
+                  "value": "a"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "string",
+                  "value": "b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-sets-of-strings",
+      "sourceSha256": "c46af04fa1ce4b384855fd0fdf35b903b4fb5c10a8ba0d2e5c715bef591e8584",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-sets-of-strings.log",
+      "logSha256": "101ea3b6c9f5091c1122bf515f6987ba3b8313dcf3c320970934593e554668d7",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "set",
+              "value": [
+                {
+                  "type": "string",
+                  "value": "a"
+                }
+              ]
+            },
+            {
+              "type": "set",
+              "value": [
+                {
+                  "type": "string",
+                  "value": "b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-functions-with-strings",
+      "sourceSha256": "eb6a4677f62aa8ad53bcf908edd27c19fd96878c282b8bceb5599f849907ee42",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-functions-with-strings.log",
+      "logSha256": "8675b6a164b127189cd4839332e579294932a80e563717f14e9e6e2bca6db68f",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "string",
+                    "value": "a"
+                  }
+                ]
+              ]
+            },
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "string",
+                    "value": "b"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for strings requires TLC intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-functions-with-records",
+      "sourceSha256": "e8743505d3afe41788f9c6e66922a559f50d8eaa803b8aa8adb2b4bd69b7fb50",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-functions-with-records.log",
+      "logSha256": "ea0bba9a3cb99cf045d25ae67b88c8c4850d13dc1936225db007998f99d0b6cd",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "record",
+                    "value": {
+                      "a": {
+                        "type": "int",
+                        "value": "0"
+                      }
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for records requires TLC field-name intern IDs absent from the IR"
+    },
+    {
+      "name": "fold-set-interval-functions",
+      "sourceSha256": "060ab61e13bd97b2138ea6d1e19e463cb1a9ab32d5adca1825a013915f2d0561",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-interval-functions.log",
+      "logSha256": "25919efb49fea31b37b1f5a7e1e00c1e7da1cfe1e9ff0e6614ae5ac61a9052cd",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "int",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "-2147483648"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for integer function domains spanning more than i32::MAX"
+    },
+    {
+      "name": "fold-set-explicit-functions",
+      "sourceSha256": "88cb8cb10495dd060690d09f98b079373ae4b64426c407073d0e3f4909e279fc",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-explicit-functions.log",
+      "logSha256": "d386f2659d1ed9b676cfba967bcf3fcd544e7c5de631a161daf4985630df7cf1",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "-2147483647"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              ]
+            },
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "int",
+                  "value": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for integer function domains spanning more than i32::MAX"
+    },
+    {
+      "name": "fold-set-wide-recursive-functions",
+      "sourceSha256": "bc816643f2f55f4c026c4559ccac73426dde62a0ee89ec87fcad122e50feae42",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-wide-recursive-functions.log",
+      "logSha256": "088203647fc3195e76386edc3821fe458a4d0acff5127a9e27420fefafd368eb",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "set",
+                  "value": [
+                    {
+                      "type": "map",
+                      "value": [
+                        [
+                          {
+                            "type": "int",
+                            "value": "-2147483648"
+                          },
+                          {
+                            "type": "int",
+                            "value": "0"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "value": [
+                {
+                  "type": "set",
+                  "value": [
+                    {
+                      "type": "map",
+                      "value": [
+                        [
+                          {
+                            "type": "int",
+                            "value": "0"
+                          },
+                          {
+                            "type": "int",
+                            "value": "1"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for integer function domains spanning more than i32::MAX"
+    },
+    {
+      "name": "fold-set-wide-single-function",
+      "sourceSha256": "af5974470eb09147333f7274f8a673ffeeb61fdb3033c846de97d2c7d4cb9eb5",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-wide-single-function.log",
+      "logSha256": "10925da200434ba5a6c76e8d42254112da83b2bbeeade347244df6ceaaca1924",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "int",
+                    "value": "-2147483648"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ],
+                [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for integer function domains spanning more than i32::MAX"
+    },
+    {
+      "name": "fold-set-boolean-function-keys",
+      "sourceSha256": "691dced4c7f6559176efebfff9f72d3ba6de99956c27ef26591d34f731b08534",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-set-boolean-function-keys.log",
+      "logSha256": "ac3bb991a8f365e4369fba2a793fe8654635ee29a13e13ee3f1e14fd3a1ab0ca",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "list",
+          "value": [
+            {
+              "type": "map",
+              "value": [
+                [
+                  {
+                    "type": "bool",
+                    "value": false
+                  },
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "unsupported": "Unsupported TLA input: set fold order for strings, records or functions"
+    },
+    {
+      "name": "function-initial-choice",
+      "sourceSha256": "4a3235d7a844d596162ebc163aecdce58a04f97c474fde966f84c703a6582de4",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "function-initial-choice.log",
+      "logSha256": "078fca827d7ef3593a2ac3c49c9b5a044f5383abc56d609b426aad2539bbcd0c",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "map",
+          "value": [
+            [
+              {
+                "type": "int",
+                "value": "0"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ],
+            [
+              {
+                "type": "int",
+                "value": "3"
+              },
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "function-quantifier-order",
+      "sourceSha256": "f33f2fe0aecb14c16998b6622204543c474b60a6b449f0318a44c9e55f244b9d",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "function-quantifier-order.log",
+      "logSha256": "0f31645d41efd1b746a9e013020fdf85dad31f9d59d17b2ceb0881e5488fd90a",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "bool",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "function-comparison-error",
+      "sourceSha256": "e20eebc602bacc9f16f082cbd61bcafe38347957e37eb035fff5cb917af15fce",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "function-comparison-error.log",
+      "logSha256": "a7a4a420e8c39b85b9eac7e882a38be07e97bbf790031d8456aa611de76bc67a",
+      "exit": 75,
+      "status": "error"
+    },
+    {
+      "name": "function-set-equality",
+      "sourceSha256": "60152f2b7404f795f29323637c5d066861b1c249b6f9825c7c5f7623d7e651d4",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "function-set-equality.log",
+      "logSha256": "190a15a5affc397dc657ece48dfa747ed923c1f4334f856b3b18dd02f708855f",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "function-set-membership",
+      "sourceSha256": "74217a7699d4e4cde9fa79bc9cf1dcf3c7c7f5e04cc71515e9cb42bd49f9acea",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "function-set-membership.log",
+      "logSha256": "3044fe99ac043dea0d16ac3a50b1ed0a24c3b2d76785e9c9fdfb689df0e135ae",
+      "exit": 12,
+      "status": "invariant-violation",
+      "values": [
+        {
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "fold-equality-entry-error",
+      "sourceSha256": "815d6d007807b96f512ecd97858dc84f6b25ad78a21db0abc5909c2f1e188f65",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "fold-equality-entry-error.log",
+      "logSha256": "cdeb96eec491cfbb8f11a82c1ada975e7fa71f3bea0c0a2fa14aa851fb4daccc",
+      "exit": 75,
+      "status": "error"
+    },
+    {
+      "name": "function-equality-entry-error",
+      "sourceSha256": "eaf03ef14b2224c4c6c2cc48d98a27f997500e82f00c70609fde408051d019f8",
+      "configSha256": "58de36f4ceaca3bc03812614aa7610f31b6c29dc06d6ebaef235f09762f255fe",
+      "log": "function-equality-entry-error.log",
+      "logSha256": "d343ba26bc183a555e23f5da943cf78f1a384d355041605eaa9a9882659d8004",
+      "exit": 75,
+      "status": "error"
     }
   ]
 }

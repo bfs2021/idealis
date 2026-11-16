@@ -1,0 +1,20 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 43 and seed 6327498558411050571 with 1 worker on <cores> cores with 256MB heap and 64MB offheap memory [pid: <pid>] (<host>, MSBDiskFPSet, DiskStateQueue).
+Parsing file <capture>/Differential.tla
+Parsing file <tlc-tmp>/Integers.tla
+Parsing file <tlc-tmp>/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Differential
+Starting... (<time>)
+Computing initial states...
+Error: Attempted to compare equality of boolean TRUE with non-boolean:
+0
+Error: The error occurred when TLC was evaluating the nested
+expressions at the following positions:
+0. Line 6, column 9 to line 6, column 19 in Differential
+1. Line 6, column 14 to line 6, column 18 in Differential
+
+
+0 states generated, 0 distinct states found, 0 states left on queue.
+Finished in 00s at (<time>)

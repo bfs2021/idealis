@@ -30,6 +30,11 @@ const foldValue = (
 });
 export const foldCases = (): readonly Input[] => [
   foldValue(
+    "equality-entry-error",
+    "ApaFoldSet(Op, FALSE, {F})",
+    "F == [i \\in {0, 2} |-> TRUE]\nG == [i \\in {0, 3} |-> 0]\nOp(a, b) == b = G",
+  ),
+  foldValue(
     "sequence-values",
     'ApaFoldSeqLeft(Op, <<>>, <<"z", [a |-> 1], "A">>)',
   ),
@@ -78,6 +83,42 @@ export const foldCases = (): readonly Input[] => [
     "sequence-functions",
     "ApaFoldSeqLeft(Op, <<>>, <<[i \\in {0} |-> 1], <<2>>, {FALSE}, TRUE, 3>>)",
   ),
+  foldValue(
+    "set-functions",
+    "ApaFoldSet(Op, <<>>, {[i \\in {0, 2} |-> 9], [i \\in {0, 3} |-> 0], [i \\in {0} |-> -1]})",
+  ),
+  foldValue(
+    "set-interval-functions-safe",
+    "ApaFoldSet(Op, <<>>, {[i \\in {-2147483647} |-> 0], [i \\in 0..0 |-> 1]})",
+  ),
+  foldValue(
+    "set-recursive-functions",
+    "ApaFoldSet(Op, <<>>, {<<{[i \\in {0, 2} |-> 9]}>>, <<{[i \\in {0, 3} |-> 0]}>>})",
+  ),
+  foldValue(
+    "set-wide-integers",
+    "ApaFoldSet(Op, <<>>, {-2147483647 - 1, 2147483647})",
+  ),
+  foldValue(
+    "set-wide-function-values",
+    "ApaFoldSet(Op, <<>>, {[i \\in {0} |-> -2147483647 - 1], [i \\in {0} |-> 2147483647]})",
+  ),
+  foldValue(
+    "set-wide-tuple-values",
+    "ApaFoldSet(Op, <<>>, {<<-2147483647 - 1>>, <<2147483647>>})",
+  ),
+  ...(["direct", "tuple", "set"] as const).map((container) => {
+    const element = "[i \\in {0} |-> 0]";
+    const member = {
+      direct: element,
+      tuple: `<<${element}>>`,
+      set: `{${element}}`,
+    }[container];
+    return foldValue(
+      `unsupported-function-${container}`,
+      `ApaFoldSet(Op, <<>>, {${member}})`,
+    );
+  }),
   ...(["ApaFoldSet", "ApaFoldSeqLeft"] as const).map(
     (operator): Input => ({
       name: `fold-own-${operator}`,
@@ -101,7 +142,6 @@ export const foldOrderControls = (): readonly Input[] => [
     [
       ["string", '"only"'],
       ["record", "[field |-> 0]"],
-      ["function", "[i \\in {0} |-> 0]"],
     ] as const
   ).flatMap(([kind, element]) =>
     (
@@ -117,6 +157,53 @@ export const foldOrderControls = (): readonly Input[] => [
       ),
     ),
   ),
+  ...(
+    [
+      ["set-strings", 'ApaFoldSet(Op, <<>>, {"b", "a", "A", "aa", "B", ""})'],
+      [
+        "set-strings-reversed",
+        'ApaFoldSet(Op, <<>>, {"", "B", "aa", "A", "a", "b"})',
+      ],
+      [
+        "set-records",
+        "ApaFoldSet(Op, <<>>, {[a |-> 2], [a |-> 1, b |-> 0], [a |-> 1]})",
+      ],
+      [
+        "set-record-fields",
+        "ApaFoldSet(Op, <<>>, {[zeta |-> 0], [alpha |-> 0]})",
+      ],
+      ["set-nested-strings", 'ApaFoldSet(Op, <<>>, {<<"b">>, <<"a">>})'],
+      ["set-sets-of-strings", 'ApaFoldSet(Op, <<>>, {{"b"}, {"a"}})'],
+      [
+        "set-functions-with-strings",
+        'ApaFoldSet(Op, <<>>, {[i \\in {0} |-> "b"], [i \\in {0} |-> "a"]})',
+      ],
+      [
+        "set-functions-with-records",
+        "ApaFoldSet(Op, <<>>, {[i \\in {0} |-> [a |-> 0]]})",
+      ],
+      [
+        "set-interval-functions",
+        "ApaFoldSet(Op, <<>>, {[i \\in {-2147483647 - 1} |-> 0], <<1>>})",
+      ],
+      [
+        "set-explicit-functions",
+        "ApaFoldSet(Op, <<>>, {[i \\in {-2147483647} |-> 0], [i \\in {1} |-> 1]})",
+      ],
+      [
+        "set-wide-recursive-functions",
+        "ApaFoldSet(Op, <<>>, {<<{[i \\in {-2147483647 - 1} |-> 0]}>>, <<{[i \\in {0} |-> 1]}>>})",
+      ],
+      [
+        "set-wide-single-function",
+        "ApaFoldSet(Op, <<>>, {[i \\in {-2147483647 - 1, 0} |-> 0]})",
+      ],
+      [
+        "set-boolean-function-keys",
+        "ApaFoldSet(Op, <<>>, {[i \\in {FALSE} |-> 0]})",
+      ],
+    ] as const
+  ).map(([name, expression]) => foldValue(name, expression)),
   foldValue("set-mixed-kinds", 'ApaFoldSet(Op, <<>>, {TRUE, 0, "a"})'),
 ];
 export const foldRejections = (): readonly Input[] => [
@@ -159,8 +246,46 @@ export const foldRejections = (): readonly Input[] => [
     config: "INIT Init\nNEXT Next",
   },
 ];
+export const functionOrderCases = (): readonly Input[] => [
+  {
+    ...value("function-equality-entry-error", "F = G"),
+    goldenFrontendParity: true,
+    source:
+      "---- MODULE Differential ----\nEXTENDS Integers\nVARIABLE x\nF == [i \\in {0, 2} |-> TRUE]\nG == [i \\in {0, 3} |-> 0]\nInit == x = (F = G)\nNext == UNCHANGED x\nProp == x # x\n====",
+  },
+  {
+    ...value("function-initial-choice", "0"),
+    goldenFrontendParity: true,
+    source:
+      "---- MODULE Differential ----\nEXTENDS Integers\nVARIABLE x\nInit == x \\in {[i \\in {0, 2} |-> 9], [i \\in {0, 3} |-> 0]}\nNext == UNCHANGED x\nProp == x # x\n====",
+  },
+  ...(
+    [
+      [
+        "function-quantifier-order",
+        "\\A f \\in {[i \\in {0, 2} |-> 9], [i \\in {0, 3} |-> 0]}: IF f[0] = 0 THEN FALSE ELSE Head(<<>>) = 0",
+      ],
+      [
+        "function-comparison-error",
+        "Cardinality({[i \\in {0, 2} |-> TRUE], [i \\in {0, 3} |-> 0]})",
+      ],
+      [
+        "function-set-equality",
+        "{[i \\in {0, 2} |-> 9], [i \\in {0, 3} |-> 0]} = {[i \\in {0, 3} |-> 0], [i \\in {0, 2} |-> 9]}",
+      ],
+      [
+        "function-set-membership",
+        "[i \\in {0, 3} |-> 0] \\in {[i \\in {0, 2} |-> 9], [i \\in {0, 3} |-> 0]}",
+      ],
+    ] as const
+  ).map(([name, expression]) => ({
+    ...value(name, expression),
+    goldenFrontendParity: true as const,
+  })),
+];
 export const boundaries = (): readonly Input[] => [
   ...foldCases(),
+  ...functionOrderCases(),
   ...["<<>>", "<<7>>", "<<7,8,9>>"].flatMap((sequence, size) =>
     [
       [-1, -1],
