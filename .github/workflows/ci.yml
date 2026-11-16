@@ -52,7 +52,7 @@ jobs:
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
-      - run: node --test dist/evals/smt-subset/contract-test.js dist/evals/smt-expansion/contract-test.js dist/evals/smt-scripts/contract-test.js
+      - run: node --test dist/evals/smt-subset/contract-test.js dist/evals/smt-expansion/contract-test.js dist/evals/smt-scripts/contract-test.js dist/evals/smt-tuning/contract-test.js
       - run: pnpm exec vitest run --config smt-vitest.config.ts
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings

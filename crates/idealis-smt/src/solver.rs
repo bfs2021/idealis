@@ -1,9 +1,10 @@
 use crate::{Assumption, Error, Problem, Result, Solution, parser};
+use std::sync::Arc;
 
 pub struct Solver {
     source: String,
     frames: Vec<usize>,
-    problem: Problem,
+    problem: Arc<Problem>,
 }
 impl Solver {
     pub fn parse(source: &str) -> Result<Self> {
@@ -11,14 +12,14 @@ impl Solver {
         Ok(Self {
             source: parser::session_source(source)?,
             frames: vec![],
-            problem,
+            problem: Arc::new(problem),
         })
     }
     pub fn assert(&mut self, expression: &str) -> Result<()> {
         let source = format!("{}\n{}", self.source, parser::assertion(expression)?);
         let problem = Problem::parse(&source)?;
         self.source = source;
-        self.problem = problem;
+        self.problem = Arc::new(problem);
         Ok(())
     }
     pub fn push(&mut self, count: u32) -> Result<()> {
@@ -42,7 +43,7 @@ impl Solver {
         let problem = Problem::parse(&self.source[..length])?;
         self.source.truncate(length);
         self.frames.truncate(level);
-        self.problem = problem;
+        self.problem = Arc::new(problem);
         Ok(())
     }
     pub fn check(&self, max_work: u32) -> Solution {
@@ -51,7 +52,7 @@ impl Solver {
     pub fn check_assuming(&self, assumptions: &[Assumption], max_work: u32) -> Result<Solution> {
         self.problem.solve_assuming(assumptions, max_work)
     }
-    pub(super) fn snapshot(&self) -> Result<Problem> {
-        Problem::parse(&self.source)
+    pub(super) fn snapshot(&self) -> Arc<Problem> {
+        self.problem.clone()
     }
 }

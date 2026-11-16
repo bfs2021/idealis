@@ -78,7 +78,7 @@ assert/pop時はsourceを再解析する。変更なしのcheckは解析結果�
 
 ### SMT-LIB scriptをまとめて実行する
 
-`Script::parse(source)`は全コマンドを検査し、各check時点の式を保持する。`Script::solve(max_work)`はcheckの順に`Vec<Solution>`を返す。JSONは`run-script {source,maxWork}`を受け、`script-results {results:[...]}`を返す。単発の`solve`や既存handleの契約は変えない。
+`Script::parse(source)`は全コマンドを検査し、各check時点の式を保持する。制約が同じcheckは不変な解析結果を共有する。`Script::solve(max_work)`はcheckの順に`Vec<Solution>`を返す。JSONは`run-script {source,maxWork}`を受け、`script-results {results:[...]}`を返す。単発の`solve`や既存handleの契約は変えない。
 
 ```smt2
 (declare-const b Bool)
@@ -103,6 +103,8 @@ workは全checkで共有し、各結果の`stats.work`を差し引く。残り0�
 [評価0040](../evals/iterations/0040-smt-expansion.md)では、定数倍・整数iteの確認用140式と21件のcontext問い合わせをZ3へ照合した。旧版が受理した式は1/140、新版は140/140。新機能を狙った人工入力の対応率で、実用入力全体の対応率や速度の比較ではない。
 
 [評価0041](../evals/iterations/0041-smt-scripts.md)では、確認用67 scriptの588 checkをZ3の逐次実行と独立したsnapshotへ照合し、全SATモデルを検査した。旧版の単発solveは同じsourceの1/67を受理した。既存のcontext APIの操作をSMT-LIB入力でも使えるようにした結果で、速度比較はしていない。
+
+[評価0042](../evals/iterations/0042-smt-tuning.md)ではcheckごとの再解析を除き、同じライブラリのnative解析を反復checkで約4.0倍、scope付きで約1.7倍、整数iteで約6.7倍に改善した。既存6ケースを残してCriterionを14ケースに増やし、同じ保存binaryで逆順・再確認も測定した。各checkの探索とwork/statsは変えない。WasmやZ3との速度比較は今回測っていない。
 
 ## 再実行
 

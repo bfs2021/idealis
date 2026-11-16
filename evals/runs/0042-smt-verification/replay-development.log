@@ -1,0 +1,7 @@
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node dist/evals/smt-tuning/replay.js 'evals/runs/0042-smt-correctness-development'
+{"status":"replayed","scripts":35,"sat":200,"unsat":100,"checks":300,"controls":22,"sharedBudget":true,"emptyResults":true,"baselineAccepted":null,"z3Version":"5.4.1.0 145c0c51570a357cc558ce898ce77573ba9d4fbf z3-5.4.1","fixtures":4,"fixtureQueries":193,"baselineRequests":113,"exactStats":true}

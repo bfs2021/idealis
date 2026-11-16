@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0042: SMTのCriterionと解析費用](iterations/0042-smt-tuning.md)は、14ケースの固定benchmarkで不変な解析結果の共有を評価する。profile、改善前後の順序を入れ替えた測定、ばらつきの再確認、旧版との完全応答とZ3照合を記録した。
+
 [0030: RustのSMTサブセット](iterations/0030-smt-subset.md)は生成入力とSATモデルをZ3に照合する。[0031: Z3の再利用を含む速度比較](iterations/0031-smt-reuse.md)でnative/Wasm、解析、prepared、push/pop、起動の費用を分けた。限定した差分制約の経路は候補とし、Boolean UNSATの後退とunknownも保存している。
 
 [0034: 静的Alloyサブセット](iterations/0034-alloy-subset.md)は、独立crate `ralloy`のnative/Wasmと公式Alloy 6.2.0を比較する。有限scopeの関係モデル、返却構造の受理、空関係のarityの修正、ブラウザと単独consumerを検査した。

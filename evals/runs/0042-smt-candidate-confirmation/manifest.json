@@ -1,0 +1,764 @@
+{
+  "stage": "candidate-confirmation",
+  "binary": {
+    "sources": [
+      {
+        "path": ".github/workflows/ci.yml",
+        "sha256": "3a3c0aca18e898bfb75bab97333aa44c8fca84affaa75f5674aa066cd1634740"
+      },
+      {
+        "path": "biome.json",
+        "sha256": "ed1e53ae1df181d2a050b684803c1e3033874c48bc43fdd0a880a84fb388e108"
+      },
+      {
+        "path": "crates/idealis-smt/Cargo.lock",
+        "sha256": "6901aec9fa13e308f316a8d2c5c950f391b2db9ebaa82fade554552c690d40e9"
+      },
+      {
+        "path": "crates/idealis-smt/Cargo.toml",
+        "sha256": "b6e7472bf4b8fcc6c2ede2940836b1148514f9898b6feb63b6f923f61974fd1c"
+      },
+      {
+        "path": "crates/idealis-smt/LICENSE",
+        "sha256": "c5f6ee341fb447b0b69264d5e304186f1d9cd2e9d1b9d33095d08879888defc1"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/integer-ite.smt2",
+        "sha256": "85251ab4f3e371c94f8711fe29a75cd5510cd2e895b21d08932965164aeffa88"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/ite-64.smt2",
+        "sha256": "e657efa742cefaba0555cea0e3f5aab4bde884214da832a2519bb6f82d813c78"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/repeat-64.smt2",
+        "sha256": "14d047b31ccf8608cbf3624ab51c52c385ce284b87b0d27c878c2e4517fd63a2"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/scopes-32.smt2",
+        "sha256": "6a099a1f9b833483dd92494e2187880b2551139e5562d9c721a21795fa03254f"
+      },
+      {
+        "path": "crates/idealis-smt/benches/solver.rs",
+        "sha256": "0ea04ac5e0e829f61b5f8ffc691e730d9293104ea647d9ec2ebf2a2eef8c418f"
+      },
+      {
+        "path": "crates/idealis-smt/examples/ttl.rs",
+        "sha256": "010617ece0746281dc4cb0e344575d8096fa56995a6b6eef7304e12573d4b3fb"
+      },
+      {
+        "path": "crates/idealis-smt/src/lib.rs",
+        "sha256": "84c917c55fce5052bf69f9767bdbdf3e8bd98f87a7f5f1c8d4e799be0210db68"
+      },
+      {
+        "path": "crates/idealis-smt/src/main.rs",
+        "sha256": "55a2fba57e5cc16924fd34433b2086905653a63404519009f8f82f54b1e74ead"
+      },
+      {
+        "path": "crates/idealis-smt/src/parser.rs",
+        "sha256": "57ebf9be64751e16b858e7f8ff5ab7262cafcfa05098026fd0a485f0306d3052"
+      },
+      {
+        "path": "crates/idealis-smt/src/protocol.rs",
+        "sha256": "7e453fa03e0f81c3a534a211498a1f99c6b2e63359b7c3f02ea9dd2a71d7ed86"
+      },
+      {
+        "path": "crates/idealis-smt/src/script.rs",
+        "sha256": "46e136a6687a4047844c5199a0799935f7faf32c264ec2add11aab8125bfd57f"
+      },
+      {
+        "path": "crates/idealis-smt/src/solver.rs",
+        "sha256": "b7e51fcfa9c40da4de1a49b3a53363cabc632150fd4a10ea1db694b27c30141d"
+      },
+      {
+        "path": "crates/idealis-smt/src/wasm.rs",
+        "sha256": "942d755ec0342a5aff28bf7e25bbe48e601bb9631a57fd98d012c6873b8a172e"
+      },
+      {
+        "path": "crates/idealis-smt/tests/benchmark.rs",
+        "sha256": "b1e96de248276eaeded5ddfcf36c397ecaab9e45c46b3e949fad69f7da97ff96"
+      },
+      {
+        "path": "crates/idealis-smt/tests/expansion.rs",
+        "sha256": "bfa8123edf5acb3edcfad0c20328277df23cbf729395d6f3dfe2d1642c1c3aeb"
+      },
+      {
+        "path": "crates/idealis-smt/tests/scripts.rs",
+        "sha256": "8785381075cf1b5a72570deeebf212bf9051b360b1a95773a76ab90694cbd2d8"
+      },
+      {
+        "path": "crates/idealis-smt/tests/solver.rs",
+        "sha256": "191bb58302c2f2f295549c8e4f750f6691aedc9ba6b1a21fe1fb576e5b150b1d"
+      },
+      {
+        "path": "evals/harness/ttl.ts",
+        "sha256": "2e4b7d6f934adec10e15e8c95e4785a338163eced63e1a0a82ac511b48c6fd19"
+      },
+      {
+        "path": "evals/plans/0040-smt-expansion.md",
+        "sha256": "15413576dd029de47f82a0cff11f3120f4435710c198332029591b74ddc8c17c"
+      },
+      {
+        "path": "evals/plans/0040a-smt-expansion-adjustment.md",
+        "sha256": "4ea9bcf39fc705ffffd30a28bce4697f2c8946631957af93ef11c110f3714399"
+      },
+      {
+        "path": "evals/plans/0041-smt-scripts.md",
+        "sha256": "c9abf5e8ad218b4f29f8f9089b190c5d2fe7921a5710a3dc92a0927931d3bfd9"
+      },
+      {
+        "path": "evals/plans/0042-smt-tuning.md",
+        "sha256": "5ec800ec66709a0bc6a09bb8b646b8c456b2e10b80e2865934c3fb485d8c039e"
+      },
+      {
+        "path": "evals/profile-tuning/hotspots.ts",
+        "sha256": "ae05ed1ae29b2a01904706a65b180f32c90dc2814ebb07ee080da93e8a28b27d"
+      },
+      {
+        "path": "evals/smt-expansion/browser-entry.ts",
+        "sha256": "8a335f1747d7edd8ba815ad5097d3be71ac979bfc84f6b31b2caf72473dd987c"
+      },
+      {
+        "path": "evals/smt-expansion/checks.ts",
+        "sha256": "65a24d2694c83e070e0eb3d22282d9829d7e7b7f0a004bd61321e61b6d7d87d4"
+      },
+      {
+        "path": "evals/smt-expansion/contract-test.ts",
+        "sha256": "84e0b08a01b7ee61e5a789372bb9eeafeea6d06d56ca47481830b865836a23f5"
+      },
+      {
+        "path": "evals/smt-expansion/corpus.ts",
+        "sha256": "9c7ed33e7182f2bce5d32d7d64f8fb229d644f69b1cb3f2c4c2627f17e69a4ef"
+      },
+      {
+        "path": "evals/smt-expansion/provenance.ts",
+        "sha256": "8c7dca68459f9a398542e2a8d6b605d8c664e54403243d79c7fbb047112faebd"
+      },
+      {
+        "path": "evals/smt-expansion/replay.ts",
+        "sha256": "b20f9d5f58175f26f46857e770a688ea31313ae52b27fe5de982e42aed22336e"
+      },
+      {
+        "path": "evals/smt-expansion/run.ts",
+        "sha256": "d460710eb9a1be2c805420c90a53d9b5a5b2b10774713ee887f21f135b2b946e"
+      },
+      {
+        "path": "evals/smt-expansion/runner.vitest.ts",
+        "sha256": "e468576d21a454b6b99b41ce9fa3a76233c88e1cf9b41aea83855494b3b59beb"
+      },
+      {
+        "path": "evals/smt-expansion/verify.ts",
+        "sha256": "67f383cd523d2294cdbc2a04a4652395d1fe6ea02bab95b74604bfb903d52659"
+      },
+      {
+        "path": "evals/smt-scripts/browser-entry.ts",
+        "sha256": "b023c8c3f3ad17f0acdac2d3b5fdc2909396dc782070d2b4e08e39cd9dd3956f"
+      },
+      {
+        "path": "evals/smt-scripts/checks.ts",
+        "sha256": "9bb02282f1a81450e43bd637210dfdeb1b844a877b8715506547bb27fe768bd3"
+      },
+      {
+        "path": "evals/smt-scripts/contract-test.ts",
+        "sha256": "bb98207ee437023de7a5dbbaf63ec0add4c7bd2704ed9f8f4ed953359846fbbc"
+      },
+      {
+        "path": "evals/smt-scripts/corpus.ts",
+        "sha256": "251f41cc54daa4d2a08b793e575766501dea521437656bc30a6f00d32b09b66f"
+      },
+      {
+        "path": "evals/smt-scripts/provenance.ts",
+        "sha256": "8f2cb50059a26af3e73688c29b3f9c8680c31e261ec44a0880ce9a9653c03035"
+      },
+      {
+        "path": "evals/smt-scripts/replay.ts",
+        "sha256": "e93e16683dd3973f319756b7406de0a69cd4d695d0bf1e505b772167161f341f"
+      },
+      {
+        "path": "evals/smt-scripts/run.ts",
+        "sha256": "ce580661779a614864fb8a66d670b24434b3c86a35f78b1a5486c02e1d64ce43"
+      },
+      {
+        "path": "evals/smt-scripts/runner.vitest.ts",
+        "sha256": "367bcba0060a9421bfc37d8dcd174d8fafef0c5e5de015e7bdf5f4816a8021e1"
+      },
+      {
+        "path": "evals/smt-scripts/verify.ts",
+        "sha256": "fe0a34031ef79d60abbdc70f3086d1d2c344420f45e0f55ac9511b72fa1b26ef"
+      },
+      {
+        "path": "evals/smt-subset/benchmark.ts",
+        "sha256": "127d6abc54ba0826f468062d5eb86a71398cddbac591f9167f76d804ab89bb97"
+      },
+      {
+        "path": "evals/smt-subset/browser-entry.ts",
+        "sha256": "4b498cf68aa681a800fb4d68bc150f3f128db722590de2d34169bf7b35bdbfb3"
+      },
+      {
+        "path": "evals/smt-subset/browser.spec.ts",
+        "sha256": "a07b9b2cc29d54aa24953a9ac3e6d328b05f4829be826c6ba1aeca421d2efa83"
+      },
+      {
+        "path": "evals/smt-subset/clients.ts",
+        "sha256": "dd8d46f2c9722babf02720f8b3efcba4f03d858370ce4841111a9a918b0b4c95"
+      },
+      {
+        "path": "evals/smt-subset/cold.ts",
+        "sha256": "251ef81a8c9402086e051c2e0021ff27094ba4ed65e0c20d56444206c03e400d"
+      },
+      {
+        "path": "evals/smt-subset/contract-test.ts",
+        "sha256": "39495b984950c8c3c85aad71b3d082c7f32815f7310d7fffcd948df1f8a9cd68"
+      },
+      {
+        "path": "evals/smt-subset/corpus.ts",
+        "sha256": "fdae5e395365e9c4b3d19b119eb37162be88494651f89a26a5fccaeac8826a7c"
+      },
+      {
+        "path": "evals/smt-subset/expansion-browser.spec.ts",
+        "sha256": "542e2ae87bbea6aad814a4b7f25e63841fb6ea661cd0c2b43cdad86d67835e21"
+      },
+      {
+        "path": "evals/smt-subset/paths.ts",
+        "sha256": "e969e33faad0df28e5f5ee304dba22c84304da162f4f31543a03ef166e664437"
+      },
+      {
+        "path": "evals/smt-subset/provenance.ts",
+        "sha256": "f79fe0b6c22946588bd468a0e5beb78b037fccd3e1ff736997434cc5319d4a85"
+      },
+      {
+        "path": "evals/smt-subset/script-browser.spec.ts",
+        "sha256": "1dec218b95c1dc4e126dffebdfa1401c4f37982feed5ce9506556d1fd504a324"
+      },
+      {
+        "path": "evals/smt-subset/verify-run.ts",
+        "sha256": "3204373d00f4d3abafa49e7de1008a5caa8415684ef66bdef868ebcc64e887d6"
+      },
+      {
+        "path": "evals/smt-subset/verify.ts",
+        "sha256": "fb9bc4fd076b90555824f17166bd43e57938da1073b55eacf2c7d15a345cb057"
+      },
+      {
+        "path": "evals/smt-subset/wasm.ts",
+        "sha256": "deb5ddf7dfaf8f1dcce372caffb0ebfa93c4aaeac1b77462853c3c0d8695a0a9"
+      },
+      {
+        "path": "evals/smt-subset/wire.ts",
+        "sha256": "c7601fd491214ef92d9784716b82d20ad7b07793914f45d10c0c3e5bbf5b462d"
+      },
+      {
+        "path": "evals/smt-tuning/capture.ts",
+        "sha256": "c61a466acb66ab376ff121770ceac83ff02925be03529a844fd2bbf27e9f08e2"
+      },
+      {
+        "path": "evals/smt-tuning/cases.ts",
+        "sha256": "ae312d2652add51f834137f7099c7d162ed4517c1ff88fa75e53aacd7ff9b76e"
+      },
+      {
+        "path": "evals/smt-tuning/checks.ts",
+        "sha256": "4070d1b6e3549342cb6991a18032de4c7467d7b81340847a032f66c3ba75bb44"
+      },
+      {
+        "path": "evals/smt-tuning/compare.ts",
+        "sha256": "12ce68b3d76156c579456a6727ac4a8766a75698012adb7cdf130fdfd52cd693"
+      },
+      {
+        "path": "evals/smt-tuning/contract-test.ts",
+        "sha256": "d72e145012ccaa99da5b032209cdc708a56983d1bc76248f36e530acbfa0dbee"
+      },
+      {
+        "path": "evals/smt-tuning/criterion.ts",
+        "sha256": "6db74dc4d714a67837af730b3e001350be9e106db578373838c2eb2c20c7e5e9"
+      },
+      {
+        "path": "evals/smt-tuning/profile.ts",
+        "sha256": "e37abde26f066513316363d3b53fdeeb936a79e8748e63199acd0a854ec9fd4e"
+      },
+      {
+        "path": "evals/smt-tuning/provenance.ts",
+        "sha256": "7f29ad0418b4d70fe8d5c8e7019c5b83b75a28dd38e6ca342e1e535ca2d1fa1b"
+      },
+      {
+        "path": "evals/smt-tuning/replay.ts",
+        "sha256": "e93e16683dd3973f319756b7406de0a69cd4d695d0bf1e505b772167161f341f"
+      },
+      {
+        "path": "evals/smt-tuning/run.ts",
+        "sha256": "6c36fb1bf9ed3bcd33202f5a77587da4437e6e81c3e4537bfdf00ca34526fcfb"
+      },
+      {
+        "path": "evals/smt-tuning/runner.vitest.ts",
+        "sha256": "87f9c9f33cdec2219b9a116929d1dbfdeef38a6887f68d680743a598ff88c124"
+      },
+      {
+        "path": "evals/smt-tuning/verify.ts",
+        "sha256": "5f98b4d8e6207316b8656e2638d86bb19dced2d73dae693cb5bef3a01e450479"
+      },
+      {
+        "path": "examples/counter-model.ts",
+        "sha256": "8635f088a3fdf9e0b1bf4ea1f96790d56d578766d6e3c3c81a483cd9127f7721"
+      },
+      {
+        "path": "examples/durable-counter.ts",
+        "sha256": "5f77b4b8dbbb815b71dc31f121d220623484f67e36efad0c4114996ee444521c"
+      },
+      {
+        "path": "justfile",
+        "sha256": "14e69de03c90046819f199b16d023465257e9b4981e523c9037bd69d078543a6"
+      },
+      {
+        "path": "package.json",
+        "sha256": "99aa0f5b95329bc25d677c49921698731c5c9ae103fdcd22109c1c13c1965078"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "27d1f2216d738d57e5a7a277158ba006f03e821df60606865915c54884fd6274"
+      },
+      {
+        "path": "scripts/package-test.ts",
+        "sha256": "fff9bd143d80642e93359b6a2a8646c72654f114158e88f95f51b0a4c2d9bf54"
+      },
+      {
+        "path": "scripts/package.ts",
+        "sha256": "81f4f77701643aa9cf045116d4c6bae4bb4a83a262fd8ff61b65b380fdbd2104"
+      },
+      {
+        "path": "smt-playwright.config.ts",
+        "sha256": "1e7b6216afce7dcc4adb17212f9f12f3a5ee0245cedd8e5f87c0c0125a430931"
+      },
+      {
+        "path": "smt-vitest.config.ts",
+        "sha256": "b34f71bfeed1837a87eac3b61027975b4b3de526c61ed774d92ca004957e77f7"
+      },
+      {
+        "path": "src/conformance.ts",
+        "sha256": "fde9957b697b171e252b9abc6fdbd765f283389212684d99b262617a3bb12326"
+      },
+      {
+        "path": "src/contracts.ts",
+        "sha256": "99ccf65de2f12fffcb4f5abbf9ccffeedccd86f0103c9745d571e5e2d90049af"
+      },
+      {
+        "path": "src/trace.ts",
+        "sha256": "0a20a45ba0d84841139bec2dd8178c40585276fffc75e536d33ea1ca2c077cf3"
+      },
+      {
+        "path": "tsconfig.build.json",
+        "sha256": "d4e5348b7e9c8685110feabc9d2ff878d8bf235e0f778a5b230adbffcb7b520f"
+      },
+      {
+        "path": "tsconfig.json",
+        "sha256": "002e2f5c7e99896b3a6853d651b4ee4b3c5a92d5cce156a60ef0c371dd5a6410"
+      }
+    ],
+    "sourceVersion": "0f1942689919cc9128de7bcf86e91bbdc893beae219261488d103ee824f68458",
+    "binary": "/Users/mz/ghq/github.com/mizchi/idealis/.artifacts/smt-tuning/candidate/solver-bench",
+    "sha256": "8c9b7b85ffd7b679e8c801357d3fca2033c04108dc66e72b72f07096613cd0a3",
+    "benchmarkSources": [
+      {
+        "path": "crates/idealis-smt/benches/fixtures/integer-ite.smt2",
+        "sha256": "85251ab4f3e371c94f8711fe29a75cd5510cd2e895b21d08932965164aeffa88"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/ite-64.smt2",
+        "sha256": "e657efa742cefaba0555cea0e3f5aab4bde884214da832a2519bb6f82d813c78"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/repeat-64.smt2",
+        "sha256": "14d047b31ccf8608cbf3624ab51c52c385ce284b87b0d27c878c2e4517fd63a2"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/scopes-32.smt2",
+        "sha256": "6a099a1f9b833483dd92494e2187880b2551139e5562d9c721a21795fa03254f"
+      },
+      {
+        "path": "crates/idealis-smt/benches/solver.rs",
+        "sha256": "0ea04ac5e0e829f61b5f8ffc691e730d9293104ea647d9ec2ebf2a2eef8c418f"
+      }
+    ],
+    "commit": "dd0c68c41341d098aabedf5a3329910b3293257d",
+    "dirtyPaths": " M .github/workflows/ci.yml\n M crates/idealis-smt/benches/solver.rs\n M crates/idealis-smt/src/parser.rs\n M crates/idealis-smt/src/script.rs\n M crates/idealis-smt/src/solver.rs\n M evals/runs/ledger.jsonl\n M justfile\n M smt-vitest.config.ts\n?? crates/idealis-smt/benches/fixtures/\n?? crates/idealis-smt/tests/benchmark.rs\n?? evals/runs/0042-smt-baseline-development/\n?? evals/smt-tuning/\n",
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+    "build": "cargo bench --no-run --bench solver --locked; CARGO_PROFILE_BENCH_STRIP=none; other bench defaults unchanged"
+  },
+  "driver": {
+    "sources": [
+      {
+        "path": ".github/workflows/ci.yml",
+        "sha256": "3a3c0aca18e898bfb75bab97333aa44c8fca84affaa75f5674aa066cd1634740"
+      },
+      {
+        "path": "biome.json",
+        "sha256": "ed1e53ae1df181d2a050b684803c1e3033874c48bc43fdd0a880a84fb388e108"
+      },
+      {
+        "path": "crates/idealis-smt/Cargo.lock",
+        "sha256": "6901aec9fa13e308f316a8d2c5c950f391b2db9ebaa82fade554552c690d40e9"
+      },
+      {
+        "path": "crates/idealis-smt/Cargo.toml",
+        "sha256": "b6e7472bf4b8fcc6c2ede2940836b1148514f9898b6feb63b6f923f61974fd1c"
+      },
+      {
+        "path": "crates/idealis-smt/LICENSE",
+        "sha256": "c5f6ee341fb447b0b69264d5e304186f1d9cd2e9d1b9d33095d08879888defc1"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/integer-ite.smt2",
+        "sha256": "85251ab4f3e371c94f8711fe29a75cd5510cd2e895b21d08932965164aeffa88"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/ite-64.smt2",
+        "sha256": "e657efa742cefaba0555cea0e3f5aab4bde884214da832a2519bb6f82d813c78"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/repeat-64.smt2",
+        "sha256": "14d047b31ccf8608cbf3624ab51c52c385ce284b87b0d27c878c2e4517fd63a2"
+      },
+      {
+        "path": "crates/idealis-smt/benches/fixtures/scopes-32.smt2",
+        "sha256": "6a099a1f9b833483dd92494e2187880b2551139e5562d9c721a21795fa03254f"
+      },
+      {
+        "path": "crates/idealis-smt/benches/solver.rs",
+        "sha256": "0ea04ac5e0e829f61b5f8ffc691e730d9293104ea647d9ec2ebf2a2eef8c418f"
+      },
+      {
+        "path": "crates/idealis-smt/examples/ttl.rs",
+        "sha256": "010617ece0746281dc4cb0e344575d8096fa56995a6b6eef7304e12573d4b3fb"
+      },
+      {
+        "path": "crates/idealis-smt/src/lib.rs",
+        "sha256": "84c917c55fce5052bf69f9767bdbdf3e8bd98f87a7f5f1c8d4e799be0210db68"
+      },
+      {
+        "path": "crates/idealis-smt/src/main.rs",
+        "sha256": "55a2fba57e5cc16924fd34433b2086905653a63404519009f8f82f54b1e74ead"
+      },
+      {
+        "path": "crates/idealis-smt/src/parser.rs",
+        "sha256": "57ebf9be64751e16b858e7f8ff5ab7262cafcfa05098026fd0a485f0306d3052"
+      },
+      {
+        "path": "crates/idealis-smt/src/protocol.rs",
+        "sha256": "7e453fa03e0f81c3a534a211498a1f99c6b2e63359b7c3f02ea9dd2a71d7ed86"
+      },
+      {
+        "path": "crates/idealis-smt/src/script.rs",
+        "sha256": "46e136a6687a4047844c5199a0799935f7faf32c264ec2add11aab8125bfd57f"
+      },
+      {
+        "path": "crates/idealis-smt/src/solver.rs",
+        "sha256": "b7e51fcfa9c40da4de1a49b3a53363cabc632150fd4a10ea1db694b27c30141d"
+      },
+      {
+        "path": "crates/idealis-smt/src/wasm.rs",
+        "sha256": "942d755ec0342a5aff28bf7e25bbe48e601bb9631a57fd98d012c6873b8a172e"
+      },
+      {
+        "path": "crates/idealis-smt/tests/benchmark.rs",
+        "sha256": "b1e96de248276eaeded5ddfcf36c397ecaab9e45c46b3e949fad69f7da97ff96"
+      },
+      {
+        "path": "crates/idealis-smt/tests/expansion.rs",
+        "sha256": "bfa8123edf5acb3edcfad0c20328277df23cbf729395d6f3dfe2d1642c1c3aeb"
+      },
+      {
+        "path": "crates/idealis-smt/tests/scripts.rs",
+        "sha256": "8785381075cf1b5a72570deeebf212bf9051b360b1a95773a76ab90694cbd2d8"
+      },
+      {
+        "path": "crates/idealis-smt/tests/solver.rs",
+        "sha256": "191bb58302c2f2f295549c8e4f750f6691aedc9ba6b1a21fe1fb576e5b150b1d"
+      },
+      {
+        "path": "evals/harness/ttl.ts",
+        "sha256": "2e4b7d6f934adec10e15e8c95e4785a338163eced63e1a0a82ac511b48c6fd19"
+      },
+      {
+        "path": "evals/plans/0040-smt-expansion.md",
+        "sha256": "15413576dd029de47f82a0cff11f3120f4435710c198332029591b74ddc8c17c"
+      },
+      {
+        "path": "evals/plans/0040a-smt-expansion-adjustment.md",
+        "sha256": "4ea9bcf39fc705ffffd30a28bce4697f2c8946631957af93ef11c110f3714399"
+      },
+      {
+        "path": "evals/plans/0041-smt-scripts.md",
+        "sha256": "c9abf5e8ad218b4f29f8f9089b190c5d2fe7921a5710a3dc92a0927931d3bfd9"
+      },
+      {
+        "path": "evals/plans/0042-smt-tuning.md",
+        "sha256": "5ec800ec66709a0bc6a09bb8b646b8c456b2e10b80e2865934c3fb485d8c039e"
+      },
+      {
+        "path": "evals/profile-tuning/hotspots.ts",
+        "sha256": "ae05ed1ae29b2a01904706a65b180f32c90dc2814ebb07ee080da93e8a28b27d"
+      },
+      {
+        "path": "evals/smt-expansion/browser-entry.ts",
+        "sha256": "8a335f1747d7edd8ba815ad5097d3be71ac979bfc84f6b31b2caf72473dd987c"
+      },
+      {
+        "path": "evals/smt-expansion/checks.ts",
+        "sha256": "65a24d2694c83e070e0eb3d22282d9829d7e7b7f0a004bd61321e61b6d7d87d4"
+      },
+      {
+        "path": "evals/smt-expansion/contract-test.ts",
+        "sha256": "84e0b08a01b7ee61e5a789372bb9eeafeea6d06d56ca47481830b865836a23f5"
+      },
+      {
+        "path": "evals/smt-expansion/corpus.ts",
+        "sha256": "9c7ed33e7182f2bce5d32d7d64f8fb229d644f69b1cb3f2c4c2627f17e69a4ef"
+      },
+      {
+        "path": "evals/smt-expansion/provenance.ts",
+        "sha256": "8c7dca68459f9a398542e2a8d6b605d8c664e54403243d79c7fbb047112faebd"
+      },
+      {
+        "path": "evals/smt-expansion/replay.ts",
+        "sha256": "b20f9d5f58175f26f46857e770a688ea31313ae52b27fe5de982e42aed22336e"
+      },
+      {
+        "path": "evals/smt-expansion/run.ts",
+        "sha256": "d460710eb9a1be2c805420c90a53d9b5a5b2b10774713ee887f21f135b2b946e"
+      },
+      {
+        "path": "evals/smt-expansion/runner.vitest.ts",
+        "sha256": "e468576d21a454b6b99b41ce9fa3a76233c88e1cf9b41aea83855494b3b59beb"
+      },
+      {
+        "path": "evals/smt-expansion/verify.ts",
+        "sha256": "67f383cd523d2294cdbc2a04a4652395d1fe6ea02bab95b74604bfb903d52659"
+      },
+      {
+        "path": "evals/smt-scripts/browser-entry.ts",
+        "sha256": "b023c8c3f3ad17f0acdac2d3b5fdc2909396dc782070d2b4e08e39cd9dd3956f"
+      },
+      {
+        "path": "evals/smt-scripts/checks.ts",
+        "sha256": "9bb02282f1a81450e43bd637210dfdeb1b844a877b8715506547bb27fe768bd3"
+      },
+      {
+        "path": "evals/smt-scripts/contract-test.ts",
+        "sha256": "bb98207ee437023de7a5dbbaf63ec0add4c7bd2704ed9f8f4ed953359846fbbc"
+      },
+      {
+        "path": "evals/smt-scripts/corpus.ts",
+        "sha256": "251f41cc54daa4d2a08b793e575766501dea521437656bc30a6f00d32b09b66f"
+      },
+      {
+        "path": "evals/smt-scripts/provenance.ts",
+        "sha256": "8f2cb50059a26af3e73688c29b3f9c8680c31e261ec44a0880ce9a9653c03035"
+      },
+      {
+        "path": "evals/smt-scripts/replay.ts",
+        "sha256": "e93e16683dd3973f319756b7406de0a69cd4d695d0bf1e505b772167161f341f"
+      },
+      {
+        "path": "evals/smt-scripts/run.ts",
+        "sha256": "ce580661779a614864fb8a66d670b24434b3c86a35f78b1a5486c02e1d64ce43"
+      },
+      {
+        "path": "evals/smt-scripts/runner.vitest.ts",
+        "sha256": "367bcba0060a9421bfc37d8dcd174d8fafef0c5e5de015e7bdf5f4816a8021e1"
+      },
+      {
+        "path": "evals/smt-scripts/verify.ts",
+        "sha256": "fe0a34031ef79d60abbdc70f3086d1d2c344420f45e0f55ac9511b72fa1b26ef"
+      },
+      {
+        "path": "evals/smt-subset/benchmark.ts",
+        "sha256": "127d6abc54ba0826f468062d5eb86a71398cddbac591f9167f76d804ab89bb97"
+      },
+      {
+        "path": "evals/smt-subset/browser-entry.ts",
+        "sha256": "4b498cf68aa681a800fb4d68bc150f3f128db722590de2d34169bf7b35bdbfb3"
+      },
+      {
+        "path": "evals/smt-subset/browser.spec.ts",
+        "sha256": "a07b9b2cc29d54aa24953a9ac3e6d328b05f4829be826c6ba1aeca421d2efa83"
+      },
+      {
+        "path": "evals/smt-subset/clients.ts",
+        "sha256": "dd8d46f2c9722babf02720f8b3efcba4f03d858370ce4841111a9a918b0b4c95"
+      },
+      {
+        "path": "evals/smt-subset/cold.ts",
+        "sha256": "251ef81a8c9402086e051c2e0021ff27094ba4ed65e0c20d56444206c03e400d"
+      },
+      {
+        "path": "evals/smt-subset/contract-test.ts",
+        "sha256": "39495b984950c8c3c85aad71b3d082c7f32815f7310d7fffcd948df1f8a9cd68"
+      },
+      {
+        "path": "evals/smt-subset/corpus.ts",
+        "sha256": "fdae5e395365e9c4b3d19b119eb37162be88494651f89a26a5fccaeac8826a7c"
+      },
+      {
+        "path": "evals/smt-subset/expansion-browser.spec.ts",
+        "sha256": "542e2ae87bbea6aad814a4b7f25e63841fb6ea661cd0c2b43cdad86d67835e21"
+      },
+      {
+        "path": "evals/smt-subset/paths.ts",
+        "sha256": "e969e33faad0df28e5f5ee304dba22c84304da162f4f31543a03ef166e664437"
+      },
+      {
+        "path": "evals/smt-subset/provenance.ts",
+        "sha256": "f79fe0b6c22946588bd468a0e5beb78b037fccd3e1ff736997434cc5319d4a85"
+      },
+      {
+        "path": "evals/smt-subset/script-browser.spec.ts",
+        "sha256": "1dec218b95c1dc4e126dffebdfa1401c4f37982feed5ce9506556d1fd504a324"
+      },
+      {
+        "path": "evals/smt-subset/verify-run.ts",
+        "sha256": "3204373d00f4d3abafa49e7de1008a5caa8415684ef66bdef868ebcc64e887d6"
+      },
+      {
+        "path": "evals/smt-subset/verify.ts",
+        "sha256": "fb9bc4fd076b90555824f17166bd43e57938da1073b55eacf2c7d15a345cb057"
+      },
+      {
+        "path": "evals/smt-subset/wasm.ts",
+        "sha256": "deb5ddf7dfaf8f1dcce372caffb0ebfa93c4aaeac1b77462853c3c0d8695a0a9"
+      },
+      {
+        "path": "evals/smt-subset/wire.ts",
+        "sha256": "c7601fd491214ef92d9784716b82d20ad7b07793914f45d10c0c3e5bbf5b462d"
+      },
+      {
+        "path": "evals/smt-tuning/capture.ts",
+        "sha256": "c61a466acb66ab376ff121770ceac83ff02925be03529a844fd2bbf27e9f08e2"
+      },
+      {
+        "path": "evals/smt-tuning/cases.ts",
+        "sha256": "ae312d2652add51f834137f7099c7d162ed4517c1ff88fa75e53aacd7ff9b76e"
+      },
+      {
+        "path": "evals/smt-tuning/checks.ts",
+        "sha256": "4070d1b6e3549342cb6991a18032de4c7467d7b81340847a032f66c3ba75bb44"
+      },
+      {
+        "path": "evals/smt-tuning/compare.ts",
+        "sha256": "12ce68b3d76156c579456a6727ac4a8766a75698012adb7cdf130fdfd52cd693"
+      },
+      {
+        "path": "evals/smt-tuning/contract-test.ts",
+        "sha256": "d72e145012ccaa99da5b032209cdc708a56983d1bc76248f36e530acbfa0dbee"
+      },
+      {
+        "path": "evals/smt-tuning/criterion.ts",
+        "sha256": "6db74dc4d714a67837af730b3e001350be9e106db578373838c2eb2c20c7e5e9"
+      },
+      {
+        "path": "evals/smt-tuning/profile.ts",
+        "sha256": "e37abde26f066513316363d3b53fdeeb936a79e8748e63199acd0a854ec9fd4e"
+      },
+      {
+        "path": "evals/smt-tuning/provenance.ts",
+        "sha256": "7f29ad0418b4d70fe8d5c8e7019c5b83b75a28dd38e6ca342e1e535ca2d1fa1b"
+      },
+      {
+        "path": "evals/smt-tuning/replay.ts",
+        "sha256": "e93e16683dd3973f319756b7406de0a69cd4d695d0bf1e505b772167161f341f"
+      },
+      {
+        "path": "evals/smt-tuning/run.ts",
+        "sha256": "6c36fb1bf9ed3bcd33202f5a77587da4437e6e81c3e4537bfdf00ca34526fcfb"
+      },
+      {
+        "path": "evals/smt-tuning/runner.vitest.ts",
+        "sha256": "87f9c9f33cdec2219b9a116929d1dbfdeef38a6887f68d680743a598ff88c124"
+      },
+      {
+        "path": "evals/smt-tuning/verify.ts",
+        "sha256": "5f98b4d8e6207316b8656e2638d86bb19dced2d73dae693cb5bef3a01e450479"
+      },
+      {
+        "path": "examples/counter-model.ts",
+        "sha256": "8635f088a3fdf9e0b1bf4ea1f96790d56d578766d6e3c3c81a483cd9127f7721"
+      },
+      {
+        "path": "examples/durable-counter.ts",
+        "sha256": "5f77b4b8dbbb815b71dc31f121d220623484f67e36efad0c4114996ee444521c"
+      },
+      {
+        "path": "justfile",
+        "sha256": "14e69de03c90046819f199b16d023465257e9b4981e523c9037bd69d078543a6"
+      },
+      {
+        "path": "package.json",
+        "sha256": "99aa0f5b95329bc25d677c49921698731c5c9ae103fdcd22109c1c13c1965078"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "27d1f2216d738d57e5a7a277158ba006f03e821df60606865915c54884fd6274"
+      },
+      {
+        "path": "scripts/package-test.ts",
+        "sha256": "fff9bd143d80642e93359b6a2a8646c72654f114158e88f95f51b0a4c2d9bf54"
+      },
+      {
+        "path": "scripts/package.ts",
+        "sha256": "81f4f77701643aa9cf045116d4c6bae4bb4a83a262fd8ff61b65b380fdbd2104"
+      },
+      {
+        "path": "smt-playwright.config.ts",
+        "sha256": "1e7b6216afce7dcc4adb17212f9f12f3a5ee0245cedd8e5f87c0c0125a430931"
+      },
+      {
+        "path": "smt-vitest.config.ts",
+        "sha256": "b34f71bfeed1837a87eac3b61027975b4b3de526c61ed774d92ca004957e77f7"
+      },
+      {
+        "path": "src/conformance.ts",
+        "sha256": "fde9957b697b171e252b9abc6fdbd765f283389212684d99b262617a3bb12326"
+      },
+      {
+        "path": "src/contracts.ts",
+        "sha256": "99ccf65de2f12fffcb4f5abbf9ccffeedccd86f0103c9745d571e5e2d90049af"
+      },
+      {
+        "path": "src/trace.ts",
+        "sha256": "0a20a45ba0d84841139bec2dd8178c40585276fffc75e536d33ea1ca2c077cf3"
+      },
+      {
+        "path": "tsconfig.build.json",
+        "sha256": "d4e5348b7e9c8685110feabc9d2ff878d8bf235e0f778a5b230adbffcb7b520f"
+      },
+      {
+        "path": "tsconfig.json",
+        "sha256": "002e2f5c7e99896b3a6853d651b4ee4b3c5a92d5cce156a60ef0c371dd5a6410"
+      }
+    ],
+    "sourceVersion": "0f1942689919cc9128de7bcf86e91bbdc893beae219261488d103ee824f68458"
+  },
+  "environment": {
+    "cpu": "Apple M5",
+    "logicalCpus": 10,
+    "platform": "darwin",
+    "arch": "arm64",
+    "os": "25.6.0",
+    "loadAverage": [
+      2.7783203125,
+      2.568359375,
+      2.71142578125
+    ],
+    "dedicatedHost": false
+  },
+  "conditions": {
+    "samples": 20,
+    "warmupSeconds": 1,
+    "measurementSeconds": 2,
+    "statistic": "median",
+    "confidence": 0.95,
+    "command": [
+      "/Users/mz/ghq/github.com/mizchi/idealis/.artifacts/smt-tuning/candidate/solver-bench",
+      "--bench",
+      "--noplot"
+    ],
+    "criterionHome": "/Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0042-smt-candidate-confirmation/criterion",
+    "validationOutsideTimers": true
+  }
+}

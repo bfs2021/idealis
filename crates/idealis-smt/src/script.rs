@@ -2,7 +2,7 @@ use crate::{Formula, Problem, Result, Solution, parser};
 use std::sync::Arc;
 
 struct Query {
-    problem: Problem,
+    problem: Arc<Problem>,
     todo: Vec<(Arc<Formula>, bool)>,
 }
 pub struct Script {

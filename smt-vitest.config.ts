@@ -4,6 +4,7 @@ export default defineConfig({
     include: [
       "evals/smt-expansion/runner.vitest.ts",
       "evals/smt-scripts/runner.vitest.ts",
+      "evals/smt-tuning/runner.vitest.ts",
     ],
   },
 });

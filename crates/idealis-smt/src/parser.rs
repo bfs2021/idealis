@@ -798,7 +798,7 @@ pub(super) fn assertion(expression: &str) -> Result<String> {
     Ok(format!("(assert {})", render(&nodes[0])))
 }
 
-pub(super) fn script(source: &str) -> Result<Vec<(Problem, Vec<Assumption>)>> {
+pub(super) fn script(source: &str) -> Result<Vec<(Arc<Problem>, Vec<Assumption>)>> {
     let nodes = parse(source)?;
     let mut prefix = String::new();
     let mut solver = None;
@@ -865,7 +865,7 @@ pub(super) fn script(source: &str) -> Result<Vec<(Problem, Vec<Assumption>)>> {
                 } else {
                     return Err(Error::new("syntax", "check command arity"));
                 };
-                queries.push((context.snapshot()?, assumptions));
+                queries.push((context.snapshot(), assumptions));
             }
             "assert" | "push" | "pop" => return Err(Error::new("syntax", "script command arity")),
             _ => {

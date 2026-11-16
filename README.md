@@ -8,17 +8,25 @@ CLI は `idealis`、npm package は `@mizchi/idealis`。Rust のホストは `id
 
 ## 構成とライブラリの役割
 
-| ライブラリ                                      | 入力                                               | 担当する処理・出力                                                                                                 |
-| ----------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| [`rtla`](crates/rtla)                           | TLA+ソースとTLC設定                                | 構文解析し、構文木（AST）を返す。名前解決やモデル検査は後段が担当する。                                            |
-| [`rtla-compiler`](crates/rtla-compiler)         | rtlaのAST                                          | 名前解決、定数・operatorの展開を行い、対応する有限モデルの中間表現（IR）へ変換する。                               |
-| [`rtlc`](crates/rtlc)                           | 検査用IR                                           | 状態を列挙し、invariant・deadlock・temporal property・fairnessを検査して反例を返す。nativeの探索並列化も担当する。 |
-| [`idealis-core`](crates/idealis-core)           | TLA+ソース、IR、有限モデル、実装の観測・履歴       | parser・compiler・checkerを接続し、実装照合、履歴検査、再生、縮小候補の生成とnative JSONL / Wasm境界を提供する。   |
-| [`idealis-smt`](crates/idealis-smt)（旧`rsmt`） | 対応するSMT-LIB式                                  | 任意精度整数の差分制約とBoolean式を解き、SATの具体値、UNSAT、予算切れのunknownを返す独立した試作ソルバー。         |
-| [`ralloy`](crates/ralloy)                       | 静的なAlloyソースと有限scope                       | sig・二項関係・fact・assertを解析し、構造を列挙してinstanceや反例を返す。native/Wasmで動く独立した試作。           |
-| [`idealis-testing`](crates/idealis-testing)     | 有限生成器、保存case、評価feedback、複数実装の観測 | Rustで生成・縮小・差分比較・再生を管理し、native/Wasmのeffectを各言語のDriverが評価する。                          |
-| [`@mizchi/idealis`](src)                        | TSのモデルとDriver、各backendの入出力              | オラクル生成、実装との照合、差分・property-based test、反例縮小、スケジューリングとCLIを提供する。                 |
-| [Go adapter](adapters/go)                       | 共通コアのWasmとGoのモデル・実装・履歴             | CGOなしでRustコアへ接続し、同じ値・オラクル・観測を使って照合と再生を行う。                                        |
+| ライブラリ                                                                                                                                                                                                                          | 入力                                         | 担当する処理・出力                                                                                                 |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| [`rtla`](crates/rtla)                                                                                                                                                                                                               | TLA+ソースとTLC設定                          | 構文解析し、構文木（AST）を返す。名前解決やモデル検査は後段が担当する。                                            |
+| [`rtla-compiler`](crates/rtla-compiler)                                                                                                                                                                                             | rtlaのAST                                    | 名前解決、定数・operatorの展開を行い、対応する有限モデルの中間表現（IR）へ変換する。                               |
+| [`rtlc`](crates/rtlc)                                                                                                                                                                                                               | 検査用IR                                     | 状態を列挙し、invariant・deadlock・temporal property・fairnessを検査して反例を返す。nativeの探索並列化も担当する。 |
+| [`idealis-core`](crates/idealis-core)                                                                                                                                                                                               | TLA+ソース、IR、有限モデル、実装の観測・履歴 | parser・compiler・checkerを接続し、実装照合、履歴検査、再生、縮小候補の生成とnative JSONL / Wasm境界を提供する。   |
+| [`idealis-smt`](crates/idealis-smt)（旧`rsmt`）                                                                                                                                                                                     | 対応するSMT-LIB式                            | 任意精度整数の差分制約とBoolean式を解き、SATの具体値、UNSAT、予算切れのunknownを返す独立した試作ソルバー。         |
+| 同じidealis-smtの改善前後をCriterionで比較したnativeの解析時間。Apple M5、20 samplesの中央値で、JSONL/Wasmや求解の時間は含めない。全14ケース、ばらついた測定と再確認の条件は[評価0042](evals/iterations/0042-smt-tuning.md)を参照。 |
+
+| scriptの内容                 |   改善前 |   改善後 |  倍率 |
+| ---------------------------- | -------: | -------: | ----: |
+| 64 check、整数チェーン32変数 | 4.701 ms | 1.183 ms | 4.0倍 |
+| scope操作32組、64 check      | 415.2 µs | 239.0 µs | 1.7倍 |
+| 整数ite、64 check            | 212.7 µs |  31.8 µs | 6.7倍 |
+
+[`ralloy`](crates/ralloy) | 静的なAlloyソースと有限scope | sig・二項関係・fact・assertを解析し、構造を列挙してinstanceや反例を返す。native/Wasmで動く独立した試作。 |
+| [`idealis-testing`](crates/idealis-testing) | 有限生成器、保存case、評価feedback、複数実装の観測 | Rustで生成・縮小・差分比較・再生を管理し、native/Wasmのeffectを各言語のDriverが評価する。 |
+| [`@mizchi/idealis`](src) | TSのモデルとDriver、各backendの入出力 | オラクル生成、実装との照合、差分・property-based test、反例縮小、スケジューリングとCLIを提供する。 |
+| [Go adapter](adapters/go) | 共通コアのWasmとGoのモデル・実装・履歴 | CGOなしでRustコアへ接続し、同じ値・オラクル・観測を使って照合と再生を行う。 |
 
 RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
 
