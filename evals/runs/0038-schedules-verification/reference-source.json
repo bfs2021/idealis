@@ -1,0 +1,17 @@
+{
+  "candidate": "loom-0.7.2",
+  "upstreamCommit": "a7033ee06a97c52eb2f8131c095fbea6c6eecba3",
+  "sources": [
+    {
+      "path": "src/model.rs",
+      "sha256": "035840da0ada949d4457032a8437eb1e1d21616e88e81ceee0b36d47e6961593",
+      "url": "https://github.com/tokio-rs/loom/blob/a7033ee06a97c52eb2f8131c095fbea6c6eecba3/src/model.rs"
+    },
+    {
+      "path": "README.md",
+      "sha256": "6c63e027ed64d45ee2a74b3063367403c4bb6c7d80e367b5872738485ef848d2",
+      "url": "https://github.com/tokio-rs/loom/blob/a7033ee06a97c52eb2f8131c095fbea6c6eecba3/README.md"
+    }
+  ],
+  "limitations": "SeqCst is modeled with weaker synchronization, load buffering is incomplete. This evaluation compares final value sets of a specific counter, not full memory-model equivalence"
+}

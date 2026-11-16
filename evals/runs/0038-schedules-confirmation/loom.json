@@ -1,0 +1,27 @@
+{
+  "actors": 2,
+  "candidate": "loom-0.7.2",
+  "maxBranches": 1000,
+  "maxDuration": null,
+  "maxPermutations": null,
+  "maxThreads": 3,
+  "ordering": "SeqCst, with Loom's documented limitations",
+  "preemptionBound": null,
+  "results": [
+    {
+      "broken": false,
+      "executions": 54,
+      "outcomes": [
+        2
+      ]
+    },
+    {
+      "broken": true,
+      "executions": 90,
+      "outcomes": [
+        1,
+        2
+      ]
+    }
+  ]
+}

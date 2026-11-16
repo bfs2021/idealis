@@ -1,6 +1,55 @@
 default:
   @just --list
 
+fuzz-build: testing-build
+  cargo build --release --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
+  cargo +nightly-2026-08-27 metadata --locked --format-version 1 --manifest-path evals/structured-fuzz/fuzz/Cargo.toml > /dev/null
+  cargo +nightly-2026-08-27 fuzz build --sanitizer address --fuzz-dir evals/structured-fuzz/fuzz
+
+fuzz-test: fuzz-build
+  cargo fmt --manifest-path evals/structured-fuzz/rust/Cargo.toml -- --check
+  cargo fmt --manifest-path evals/structured-fuzz/fuzz/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
+  pnpm build
+  node --test dist/evals/structured-fuzz/contract-test.js
+  pnpm exec vitest run --config fuzz-vitest.config.ts
+
+fuzz-browser:
+  pnpm exec playwright test --config fuzz-playwright.config.ts
+
+fuzz-eval phase run parent="": fuzz-build
+  pnpm build
+  node dist/evals/structured-fuzz/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
+
+fuzz-replay run:
+  pnpm build
+  node dist/evals/structured-fuzz/replay.js {{quote(run)}}
+
+controlled-build: testing-build
+  cargo build --release --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
+  cargo build --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
+
+controlled-test: controlled-build testing-core-test
+  cargo fmt --manifest-path evals/controlled-schedules/rust/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
+  cargo run --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
+  pnpm build
+  node --test dist/evals/controlled-schedules/contract-test.js
+  pnpm exec vitest run --config schedules-vitest.config.ts
+
+controlled-browser: controlled-build
+  pnpm exec playwright test --config schedules-playwright.config.ts
+
+controlled-eval phase run parent="": controlled-build
+  pnpm build
+  node dist/evals/controlled-schedules/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
+
+controlled-replay run:
+  pnpm build
+  node dist/evals/controlled-schedules/replay.js {{quote(run)}}
+
 testing-build:
   cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml

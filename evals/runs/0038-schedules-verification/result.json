@@ -1,0 +1,195 @@
+{
+  "status": "complete",
+  "sourceVersion": "63b8e755e00f8f50ba5e67ef433c264158ad2bb56c19395bdb7b513c528293d0",
+  "commit": "a9a480a2dd883b46adadaff347b786db5bdbb527",
+  "checks": [
+    {
+      "command": "just controlled-test",
+      "exitCode": 0,
+      "log": "final-controlled-test.log"
+    },
+    {
+      "command": "just controlled-browser",
+      "exitCode": 0,
+      "log": "browser-final.log"
+    },
+    {
+      "command": "just testing-test",
+      "exitCode": 0,
+      "log": "old-testing-contract.log"
+    },
+    {
+      "command": "just check",
+      "exitCode": 0,
+      "log": "final-check.log"
+    },
+    {
+      "command": "just browser",
+      "exitCode": 0,
+      "log": "core-browser.log"
+    },
+    {
+      "command": "just runtime-build",
+      "exitCode": 0,
+      "log": "runtime-build.log"
+    },
+    {
+      "command": "just runtime-test",
+      "exitCode": 0,
+      "log": "runtime-test.log"
+    },
+    {
+      "command": "just usable-test",
+      "exitCode": 0,
+      "log": "usable-test.log"
+    },
+    {
+      "command": "pnpm usable:eval .artifacts/controlled-schedules/usable-evaluation",
+      "exitCode": 0,
+      "log": "usable-eval.log"
+    },
+    {
+      "command": "pnpm usable:replay .artifacts/controlled-schedules/usable-evaluation",
+      "exitCode": 0,
+      "log": "usable-replay.log"
+    },
+    {
+      "command": "just evaluate",
+      "exitCode": 0,
+      "log": "evaluate.log"
+    },
+    {
+      "command": "just replay-evaluation",
+      "exitCode": 0,
+      "log": "evaluate-replay.log"
+    },
+    {
+      "command": "just mutation",
+      "exitCode": 0,
+      "log": "mutation.log"
+    },
+    {
+      "command": "just package",
+      "exitCode": 0,
+      "log": "package-green.log"
+    },
+    {
+      "command": "just controlled-replay evals/runs/0038-packaging-regression-development",
+      "exitCode": 0,
+      "log": "regression-development-replay.log"
+    },
+    {
+      "command": "just controlled-replay evals/runs/0038-packaging-regression-confirmation",
+      "exitCode": 0,
+      "log": "regression-confirmation-replay.log"
+    }
+  ],
+  "expectedDevelopmentFailures": [
+    {
+      "log": "rust-red.log",
+      "reason": "Missing Schedule API"
+    },
+    {
+      "log": "ts-red.log",
+      "reason": "Missing TS schedule method"
+    },
+    {
+      "log": "gates-red.log",
+      "reason": "Missing native gate implementation"
+    },
+    {
+      "log": "lint-before-eval.log",
+      "reason": "Artifacts from an unrelated branch entered Biome scan. Preserved outside scan without changing source"
+    },
+    {
+      "log": "lint-before-eval-green.log",
+      "reason": "Formatting after removing an unnecessary export"
+    },
+    {
+      "log": "package.log",
+      "reason": "Standalone example imported undeclared serde_json. Original evidence retained, consumer fixed and observed seeds rerun as regression"
+    }
+  ],
+  "mutation": {
+    "score": 95.4,
+    "scope": "Existing TS counter only, reused results. Does not measure new Rust/TS scheduling adequacy"
+  },
+  "binaries": [
+    {
+      "path": "crates/idealis-testing/target/release/idealis-testing",
+      "bytes": 550976,
+      "sha256": "9f24ed866f54c478ba011a73ce34eb7c8b66b9133d493b6d1aee8dc6fec8726f"
+    },
+    {
+      "path": "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+      "bytes": 374454,
+      "sha256": "312bd3c768d5b14161a868a81320ffd614b31368204a5bfdf0b46c3816940de9"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/target/release/idealis-schedule-eval",
+      "bytes": 698016,
+      "sha256": "10da1bd59e1fd49bef37bf6ba9a113f2534546a2db5b6b035e09dd0002c28285"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/target/release/examples/loom",
+      "bytes": 828592,
+      "sha256": "7c18d05627f2b0013b124638d3bceb3a2edebcd74b02122d6e434fdef6f33184"
+    }
+  ],
+  "packages": [
+    {
+      "path": "mizchi-idealis-0.1.0-alpha.0.tgz",
+      "sha256": "14d5101fc7103f17c1646768428f76e267e90f78c481edf053c1268f817aba2a"
+    },
+    {
+      "path": "idealis-core-0.1.0-alpha.0.crate",
+      "sha256": "dfe599282c2306f3e79e17cd94b276b57aac2b5dec926b2a3c1bf78d6fc76ce2"
+    },
+    {
+      "path": "rtlc-0.1.0-alpha.0.crate",
+      "sha256": "a57b857b16a86618a3429abbf25ed2fa654bf36c9454794e0fce2403bb608f9f"
+    },
+    {
+      "path": "rtla-0.1.0-alpha.0.crate",
+      "sha256": "a6795bcaadb69e4008b3c5b76c8af667190670bb41ebd16e646c7a25175c50e1"
+    },
+    {
+      "path": "rtla-compiler-0.1.0-alpha.0.crate",
+      "sha256": "6f3c9efc5eabed8d8dae76570e03afa106b6e417f508339e75b3b56138a11cbd"
+    },
+    {
+      "path": "idealis-smt-0.1.0-alpha.0.crate",
+      "sha256": "d9c724bb94e02e5c2d2e3ba952ea61eecf084a0f0736af03b002edac09bddf57"
+    },
+    {
+      "path": "ralloy-0.1.0-alpha.0.crate",
+      "sha256": "468e6904615ea9ea84a7cb264df35592233651dc2bc11e4917a95cca22789617"
+    },
+    {
+      "path": "idealis-testing-0.1.0-alpha.0.crate",
+      "sha256": "f41e8b7d8de4028794707c740a7b379ffec61015be903566a529290b93b4520a"
+    }
+  ],
+  "files": [
+    {
+      "path": "logs.json.gz",
+      "sha256": "9bc812d568fd32138c52a301e35be5413c1a99ad197e8caf3c3c08c6578b7f52"
+    },
+    {
+      "path": "browser-records.json.gz",
+      "sha256": "166b8ef4a3a95f358ff8c43961ad7fb04670369054f00bfdfdab7b345ffcaea5"
+    },
+    {
+      "path": "revision-regression.json",
+      "sha256": "f8b3036e1b58c5abbcf87c2d31b81e85292e4ea46f7acc043a7ee636dbdf37c8"
+    },
+    {
+      "path": "reference-source.json",
+      "sha256": "580b67d47fcc44883034b46d9e5f07124e6211627196045b32bc7c1ad842bc17"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "c1cb9c170fadf6cae516c25590b7482a62e20b9892ab1d9824a0ce86070f8144"
+    }
+  ]
+}

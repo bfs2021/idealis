@@ -7,11 +7,13 @@ import type {
   TestingRequest,
   TestingResult,
   TestingRuntime,
+  TestingSchedule,
   TestingTarget,
 } from "./contracts.js";
 import {
   differential,
   effect,
+  generator,
   json,
   reply,
   TestingError,
@@ -33,6 +35,8 @@ export type {
   TestingRequest,
   TestingResult,
   TestingRuntime,
+  TestingSchedule,
+  TestingScheduleActor,
   TestingTarget,
   TestingTrial,
   TestingVerdict,
@@ -83,6 +87,12 @@ export const createTestingRuntime = (
     }
   };
   return Object.freeze({
+    schedule: async (schedule: TestingSchedule) => {
+      const request: TestingRequest = JSON.parse(
+        JSON.stringify(json({ kind: "schedule", schedule })),
+      );
+      return generator(reply(await dispatch(request), "generator").generator);
+    },
     property: (plan: TestingPlan, evaluate: TestingEvaluator) =>
       run({ kind: "property", plan }, evaluate),
     shrink: (

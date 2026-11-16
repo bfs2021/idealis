@@ -1,0 +1,54 @@
+{
+  "status": "complete",
+  "sourceVersion": "63b8e755e00f8f50ba5e67ef433c264158ad2bb56c19395bdb7b513c528293d0",
+  "seeds": 16,
+  "normal": 32,
+  "detected": 32,
+  "missed": 0,
+  "exhaustive": [
+    {
+      "actors": 2,
+      "schedules": 6,
+      "outcomes": [
+        1,
+        2
+      ],
+      "detected": 4
+    },
+    {
+      "actors": 3,
+      "schedules": 90,
+      "outcomes": [
+        1,
+        2,
+        3
+      ],
+      "detected": 84
+    }
+  ],
+  "exchanges": 2765,
+  "sutExchanges": 5528,
+  "elapsedMs": 1324.710542,
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "b4b4ebaee07a6958969102951b1b5fd1dd41e239f9372456fe941d955912bd59"
+    },
+    {
+      "path": "records.json.gz",
+      "sha256": "88a35a18d80cf22423b4608fe205556e4b6a35e8ab77e9ff22255add40874df1"
+    },
+    {
+      "path": "exchanges.json.gz",
+      "sha256": "d279e103f986c32c665ce8d5a1f855d23c7a703de5669481c3eda4937e0b348d"
+    },
+    {
+      "path": "sut-exchanges.json.gz",
+      "sha256": "eaadd1dbf082885e9ec9e9a3f6b3f295884291bb34cbc71425aad11ee57376be"
+    },
+    {
+      "path": "loom.json",
+      "sha256": "72e9caffc187ddc734cf05455151baacdbc8da25ba2e0b8ba9ce5bb38a48e236"
+    }
+  ]
+}

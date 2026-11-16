@@ -1,4 +1,6 @@
-use crate::{Case, Error, Generator, Observation, Plan, Session, Target, Verdict, compare};
+use crate::{
+    Case, Error, Generator, Observation, Plan, Schedule, Session, Target, Verdict, compare,
+};
 use serde::Deserialize;
 use serde_json::{Value, json};
 
@@ -11,6 +13,9 @@ struct Envelope {
 #[derive(Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 enum Request {
+    Schedule {
+        schedule: Schedule,
+    },
     Property {
         plan: Plan,
     },
@@ -58,6 +63,9 @@ impl Engine {
             return Err(Error::protocol("unsupported protocol version"));
         }
         match envelope.request {
+            Request::Schedule { schedule } => {
+                Ok(json!({"kind":"generator","generator":schedule.generator()?}))
+            }
             Request::Compare { oracle, targets } => {
                 Ok(json!({"kind":"comparison","result":compare(oracle, targets)?}))
             }

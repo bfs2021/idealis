@@ -1,0 +1,11 @@
+{
+  "binary": "evals/structured-fuzz/rust/target/release/idealis-fuzz-eval",
+  "args": [
+    "control"
+  ],
+  "status": 101,
+  "signal": null,
+  "stdout": "",
+  "stderr": "\nthread 'main' (47872180) panicked at src/lib.rs:61:9:\nassertion `left == right` failed: protocol state differs\n  left: Object {\"error\": Object {\"kind\": String(\"protocol\"), \"message\": String(\"no active session\")}, \"kind\": String(\"error\")}\n right: Object {\"effect\": Object {\"kind\": String(\"done\"), \"result\": Object {\"attempts\": Number(1), \"cases\": Number(0), \"counterexample\": Object {\"actions\": Array [String(\"bad\")], \"format\": String(\"idealis.test-case\"), \"generatorId\": String(\"g\"), \"generatorVersion\": String(\"1\"), \"index\": Number(0), \"rng\": String(\"xorshift32-v1\"), \"seed\": Number(1), \"version\": Number(1)}, \"reason\": Null, \"seed\": Number(1), \"shrink\": Null, \"signature\": String(\"contains-bad\"), \"skips\": Number(0), \"status\": String(\"failed\"), \"trials\": Array [Object {\"case\": Object {\"actions\": Array [String(\"bad\")], \"format\": String(\"idealis.test-case\"), \"generatorId\": String(\"g\"), \"generatorVersion\": String(\"1\"), \"index\": Number(0), \"rng\": String(\"xorshift32-v1\"), \"seed\": Number(1), \"version\": Number(1)}, \"id\": Number(1), \"phase\": String(\"replay\"), \"verdict\": Object {\"signature\": String(\"contains-bad\"), \"status\": String(\"mismatch\")}}], \"work\": Number(0)}}, \"kind\": String(\"effect\")}\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+  "error": null
+}

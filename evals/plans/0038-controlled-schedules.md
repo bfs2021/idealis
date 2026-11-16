@@ -1,0 +1,15 @@
+# 0038: 明示した並行スケジュールを生成・再生する
+
+actorごとの有限操作列から、順序を保ったinterleavingの生成器をRustで作る。`idealis-testing`へSchedule/Actorの契約と生成器への変換を追加し、同じ実装をnative/WasmとTSのtesting APIで使う。ホストは`actor`、0始まりの`step`、`operation`を受け取り、指定した操作を1つ進める。任意のRust threadやJavaScriptのawaitを自動捕捉する機能は含めない。
+
+生成器はprogram counterの直積。1-8 actor、合計128操作、最大1024状態と既存のJSON/edge上限を先に検査する。actor IDは一意で、空の操作列も許す。最短長0、最長長は合計操作数とし、有効なprefixをPBTと削除縮小で使えるようにする。完了までの全探索は評価ハーネスで独立に列挙する。PBTのpassedを全interleavingの完全探索とは扱わない。生成器の構築費用はSession.maxWorkの外で、構造の上限により制限する。
+
+参照例は2 actorと3 actorのカウンタ。各actorはread/writeの2操作でincrementする。故障版はread時点の値+1を後からstoreし、正常版はwriteでfetch_addする。TSではasync generator、Rustでは実std threadをチャネルのgateで1操作ずつ進める。各prefixの期待値は完了したwrite数で、SUTの観測を期待値には使わない。全操作を終える列は手計算で2 actorが6通り、3 actorが90通り。結果は独立TS列挙と生成器の列挙で照合する。
+
+連続してactorを完了させる逐次の対照では両版を検査し、interleavingでの追加検出を記録する。Loom 0.7.2をnative評価crateのdev dependencyに固定し、公式lost update例と同じ2 actorのload/store、正常なfetch_addの最終値集合を比較する。Loomの全C11/SeqCst対応や任意のRust実装の証明を主張しない。Loomは純粋なcoreと配布Wasmの依存に入れない。
+
+開発seedは0x38a1から16件、確認seedは0x38c3から32件を予約する。各seedで2/3 actorの正常版・故障版を同じcaseで比較し、PBTは64有効case、maxAttempts 64、maxShrinkChecks 128、maxWork 1,000,000。見逃しはそのまま記録する。検出したcaseはnative/Wasmのtrialと縮小結果を照合し、実TS/Rustで同じ故障を再現して正常版を通す。有効な単一削除について最小性も検査する。
+
+実Chromiumは別seed 0x3801で生成・縮小・再生を行う。work 0はinconclusive、不正actor/範囲外の構築はエラーにし、セッションを破壊しない。固定テスト、native/Wasm、node:test/Vitest、実ブラウザ、単独npm/Rust consumerを確認する。条件・lock・ソースとbinary hash・全trial・native輸送記録・Loom出力・失敗/成功ログは新規runへ保存し、再生する。
+
+公開API変更のためpackageを検査する。check/browser、runtime-build/test、usable-test/eval/replay、evaluate/replay、既存mutationも実行する。採用は逐次対照に対する追加検出と両言語での再現、正常版の対照、依存/診断コストで判断する。新しい速度比較や未知の実プロジェクトの不具合発見には数えない。今回のPRは1本へまとめ、registryへの公開とmergeは行わない。

@@ -3,6 +3,7 @@ import type {
   TestingComparisonStatus,
   TestingDifferential,
   TestingEffect,
+  TestingGenerator,
   TestingJson,
   TestingObservation,
   TestingPhase,
@@ -102,6 +103,80 @@ export const json = (input: unknown, maximumDepth = 64): TestingJson => {
     }
   };
   return visit(input, 0);
+};
+export const generator = (input: unknown): TestingGenerator => {
+  const value = fields(input, [
+    "id",
+    "version",
+    "initial",
+    "states",
+    "minLength",
+    "maxLength",
+  ]);
+  if (
+    !Array.isArray(value.initial) ||
+    value.initial.length === 0 ||
+    !isRecord(value.states) ||
+    Object.keys(value.states).length > 1024
+  )
+    throw new TestingError("protocol", "Invalid testing generator states");
+  const initial = value.initial.map((entry: unknown) => text(entry));
+  const minLength = count(value.minLength);
+  const maxLength = count(value.maxLength);
+  if (
+    minLength > maxLength ||
+    maxLength > 128 ||
+    new Set(initial).size !== initial.length
+  )
+    throw new TestingError("protocol", "Invalid testing generator bounds");
+  let edges = 0;
+  const states = Object.freeze(
+    Object.fromEntries(
+      Object.entries(value.states).map(([key, entries]) => {
+        text(key);
+        if (!Array.isArray(entries))
+          throw new TestingError("protocol", "Invalid testing generator edges");
+        edges += entries.length;
+        if (edges > 10_000)
+          throw new TestingError(
+            "resource",
+            "Testing generator exceeds edge limit",
+          );
+        return [
+          key,
+          Object.freeze(
+            entries.map((input: unknown) => {
+              const edge = fields(input, ["action", "target"]);
+              const action = json(edge.action, 32);
+              if (
+                new TextEncoder().encode(JSON.stringify(action)).length > 8192
+              )
+                throw new TestingError(
+                  "resource",
+                  "Testing action exceeds 8 KiB",
+                );
+              return Object.freeze({ action, target: text(edge.target) });
+            }),
+          ),
+        ];
+      }),
+    ),
+  );
+  if (
+    initial.some((key) => !Object.hasOwn(states, key)) ||
+    Object.values(states).some((entries) =>
+      entries.some((edge) => !Object.hasOwn(states, edge.target)),
+    )
+  )
+    throw new TestingError("protocol", "Unknown testing generator state");
+  return Object.freeze({
+    id: text(value.id),
+    version: text(value.version),
+    initial: Object.freeze(initial),
+    states,
+    minLength,
+    maxLength,
+  });
 };
 export const verdict = (input: unknown): TestingVerdict => {
   if (!isRecord(input))
@@ -361,9 +436,11 @@ export const reply = (
     input,
     kind === "effect"
       ? ["kind", "effect"]
-      : kind === "comparison"
-        ? ["kind", "result"]
-        : ["kind"],
+      : kind === "generator"
+        ? ["kind", "generator"]
+        : kind === "comparison"
+          ? ["kind", "result"]
+          : ["kind"],
   );
   if (value.kind !== kind)
     throw new TestingError("protocol", "Unexpected testing response");

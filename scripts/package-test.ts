@@ -132,6 +132,7 @@ import {createSimulationHost} from '@mizchi/idealis/host';
 import {planSchedule,runSchedule} from '@mizchi/idealis/scheduling';
 import {createRtlcBackend,runBackend,parseBackendResult} from '@mizchi/idealis/backend';
 const testing=await createTestingWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/testing.wasm'))));
+const schedules=await testing.schedule({id:'consumer-actors',version:'1',actors:[{id:'left',operations:['read','write']},{id:'right',operations:['read','write']}]});assert.equal(schedules.maxLength,4);assert.equal(Object.keys(schedules.states).length,9);
 const testingPlan={generator:{id:'consumer',version:'1',initial:['s'],states:{s:[{action:'good',target:'s'},{action:'bad',target:'s'}]},minLength:0,maxLength:8},seed:0x36a1,cases:32,maxAttempts:64,maxShrinkChecks:64,maxWork:10000};
 const predicate=testCase=>testCase.actions.includes('bad')?{status:'mismatch',signature:'bad'}:{status:'matched'};
 const testingResult=await testing.property(testingPlan,predicate);assert.equal(testingResult.status,'failed');assert.deepEqual(testingResult.counterexample.actions,['bad']);assert.equal(testingResult.shrink.status,'minimal');
@@ -184,7 +185,8 @@ const node = execFileSync(process.execPath, [join(consumer, "consumer.mjs")], {
 await writeFile(
   join(consumer, "consumer.ts"),
   `import type {Model} from '@mizchi/idealis';
-import {createTestingWasm,type TestingCase} from '@mizchi/idealis/testing';
+import {createTestingWasm,type TestingCase,type TestingSchedule} from '@mizchi/idealis/testing';
+const schedule:TestingSchedule={id:'typecheck',version:'1',actors:[{id:'actor',operations:['step']}]};void schedule;
 const testingCase:TestingCase={format:'idealis.test-case',version:1,rng:'xorshift32-v1',generatorId:'g',generatorVersion:'1',seed:1,index:0,actions:[]};void testingCase;void createTestingWasm;
 import {createAlloyWasm,type AlloyInstance} from '@mizchi/idealis/alloy';
 const observed:AlloyInstance={signatures:{N:[]},fields:{edge:[]}};void observed;void createAlloyWasm;
@@ -504,6 +506,24 @@ const testing = execFileSync("cargo", ["run", "--offline", "--quiet"], {
   .toString()
   .trim();
 assert.equal(testing, "standalone idealis-testing consumer checked");
+await writeFile(
+  join(testingConsumer, "main.rs"),
+  await readFile(
+    join(
+      testingConsumer,
+      `idealis-testing-${version}`,
+      "examples",
+      "schedule.rs",
+    ),
+  ),
+);
+const testingSchedule = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+  cwd: testingConsumer,
+  stdio: "pipe",
+})
+  .toString()
+  .trim();
+assert.equal(testingSchedule, "standalone schedule generator checked");
 const testingMetadata = JSON.parse(
   execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
     cwd: testingConsumer,
@@ -519,6 +539,7 @@ assert.ok(
       "idealis-core",
       "idealis-smt",
       "ralloy",
+      "loom",
       "z3",
       "z3-sys",
     ].includes(entry.name),
@@ -543,6 +564,7 @@ const result = {
   rsmt,
   ralloy,
   testing,
+  testingSchedule,
   testingDependencies: testingMetadata.packages
     .map((entry: { name: string }) => entry.name)
     .sort(),

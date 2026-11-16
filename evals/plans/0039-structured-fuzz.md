@@ -1,0 +1,17 @@
+# 0039: testing protocolを構造付き入力でfuzzする
+
+対象はidealis-testingのJSONL Engineと保存case。nativeのcargo-fuzz/libFuzzer/AddressSanitizerを使い、生JSONLの変異とArbitraryによる構造付きcommand生成を比較する。fuzzerとArbitraryは非公開eval crateだけに置き、公開coreや配布Wasmの依存を増やさない。PRは1本にまとめる。
+
+入力は最大8192 bytes、最大64 command、最大256 dispatchに制限する。構造付き生成器の通常planはcase数1-4、長さ0-8、shrink checks 2-16、work 0-4096。property/resume/replay/shrink/cancel/compare/schedule、wrong ID・extra field・壊れたJSONと保存caseを含める。返却されたpending IDとcaseを使ってfeedbackを生成し、縮小・確認のphaseまで到達させる。
+
+不正requestのerrorを受けたEngineと、そのrequestを省略した独立Engineを次の有効requestで比較し、pending sessionの破損を検出する。成功応答は同じ要求に対して一致し、passedには有効caseがあり、failedには同じsignatureとcaseの最終mismatchが必要とする。多数決やSUTの観測を期待値には使わない。意図的にpending sessionをcancelする既知故障の対照で、照合器が不一致を拒否することを確認する。
+
+0036/0038の保存輸送記録から固定seed corpusを作り、保存caseも構造付き入力へ取り込む。開発と確認は固定した初期corpusから別々に開始する。cargo-fuzz 0.13.2、既存のnightly-2026-08-27を使い、global default toolchainは変更しない。libFuzzerの既定の時間制限は0で無効にし、run数で停止する。最大RSSは1024 MiBで、超過・signal・非ゼロ終了は成功にしない。
+
+開発seed 0x39a1と確認seed 0x39c3を予約し、各targetを10,000 runs実行する。同一ソース・lock・初期corpus・引数・binary hashを固定し、生ログ、終了code、全生成corpus、発見したartifactを新規runへ保存する。追加の到達性比較は同じbytes列の128件/256件を両targetへ渡す。回帰用seedは0x3901。semanticなphase/終端への到達を数え、異なるbinaryのLLVM coverage値を直接比較しない。
+
+保存corpusはASanと通常nativeで再生し、全dispatchを同じcoreのWasmへ渡して照合する。成功応答は完全一致を要求する。非対応値域の不正JSONはnative/Wasmの両方がerrorであることを要求し、platformに依存するparserの詳細を成功応答と同じ契約にはしない。実Chromiumでは固定回帰transcriptを再生する。探索campaignの再実行で同じcorpusになるとは主張せず、保存入力の再現を検査する。
+
+panic、ASan、状態破損、判定不一致は最小入力を保存し、決定的な回帰テストへ移す。条件を変える場合は別plan/runへ記録し、確認seedを新しい独立実験に再利用しない。何も発見しなかった場合も、その範囲を記録する。追加到達・再現・診断費用を採用判断に使い、有限runでの無障害を正しさの証明にしない。
+
+fmt/clippy/tests、ASan実行と保存corpus再生、node/Vitest、実ブラウザ、check/browser、runtime-build/test、evaluate/replayを確認する。公開coreへ修正が必要ならowner層で回帰を追加し、usable-test/eval/replay、packageと単独consumerも検査する。mergeとregistry publishは行わない。

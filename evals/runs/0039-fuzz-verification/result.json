@@ -1,0 +1,122 @@
+{
+  "status": "complete",
+  "sourceVersion": "a918bae9465e5991f4a8db5e3aa8dd57be41637b780fedbca24621d5a94d8ff4",
+  "commit": "4c69dfda307b7995911f325ad7fb79cf0c6ce853",
+  "checks": [
+    {
+      "command": "just fuzz-test",
+      "exitCode": 0,
+      "log": "fuzz-test.log"
+    },
+    {
+      "command": "just fuzz-browser",
+      "exitCode": 0,
+      "log": "browser.log"
+    },
+    {
+      "command": "just fuzz-eval smoke .artifacts/structured-fuzz/smoke",
+      "exitCode": 0,
+      "log": "smoke.log"
+    },
+    {
+      "command": "just fuzz-replay evals/runs/0039-fuzz-development",
+      "exitCode": 0,
+      "log": "development-replay.log"
+    },
+    {
+      "command": "just fuzz-replay evals/runs/0039-fuzz-confirmation",
+      "exitCode": 0,
+      "log": "confirmation-replay.log"
+    },
+    {
+      "command": "just check",
+      "exitCode": 0,
+      "log": "check.log"
+    },
+    {
+      "command": "just browser",
+      "exitCode": 0,
+      "log": "core-browser.log"
+    },
+    {
+      "command": "just runtime-build",
+      "exitCode": 0,
+      "log": "runtime-build.log"
+    },
+    {
+      "command": "just runtime-test",
+      "exitCode": 0,
+      "log": "runtime-test.log"
+    },
+    {
+      "command": "just evaluate",
+      "exitCode": 0,
+      "log": "evaluate.log"
+    },
+    {
+      "command": "just replay-evaluation",
+      "exitCode": 0,
+      "log": "evaluate-replay.log"
+    }
+  ],
+  "expectedDevelopmentFailures": [
+    {
+      "log": "red.log",
+      "reason": "Missing audit crate implementation"
+    },
+    {
+      "log": "green.log",
+      "reason": "The initial minLength forbade deletion candidates. Kept the phase assertion and fixed the harness generator before campaigns"
+    },
+    {
+      "log": "runner-build-final.log",
+      "reason": "Missing explicit type for browser record array; added the private AuditRecord contract"
+    }
+  ],
+  "knownFaultControl": "Intentional pending reset panics with protocol state differs. This is a harness control, not an unknown core bug",
+  "scope": "No public API, crate dependency or Wasm artifact changes. Package/consumer and mutation reruns are not required for the private harness",
+  "binaries": [
+    {
+      "path": "evals/structured-fuzz/rust/target/release/idealis-fuzz-eval",
+      "sha256": "9a480041268ba46626c36cca9e2668d7b1e47fd431485da88226b31c5f5db8c2",
+      "bytes": 1370928
+    },
+    {
+      "path": "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+      "sha256": "312bd3c768d5b14161a868a81320ffd614b31368204a5bfdf0b46c3816940de9",
+      "bytes": 374454
+    },
+    {
+      "path": "evals/structured-fuzz/fuzz/target/aarch64-apple-darwin/release/raw",
+      "sha256": "de446463dbd3b9954b684cc0e01de86c0ea521bc1a4b77c119dded91f82c4351",
+      "bytes": 5338528
+    },
+    {
+      "path": "evals/structured-fuzz/fuzz/target/aarch64-apple-darwin/release/structured",
+      "sha256": "c3aaf56540c401bdf461140c2ce4c162a6ee94b55a628f17691ec93cc92464f6",
+      "bytes": 5338744
+    }
+  ],
+  "files": [
+    {
+      "path": "logs.json.gz",
+      "sha256": "0de90eeaa66d51abd590e432954ea73400917dd702b98bb06743a570ec06c8e8"
+    },
+    {
+      "path": "metrics.json",
+      "sha256": "b9e86f40cabf3a830891dc5222012d29e391749f06a73bee87fad1a4b25a8cf7"
+    },
+    {
+      "path": "browser-records.json.gz",
+      "sha256": "10bfee70d8933da5c5febd4e71878e2bb5ba68c50b9c86d5ca167e36512a8bd2"
+    },
+    {
+      "path": "smoke.json.gz",
+      "sha256": "43f3d60d46abc2eb85a4833d54ce5930bc5e4b8a113afa5fa406755e551219ab"
+    },
+    {
+      "path": "tools.json",
+      "sha256": "2c9b7385c33832133e576a848c6f1a0b46c1564eb3d5bc5fa04daa582cb20bfc"
+    }
+  ]
+}

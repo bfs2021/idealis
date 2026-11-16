@@ -20,14 +20,22 @@ Caseはformat=idealis.test-case、version=1、rng、generatorId/generatorVersion
 
 上限は1024状態、10,000遷移、128 actions、action当たり8 KiB、JSON再帰32段、case/request当たり1 MiB。1セッションは最大256正常case、4096 attempts、512縮小checks、16 MiBのtrial記録を扱う。超える入力はprotocol/resource error。workは生成の各段階と候補の受理検査を数え、JSON復号・plan検査・SUT実行の時間を含めない。SUT評価回数はattempts/checksで制限する。
 
+## 明示した並行操作列
+
+`Schedule { id, version, actors }`の各actorは`ScheduleActor { id, operations }`。`Schedule::generator()`はprogram counterの直積からGeneratorを作る。actionは`{ actor, step, operation }`となり、同actor内の操作順を維持する。stepは0始まり。[examples/schedule.rs](examples/schedule.rs)を参照。
+
+1-8 actor、合計128操作、最大1024状態を構築前に検査する。actor IDは一意にする。空の操作列も許す。最短長0、最長長は合計操作数で、prefixも生成・縮小の対象。任意の単一削除でactor内の順序やoperationが崩れる候補は受理しない。構築はSessionのwork予算外で、構造の上限により制限する。
+
+SUTはホストが指定actorを1操作ずつ進める。threadやawaitの自動計装、ブロッキングやweak memoryのモデル化は含まない。PBTのpassedを全スケジュールの完全探索と解釈しない。Loomは評価crateだけで利用し、このcrateやWasmの依存へ含めない。
+
 ## 差分比較
 
 `compare(Observation::Allowed { values }, targets)`は、referenceが許可する値集合と各実装の観測を比較する。対象を多数決でオラクルへしない。空の対象はerror、空の許可値集合はinvalid。invalid/unknown/errorはmatchedへ変換せず、対象ごとのoutcomeも残す。全体statusはerror、mismatch、unknown、invalid、matchedの優先順で決めるため、全体statusだけで他対象の判定が完了したとは扱わない。
 
 ## nativeとWasm
 
-binaryはversion=1のJSONLを扱う。requestのkindはproperty、shrink、replay、resume、cancel、compare。property/shrink/replayは同時に1セッションだけ実行し、cancelで解放する。compareは進行中のセッションとは独立。無効なrequestやfeedback IDは進行中の要求を消費しない。
+binaryはversion=1のJSONLを扱う。requestのkindはschedule、property、shrink、replay、resume、cancel、compare。scheduleは`{ kind: "schedule", schedule: ... }`へ`{ kind: "generator", generator: ... }`を返す。property/shrink/replayは同時に1セッションだけ実行し、cancelで解放する。schedule/compareは進行中のセッションとは独立。無効なrequestやfeedback IDは進行中の要求を消費しない。
 
 Wasm ABI v1はtesting_abi_version、testing_input_resize、testing_dispatch、testing_output_ptr、testing_output_len。ホストは同じJSONを渡す。並列に実行する場合はworkerごとに別runtimeを使う。
 
-[Proptestの状態機械テスト](https://proptest-rs.github.io/proptest/proptest/state-machine.html)と既存TSの縮小器を参照した。外部solver、並行スケジュール探索、高階Strategy、scalar縮小はこのcrateへ組み込んでいない。
+[Proptestの状態機械テスト](https://proptest-rs.github.io/proptest/proptest/state-machine.html)と既存TSの縮小器を参照した。外部solver、任意threadの自動計装、高階Strategy、scalar縮小はこのcrateへ組み込んでいない。

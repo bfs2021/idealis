@@ -1,0 +1,38 @@
+{
+  "nightly": "rustc 1.100.0-nightly (bff8e12ff 2026-08-26)\nbinary: rustc\ncommit-hash: bff8e12ff5e6bcd53dfb1dbccdcec80a60a856ed\ncommit-date: 2026-08-26\nhost: aarch64-apple-darwin\nrelease: 1.100.0-nightly\nLLVM version: 23.1.0",
+  "cargoFuzz": "cargo-fuzz 0.13.2",
+  "tools": [
+    {
+      "crate": "arbitrary-1.4.2",
+      "manifestSha256": "18431fa35c62df4019339b0b105a0ee12e8db49ca178e68f0fb3b9b7e5e8ec01",
+      "vcs": {
+        "git": {
+          "sha1": "dc22fdefd5456a0f4d2f190c6d3e017e3c7ddd8e"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "crate": "libfuzzer-sys-0.4.13",
+      "manifestSha256": "90e7897e6d532d91859f0ae4125234e49767729bf4fbd135390aa3dcc56921dc",
+      "vcs": {
+        "git": {
+          "sha1": "719e4efb9b8857ebaa782ae59376c8cbb78fed0f"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "crate": "cargo-fuzz-0.13.2",
+      "manifestSha256": "936e5dcaeedc1fe79c53580d8af9164b3b8a5dfb182a8b1ced50d262f63f202e",
+      "vcs": {
+        "git": {
+          "sha1": "984c861c8dfea28055254c5f1d2659ab2cd63f76"
+        },
+        "path_in_vcs": ""
+      }
+    }
+  ],
+  "structureReference": "https://rust-fuzz.github.io/book/cargo-fuzz/structure-aware-fuzzing.html",
+  "libFuzzerReference": "https://llvm.org/docs/LibFuzzer.html"
+}
