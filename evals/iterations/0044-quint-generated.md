@@ -14,4 +14,6 @@ TLCとの最初のpilotは、初期状態のinvariant違反ではTLCが状態数
 
 既存のVariants import全体を拒否する対照は、今回の限定した対応と矛盾するため更新した。新しい正常受理の回帰に加え、Realsのimport、未対応のVariantFilterとTLCのPrint、foldの展開上限を拒否する対照を残した。
 
+ソース`c59e098`を固定した[最終run](../runs/0044-quint-final/result.json)と[再生run](../runs/0044-quint-replay/result.json)も、同じsourceVersionとbinaryで12件・反例6件が成功した。再生ではnative/Wasmの全結果も保存値と完全一致した。[検証ログ](../runs/0044-quint-verification/manifest.json)にportable-test、check、browser、mutation、evaluate/replay-evaluation、safety-test、quint-testを保存した。既存compiler-evalは237入力・235受理・2拒否を維持した。Chromiumは新しい12入力を含め3テスト、保存fixtureは13テスト、safety回帰は211テストが通過した。
+
 採用するのは、この生成形式の有限fragmentをRust/native/Wasmで実行する経路。Quint言語全体やQuint ConnectのAPI・ITF、任意コードとの適合性、性能は今回の評価対象ではない。結果は人工的な固定モデルの互換性回帰であり、実プロジェクトの未知バグ発見とは数えない。
