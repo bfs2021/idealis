@@ -1,0 +1,13 @@
+# 0042: SMTのCriterionと解析費用の改善
+
+既存の整数チェーン6ケースを残し、整数ite、反復check、scope操作のCriterionケースを追加する。解析だけ、解析と求解、解析済みの求解、contextのpush/assert/popを区別する。検証やfixture生成をtiming loopへ入れず、出力はblack_boxで消費する。SMT-LIB 2.7 Figure 3.11の差分制約サイクルから、未対応の観測コマンドを除いたscriptをscope対照にする。
+
+新しいbenchと入力を固定してからbaselineを測る。Criterion 0.8.2、warmup 1秒、measurement 2秒、20 samples。bench binaryはstrip=noneで両版をビルドし、保存したbinaryを再利用する。baseline→candidateの開発測定と、candidate→baselineの逆順の確認測定を独立ディレクトリへ保存する。採否は各測定のmedianと95%区間を見て決め、Criterionのraw samplesも残す。同じホストで他の重い検査を同時に動かさない。専用ホストではないこと、CPU/OS/依存lock/ビルド条件/source/binaryのhashを記録する。
+
+主指標はscriptの反復64 checkのparseで20%以上の短縮、scope scriptのparseで10%以上の短縮。既存のparse-solve/preparedと解析済みscriptのsolveに10%超の中央値後退があれば再測定か保留にする。平均や中央値から好都合なものを選び直さない。目標を下げず、未達は未達として残す。初回のbaselineは性能上のRedとして扱い、意味論の回帰テストは測定前後で通す。
+
+samply 1000Hzで同じbench binaryのscript parseを各5秒profileし、timing測定とは分ける。まずスナップショット生成での再解析、AST構築・破棄、割り当ての費用を調べる。候補はimmutableな解析結果を共有する変更。assert/popの再解析と失敗時の原子性、assumptions、結果順、maxWorkとstats、scope上限は変えない。学習状態の再利用やSMT対応範囲の拡張はしない。profilingの可視性が不足すればその限界を残し、推測だけでhotspotを断定しない。
+
+baseline d5fb2ffのnative/Wasmを保存する。改善前後で固定したCriterion fixture、既存SMT/0040/0041のテスト、native/Wasm/旧版の完全応答、Z3の逐次scriptと独立snapshot・SATモデルを照合する。新しい正しさ確認は開発seed 0x42a1の32 script、確認seed 0x42c3の64 scriptとし、同じcandidate source/binaryで実行する。過去の確認seedを独立確認として再利用しない。入力・応答・モデル・不正/unknown/空結果と、work/statsを保存し再生する。
+
+fmt/clippy/Rust tests、node/Vitest、実Chromium、check/browser、runtime-build/test、evaluate/replayを確認する。packageの独立consumerも検査する。古いrunを上書きせず、失敗や採用しなかった候補も残す。性能はこのnative microbenchmarkの範囲に限定し、Z3との新しい倍率、Wasmの倍率、実用入力全体への外挿はしない。依存する機能追加のPR #49の上に、性能変更を1本でまとめる。mergeとregistry publishは行わない。
