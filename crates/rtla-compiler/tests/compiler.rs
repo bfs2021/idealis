@@ -107,3 +107,15 @@ fn empty_initial_domain_stays_empty() {
         .unwrap();
     assert_eq!(serde_json::to_value(result).unwrap()["status"], "empty");
 }
+#[test]
+fn fold_rejects_a_recursive_operator_in_the_ast() {
+    let mut module = rtla::parse_module("---- MODULE Fold ----\nEXTENDS Apalache\nVARIABLE x\nOp(a, b) == a\nInit == x = ApaFoldSet(Op, 0, {})\nNext == UNCHANGED x\n====").unwrap();
+    module.definitions[0].is_recursive = true;
+    assert!(
+        compile(
+            &module,
+            &rtla::parse_config("INIT Init\nNEXT Next").unwrap()
+        )
+        .is_err()
+    );
+}

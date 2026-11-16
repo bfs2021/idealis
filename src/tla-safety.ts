@@ -73,7 +73,13 @@ export const compileTlaSafety = (options: {
     module.instances.length ||
     module.extends.some(
       (name) =>
-        !["Naturals", "Integers", "Sequences", "FiniteSets"].includes(name),
+        ![
+          "Naturals",
+          "Integers",
+          "Sequences",
+          "FiniteSets",
+          "Apalache",
+        ].includes(name),
     )
   )
     unsupported("modules or EXTENDS");
@@ -217,6 +223,52 @@ export const compileTlaSafety = (options: {
         scope: entry.scope,
         calls: [...context.calls, name],
       },
+    };
+  };
+  const fold = (
+    sequence: boolean,
+    args: readonly Expression[],
+    context: Context,
+    child: Context,
+  ): SafetyExpression => {
+    const [operator, initial, collection] = args;
+    if (args.length !== 3 || !initial || !collection)
+      return unsupported("fold arity");
+    if (operator?.kind !== "Identifier")
+      return unsupported("fold operator argument");
+    const name = operator.name;
+    const entry = context.scope.entries.get(name);
+    const definition = entry?.definition;
+    if (
+      context.locals.has(name) ||
+      !entry ||
+      !definition ||
+      definition.isRecursive ||
+      context.calls.includes(name) ||
+      definition.kind !== "Operator" ||
+      definition.params.length !== 2 ||
+      definition.params.some((param) => param.arity !== 0)
+    )
+      return unsupported(`fold operator ${name}`);
+    const accumulator = context.bound;
+    if (accumulator + 2 > 40)
+      return unsupported("more than 40 bound variables");
+    const locals = new Map(entry.locals);
+    for (const [index, param] of definition.params.entries())
+      locals.set(param.name, { op: "bound", slot: accumulator + index });
+    return {
+      op: "fold",
+      accumulator,
+      initial: expression(initial, child),
+      collection: expression(collection, child),
+      order: sequence ? "sequence-left" : "set-members",
+      body: expression(definition.body, {
+        ...nested(child),
+        locals,
+        scope: entry.scope,
+        calls: [...child.calls, name],
+        bound: accumulator + 2,
+      }),
     };
   };
   const letContext = (
@@ -564,6 +616,16 @@ export const compileTlaSafety = (options: {
         const expanded = call(value.operator, value.args, context);
         return expression(expanded.body, expanded.context);
       }
+      if (
+        module.extends.includes("Apalache") &&
+        ["ApaFoldSet", "ApaFoldSeqLeft"].includes(value.operator)
+      )
+        return fold(
+          value.operator === "ApaFoldSeqLeft",
+          value.args,
+          context,
+          child,
+        );
       const first = value.args[0];
       const second = value.args[1];
       if (

@@ -590,6 +590,38 @@ impl<'scope> Arena<'scope> {
             _ => Err(CoreError::protocol("Expected a finite set")),
         }
     }
+    pub fn fold_members(&self, value: Scalar) -> Result<Vec<Scalar>, CoreError> {
+        let members = self.members(value)?;
+        for member in &members {
+            self.check_fold_order(*member)?;
+        }
+        Ok(members)
+    }
+    fn check_fold_order(&self, value: Scalar) -> Result<(), CoreError> {
+        if let Scalar::Ref(_) = value {
+            match self.cell(value)? {
+                Cell::String(_) => return Err(unsupported_fold_order()),
+                Cell::Set(values) => {
+                    for value in values {
+                        self.check_fold_order(*value)?;
+                    }
+                }
+                Cell::Function(entries) => {
+                    if !entries
+                        .iter()
+                        .enumerate()
+                        .all(|(index, entry)| entry.0 == Scalar::Int((index + 1) as i32))
+                    {
+                        return Err(unsupported_fold_order());
+                    }
+                    for (_, value) in entries {
+                        self.check_fold_order(*value)?;
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
     pub fn contains(&self, value: Scalar, set: Scalar) -> Result<bool, CoreError> {
         let Cell::Set(values) = self.cell(set)? else {
             return Err(CoreError::protocol("Membership requires a finite set"));
@@ -731,6 +763,10 @@ impl<'scope> Arena<'scope> {
             },
         })
     }
+}
+
+fn unsupported_fold_order() -> CoreError {
+    CoreError::protocol("Unsupported TLA input: set fold order for strings, records or functions")
 }
 
 fn work_exhausted() -> CoreError {

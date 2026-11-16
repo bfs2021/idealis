@@ -1,5 +1,5 @@
 use crate::CoreError;
-use crate::ir::{Binding, Branch, Domain, Expression, Scalar, Step};
+use crate::ir::{Binding, Branch, Domain, Expression, FoldOrder, Scalar, Step};
 use crate::safety_values::Arena;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_values::ValueRemap;
@@ -336,6 +336,12 @@ impl Expression {
                 children.push(body);
                 children
             }
+            Self::Fold {
+                initial,
+                collection,
+                body,
+                ..
+            } => vec![initial, collection, body],
             Self::Subseq { sequence, from, to } => vec![sequence, from, to],
             Self::Enabled { .. } | Self::UnmatchedCase { .. } => vec![],
         }
@@ -430,6 +436,23 @@ impl Expression {
                     bound.domain.validate(child)?;
                     child.locals += 1;
                 }
+                body.validate_with(child)?;
+                return Ok(());
+            }
+            Self::Fold {
+                accumulator,
+                initial,
+                collection,
+                body,
+                ..
+            } => {
+                if *accumulator != ctx.locals || ctx.locals + 2 > 40 {
+                    return Err(CoreError::protocol("Invalid fold variable slot"));
+                }
+                initial.validate_with(ctx.child())?;
+                collection.validate_with(ctx.child())?;
+                let mut child = ctx.child();
+                child.locals += 2;
                 body.validate_with(child)?;
                 return Ok(());
             }
@@ -661,6 +684,38 @@ impl Expression {
                 } else {
                     arena.set(values)?
                 }
+            }
+            Self::Fold {
+                accumulator,
+                initial,
+                collection,
+                order,
+                body,
+            } => {
+                if *accumulator != ctx.locals.len() {
+                    return Err(CoreError::protocol("Invalid fold variable slot"));
+                }
+                let mut result = initial.eval(ctx, arena)?;
+                let source = collection.eval(ctx, arena)?;
+                let elements = match order {
+                    FoldOrder::SetMembers => arena.fold_members(source)?,
+                    FoldOrder::SequenceLeft => arena.sequence(source)?,
+                };
+                let mut locals = ctx.locals.to_vec();
+                for element in elements {
+                    arena.tick()?;
+                    locals.push(result);
+                    locals.push(element);
+                    result = body.eval(
+                        EvalContext {
+                            locals: &locals,
+                            ..ctx
+                        },
+                        arena,
+                    )?;
+                    locals.truncate(ctx.locals.len());
+                }
+                result
             }
             Self::Domain { argument } => {
                 let value = argument.eval(ctx, arena)?;
@@ -1273,6 +1328,91 @@ mod tests {
     use crate::Value;
     use crate::ir::{Expression, Scalar};
     use crate::safety_values::Arena;
+
+    fn fold(
+        order: &str,
+        initial: serde_json::Value,
+        collection: serde_json::Value,
+        body: serde_json::Value,
+    ) -> Expression {
+        serde_json::from_value(serde_json::json!({"op":"fold","accumulator":0,"order":order,"initial":initial,"collection":collection,"body":body})).unwrap()
+    }
+
+    #[test]
+    fn fold_charges_each_iteration_and_exhaustion_is_an_error() {
+        use serde_json::json;
+        for (order, value) in [
+            (
+                "set-members",
+                Value::Set(vec![Value::Int("1".into()), Value::Int("2".into())]),
+            ),
+            (
+                "sequence-left",
+                Value::List(vec![Value::Int("1".into()), Value::Int("2".into())]),
+            ),
+        ] {
+            let expression = fold(
+                order,
+                json!({"op":"literal","value":{"type":"int","value":"0"}}),
+                json!({"op":"read","slot":0,"next":false}),
+                json!({"op":"bound","slot":0}),
+            );
+            let mut arena = Arena::new(100);
+            let source = arena.data(&value).unwrap();
+            let before = arena.work;
+            expression
+                .eval(EvalContext::new(&[source], &[]), &mut arena)
+                .unwrap();
+            assert_eq!(arena.work - before, 2);
+            let mut limited = Arena::new(before + 1);
+            let source = limited.data(&value).unwrap();
+            let error = expression
+                .eval(EvalContext::new(&[source], &[]), &mut limited)
+                .unwrap_err();
+            assert!(error.message.contains("work budget"), "{error}");
+            assert_eq!(limited.work, before + 1);
+        }
+    }
+
+    #[test]
+    fn fold_reserves_two_slots_without_raising_the_bound_limit() {
+        use serde_json::json;
+        for (count, accepted) in [(38, true), (39, false)] {
+            let bindings: Vec<_> = (0..count)
+                .map(|slot| json!({"slot":slot,"domain":{"kind":"set","values":[]}}))
+                .collect();
+            let expression: Expression = serde_json::from_value(json!({"op":"forall","bounds":bindings,"body":{"op":"fold","accumulator":count,"initial":{"op":"literal","value":{"type":"bool","value":true}},"collection":{"op":"set","values":[]},"order":"set-members","body":{"op":"bound","slot":count+1}}})).unwrap();
+            assert_eq!(expression.validate(0, 3, 0).is_ok(), accepted);
+        }
+    }
+
+    #[test]
+    fn fold_slots_are_scoped_and_collection_uses_outer_scope() {
+        use serde_json::json;
+        let valid = fold(
+            "set-members",
+            json!({"op":"literal","value":{"type":"int","value":"0"}}),
+            json!({"op":"set","values":[]}),
+            json!({"op":"bound","slot":1}),
+        );
+        for (field, value) in [
+            ("accumulator", json!(1)),
+            ("accumulator", json!(40)),
+            ("initial", json!({"op":"bound","slot":0})),
+            ("collection", json!({"op":"bound","slot":1})),
+            ("body", json!({"op":"bound","slot":2})),
+        ] {
+            let mut invalid = serde_json::to_value(&valid).unwrap();
+            invalid[field] = value;
+            let invalid: Expression = serde_json::from_value(invalid).unwrap();
+            assert!(invalid.validate(0, 3, 0).is_err());
+        }
+        for (field, value) in [("order", json!("right")), ("extra", json!(true))] {
+            let mut invalid = serde_json::to_value(&valid).unwrap();
+            invalid[field] = value;
+            assert!(serde_json::from_value::<Expression>(invalid).is_err());
+        }
+    }
 
     fn membership(element: Expression) -> Expression {
         Expression::FunctionIn {

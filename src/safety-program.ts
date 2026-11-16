@@ -235,6 +235,22 @@ const expression = (input: unknown, depth: number): void => {
       });
       expression(input.body, child);
       return;
+    case "fold":
+      fields(input, [
+        "op",
+        "accumulator",
+        "initial",
+        "collection",
+        "order",
+        "body",
+      ]);
+      count(input.accumulator);
+      if (input.order !== "set-members" && input.order !== "sequence-left")
+        throw new PortableCoreError("protocol", "Invalid compiled fold order");
+      expression(input.initial, child);
+      expression(input.collection, child);
+      expression(input.body, child);
+      return;
     case "if":
       fields(input, ["op", "condition", "consequent", "alternative"]);
       expression(input.condition, child);

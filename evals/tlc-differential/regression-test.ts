@@ -14,7 +14,7 @@ import { bounds } from "../collections-temporal/cases.js";
 import { traceInput } from "../collections-temporal/tlc.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
-import { boundaries } from "./corpus.js";
+import { boundaries, foldOrderControls, foldRejections } from "./corpus.js";
 
 interface Golden {
   readonly cases: readonly ({
@@ -27,6 +27,7 @@ interface Golden {
     values?: readonly PortableValue[];
     states?: number;
     generated?: number;
+    unsupported?: string;
   } & (
     | { message: string; location: string }
     | { message?: never; location?: never }
@@ -34,7 +35,7 @@ interface Golden {
 }
 const golden = (
   await Promise.all(
-    ["tlc-strings", "tlc-case"].map(async (directory) => {
+    ["tlc-strings", "tlc-case", "tlc-apalache-folds"].map(async (directory) => {
       const fixture: Golden = JSON.parse(
         await readFile(`evals/fixtures/${directory}/expected.json`, "utf8"),
       );
@@ -47,7 +48,7 @@ const core = await createPortableWasm(
     "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   ),
 );
-for (const input of boundaries())
+for (const input of [...boundaries(), ...foldOrderControls()])
   test(`TLC regression: ${input.name}`, async () => {
     if (input.expectedRejection) {
       assert.throws(() => compileTlaSafety(input), /TLC 1.7.4 string literal/);
@@ -88,7 +89,7 @@ for (const input of boundaries())
       result?.status === "complete" ? "success" : (result?.status ?? "error");
     assert.equal(
       status,
-      reference.status,
+      fixture?.unsupported ? "error" : reference.status,
       `${input.name}: ${JSON.stringify(result ?? error)}`,
     );
     const native = startNative();
@@ -110,6 +111,10 @@ for (const input of boundaries())
       );
     } finally {
       await native.close();
+    }
+    if (fixture?.unsupported) {
+      assert.ok(error?.message.includes(fixture.unsupported), error?.message);
+      return;
     }
     if (fixture?.values)
       assert.deepEqual(result?.violation?.trace[0]?.values, fixture.values);
@@ -157,5 +162,90 @@ test("unmatched CASE IR requires a nonempty location and exact fields", () => {
       ],
     };
     assert.throws(() => decodeSafetyProgram(invalid), PortableCoreError);
+  }
+});
+
+for (const input of foldRejections())
+  test(`Apalache fold rejects: ${input.name}`, async () => {
+    assert.equal(input.goldenFrontendParity, true);
+    const fixture = golden.find((entry) => entry.name === input.name);
+    assert.ok(fixture, input.name);
+    assert.equal(fixture.sourceSha256, digest(input.source));
+    assert.equal(fixture.configSha256, digest(input.config));
+    assert.equal(
+      fixture.logSha256,
+      digest(
+        await readFile(`evals/fixtures/${fixture.directory}/${fixture.log}`),
+      ),
+    );
+    assert.throws(() => compileTlaSafety(input));
+    assert.throws(() => compileTlaSource(core, input), PortableCoreError);
+    const native = startNative();
+    try {
+      const response = await native.request({
+        version: 1,
+        request: {
+          kind: "compile-tla",
+          source: input.source,
+          config: input.config,
+        },
+      });
+      assert.ok(isRecord(response));
+      assert.equal(response.kind, "error");
+    } finally {
+      await native.close();
+    }
+  });
+
+test("fold IR requires exact fields, an explicit order and valid slot counts", () => {
+  const input = boundaries().find(
+    (input) => input.name === "fold-set-integers",
+  );
+  assert.ok(input);
+  const program = compileTlaSafety(input);
+  assert.deepEqual(decodeSafetyProgram(program), program);
+  const fold = program.initial[0]?.steps[0];
+  assert.ok(fold?.kind === "assign" && fold.value.op === "fold");
+  for (const invalid of [
+    { ...fold.value, order: "right" },
+    { ...fold.value, accumulator: -1 },
+    { ...fold.value, accumulator: 1.5 },
+    { ...fold.value, extra: true },
+    { ...fold.value, initial: { op: "bound", slot: -1 } },
+    { ...fold.value, body: { op: "unknown" } },
+    Object.fromEntries(
+      Object.entries(fold.value).filter(([key]) => key !== "collection"),
+    ),
+  ]) {
+    assert.throws(
+      () =>
+        decodeSafetyProgram({
+          ...program,
+          initial: [
+            {
+              name: "Init",
+              steps: [{ kind: "assign", slot: 0, value: invalid }],
+            },
+          ],
+        }),
+      PortableCoreError,
+    );
+  }
+});
+
+test("fold calls preserve expansion limits and do not enable other modules", () => {
+  for (const input of [
+    {
+      source:
+        "---- MODULE Modules ----\nEXTENDS Apalache, Variants\nVARIABLE x\nInit == x = 0\nNext == UNCHANGED x\n====",
+      config: "INIT Init\nNEXT Next",
+    },
+    {
+      source: `---- MODULE DeepFold ----\nEXTENDS Apalache\nVARIABLE x\nOp(a, b) == a\nInit == x = ${"ApaFoldSet(Op, ".repeat(50)}0${", {})".repeat(50)}\nNext == UNCHANGED x\n====`,
+      config: "INIT Init\nNEXT Next",
+    },
+  ]) {
+    assert.throws(() => compileTlaSafety(input), /Unsupported TLA input/);
+    assert.throws(() => compileTlaSource(core, input), PortableCoreError);
   }
 });

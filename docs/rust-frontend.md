@@ -47,11 +47,15 @@ native JSONLでは`{"version":1,"request":{"kind":"compile-tla","source":"…","
 
 ## 対応範囲
 
-目標は[既存の有限fragment](rust-safety.md#対応範囲)との一致。名前解決、定数、非再帰operator、lexicalなLET、有限量化、集合・関数・record・sequence、action列挙、temporal/fairnessを変換する。全TLA+やSANYの型検査ではない。INSTANCE、ユーザーモジュール、高階・再帰operator、無限集合の列挙、symmetry、state/action constraintは未対応。
+目標は[既存の有限fragment](rust-safety.md#対応範囲)との一致。名前解決、定数、非再帰operator、lexicalなLET、有限量化、集合・関数・record・sequence、action列挙、temporal/fairnessを変換する。全TLA+やSANYの型検査ではない。INSTANCE、ユーザーモジュール、一般の高階・再帰operator、無限集合の列挙、symmetry、state/action constraintは未対応。
 
 整数はTLC 1.7.4に合わせたsigned 32 bit。未使用の定義・theoremの正しさは保証しない。既存の`compileTlaSafety`はtla-tsを使う独立したfrontendとして残しており、自動で切り替えない。
 
 CASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) に合わせて評価時に未一致エラーとソース位置を返す。未評価の分岐内のCASEではエラーにしない。両frontendで同じIRへ変換する。
+
+root module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
+
+sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は既存の値順序が TLC v1.7.4 (`5a47802`) と一致する整数、Boolean、tuple / sequence、集合と、それらの再帰的な組み合わせだけを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順で比較する。集合要素に文字列・record・関数がどの深さでも含まれる場合は `Unsupported TLA input: set fold order for strings, records or functions` という評価時エラーで拒否する。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。既存の関数比較や整数 domain の範囲は変更しない。model value は従来どおり未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
 内部ではJSONのIR nodeを組み立て、型付きSafetyProgramへ変換する。今回の評価は意味の一致を確認するもので、TS frontendより高速という測定ではない。`complete`、`bounded`、`empty`の意味は従来と同じ。[backend契約](backend-contract.md)を使う場合も、検査対象・意味論・仮定のIDは呼び出し側で固定する。
 

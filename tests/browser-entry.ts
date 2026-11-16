@@ -114,6 +114,23 @@ export const run = async (): Promise<Record<string, unknown>> => {
     }
     if (!failed) throw new Error("Browser unmatched CASE did not fail");
   }
+  const foldInput = {
+    source:
+      "---- MODULE BrowserFold ----\nEXTENDS Integers, Sequences, Apalache\nVARIABLE x\nOp(a, b) == Append(a, b)\nInit == x = ApaFoldSet(Op, <<>>, {3, -2, 1})\nNext == UNCHANGED x\nSafe == x = <<-2, 1, 3>>\n====",
+    config: "INIT Init\nNEXT Next\nINVARIANT Safe",
+  };
+  for (const program of [
+    compileTlaSafety(foldInput),
+    compileTlaSource(rust, foldInput),
+  ]) {
+    const result = checkSafety(rust, program, {
+      maxDepth: 2,
+      maxStates: 10,
+      maxWork: 1000,
+    });
+    if (result.status !== "complete" || result.states !== 1)
+      throw new Error("Browser Apalache fold operations differ");
+  }
   const smt = await createSmtOracle(api).solve(
     "(declare-const value Int) (assert (= value 7))",
     ["value"],

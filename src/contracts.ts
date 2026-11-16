@@ -333,6 +333,14 @@ export type SafetyExpression =
       readonly body: SafetyExpression;
     }
   | {
+      readonly op: "fold";
+      readonly accumulator: number;
+      readonly initial: SafetyExpression;
+      readonly collection: SafetyExpression;
+      readonly order: "set-members" | "sequence-left";
+      readonly body: SafetyExpression;
+    }
+  | {
       readonly op:
         | "sequence-set"
         | "domain"
