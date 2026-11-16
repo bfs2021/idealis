@@ -67,6 +67,9 @@ pub enum Expression {
     Domain {
         argument: Box<Self>,
     },
+    VariantTag {
+        argument: Box<Self>,
+    },
     Cardinality {
         argument: Box<Self>,
     },

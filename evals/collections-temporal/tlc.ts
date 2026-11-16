@@ -10,7 +10,7 @@ import type {
 } from "../../src/contracts.js";
 import type { Case } from "./cases.js";
 
-export const tlaValue = (value: PortableValue): string => {
+const valueExpression = (value: PortableValue, depth: number): string => {
   switch (value.type) {
     case "int":
       return value.value;
@@ -19,23 +19,28 @@ export const tlaValue = (value: PortableValue): string => {
     case "string":
       return JSON.stringify(value.value);
     case "list":
-      return `<<${value.value.map(tlaValue).join(",")}>>`;
+      return `<<${value.value.map((inner) => valueExpression(inner, depth + 1)).join(",")}>>`;
     case "set":
-      return `{${value.value.map(tlaValue).join(",")}}`;
+      return `{${value.value.map((inner) => valueExpression(inner, depth + 1)).join(",")}}`;
     case "record":
-      return tlaValue({
-        type: "map",
-        value: value.value.map(([key, inner]) => [
-          { type: "string", value: key },
-          inner,
-        ]),
-      });
+      return valueExpression(
+        {
+          type: "map",
+          value: value.value.map(([key, inner]) => [
+            { type: "string", value: key },
+            inner,
+          ]),
+        },
+        depth,
+      );
     case "map":
-      return `[__key \\in {${value.value.map(([key]) => tlaValue(key)).join(",")}} |-> ${value.value.reduceRight((otherwise, [key, inner]) => `IF __key = ${tlaValue(key)} THEN ${tlaValue(inner)} ELSE ${otherwise}`, "TRUE")}]`;
+      return `[__key${depth} \\in {${value.value.map(([key]) => valueExpression(key, depth + 1)).join(",")}} |-> ${value.value.reduceRight((otherwise, [key, inner]) => `IF __key${depth} = ${valueExpression(key, depth + 1)} THEN ${valueExpression(inner, depth + 1)} ELSE ${otherwise}`, "TRUE")}]`;
     default:
       throw new Error("Not a TLA value");
   }
 };
+export const tlaValue = (value: PortableValue): string =>
+  valueExpression(value, 0);
 export const runTlc = async (
   java: string,
   jar: string,

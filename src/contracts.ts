@@ -344,6 +344,7 @@ export type SafetyExpression =
       readonly op:
         | "sequence-set"
         | "domain"
+        | "variant-tag"
         | "cardinality"
         | "len"
         | "head"

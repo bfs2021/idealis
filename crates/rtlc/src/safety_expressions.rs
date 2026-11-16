@@ -273,6 +273,7 @@ impl Expression {
             | Self::Not { argument }
             | Self::Neg { argument }
             | Self::Domain { argument }
+            | Self::VariantTag { argument }
             | Self::Cardinality { argument }
             | Self::SequenceSet { argument }
             | Self::Len { argument }
@@ -720,6 +721,16 @@ impl Expression {
             Self::Domain { argument } => {
                 let value = argument.eval(ctx, arena)?;
                 arena.domain(value)?
+            }
+            Self::VariantTag { argument } => {
+                let value = argument.eval(ctx, arena)?;
+                let entries = arena.entries(value)?;
+                if entries.len() != 1 || arena.text(entries[0].0).is_none() {
+                    return Err(CoreError::protocol(
+                        "Unsupported TLA input: VariantTag requires a singleton string domain",
+                    ));
+                }
+                entries[0].0
             }
             Self::Cardinality { argument } => {
                 let value = argument.eval(ctx, arena)?;

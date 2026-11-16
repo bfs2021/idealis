@@ -1,0 +1,122 @@
+{
+  "quint": "0.33.1",
+  "apalache": "0.63.0",
+  "apalacheSha256": "f2d43f2e279a657be50b2ecec3a013ba2915266008a2562b38412c3269347dc9",
+  "node": "v24.22.2",
+  "records": [
+    {
+      "name": "Counter",
+      "command": [
+        "pnpm",
+        "dlx",
+        "@informalsystems/quint@0.33.1",
+        "compile",
+        "evals/fixtures/quint-generated/Counter.qnt",
+        "--init=init",
+        "--step=step",
+        "--invariant=safety,broken",
+        "--target=tlaplus",
+        "--server-endpoint=localhost:18822",
+        "--apalache-version=0.63.0"
+      ],
+      "exit": 0,
+      "quintSha256": "ddcdfa0adbacb2004ee74bc3caea0af0112dec0fe3b95d340264cec01d5140af",
+      "tlaSha256": "f615abfb93666871e27956e77ac3f9d761b3c6564a0dd024e96b9cd0596eebeb"
+    },
+    {
+      "name": "SetFold",
+      "command": [
+        "pnpm",
+        "dlx",
+        "@informalsystems/quint@0.33.1",
+        "compile",
+        "evals/fixtures/quint-generated/SetFold.qnt",
+        "--init=init",
+        "--step=step",
+        "--invariant=safety,broken",
+        "--target=tlaplus",
+        "--server-endpoint=localhost:18822",
+        "--apalache-version=0.63.0"
+      ],
+      "exit": 0,
+      "quintSha256": "f565a2f304287846bb6abcf5647f0c38c21e14cb415f4780462add1c250f4dbf",
+      "tlaSha256": "c478e170660b4827b0562dac8f1f6df30b1a5609eb852459b39ddcc94101cd12"
+    },
+    {
+      "name": "SequenceFold",
+      "command": [
+        "pnpm",
+        "dlx",
+        "@informalsystems/quint@0.33.1",
+        "compile",
+        "evals/fixtures/quint-generated/SequenceFold.qnt",
+        "--init=init",
+        "--step=step",
+        "--invariant=safety,broken",
+        "--target=tlaplus",
+        "--server-endpoint=localhost:18822",
+        "--apalache-version=0.63.0"
+      ],
+      "exit": 0,
+      "quintSha256": "b9d27ab68724e142cd747b0e8539dc6e9be0554bc8ae978b7ebcc7cd5c2a270a",
+      "tlaSha256": "bf36b83c1dcbb09ecb92db48670a20c57bbed8854e5b0e8d4f650ac30bfbe3f3"
+    },
+    {
+      "name": "Choice",
+      "command": [
+        "pnpm",
+        "dlx",
+        "@informalsystems/quint@0.33.1",
+        "compile",
+        "evals/fixtures/quint-generated/Choice.qnt",
+        "--init=init",
+        "--step=step",
+        "--invariant=safety,broken",
+        "--target=tlaplus",
+        "--server-endpoint=localhost:18822",
+        "--apalache-version=0.63.0"
+      ],
+      "exit": 0,
+      "quintSha256": "d8a5ee644cc34dfa7745aefc9771e00572d8c9be195cb559cb2c821aada432c9",
+      "tlaSha256": "47025cc4b360930a733b388b58f3571357c952308dace2b435a444654dec0a98"
+    },
+    {
+      "name": "Match",
+      "command": [
+        "pnpm",
+        "dlx",
+        "@informalsystems/quint@0.33.1",
+        "compile",
+        "evals/fixtures/quint-generated/Match.qnt",
+        "--init=init",
+        "--step=step",
+        "--invariant=safety,broken",
+        "--target=tlaplus",
+        "--server-endpoint=localhost:18822",
+        "--apalache-version=0.63.0"
+      ],
+      "exit": 0,
+      "quintSha256": "afa5eb38e983a206d09095fa6b2ff182eabd26cef42a9ea8750019dca41d3721",
+      "tlaSha256": "aedb9b150b488da14f487e77ce39de0db0964e992d2e648d47e793220c97197f"
+    },
+    {
+      "name": "NestedFold",
+      "command": [
+        "pnpm",
+        "dlx",
+        "@informalsystems/quint@0.33.1",
+        "compile",
+        "evals/fixtures/quint-generated/NestedFold.qnt",
+        "--init=init",
+        "--step=step",
+        "--invariant=safety,broken",
+        "--target=tlaplus",
+        "--server-endpoint=localhost:18822",
+        "--apalache-version=0.63.0"
+      ],
+      "exit": 0,
+      "quintSha256": "5dcc44a2e5047618710df292cd2f08c8c06a07f7f459d41beed54dfd2216697d",
+      "tlaSha256": "e8dbe4e7720ce8da38d4196e8aa0ae7f52c89aa2ababb0db31dc696a8ab93199"
+    }
+  ]
+}

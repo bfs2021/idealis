@@ -120,6 +120,7 @@ const expression = (input: unknown, depth: number): void => {
     "not",
     "neg",
     "domain",
+    "variant-tag",
     "cardinality",
     "sequence-set",
     "len",

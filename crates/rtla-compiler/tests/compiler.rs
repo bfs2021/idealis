@@ -119,3 +119,66 @@ fn fold_rejects_a_recursive_operator_in_the_ast() {
         .is_err()
     );
 }
+
+#[test]
+fn apalache_assignment_requires_the_module_and_preserves_guards() {
+    let source = "---- MODULE Assignment ----\nEXTENDS Integers, Apalache\nVARIABLE x\nInit == x := 0\nNext == x' := x + 1\nSafe == (x := 0) \\/ (x := 1)\n====";
+    let config = "INIT Init\nNEXT Next\nINVARIANT Safe";
+    let result = program(source, config)
+        .check(SafetyBounds {
+            max_depth: 10,
+            max_states: 100,
+            max_work: 100000,
+            max_temporal_nodes: None,
+        })
+        .unwrap();
+    let result = serde_json::to_value(result).unwrap();
+    assert_eq!(result["status"], "invariant-violation");
+    assert_eq!(result["violation"]["trace"].as_array().unwrap().len(), 3);
+    assert!(
+        compile(
+            &rtla::parse_module(&source.replace("Integers, Apalache", "Integers")).unwrap(),
+            &rtla::parse_config(config).unwrap(),
+        )
+        .is_err()
+    );
+}
+
+#[test]
+fn variants_preserve_payload_scope_and_reject_ambiguous_tags() {
+    let source = "---- MODULE VariantPayload ----\nEXTENDS Apalache, Integers, Variants\nVARIABLE x\nAdd(acc, element) == acc + element\nInit == x = Variant(\"Outer\", ApaFoldSeqLeft(Add, 0, <<1, 2>>))\nNext == UNCHANGED x\nSafe == VariantTag(x) = \"Outer\" /\\ VariantGetUnsafe(\"Outer\", x) = 3\n====";
+    let config = "INIT Init\nNEXT Next\nINVARIANT Safe";
+    let bounds = SafetyBounds {
+        max_depth: 10,
+        max_states: 100,
+        max_work: 100000,
+        max_temporal_nodes: None,
+    };
+    assert_eq!(
+        serde_json::to_value(program(source, config).check(bounds).unwrap()).unwrap()["status"],
+        "complete"
+    );
+    assert!(
+        compile(
+            &rtla::parse_module(&source.replace(", Variants", "")).unwrap(),
+            &rtla::parse_config(config).unwrap(),
+        )
+        .is_err()
+    );
+    for value in [
+        "[tag \\in {} |-> 0]",
+        "[first |-> 1, second |-> 2]",
+        "<<1>>",
+    ] {
+        let invalid = format!(
+            "---- MODULE InvalidTag ----\nEXTENDS Variants\nVARIABLE x\nInit == x = VariantTag({value})\nNext == UNCHANGED x\n===="
+        );
+        assert!(
+            program(&invalid, "INIT Init\nNEXT Next")
+                .check(bounds)
+                .unwrap_err()
+                .message
+                .contains("singleton string domain")
+        );
+    }
+}

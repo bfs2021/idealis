@@ -233,11 +233,21 @@ test("fold IR requires exact fields, an explicit order and valid slot counts", (
   }
 });
 
-test("fold calls preserve expansion limits and do not enable other modules", () => {
+test("fold calls preserve expansion limits and reject unsupported imports and operators", () => {
   for (const input of [
     {
       source:
-        "---- MODULE Modules ----\nEXTENDS Apalache, Variants\nVARIABLE x\nInit == x = 0\nNext == UNCHANGED x\n====",
+        "---- MODULE Modules ----\nEXTENDS Apalache, Reals\nVARIABLE x\nInit == x = 0\nNext == UNCHANGED x\n====",
+      config: "INIT Init\nNEXT Next",
+    },
+    {
+      source:
+        '---- MODULE UnsupportedVariant ----\nEXTENDS Apalache, Variants\nVARIABLE x\nInit == x = VariantFilter("Tag", {})\nNext == UNCHANGED x\n====',
+      config: "INIT Init\nNEXT Next",
+    },
+    {
+      source:
+        '---- MODULE UnsupportedTLC ----\nEXTENDS Apalache, TLC\nVARIABLE x\nInit == x = Print("tag", 0)\nNext == UNCHANGED x\n====',
       config: "INIT Init\nNEXT Next",
     },
     {

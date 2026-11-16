@@ -169,7 +169,9 @@ pub fn compile(module: &Module, config: &Config) -> Result<rtlc::SafetyProgram> 
             "Integers",
             "Sequences",
             "FiniteSets",
+            "TLC",
             "Apalache",
+            "Variants",
         ]
         .contains(&name.as_str())
     }) {
@@ -693,6 +695,37 @@ impl Compiler<'_> {
             }
             return self.fold(operator == "ApaFoldSeqLeft", args, context, child);
         }
+        if self.extends("Variants") {
+            match operator {
+                "Variant" if args.len() == 2 => {
+                    if context.bound >= 256 {
+                        return unsupported("too many bound variables");
+                    }
+                    let tag = self.expression(&args[0], child)?;
+                    let payload = self.expression(
+                        &args[1],
+                        &Context {
+                            bound: context.bound + 1,
+                            ..child.clone()
+                        },
+                    )?;
+                    return Ok(
+                        json!({"op":"function","bounds":[{"slot":context.bound,"domain":{"kind":"set","values":[tag]}}],"body":payload}),
+                    );
+                }
+                "VariantTag" if args.len() == 1 => {
+                    return Ok(
+                        json!({"op":"variant-tag","argument":self.expression(&args[0],child)?}),
+                    );
+                }
+                "VariantGetUnsafe" if args.len() == 2 => {
+                    return Ok(
+                        json!({"op":"at","target":self.expression(&args[1],child)?,"key":self.expression(&args[0],child)?}),
+                    );
+                }
+                _ => {}
+            }
+        }
         if args.len() == 1 && ["-.", "-"].contains(&operator) {
             if !self.extends("Integers") {
                 return unsupported("unary minus requires Integers");
@@ -761,6 +794,7 @@ impl Compiler<'_> {
             "-" => "sub",
             "*" => "mul",
             "=" => "eq",
+            ":=" if self.extends("Apalache") => "eq",
             "#" | "/=" => "ne",
             "<" => "lt",
             "<=" | "\\leq" => "le",
@@ -994,8 +1028,9 @@ impl Compiler<'_> {
                 json!({"name":name,"steps":unchanged(self.expression(expression,&child)?)?}),
             ]),
             E::Apply { operator, args } if args.len() == 2 => {
+                let equality = operator == "=" || operator == ":=" && self.extends("Apalache");
                 if let Some(slot) = self.target(&args[0], context) {
-                    if operator == "=" {
+                    if equality {
                         return Ok(vec![
                             json!({"name":name,"steps":[{"kind":"assign","slot":slot,"value":self.expression(&args[1],&child)?}]}),
                         ]);
@@ -1006,9 +1041,7 @@ impl Compiler<'_> {
                         ]);
                     }
                 }
-                if operator == "="
-                    && let Some(slot) = self.target(&args[1], context)
-                {
+                if equality && let Some(slot) = self.target(&args[1], context) {
                     return Ok(vec![
                         json!({"name":name,"steps":[{"kind":"assign","slot":slot,"value":self.expression(&args[0],&child)?}]}),
                     ]);

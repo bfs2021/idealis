@@ -480,6 +480,23 @@ backend-eval run: portable-build
   pnpm build
   node dist/evals/backend-contract/evaluate.js {{quote(run)}}
 
+# Quint's generated TLA+ and replay against TLC.
+quint-test: portable-build
+  pnpm build
+  node --test dist/evals/quint-generated/contract-test.js
+
+quint-generate output endpoint apalache_jar:
+  pnpm build
+  node dist/evals/quint-generated/generate.js {{quote(output)}} {{quote(endpoint)}} {{quote(apalache_jar)}}
+
+quint-eval java tlc_jar apalache_jar run: portable-build
+  pnpm build
+  node dist/evals/quint-generated/run.js {{quote(run)}} {{quote(java)}} {{quote(tlc_jar)}} {{quote(apalache_jar)}}
+
+quint-replay java tlc_jar apalache_jar saved run: portable-build
+  pnpm build
+  node dist/evals/quint-generated/run.js {{quote(run)}} {{quote(java)}} {{quote(tlc_jar)}} {{quote(apalache_jar)}} {{quote(saved)}}
+
 # SMT expression and context expansion against Z3.
 smt-expansion-test: smt-build
   pnpm build

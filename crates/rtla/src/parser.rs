@@ -16,7 +16,9 @@ fn infix(operator: &str) -> Option<Precedence> {
         "=>" => (1, 1, false),
         "<=>" | "~>" | "-+->" => (2, 2, false),
         "/\\" | "\\/" => (3, 3, true),
-        "=" | "#" | "<" | ">" | "<=" | ">=" | "\\in" | "\\notin" | "\\subseteq" => (5, 5, false),
+        "=" | ":=" | "#" | "<" | ">" | "<=" | ">=" | "\\in" | "\\notin" | "\\subseteq" => {
+            (5, 5, false)
+        }
         "\\cdot" => (5, 14, true),
         "@@" => (6, 6, true),
         ":>" | "<:" => (7, 7, false),
