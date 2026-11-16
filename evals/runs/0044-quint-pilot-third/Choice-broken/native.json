@@ -1,0 +1,34 @@
+{
+  "kind": "safety",
+  "result": {
+    "status": "invariant-violation",
+    "reason": null,
+    "states": 3,
+    "generated": 4,
+    "depth": 1,
+    "work": 9,
+    "violation": {
+      "name": "broken",
+      "trace": [
+        {
+          "action": null,
+          "values": [
+            {
+              "type": "int",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "action": "step",
+          "values": [
+            {
+              "type": "int",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

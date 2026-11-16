@@ -1,0 +1,36 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 58 and seed 6623956056730975708 with 1 worker on 10 cores with 256MB heap and 64MB offheap memory [pid: 70285] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/Match.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/Integers.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/Sequences.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/FiniteSets.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/TLC.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/Apalache.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/Variants.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/model/scratch/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Apalache
+Semantic processing of module Variants
+Semantic processing of module Match
+Starting... (2026-11-17 00:21:51)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-11-17 00:21:51.
+Error: Invariant broken is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+phase = [Idle |-> [tag |-> "UNIT"]]
+
+State 2: <:= line 35, col 3 to line 56, col 59 of module Match>
+phase = [Busy |-> [tag |-> "UNIT"]]
+
+State 3: <:= line 35, col 3 to line 56, col 59 of module Match>
+phase = [Done |-> [tag |-> "UNIT"]]
+
+3 states generated, 3 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 3.
+The average outdegree of the complete state graph is 1 (minimum is 1, the maximum 1 and the 95th percentile is 1).
+Finished in 00s at (2026-11-17 00:21:51)

@@ -2,9 +2,11 @@
 
 rtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust frontend。parserとcheckerを別crateに保ち、両者の公開契約をつなぐ。Nodeやsolverには依存しない。
 
-`compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。対象はidealisの既存TS frontendと同じ有限fragment。INSTANCE、ユーザーモジュール、一般の高階・再帰operator、無限集合の列挙、symmetry、state/action constraintは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
+`compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。INSTANCE、ユーザーモジュール、一般の高階・再帰operator、無限集合の列挙、symmetry、state/action constraintは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
 
 内部ではJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。
+
+root moduleの`EXTENDS Apalache`がある場合、`:=`を同モジュールの定義どおり等号として扱う。`EXTENDS Variants`ではApalache 0.63.0の`Variant`、`VariantTag`、`VariantGetUnsafe`を扱い、tag取得はdomainが一つの文字列keyである関数に限定する。他のVariants operatorと一般のCHOOSEは未対応。`EXTENDS TLC`は受理するが、TLCの全operatorを実装するものではない。
 
 CASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) と同様に評価時に未一致エラーとソース位置を返す。未評価の分岐内ではエラーにしない。
 

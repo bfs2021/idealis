@@ -1,0 +1,33 @@
+{
+  "status": "complete",
+  "controls": [
+    {
+      "case": "incomplete",
+      "command": [
+        "node",
+        "dist/evals/quint-generated/run.js",
+        ".artifacts/quint-generated/guard-output-incomplete",
+        ".artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java",
+        ".artifacts/tlc/tla2tools.jar",
+        ".artifacts/apalache/apalache-0.63.0/lib/apalache.jar",
+        ".artifacts/quint-generated/guard-incomplete"
+      ],
+      "exit": 1,
+      "rejected": true
+    },
+    {
+      "case": "tampered",
+      "command": [
+        "node",
+        "dist/evals/quint-generated/run.js",
+        ".artifacts/quint-generated/guard-output-tampered",
+        ".artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java",
+        ".artifacts/tlc/tla2tools.jar",
+        ".artifacts/apalache/apalache-0.63.0/lib/apalache.jar",
+        ".artifacts/quint-generated/guard-tampered"
+      ],
+      "exit": 1,
+      "rejected": true
+    }
+  ]
+}

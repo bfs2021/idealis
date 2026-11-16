@@ -14,6 +14,22 @@ import {
 import { checkProperty } from "../src/property.js";
 import { createSmtOracle } from "../src/smt.js";
 import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
+import { checkTlaSource } from "../src/tla-source.js";
+
+export const runGenerated = async (
+  inputs: readonly { readonly source: string; readonly config: string }[],
+) => {
+  const core = await createPortableWasm(
+    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+  );
+  return inputs.map((input) =>
+    checkTlaSource(core, input, {
+      maxDepth: 64,
+      maxStates: 10000,
+      maxWork: 1000000,
+    }),
+  );
+};
 
 export const run = async (): Promise<Record<string, unknown>> => {
   const model = checkModel(counterModel, { maxDepth: 2, maxStates: 100 });

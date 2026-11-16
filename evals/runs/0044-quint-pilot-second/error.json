@@ -1,0 +1,201 @@
+{
+  "message": "AssertionError [ERR_ASSERTION]: TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)\nRunning breadth-first search Model-Checking with fp 46 and seed 1658715896864669296 with 1 worker on 10 cores with 256MB heap and 64MB offheap memory [pid: 70289] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/Witness.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/Match.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Integers.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Sequences.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/FiniteSets.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/TLC.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Apalache.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Variants.tla\nParsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Naturals.tla\nSemantic processing of module Naturals\nSemantic processing of module Integers\nSemantic processing of module Sequences\nSemantic processing of module FiniteSets\nSemantic processing of module TLC\nSemantic processing of module Apalache\nSemantic processing of module Variants\nSemantic processing of module Match\nSemantic processing of module Witness\nSemantic errors:\n\n*** Errors: 4\n\nline 7, col 99 to line 7, col 103 of module Witness\n\nMultiply-defined symbol '__key': this definition or declaration conflicts \nwith the one at line 7, col 52 to line 7, col 56 of module Witness.\n\n\nline 8, col 113 to line 8, col 117 of module Witness\n\nMultiply-defined symbol '__key': this definition or declaration conflicts \nwith the one at line 8, col 66 to line 8, col 70 of module Witness.\n\n\nline 8, col 287 to line 8, col 291 of module Witness\n\nMultiply-defined symbol '__key': this definition or declaration conflicts \nwith the one at line 8, col 240 to line 8, col 244 of module Witness.\n\n\nline 8, col 461 to line 8, col 465 of module Witness\n\nMultiply-defined symbol '__key': this definition or declaration conflicts \nwith the one at line 8, col 414 to line 8, col 418 of module Witness.\n\n\n\nStarting... (2026-11-17 00:21:52)\nError: Parsing or semantic analysis failed.\nFinished in 00s at (2026-11-17 00:21:52)\n\n+ actual - expected\n\n+ 'input-error'\n- 'complete'\n",
+  "records": [
+    {
+      "name": "Counter",
+      "property": "safety",
+      "result": {
+        "status": "complete",
+        "reason": null,
+        "states": 4,
+        "generated": 5,
+        "depth": 3,
+        "work": 10,
+        "violation": null
+      }
+    },
+    {
+      "name": "Counter",
+      "property": "broken",
+      "result": {
+        "status": "invariant-violation",
+        "reason": null,
+        "states": 3,
+        "generated": 3,
+        "depth": 2,
+        "work": 6,
+        "violation": {
+          "name": "broken",
+          "trace": [
+            {
+              "action": null,
+              "values": [
+                {
+                  "type": "int",
+                  "value": "0"
+                }
+              ]
+            },
+            {
+              "action": "step",
+              "values": [
+                {
+                  "type": "int",
+                  "value": "1"
+                }
+              ]
+            },
+            {
+              "action": "step",
+              "values": [
+                {
+                  "type": "int",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SetFold",
+      "property": "safety",
+      "result": {
+        "status": "complete",
+        "reason": null,
+        "states": 1,
+        "generated": 2,
+        "depth": 0,
+        "work": 11,
+        "violation": null
+      }
+    },
+    {
+      "name": "SetFold",
+      "property": "broken",
+      "result": {
+        "status": "invariant-violation",
+        "reason": null,
+        "states": 1,
+        "generated": 1,
+        "depth": 0,
+        "work": 9,
+        "violation": {
+          "name": "broken",
+          "trace": [
+            {
+              "action": null,
+              "values": [
+                {
+                  "type": "int",
+                  "value": "6"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SequenceFold",
+      "property": "safety",
+      "result": {
+        "status": "complete",
+        "reason": null,
+        "states": 1,
+        "generated": 2,
+        "depth": 0,
+        "work": 11,
+        "violation": null
+      }
+    },
+    {
+      "name": "SequenceFold",
+      "property": "broken",
+      "result": {
+        "status": "invariant-violation",
+        "reason": null,
+        "states": 1,
+        "generated": 1,
+        "depth": 0,
+        "work": 9,
+        "violation": {
+          "name": "broken",
+          "trace": [
+            {
+              "action": null,
+              "values": [
+                {
+                  "type": "int",
+                  "value": "312"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Choice",
+      "property": "safety",
+      "result": {
+        "status": "complete",
+        "reason": null,
+        "states": 3,
+        "generated": 10,
+        "depth": 1,
+        "work": 23,
+        "violation": null
+      }
+    },
+    {
+      "name": "Choice",
+      "property": "broken",
+      "result": {
+        "status": "invariant-violation",
+        "reason": null,
+        "states": 3,
+        "generated": 4,
+        "depth": 1,
+        "work": 9,
+        "violation": {
+          "name": "broken",
+          "trace": [
+            {
+              "action": null,
+              "values": [
+                {
+                  "type": "int",
+                  "value": "0"
+                }
+              ]
+            },
+            {
+              "action": "step",
+              "values": [
+                {
+                  "type": "int",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Match",
+      "property": "safety",
+      "result": {
+        "status": "complete",
+        "reason": null,
+        "states": 3,
+        "generated": 4,
+        "depth": 2,
+        "work": 25,
+        "violation": null
+      }
+    }
+  ]
+}

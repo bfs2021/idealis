@@ -1,0 +1,155 @@
+✔ Quint output is preserved byte for byte with its source provenance (6.715ms)
+✖ Counter: generated TLA+ safety agrees in native and Wasm (3.197667ms)
+✖ Counter: generated TLA+ broken agrees in native and Wasm (0.565708ms)
+✖ SetFold: generated TLA+ safety agrees in native and Wasm (0.496583ms)
+✖ SetFold: generated TLA+ broken agrees in native and Wasm (0.324958ms)
+✖ SequenceFold: generated TLA+ safety agrees in native and Wasm (0.354917ms)
+✖ SequenceFold: generated TLA+ broken agrees in native and Wasm (0.268708ms)
+✖ Choice: generated TLA+ safety agrees in native and Wasm (0.511416ms)
+✖ Choice: generated TLA+ broken agrees in native and Wasm (0.567333ms)
+✖ Match: generated TLA+ safety agrees in native and Wasm (0.691291ms)
+✖ Match: generated TLA+ broken agrees in native and Wasm (0.372667ms)
+✖ NestedFold: generated TLA+ safety agrees in native and Wasm (0.678917ms)
+✖ NestedFold: generated TLA+ broken agrees in native and Wasm (0.279166ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 1
+ℹ fail 12
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 442.956958
+
+✖ failing tests:
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ Counter: generated TLA+ safety agrees in native and Wasm (3.197667ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 14:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ Counter: generated TLA+ broken agrees in native and Wasm (0.565708ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 14:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ SetFold: generated TLA+ safety agrees in native and Wasm (0.496583ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 26:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ SetFold: generated TLA+ broken agrees in native and Wasm (0.324958ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 26:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ SequenceFold: generated TLA+ safety agrees in native and Wasm (0.354917ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 26:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ SequenceFold: generated TLA+ broken agrees in native and Wasm (0.268708ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 26:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ Choice: generated TLA+ safety agrees in native and Wasm (0.511416ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 14:45
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ Choice: generated TLA+ broken agrees in native and Wasm (0.567333ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 14:45
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ Match: generated TLA+ safety agrees in native and Wasm (0.691291ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 36:5
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ Match: generated TLA+ broken agrees in native and Wasm (0.372667ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 36:5
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ NestedFold: generated TLA+ safety agrees in native and Wasm (0.678917ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 33:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }
+
+test at dist/evals/quint-generated/contract-test.js:30:9
+✖ NestedFold: generated TLA+ broken agrees in native and Wasm (0.279166ms)
+  Error [PortableCoreError]: TLA parsing: Expected identifier at 33:16
+      at Object.request (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/portable-wasm.js:126:23)
+      at checkTlaSource (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/src/tla-source.js:16:25)
+      at TestContext.<anonymous> (file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/contract-test.js:35:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'protocol'
+  }

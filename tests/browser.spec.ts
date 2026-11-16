@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { build } from "esbuild";
+import { config, names } from "../evals/quint-generated/cases.js";
 
 let server: Server | undefined;
 let origin: string;
@@ -82,6 +83,41 @@ test.afterAll(async () => {
     await new Promise<void>((resolve, reject) =>
       server?.close((error) => (error ? reject(error) : resolve())),
     );
+});
+
+test("checks unchanged Quint output in Chromium", async ({ page }) => {
+  const inputs = (
+    await Promise.all(
+      names.map(async (name) => {
+        const source = await readFile(
+          `evals/fixtures/quint-generated/generated/${name}.tla`,
+          "utf8",
+        );
+        return ["safety", "broken"].map((property) => ({
+          source,
+          config: config(property === "safety" ? "safety" : "broken"),
+        }));
+      }),
+    )
+  ).flat();
+  await page.goto(origin);
+  const result = await page.evaluate(async (cases) => {
+    const api: unknown = Reflect.get(globalThis, "idealisBrowser");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runGenerated" in api) ||
+      typeof api.runGenerated !== "function"
+    )
+      throw new Error("Browser generated-model API missing");
+    return api.runGenerated(cases);
+  }, inputs);
+  expect(result).toMatchObject(
+    inputs.map((_, index) => ({
+      status: index % 2 === 0 ? "complete" : "invariant-violation",
+      reason: null,
+    })),
+  );
 });
 
 test("runs core, shrinking, TLA+ and Z3 Wasm in a real browser", async ({

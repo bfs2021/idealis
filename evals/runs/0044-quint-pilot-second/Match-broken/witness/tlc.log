@@ -1,0 +1,52 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 46 and seed 1658715896864669296 with 1 worker on 10 cores with 256MB heap and 64MB offheap memory [pid: 70289] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/Witness.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/Match.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Integers.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Sequences.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/FiniteSets.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/TLC.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Apalache.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Variants.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0044-quint-pilot-second/Match-broken/witness/scratch/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Apalache
+Semantic processing of module Variants
+Semantic processing of module Match
+Semantic processing of module Witness
+Semantic errors:
+
+*** Errors: 4
+
+line 7, col 99 to line 7, col 103 of module Witness
+
+Multiply-defined symbol '__key': this definition or declaration conflicts 
+with the one at line 7, col 52 to line 7, col 56 of module Witness.
+
+
+line 8, col 113 to line 8, col 117 of module Witness
+
+Multiply-defined symbol '__key': this definition or declaration conflicts 
+with the one at line 8, col 66 to line 8, col 70 of module Witness.
+
+
+line 8, col 287 to line 8, col 291 of module Witness
+
+Multiply-defined symbol '__key': this definition or declaration conflicts 
+with the one at line 8, col 240 to line 8, col 244 of module Witness.
+
+
+line 8, col 461 to line 8, col 465 of module Witness
+
+Multiply-defined symbol '__key': this definition or declaration conflicts 
+with the one at line 8, col 414 to line 8, col 418 of module Witness.
+
+
+
+Starting... (2026-11-17 00:21:52)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 00:21:52)

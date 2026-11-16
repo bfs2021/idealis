@@ -1,0 +1,25 @@
+pnpm portable:build
+
+> @mizchi/idealis@0.1.0-alpha.0 portable:build /Users/mz/ghq/github.com/mizchi/idealis
+> cargo build --release --locked --manifest-path crates/idealis-core/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-core/Cargo.toml
+
+    Finished `release` profile [optimized] target(s) in 0.10s
+    Finished `release` profile [optimized] target(s) in 0.02s
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node dist/evals/quint-generated/run.js 'evals/runs/0044-quint-final' '.artifacts/tlc/arm64/jdk-21.0.13+9-jre/Contents/Home/bin/java' '.artifacts/tlc/tla2tools.jar' '.artifacts/apalache/apalache-0.63.0/lib/apalache.jar'
+Counter-safety: complete, 4 states, 5 generated
+Counter-broken: invariant-violation, 3 states, 3 generated
+SetFold-safety: complete, 1 states, 2 generated
+SetFold-broken: invariant-violation, 1 states, 1 generated
+SequenceFold-safety: complete, 1 states, 2 generated
+SequenceFold-broken: invariant-violation, 1 states, 1 generated
+Choice-safety: complete, 3 states, 10 generated
+Choice-broken: invariant-violation, 3 states, 4 generated
+Match-safety: complete, 3 states, 4 generated
+Match-broken: invariant-violation, 3 states, 3 generated
+NestedFold-safety: complete, 1 states, 2 generated
+NestedFold-broken: invariant-violation, 1 states, 1 generated

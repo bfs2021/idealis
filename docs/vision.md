@@ -56,6 +56,8 @@ flowchart TD
 
 [Quintの公式MBT資料](https://quint.sh/docs/model-based-testing)が区別するように、モデルからテストを生成する経路と、実装で取得した履歴をモデルへ照合する経路の両方を扱いたい。Quint言語・Quint Connect API・ITFの互換性や直接接続は、現在の実装済み機能には数えない。
 
+[Quint生成TLA+の実行](quint-generated.md)は、Rust frontendの限定したfragmentで確認している。生成物の実行と、Quint ConnectのDriverやITFへ直接接続する機能は別の範囲として扱う。
+
 ## 埋め込みinvariantを言語別frontendからつなぐ
 
 [Why3](https://why3.org/)はWhyMLなどの表現から検証条件を作り、外部proverへ渡す。[WhyMLの注釈](https://why3.org/doc/whyml.html)には事前・事後条件、assertion、loop invariantがある。参考にするのは、言語ごとの表現を検証条件へ変換し、検査側を再利用する構成。

@@ -1,0 +1,91 @@
+{
+  "kind": "safety",
+  "result": {
+    "status": "invariant-violation",
+    "reason": null,
+    "states": 3,
+    "generated": 3,
+    "depth": 2,
+    "work": 27,
+    "violation": {
+      "name": "broken",
+      "trace": [
+        {
+          "action": null,
+          "values": [
+            {
+              "type": "record",
+              "value": [
+                [
+                  "Idle",
+                  {
+                    "type": "record",
+                    "value": [
+                      [
+                        "tag",
+                        {
+                          "type": "string",
+                          "value": "UNIT"
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "action": "step",
+          "values": [
+            {
+              "type": "record",
+              "value": [
+                [
+                  "Busy",
+                  {
+                    "type": "record",
+                    "value": [
+                      [
+                        "tag",
+                        {
+                          "type": "string",
+                          "value": "UNIT"
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "action": "step",
+          "values": [
+            {
+              "type": "record",
+              "value": [
+                [
+                  "Done",
+                  {
+                    "type": "record",
+                    "value": [
+                      [
+                        "tag",
+                        {
+                          "type": "string",
+                          "value": "UNIT"
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

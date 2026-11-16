@@ -2,6 +2,17 @@ use rtla::ast::ExpressionKind;
 use rtla::{ErrorKind, parse_config, parse_expression, parse_module};
 
 #[test]
+fn parses_apalache_assignment_at_tlc_comparison_precedence() {
+    let expression = parse_expression("state' := state + 1").unwrap();
+    let ExpressionKind::Apply { operator, args } = expression.node else {
+        panic!("expected infix assignment")
+    };
+    assert_eq!(operator, ":=");
+    assert!(matches!(&args[1].node, ExpressionKind::Apply { operator, .. } if operator == "+"));
+    assert!(parse_expression("a := b = c").is_err());
+}
+
+#[test]
 fn parses_upstream_channel_without_a_checker() {
     let module = parse_module(include_str!("fixtures/Channel.tla")).unwrap();
     assert_eq!(module.name, "Channel");
