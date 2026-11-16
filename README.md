@@ -1,32 +1,58 @@
 # idealis
 
-**このリポジトリは開発途中の未完成なツールキットです。** 現在は `0.1.0-alpha.0` の試作段階で、API・対応範囲・backend間の統合を整備しています。npm / crates.io には未公開です。
+仕様を起点に、モデルの性質と実装の振る舞いを検査する、ポータブルな形式モデル駆動のツールキット。
 
-形式モデルを基準に、モデル検査と実装の適合性検査を行うポータブルなツールキット。モデルからのオラクル生成、差分テスト、反例を縮小する property-based testing を、Vitest・`node:test`・ブラウザで実行する。
+**このリポジトリは開発途中の未完成なツールキットです。** 現在は`0.1.0-alpha.0`の試作段階で、API・対応範囲・backend間の統合を整備しています。npm / crates.ioには未公開です。
 
-CLI は `idealis`、npm package は `@mizchi/idealis`。Rust のホストは `idealis-core`、SMT サブセットは `idealis-smt`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。
+設計の軸は、値や制約を扱うZ3/SMTと、状態遷移や並行実行を扱うTLA+。この二つを相互運用できるライブラリとして用意し、モデル検査・オラクル生成・実装照合を各テストツールへつなぎたい。最初の対象言語はTypeScript、Rust、Go。[目指す構成と進める順序](docs/vision.md)を参照。
+
+## 目指す開発体験
+
+1. 状態・操作・invariant・環境仮定を仕様に書き、仕様モデル自体の性質を検査する。
+2. モデルと制約から、テストの入力列と許容する観測を作る。
+3. 各言語のDriverで実装を動かし、障害や実行順を変えながら、観測履歴が仕様の許す振る舞いに含まれるか照合する。
+4. 逸脱したcaseを縮小・保存し、仕様や実装を修正した後も同じ反例をCIで再生する。
+
+中心に置くのは、[Quint Connect](https://github.com/quint-co/quint-connect)のようにモデルと実装をDriverで結ぶ使い方。期待値は仕様から作り、実装の観測から作らない。非決定的な仕様では、観測に整合する候補を残して検査する。
+
+実装に埋めたinvariantや事前・事後条件も、言語別frontendから共通の検査基盤へ渡せるようにしたい。[Why3](https://why3.org/)の検証条件へ集約する構成を参考にする。現在の`Model.invariants`はモデル状態を評価する機能で、ソース注釈の抽出や任意コードの静的検証は今後の計画。
+
+## 最初の対象言語
+
+| 言語       | テストへの接続                | 現在の主な経路                                                 |
+| ---------- | ----------------------------- | -------------------------------------------------------------- |
+| TypeScript | Vitest、`node:test`、ブラウザ | Model/Driver、Rust/Wasmコア、PBT・差分テスト・再生、Z3 adapter |
+| Rust       | `cargo test`                  | nativeの共通コア、独立crate、PBT・差分・保存caseの再生         |
+| Go         | `testing`                     | CGOなしのWasm adapter、有限モデル・実装・履歴の照合            |
+
+共通にしたいのはモデル・値・観測・反例と検査の意味。実装への操作や埋め込み注釈の読み取りは、各言語のDriver/frontendが担当する。各言語の全APIがそろっている段階ではない。
+
+## 現在の実装とこれから
+
+| 項目                         | 現在地                                                                                        |
+| ---------------------------- | --------------------------------------------------------------------------------------------- |
+| モデルと実装の照合           | 有限モデル、Driver、共通オラクル、履歴照合と再生を実装。TS/Rust/Goの接続例がある。            |
+| 生成・縮小・障害や順序の制御 | PBT・差分テスト・保存caseの再生、明示した時計・通信・永続化・actor順序を扱う。                |
+| TLA+系のモデル検査           | Rust/Wasmのparser・compiler・checkerとtla-ts経路。対応範囲はサブセット。                      |
+| SMT                          | 公開TS adapterはZ3 Wasmを利用。独立した`idealis-smt`は対応サブセットをnative/Wasmで解く試作。 |
+| TLA+とSMTの相互運用          | 共通backend契約はあるが、値・式の変換と統合した検査経路は今後の対象。                         |
+| 埋め込みinvariant            | モデル状態のinvariant検査はある。各言語のソース注釈の抽出・VC生成は未実装。                   |
+
+CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。Quint Connectの接続方法とWhy3のfrontend/backend分離を参考にしており、両ツールの言語・APIとの互換実装を提供する段階ではない。
 
 ## 構成とライブラリの役割
 
-| ライブラリ                                                                                                                                                                                                                          | 入力                                         | 担当する処理・出力                                                                                                 |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| [`rtla`](crates/rtla)                                                                                                                                                                                                               | TLA+ソースとTLC設定                          | 構文解析し、構文木（AST）を返す。名前解決やモデル検査は後段が担当する。                                            |
-| [`rtla-compiler`](crates/rtla-compiler)                                                                                                                                                                                             | rtlaのAST                                    | 名前解決、定数・operatorの展開を行い、対応する有限モデルの中間表現（IR）へ変換する。                               |
-| [`rtlc`](crates/rtlc)                                                                                                                                                                                                               | 検査用IR                                     | 状態を列挙し、invariant・deadlock・temporal property・fairnessを検査して反例を返す。nativeの探索並列化も担当する。 |
-| [`idealis-core`](crates/idealis-core)                                                                                                                                                                                               | TLA+ソース、IR、有限モデル、実装の観測・履歴 | parser・compiler・checkerを接続し、実装照合、履歴検査、再生、縮小候補の生成とnative JSONL / Wasm境界を提供する。   |
-| [`idealis-smt`](crates/idealis-smt)（旧`rsmt`）                                                                                                                                                                                     | 対応するSMT-LIB式                            | 任意精度整数の差分制約とBoolean式を解き、SATの具体値、UNSAT、予算切れのunknownを返す独立した試作ソルバー。         |
-| 同じidealis-smtの改善前後をCriterionで比較したnativeの解析時間。Apple M5、20 samplesの中央値で、JSONL/Wasmや求解の時間は含めない。全14ケース、ばらついた測定と再確認の条件は[評価0042](evals/iterations/0042-smt-tuning.md)を参照。 |
-
-| scriptの内容                 |   改善前 |   改善後 |  倍率 |
-| ---------------------------- | -------: | -------: | ----: |
-| 64 check、整数チェーン32変数 | 4.701 ms | 1.183 ms | 4.0倍 |
-| scope操作32組、64 check      | 415.2 µs | 239.0 µs | 1.7倍 |
-| 整数ite、64 check            | 212.7 µs |  31.8 µs | 6.7倍 |
-
-[`ralloy`](crates/ralloy) | 静的なAlloyソースと有限scope | sig・二項関係・fact・assertを解析し、構造を列挙してinstanceや反例を返す。native/Wasmで動く独立した試作。 |
-| [`idealis-testing`](crates/idealis-testing) | 有限生成器、保存case、評価feedback、複数実装の観測 | Rustで生成・縮小・差分比較・再生を管理し、native/Wasmのeffectを各言語のDriverが評価する。 |
-| [`@mizchi/idealis`](src) | TSのモデルとDriver、各backendの入出力 | オラクル生成、実装との照合、差分・property-based test、反例縮小、スケジューリングとCLIを提供する。 |
-| [Go adapter](adapters/go) | 共通コアのWasmとGoのモデル・実装・履歴 | CGOなしでRustコアへ接続し、同じ値・オラクル・観測を使って照合と再生を行う。 |
+| ライブラリ                                    | 入力                                           | 担当する処理・出力                                                                         |
+| --------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [`rtla`](crates/rtla)                         | TLA+ソースとTLC設定                            | 構文解析しASTを返す。名前解決とモデル検査は後段が担当する。                                |
+| [`rtla-compiler`](crates/rtla-compiler)       | rtlaのAST                                      | 名前解決、定数・operatorの展開、対応する有限モデルのIRへの変換。                           |
+| [`rtlc`](crates/rtlc)                         | 検査用IR                                       | 状態列挙、invariant・deadlock・temporal property・fairness検査と反例。nativeの探索並列化。 |
+| [`idealis-core`](crates/idealis-core)         | TLA+ソース、IR、有限モデル、観測・履歴         | frontendとcheckerの接続、実装照合、履歴検査、再生とnative JSONL/Wasm境界。                 |
+| [`idealis-smt`](crates/idealis-smt)（旧rsmt） | 対応するSMT-LIB式                              | 任意精度Intの差分制約とBool式。SATモデル、UNSAT、work切れのunknownを返す独立した試作。     |
+| [`ralloy`](crates/ralloy)                     | 静的なAlloyソースと有限scope                   | sig・二項関係・fact・assertの解析と、有限構造の列挙・instanceや反例の生成。                |
+| [`idealis-testing`](crates/idealis-testing)   | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
+| [`@mizchi/idealis`](src)                      | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
+| [Go adapter](adapters/go)                     | 共通コアのWasmとGoのモデル・実装・履歴         | CGOなしでRustコアへ接続し、同じ値・オラクル・観測で照合と再生を行う。                      |
 
 RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
 
@@ -113,6 +139,16 @@ Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅
 | 幅1のring  |    272 → 255 ms |        1.07× |
 
 native Criterionのcounterは12.285→9.266 ms、functionは11.071→9.416 msだった。整数位置の変更単独はchannels最大8で後退する回もあり、全ケースの高速化を保証する結果ではない。[profile・14本の段階別測定・16 sampleと再生](evals/iterations/0024-profile-tuning.md)を保存した。`just profile-test`、`just profile-criterion <stage> <新規runパス>`で確認できる。
+
+## SMTスクリプト解析の最適化
+
+同じidealis-smtの改善前後をCriterionで比較したnativeの解析時間。Apple M5、20 samplesの中央値で、JSONL/Wasmや求解の時間は含めない。全14ケース、ばらついた測定と再確認の条件は[評価0042](evals/iterations/0042-smt-tuning.md)を参照。
+
+| scriptの内容                 |   改善前 |   改善後 |  倍率 |
+| ---------------------------- | -------: | -------: | ----: |
+| 64 check、整数チェーン32変数 | 4.701 ms | 1.183 ms | 4.0倍 |
+| scope操作32組、64 check      | 415.2 µs | 239.0 µs | 1.7倍 |
+| 整数ite、64 check            | 212.7 µs |  31.8 µs | 6.7倍 |
 
 ## モデルと実装の比較
 
