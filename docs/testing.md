@@ -46,6 +46,30 @@ console.log(result.status, result.counterexample?.actions);
 
 実装との照合では、callbackから既存の`checkConformance(model, createDriver(), actions)`を呼ぶ。mismatchには原因を表すsignatureを付け、matched/invalidはそのまま返す。各caseで新しいDriverを作り、縮小候補でも初期化から実行する。[状態付きカウンタの接続例](../evals/testing-core/driver.ts)と[生成器](../evals/testing-core/fixture.ts)を参照。
 
+## actorの操作順を制御する
+
+`runtime.schedule(input)`はactorごとの有限操作列を、順序を保ったinterleavingの生成器へ変換する。生成するactionは`{ actor, step, operation }`で、stepは0始まり。たとえば次は2 actorのread/writeを組み合わせる。
+
+```ts
+const generator = await runtime.schedule({
+  id: "concurrent-increments",
+  version: "1",
+  actors: [
+    { id: "left", operations: ["read", "write"] },
+    { id: "right", operations: ["read", "write"] },
+  ],
+});
+console.log(generator.maxLength); // 4
+```
+
+このgeneratorを`property`や`shrink`へ渡す。評価callbackはcaseごとにSUTを初期化し、actionに対応するactorを1操作ずつ進める。TSのasync generatorとRustの実threadを使う[評価driver](../evals/controlled-schedules/driver.ts)と[Rustのgate](../evals/controlled-schedules/rust/src/lib.rs)を参照。コアがthreadやawaitを自動計装するわけではない。
+
+生成器はactorごとのprogram counterの直積。各actorの順序を保つprefixを受理するため、readを消して同actorのwriteだけを残す縮小候補は実行しない。PBTではprefixの期待値も仕様側で定義する。今回のカウンタは完了したwrite数を期待値とし、read途中のprefixも検査できる。
+
+上限は1-8 actor、合計128操作、1024状態で、actor IDは一意にする。空の操作列は許すが、並行処理を検査した意味にはならない。生成器の構築はSession.maxWorkに含めず、構造の上限で制限する。保存caseはactor/step/operationをそのまま再生する。操作列やdriverの意味を変える場合はversionとmanifestも更新する。
+
+構築結果はimmutableなスナップショット。構築と比較は進行中のproperty sessionからも呼べる。PBTのpassedは生成したcaseに対する結果で、全interleavingの検査済みを意味しない。ブロッキング、依存関係、weak memoryを自動でモデル化する機能は含まない。[0038の評価](../evals/iterations/0038-controlled-schedules.md)を参照。
+
 ## 結果と縮小
 
 | status       | 意味                                          |
@@ -99,4 +123,4 @@ just testing-example
 just package
 ```
 
-採用評価は[0036](../evals/iterations/0036-testing-core.md)。SAT/CNF、並行スケジュール探索、構造fuzzingはこの契約を基準に別の評価で追加する。
+基礎契約の採用評価は[0036](../evals/iterations/0036-testing-core.md)、明示した並行スケジュールは[0038](../evals/iterations/0038-controlled-schedules.md)。構造fuzzingは別の評価で追加する。

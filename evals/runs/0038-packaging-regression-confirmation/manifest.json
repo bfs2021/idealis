@@ -1,0 +1,384 @@
+{
+  "sources": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "55636324c1018e84722b60eb41832314393b6453ecc7bbb867911cc7f6c0d99d"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "b9009a818daa3b86fe3aed7a6c50086923a964269e100f61d8bad3caa83a6a39"
+    },
+    {
+      "path": "biome.json",
+      "sha256": "c26d15488a2c22c0d2b98a548a2d7a4a11f1289235f2c49ba2b152527b1d1f53"
+    },
+    {
+      "path": "crates/idealis-testing/Cargo.lock",
+      "sha256": "54371340804e289bd3b9b2e43af6492e21015c8aae5c468715971d763334bb9a"
+    },
+    {
+      "path": "crates/idealis-testing/Cargo.toml",
+      "sha256": "8cda1890eadebb57cc0a8fd696451f6c08cfc511d841a3483659242c3d9049f0"
+    },
+    {
+      "path": "crates/idealis-testing/examples/counter.rs",
+      "sha256": "d66cd07c2d01d3a083678949719a2e6cb44e9520d5c566091e4f41636b009686"
+    },
+    {
+      "path": "crates/idealis-testing/examples/schedule.rs",
+      "sha256": "3efc72a263ca20c1aab07493050b68a72e8abdd964859e5feddf38f35275a61a"
+    },
+    {
+      "path": "crates/idealis-testing/src/compare.rs",
+      "sha256": "0655a4155cebec729340c939abaf367e41f826f461e1492c0fcb8cb469a81c42"
+    },
+    {
+      "path": "crates/idealis-testing/src/engine.rs",
+      "sha256": "23ea75e7a36e1fc0a1cb5249641463033ff86f634f40f47ea7d0cbafd0fd4abf"
+    },
+    {
+      "path": "crates/idealis-testing/src/generator.rs",
+      "sha256": "0a959323d312f3cf5241286e95661adb07eeafe58a948d805729e428f666b737"
+    },
+    {
+      "path": "crates/idealis-testing/src/lib.rs",
+      "sha256": "74c3ab65f91124da1108c586935ffeac04f023107e78ef70d1cde1680890c941"
+    },
+    {
+      "path": "crates/idealis-testing/src/main.rs",
+      "sha256": "e21ebd6e989ae76723c0d57a767a86dd62c6db206de2690e1a6e05f1cd576186"
+    },
+    {
+      "path": "crates/idealis-testing/src/schedule.rs",
+      "sha256": "f9d782257352901009bbc521d965469f1f227be64a8480913195d822b00b0c90"
+    },
+    {
+      "path": "crates/idealis-testing/src/session.rs",
+      "sha256": "34b6151b4625b8d7e016e6f03b44ba44c79f75d16069ef22a09b684dd9fde431"
+    },
+    {
+      "path": "crates/idealis-testing/src/shrink.rs",
+      "sha256": "a6814f9c4f9f16c51b810a140225cc8ee2eafd156ed987ffbdb3ba011c63166a"
+    },
+    {
+      "path": "crates/idealis-testing/src/wasm.rs",
+      "sha256": "71ad6555d5188f5335bad36197337afdf7fe8780940cce895f7e97a65ea5049e"
+    },
+    {
+      "path": "crates/idealis-testing/tests/compare.rs",
+      "sha256": "71009c89c87fc1a038e423f09a50868c0da73848a798d058ac9c2a44695840b1"
+    },
+    {
+      "path": "crates/idealis-testing/tests/protocol.rs",
+      "sha256": "20e91da97e714bb08353456cbb1e7b03d031158049be609afb56b770fc34c94e"
+    },
+    {
+      "path": "crates/idealis-testing/tests/schedule.rs",
+      "sha256": "5a9c2b29361ff73131407b7434e28d40b9b27e57aca9ec2864f0146401246fad"
+    },
+    {
+      "path": "crates/idealis-testing/tests/session.rs",
+      "sha256": "969fbf55edbbeea4dbd7ad853476233bcf36eb451ae575023db3c5dd1e4dff31"
+    },
+    {
+      "path": "evals/controlled-schedules/browser-entry.ts",
+      "sha256": "bdc89fad445be2b8cbc2110d31a25cfe2c729d41eeaf3022f985a0570ba575eb"
+    },
+    {
+      "path": "evals/controlled-schedules/browser.spec.ts",
+      "sha256": "ea7e56dcd04cd3cc272666f32d8cb46b0c4c9c6a5f5da0241e82b767ec5f38a1"
+    },
+    {
+      "path": "evals/controlled-schedules/clients.ts",
+      "sha256": "57b3b086fa60683e71cc03158b80099713a4de0a8657ce341a211ed4db6c8412"
+    },
+    {
+      "path": "evals/controlled-schedules/contract-test.ts",
+      "sha256": "f59f17614a66620241d7c1b7f3b4650d133bf21a0ab4ed5421e625eb754d93d1"
+    },
+    {
+      "path": "evals/controlled-schedules/contract.ts",
+      "sha256": "e11af6524439386d36b133616a30163d90fdb6c555fd5957b3866b10ab2c977f"
+    },
+    {
+      "path": "evals/controlled-schedules/driver.ts",
+      "sha256": "ac1b6fdefcc6f24880b9e128cea88d2505336840d2b6de6516ff6755a74f6f4a"
+    },
+    {
+      "path": "evals/controlled-schedules/fixture.ts",
+      "sha256": "7d5f96d90eba4a5cbe86a437cdb8996a583a86be262bb9ee490fe9d5c668565f"
+    },
+    {
+      "path": "evals/controlled-schedules/provenance.ts",
+      "sha256": "65427ac213c13fe068a6497b7575694bbe56bd83aa4e7a157d8a8141e1c1272a"
+    },
+    {
+      "path": "evals/controlled-schedules/replay.ts",
+      "sha256": "d0b5fe61a19f820e55d4ad0899be1000e60c6fe26b952cca1b6ec327a01bec83"
+    },
+    {
+      "path": "evals/controlled-schedules/run.ts",
+      "sha256": "de80f7dd5b2f24135122eaddaf3e49e99ca90e543776d03dd984704c6c07139d"
+    },
+    {
+      "path": "evals/controlled-schedules/runner.vitest.ts",
+      "sha256": "8c067a53df3d95112f8f8252c8b0f31326ec72e094df00db56bf0870dde25e3a"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/Cargo.lock",
+      "sha256": "417604ae9120b0f0f6821a98da937721064a485807ab732e3600f9874cc79b15"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/Cargo.toml",
+      "sha256": "f1dd3601dd4a757ef50050adadc62e36f5ff1a82d6b708fa9f77cbfca49cca73"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/examples/loom.rs",
+      "sha256": "990337bff902d7ef897f6d4f211cba5bd69f25fdf4d0cc6bc32d4f5df9fb527e"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/src/lib.rs",
+      "sha256": "012d1f9b1f00f6f51e5727dcaf43794f77892e236c772262538e6ac598bba87a"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/src/main.rs",
+      "sha256": "63446a98412fe97746e10462da04433d443f28425d241b0dc48a6dca050423b4"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/tests/gates.rs",
+      "sha256": "f5576775080807eb18f885f3528e3e6ea39ccbed838dce69a29471d8e137852f"
+    },
+    {
+      "path": "evals/controlled-schedules/verify.ts",
+      "sha256": "9bfeed03f0994b2bc2f5397f7048c3baaafe737bb3c5b4b733c6e611fa08bd31"
+    },
+    {
+      "path": "evals/plans/0038-controlled-schedules.md",
+      "sha256": "ef3482b1ed1762a2190869774e4212b3bf4afd3c1946b96a9130e7d4a5cb7dc4"
+    },
+    {
+      "path": "evals/plans/0038-packaging-regression.md",
+      "sha256": "dca82aa7efc5cef5394722ac9f675f98910b290b4529da459d4c22db41070380"
+    },
+    {
+      "path": "evals/smt-subset/clients.ts",
+      "sha256": "04d57e75c694ca1f476d60cf8d9c022324dc2c0b75e49ae9d415a3d634c582d1"
+    },
+    {
+      "path": "evals/testing-core/clients.ts",
+      "sha256": "2562d125b116984bad848c851a6fd1e1a8d3729c39eae229619764e9b1015e4b"
+    },
+    {
+      "path": "justfile",
+      "sha256": "962b2224caef84231ff8bdb4efa7caaa75d29b0d90d4fd1f9d606d40e5ce3601"
+    },
+    {
+      "path": "package.json",
+      "sha256": "99aa0f5b95329bc25d677c49921698731c5c9ae103fdcd22109c1c13c1965078"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "27d1f2216d738d57e5a7a277158ba006f03e821df60606865915c54884fd6274"
+    },
+    {
+      "path": "schedules-playwright.config.ts",
+      "sha256": "02a645563a5c785dfe29a9ca7070e4afed56e8f4ced0c82502d6bed2e2e9b2d7"
+    },
+    {
+      "path": "schedules-vitest.config.ts",
+      "sha256": "741fc2571415fc803bb7365b04572e72eee1fb081bf9e7471e44a247c2c08e1b"
+    },
+    {
+      "path": "scripts/package-test.ts",
+      "sha256": "fff9bd143d80642e93359b6a2a8646c72654f114158e88f95f51b0a4c2d9bf54"
+    },
+    {
+      "path": "scripts/package.ts",
+      "sha256": "81f4f77701643aa9cf045116d4c6bae4bb4a83a262fd8ff61b65b380fdbd2104"
+    },
+    {
+      "path": "src/alloy.ts",
+      "sha256": "9d267f5b9b13aad4cc693b1c0d3d0960480d85ca84c4937b8bdcc7526c5116be"
+    },
+    {
+      "path": "src/backend.ts",
+      "sha256": "6dc14c671b2eb4c3e47554337c0818a6aeecebec782015219e135ae2eccd9b14"
+    },
+    {
+      "path": "src/budget.ts",
+      "sha256": "59239e0c17b0e6670d22c031de983434c9444cdc74f58dde3f4ed42f2e0d2ba8"
+    },
+    {
+      "path": "src/checker.ts",
+      "sha256": "0d3d22b03dddd84e9b523f298a1c111b2a61dc4cec8731b8969d640124692e4b"
+    },
+    {
+      "path": "src/compose.ts",
+      "sha256": "a3fd903ca6dce125b6efb8ac34d77fc92d91640994e14e1a86a313d30c11f4e6"
+    },
+    {
+      "path": "src/conformance.ts",
+      "sha256": "fde9957b697b171e252b9abc6fdbd765f283389212684d99b262617a3bb12326"
+    },
+    {
+      "path": "src/contracts.ts",
+      "sha256": "99ccf65de2f12fffcb4f5abbf9ccffeedccd86f0103c9745d571e5e2d90049af"
+    },
+    {
+      "path": "src/finite.ts",
+      "sha256": "69c6c67e3ab8cc6ec33359c7668a8717a40d3f4c62367606a2afacb7ca936489"
+    },
+    {
+      "path": "src/history.ts",
+      "sha256": "78cfeda2537605446f7226fe3e6865acc047299105aca0273d90b9d1c09d8bd5"
+    },
+    {
+      "path": "src/host.ts",
+      "sha256": "c952e1da81a9c0a1a71a78b2c35a4441b156e087c96a6c1241c712647a0ca30b"
+    },
+    {
+      "path": "src/index.ts",
+      "sha256": "d8219cc54aabba15e4f04c604decdaf61d3f8dbcab9b01b721298e35f047867f"
+    },
+    {
+      "path": "src/portable-value.ts",
+      "sha256": "82569e3d4ff0cccaf81b44d886ec9061d922065420c1e3002acde73378794c5e"
+    },
+    {
+      "path": "src/portable-wasm.ts",
+      "sha256": "17f164b4d505eca92e8560f2fb73ce1ee0b27217ab8a068fd30c53a74071a8e4"
+    },
+    {
+      "path": "src/portable.ts",
+      "sha256": "67bd14e26edea8c2264c841031f063205d5124b3981b66b5167cd8a59ac5c51c"
+    },
+    {
+      "path": "src/property.ts",
+      "sha256": "52b5afd86848a425e27423241de275dfe7c67f8bc812119eab8593bcf0f6e60a"
+    },
+    {
+      "path": "src/safety-program.ts",
+      "sha256": "9fa0f305f2b6feb5bfe8dda7a5053fdb41f7cdfb0e133f8a8d635c633d82f874"
+    },
+    {
+      "path": "src/safety.ts",
+      "sha256": "fb3b9b366411ee31a16fccc92888ece3829d54683d130914440628c7e29359ec"
+    },
+    {
+      "path": "src/scheduling.ts",
+      "sha256": "b48010720d2641a8da84fb7146cae21214ccf77c8b79d9cd778a2f952b3dde0a"
+    },
+    {
+      "path": "src/sharding.ts",
+      "sha256": "ed7b6f23dd4f2ec86a732828990f38f12ee50151788de734b0fd6c3a19f73b19"
+    },
+    {
+      "path": "src/shrink.ts",
+      "sha256": "2b0cfe9a1586a1b52e106695df11378acbcd61c2e6e967349c2cc03dda5cf57c"
+    },
+    {
+      "path": "src/smt.ts",
+      "sha256": "702836572848046b6e91585cbb21f96b2cacff42a2180f06e04cfc27e05b94ac"
+    },
+    {
+      "path": "src/testing-wire.ts",
+      "sha256": "d7352b089bd96c2c9e4b1540983573d19b2a7b46af59b42b589071a535813e0a"
+    },
+    {
+      "path": "src/testing.ts",
+      "sha256": "475d5b3f99e32366d6ed0f0b5cd9d86fdaad1aa7b9453d13a5ed4ddae495be2a"
+    },
+    {
+      "path": "src/tla-safety.ts",
+      "sha256": "47f75f1cb7c6f93c75d6e2a086c45f25929ecc80601db8221f86307aa7e75436"
+    },
+    {
+      "path": "src/tla-source.ts",
+      "sha256": "785e68a35e790e642ee57de97aeaa2a1f5ef9c2df9756173ccb3f0e9f96bb359"
+    },
+    {
+      "path": "src/tla.ts",
+      "sha256": "ada3ca5acc8d08d4f964e9711b6058e16f6e90603815bf609fa1f6af93c7bdb3"
+    },
+    {
+      "path": "src/trace.ts",
+      "sha256": "0a20a45ba0d84841139bec2dd8178c40585276fffc75e536d33ea1ca2c077cf3"
+    },
+    {
+      "path": "tsconfig.build.json",
+      "sha256": "d4e5348b7e9c8685110feabc9d2ff878d8bf235e0f778a5b230adbffcb7b520f"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "002e2f5c7e99896b3a6853d651b4ee4b3c5a92d5cce156a60ef0c371dd5a6410"
+    }
+  ],
+  "sourceVersion": "63b8e755e00f8f50ba5e67ef433c264158ad2bb56c19395bdb7b513c528293d0",
+  "phase": "confirmation",
+  "seeds": [
+    14531,
+    14532,
+    14533,
+    14534,
+    14535,
+    14536,
+    14537,
+    14538,
+    14539,
+    14540,
+    14541,
+    14542,
+    14543,
+    14544,
+    14545,
+    14546,
+    14547,
+    14548,
+    14549,
+    14550,
+    14551,
+    14552,
+    14553,
+    14554,
+    14555,
+    14556,
+    14557,
+    14558,
+    14559,
+    14560,
+    14561,
+    14562
+  ],
+  "parent": "evals/runs/0038-packaging-regression-development",
+  "binaries": [
+    {
+      "path": "crates/idealis-testing/target/release/idealis-testing",
+      "bytes": 550976,
+      "sha256": "9f24ed866f54c478ba011a73ce34eb7c8b66b9133d493b6d1aee8dc6fec8726f"
+    },
+    {
+      "path": "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+      "bytes": 374454,
+      "sha256": "312bd3c768d5b14161a868a81320ffd614b31368204a5bfdf0b46c3816940de9"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/target/release/idealis-schedule-eval",
+      "bytes": 698016,
+      "sha256": "10da1bd59e1fd49bef37bf6ba9a113f2534546a2db5b6b035e09dd0002c28285"
+    },
+    {
+      "path": "evals/controlled-schedules/rust/target/release/examples/loom",
+      "bytes": 828592,
+      "sha256": "7c18d05627f2b0013b124638d3bceb3a2edebcd74b02122d6e434fdef6f33184"
+    }
+  ],
+  "commit": "a9a480a2dd883b46adadaff347b786db5bdbb527",
+  "dirtyPaths": "M README.md\n M crates/idealis-testing/README.md\n M docs/testing.md\n M evals/README.md\n M evals/runs/ledger.jsonl\n?? evals/controlled-schedules/README.md\n?? evals/iterations/0038-controlled-schedules.md\n?? evals/runs/0038-packaging-regression-development/\n?? evals/runs/0038-schedules-confirmation/\n?? evals/runs/0038-schedules-development/",
+  "environment": {
+    "node": "v24.22.2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"
+  },
+  "comparison": "Explicit actor order, independent enumeration, TS async generators and gated std threads, two-actor Loom final outcomes"
+}
