@@ -49,7 +49,10 @@ export interface Comparison<Observation> {
 export type PortableValue =
   | { readonly type: "null" }
   | { readonly type: "bool"; readonly value: boolean }
-  | { readonly type: "int" | "string" | "bytes"; readonly value: string }
+  | {
+      readonly type: "int" | "string" | "bytes" | "model-value";
+      readonly value: string;
+    }
   | { readonly type: "list" | "set"; readonly value: readonly PortableValue[] }
   | {
       readonly type: "record";
@@ -341,6 +344,11 @@ export type SafetyExpression =
       readonly body: SafetyExpression;
     }
   | {
+      readonly op: "choose";
+      readonly binding: SafetyBinding;
+      readonly body: SafetyExpression;
+    }
+  | {
       readonly op:
         | "sequence-set"
         | "domain"
@@ -389,6 +397,9 @@ export type SafetyExpression =
         | "add"
         | "sub"
         | "mul"
+        | "div"
+        | "mod"
+        | "pow"
         | "eq"
         | "ne"
         | "lt"
@@ -455,6 +466,11 @@ export interface SafetyBinding {
 export type TemporalFormula =
   | { readonly kind: "atom"; readonly expression: SafetyExpression }
   | {
+      readonly kind: "forall" | "exists";
+      readonly bounds: readonly SafetyBinding[];
+      readonly formula: TemporalFormula;
+    }
+  | {
       readonly kind: "not" | "always" | "eventually";
       readonly formula: TemporalFormula;
     }
@@ -486,6 +502,8 @@ export interface SafetyProgram {
   readonly checkDeadlock: boolean;
   readonly initialProperties?: readonly SafetyPredicate[];
   readonly actionProperties?: readonly SafetyPredicate[];
+  readonly constraints?: readonly SafetyPredicate[];
+  readonly actionConstraints?: readonly SafetyPredicate[];
   readonly properties?: readonly TemporalProperty[];
   readonly fairness?: readonly TemporalFormula[];
 }

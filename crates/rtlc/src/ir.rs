@@ -45,6 +45,10 @@ pub enum Expression {
         bounds: Vec<Binding>,
         body: Box<Self>,
     },
+    Choose {
+        binding: Binding,
+        body: Box<Self>,
+    },
     Function {
         bounds: Vec<Binding>,
         body: Box<Self>,
@@ -159,6 +163,18 @@ pub enum Expression {
         right: Box<Self>,
     },
     Mul {
+        left: Box<Self>,
+        right: Box<Self>,
+    },
+    Div {
+        left: Box<Self>,
+        right: Box<Self>,
+    },
+    Mod {
+        left: Box<Self>,
+        right: Box<Self>,
+    },
+    Pow {
         left: Box<Self>,
         right: Box<Self>,
     },
@@ -303,6 +319,10 @@ pub struct SafetyProgram {
     pub properties: Vec<TemporalProperty>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub fairness: Vec<TemporalFormula>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub constraints: Vec<Predicate>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub action_constraints: Vec<Predicate>,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -410,12 +430,34 @@ impl Scalar {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum TemporalFormula {
-    Atom { expression: Expression },
-    Not { formula: Box<Self> },
-    Always { formula: Box<Self> },
-    Eventually { formula: Box<Self> },
-    And { left: Box<Self>, right: Box<Self> },
-    Or { left: Box<Self>, right: Box<Self> },
+    Atom {
+        expression: Expression,
+    },
+    Not {
+        formula: Box<Self>,
+    },
+    Always {
+        formula: Box<Self>,
+    },
+    Eventually {
+        formula: Box<Self>,
+    },
+    And {
+        left: Box<Self>,
+        right: Box<Self>,
+    },
+    Or {
+        left: Box<Self>,
+        right: Box<Self>,
+    },
+    Forall {
+        bounds: Vec<Binding>,
+        formula: Box<Self>,
+    },
+    Exists {
+        bounds: Vec<Binding>,
+        formula: Box<Self>,
+    },
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

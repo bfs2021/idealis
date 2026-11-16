@@ -284,6 +284,21 @@ test("the real offline gate rejects stale, missing and corrupted staged Jev evid
     stage();
     const clean = check(true);
     assert.equal(clean.status, 0, clean.stderr);
+    const fixturePath = "crates/rtla-compiler/tests/finite-support.json";
+    const fixture = await readFile(join(root, fixturePath));
+    await writeFile(
+      join(root, fixturePath),
+      Buffer.concat([fixture, Buffer.from("\n")]),
+    );
+    stage();
+    assert.notEqual(
+      check(true).status,
+      0,
+      "compiled fixtures must invalidate saved evidence",
+    );
+    await writeFile(join(root, fixturePath), fixture);
+    stage();
+    assert.equal(check(true).status, 0);
     const sourcePath = "crates/rtla/src/error.rs";
     const original = await readFile(join(root, sourcePath));
     await writeFile(

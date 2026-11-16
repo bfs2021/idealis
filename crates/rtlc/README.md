@@ -6,6 +6,10 @@ TLCの意味論に合わせた、有限TLA+ fragmentのモデル検査ライブ�
 
 実行コードは`idealis-core`へ依存しない。RustのTLA+経路ではrtlaが構文解析、rtla-compilerがIR生成を担当する。既存のTypeScript frontendも比較対象として残す。[対応範囲と制約](../../docs/rust-safety.md)を参照。TLC CLIやTLA+全体の互換性を示すcrateではない。
 
+整数の\div / % / ^、有限CHOOSE、state/action constraint、model value、定数有限domain上の時間論理量化を扱う。探索制約で除外した候補もinvariantと対応するpropertyを検査する。SYMMETRY、VIEW、ディスク退避、checkpoint、simulation/DFID、式単位のcoverageは未対応。各項目は[チェックリスト](SUPPORT.md)で管理する。
+
+model valueのwire表現は`{"type":"model-value","value":"p_1"}`。文字列の`"p_1"`とは異なる値で、反例にもtagを保持する。型名はTLCと同じく名前の先頭1文字とunderscoreで表す。集合foldでmodel valueの順序を使う入力は拒否する。
+
 ## Rustから使う
 
 ローカルcheckoutでは`rtlc = { path = "../idealis/crates/rtlc" }`を依存に追加する。JSON IRを読む場合は`serde_json`も使う。

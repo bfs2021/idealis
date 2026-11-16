@@ -2,12 +2,17 @@
   "valid": [
     {
       "name": "null",
-      "input": { "type": "null" },
+      "input": {
+        "type": "null"
+      },
       "canonical": "{\"type\":\"null\"}"
     },
     {
       "name": "large integer",
-      "input": { "type": "int", "value": "9007199254740993123456789" },
+      "input": {
+        "type": "int",
+        "value": "9007199254740993123456789"
+      },
       "canonical": "{\"type\":\"int\",\"value\":\"9007199254740993123456789\"}"
     },
     {
@@ -15,9 +20,18 @@
       "input": {
         "type": "set",
         "value": [
-          { "type": "int", "value": "2" },
-          { "type": "int", "value": "1" },
-          { "type": "int", "value": "2" }
+          {
+            "type": "int",
+            "value": "2"
+          },
+          {
+            "type": "int",
+            "value": "1"
+          },
+          {
+            "type": "int",
+            "value": "2"
+          }
         ]
       },
       "canonical": "{\"type\":\"set\",\"value\":[{\"type\":\"int\",\"value\":\"1\"},{\"type\":\"int\",\"value\":\"2\"}]}"
@@ -27,8 +41,20 @@
       "input": {
         "type": "record",
         "value": [
-          ["😀", { "type": "bool", "value": false }],
-          ["", { "type": "bytes", "value": "00ff" }]
+          [
+            "😀",
+            {
+              "type": "bool",
+              "value": false
+            }
+          ],
+          [
+            "",
+            {
+              "type": "bytes",
+              "value": "00ff"
+            }
+          ]
         ]
       },
       "canonical": "{\"type\":\"record\",\"value\":[[\"\",{\"type\":\"bytes\",\"value\":\"00ff\"}],[\"😀\",{\"type\":\"bool\",\"value\":false}]]}"
@@ -38,25 +64,107 @@
       "input": {
         "type": "map",
         "value": [
-          [{ "type": "string", "value": "x" }, { "type": "null" }],
-          [{ "type": "int", "value": "-2" }, { "type": "list", "value": [] }]
+          [
+            {
+              "type": "string",
+              "value": "x"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          [
+            {
+              "type": "int",
+              "value": "-2"
+            },
+            {
+              "type": "list",
+              "value": []
+            }
+          ]
         ]
       },
       "canonical": "{\"type\":\"map\",\"value\":[[{\"type\":\"int\",\"value\":\"-2\"},{\"type\":\"list\",\"value\":[]}],[{\"type\":\"string\",\"value\":\"x\"},{\"type\":\"null\"}]]}"
+    },
+    {
+      "name": "model value alice",
+      "input": {
+        "type": "model-value",
+        "value": "alice"
+      },
+      "canonical": "{\"type\":\"model-value\",\"value\":\"alice\"}"
+    },
+    {
+      "name": "model value p_1",
+      "input": {
+        "type": "model-value",
+        "value": "p_1"
+      },
+      "canonical": "{\"type\":\"model-value\",\"value\":\"p_1\"}"
     }
   ],
   "invalid": [
-    { "name": "null with payload", "input": { "type": "null", "value": null } },
-    { "name": "integer newline", "input": { "type": "int", "value": "1\n" } },
-    { "name": "bytes newline", "input": { "type": "bytes", "value": "00\n" } },
-    { "name": "leading zero", "input": { "type": "int", "value": "01" } },
-    { "name": "negative zero", "input": { "type": "int", "value": "-0" } },
-    { "name": "float", "input": { "type": "float", "value": 1.5 } },
+    {
+      "name": "null with payload",
+      "input": {
+        "type": "null",
+        "value": null
+      }
+    },
+    {
+      "name": "integer newline",
+      "input": {
+        "type": "int",
+        "value": "1\n"
+      }
+    },
+    {
+      "name": "bytes newline",
+      "input": {
+        "type": "bytes",
+        "value": "00\n"
+      }
+    },
+    {
+      "name": "leading zero",
+      "input": {
+        "type": "int",
+        "value": "01"
+      }
+    },
+    {
+      "name": "negative zero",
+      "input": {
+        "type": "int",
+        "value": "-0"
+      }
+    },
+    {
+      "name": "float",
+      "input": {
+        "type": "float",
+        "value": 1.5
+      }
+    },
     {
       "name": "duplicate record",
       "input": {
         "type": "record",
-        "value": [["a", { "type": "null" }], ["a", { "type": "null" }]]
+        "value": [
+          [
+            "a",
+            {
+              "type": "null"
+            }
+          ],
+          [
+            "a",
+            {
+              "type": "null"
+            }
+          ]
+        ]
       }
     },
     {
@@ -64,19 +172,73 @@
       "input": {
         "type": "map",
         "value": [
-          [{ "type": "int", "value": "1" }, { "type": "null" }],
-          [{ "type": "int", "value": "1" }, { "type": "null" }]
+          [
+            {
+              "type": "int",
+              "value": "1"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          [
+            {
+              "type": "int",
+              "value": "1"
+            },
+            {
+              "type": "null"
+            }
+          ]
         ]
       }
     },
     {
       "name": "extra field",
-      "input": { "type": "bool", "value": true, "extra": 1 }
+      "input": {
+        "type": "bool",
+        "value": true,
+        "extra": 1
+      }
     },
-    { "name": "invalid bytes", "input": { "type": "bytes", "value": "FF" } },
+    {
+      "name": "invalid bytes",
+      "input": {
+        "type": "bytes",
+        "value": "FF"
+      }
+    },
     {
       "name": "unpaired surrogate",
       "json": "{\"type\":\"string\",\"value\":\"\\ud800\"}"
+    },
+    {
+      "name": "invalid model value ''",
+      "input": {
+        "type": "model-value",
+        "value": ""
+      }
+    },
+    {
+      "name": "invalid model value '1abc'",
+      "input": {
+        "type": "model-value",
+        "value": "1abc"
+      }
+    },
+    {
+      "name": "invalid model value 'a b'",
+      "input": {
+        "type": "model-value",
+        "value": "a b"
+      }
+    },
+    {
+      "name": "invalid model value 'alice\\n'",
+      "input": {
+        "type": "model-value",
+        "value": "alice\n"
+      }
     }
   ]
 }

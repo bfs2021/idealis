@@ -84,7 +84,9 @@ fn literal(value: &ConfigValue) -> Result<Json> {
         ConfigValue::Set { elements } => Ok(
             json!({"op":"set","values":elements.iter().map(literal).collect::<Result<Vec<_>>>()?}),
         ),
-        ConfigValue::ModelValue { .. } => unsupported("model values are not strings"),
+        ConfigValue::ModelValue { name } => {
+            Ok(json!({"op":"data","value":{"type":"model-value","value":name}}))
+        }
     }
 }
 fn level(value: &Json) -> u8 {
@@ -177,9 +179,7 @@ pub fn compile(module: &Module, config: &Config) -> Result<rtlc::SafetyProgram> 
     }) {
         return unsupported("EXTENDS");
     }
-    if !config.constraints.is_empty()
-        || !config.action_constraints.is_empty()
-        || !config.substitutions.is_empty()
+    if !config.substitutions.is_empty()
         || config.symmetry.is_some()
         || config.view.is_some()
         || config.alias.is_some()
@@ -569,6 +569,20 @@ impl Compiler<'_> {
                     json!({"op":"filter","bounds":bindings,"body":self.expression(predicate,&bound)?}),
                 )
             }
+            E::Choose {
+                pattern,
+                set: Some(set),
+                body,
+            } => {
+                let bound = ast::Bound {
+                    pattern: pattern.clone(),
+                    set: *set.clone(),
+                };
+                let (bindings, context) = self.bind(&[bound], &child)?;
+                Ok(
+                    json!({"op":"choose","binding":bindings[0],"body":self.expression(body,&context)?}),
+                )
+            }
             E::If {
                 condition,
                 consequent,
@@ -793,6 +807,9 @@ impl Compiler<'_> {
             "+" => "add",
             "-" => "sub",
             "*" => "mul",
+            "\\div" => "div",
+            "%" => "mod",
+            "^" => "pow",
             "=" => "eq",
             ":=" if self.extends("Apalache") => "eq",
             "#" | "/=" => "ne",
@@ -811,7 +828,12 @@ impl Compiler<'_> {
         if args.len() != 2 {
             return unsupported(format!("operator arity {operator}"));
         }
-        if ["add", "sub", "mul", "lt", "le", "gt", "ge"].contains(&op) && !self.arithmetic() {
+        if [
+            "add", "sub", "mul", "div", "mod", "pow", "lt", "le", "gt", "ge",
+        ]
+        .contains(&op)
+            && !self.arithmetic()
+        {
             return unsupported("arithmetic requires Naturals");
         }
         if op == "concat" && !self.extends("Sequences") {
@@ -871,9 +893,9 @@ impl Compiler<'_> {
             E::RecordSet { .. } | E::FunctionSet { .. } => Ok(
                 json!({"op":"function-in","left":left,"right":self.membership_set(value,&context.nested()?)?}),
             ),
-            E::Apply { operator, args } if operator == "SUBSET" && args.len() == 1 => {
-                Ok(json!({"op":"subset-eq","left":left,"right":self.expression(&args[0],context)?}))
-            }
+            E::Apply { operator, args } if operator == "SUBSET" && args.len() == 1 => Ok(
+                json!({"op":"function-in","left":left,"right":{"op":"powerset","argument":self.expression(&args[0],context)?}}),
+            ),
             _ => Ok(json!({"op":"in","value":left,"domain":self.domain(value,context,false)?})),
         }
     }
@@ -1074,6 +1096,19 @@ impl Compiler<'_> {
     fn temporal(&mut self, value: &Expression, context: &Context) -> Result<Json> {
         let child = context.nested()?;
         match &value.node {
+            E::Forall { bounds, body } | E::Exists { bounds, body } => {
+                let (bindings, context) = self.bind(bounds, &child)?;
+                let formula = self.temporal(body, &context)?;
+                if formula["kind"] == "atom" {
+                    return Ok(atom(self.expression(value, &child)?));
+                }
+                if bindings.iter().any(|binding| level(&binding["domain"]) > 0) {
+                    return unsupported("temporal quantification requires constant finite domains");
+                }
+                Ok(
+                    json!({"kind":if matches!(value.node, E::Forall { .. }) {"forall"} else {"exists"},"bounds":bindings,"formula":formula}),
+                )
+            }
             E::Identifier { name } if self.has(context, name) => {
                 let (body, expanded) = self.call(name, &[], context)?;
                 self.temporal(&body, &expanded)
@@ -1301,6 +1336,24 @@ impl Compiler<'_> {
             assumptions.push(json!({"name":assumption.name.clone().unwrap_or_else(||format!("ASSUME {}",index+1)),"expression":self.expression(&assumption.expression,&self.root(Phase::Constant))?}));
         }
         let mut result = json!({"format":"modelt.safety-program","version":1,"name":self.module.name,"variables":self.module.variables.iter().map(|value|&value.name).collect::<Vec<_>>(),"initial":initial,"next":next,"invariants":invariants,"assumptions":assumptions,"checkDeadlock":self.config.check_deadlock});
+        for (key, names, phase) in [
+            ("constraints", self.config.constraints.clone(), Phase::State),
+            (
+                "actionConstraints",
+                self.config.action_constraints.clone(),
+                Phase::Next,
+            ),
+        ] {
+            if names.is_empty() {
+                continue;
+            }
+            let mut predicates = vec![];
+            for name in names {
+                let (body, context) = self.operator(&name, phase)?;
+                predicates.push(json!({"name":name,"expression":self.expression(&body,&context)?}));
+            }
+            result[key] = json!(predicates);
+        }
         if !initial_properties.is_empty() {
             result["initialProperties"] = json!(initial_properties);
         }
@@ -1353,7 +1406,7 @@ fn validate_temporal(formula: &Json, path: &[String], direct: bool) -> Result<()
         }
         Some(kind) => {
             let mut path = path.to_vec();
-            if kind != "not" {
+            if !["not", "forall", "exists"].contains(&kind) {
                 path.push(kind.into());
             }
             validate_temporal(&formula["formula"], &path, direct)

@@ -1,0 +1,332 @@
+{
+  "status": "complete",
+  "stage": "finite-tuned",
+  "sourceVersion": "6df09968f1986fc0a85b0bfa2357c571bf6e9a7efb9f9033095019bd72ca6a71",
+  "exit": 0,
+  "sourceUnchanged": true,
+  "archiveError": null,
+  "estimates": [
+    {
+      "benchmark": "membership/function-cube",
+      "mean": 2474336.4829255706,
+      "lower": 2377081.1875475617,
+      "upper": 2585729.141844943
+    },
+    {
+      "benchmark": "membership/parallel-channels",
+      "mean": 1046077.47,
+      "lower": 1004454.53925,
+      "upper": 1094573.8977500002
+    },
+    {
+      "benchmark": "search/counter-product/1",
+      "mean": 11767576.65,
+      "lower": 11394056.2225,
+      "upper": 12193191.817999998
+    },
+    {
+      "benchmark": "search/counter-product/8",
+      "mean": 11204586.649999999,
+      "lower": 10805115.39825,
+      "upper": 11708852.688
+    },
+    {
+      "benchmark": "search/function-cube/1",
+      "mean": 10755772.100000001,
+      "lower": 10521940.767,
+      "upper": 11032036.67975
+    },
+    {
+      "benchmark": "search/function-cube/8",
+      "mean": 9956945.430000002,
+      "lower": 9864367.058,
+      "upper": 10056264.02025
+    },
+    {
+      "benchmark": "search/linear-ring/1",
+      "mean": 1268540.4889595045,
+      "lower": 1227622.9366819365,
+      "upper": 1338165.5309899144
+    },
+    {
+      "benchmark": "search/linear-ring/8",
+      "mean": 1261069.0484265434,
+      "lower": 1237200.7102018313,
+      "upper": 1289172.0984200186
+    },
+    {
+      "benchmark": "search/parallel-channels/1",
+      "mean": 15298033.825,
+      "lower": 15186222.4821875,
+      "upper": 15423303.711562501
+    },
+    {
+      "benchmark": "search/parallel-channels/8",
+      "mean": 8720448.039848667,
+      "lower": 8650801.45581771,
+      "upper": 8794499.185625022
+    },
+    {
+      "benchmark": "values/except-function",
+      "mean": 508766.4890001016,
+      "lower": 496155.23038286756,
+      "upper": 523205.80820565985
+    },
+    {
+      "benchmark": "values/except-record",
+      "mean": 4160898.1154817804,
+      "lower": 4092216.378535409,
+      "upper": 4233633.57253746
+    },
+    {
+      "benchmark": "values/intern-existing-functions",
+      "mean": 498765.287236974,
+      "lower": 481862.9536387332,
+      "upper": 519019.03943146474
+    },
+    {
+      "benchmark": "values/intern-new-functions",
+      "mean": 574072.9329706006,
+      "lower": 562227.783195884,
+      "upper": 589790.5768234322
+    }
+  ],
+  "files": [
+    {
+      "path": "criterion/membership/function-cube/finite-tuned/benchmark.json",
+      "sha256": "0cf47ea1f18d5ac536250f61739cc59e492d64eca1006f9124bcefa820cebd22"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-tuned/estimates.json",
+      "sha256": "ea6cd747bace88544023d590631e24e38463fc90604273f354b132dc5af726bd"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-tuned/sample.json",
+      "sha256": "7a6265b7acd7de2f76ac0b797ed1afa4e75792d63cb940cd62ffcbd1e4c5dcdb"
+    },
+    {
+      "path": "criterion/membership/function-cube/finite-tuned/tukey.json",
+      "sha256": "7390c6147ab7bf52dc1d38bcb7053aa17d715a74bee89c3c40be439bca23a7d3"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-tuned/benchmark.json",
+      "sha256": "29ba1763563f8fbddc0488d87ffc7efd36ccbaed8503f21447735ba606506a79"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-tuned/estimates.json",
+      "sha256": "e88d8bb7339a57f530a78ef7e1bb03d90af4d65a59385fbf6eed64e49c5d7332"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-tuned/sample.json",
+      "sha256": "0705d6ba9a0c8f5581c84b901dfd6a5daf5af1fefe29e554e24f666e753ec50b"
+    },
+    {
+      "path": "criterion/membership/parallel-channels/finite-tuned/tukey.json",
+      "sha256": "c912dd63b059a674f17d8013441bc900f239af49cebce8b937545e76cceea8d2"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-tuned/benchmark.json",
+      "sha256": "120e55a924ed6aa621bffe5f0e275e791da831071b21663235e72c67fbe12ad0"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-tuned/estimates.json",
+      "sha256": "21c55a2d50f342455fa2ba7a9f2f77eb0e4931967dce401d63cf66f3c4db1a93"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-tuned/sample.json",
+      "sha256": "1fcb97333e9b24a8f0182c5c010db278dc3c0bfa1f9471d25f68b159b7399d60"
+    },
+    {
+      "path": "criterion/search/counter-product/1/finite-tuned/tukey.json",
+      "sha256": "5e0326ff62e27fc96d6336ccfa79ac18592a6dae6b0a0dc18838f17fa32b1e02"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-tuned/benchmark.json",
+      "sha256": "8d1caf3af184aa582fc43e4894d151a2688799a05f70fb0b35dd0c8e27e7e488"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-tuned/estimates.json",
+      "sha256": "b2a9b35537afd3ab893a8ea967b302379b19bb1a96113614c5e4b83b6513b36e"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-tuned/sample.json",
+      "sha256": "7b87cdc72f11e59cbb15d4f67d9497a9c5840c05342aa8c1297ecacda3355614"
+    },
+    {
+      "path": "criterion/search/counter-product/8/finite-tuned/tukey.json",
+      "sha256": "b4662f137cd451b58ac10e32a4a8eec9a8f8485b213628e9764dfe7a30dc2f5b"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-tuned/benchmark.json",
+      "sha256": "9a1eb84a697cde96cfcf6d95618bf0bbeac0d34d6f69af8474fa61816da60f4f"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-tuned/estimates.json",
+      "sha256": "08bd28e8dc71f6711ab53e7bc6a596da3c8c8c26d2cd94cce76526276c0d8a2c"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-tuned/sample.json",
+      "sha256": "1a5a378e50f539ca3cd72d6a2d1d4095e0b3c7a88b2c4db72b9fde0cb9aa74c7"
+    },
+    {
+      "path": "criterion/search/function-cube/1/finite-tuned/tukey.json",
+      "sha256": "d30c5a55c0a058bef216b97c6183ea4d5b2b5627f19cbe6991108786d9e6d6ab"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-tuned/benchmark.json",
+      "sha256": "a84980a0099bbf2676878353a36875f965291136a463c1d0d950ae51edd46b06"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-tuned/estimates.json",
+      "sha256": "31460ca68cb22271c76374a5521ddb07f54f3a394817ebcf5355c9b480c03fe8"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-tuned/sample.json",
+      "sha256": "2e2f1e879968900c361adebbf5c6206a94eec0aa5ff562d9ee78b303f924c611"
+    },
+    {
+      "path": "criterion/search/function-cube/8/finite-tuned/tukey.json",
+      "sha256": "e4cb73d0f773e7306f4cb119704fc3bcfb267d84e36edee7ae968a565e49bf58"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-tuned/benchmark.json",
+      "sha256": "d95f4945a2767eee008aab813ba24de70abb58c6077095b88d04709105394b53"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-tuned/estimates.json",
+      "sha256": "91f070749915daf4723a0f16c4635bcca0140f7b2c65fd36420efc36734d54a9"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-tuned/sample.json",
+      "sha256": "4571b15d405c3f7f03c52d1c02b63bdd0d5c4e0a2d76e553e4bb18dd13e388a5"
+    },
+    {
+      "path": "criterion/search/linear-ring/1/finite-tuned/tukey.json",
+      "sha256": "e357907ccca2f24d394b8e6f749de306c651f9d5bc29bb9a9aefdfccf40a8f3d"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-tuned/benchmark.json",
+      "sha256": "b3b950e326c210ab5f767440cc1605c5f7833bbd9593889bc0cc29cdf06fdf47"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-tuned/estimates.json",
+      "sha256": "9403671ef595bb4637f523a71757f43cd6611ce412f753bae732e75841bf358b"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-tuned/sample.json",
+      "sha256": "65c717ecd6410fa9f37b281ed9b2380d58a06d282181338de6f2862af493e12d"
+    },
+    {
+      "path": "criterion/search/linear-ring/8/finite-tuned/tukey.json",
+      "sha256": "37757eac9116f1e3119b354459861d0ab40ab9ec4a1ad8fc8e8d3c145db48a5c"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-tuned/benchmark.json",
+      "sha256": "30d1fe70463c5d38a87a77df0bc948efba37dcca42ccaa16a703ba4059a31387"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-tuned/estimates.json",
+      "sha256": "1b6c21876e5ee57512a5f79c7585850888e7d2f0dff3e39be811b281f5237889"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-tuned/sample.json",
+      "sha256": "59cad8d98cdccbd7391a6c3b4db21d7c64d6fb86f4419fcd309be106de15a1ea"
+    },
+    {
+      "path": "criterion/search/parallel-channels/1/finite-tuned/tukey.json",
+      "sha256": "75802ad9ce1fde7f4496cd8a344334c6bbed6f051e85d9f6965a2b43ced31262"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-tuned/benchmark.json",
+      "sha256": "c562571d9ec67019552cda868a4c5df20ecfc97e93ee4478eb80cb91da03dc37"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-tuned/estimates.json",
+      "sha256": "809258c65ca42440a634be03508faf28a9fdbba887f423b863dcc6a3399dfcf3"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-tuned/sample.json",
+      "sha256": "84441a16d654276182b31fa5d20da0f950355d44c58668ccea78175a5e628915"
+    },
+    {
+      "path": "criterion/search/parallel-channels/8/finite-tuned/tukey.json",
+      "sha256": "9bd8e981de101081bcba0f3212a64732fcf8b5db0bd5b54c82b1607423452862"
+    },
+    {
+      "path": "criterion/values/except-function/finite-tuned/benchmark.json",
+      "sha256": "0d653631af28ce397f8506d965c3f1dbad29e15c88c8e302a76ddb3669fd1e99"
+    },
+    {
+      "path": "criterion/values/except-function/finite-tuned/estimates.json",
+      "sha256": "3dd9b12763b02d9e9fdbfebd4d3c2e0a42b2f5898f453e39bd48403ce514b0c6"
+    },
+    {
+      "path": "criterion/values/except-function/finite-tuned/sample.json",
+      "sha256": "5de84002ccf04d38c05d880bdaad2e484c606677c185ed647677a6c4f6196802"
+    },
+    {
+      "path": "criterion/values/except-function/finite-tuned/tukey.json",
+      "sha256": "ce44689a02747a2f41fdc5939089e1d53cdb5e2e2a3faa83acb0ead6d3489a34"
+    },
+    {
+      "path": "criterion/values/except-record/finite-tuned/benchmark.json",
+      "sha256": "9c54005bdb65b73192a525c9b34d5be84126f5200374a5ed0481c615b5c1463d"
+    },
+    {
+      "path": "criterion/values/except-record/finite-tuned/estimates.json",
+      "sha256": "03520bea89d247b37d12ba64ca588e8aa2a8493b915895745a40e39d56210a2c"
+    },
+    {
+      "path": "criterion/values/except-record/finite-tuned/sample.json",
+      "sha256": "6b5170a3b6ce95f56cfcf45bd72ae51b46c1c2ee07d1e40b06fe19181e73b375"
+    },
+    {
+      "path": "criterion/values/except-record/finite-tuned/tukey.json",
+      "sha256": "6a40b99db5353380e87864f4e05da9cc27ba8a13f9c881d49a20fe9c0dccc409"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-tuned/benchmark.json",
+      "sha256": "2f98f6f8304ff08556c1aeba917248a35c4e6ff6a879b2b188372f7cc95f6015"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-tuned/estimates.json",
+      "sha256": "a4d2ea5fcf8bbccbcaa3cb8d51af13852aa189c6dd45d783f98f33eeda3bab88"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-tuned/sample.json",
+      "sha256": "77971f49cdc082c32ac7636727c09bc473ce910d1a1358724467d44e9ebbd2ed"
+    },
+    {
+      "path": "criterion/values/intern-existing-functions/finite-tuned/tukey.json",
+      "sha256": "e5a099650ea894d2c329695117ecb50049a342031b95bd15df762b7ea3187516"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-tuned/benchmark.json",
+      "sha256": "a9db83965d72162af188d92b5c155c09f977d9835dd655d48347e7dbc217971a"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-tuned/estimates.json",
+      "sha256": "577f1065ffc5d091f90a2c48d84ec5bce18018455363bc5a9e7f310c684db648"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-tuned/sample.json",
+      "sha256": "0ed54596311b9baf90ea009db39efe24ac82bcc9bbc0e1ffaec840c3254dad6f"
+    },
+    {
+      "path": "criterion/values/intern-new-functions/finite-tuned/tukey.json",
+      "sha256": "cb33e78ef4f37091f077e7aaf2a649452cfe56828ba4c2d38784776da44dd131"
+    },
+    {
+      "path": "criterion.log",
+      "sha256": "95e17ff460ceeb5b20dcc1797172f91cb4695f385263bc929654476e43b8fe73"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "0c328bb2dadc6aa9f5b1b21e4b5f5cfc20ba29e826479121060312e9e6305fcf"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "d9a95e8abff4900e74ca918a9fbd9ae6d1b9fcb39d00a9759ef114044a85b835"
+    }
+  ]
+}

@@ -475,6 +475,22 @@ compiler-test:
   cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
 
+tlc-finite-eval run java jar: safety-build
+  node dist/evals/tlc-finite/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+tlc-finite-replay saved run java jar: safety-build
+  node dist/evals/tlc-finite/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(saved)}}
+
+compiler-criterion stage run: criterion-prepare
+  IDEALIS_CRITERION_PLAN=0046-tlc-finite-support IDEALIS_CRITERION_TARGET=rtla-compiler node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+criterion-baseline revision stage run: criterion-prepare
+  IDEALIS_CRITERION_PLAN=0046-tlc-finite-support IDEALIS_CRITERION_REVISION={{quote(revision)}} node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+criterion-verify run:
+  pnpm build
+  node dist/evals/criterion-safety/verify.js {{quote(run)}}
+
 compiler-eval run: portable-build
   pnpm build
   node dist/evals/rtla-compiler/evaluate.js {{quote(run)}}

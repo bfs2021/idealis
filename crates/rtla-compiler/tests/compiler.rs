@@ -61,7 +61,7 @@ fn unsupported_inputs_do_not_become_a_successful_model() {
         ),
         (
             "---- MODULE M ----\nVARIABLE x\nInit == x = 0\nNext == UNCHANGED x\n====",
-            "INIT Init\nNEXT Next\nCONSTRAINT Init",
+            "INIT Init\nNEXT Next\nCONSTRAINT Missing",
         ),
     ] {
         assert!(

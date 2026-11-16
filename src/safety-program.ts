@@ -142,6 +142,9 @@ const expression = (input: unknown, depth: number): void => {
     "add",
     "sub",
     "mul",
+    "div",
+    "mod",
+    "pow",
     "eq",
     "ne",
     "lt",
@@ -252,6 +255,11 @@ const expression = (input: unknown, depth: number): void => {
       expression(input.collection, child);
       expression(input.body, child);
       return;
+    case "choose":
+      fields(input, ["op", "binding", "body"]);
+      binding(input.binding, child);
+      expression(input.body, child);
+      return;
     case "if":
       fields(input, ["op", "condition", "consequent", "alternative"]);
       expression(input.condition, child);
@@ -290,6 +298,14 @@ const formula = (input: unknown, depth = 0): void => {
       fields(input, ["kind", "expression"]);
       expression(input.expression, 0);
       return;
+    case "forall":
+    case "exists":
+      fields(input, ["kind", "bounds", "formula"]);
+      array(input.bounds).forEach((item) => {
+        binding(item, 0);
+      });
+      formula(input.formula, depth + 1);
+      return;
     case "not":
     case "always":
     case "eventually":
@@ -323,7 +339,14 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
       "assumptions",
       "checkDeadlock",
     ],
-    ["initialProperties", "actionProperties", "properties", "fairness"],
+    [
+      "initialProperties",
+      "actionProperties",
+      "properties",
+      "fairness",
+      "constraints",
+      "actionConstraints",
+    ],
   );
   if (
     value.format !== "modelt.safety-program" ||
@@ -343,6 +366,8 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
     "assumptions",
     "initialProperties",
     "actionProperties",
+    "constraints",
+    "actionConstraints",
   ]) {
     if (value[key] === undefined) continue;
     for (const item of array(value[key])) {

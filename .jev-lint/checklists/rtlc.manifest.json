@@ -23,62 +23,66 @@
       "role": "reference"
     },
     "source5": {
-      "path": "crates/rtlc/src/benchmarks.rs",
+      "path": "crates/rtlc/src/bench-fixtures.json",
       "role": "reference"
     },
     "source6": {
-      "path": "crates/rtlc/src/ir.rs",
+      "path": "crates/rtlc/src/benchmarks.rs",
       "role": "reference"
     },
     "source7": {
-      "path": "crates/rtlc/src/lib.rs",
+      "path": "crates/rtlc/src/ir.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "crates/rtlc/src/safety.rs",
+      "path": "crates/rtlc/src/lib.rs",
       "role": "reference"
     },
     "source9": {
-      "path": "crates/rtlc/src/safety_expressions.rs",
+      "path": "crates/rtlc/src/safety.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "crates/rtlc/src/safety_parallel.rs",
+      "path": "crates/rtlc/src/safety_expressions.rs",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/rtlc/src/safety_values.rs",
+      "path": "crates/rtlc/src/safety_parallel.rs",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/rtlc/src/safety_work.rs",
+      "path": "crates/rtlc/src/safety_values.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/rtlc/src/temporal.rs",
+      "path": "crates/rtlc/src/safety_work.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/rtlc/src/value.rs",
+      "path": "crates/rtlc/src/temporal.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtlc/tests/parallel_safety.rs",
+      "path": "crates/rtlc/src/value.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/rtlc/tests/standalone.rs",
+      "path": "crates/rtlc/tests/parallel_safety.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "package.json",
+      "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "pnpm-lock.yaml",
+      "path": "package.json",
       "role": "reference"
     },
     "source19": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source20": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -100,17 +104,17 @@
       "topic": "IRの値と式・予算・結果の公開契約",
       "mode": "semantic",
       "reference": {
-        "source": "source6"
+        "source": "source7"
       },
       "target": {
         "source": "source3"
       },
       "context": [
         {
-          "source": "source14"
+          "source": "source15"
         },
         {
-          "source": "source8"
+          "source": "source9"
         }
       ]
     },
@@ -119,7 +123,7 @@
       "topic": "有限BFS、invariantとdeadlock、結果と探索予算",
       "mode": "semantic",
       "reference": {
-        "source": "source8"
+        "source": "source9"
       },
       "target": {
         "source": "source3"
@@ -131,7 +135,7 @@
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source13"
+        "source": "source14"
       },
       "target": {
         "source": "source3"
@@ -143,7 +147,7 @@
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
-        "source": "source10"
+        "source": "source11"
       },
       "target": {
         "source": "source3"

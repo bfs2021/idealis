@@ -807,9 +807,9 @@ export const compileTlaSafety = (options: {
       };
     if (value.kind === "Apply" && value.operator === "SUBSET" && value.args[0])
       return {
-        op: "subset-eq",
+        op: "function-in",
         left,
-        right: expression(value.args[0], context),
+        right: { op: "powerset", argument: expression(value.args[0], context) },
       };
     return { op: "in", value: left, domain: domain(value, context) };
   };

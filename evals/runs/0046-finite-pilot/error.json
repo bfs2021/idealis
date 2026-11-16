@@ -1,0 +1,1865 @@
+{
+  "status": "error",
+  "error": "AssertionError [ERR_ASSERTION]: TLC comparison failed",
+  "reports": [
+    {
+      "input": {
+        "name": "div-negative",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = -3\nInit == x = (-7) \\div 3\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "div-negative-denominator",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = -3\nInit == x = 7 \\div (-3)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "div-both-negative",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = 2\nInit == x = (-7) \\div (-3)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "mod-negative",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = 2\nInit == x = (-7) % 3\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "power-negative",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = -8\nInit == x = (-2)^3\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "power-min",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = -2147483648\nInit == x = (-2)^31\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": null,
+        "generated": null,
+        "exit": 255
+      },
+      "differences": [
+        "verdict: complete != model-error"
+      ]
+    },
+    {
+      "input": {
+        "name": "power-large-unit",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = -1\nInit == x = (-1)^2147483647\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "power-zero",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = 1\nInit == x = 9^0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "div-zero",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = 1 \\div 0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "zero"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Integer division by zero"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Integer division by zero"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "div-overflow",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = (-2147483647 - 1) \\div (-1)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "overflow"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Safety integer overflow"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Safety integer overflow"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "mod-zero",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = 1 % 0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "positive"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Modulo requires a positive divisor"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Modulo requires a positive divisor"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "mod-negative-denominator",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = 1 % (-2)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "positive"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Modulo requires a positive divisor"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Modulo requires a positive divisor"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "power-negative-exponent",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = 2^(-1)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "natural"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Power requires a natural exponent"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Power requires a natural exponent"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "power-zero-zero",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = 0^0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "0^0"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Undefined 0^0"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Undefined 0^0"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "power-overflow",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = 2^31\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "overflow"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Safety integer overflow"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Safety integer overflow"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "arithmetic-lazy",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = IF TRUE THEN 1 ELSE 0^0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-order",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = 2\nInit == x = CHOOSE n \\in {3, 1, 2}: n > 1\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 6,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 6,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-equivalent",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = (CHOOSE n \\in 1..3: n > 0)\nInit == x = (CHOOSE n \\in {3, 1, 2}: n > 0)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 6,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 6,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-tuple",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = <<1, 3>>\nInit == x = CHOOSE <<a, b>> \\in {<<2, 0>>, <<1, 3>>}: a < b\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 13,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 13,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-nested",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nSafe == x = 2\nInit == x = CHOOSE n \\in 1..3: (CHOOSE m \\in 1..3: m > n) = 3\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 11,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 11,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-no-witness",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = CHOOSE n \\in 1..3: n > 9\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "no element"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "CHOOSE: no element of the domain satisfied the predicate"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "CHOOSE: no element of the domain satisfied the predicate"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-empty",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = CHOOSE n \\in {}: TRUE\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "model-error",
+        "error": "no element"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "CHOOSE: no element of the domain satisfied the predicate"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "CHOOSE: no element of the domain satisfied the predicate"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 0,
+        "generated": 0,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "choose-lazy",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\n\nInit == x = IF TRUE THEN 1 ELSE (CHOOSE n \\in {}: TRUE)\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\n",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "state-constraint",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x < 3\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTRAINT Limit",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 3,
+        "generated": 4,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "action-constraint",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x' < 3\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nACTION_CONSTRAINT Limit",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 3,
+        "generated": 4,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "constraint-boundary-invariant",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x < 3\nSafe == x < 3\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTRAINT Limit\nINVARIANT Safe",
+        "expected": "invariant-violation"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "invariant-violation",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "native": {
+        "result": {
+          "status": "invariant-violation",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "reference": {
+        "status": "invariant-violation",
+        "states": 3,
+        "generated": 4,
+        "exit": 12
+      },
+      "witness": {
+        "input": {
+          "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x < 3\nSafe == x < 3\nInit == x = 0\nNext == x' = x + 1\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (x = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 1 /\\ (x' = 1)) \\/ (__position = 1 /\\ __position' = 2 /\\ (x' = 2)) \\/ (__position = 2 /\\ __position' = 3 /\\ (x' = 3)) \\/ (__position = 3 /\\ __position' = 3 /\\ (x' = 3))) /\\ (Next \\/ UNCHANGED <<x>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<x,__position>> /\\ WF_<<x,__position>>(__TraceNext)\n__Expected == <>(~(Safe))\n====",
+          "expected": "complete",
+          "config": "SPECIFICATION __TraceSpec\n\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+        },
+        "status": "complete",
+        "states": 4
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "constraint-boundary-property",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x < 3\nSafe == [][x' < 3]_x\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTRAINT Limit\nPROPERTY Safe",
+        "expected": "property-violation"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "property-violation",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "native": {
+        "result": {
+          "status": "property-violation",
+          "reason": null,
+          "states": 3,
+          "generated": 4,
+          "depth": 2,
+          "work": 8,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "1"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "2"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "reference": {
+        "status": "liveness-violation",
+        "states": 3,
+        "generated": 4,
+        "exit": 13
+      },
+      "witness": {
+        "input": {
+          "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x < 3\nSafe == [][x' < 3]_x\nInit == x = 0\nNext == x' = x + 1\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (x = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 1 /\\ (x' = 1)) \\/ (__position = 1 /\\ __position' = 2 /\\ (x' = 2)) \\/ (__position = 2 /\\ __position' = 3 /\\ (x' = 3)) \\/ (__position = 3 /\\ __position' = 3 /\\ (x' = 3))) /\\ (Next \\/ UNCHANGED <<x>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<x,__position>> /\\ WF_<<x,__position>>(__TraceNext)\n__Expected == Safe\n====",
+          "expected": "liveness-violation",
+          "config": "SPECIFICATION __TraceSpec\n\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+        },
+        "status": "liveness-violation",
+        "states": 4
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "constraint-initial-invariant",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x > 1\nSafe == x > 1\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTRAINT Limit\nINVARIANT Safe",
+        "expected": "invariant-violation"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "invariant-violation",
+          "reason": null,
+          "states": 0,
+          "generated": 1,
+          "depth": 0,
+          "work": 2,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "native": {
+        "result": {
+          "status": "invariant-violation",
+          "reason": null,
+          "states": 0,
+          "generated": 1,
+          "depth": 0,
+          "work": 2,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "reference": {
+        "status": "invariant-violation",
+        "states": null,
+        "generated": null,
+        "exit": 12
+      },
+      "witness": {
+        "input": {
+          "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x > 1\nSafe == x > 1\nInit == x = 0\nNext == x' = x + 1\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (x = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 0 /\\ (x' = 0))) /\\ (Next \\/ UNCHANGED <<x>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<x,__position>> /\\ WF_<<x,__position>>(__TraceNext)\n__Expected == <>(~(Safe))\n====",
+          "expected": "complete",
+          "config": "SPECIFICATION __TraceSpec\n\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+        },
+        "status": "complete",
+        "states": 1
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "constraint-initial-empty",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x > 1\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTRAINT Limit",
+        "expected": "empty"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "empty",
+          "reason": null,
+          "states": 0,
+          "generated": 1,
+          "depth": 0,
+          "work": 2,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "empty",
+          "reason": null,
+          "states": 0,
+          "generated": 1,
+          "depth": 0,
+          "work": 2,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "empty",
+        "states": 0,
+        "generated": 1,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "constraint-does-not-deadlock",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLimit == x = 0\nInit == x = 0\nNext == x' = x + 1\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTRAINT Limit",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 4,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "temporal-forall",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\A n \\in 0..1: <> (x = n)\nInit == x = 0\nNext == x' = 1 - x\n====",
+        "config": "INIT Init\nNEXT Next\nPROPERTY Live",
+        "expected": "liveness-violation"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "liveness-violation",
+          "reason": null,
+          "states": 2,
+          "generated": 3,
+          "depth": 1,
+          "work": 64,
+          "violation": {
+            "name": "Live",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "<stuttering>",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ],
+            "loopStart": 1,
+            "loopAction": "<stuttering>"
+          }
+        }
+      },
+      "native": {
+        "result": {
+          "status": "liveness-violation",
+          "reason": null,
+          "states": 2,
+          "generated": 3,
+          "depth": 1,
+          "work": 64,
+          "violation": {
+            "name": "Live",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "<stuttering>",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ],
+            "loopStart": 1,
+            "loopAction": "<stuttering>"
+          }
+        }
+      },
+      "reference": {
+        "status": "liveness-violation",
+        "states": 2,
+        "generated": 3,
+        "exit": 13
+      },
+      "witness": {
+        "input": {
+          "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\A n \\in 0..1: <> (x = n)\nInit == x = 0\nNext == x' = 1 - x\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (x = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 1 /\\ (x' = 0)) \\/ (__position = 1 /\\ __position' = 1 /\\ (x' = 0))) /\\ (Next \\/ UNCHANGED <<x>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<x,__position>> /\\ WF_<<x,__position>>(__TraceNext)\n__Expected == ~(Live)\n====",
+          "expected": "complete",
+          "config": "SPECIFICATION __TraceSpec\n\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+        },
+        "status": "complete",
+        "states": 2
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "temporal-exists",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\E n \\in 0..1: []<> (x = n)\nInit == x = 0\nNext == x' = 1 - x\n====",
+        "config": "INIT Init\nNEXT Next\nPROPERTY Live",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 3,
+          "depth": 1,
+          "work": 234,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 3,
+          "depth": 1,
+          "work": 234,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 2,
+        "generated": 3,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "temporal-forall-empty",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\A n \\in {}: <> FALSE\nInit == x = 0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nPROPERTY Live",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 10,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 10,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": null,
+        "generated": null,
+        "exit": 77
+      },
+      "differences": [
+        "verdict: complete != model-error"
+      ]
+    },
+    {
+      "input": {
+        "name": "temporal-exists-empty",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\E n \\in {}: <> TRUE\nInit == x = 0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nPROPERTY Live",
+        "expected": "liveness-violation"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "liveness-violation",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 25,
+          "violation": {
+            "name": "Live",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ],
+            "loopStart": 1,
+            "loopAction": "Next"
+          }
+        }
+      },
+      "native": {
+        "result": {
+          "status": "liveness-violation",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 25,
+          "violation": {
+            "name": "Live",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "action": "Next",
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ],
+            "loopStart": 1,
+            "loopAction": "Next"
+          }
+        }
+      },
+      "reference": {
+        "status": "liveness-violation",
+        "states": 1,
+        "generated": 2,
+        "exit": 13
+      },
+      "witness": {
+        "input": {
+          "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\E n \\in {}: <> TRUE\nInit == x = 0\nNext == UNCHANGED x\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (x = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 1 /\\ (x' = 0)) \\/ (__position = 1 /\\ __position' = 1 /\\ (x' = 0))) /\\ (Next \\/ UNCHANGED <<x>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<x,__position>> /\\ WF_<<x,__position>>(__TraceNext)\n__Expected == ~(Live)\n====",
+          "expected": "complete",
+          "config": "SPECIFICATION __TraceSpec\n\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+        },
+        "status": "model-error",
+        "states": null
+      },
+      "differences": [
+        "witness"
+      ]
+    },
+    {
+      "input": {
+        "name": "temporal-tuple",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\A <<a, b>> \\in {<<0, 1>>}: [] (x = a) \\/ <> (x = b)\nInit == x = 0\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nPROPERTY Live",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 70,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 70,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "temporal-fair",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nLive == \\A n \\in 0..1: <> (x = n)\nSpec == Init /\\ [][Next]_x /\\ WF_x(Next)\nInit == x = 0\nNext == x' = 1 - x\n====",
+        "config": "SPECIFICATION Spec\nPROPERTY Live",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 3,
+          "depth": 1,
+          "work": 186,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 3,
+          "depth": 1,
+          "work": 186,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "input-error",
+        "states": null,
+        "generated": null,
+        "exit": 150
+      },
+      "differences": [
+        "verdict: complete != input-error"
+      ]
+    },
+    {
+      "input": {
+        "name": "model-untyped",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nCONSTANT Nodes\nSafe == x \\in Nodes\nInit == x \\in Nodes\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTANT Nodes = {alice, bob}\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 4,
+          "depth": 0,
+          "work": 16,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 4,
+          "depth": 0,
+          "work": 16,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 2,
+        "generated": 4,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "model-typed",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nCONSTANT Nodes\nSafe == x \\in Nodes\nInit == x \\in Nodes\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTANT Nodes = {p_1, p_2}\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 4,
+          "depth": 0,
+          "work": 16,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 2,
+          "generated": 4,
+          "depth": 0,
+          "work": 16,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 2,
+        "generated": 4,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "model-string-distinct",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nCONSTANT Nodes\nSafe == x # \"alice\"\nInit == x \\in Nodes\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTANT Nodes = {alice}\nINVARIANT Safe",
+        "expected": "complete"
+      },
+      "classification": "compared",
+      "ours": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 8,
+          "violation": null
+        }
+      },
+      "native": {
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 8,
+          "violation": null
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 1,
+        "generated": 2,
+        "exit": 0
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "model-typed-error",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nCONSTANT Nodes\nSafe == x # 1\nInit == x \\in Nodes\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTANT Nodes = {p_1}\nINVARIANT Safe",
+        "expected": "model-error",
+        "error": "model"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Incomparable typed model values"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Incomparable typed model values"
+        }
+      },
+      "reference": {
+        "status": "model-error",
+        "states": 1,
+        "generated": 1,
+        "exit": 75
+      },
+      "differences": []
+    },
+    {
+      "input": {
+        "name": "model-typed-different",
+        "family": "graph",
+        "source": "---- MODULE Differential ----\nEXTENDS Integers, FiniteSets, Sequences\nVARIABLE x\nCONSTANT Nodes\nSafe == TRUE\nInit == x \\in Nodes\nNext == UNCHANGED x\n====",
+        "config": "INIT Init\nNEXT Next\nCONSTANT Nodes = {p_1, q_1}\nINVARIANT Safe",
+        "expected": "model-error",
+        "error": "model"
+      },
+      "classification": "compared",
+      "ours": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Incomparable typed model values"
+        }
+      },
+      "native": {
+        "error": {
+          "phase": "check",
+          "code": "protocol",
+          "message": "Incomparable typed model values"
+        }
+      },
+      "reference": {
+        "status": "complete",
+        "states": 2,
+        "generated": 4,
+        "exit": 0
+      },
+      "differences": [
+        "verdict: model-error != complete"
+      ]
+    }
+  ]
+}

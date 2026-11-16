@@ -72,13 +72,13 @@ maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが�
 
 root module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
 
-sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。model value は従来どおり未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
+sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
 primed variable は、同じ分岐で代入した後に読み取る。部分的な関数更新を左辺に置く式から、未代入の変数を逆算しない。ENABLED は列挙可能な action に限り、fairness の subscript は候補ごとに評価できる必要がある。未代入の next variable に任意の値を補わない。
 
 設定は INIT / NEXT または SPECIFICATION に、INVARIANT / PROPERTY / CONSTANT / CHECK_DEADLOCK を組み合わせる。SPECIFICATION は初期述語、全 state variable を列挙した subscript の `[][Next]_vars`、WF / SF の連言を扱う。PROPERTY は state / action predicate、論理結合、always / eventually / leads-to を扱う。action を含む一般の temporal property は `[]<>A` / `<>[]A` の範囲に限る。定数の ASSUME も確認する。
 
-selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。INSTANCE・ユーザーモジュール、一般の高階・再帰 operator、model value、無限集合の列挙、temporal quantification、symmetry、state/action constraint は未対応。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
+selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。INSTANCE・ユーザーモジュール、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、symmetry、VIEW は未対応。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
 
 frontend の上限は、変数256、分岐4096、分岐あたり256 step、展開深さ40、bound variable 40。実行側も IR のフィールド・参照・式を検証する。複合値の深さは64で、それを超える state の生成はエラー。探索中は状態と親 index を保存し、temporal property がある場合だけ遷移グラフも保存する。
 
@@ -120,3 +120,5 @@ just complex-tlc-replay /path/to/java /path/to/tla2tools.jar .artifacts/complex-
 [0012〜0014 の評価結果](../evals/iterations/0012-collections-temporal.md) に、対応検査と性能の改善・未達条件を記録している。`safety-eval` の既定 plan は0014で、任意の既存 plan を第2引数に指定できる。
 
 [TLCとの直接差分検査](../evals/iterations/0015-tlc-differential.md) で、空区間の所属、部分集合の短絡、型集合の評価順、文字列演算を修正した。文字列の Head / Append はこの TLC version の動作に従う。TLA+ source の文字列 literal はこの版の字句範囲に限定し、範囲外の文字は frontend が拒否する。UTF-16 の途中で surrogate pair を分割する結果は portable string として表現せずエラーにする。
+
+Rust frontendとrtlcの追加対応は[crateのチェックリスト](../crates/rtla-compiler/SUPPORT.md)を参照。model value、有限CHOOSE、整数の\div / % / ^、CONSTRAINT / ACTION_CONSTRAINT、PROPERTY内の定数有限domain上の時間論理量化を扱う。既存TS frontendの対応範囲とは区別する。

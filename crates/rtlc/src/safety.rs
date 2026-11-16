@@ -193,10 +193,20 @@ impl<'program> Search<'program> {
                 ));
             }
         }
-        for predicate in &program.action_properties {
+        for predicate in program
+            .action_properties
+            .iter()
+            .chain(&program.action_constraints)
+        {
             predicate
                 .expression
                 .validate(program.variables.len(), 1, 0)?;
+            arena.register_memberships(&predicate.expression);
+        }
+        for predicate in &program.constraints {
+            predicate
+                .expression
+                .validate(program.variables.len(), 2, 0)?;
             arena.register_memberships(&predicate.expression);
         }
         for property in &program.properties {
@@ -388,6 +398,65 @@ impl<'program> Search<'program> {
     ) -> Result<(), CoreError> {
         let hash = get_hash(values)?;
         self.result.generated += 1;
+        if !self.program.constraints.is_empty()
+            || (parent.is_some() && !self.program.action_constraints.is_empty())
+        {
+            let current: Vec<_> = values.iter().flatten().copied().collect();
+            let mut in_model = true;
+            for predicate in &self.program.constraints {
+                if !predicate
+                    .expression
+                    .eval(EvalContext::new(&current, &[]), arena)?
+                    .boolean()?
+                {
+                    in_model = false;
+                    break;
+                }
+            }
+            if in_model && let Some(parent) = parent {
+                for predicate in &self.program.action_constraints {
+                    if !predicate
+                        .expression
+                        .eval(EvalContext::new(self.store.state(parent), values), arena)?
+                        .boolean()?
+                    {
+                        in_model = false;
+                        break;
+                    }
+                }
+            }
+            if !in_model {
+                if parent.is_some_and(|index| self.nodes[index].depth >= self.bounds.max_depth) {
+                    self.result.status = "bounded".into();
+                    self.result.reason = Some("depth".into());
+                    return Ok(());
+                }
+                if let Some((status, name)) =
+                    check_properties(self.program, &current, parent, &self.store, true, arena)?
+                {
+                    let mut trace = parent
+                        .map(|index| self.trace(index, arena))
+                        .transpose()?
+                        .unwrap_or_default();
+                    trace.push(SafetyTraceStep {
+                        action: parent.map(|_| self.program.next[action].name.clone()),
+                        values: current
+                            .iter()
+                            .map(|value| arena.portable(*value))
+                            .collect::<Result<_, _>>()?,
+                    });
+                    self.result.status = status.into();
+                    self.result.reason = None;
+                    self.result.violation = Some(SafetyViolation {
+                        name: name.into(),
+                        trace,
+                        loop_start: None,
+                        loop_action: None,
+                    });
+                }
+                return Ok(());
+            }
+        }
         let existing = self.store.find(hash, values);
         let index = if let Some(index) = existing {
             index
@@ -426,61 +495,40 @@ impl<'program> Search<'program> {
         } else if !self.roots.contains(&index) {
             self.roots.push(index);
         }
-        if existing.is_none() {
-            let violation = check_invariants(self.program, self.store.state(index), arena)?;
-            if let Some(predicate) = violation {
-                self.result.status = "invariant-violation".into();
-                self.result.reason = None;
-                self.result.violation = Some(SafetyViolation {
-                    name: self.program.invariants[predicate].name.clone(),
-                    trace: self.trace(index, arena)?,
-                    loop_start: None,
-                    loop_action: None,
+        let checks_candidate = (existing.is_none() && !self.program.invariants.is_empty())
+            || if parent.is_some() {
+                !self.program.action_properties.is_empty()
+            } else {
+                !self.program.initial_properties.is_empty()
+            };
+        if checks_candidate
+            && let Some((status, name)) = check_properties(
+                self.program,
+                self.store.state(index),
+                parent,
+                &self.store,
+                existing.is_none(),
+                arena,
+            )?
+        {
+            let trace = if let Some(parent) = parent {
+                let mut trace = self.trace(parent, arena)?;
+                trace.push(SafetyTraceStep {
+                    action: Some(self.program.next[action].name.clone()),
+                    values: self.portable(index, arena)?,
                 });
-                return Ok(());
-            }
-        }
-        if let Some(parent) = parent {
-            for predicate in &self.program.action_properties {
-                if !predicate
-                    .expression
-                    .eval(EvalContext::new(self.store.state(parent), values), arena)?
-                    .boolean()?
-                {
-                    let mut trace = self.trace(parent, arena)?;
-                    trace.push(SafetyTraceStep {
-                        action: Some(self.program.next[action].name.clone()),
-                        values: self.portable(index, arena)?,
-                    });
-                    self.result.status = "property-violation".into();
-                    self.result.reason = None;
-                    self.result.violation = Some(SafetyViolation {
-                        name: predicate.name.clone(),
-                        trace,
-                        loop_start: None,
-                        loop_action: None,
-                    });
-                    return Ok(());
-                }
-            }
-        } else {
-            for predicate in &self.program.initial_properties {
-                if !predicate
-                    .expression
-                    .eval(EvalContext::new(self.store.state(index), &[]), arena)?
-                    .boolean()?
-                {
-                    self.result.status = "property-violation".into();
-                    self.result.reason = None;
-                    self.result.violation = Some(SafetyViolation {
-                        name: predicate.name.clone(),
-                        trace: self.trace(index, arena)?,
-                        loop_start: None,
-                        loop_action: None,
-                    });
-                    return Ok(());
-                }
-            }
+                trace
+            } else {
+                self.trace(index, arena)?
+            };
+            self.result.status = status.into();
+            self.result.reason = None;
+            self.result.violation = Some(SafetyViolation {
+                name: name.into(),
+                trace,
+                loop_start: None,
+                loop_action: None,
+            });
         }
         Ok(())
     }
@@ -511,18 +559,49 @@ impl<'program> Search<'program> {
     }
 }
 
-fn check_invariants(
-    program: &SafetyProgram,
+fn check_properties<'a>(
+    program: &'a SafetyProgram,
     values: &[Scalar],
+    parent: Option<usize>,
+    store: &StateStore,
+    is_new: bool,
     arena: &mut Arena,
-) -> Result<Option<usize>, CoreError> {
-    for (index, predicate) in program.invariants.iter().enumerate() {
-        if !predicate
-            .expression
-            .eval(EvalContext::new(values, &[]), arena)?
-            .boolean()?
-        {
-            return Ok(Some(index));
+) -> Result<Option<(&'static str, &'a str)>, CoreError> {
+    if is_new {
+        for predicate in &program.invariants {
+            if !predicate
+                .expression
+                .eval(EvalContext::new(values, &[]), arena)?
+                .boolean()?
+            {
+                return Ok(Some(("invariant-violation", &predicate.name)));
+            }
+        }
+    }
+    if let Some(parent) = parent {
+        if program.action_properties.is_empty() {
+            return Ok(None);
+        }
+        let parent = store.state(parent);
+        let next: Vec<_> = values.iter().copied().map(Some).collect();
+        for predicate in &program.action_properties {
+            if !predicate
+                .expression
+                .eval(EvalContext::new(parent, &next), arena)?
+                .boolean()?
+            {
+                return Ok(Some(("property-violation", &predicate.name)));
+            }
+        }
+    } else {
+        for predicate in &program.initial_properties {
+            if !predicate
+                .expression
+                .eval(EvalContext::new(values, &[]), arena)?
+                .boolean()?
+            {
+                return Ok(Some(("property-violation", &predicate.name)));
+            }
         }
     }
     Ok(None)
