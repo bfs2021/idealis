@@ -1,0 +1,13 @@
+cargo build --release --locked --manifest-path evals/sat-foundation/rust/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.03s
+cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/sat-foundation/rust/Cargo.toml
+    Finished `release` profile [optimized] target(s) in 0.03s
+pnpm exec playwright test --config sat-playwright.config.ts
+
+Running 1 test using 1 worker
+
+(node:88101) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 evals/sat-foundation/browser.spec.ts:8:1 › Varisat solves CNF in Chromium without host imports or isolation (479ms)
+
+  1 passed (926ms)

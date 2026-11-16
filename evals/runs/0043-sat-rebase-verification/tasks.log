@@ -1,0 +1,145 @@
+Available recipes:
+    alloy-browser
+    alloy-instance-eval phase run java jar parent=""
+    alloy-instance-replay run
+    alloy-test
+    apalache-eval run java jar
+    apalache-test
+    async-build
+    async-eval phase run parent=""
+    async-replay run
+    async-test
+    backend-eval run
+    backend-test
+    browser
+    check
+    checker-bench java jar archive run
+    checker-bench-replay java jar archive saved run
+    checker-bench-test
+    compiler-eval run
+    compiler-test
+    compiler-tlc run java jar
+    complex-eval run parent=""
+    complex-replay run
+    complex-tlc java jar run
+    complex-tlc-replay java jar run
+    controlled-browser
+    controlled-build
+    controlled-eval phase run parent=""
+    controlled-replay run
+    controlled-test
+    criterion-compare run
+    criterion-controls run
+    criterion-prepare
+    criterion-replay saved run
+    criterion-save stage run
+    criterion-test
+    cross-build
+    cross-eval phase run parent=""
+    cross-replay run
+    cross-test
+    default
+    demo
+    eval-loop
+    evaluate
+    frontier-budget-eval java jar archive run
+    frontier-budget-replay java jar archive saved run
+    frontier-safety-eval java jar archive run
+    frontier-safety-replay java jar archive saved run
+    frontier-safety-test
+    fuzz-browser
+    fuzz-build
+    fuzz-eval phase run parent=""
+    fuzz-replay run
+    fuzz-test
+    go-test
+    install
+    mutation
+    package
+    parallel-safety-eval run
+    parallel-safety-replay saved run
+    parallel-safety-test
+    portable-build
+    portable-eval
+    portable-replay run
+    portable-test
+    profile-criterion stage run
+    profile-record backend binary run
+    profile-replay saved run
+    profile-scalar run
+    profile-summary saved run
+    profile-test
+    ralloy-browser
+    ralloy-build
+    ralloy-contract
+    ralloy-eval phase run java jar parent=""
+    ralloy-example
+    ralloy-replay run
+    ralloy-test
+    readme-bench java jar archive run
+    readme-bench-replay java jar archive saved run
+    readme-bench-test java jar
+    replay-evaluation
+    replay-loop
+    rsmt-build
+    rsmt-compare run baseline
+    rsmt-criterion
+    rsmt-example
+    rsmt-test
+    rtla-browser
+    rtla-build
+    rtla-eval run java jar
+    rtla-test
+    rtlc-compare run
+    rtlc-example
+    rtlc-test
+    runtime-build
+    runtime-eval
+    runtime-test
+    safety-build
+    safety-eval run plan="0014-value-hash"
+    safety-replay run
+    safety-test
+    safety-tlc java jar
+    sat-browser
+    sat-build
+    sat-eval phase run parent=""
+    sat-replay run
+    sat-test
+    single-model-eval java jar archive run
+    single-model-replay java jar archive saved run
+    single-model-test java jar
+    smt-bench run z3
+    smt-browser
+    smt-build
+    smt-criterion
+    smt-expansion-eval phase run baseline parent=""
+    smt-expansion-replay run
+    smt-expansion-test                                # SMT expression and context expansion against Z3.
+    smt-script-eval phase run baseline parent=""
+    smt-script-replay run
+    smt-script-test                                   # SMT-LIB scripts, ordered queries and a shared work budget.
+    smt-test
+    smt-tuning-build                                  # Fixed SMT benchmarks and immutable before/after binaries.
+    smt-tuning-capture binary output
+    smt-tuning-compare before after confirmation after_before run
+    smt-tuning-criterion stage provenance run
+    smt-tuning-eval phase run baseline parent=""
+    smt-tuning-replay run
+    smt-verify phase run parent=""
+    test
+    testing-browser
+    testing-build
+    testing-core-test
+    testing-eval phase run parent=""
+    testing-example
+    testing-replay run
+    testing-test
+    tlc-diff java jar phase run
+    tlc-diff-replay java jar saved run
+    tlc-throughput java jar archive run
+    tlc-throughput-replay java jar archive saved run
+    usable-benchmark input output
+    usable-eval
+    usable-replay run
+    usable-test
