@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Counter",
+    "property": "safety",
+    "status": "complete",
+    "states": 4,
+    "generated": 5,
+    "tlaSha256": "f615abfb93666871e27956e77ac3f9d761b3c6564a0dd024e96b9cd0596eebeb",
+    "configSha256": "d5a8dccd3561e04d25e0aace190e7e27a65cb105e2bb87b3aef8b56bf37071c9",
+    "logSha256": "bdd2d65c47ba03d2737570e2d15c63a2fc5b6938c3e0e35b25e295ad36b145a1"
+  },
+  {
+    "name": "Counter",
+    "property": "broken",
+    "status": "invariant-violation",
+    "states": 3,
+    "generated": 3,
+    "tlaSha256": "f615abfb93666871e27956e77ac3f9d761b3c6564a0dd024e96b9cd0596eebeb",
+    "configSha256": "6fa71bc35b6afc74ffb1676fab1d3502fb9d209721aaf9fe2ece7c9da6583195",
+    "logSha256": "56b261fb444bf9801c59521baf6da95d07a76f30805f66d5becfa8ab6ac5d3ca"
+  },
+  {
+    "name": "SetFold",
+    "property": "safety",
+    "status": "complete",
+    "states": 1,
+    "generated": 2,
+    "tlaSha256": "c478e170660b4827b0562dac8f1f6df30b1a5609eb852459b39ddcc94101cd12",
+    "configSha256": "d5a8dccd3561e04d25e0aace190e7e27a65cb105e2bb87b3aef8b56bf37071c9",
+    "logSha256": "59520d91c8056c9d4bb85bfa21b6739dc478401114f7bb20af163ad3a6fed9a6"
+  },
+  {
+    "name": "SetFold",
+    "property": "broken",
+    "status": "invariant-violation",
+    "states": null,
+    "generated": null,
+    "tlaSha256": "c478e170660b4827b0562dac8f1f6df30b1a5609eb852459b39ddcc94101cd12",
+    "configSha256": "6fa71bc35b6afc74ffb1676fab1d3502fb9d209721aaf9fe2ece7c9da6583195",
+    "logSha256": "893baee7805d70316f1d7c73d9426e8bd0edc279e6008d77f7ad2a633935f058"
+  },
+  {
+    "name": "SequenceFold",
+    "property": "safety",
+    "status": "complete",
+    "states": 1,
+    "generated": 2,
+    "tlaSha256": "bf36b83c1dcbb09ecb92db48670a20c57bbed8854e5b0e8d4f650ac30bfbe3f3",
+    "configSha256": "d5a8dccd3561e04d25e0aace190e7e27a65cb105e2bb87b3aef8b56bf37071c9",
+    "logSha256": "84dde81a624d36bd707258ab18c7733b1d5366a2bef9476ed91d4116712fc7ef"
+  },
+  {
+    "name": "SequenceFold",
+    "property": "broken",
+    "status": "invariant-violation",
+    "states": null,
+    "generated": null,
+    "tlaSha256": "bf36b83c1dcbb09ecb92db48670a20c57bbed8854e5b0e8d4f650ac30bfbe3f3",
+    "configSha256": "6fa71bc35b6afc74ffb1676fab1d3502fb9d209721aaf9fe2ece7c9da6583195",
+    "logSha256": "5646f0e92d290916c1772d6b303ec9514cef9d8acb95ed40a47b6c7c25b8d481"
+  },
+  {
+    "name": "Choice",
+    "property": "safety",
+    "status": "complete",
+    "states": 3,
+    "generated": 10,
+    "tlaSha256": "47025cc4b360930a733b388b58f3571357c952308dace2b435a444654dec0a98",
+    "configSha256": "d5a8dccd3561e04d25e0aace190e7e27a65cb105e2bb87b3aef8b56bf37071c9",
+    "logSha256": "5c8ad9b47e2fdc026d4d9220a5c768677b3a012fabb7a2614cd5f1efaf8b9382"
+  },
+  {
+    "name": "Choice",
+    "property": "broken",
+    "status": "invariant-violation",
+    "states": 3,
+    "generated": 4,
+    "tlaSha256": "47025cc4b360930a733b388b58f3571357c952308dace2b435a444654dec0a98",
+    "configSha256": "6fa71bc35b6afc74ffb1676fab1d3502fb9d209721aaf9fe2ece7c9da6583195",
+    "logSha256": "5fa2130336d98b38be308cf176b7d45dbbc7b6e069084d5f51b38bc358c403d5"
+  },
+  {
+    "name": "Match",
+    "property": "safety",
+    "status": "complete",
+    "states": 3,
+    "generated": 4,
+    "tlaSha256": "aedb9b150b488da14f487e77ce39de0db0964e992d2e648d47e793220c97197f",
+    "configSha256": "d5a8dccd3561e04d25e0aace190e7e27a65cb105e2bb87b3aef8b56bf37071c9",
+    "logSha256": "375a38063a81ee4199de6f0ecf183fecca97e34ca20f83277baba15cb320ecf2"
+  },
+  {
+    "name": "Match",
+    "property": "broken",
+    "status": "invariant-violation",
+    "states": 3,
+    "generated": 3,
+    "tlaSha256": "aedb9b150b488da14f487e77ce39de0db0964e992d2e648d47e793220c97197f",
+    "configSha256": "6fa71bc35b6afc74ffb1676fab1d3502fb9d209721aaf9fe2ece7c9da6583195",
+    "logSha256": "9cc63d228bda2ae2abd870672bf8700fb73f5b38ca283c27fea4432e0a8bae8d"
+  },
+  {
+    "name": "NestedFold",
+    "property": "safety",
+    "status": "complete",
+    "states": 1,
+    "generated": 2,
+    "tlaSha256": "e8dbe4e7720ce8da38d4196e8aa0ae7f52c89aa2ababb0db31dc696a8ab93199",
+    "configSha256": "d5a8dccd3561e04d25e0aace190e7e27a65cb105e2bb87b3aef8b56bf37071c9",
+    "logSha256": "6db0e3af299ee95ef8415630768dce5e36732f180cd7be82178cf23d8df56794"
+  },
+  {
+    "name": "NestedFold",
+    "property": "broken",
+    "status": "invariant-violation",
+    "states": null,
+    "generated": null,
+    "tlaSha256": "e8dbe4e7720ce8da38d4196e8aa0ae7f52c89aa2ababb0db31dc696a8ab93199",
+    "configSha256": "6fa71bc35b6afc74ffb1676fab1d3502fb9d209721aaf9fe2ece7c9da6583195",
+    "logSha256": "ab2c768b1891283bd8511f2b35e206601eaaf78b6c7def0324071a929508675a"
+  }
+]

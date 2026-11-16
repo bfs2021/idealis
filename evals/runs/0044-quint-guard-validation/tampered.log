@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '0f03ad2906033e92f9dd9cfc969db1c6cd82e42439a511455c6da303d37fa2a3'
+- 'cd2bb34542df77d2d4b268b81ad4616c9d735425214d6e6dc30a3ebee3a1e7a8'
+
+    at file:///Users/mz/ghq/github.com/mizchi/idealis/dist/evals/quint-generated/run.js:70:16 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '0f03ad2906033e92f9dd9cfc969db1c6cd82e42439a511455c6da303d37fa2a3',
+  expected: 'cd2bb34542df77d2d4b268b81ad4616c9d735425214d6e6dc30a3ebee3a1e7a8',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.2

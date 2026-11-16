@@ -16,4 +16,6 @@ TLCとの最初のpilotは、初期状態のinvariant違反ではTLCが状態数
 
 ソース`c59e098`を固定した[最終run](../runs/0044-quint-final/result.json)と[再生run](../runs/0044-quint-replay/result.json)も、同じsourceVersionとbinaryで12件・反例6件が成功した。再生ではnative/Wasmの全結果も保存値と完全一致した。[検証ログ](../runs/0044-quint-verification/manifest.json)にportable-test、check、browser、mutation、evaluate/replay-evaluation、safety-test、quint-testを保存した。既存compiler-evalは237入力・235受理・2拒否を維持した。Chromiumは新しい12入力を含め3テスト、保存fixtureは13テスト、safety回帰は211テストが通過した。
 
+再生の受理条件へ完了マーカー・証拠ファイルのdigest検査も加えた。[未完了と改変の対照](../runs/0044-quint-guard-validation/result.json)は、result.jsonのないrunとrecords.jsonの末尾へ1 byteを加えたrunを、モデル実行前に拒否した。受理条件を加えた[run](../runs/0044-quint-guarded/result.json)と[再生](../runs/0044-quint-guarded-replay/result.json)でも12件・反例6件が成功し、checkとevaluate/replay-evaluationも再確認した。
+
 採用するのは、この生成形式の有限fragmentをRust/native/Wasmで実行する経路。Quint言語全体やQuint ConnectのAPI・ITF、任意コードとの適合性、性能は今回の評価対象ではない。結果は人工的な固定モデルの互換性回帰であり、実プロジェクトの未知バグ発見とは数えない。

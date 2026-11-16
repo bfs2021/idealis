@@ -61,6 +61,25 @@ const previous: unknown = saved
   ? JSON.parse(await readFile(join(saved, "records.json"), "utf8"))
   : null;
 if (saved) {
+  const completion: unknown = JSON.parse(
+    await readFile(join(saved, "result.json"), "utf8"),
+  );
+  assert.ok(isRecord(completion) && completion.status === "complete");
+  assert.ok(Array.isArray(completion.files));
+  assert.deepEqual(
+    completion.files
+      .map((file: unknown) => {
+        assert.ok(isRecord(file));
+        return file.path;
+      })
+      .sort(),
+    ["manifest.json", "oracle.json", "records.json"],
+  );
+  for (const file of completion.files) {
+    assert.ok(isRecord(file) && typeof file.path === "string");
+    assert.equal(digest(await readFile(join(saved, file.path))), file.sha256);
+  }
+  assert.equal(completion.sourceVersion, sourceVersion);
   const manifest: unknown = JSON.parse(
     await readFile(join(saved, "manifest.json"), "utf8"),
   );
