@@ -16,6 +16,10 @@ impl std::fmt::Display for CompileError {
 }
 impl std::error::Error for CompileError {}
 type Result<T> = std::result::Result<T, CompileError>;
+fn unmatched_case(location: &ast::Location) -> Json {
+    json!({"op":"unmatched-case","location":format!("line {}, column {}", location.line, location.column)})
+}
+
 fn unsupported<T>(message: impl Into<String>) -> Result<T> {
     Err(CompileError {
         message: message.into(),
@@ -756,11 +760,8 @@ impl Compiler<'_> {
                 Ok(result)
             }
             E::Case { arms, other: None } if !arms.is_empty() => {
-                let (last, rest) = arms.split_last().ok_or_else(|| CompileError {
-                    message: "empty CASE".into(),
-                })?;
-                let mut result = self.expression(&last.body, &child)?;
-                for arm in rest.iter().rev() {
+                let mut result = unmatched_case(&value.location);
+                for arm in arms.iter().rev() {
                     result = json!({"op":"if","condition":self.expression(&arm.condition,&child)?,"consequent":self.expression(&arm.body,&child)?,"alternative":result});
                 }
                 Ok(result)
@@ -1182,17 +1183,21 @@ impl Compiler<'_> {
                     previous.push(condition);
                     result = limited(result)?;
                 }
+                let guards: Vec<Json> = previous
+                    .iter()
+                    .map(|earlier| json!({"kind":"guard","expression":{"op":"not","argument":earlier}}))
+                    .collect();
                 if let Some(other) = other {
-                    let guards: Vec<Json> = previous
-                        .iter()
-                        .map(|earlier| json!({"kind":"guard","expression":{"op":"not","argument":earlier}}))
-                        .collect();
                     for mut branch in self.action(other, &child, name)? {
                         let mut joined = guards.clone();
                         joined.extend(steps(&branch)?.clone());
                         branch["steps"] = json!(joined);
                         result.push(branch);
                     }
+                } else {
+                    let mut joined = guards;
+                    joined.push(json!({"kind":"guard","expression":unmatched_case(&value.location)}));
+                    result.push(json!({"name":name,"steps":joined}));
                 }
                 limited(result)
             }

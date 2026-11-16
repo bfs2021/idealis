@@ -70,6 +70,9 @@ pub enum Expression {
         order: FoldOrder,
         body: Box<Self>,
     },
+    UnmatchedCase {
+        location: String,
+    },
     Domain {
         argument: Box<Self>,
     },
