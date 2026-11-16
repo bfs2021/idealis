@@ -1,6 +1,31 @@
 default:
   @just --list
 
+fuzz-build: testing-build
+  cargo build --release --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
+  cargo +nightly-2026-08-27 metadata --locked --format-version 1 --manifest-path evals/structured-fuzz/fuzz/Cargo.toml > /dev/null
+  cargo +nightly-2026-08-27 fuzz build --sanitizer address --fuzz-dir evals/structured-fuzz/fuzz
+
+fuzz-test: fuzz-build
+  cargo fmt --manifest-path evals/structured-fuzz/rust/Cargo.toml -- --check
+  cargo fmt --manifest-path evals/structured-fuzz/fuzz/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
+  pnpm build
+  node --test dist/evals/structured-fuzz/contract-test.js
+  pnpm exec vitest run --config fuzz-vitest.config.ts
+
+fuzz-browser:
+  pnpm exec playwright test --config fuzz-playwright.config.ts
+
+fuzz-eval phase run parent="": fuzz-build
+  pnpm build
+  node dist/evals/structured-fuzz/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
+
+fuzz-replay run:
+  pnpm build
+  node dist/evals/structured-fuzz/replay.js {{quote(run)}}
+
 controlled-build: testing-build
   cargo build --release --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
   cargo build --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
