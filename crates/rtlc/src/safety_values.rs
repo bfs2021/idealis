@@ -4,7 +4,7 @@ use crate::safety_expressions::MembershipSet;
 use crate::safety_work::WorkBudget;
 use crate::{CoreError, Value};
 use std::cmp::Ordering;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::hash::{BuildHasherDefault, Hash, Hasher};
 use std::sync::Arc;
 
@@ -590,32 +590,32 @@ impl<'scope> Arena<'scope> {
             _ => Err(CoreError::protocol("Expected a finite set")),
         }
     }
-    pub fn fold_members(&self, value: Scalar) -> Result<Vec<Scalar>, CoreError> {
+    pub fn fold_members(&mut self, value: Scalar) -> Result<Vec<Scalar>, CoreError> {
         let members = self.members(value)?;
-        for member in &members {
-            self.check_fold_order(*member)?;
-        }
+        self.check_fold_order(&members)?;
         Ok(members)
     }
-    fn check_fold_order(&self, value: Scalar) -> Result<(), CoreError> {
-        if let Scalar::Ref(_) = value {
-            match self.cell(value)? {
-                Cell::String(_) => return Err(unsupported_fold_order()),
-                Cell::Set(values) => {
-                    for value in values {
-                        self.check_fold_order(*value)?;
-                    }
+    fn check_fold_order(&mut self, values: &[Scalar]) -> Result<(), CoreError> {
+        let mut pending: Vec<_> = values.iter().rev().copied().collect();
+        let mut visited = HashSet::new();
+        while let Some(value) = pending.pop() {
+            if let Scalar::Ref(index) = value {
+                if !visited.insert(index) {
+                    continue;
                 }
-                Cell::Function(entries) => {
-                    if !entries
-                        .iter()
-                        .enumerate()
-                        .all(|(index, entry)| entry.0 == Scalar::Int((index + 1) as i32))
-                    {
-                        return Err(unsupported_fold_order());
-                    }
-                    for (_, value) in entries {
-                        self.check_fold_order(*value)?;
+                self.tick()?;
+                match self.cell(value)? {
+                    Cell::String(_) => return Err(unsupported_fold_order()),
+                    Cell::Set(values) => pending.extend(values.iter().rev().copied()),
+                    Cell::Function(entries) => {
+                        if !entries
+                            .iter()
+                            .enumerate()
+                            .all(|(index, entry)| entry.0 == Scalar::Int((index + 1) as i32))
+                        {
+                            return Err(unsupported_fold_order());
+                        }
+                        pending.extend(entries.iter().rev().map(|(_, value)| *value));
                     }
                 }
             }
@@ -810,6 +810,26 @@ mod tests {
     use super::{Arena, Cell, ValueHasher};
     use crate::ir::Scalar;
     use std::hash::{Hash, Hasher};
+
+    #[test]
+    fn fold_order_visits_shared_cells_once_per_call_and_obeys_the_work_budget() {
+        let mut arena = Arena::new(150);
+        let mut deep = Scalar::Int(0);
+        for _ in 0..48 {
+            deep = arena.tuple(vec![deep, deep]).unwrap();
+        }
+        let first = arena.tuple(vec![Scalar::Int(1), deep]).unwrap();
+        let second = arena.tuple(vec![Scalar::Int(2), deep]).unwrap();
+        let members = arena.set(vec![first, second]).unwrap();
+        let before = arena.work;
+        let result = arena.fold_members(members);
+        assert_eq!(arena.work - before, 50);
+        assert_eq!(result.unwrap(), vec![first, second]);
+        let error = arena.fold_members(members).unwrap_err();
+        assert_eq!(error.code, "budget");
+        assert_eq!(error.message, "Safety work budget exhausted");
+        assert_eq!(arena.work, 150);
+    }
 
     #[cfg(not(target_arch = "wasm32"))]
     #[test]
