@@ -1,0 +1,95 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "cases": [
+    {
+      "name": "case-first-true",
+      "sourceSha256": "bb1139eea4b6b811c6e3ebe54267258518e844c4fabfb5e5c55942089618c557",
+      "configSha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375",
+      "log": "case-first-true.log",
+      "logSha256": "2af47bd52e9e310daeaf10d7a293bc32500c7e0bc351321f44230a64ca7cfce9",
+      "exit": 0,
+      "status": "success",
+      "states": 3,
+      "generated": 4
+    },
+    {
+      "name": "case-expression-no-match",
+      "sourceSha256": "bcc0c9f10bc667af96354fd0df21653aa33dbc49aa515d2180b1edc12804e6bd",
+      "configSha256": "701a90a016c71eb0e17dc6f79c3717e9a9f9697848687772f776ac731d37cab9",
+      "log": "case-expression-no-match.log",
+      "logSha256": "77042bac8b84369607348e56ea88f95760d188798a25c32b41a97908853a8e01",
+      "exit": 75,
+      "status": "error",
+      "message": "CASE with no conditions true",
+      "location": "line 3, column 13"
+    },
+    {
+      "name": "case-action-no-match",
+      "sourceSha256": "b2fb8acbdb5f7aed415c3e9b730ccf30c715e3ab91efbf86f168c097f0ae1c09",
+      "configSha256": "701a90a016c71eb0e17dc6f79c3717e9a9f9697848687772f776ac731d37cab9",
+      "log": "case-action-no-match.log",
+      "logSha256": "0f2c41760aa418811d0652d6bfb3db05eed783ab0b1cdad2036f4fae06d92b00",
+      "exit": 75,
+      "status": "error",
+      "message": "CASE with no conditions true",
+      "location": "line 4, column 9"
+    },
+    {
+      "name": "case-unevaluated-branch",
+      "sourceSha256": "e81b78b988519429c6dddd85fb865ada4c70fcd56a46fe9ccbfd6177571c44bf",
+      "configSha256": "701a90a016c71eb0e17dc6f79c3717e9a9f9697848687772f776ac731d37cab9",
+      "log": "case-unevaluated-branch.log",
+      "logSha256": "b39c4359cf60bcae85928e17ebb61fbc887065505c4dafe58885440a0d154a9f",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "case-invariant-empty-init",
+      "sourceSha256": "8f933e769c0b6768d881f1fb41af01840736cd21f2bdb70caf076fe95c2bc01b",
+      "configSha256": "f25dabf142b9c5b8a4acde12edfbeb7596ca21ad16d1ee22a6275d98bc8074dd",
+      "log": "case-invariant-empty-init.log",
+      "logSha256": "8ebd62f7469b4e6f396611507ff6fb4691d52ef3af769b124d359e566d86e108",
+      "exit": 0,
+      "status": "empty",
+      "states": 0,
+      "generated": 0
+    },
+    {
+      "name": "case-action-other",
+      "sourceSha256": "be6964e0b124235c28cc1196b1015caed3b35fd4b2771eed26f8c5a822021d3d",
+      "configSha256": "701a90a016c71eb0e17dc6f79c3717e9a9f9697848687772f776ac731d37cab9",
+      "log": "case-action-other.log",
+      "logSha256": "9883690a034963dfd71b7db9a3405a1bde8fa94f95f65deaf23382d1e492733e",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "case-action-short-circuit",
+      "sourceSha256": "1b0e906fd2beee614f075f9ba9832e11aa7e907866e5dedc591a108fa4261aa1",
+      "configSha256": "701a90a016c71eb0e17dc6f79c3717e9a9f9697848687772f776ac731d37cab9",
+      "log": "case-action-short-circuit.log",
+      "logSha256": "480ae3e37cb9d3eb25e840884365655a6a47c441a4d511a39039c8f65def6439",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "case-action-unevaluated-branch",
+      "sourceSha256": "b865b67fdf192d6ddfd62456869c80c4e6bcffda43a7b614c71bd15082dacae1",
+      "configSha256": "701a90a016c71eb0e17dc6f79c3717e9a9f9697848687772f776ac731d37cab9",
+      "log": "case-action-unevaluated-branch.log",
+      "logSha256": "1a6afb6a3963a44989e05891d2dacd2d39c32ecd92e71443e51b0c2d51b606e7",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    }
+  ]
+}

@@ -305,6 +305,7 @@ export type SafetyExpression =
   | { readonly op: "data"; readonly value: PortableValue }
   | { readonly op: "bound"; readonly slot: number }
   | { readonly op: "old" }
+  | { readonly op: "unmatched-case"; readonly location: string }
   | {
       readonly op: "set" | "tuple";
       readonly values: readonly SafetyExpression[];

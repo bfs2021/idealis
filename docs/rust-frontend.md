@@ -51,6 +51,8 @@ native JSONLでは`{"version":1,"request":{"kind":"compile-tla","source":"…","
 
 整数はTLC 1.7.4に合わせたsigned 32 bit。未使用の定義・theoremの正しさは保証しない。既存の`compileTlaSafety`はtla-tsを使う独立したfrontendとして残しており、自動で切り替えない。
 
+CASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) に合わせて評価時に未一致エラーとソース位置を返す。未評価の分岐内のCASEではエラーにしない。両frontendで同じIRへ変換する。
+
 内部ではJSONのIR nodeを組み立て、型付きSafetyProgramへ変換する。今回の評価は意味の一致を確認するもので、TS frontendより高速という測定ではない。`complete`、`bounded`、`empty`の意味は従来と同じ。[backend契約](backend-contract.md)を使う場合も、検査対象・意味論・仮定のIDは呼び出し側で固定する。
 
 ## 検証

@@ -1,0 +1,24 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 118 and seed 8067231668791354170 with 1 worker on <cores> cores with 256MB heap and 64MB offheap memory [pid: <pid>] (<host>, MSBDiskFPSet, DiskStateQueue).
+Parsing file <capture>/Differential.tla
+Semantic processing of module Differential
+Starting... (<time>)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at <time>.
+Error: TLC threw an unexpected exception.
+This was probably caused by an error in the spec or model.
+See the User Output or TLC Console for clues to what happened.
+The exception was a java.lang.RuntimeException
+: In computing next states, TLC encountered a CASE with no conditions true.
+line 4, col 9 to line 4, col 47 of module Differential
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+x = 0
+
+Error: The error occurred when TLC was evaluating the nested
+expressions at the following positions:
+0. Line 4, column 9 to line 4, column 47 in Differential
+
+
+1 states generated, 1 distinct states found, 0 states left on queue.
+Finished in 00s at (<time>)

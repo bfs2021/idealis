@@ -14,6 +14,9 @@ pub enum Expression {
         slot: usize,
     },
     Old,
+    UnmatchedCase {
+        location: String,
+    },
     Set {
         values: Vec<Self>,
     },

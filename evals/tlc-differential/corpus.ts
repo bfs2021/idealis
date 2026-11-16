@@ -5,6 +5,7 @@ export interface Input {
   readonly config: string;
   readonly seed?: number;
   readonly expectedRejection?: true;
+  readonly goldenFrontendParity?: true;
 }
 export const seeds = { development: 0x15a1, confirmation: 0x15c3 } as const;
 const value = (name: string, expression: string): Input => ({
@@ -80,6 +81,65 @@ export const boundaries = (): readonly Input[] => [
       "\\E n \\in 0..1: IF n = 0 THEN TRUE ELSE Head(<<>>)",
     ],
   ].map(([name, expression]) => value(name ?? "", expression ?? "")),
+  {
+    name: "case-first-true",
+    goldenFrontendParity: true,
+    family: "graph",
+    source:
+      "---- MODULE Differential ----\nEXTENDS Naturals\nVARIABLE x\nInit == x = CASE FALSE -> 5 [] TRUE -> 0 [] TRUE -> 9\nNext == CASE x = 0 -> x' = 1 [] x = 1 -> x' = 2 [] TRUE -> UNCHANGED x [] TRUE -> x' = 9\nSafe == x < 3\n====",
+    config: "INIT Init\nNEXT Next\nINVARIANT Safe",
+  },
+  {
+    name: "case-expression-no-match",
+    goldenFrontendParity: true,
+    family: "control",
+    source:
+      "---- MODULE Differential ----\nVARIABLE x\nInit == x = CASE FALSE -> 1 [] FALSE -> 2\nNext == UNCHANGED x\n====",
+    config: "INIT Init\nNEXT Next",
+  },
+  {
+    name: "case-action-no-match",
+    goldenFrontendParity: true,
+    family: "control",
+    source:
+      "---- MODULE Differential ----\nVARIABLE x\nInit == x = 0\nNext == CASE x = 5 -> x' = 1 [] x = 6 -> x' = 2\n====",
+    config: "INIT Init\nNEXT Next",
+  },
+  {
+    name: "case-unevaluated-branch",
+    goldenFrontendParity: true,
+    family: "control",
+    source:
+      "---- MODULE Differential ----\nVARIABLE x\nInit == x = IF TRUE THEN 0 ELSE CASE FALSE -> 1\nNext == UNCHANGED x\n====",
+    config: "INIT Init\nNEXT Next",
+  },
+  {
+    name: "case-invariant-empty-init",
+    goldenFrontendParity: true,
+    family: "control",
+    source:
+      "---- MODULE Differential ----\nVARIABLE x\nInit == x \\in {}\nNext == UNCHANGED x\nInv == CASE FALSE -> TRUE\n====",
+    config: "INIT Init\nNEXT Next\nINVARIANT Inv",
+  },
+  ...[
+    ["case-action-other", "CASE FALSE -> x' = 9 [] OTHER -> UNCHANGED x"],
+    [
+      "case-action-short-circuit",
+      "CASE TRUE -> UNCHANGED x [] (Head(<<>>) = 0) -> x' = 9",
+    ],
+    [
+      "case-action-unevaluated-branch",
+      "IF TRUE THEN UNCHANGED x ELSE CASE FALSE -> x' = 9",
+    ],
+  ].map(
+    ([name, next]): Input => ({
+      name: name ?? "",
+      goldenFrontendParity: true,
+      family: "control",
+      source: `---- MODULE Differential ----\nEXTENDS Sequences\nVARIABLE x\nInit == x = 0\nNext == ${next}\n====`,
+      config: "INIT Init\nNEXT Next",
+    }),
+  ),
   {
     name: "positive-control",
     family: "control",

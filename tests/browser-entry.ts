@@ -6,7 +6,11 @@ import {
   createCounter,
 } from "../examples/durable-counter.js";
 import { checkConformance, checkModel, checkTrace } from "../src/index.js";
-import { checkSafety, createPortableWasm } from "../src/portable.js";
+import {
+  checkSafety,
+  compileTlaSource,
+  createPortableWasm,
+} from "../src/portable.js";
 import { checkProperty } from "../src/property.js";
 import { createSmtOracle } from "../src/smt.js";
 import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
@@ -84,6 +88,32 @@ export const run = async (): Promise<Record<string, unknown>> => {
   );
   if (text.status !== "complete" || text.states !== 3)
     throw new Error("Browser string operations differ");
+  const unmatchedCase = {
+    source:
+      "---- MODULE BrowserCase ----\nVARIABLE x\nInit == x = CASE FALSE -> 1\nNext == UNCHANGED x\n====",
+    config: "INIT Init\nNEXT Next",
+  };
+  for (const program of [
+    compileTlaSafety(unmatchedCase),
+    compileTlaSource(rust, unmatchedCase),
+  ]) {
+    let failed = false;
+    try {
+      checkSafety(rust, program, {
+        maxDepth: 4,
+        maxStates: 10,
+        maxWork: 1000,
+      });
+    } catch (error) {
+      if (
+        !(error instanceof Error) ||
+        !error.message.includes("CASE with no conditions true")
+      )
+        throw error;
+      failed = true;
+    }
+    if (!failed) throw new Error("Browser unmatched CASE did not fail");
+  }
   const smt = await createSmtOracle(api).solve(
     "(declare-const value Int) (assert (= value 7))",
     ["value"],

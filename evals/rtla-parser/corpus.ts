@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { isRecord } from "../../src/trace.js";
 import { cases } from "../collections-temporal/cases.js";
+import { boundaries } from "../tlc-differential/corpus.js";
 
 export interface Input {
   readonly name: string;
@@ -15,7 +16,7 @@ export const archived = [
   "evals/runs/0022-readme-comparison/cases.json",
 ];
 export const corpus = async (): Promise<readonly Input[]> => {
-  const inputs: Input[] = [...cases];
+  const inputs: Input[] = [...cases, ...boundaries()];
   for (const path of archived) {
     const saved: unknown = JSON.parse(await readFile(path, "utf8"));
     assert.ok(Array.isArray(saved));
