@@ -1,0 +1,62 @@
+{
+  "schema": "jev-lint-documents-1",
+  "snapshotDigest": "ebbb12c3d3360c576f1ea2287674373943f61c60a3c7ea2ccdf64117dd665c78",
+  "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
+  "model": "jev-1.14.0",
+  "snapshotChanged": false,
+  "status": "complete",
+  "qualityVerdict": "UNREVIEWED",
+  "candidates": [
+    {
+      "id": "idealis-testing-readme",
+      "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
+      "mode": "semantic",
+      "reference": {
+        "source": "source2",
+        "path": "crates/idealis-testing/README.md",
+        "startLine": 1,
+        "endLine": 43,
+        "quote": "# idealis-testing\n\n[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。\n\n有限状態機械からの操作列生成、削除による縮小、保存caseの再生、差分比較を行うRustライブラリ。serde/serde_jsonだけに依存し、同じ実装をnativeとホストimport不要のWasmで使う。SUTのI/Oやテストランナーはホストが担当する。alpha版で、registryには未公開。\n\n## セッションを駆動する\n\n`Session::property(Plan)`を作り、`effect()`を読む。Evaluateはcorrelation ID、phase、caseを持つ。ホストが新しいSUTを初期化してcase.actionsを実行し、`resume(id, verdict)`へ評価を返す。Doneが最終結果。Rustの呼び出し例は[examples/counter.rs](examples/counter.rs)を参照。\n\nVerdictはmatched、signature付きmismatch、invalid、reason付きunknown、message付きerror。mismatchを検出すると同じsignatureを保つ削除候補を検査し、最後に再現を確認する。unknownの候補がある場合、縮小をminimalと判定しない。異なるsignatureや非再現を成功へ変換しない。\n\n結果はpassed、failed、exhausted、inconclusive、error、not-failing。passedは指定した数の有効な正常caseを実行した意味で、モデルの完全探索ではない。invalidだけならexhausted、work不足ならinconclusive。縮小のminimalは、生成器が受理する列の中で単一削除しても同じ失敗を保持できない意味。予算で打ち切った縮小はboundedになる。scalar値の縮小は含めない。\n\n`Session::shrink(generator, case, max_checks, max_work)`は既知のcaseを縮小する。`Session::replay(case, expected_signature)`は保存したactionを使い、乱数から再生成しない。expected_signatureを指定した再生が失敗を再現しなければerrorになる。unknownや実行errorは別に保持する。\n\n## 生成器と保存形式\n\nGeneratorはid/version、初期状態、各状態のaction/target、minLength/maxLengthを持つ。最初に目標長、初期状態、遷移をxorshift32-v1で選ぶ。seedは1-2^32-1。終端へ到達するとそこで止め、minLengthに届かない生成はskipする。縮小候補は同じ有限状態機械と長さの条件を満たす必要がある。汎用Proptestやfast-checkのStrategyとseedの互換性は提供しない。\n\nCaseはformat=idealis.test-case、version=1、rng、generatorId/generatorVersion、seed/index、全actionsを持つ。モデルやDriverの版は評価側のmanifestへ固定する。JSONでは配列の順序を保持し、objectのfield順は比較に影響しない。数値はsafe integerに限り、任意精度整数・集合等はホストで既存のPortableValueへ正規化してから渡す。\n\n上限は1024状態、10,000遷移、128 actions、action当たり8 KiB、JSON再帰32段、case/request当たり1 MiB。1セッションは最大256正常case、4096 attempts、512縮小checks、16 MiBのtrial記録を扱う。超える入力はprotocol/resource error。workは生成の各段階と候補の受理検査を数え、JSON復号・plan検査・SUT実行の時間を含めない。SUT評価回数はattempts/checksで制限する。\n\n## 明示した並行操作列\n\n`Schedule { id, version, actors }`の各actorは`ScheduleActor { id, operations }`。`Schedule::generator()`はprogram counterの直積からGeneratorを作る。actionは`{ actor, step, operation }`となり、同actor内の操作順を維持する。stepは0始まり。[examples/schedule.rs](examples/schedule.rs)を参照。\n\n1-8 actor、合計128操作、最大1024状態を構築前に検査する。actor IDは一意にする。空の操作列も許す。最短長0、最長長は合計操作数で、prefixも生成・縮小の対象。任意の単一削除でactor内の順序やoperationが崩れる候補は受理しない。構築はSessionのwork予算外で、構造の上限により制限する。\n\nSUTはホストが指定actorを1操作ずつ進める。threadやawaitの自動計装、ブロッキングやweak memoryのモデル化は含まない。PBTのpassedを全スケジュールの完全探索と解釈しない。Loomは評価crateだけで利用し、このcrateやWasmの依存へ含めない。\n\n## 差分比較\n\n`compare(Observation::Allowed { values }, targets)`は、referenceが許可する値集合と各実装の観測を比較する。対象を多数決でオラクルへしない。空の対象はerror、空の許可値集合はinvalid。invalid/unknown/errorはmatchedへ変換せず、対象ごとのoutcomeも残す。全体statusはerror、mismatch、unknown、invalid、matchedの優先順で決めるため、全体statusだけで他対象の判定が完了したとは扱わない。\n\n## nativeとWasm\n\nbinaryはversion=1のJSONLを扱う。requestのkindはschedule、property、shrink、replay、resume、cancel、compare。scheduleは`{ kind: \"schedule\", schedule: ... }`へ`{ kind: \"generator\", generator: ... }`を返す。property/shrink/replayは同時に1セッションだけ実行し、cancelで解放する。schedule/compareは進行中のセッションとは独立。無効なrequestやfeedback IDは進行中の要求を消費しない。\n\nWasm ABI v1はtesting_abi_version、testing_input_resize、testing_dispatch、testing_output_ptr、testing_output_len。ホストは同じJSONを渡す。並列に実行する場合はworkerごとに別runtimeを使う。\n\n[Proptestの状態機械テスト](https://proptest-rs.github.io/proptest/proptest/state-machine.html)と既存TSの縮小器を参照した。外部solver、任意threadの自動計装、高階Strategy、scalar縮小はこのcrateへ組み込んでいない。",
+        "contentHash": "cd8187c058a2de2863ed2c1b2024d988f5236a9a248d9612629823a451768df9"
+      },
+      "target": {
+        "source": "source3",
+        "path": "crates/idealis-testing/SUPPORT.md",
+        "startLine": 1,
+        "endLine": 32,
+        "quote": "# idealis-testingの対応チェックリスト\n\nチェック済みは有限生成器からの生成・評価・縮小・再生・差分比較。SUTとテストランナーはホストが所有する。未チェックは未対応または対象外で、実装予定を約束しない。\n\n## 対応済み\n\n- [x] 整数・文字列などのscalar値も縮小する。\n\n- [x] 有限状態機械のGeneratorとxorshift32-v1のseedによる操作列生成。長さ・終端・受理条件を扱う。\n- [x] Session::propertyでEvaluate/Doneのeffectを返し、correlation ID付きの評価を受け取る。\n- [x] matched、signature付きmismatch、invalid、unknown、errorを区別する。\n- [x] 同じ失敗signatureを保つ操作削除と再現確認。受理条件を満たす単一削除に対するminimalと予算切れのboundedを区別する。\n- [x] 保存Caseの全actionsを使う再生。seedからの再生成ではなく、期待signatureの非再現をerrorにする。\n- [x] 許容観測集合と各targetの差分比較。対象の多数決をオラクルにしない。\n- [x] Scheduleのactorごとの順序を保つ操作列と有限Generatorへの変換。\n- [x] version付きCase、JSONのsafe integer、protocol/resource上限とwork予算。\n- [x] serde/serde_jsonを使う独立Rustライブラリ、native JSONLとホストimport不要のWasm ABI v1。\n\n## 非対応・対象外\n\n\n- [ ] thread/awaitの自動計装、ブロッキング、weak memoryのモデル化、SUTの自動実行。\n- [ ] 外部solverの内蔵、任意言語の静的検証、PBTのpassedからのモデル完全探索の証明。\n- [ ] 一つのruntime内の並列セッション。workerごとに別runtimeを使う。\n\n## 制約と根拠\n\n- [x] passedは指定数の有効caseが正常だった意味。invalidだけならexhausted、work不足ならinconclusiveとする。\n- [x] unknownの縮小候補がある場合にminimalとせず、異なるsignatureや非再現を成功へ変換しない。\n- [x] Scheduleは1〜8 actor、合計128操作、最大1024状態。構築費用はSessionのwork予算外で、構造上限で制限する。\n\n[README](README.md)、[Session](src/session.rs)、[縮小](src/shrink.rs)、[差分比較](src/compare.rs)、[Schedule](src/schedule.rs)、[評価](../../evals/iterations/0036-testing-core.md)を参照。",
+        "contentHash": "e8f272549d617b805b03a17514c7cae0a634f5724ce3e80d33b5aa59a9071c38"
+      },
+      "context": [],
+      "candidateId": "2673913dd87acd36d2b59912a279daf7ac13636e17a3868903cc00af631268d5",
+      "contextHash": "a617cba3c7ee0506065d82ea4e8fba61e850eded7976ac6cb692466a7f4784c7",
+      "judgment": {
+        "choice": "contradicts",
+        "confidence": 0.99,
+        "probabilities": {
+          "supports": 0.01,
+          "contradicts": 0.99,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    }
+  ],
+  "coverage": {
+    "expected": 1,
+    "selected": 1,
+    "answered": 1,
+    "missing": 0,
+    "contradictions": 1,
+    "unassessed": 0,
+    "deferred": 0,
+    "issues": 0,
+    "unboundDocuments": 0
+  },
+  "usage": {
+    "requests": 1,
+    "inputTokens": 3727,
+    "usd": 0.000156534
+  },
+  "errors": []
+}

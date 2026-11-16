@@ -1,0 +1,87 @@
+{
+  "status": "complete",
+  "results": [
+    {
+      "id": "smt-clean",
+      "expected": "supports",
+      "actual": "supports",
+      "exit": 0,
+      "usage": {
+        "requests": 1,
+        "inputTokens": 4182,
+        "usd": 0.000175644
+      }
+    },
+    {
+      "id": "smt-real",
+      "expected": "contradicts",
+      "actual": "contradicts",
+      "exit": 1,
+      "usage": {
+        "requests": 1,
+        "inputTokens": 4195,
+        "usd": 0.00017619
+      }
+    },
+    {
+      "id": "testing-clean",
+      "expected": "supports",
+      "actual": "supports",
+      "exit": 0,
+      "usage": {
+        "requests": 1,
+        "inputTokens": 3740,
+        "usd": 0.00015708
+      }
+    },
+    {
+      "id": "testing-scalar",
+      "expected": "contradicts",
+      "actual": "contradicts",
+      "exit": 1,
+      "usage": {
+        "requests": 1,
+        "inputTokens": 3727,
+        "usd": 0.000156534
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "manifest.json",
+      "sha256": "65c7db9f60af36887a835750799548ce11e3dcb1fed9b994e4ce3fe80a4e8d7f"
+    },
+    {
+      "path": "smt-clean.input.json",
+      "sha256": "9a2a981cc810c373e17e51de4e911c64ff8f57322fb8e979815e75528fd80129"
+    },
+    {
+      "path": "smt-clean.record.json",
+      "sha256": "4cda28cd9a412448bf3ee59f6255afe1b5bacbdf8e3f87104a3389350d077048"
+    },
+    {
+      "path": "smt-real.input.json",
+      "sha256": "7c7696ebc86bb915ce9e23309403f04165849059451bf8f6366db587ddaa8dab"
+    },
+    {
+      "path": "smt-real.record.json",
+      "sha256": "f13b9eb7d6ce8105697bb67246d91f521c6ae73dba1f950610ce204ab8856b96"
+    },
+    {
+      "path": "testing-clean.input.json",
+      "sha256": "09a70931b13117af3da5fe87dfc8213f5a389054fbda69e0dec808f9c0cad727"
+    },
+    {
+      "path": "testing-clean.record.json",
+      "sha256": "f3d9676940d0313bf80f823c2e7eee7d7f0090e87e857a6ed7c5ebf6abe6f2f4"
+    },
+    {
+      "path": "testing-scalar.input.json",
+      "sha256": "2dd17fc5dc66eda8a4902ff95bdc27227cf6e4792ae2e7727529dcb48b5586e3"
+    },
+    {
+      "path": "testing-scalar.record.json",
+      "sha256": "c26227e31f3c27cc56e7f5c793e0708c3700d4cfd6a95488e852239bc234466b"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # rtla
 
+[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
+
 TLA+とTLC設定を型付きASTへ変換するRustパーサー。`idealis-core`と`rtlc`に依存しない。nativeと`wasm32-unknown-unknown`で同じコードを使い、解析中にファイル・ネットワーク・時計・スレッドを使わない。
 
 ## Rustから使う

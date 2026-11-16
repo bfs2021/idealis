@@ -1,0 +1,22 @@
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node --test dist/scripts/check-support-test.js
+✔ sync without a Jev key warns and skips before reading or writing the repository (122.035958ms)
+✔ pre-commit skips without either key and continues when either alias is set (74.470042ms)
+✔ a real index is authoritative over unstaged checklist edits (247.358917ms)
+✔ missing checklists, new crates and dangling staged evidence are rejected (238.752875ms)
+✔ staged symlink sources are not followed (126.54125ms)
+✔ installing a hook is repeatable and preserves another tool's hook (117.203958ms)
+✔ a checklist made only of examples in a code fence is not a support declaration (124.630125ms)
+✔ the real offline gate rejects stale, missing and corrupted staged Jev evidence (18334.353625ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19443.948208

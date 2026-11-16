@@ -20,7 +20,9 @@ jobs:
       - run: rustup target add wasm32-unknown-unknown
       - run: pnpm check
       - run: pnpm typecheck
+      - run: node --experimental-strip-types scripts/check-support.ts
       - run: pnpm test
+      - run: node --test dist/scripts/check-support-test.js
       - run: cargo fmt --manifest-path evals/sat-foundation/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/sat-foundation/rust/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path evals/sat-foundation/rust/Cargo.toml

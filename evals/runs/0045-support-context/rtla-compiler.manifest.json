@@ -1,0 +1,87 @@
+{
+  "schema": "jev-lint-documents-manifest-1",
+  "roots": [
+    "crates/rtla-compiler/SUPPORT.md"
+  ],
+  "files": {
+    "source0": {
+      "path": "crates/rtla-compiler/Cargo.lock",
+      "role": "reference"
+    },
+    "source1": {
+      "path": "crates/rtla-compiler/Cargo.toml",
+      "role": "reference"
+    },
+    "source2": {
+      "path": "crates/rtla-compiler/README.md",
+      "role": "reference"
+    },
+    "source3": {
+      "path": "crates/rtla-compiler/SUPPORT.md",
+      "role": "document"
+    },
+    "source4": {
+      "path": "crates/rtla-compiler/examples/check.rs",
+      "role": "reference"
+    },
+    "source5": {
+      "path": "crates/rtla-compiler/src/lib.rs",
+      "role": "reference"
+    },
+    "source6": {
+      "path": "crates/rtla-compiler/tests/compiler.rs",
+      "role": "reference"
+    },
+    "source7": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source8": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source9": {
+      "path": "scripts/check-support.ts",
+      "role": "reference"
+    }
+  },
+  "comparisons": [
+    {
+      "id": "rtla-compiler-readme",
+      "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
+      "mode": "semantic",
+      "reference": {
+        "source": "source2"
+      },
+      "target": {
+        "source": "source3"
+      }
+    },
+    {
+      "id": "rtla-compiler-implementation-0",
+      "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
+      "mode": "semantic",
+      "reference": {
+        "source": "source5",
+        "contains": "pub fn compile("
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "rtla-compiler-implementation-1",
+      "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
+      "mode": "semantic",
+      "reference": {
+        "source": "source5",
+        "contains": "fn apply("
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    }
+  ]
+}

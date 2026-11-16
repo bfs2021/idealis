@@ -1,5 +1,7 @@
 # idealis-core
 
+[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
+
 Rust native / Wasm core for finite state models, conformance checking, trace replay, and failure-preserving sequence shrinking.
 
 `SafetyProgram::check()` is re-exported from the independent `rtlc` crate. It evaluates a versioned transition program and performs BFS, invariant/deadlock checking, temporal/fairness checking, and counterexample reconstruction inside Rust. It generates successors during exploration rather than accepting a precomputed graph. The IR supports a finite TLA+ fragment including integers, booleans, sets, functions, records and sequences; it is not a complete TLA+ interpreter. `compile_tla(source, config)` connects the `rtla` parser and `rtla-compiler` to produce that IR in native or Wasm. The checker itself lives in `rtlc` and has no parser or solver dependency. The existing TypeScript `compileTlaSafety` frontend remains a comparison path. See [the supported fragment and limits](https://github.com/mizchi/idealis/blob/main/docs/rust-safety.md).

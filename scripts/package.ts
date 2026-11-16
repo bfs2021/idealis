@@ -69,6 +69,7 @@ for (const name of [
     "Cargo.toml",
     "Cargo.lock",
     "README.md",
+    "SUPPORT.md",
     "LICENSE",
     ...(["rtla", "ralloy"].includes(name) ? ["NOTICE"] : []),
     ...(name === "idealis-smt" ? ["benches"] : []),
