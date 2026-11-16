@@ -163,6 +163,10 @@ const expression = (input: unknown, depth: number): void => {
     return;
   }
   switch (input.op) {
+    case "unmatched-case":
+      fields(input, ["op", "location"]);
+      text(input.location);
+      return;
     case "old":
       fields(input, ["op"]);
       return;

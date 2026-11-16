@@ -15,3 +15,5 @@ native と Wasm は結果・trace・work を完全比較する。TLC とは API 
 初回の確認 seed 0x15B2 は32件一致した。保存結果の replay では、未実行の native 欄を `undefined` 付きで返すと JSON 保存時に欄が消え、比較が失敗する問題を2件の抜粋で再現した。未実行欄を省略する修正だけを行う。モデル検査器・入力の意味・binary は変更しない。元の確認結果を残し、追加確認 seed 0x15C3 をここで予約する。追加確認を従来32件の新しい独立実行として水増ししない。
 
 並列回帰実行中の再実行で、標準モジュール解析の NullPointerException が1件発生した。同一入力は先行 run で型エラーを返していた。v1.7.4 の `SimpleFilenameToStream.read` は `java.io.tmpdir` 内の固定ファイル名へ書き、終了時に削除する。全 TLC 呼び出しに専用の一時ディレクトリを指定し、JVM の解析例外を input error とも model error とも区別する。失敗 run は保持する。検査器の binary・モデル・確認 seed 0x15C3 は変更せず、未実行の追加確認を続ける。
+
+CASE の追加回帰条件: OTHER のない式と action で、最初の真の arm を選ぶこと、全条件が偽なら到達時に評価エラーとソース位置を返すこと、未評価の分岐ではエラーにしないことを固定する。空の Init の invariant を事前評価しないこと、OTHER 付き action、後続 guard の短絡、未評価の action 分岐も含む小さい8入力を境界 corpus に追加し、同じ pinned TLC v1.7.4 (`5a47802`) の環境情報だけを置換したログと source / config / log / jar の SHA-256 を `evals/fixtures/tlc-case/` に保存する。TS / Rust frontend の IR と native / Wasm の結果を比較し、IR の location 検証も回帰で確認する。確認 seed や保存 run は変更せず、未知故障発見や全 TLA+ 互換の主張は追加しない。

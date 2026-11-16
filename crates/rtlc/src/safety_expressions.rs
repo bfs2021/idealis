@@ -337,7 +337,7 @@ impl Expression {
                 children
             }
             Self::Subseq { sequence, from, to } => vec![sequence, from, to],
-            Self::Enabled { .. } => vec![],
+            Self::Enabled { .. } | Self::UnmatchedCase { .. } => vec![],
         }
     }
     fn is_context_free(&self) -> bool {
@@ -345,6 +345,7 @@ impl Expression {
             self,
             Self::Read { .. }
                 | Self::Enabled { .. }
+                | Self::UnmatchedCase { .. }
                 | Self::Bound { .. }
                 | Self::Old
                 | Self::Prime { .. }
@@ -354,8 +355,10 @@ impl Expression {
         ) && self.children().iter().all(|child| child.is_context_free())
     }
     pub(crate) fn is_constant(&self) -> bool {
-        !matches!(self, Self::Read { .. } | Self::Enabled { .. })
-            && self.children().iter().all(|value| value.is_constant())
+        !matches!(
+            self,
+            Self::Read { .. } | Self::Enabled { .. } | Self::UnmatchedCase { .. }
+        ) && self.children().iter().all(|value| value.is_constant())
     }
     pub(crate) fn validate(
         &self,
@@ -376,6 +379,11 @@ impl Expression {
             return Err(CoreError::protocol("Safety expression nesting exceeds 48"));
         }
         match self {
+            Self::UnmatchedCase { location } => {
+                if location.is_empty() {
+                    return Err(CoreError::protocol("Invalid unmatched CASE location"));
+                }
+            }
             Self::Prime { argument } => {
                 if ctx.phase != 1 {
                     return Err(CoreError::protocol("Prime requires an action context"));
@@ -491,6 +499,11 @@ impl Expression {
                 return self.eval(ctx, arena);
             }
             Self::Data { value } => arena.data(value)?,
+            Self::UnmatchedCase { location } => {
+                return Err(CoreError::protocol(&format!(
+                    "Attempted to evaluate a CASE with no conditions true at {location}"
+                )));
+            }
             Self::Prime { argument } => argument.eval(EvalContext { prime: true, ..ctx }, arena)?,
             Self::Not { argument } => Scalar::Bool(!argument.eval(ctx, arena)?.boolean()?),
             Self::Neg { argument } => Scalar::Int(

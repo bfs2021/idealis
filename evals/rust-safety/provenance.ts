@@ -23,6 +23,7 @@ export const fingerprint = async () => {
     "evals/collections-temporal",
     "evals/fixtures/channel",
     "evals/fixtures/tlc-strings",
+    "evals/fixtures/tlc-case",
     "evals/plans/0012-collections-temporal.md",
     "evals/plans/0013-scalar-comparison.md",
     "evals/plans/0014-value-hash.md",

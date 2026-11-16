@@ -98,3 +98,30 @@ fn wire_contract_roundtrips_and_rejects_internal_references() {
     };
     assert!(invalid.check(bounds()).is_err());
 }
+
+#[test]
+fn unmatched_case_wire_contract_requires_a_nonempty_location() {
+    let mut encoded = serde_json::to_value(ring()).unwrap();
+    encoded["initial"][0]["steps"][0]["value"] =
+        serde_json::json!({"op":"unmatched-case","location":"line 3, column 13"});
+    let decoded: SafetyProgram = serde_json::from_value(encoded.clone()).unwrap();
+    assert_eq!(
+        decoded.check(bounds()).unwrap_err().message,
+        "Attempted to evaluate a CASE with no conditions true at line 3, column 13"
+    );
+    for invalid in [
+        serde_json::json!({"op":"unmatched-case"}),
+        serde_json::json!({"op":"unmatched-case","location":1}),
+        serde_json::json!({"op":"unmatched-case","location":"line 3, column 13","extra":true}),
+    ] {
+        encoded["initial"][0]["steps"][0]["value"] = invalid;
+        assert!(serde_json::from_value::<SafetyProgram>(encoded.clone()).is_err());
+    }
+    encoded["initial"][0]["steps"][0]["value"] =
+        serde_json::json!({"op":"unmatched-case","location":""});
+    let decoded: SafetyProgram = serde_json::from_value(encoded).unwrap();
+    assert_eq!(
+        decoded.check(bounds()).unwrap_err().message,
+        "Invalid unmatched CASE location"
+    );
+}

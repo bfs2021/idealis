@@ -64,7 +64,7 @@ maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが�
 主な演算は次の通り。
 
 - 非再帰 operator / 関数定義、LET、有限の全称・存在量化、tuple pattern。
-- 加減乗算、比較、論理、IF、OTHER 付き CASE。整数 overflow はエラー。
+- 加減乗算、比較、論理、IF、CASE。CASE は式・action ともソース順で最初の真の arm を選び、OTHER を省略できる。OTHER がなく全条件が偽なら、その CASE の評価時に TLC と同じ未一致エラーとソース位置を返す。未評価の分岐ではエラーにしない。整数 overflow はエラー。
 - 集合の列挙・内包・写像、和・積・差・部分集合、SUBSET、UNION、Cardinality。
 - 関数・record の生成、DOMAIN、適用、所属、EXCEPT。複数の更新は順に適用し、@ は各更新の直前の値。存在しない EXCEPT path では右辺を評価しない。
 - sequence の Len / Head / Tail / Append / SubSeq / 連結、有限集合を要素にする Seq への所属。

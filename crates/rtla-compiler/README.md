@@ -6,6 +6,8 @@ rtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust front
 
 内部ではJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。
 
+CASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) と同様に評価時に未一致エラーとソース位置を返す。未評価の分岐内ではエラーにしない。
+
 ```sh
 just compiler-test
 ```

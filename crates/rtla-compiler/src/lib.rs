@@ -64,6 +64,9 @@ struct Compiler<'a> {
 fn boolean(value: bool) -> Json {
     json!({"op":"literal","value":{"type":"bool","value":value}})
 }
+fn unmatched_case(location: &ast::Location) -> Json {
+    json!({"op":"unmatched-case","location":format!("line {}, column {}", location.line, location.column)})
+}
 fn integer(value: i64) -> Result<Json> {
     if i32::try_from(value).is_err() {
         return unsupported("integer outside signed 32 bits");
@@ -566,11 +569,14 @@ impl Compiler<'_> {
             } => Ok(
                 json!({"op":"if","condition":self.expression(condition,&child)?,"consequent":self.expression(consequent,&child)?,"alternative":self.expression(alternative,&child)?}),
             ),
-            E::Case {
-                arms,
-                other: Some(other),
-            } => {
-                let mut result = self.expression(other, &child)?;
+            E::Case { arms, other } => {
+                let mut result = if let Some(other) = other {
+                    self.expression(other, &child)?
+                } else if !arms.is_empty() {
+                    unmatched_case(&value.location)
+                } else {
+                    return unsupported("empty CASE");
+                };
                 for arm in arms.iter().rev() {
                     result = json!({"op":"if","condition":self.expression(&arm.condition,&child)?,"consequent":self.expression(&arm.body,&child)?,"alternative":result});
                 }
@@ -871,6 +877,47 @@ impl Compiler<'_> {
                         branch["steps"] = json!(joined);
                         result.push(branch);
                     }
+                }
+                limited(result)
+            }
+            E::Case { arms, other } if !arms.is_empty() => {
+                let mut result = vec![];
+                let mut previous: Vec<Json> = vec![];
+                for arm in arms {
+                    let condition = self.expression(&arm.condition, &child)?;
+                    let mut guards: Vec<Json> = previous
+                        .iter()
+                        .map(|earlier| json!({"op":"not","argument":earlier}))
+                        .collect();
+                    guards.push(condition.clone());
+                    for mut branch in self.action(&arm.body, &child, name)? {
+                        let mut joined: Vec<Json> = guards
+                            .iter()
+                            .map(|guard| json!({"kind":"guard","expression":guard}))
+                            .collect();
+                        joined.extend(steps(&branch)?.clone());
+                        branch["steps"] = json!(joined);
+                        result.push(branch);
+                    }
+                    previous.push(condition);
+                    result = limited(result)?;
+                }
+                let guards: Vec<Json> = previous
+                    .iter()
+                    .map(|earlier| json!({"kind":"guard","expression":{"op":"not","argument":earlier}}))
+                    .collect();
+                if let Some(other) = other {
+                    for mut branch in self.action(other, &child, name)? {
+                        let mut joined = guards.clone();
+                        joined.extend(steps(&branch)?.clone());
+                        branch["steps"] = json!(joined);
+                        result.push(branch);
+                    }
+                } else {
+                    let mut joined = guards;
+                    joined
+                        .push(json!({"kind":"guard","expression":unmatched_case(&value.location)}));
+                    result.push(json!({"name":name,"steps":joined}));
                 }
                 limited(result)
             }

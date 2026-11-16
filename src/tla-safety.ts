@@ -40,6 +40,10 @@ interface Context {
   readonly bound: number;
   readonly scope: Scope;
 }
+const unmatchedCase = (value: Expression): SafetyExpression => ({
+  op: "unmatched-case",
+  location: `line ${value.location.line}, column ${value.location.column}`,
+});
 const getLevel = (value: unknown): number => {
   if (typeof value !== "object" || value === null) return 0;
   if ("op" in value && value.op === "read" && "next" in value)
@@ -520,7 +524,7 @@ export const compileTlaSafety = (options: {
         consequent: expression(value.consequent, child),
         alternative: expression(value.alternative, child),
       };
-    if (value.kind === "Case" && value.other)
+    if (value.kind === "Case" && (value.other || value.arms.length))
       return value.arms.reduceRight<SafetyExpression>(
         (alternative, arm) => ({
           op: "if",
@@ -528,7 +532,7 @@ export const compileTlaSafety = (options: {
           consequent: expression(arm.body, child),
           alternative,
         }),
-        expression(value.other, child),
+        value.other ? expression(value.other, child) : unmatchedCase(value),
       );
     if (value.kind === "And" || value.kind === "Or")
       return value.operands.reduce<SafetyExpression>(
@@ -860,6 +864,55 @@ export const compileTlaSafety = (options: {
             ...branch.steps,
           ],
         })),
+      ]);
+    }
+    if (value.kind === "Case" && value.arms.length) {
+      let branches: readonly SafetyBranch[] = [];
+      const previous: SafetyExpression[] = [];
+      for (const arm of value.arms) {
+        const condition = expression(arm.condition, child);
+        const guards: SafetyStep[] = [
+          ...previous.map(
+            (earlier) =>
+              ({
+                kind: "guard",
+                expression: { op: "not", argument: earlier },
+              }) satisfies SafetyStep,
+          ),
+          { kind: "guard", expression: condition },
+        ];
+        branches = limited([
+          ...branches,
+          ...action(arm.body, child, name).map((branch) => ({
+            ...branch,
+            steps: [...guards, ...branch.steps],
+          })),
+        ]);
+        previous.push(condition);
+      }
+      const guards: SafetyStep[] = previous.map((earlier) => ({
+        kind: "guard",
+        expression: { op: "not", argument: earlier },
+      }));
+      return limited([
+        ...branches,
+        ...(value.other
+          ? action(value.other, child, name).map((branch) => ({
+              ...branch,
+              steps: [...guards, ...branch.steps],
+            }))
+          : [
+              {
+                name,
+                steps: [
+                  ...guards,
+                  {
+                    kind: "guard",
+                    expression: unmatchedCase(value),
+                  } satisfies SafetyStep,
+                ],
+              },
+            ]),
       ]);
     }
     if (value.kind === "Unchanged" && context.phase === "next")
