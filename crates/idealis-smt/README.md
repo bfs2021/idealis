@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-公開境界は`Problem`、`Solver`、`Assumption`、`Solution`、`Stats`、`Error`とJSON protocolの`Engine`。`Solver`はassertion scopeを保持し、`Assumption`は一時的なBool literalを指定する。parser、式、探索状態はprivate。`Solution`はserdeでJSONへ変換でき、整数値は精度を保つため10進文字列にする。
+公開境界は`Problem`、`Solver`、`Script`、`Assumption`、`Solution`、`Stats`、`Error`とJSON protocolの`Engine`。`Solver`はassertion scopeを保持し、`Assumption`は一時的なBool literalを指定する。parser、式、探索状態はprivate。`Solution`はserdeでJSONへ変換でき、整数値は精度を保つため10進文字列にする。
 
 - `sat`は全宣言の具体値を返す。
 - `unsat`はすべての枝が矛盾した場合に返す。
@@ -47,11 +47,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-宣言は初期sourceに固定し、scopeとassumptionsは各256件まで。失敗したassert/popは元のcontextを保つ。assert/popは再解析し、変更なしのcheckは解析結果だけを再利用する。学習状態の再利用は行わない。整数iteは最大256選択肢まで展開する。一般LIAや非線形乗算、SMT-LIB scriptのpush/popは未対応。
+宣言は初期sourceに固定し、scopeとassumptionsは各256件まで。失敗したassert/popは元のcontextを保つ。assert/popは再解析し、変更なしのcheckは解析結果だけを再利用する。学習状態の再利用は行わない。整数iteは最大256選択肢まで展開する。一般LIAや非線形乗算は未対応。
+
+## SMT-LIB scriptの問い合わせ列
+
+`Script::parse(source)`で全コマンドを検査し、`Script::solve(max_work)`で各checkの`Solution`を順番に返す。push/pop、複数check-sat、Bool literalのcheck-sat-assumingに対応する。宣言・logic・optionは冒頭に固定し、各assertが追加時点で対応式になる必要がある。scope内の宣言、define-fun、get-model/get-value、reset、exitは未対応。
+
+work予算はスクリプト全体で共有する。残り0はunknown/workと空モデル。不正な後続コマンドは全体をerrorにし、部分的なSATを返さない。checkのない入力は空の結果列で、検査成功として扱わない。checkは最大256回。Scriptを再求解すると予算と探索を初めから始める。
 
 ## nativeとWasm
 
-`idealis-smt` binaryはstdin/stdoutでJSONLを扱う。requestにはversion 1と、`solve` / `prepare` / `assert` / `push` / `pop` / `check` / `release`を指定する。prepareは解析結果を保持し、回答はcacheしない。
+`idealis-smt` binaryはstdin/stdoutでJSONLを扱う。requestにはversion 1と、`run-script` / `solve` / `prepare` / `assert` / `push` / `pop` / `check` / `release`を指定する。prepareは解析結果を保持し、回答はcacheしない。run-scriptは`{source,maxWork}`を受け、`{kind:"script-results",results:[...]}`を返す。結果の整数値は文字列。
 
 ```sh
 just rsmt-build

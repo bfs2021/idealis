@@ -12,6 +12,8 @@
 
 [0038: 明示した並行スケジュール](iterations/0038-controlled-schedules.md)は、actor列の生成器をnative/Wasmで共有する。TSのasync処理とgateした実Rust threadを同じ順序で進め、逐次対照に対するlost updateの追加検出、Loomの参照、縮小と再生を検査した。
 
+[0041: SMT-LIB script](iterations/0041-smt-scripts.md)は、push/popと複数checkをZ3の逐次実行と独立snapshotに照合する。共有work予算、後続エラー、空結果、native/Wasmの一致と再生を検査した。
+
 [0040: SMTの式とcontext API](iterations/0040-smt-expansion.md)は、定数倍・整数ite・assert/push/popと一時Bool assumptionsをZ3に照合する。native/Wasmの旧版との差分、SATモデル、独立したassertion stackと再生を検査した。
 
 [0039: 構造付きfuzzing](iterations/0039-structured-fuzz.md)は、testing protocolと保存caseをASanで検査する。生JSONLとの到達性比較、状態破損を注入した対照、保存corpusのnative/Wasm再生を記録した。

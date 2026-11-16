@@ -471,3 +471,17 @@ smt-expansion-eval phase run baseline parent="": smt-build
 smt-expansion-replay run:
   pnpm build
   node dist/evals/smt-expansion/replay.js {{quote(run)}}
+
+# SMT-LIB scripts, ordered queries and a shared work budget.
+smt-script-test: smt-build
+  pnpm build
+  node --test dist/evals/smt-scripts/contract-test.js
+  pnpm exec vitest run --config smt-vitest.config.ts
+
+smt-script-eval phase run baseline parent="": smt-build
+  pnpm build
+  node dist/evals/smt-scripts/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
+
+smt-script-replay run:
+  pnpm build
+  node dist/evals/smt-scripts/replay.js {{quote(run)}}

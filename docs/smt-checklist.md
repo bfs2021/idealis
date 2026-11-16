@@ -21,9 +21,20 @@
 
 確認用の140式と21件のcontext問い合わせをZ3に照合し、SATモデルとnative/Wasmの一致を検査した。[評価0040](../evals/iterations/0040-smt-expansion.md)を参照。空and/orはZ3 5.4.1のSMT-LIB parserが拒否するため、既存の拒否動作を維持する。
 
+## 0041で追加した範囲
+
+- [x] SMT-LIB scriptのpush/pop、複数check-sat、Bool literalのcheck-sat-assuming。宣言とoptionは冒頭に固定する。
+- [x] RustのScriptとJSON run-script。check順の結果列と、全checkで共有するwork予算。
+- [x] 全コマンドの事前検査。後続エラーから部分的なSATを返さず、既存handleへ影響させない。
+- [x] Z3の逐次実行と独立snapshotへの照合、モデル検査、native/Wasm、ブラウザ、単独consumer。
+
+確認用67 scriptの588 checkでZ3と一致し、保存runを再生した。[評価0041](../evals/iterations/0041-smt-scripts.md)を参照。checkなしの入力は空結果で、検査成功とは扱わない。
+
 ## 次の候補
 
-- [ ] SMT-LIB scriptのpush/pop、複数check、check-sat-assuming。Rust/JSON APIとは別の項目。
+- [ ] scope内や後続コマンドでの宣言、global-declarationsとoption変更。
+- [ ] check-sat-assumingの任意Bool式。現在はBool literalのみ。
+- [ ] reset/reset-assertions/exitなどのSMT-LIB scriptコマンド。
 - [ ] define-funのmacro展開。
 - [ ] SMT-LIBのget-model/get-value。モデル返却自体はRust/JSONで対応済み。
 - [ ] Unicodeの引用識別子とSMT-LIB構文・optionの拡張。

@@ -29,7 +29,7 @@ SMT-LIBは入力形式で、対応範囲はその一部。[SMT-LIBの定義](htt
 (check-sat)
 ```
 
-`x + y = 7`だけでは両方が自由変数なので拒否する。`2*x + 3*y <= 7`も一般LIAなので対象外。Real、BitVec、配列、量化、非線形乗算、除算、剰余、引数のある未解釈関数は対象外。SMT-LIBスクリプトの`push/pop`や`get-model`も実装していない。再利用は別のJSON protocolで行う。
+`x + y = 7`だけでは両方が自由変数なので拒否する。`2*x + 3*y <= 7`も一般LIAなので対象外。Real、BitVec、配列、量化、非線形乗算、除算、剰余、引数のある未解釈関数は対象外。SMT-LIB scriptの`get-model/get-value`やscope内の宣言は対象外。`push/pop`と複数checkは下記のScript APIで実行する。
 
 整数の`ite`はguard付きの選択肢へ変換する。算術・比較で選択肢が256を超えるとresource errorになる。各選択肢が対応する差分制約へ落ちる必要がある。空の`(and)` / `(or)`はZ3 5.4.1のSMT-LIB parserと同じく拒否する。
 
@@ -74,11 +74,35 @@ JSONの`prepare {source}`はcontextのhandleを返す。次のリクエストを
 
 scopeとassumptionsはそれぞれ最大256件。pop underflow、未宣言/Intのassumption、不正shapeはerrorになる。assumptionsはそのcheckだけで有効。次のcheckや別handleへ持ち越さない。
 
-assert/pop時はsourceを再解析する。変更なしのcheckは解析結果を再利用するが、探索・学習状態や回答は再利用しない。SMT-LIB scriptのpush/pop/check-sat-assumingは引き続き対象外。
+assert/pop時はsourceを再解析する。変更なしのcheckは解析結果を再利用するが、探索・学習状態や回答は再利用しない。SMT-LIB scriptの問い合わせ列は次のScript APIで扱う。
+
+### SMT-LIB scriptをまとめて実行する
+
+`Script::parse(source)`は全コマンドを検査し、各check時点の式を保持する。`Script::solve(max_work)`はcheckの順に`Vec<Solution>`を返す。JSONは`run-script {source,maxWork}`を受け、`script-results {results:[...]}`を返す。単発の`solve`や既存handleの契約は変えない。
+
+```smt2
+(declare-const b Bool)
+(check-sat-assuming (b))
+(push 1)
+(assert (not b))
+(check-sat-assuming (b))
+(pop 1)
+(check-sat)
+```
+
+この入力はSAT、UNSAT、SATの3結果を返す。`check-sat-assuming`は宣言済みBool symbolか`(not symbol)`だけに対応する。空のassumptionsは通常checkと同じ。[SMT-LIB 2.7](https://smt-lib.org/papers/smt-lib-reference-v2.7-r2025-07-07.pdf)の任意Bool式への対応は今後の対象。
+
+Int/Boolの宣言と既存のlogic/optionは冒頭に固定する。assert/push/pop/check後の宣言やoption変更、define-fun、reset、exitは拒否する。各assertを追加した時点で対応する差分制約へ正規化できる必要がある。checkは最大256回、scopeとassumptionsは各256件。push/popのcountはu32のnumeralで、0はno-op。
+
+workは全checkで共有し、各結果の`stats.work`を差し引く。残り0のcheckはunknown/workと空モデルを返す。構文や型の不正は予算0でもerror。後続コマンドが不正なら部分的なSATを返さず、既存handleにも影響させない。checkのない入力は空の結果列で、仕様の検査が成功したとは扱わない。
+
+各checkは探索をやり直す。Scriptを再求解しても前回の消費やassumptionsを持ち越さず、学習状態や中断地点の再利用は行わない。
 
 [Wasm loader](../evals/smt-subset/wasm.ts)はNodeやZ3へ依存しない。実Chromiumで`crossOriginIsolated === false`のままSAT、UNSAT、unknown、未対応、再利用を検査した。0030で測定した生Wasmは330,749 bytesで、Z3 Wasmは39,205,260 bytesだった。対応機能が異なるため、汎用ソルバー同士の容量比較にはしない。
 
 [評価0040](../evals/iterations/0040-smt-expansion.md)では、定数倍・整数iteの確認用140式と21件のcontext問い合わせをZ3へ照合した。旧版が受理した式は1/140、新版は140/140。新機能を狙った人工入力の対応率で、実用入力全体の対応率や速度の比較ではない。
+
+[評価0041](../evals/iterations/0041-smt-scripts.md)では、確認用67 scriptの588 checkをZ3の逐次実行と独立したsnapshotへ照合し、全SATモデルを検査した。旧版の単発solveは同じsourceの1/67を受理した。既存のcontext APIの操作をSMT-LIB入力でも使えるようにした結果で、速度比較はしていない。
 
 ## 再実行
 
@@ -92,6 +116,7 @@ pnpm build
 node --test dist/evals/smt-subset/contract-test.js
 just smt-browser
 just smt-expansion-test
+just smt-script-test
 just rsmt-criterion
 just smt-verify development .artifacts/smt-dev
 just smt-verify confirmation .artifacts/smt-confirm .artifacts/smt-dev

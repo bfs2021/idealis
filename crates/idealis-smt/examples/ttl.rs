@@ -1,4 +1,4 @@
-use idealis_smt::{Assumption, Problem, Solver};
+use idealis_smt::{Assumption, Problem, Script, Solver};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let problem = Problem::parse(
@@ -41,6 +41,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     solver.pop(1)?;
     solver.assert("(= x 9)")?;
     assert_eq!(solver.check(100_000).values["x"], "9");
+    let script = Script::parse(
+        "(declare-const b Bool)(check-sat-assuming (b))(push 1)(assert (not b))(check-sat-assuming (b))(pop 1)(check-sat)",
+    )?;
+    let results = script.solve(100_000);
+    assert_eq!(results.len(), 3);
+    assert_eq!(results[0].status, "sat");
+    assert_eq!(results[1].status, "unsat");
+    assert_eq!(results[2].status, "sat");
+    assert!(
+        script
+            .solve(0)
+            .iter()
+            .all(|result| result.status == "unknown")
+    );
     println!("standalone idealis-smt consumer checked");
     Ok(())
 }

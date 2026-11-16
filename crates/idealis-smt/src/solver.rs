@@ -51,4 +51,7 @@ impl Solver {
     pub fn check_assuming(&self, assumptions: &[Assumption], max_work: u32) -> Result<Solution> {
         self.problem.solve_assuming(assumptions, max_work)
     }
+    pub(super) fn snapshot(&self) -> Result<Problem> {
+        Problem::parse(&self.source)
+    }
 }

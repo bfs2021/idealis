@@ -1,5 +1,6 @@
 mod parser;
 mod protocol;
+mod script;
 mod solver;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
@@ -7,6 +8,7 @@ mod wasm;
 use num_bigint::BigInt;
 use num_traits::Zero;
 pub use protocol::Engine;
+pub use script::Script;
 use serde::{Deserialize, Serialize};
 pub use solver::Solver;
 use std::{collections::BTreeMap, sync::Arc};
@@ -133,6 +135,9 @@ impl Problem {
         self.solve_with(max_work, vec![(self.root.clone(), true)])
     }
     pub fn solve_assuming(&self, assumptions: &[Assumption], max_work: u32) -> Result<Solution> {
+        Ok(self.solve_with(max_work, self.assumption_todo(assumptions)?))
+    }
+    fn assumption_todo(&self, assumptions: &[Assumption]) -> Result<Vec<(Arc<Formula>, bool)>> {
         if assumptions.len() > 256 {
             return Err(Error::new("resource", "assumptions exceed 256"));
         }
@@ -146,7 +151,7 @@ impl Problem {
                 None => return Err(Error::new("type", "undeclared assumption symbol")),
             }
         }
-        Ok(self.solve_with(max_work, todo))
+        Ok(todo)
     }
     fn solve_with(&self, max_work: u32, todo: Vec<(Arc<Formula>, bool)>) -> Solution {
         let mut stats = Stats::default();

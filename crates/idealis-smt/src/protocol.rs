@@ -1,4 +1,4 @@
-use crate::{Assumption, Error, Problem, Solver};
+use crate::{Assumption, Error, Problem, Script, Solver};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -12,6 +12,11 @@ struct Command {
 #[derive(Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 enum Request {
+    RunScript {
+        source: String,
+        #[serde(rename = "maxWork")]
+        max_work: u32,
+    },
     Solve {
         source: String,
         #[serde(rename = "maxWork")]
@@ -62,6 +67,9 @@ impl Engine {
             return Err(Error::new("protocol", "unsupported version"));
         }
         match command.request {
+            Request::RunScript { source, max_work } => Ok(
+                json!({"kind":"script-results","results":Script::parse(&source)?.solve(max_work)}),
+            ),
             Request::Solve { source, max_work } => {
                 Ok(json!({"kind":"solution","result":Problem::parse(&source)?.solve(max_work)}))
             }

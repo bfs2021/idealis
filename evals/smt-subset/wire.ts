@@ -18,6 +18,11 @@ export interface Assumption {
 }
 export type Request =
   | {
+      readonly kind: "run-script";
+      readonly source: string;
+      readonly maxWork: number;
+    }
+  | {
       readonly kind: "solve";
       readonly source: string;
       readonly maxWork: number;
@@ -41,6 +46,7 @@ export type Request =
     }
   | { readonly kind: "release"; readonly handle: number };
 export type Reply =
+  | { readonly kind: "script-results"; readonly results: readonly Solution[] }
   | { readonly kind: "solution"; readonly result: Solution }
   | { readonly kind: "prepared"; readonly handle: number }
   | { readonly kind: "released" }
@@ -48,6 +54,16 @@ export type Reply =
   | { readonly kind: "error"; readonly code: string; readonly message: string };
 export const decode = (input: unknown): Reply => {
   if (!isRecord(input)) throw new Error("Invalid SMT reply");
+  if (input.kind === "script-results") {
+    if (!Array.isArray(input.results) || input.results.length > 256)
+      throw new Error("Invalid SMT script results");
+    return {
+      kind: "script-results",
+      results: input.results.map((result) =>
+        solution(decode({ kind: "solution", result })),
+      ),
+    };
+  }
   if (
     input.kind === "error" &&
     typeof input.code === "string" &&

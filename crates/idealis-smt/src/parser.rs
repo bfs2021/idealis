@@ -1,4 +1,4 @@
-use crate::{Edge, Error, Formula, Problem, Result, Variable};
+use crate::{Assumption, Edge, Error, Formula, Problem, Result, Solver, Variable};
 use num_bigint::BigInt;
 use num_traits::{Signed, Zero};
 use std::{collections::BTreeMap, sync::Arc};
@@ -796,4 +796,88 @@ pub(super) fn assertion(expression: &str) -> Result<String> {
         return Err(Error::new("syntax", "assert needs a single expression"));
     }
     Ok(format!("(assert {})", render(&nodes[0])))
+}
+
+pub(super) fn script(source: &str) -> Result<Vec<(Problem, Vec<Assumption>)>> {
+    let nodes = parse(source)?;
+    let mut prefix = String::new();
+    let mut solver = None;
+    let mut queries = Vec::new();
+    for node in &nodes {
+        let command = list(node)?;
+        let operator = match command.first() {
+            Some(Node::Atom(operator, false)) => operator.as_str(),
+            _ => return Err(Error::new("syntax", "expected command")),
+        };
+        if ["set-logic", "set-option", "declare-const", "declare-fun"].contains(&operator) {
+            if solver.is_some() {
+                return Err(Error::new(
+                    "unsupported",
+                    "declarations and options must precede script operations",
+                ));
+            }
+            prefix.push_str(&render(node));
+            prefix.push('\n');
+            continue;
+        }
+        if solver.is_none() {
+            solver = Some(Solver::parse(&prefix)?);
+        }
+        let context = solver.as_mut().expect("initialized script context");
+        match operator {
+            "assert" if command.len() == 2 => context.assert(&render(&command[1]))?,
+            "push" | "pop" if command.len() == 2 => {
+                let numeral = match &command[1] {
+                    Node::Atom(value, false)
+                        if value == "0"
+                            || !value.starts_with('0')
+                                && value.chars().all(|character| character.is_ascii_digit()) =>
+                    {
+                        value
+                    }
+                    _ => return Err(Error::new("syntax", "scope count must be a numeral")),
+                };
+                let count = numeral
+                    .parse::<u32>()
+                    .map_err(|_| Error::new("resource", "scope count exceeds u32"))?;
+                if operator == "push" {
+                    context.push(count)?;
+                } else {
+                    context.pop(count)?;
+                }
+            }
+            "check-sat" | "check-sat-assuming" => {
+                if queries.len() == 256 {
+                    return Err(Error::new("resource", "script checks exceed 256"));
+                }
+                let assumptions = if operator == "check-sat" && command.len() == 1 {
+                    vec![]
+                } else if operator == "check-sat-assuming" && command.len() == 2 {
+                    let literals = list(&command[1])?;
+                    if literals.len() > 256 {
+                        return Err(Error::new("resource", "assumptions exceed 256"));
+                    }
+                    literals.iter().map(|literal| match literal {
+                        Node::Atom(value, _) => Ok(Assumption { symbol: value.clone(), positive: true }),
+                        Node::List(parts) if parts.len() == 2 && matches!(&parts[0], Node::Atom(operator, false) if operator == "not") && matches!(&parts[1], Node::Atom(_, _)) => Ok(Assumption { symbol: symbol(&parts[1])?.to_string(), positive: false }),
+                        _ => Err(Error::new("unsupported", "script assumptions require Bool literals")),
+                    }).collect::<Result<Vec<_>>>()?
+                } else {
+                    return Err(Error::new("syntax", "check command arity"));
+                };
+                queries.push((context.snapshot()?, assumptions));
+            }
+            "assert" | "push" | "pop" => return Err(Error::new("syntax", "script command arity")),
+            _ => {
+                return Err(Error::new(
+                    "unsupported",
+                    format!("script command {operator}"),
+                ));
+            }
+        }
+    }
+    if solver.is_none() {
+        Solver::parse(&prefix)?;
+    }
+    Ok(queries)
 }
