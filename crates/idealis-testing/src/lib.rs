@@ -1,6 +1,7 @@
 mod compare;
 mod engine;
 mod generator;
+mod schedule;
 mod session;
 mod shrink;
 #[cfg(target_arch = "wasm32")]
@@ -9,6 +10,7 @@ mod wasm;
 pub use compare::{Comparison, ComparisonStatus, Differential, Observation, Target, compare};
 pub use engine::Engine;
 pub use generator::{ActionEdge, Case, Generator};
+pub use schedule::{Schedule, ScheduleActor};
 pub use session::{
     Effect, Phase, Plan, Session, ShrinkStatus, ShrinkSummary, TestResult, TestStatus, Trial,
     Verdict,

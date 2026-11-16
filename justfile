@@ -1,6 +1,30 @@
 default:
   @just --list
 
+controlled-build: testing-build
+  cargo build --release --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
+  cargo build --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
+
+controlled-test: controlled-build testing-core-test
+  cargo fmt --manifest-path evals/controlled-schedules/rust/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
+  cargo run --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
+  pnpm build
+  node --test dist/evals/controlled-schedules/contract-test.js
+  pnpm exec vitest run --config schedules-vitest.config.ts
+
+controlled-browser: controlled-build
+  pnpm exec playwright test --config schedules-playwright.config.ts
+
+controlled-eval phase run parent="": controlled-build
+  pnpm build
+  node dist/evals/controlled-schedules/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
+
+controlled-replay run:
+  pnpm build
+  node dist/evals/controlled-schedules/replay.js {{quote(run)}}
+
 testing-build:
   cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml

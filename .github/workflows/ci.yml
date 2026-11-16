@@ -27,6 +27,13 @@ jobs:
       - run: pnpm testing:build
       - run: node --test dist/evals/testing-core/contract-test.js
       - run: pnpm exec vitest run --config testing-vitest.config.ts
+      - run: cargo fmt --manifest-path evals/controlled-schedules/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
+      - run: cargo build --release --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
+      - run: cargo run --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
+      - run: node --test dist/evals/controlled-schedules/contract-test.js
+      - run: pnpm exec vitest run --config schedules-vitest.config.ts
       - run: cargo fmt --manifest-path crates/ralloy/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/ralloy/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/ralloy/Cargo.toml
@@ -86,6 +93,7 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:browser
       - run: pnpm exec playwright test --config testing-playwright.config.ts
+      - run: pnpm exec playwright test --config schedules-playwright.config.ts
       - run: pnpm exec playwright test --config smt-playwright.config.ts
       - run: pnpm exec playwright test --config alloy-playwright.config.ts
       - run: pnpm exec playwright test --config alloy-instance-playwright.config.ts

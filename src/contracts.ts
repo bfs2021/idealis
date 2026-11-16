@@ -766,6 +766,15 @@ export type TestingJson =
   | string
   | readonly TestingJson[]
   | TestingJsonObject;
+export interface TestingScheduleActor {
+  readonly id: string;
+  readonly operations: readonly TestingJson[];
+}
+export interface TestingSchedule {
+  readonly id: string;
+  readonly version: string;
+  readonly actors: readonly TestingScheduleActor[];
+}
 export interface TestingGenerator {
   readonly id: string;
   readonly version: string;
@@ -873,6 +882,7 @@ export interface TestingDifferential {
   readonly comparisons: readonly TestingComparison[];
 }
 export type TestingRequest =
+  | { readonly kind: "schedule"; readonly schedule: TestingSchedule }
   | { readonly kind: "property"; readonly plan: TestingPlan }
   | {
       readonly kind: "shrink";
@@ -902,6 +912,7 @@ export type TestingEvaluator = (
   phase: TestingPhase,
 ) => TestingVerdict | Promise<TestingVerdict>;
 export interface TestingRuntime {
+  readonly schedule: (schedule: TestingSchedule) => Promise<TestingGenerator>;
   readonly property: (
     plan: TestingPlan,
     evaluate: TestingEvaluator,
