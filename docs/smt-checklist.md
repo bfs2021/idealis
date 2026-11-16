@@ -10,15 +10,16 @@
 - [x] SATの全変数モデル、UNSAT、work切れのunknown。
 - [x] native/Wasm、JSONL、解析済みProblemのprepare/check/release。
 
-## 今回実装する範囲
+## 0040で追加した範囲
 
-- [ ] 定数倍。正負・0・任意精度の係数を扱い、scaled differenceへ落ちる式に限定する。
-- [ ] `k * (x - y) <= c`を整数の丸めで正規化する。一般LIAとは区別する。
-- [ ] 整数のite。加減算・定数倍・比較・let内でも使い、展開数を制限する。
-- [ ] Rust/JSONでassertionの追加とpush/popを提供する。失敗した変更は既存contextを保つ。
-- [ ] Bool literalの一時assumptions。次のcheckへ持ち越さない。
-- [ ] 空and/orのZ3互換な単位元。
-- [ ] 新機能のZ3差分、モデル照合、native/Wasm、ブラウザと単独consumerの検査。
+- [x] 定数倍。正負・0・任意精度の係数を扱い、scaled differenceへ落ちる式に限定する。
+- [x] `k * (x - y) <= c`を整数の丸めで正規化する。一般LIAとは区別する。
+- [x] 整数のite。加減算・定数倍・比較・let内でも使い、展開数を制限する。
+- [x] Rust/JSONでassertionの追加とpush/popを提供する。失敗した変更は既存contextを保つ。
+- [x] Bool literalの一時assumptions。次のcheckへ持ち越さない。
+- [x] 新機能のZ3差分、モデル照合、native/Wasm、ブラウザと単独consumerの検査。
+
+確認用の140式と21件のcontext問い合わせをZ3に照合し、SATモデルとnative/Wasmの一致を検査した。[評価0040](../evals/iterations/0040-smt-expansion.md)を参照。空and/orはZ3 5.4.1のSMT-LIB parserが拒否するため、既存の拒否動作を維持する。
 
 ## 次の候補
 

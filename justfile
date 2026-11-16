@@ -457,3 +457,17 @@ backend-test: portable-build
 backend-eval run: portable-build
   pnpm build
   node dist/evals/backend-contract/evaluate.js {{quote(run)}}
+
+# SMT expression and context expansion against Z3.
+smt-expansion-test: smt-build
+  pnpm build
+  node --test dist/evals/smt-expansion/contract-test.js
+  pnpm exec vitest run --config smt-vitest.config.ts
+
+smt-expansion-eval phase run baseline parent="": smt-build
+  pnpm build
+  node dist/evals/smt-expansion/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
+
+smt-expansion-replay run:
+  pnpm build
+  node dist/evals/smt-expansion/replay.js {{quote(run)}}

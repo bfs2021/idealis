@@ -1,4 +1,4 @@
-use idealis_smt::Problem;
+use idealis_smt::{Assumption, Problem, Solver};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let problem = Problem::parse(
@@ -21,6 +21,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Problem::parse("(declare-const x Real)").err().unwrap().code,
         "unsupported"
     );
+    let mut solver = Solver::parse("(declare-const x Int)(declare-const b Bool)")?;
+    solver.push(1)?;
+    solver.assert("(= (* 2 x) (ite b 6 8))")?;
+    let assumptions = [Assumption {
+        symbol: "b".into(),
+        positive: true,
+    }];
+    assert_eq!(
+        solver.check_assuming(&assumptions, 100_000)?.values["x"],
+        "3"
+    );
+    solver.assert("(= x 4)")?;
+    assert_eq!(
+        solver.check_assuming(&assumptions, 100_000)?.status,
+        "unsat"
+    );
+    assert_eq!(solver.check(100_000).values["x"], "4");
+    solver.pop(1)?;
+    solver.assert("(= x 9)")?;
+    assert_eq!(solver.check(100_000).values["x"], "9");
     println!("standalone idealis-smt consumer checked");
     Ok(())
 }

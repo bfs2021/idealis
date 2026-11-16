@@ -1,0 +1,7 @@
+pnpm build
+
+> @mizchi/idealis@0.1.0-alpha.0 build /Users/mz/ghq/github.com/mizchi/idealis
+> tsc -p tsconfig.build.json
+
+node dist/evals/smt-expansion/replay.js 'evals/runs/0040-smt-confirmation'
+{"status":"replayed","sat":84,"unsat":77,"checks":161,"controls":11,"budgetUnknown":true,"baselineAccepted":1,"inputs":140,"z3Version":"5.4.1.0 145c0c51570a357cc558ce898ce77573ba9d4fbf z3-5.4.1"}
