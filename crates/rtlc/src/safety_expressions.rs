@@ -1387,11 +1387,16 @@ impl MembershipSet {
                 Ok(true)
             }
             MembershipKind::Functions { domain, range } => {
-                let entries = arena.entries(value)?;
                 if !arena.has_domain(value, *domain)? {
                     return Ok(false);
                 }
-                for (_, element) in entries {
+                if let MembershipKind::Finite(set) = range.kind
+                    && let Some(count) = arena.binary_function_membership(value, set)
+                {
+                    arena.consume(count)?;
+                    return Ok(true);
+                }
+                for element in arena.function_values(value)? {
                     arena.tick()?;
                     if !range.contains(element, arena)? {
                         return Ok(false);

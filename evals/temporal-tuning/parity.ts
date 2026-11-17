@@ -18,13 +18,16 @@ interface Input extends TlaSourceInput {
 }
 const baseline = process.argv[2];
 const directory = process.argv[3];
+const extra = process.env.IDEALIS_PARITY_EXTRA;
+const plan = process.env.IDEALIS_PARITY_PLAN ?? "0049-temporal-tuning";
 assert.ok(baseline && directory);
 await mkdir(directory);
 const base = await fingerprint();
 const paths = [
-  "evals/plans/0049-temporal-tuning.md",
+  `evals/plans/${plan}.md`,
   "evals/temporal-tuning/parity.ts",
   "evals/temporal-tuning/boundaries.json",
+  ...(extra ? [extra] : []),
 ];
 const sources = [
   ...base.sources,
@@ -72,6 +75,7 @@ inputs.push(
     await readFile("evals/temporal-tuning/boundaries.json", "utf8"),
   ),
 );
+if (extra) inputs.push(...JSON.parse(await readFile(extra, "utf8")));
 const bounds = {
   maxDepth: 100,
   maxStates: 1000,
@@ -126,11 +130,7 @@ try {
     );
   await writeFile(
     join(directory, "manifest.json"),
-    JSON.stringify(
-      { plan: "0049-temporal-tuning", sources, baseline: provenance, limits },
-      null,
-      2,
-    ),
+    JSON.stringify({ plan, sources, baseline: provenance, limits }, null, 2),
     { flag: "wx" },
   );
   await writeFile(

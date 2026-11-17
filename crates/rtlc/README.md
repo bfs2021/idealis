@@ -61,3 +61,13 @@ just package
 `rtlc-test`は全target、fmt/clippyとCriterion smokeを実行する。Criterion14本とfixtureはこのcrateに置く。通常の時間計測は`just criterion-save <stage> <新規runパス>`。
 
 `rtlc`はRustのrlibとしてWasmにもcompileできる。ブラウザ向けのJSONL/host-importなしWasm ABIはidealis-coreが提供する。`just package`はrtlc/idealis-coreの両archiveを作り、展開したcrateだけで単独consumerを検査する。registryへのpublishは行わない。
+
+## 関数値の内部表現
+
+関数・record・sequenceは正規化したdomainを共有し、値を別に保持する。64要素以下の全Boolと全Int(0/1)は別のbit表現を使う。BooleanのFALSEと整数0は区別する。その他の値と65要素以上はScalar列へ戻す。EXCEPTは元の関数を変えず、domain外の更新と入れ子の扱いを維持する。
+
+workerで作ったdomainはkeyとpayloadのRefをrootへ移す。rootのdomainはimmutableに共有する。domainの所属metadataはTLA+値の等値性に含めない。hash衝突時はdomainと値を完全比較し、公開JSON、IR、workと反例の形式は変えない。[0056の比較](../../evals/iterations/0056-compact-functions.md)を参照。
+
+packed関数と完全に一致する有限rangeでは、domainを確認してから、要素数と同じ論理workを一括計上する。異なる型・rangeとbudget付きworkerは元の要素順に検査する。通常のmembershipも値だけのowned iteratorを使い、key/value列の構築を避ける。
+
+nativeのforkでは、rootのdomainが16個以下なら、64 key以下のdomainにworker専用wrapperを使う。候補更新ごとに全workerが同じArcカウンタへ書く費用を避け、merge時にrootのdomainへ戻す。対象外の入力は通常の共有へ戻し、対応する仕様の範囲は変えない。

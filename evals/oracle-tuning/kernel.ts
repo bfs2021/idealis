@@ -8,6 +8,8 @@ import { join, resolve } from "node:path";
 const before = process.argv[2];
 const after = process.argv[3];
 const output = process.argv[4];
+const binaryName = process.argv[5] ?? "wire-bench";
+assert.ok(binaryName === "wire-bench" || binaryName === "safety-bench");
 assert.ok(before && after && output);
 const metadata = await Promise.all(
   [before, after].map(async (root) => {
@@ -16,7 +18,7 @@ const metadata = await Promise.all(
     );
     assert.equal(
       createHash("sha256")
-        .update(await readFile(join(root, "wire-bench")))
+        .update(await readFile(join(root, binaryName)))
         .digest("hex"),
       manifest.binarySha256,
     );
@@ -33,7 +35,7 @@ await writeFile(
 for (const [index, root] of [before, after, after, before].entries()) {
   const directory = resolve(output, String(index));
   await mkdir(directory);
-  const log = execFileSync(resolve(root, "wire-bench"), ["--bench"], {
+  const log = execFileSync(resolve(root, binaryName), ["--bench"], {
     env: { ...process.env, CARGO_TARGET_DIR: directory },
   });
   await writeFile(join(directory, "stdout.log"), log, { flag: "wx" });

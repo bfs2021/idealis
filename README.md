@@ -107,6 +107,19 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
+## 関数値最適化後の速度比較
+
+0056の同じrunで、tla-ts・TLC・変更後のidealisを完全探索した。起動と共通TS frontendを含む秒数で、1 warmup後3回の中央値。状態数・生成数は全経路で一致した。
+
+| モデル      | tla-ts 1 |  TLC 1 | TLC 8 | idealis Wasm 1 | idealis native 1 | idealis native 8 |
+| ----------- | -------: | -----: | ----: | -------------: | ---------------: | ---------------: |
+| 0/1整数関数 |    5.870 | 13.781 | 4.515 |          6.252 |            4.597 |            2.926 |
+| チャネル群  |   17.238 | 24.725 | 6.507 |         21.879 |           16.037 |            5.999 |
+
+関数は変更前比でnative逐次1.67倍、8 workers 1.48倍、Wasm 1.87倍。native 8 workersはTLCの1.54倍だった。チャネルのnative並列版は変更前とほぼ同じ。Wasmはまだtla-tsより関数で約7%、チャネルで約27%遅い。
+
+Apple M5 arm64、Node 24.22.2、tla-ts 0.0.10、arm64 Temurin 21.0.13+9と固定TLC jarを使用した。WasmはNode上の値。非専用ホストの負荷変動を含む。[全sample・最小/最大・Criterion・互換性検査](evals/iterations/0056-compact-functions.md)を参照。下の4モデル表は0022時点の履歴で、今回の値と混在させていない。
+
 <!-- checker-comparison:start -->
 ## モデル検査の速度比較
 

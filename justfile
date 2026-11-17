@@ -550,6 +550,18 @@ rtlc-test:
 rtlc-example:
   cargo run --example counter --locked --manifest-path crates/rtlc/Cargo.toml
 
+compact-functions-freeze directory:
+  node dist/evals/compact-functions/freeze.js {{quote(directory)}}
+
+compact-functions-compare before after java jar archive run:
+  node dist/evals/compact-functions/compare.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+compact-functions-kernel before after run:
+  node dist/evals/oracle-tuning/kernel.js {{quote(before)}} {{quote(after)}} {{quote(run)}} safety-bench
+
+compact-functions-summary comparison criterion run:
+  node dist/evals/compact-functions/summarize.js {{quote(comparison)}} {{quote(criterion)}} {{quote(run)}}
+
 rtlc-compare run:
   pnpm build
   node dist/evals/rtlc-extraction/compare.js {{quote(run)}}

@@ -257,3 +257,26 @@
 {"runId":"0053-tlc-confirmation","kind":"tlc-differential","status":"complete","phase":"confirmation","sourceVersion":"33570b54ae4c5d9b83384813349001c30fc72f83d0e18a16187ab408bc43462d","plan":"0015-tlc-differential"}
 {"runId":"0053-tlc-replay","kind":"tlc-differential","status":"complete","phase":"replay","sourceVersion":"33570b54ae4c5d9b83384813349001c30fc72f83d0e18a16187ab408bc43462d","plan":"0015-tlc-differential"}
 {"runId": "0053-resolution", "kind": "tlc-standard-modules", "status": "complete", "resultSha256": "5463228762fbd22c075c2209e60702aefec949b0d9443b92d11c43c7038e9cf8"}
+{"runId":"0056-profile-before","kind":"cpu-profile","backend":"native","status":"complete","sourceVersion":"4f181f4958fe161dc8b5d54bd36d5d4e0c50c60012fe3e2651e4f8cacb82341a"}
+{"runId":"0056-profile-before-summary","kind":"profile-summary","status":"complete","saved":"evals/runs/0056-profile-before"}
+{"runId":"0056-profile-after","kind":"cpu-profile","backend":"native","status":"complete","sourceVersion":"385ea9a47af2648f20e5c85c8914ff1207d92454d9c657588f3e5eb9bcddb58b"}
+{"runId":"0056-profile-after-summary","kind":"profile-summary","status":"complete","saved":"evals/runs/0056-profile-after"}
+{"runId":"0056-profile-d","kind":"cpu-profile","backend":"native","status":"error","sourceVersion":"f6159a7030e821f84a5439bc1ac013dccc1ad4728ef4eda074a3423aeb4b4b33"}
+{"runId":"0056-profile-d-retry","kind":"cpu-profile","backend":"native","status":"complete","sourceVersion":"106162bd73ebfc8e688e6894617017a41710dd52cb2a79eb833b89d4e43cc575"}
+{"runId":"0056-profile-d-retry-summary","kind":"profile-summary","status":"complete","saved":"evals/runs/0056-profile-d-retry"}
+{"runId":"0056-tlc","kind":"tlc-differential","status":"complete","phase":"development","sourceVersion":"e39519b28eed6e41c68e0c03bcde6b30369195b2e124f1bdf47837d18538a728","plan":"0015-tlc-differential"}
+{"runId":"0056-tlc-confirmation","kind":"tlc-differential","status":"complete","phase":"confirmation","sourceVersion":"e39519b28eed6e41c68e0c03bcde6b30369195b2e124f1bdf47837d18538a728","plan":"0015-tlc-differential"}
+{"runId":"0056-boundary-tlc","kind":"targeted-tlc-differential","plan":"0056","status":"complete","cases":16,"mismatches":0}
+{"runId":"0056-tlc-replay","kind":"tlc-differential","status":"complete","phase":"replay","sourceVersion":"e39519b28eed6e41c68e0c03bcde6b30369195b2e124f1bdf47837d18538a728","plan":"0015-tlc-differential"}
+{"runId":"0056-comparison","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-comparison-d","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-comparison-final","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-criterion","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-criterion-d","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-criterion-final","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-parity","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-parity-b","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-parity-c","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-parity-d","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-summary-d","kind":"compact-functions-evidence","plan":"0056","status":"complete"}
+{"runId":"0056-verification","kind":"verification","plan":"0056","status":"complete"}

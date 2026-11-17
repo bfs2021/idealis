@@ -15,6 +15,10 @@
 - [x] nativeのcheck_parallelは1〜256 worker上限を受け取り、適したsafety frontierを並列展開する。
 - [x] 軽いscalar・狭いfrontier・action/temporal property・fairnessは逐次へfallbackする。Wasmは逐次check。
 - [x] Rust rlibとしてnative/Wasmへビルドでき、idealis-coreやparser、外部solverには依存しない。
+- [x] 関数・record・sequenceのimmutable domainを共有し、64要素以下の全Boolまたは全Int(0/1)を別tagのbit列に保持する。混在・範囲外・65要素以上はScalar列へ戻す。公開Value/IRとcanonical identity、workを維持する。
+- [x] domainと関数のhash衝突を完全比較し、worker新規domainのkey/payload Refをrootへremapする。root所属domainはimmutableに共有し、所属metadataを等値性へ含めない。
+- [x] packed関数の型と完全に一致する有限rangeのmembershipでは、domain確認後に同じ要素数の論理workを一括計上する。workerのbudget付きoverlayは既存の要素順へ戻す。通常の関数検査も値だけのowned iteratorを使う。
+- [x] native forkはroot domainが16個以下なら、64 key以下のdomainにworker専用wrapperを持ち、参照カウンタを分離する。merge後はcanonical rootへ戻し、対象外は通常のArc共有へ戻す。
 
 ## TLC互換の追加対応
 
@@ -46,4 +50,4 @@
 - [x] workはwall timeや厳密なメモリ上限ではない。並列探索のworkと予算境界の部分結果は逐次と同じとは限らない。
 - [x] 集合foldの文字列・record、関数key幅等の制限を維持する。model valueを含む集合foldも未対応。汎用Valueのvariantの存在だけで対応とは数えない。
 
-[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[時間的性質](src/temporal.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。
+[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[関数値](src/safety_functions.rs)、[値の登録・移送](src/safety_values.rs)、[時間的性質](src/temporal.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。

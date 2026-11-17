@@ -100,6 +100,13 @@ const scopes: readonly CrateScope[] = [
         path: "src/safety_parallel.rs",
         topic: "native内部並列化の対象、逐次fallback、workerとworkの契約",
       },
+      {
+        path: "src/safety_values.rs",
+        contains: "impl<'scope> Arena<'scope>",
+        topic:
+          "immutable domain共有、Boolと整数の別bit表現、membershipの論理work、worker参照とremap、hash衝突の完全比較",
+        context: ["src/safety_functions.rs"],
+      },
     ],
   },
   {
