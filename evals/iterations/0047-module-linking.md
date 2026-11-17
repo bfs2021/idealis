@@ -34,13 +34,13 @@
 
 [Criterionの17本](../runs/0047-module-criterion-bounded/result.json)を20 sample、warmup 0.5 s、measurement 1 sで測定した。計測中はこの作業のbuild・test・TLC実行を並走させていない。通常の開発用Macでの測定で、専用機の測定ではない。AST深さ制限の追加前の[初回計測](../runs/0047-module-criterion/result.json)も保存した。下表は制限追加後の値で、両runの差を高速化とは判断しない。
 
-| ASTからIRへの処理 | 平均 | 平均の95%区間 |
-| --- | ---: | ---: |
-| 単一ファイルのcounter | 17.317 µs | 17.097-17.593 µs |
+| ASTからIRへの処理      |      平均 |    平均の95%区間 |
+| ---------------------- | --------: | ---------------: |
+| 単一ファイルのcounter  | 17.317 µs | 17.097-17.593 µs |
 | 同等のcounterをEXTENDS | 27.398 µs | 27.306-27.510 µs |
-| diamond import | 18.715 µs | 18.661-18.766 µs |
-| 独立した2つのINSTANCE | 75.746 µs | 75.191-76.468 µs |
-| module別operator置換 | 23.674 µs | 23.574-23.767 µs |
+| diamond import         | 18.715 µs | 18.661-18.766 µs |
+| 独立した2つのINSTANCE  | 75.746 µs | 75.191-76.468 µs |
+| module別operator置換   | 23.674 µs | 23.574-23.767 µs |
 
 counterのmodule解決込みcompileは、単一ファイルに対して約1.58倍の費用だった。構文解析、Wasm起動、IPC、process起動は測定区間に含まない。IRを再利用する探索の速度やTLCとの速度比には読み替えない。この測定をmodule解決の今後の最適化の基準とする。
 
