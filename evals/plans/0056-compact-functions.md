@@ -33,3 +33,9 @@ Criterionは既存14本を同じbench sourceで20 samples・warmup 0.5秒・meas
 大規模比較の途中で、Aはfunctionのnative 1が約6.5→3.9秒になった一方、8 workersでは後退が見えた。channelsのwarmupもnative 8が約6.6→9.0秒だった。Aのrunは最後まで保存する。mergeが、既にroot Arenaに属するdomainにも毎回key remap判定とdomain pool検索を行っていた。
 
 Bではdomainにroot所属のimmutable metadataを持たせ、既にrootのdomainはArcをそのまま移送する。workerで新規作成したdomainは従来どおりkeyをremapしroot poolへ登録する。所属metadataは値の等値性・hashに含めない。Aの実行ファイルは変えず、測定中にbuild/testを並行しない。Bを同じ固定条件で新しいrunへ測り直し、最終採否はBの結果で判断する。
+
+## packed値の型保証をmembershipで使う候補C
+
+AのWasm functionは9.54→5.79秒になったが、tla-tsの5.54秒には届かなかった。membershipは全生成候補で関数のkey/value列を構築し直し、全要素を検査していた。Cは値だけのowned iteratorを使う。packedの全Bool/全Int(0/1)と、完全に一致する有限rangeだけは表現上membershipが保証されるため、domainの一致を検査後に論理workを要素数分consumeしてTRUEを返す。
+
+worker内のwork割当ての順序を変えないため、この一括consumeはbudget付きoverlayでは無効にする。誤ったdomain、混在型、異なるrange、広い関数と非有限rangeは既存の順序へfallbackする。rootの予算境界の全応答が一致することを、0/1とBool、幅0/1/16/32/64/65、型不一致・狭いrangeの追加caseで凍結基準へ検査する。Cを最終候補として同じ大規模条件で新しいrunへ測定する。A/Bの測定は初期候補として残す。
