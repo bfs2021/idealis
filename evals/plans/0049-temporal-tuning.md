@@ -27,3 +27,7 @@ compilerの既存27本をfresh before/afterで測る。20 sample、warmup 0.5 s�
 [変更前profile](../runs/0049-profile-before/result.json)のSFは11,245 sample。HashMap<usize, ()>::insertはinclusive 1,646 sample、Expansion::cloneは1,319 sample。WFもそれぞれ1,182/1,133 sampleだった。訪問済み式のHashSetが小さい整数のhash・rehashとcloneを発生させている。
 
 候補はExpansion.seenだけの変更。poolが256式以下なら[u64; 4]へ、257式以上なら従来のHashSetへ保存する。疎な大きいpoolの分岐ごとに全pool分のbitmapを確保しない。挿入・所属だけを置き換え、todo/next/pendingの順序とarena.tick、SCC・witnessの処理は保持する。16/17/64/65要素の時間論理forallでword境界とfallbackの両側、正常・違反・予算境界を比較する。高速化のためにテストの意味を変えない。
+
+## 初回計測後の再測定条件
+
+初回afterでは、未変更のcompiler処理も2倍以上ぶれた。同時期のOS load averageは10.62だった。対象checkだけの改善率で採用せず、compiler 27本とrtlc 14本を各benchmarkごとにA/B/B/Aで再測定する。Aはgit archiveした0e9212acの3 crate、Bは作業tree。先に全binaryをbuildして保存し、計測中はbuild/test/profileを行わない。各回20 sample、warmup 0.5 s、measurement 1 sを維持する。2回のmeanの算術平均を各variantの値とし、その比を報告する。個別CIも保存し、この集約へ95%CIの意味を付けない。専用機の無負荷測定とはしない。残る後退は隠さず記録する。
