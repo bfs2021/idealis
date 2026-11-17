@@ -496,6 +496,28 @@ tlc-finite-replay saved run java jar: safety-build
 compiler-criterion stage run: criterion-prepare
   IDEALIS_CRITERION_PLAN=0048-fairness-operators IDEALIS_CRITERION_TARGET=rtla-compiler node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
 
+temporal-profile run:
+  pnpm build
+  cargo build --release --locked --manifest-path crates/rtla-compiler/Cargo.toml --example temporal-profile
+  node dist/evals/temporal-tuning/profile.js crates/rtla-compiler/target/release/examples/temporal-profile {{quote(run)}}
+
+temporal-criterion stage run: criterion-prepare
+  IDEALIS_CRITERION_PLAN=0049-temporal-tuning IDEALIS_CRITERION_TARGET=rtla-compiler node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+temporal-controls stage run: criterion-prepare
+  IDEALIS_CRITERION_PLAN=0049-temporal-tuning node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+temporal-parity baseline run: safety-build
+  node dist/evals/temporal-tuning/parity.js {{quote(baseline)}} {{quote(run)}}
+
+temporal-compare before after run:
+  pnpm build
+  node dist/evals/temporal-tuning/compare.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
+
+temporal-alternating run:
+  pnpm build
+  node dist/evals/temporal-tuning/alternating.js {{quote(run)}}
+
 criterion-baseline revision stage run: criterion-prepare
   IDEALIS_CRITERION_PLAN=0046-tlc-finite-support IDEALIS_CRITERION_REVISION={{quote(revision)}} node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
 

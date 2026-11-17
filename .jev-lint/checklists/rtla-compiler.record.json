@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "06303a090a59487df0d599861049aebe7e7f508a4ff90292be51e055aa27b24b",
+  "snapshotDigest": "f23111ed675f971b8e331266d5bf08e0fb2176298b75f987878056f1ce056ff3",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -32,10 +32,10 @@
       "contextHash": "92b0a7fc874b895aa65621b8d8b2beeee601ecd286242e7aca2c016b26eb273d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.51,
+        "confidence": 0.44,
         "probabilities": {
-          "supports": 0.63,
-          "contradicts": 0.36,
+          "supports": 0.58,
+          "contradicts": 0.41,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -46,7 +46,7 @@
       "topic": "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
       "mode": "semantic",
       "reference": {
-        "source": "source7",
+        "source": "source8",
         "path": "crates/rtla-compiler/src/link.rs",
         "startLine": 1,
         "endLine": 628,
@@ -63,7 +63,7 @@
       },
       "context": [
         {
-          "source": "source8",
+          "source": "source9",
           "path": "crates/rtla-compiler/src/rewrite.rs",
           "startLine": 1,
           "endLine": 309,
@@ -71,16 +71,16 @@
           "contentHash": "2c7d7e0207b0865c5f15294b8d924b36dbc11c026a38d8b13b295a3f491dfce3"
         }
       ],
-      "candidateId": "2e5118e14ea1ab4d8e387b35cc85c500ef6f16f5bb4a643ac74fce97da52b666",
-      "contextHash": "6ac114e0be8e6b0fba86b5b3452990e14aba8d2ffb46e231ebf13f59604267ca",
+      "candidateId": "9391e33c7e28cc724662b139eea1d378862c61f42ebdb784a20cdcc3d717c525",
+      "contextHash": "699c6379845d313388558959c4c8c476b4897bdb5afac737ce6dbc7d2f7feca4",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.64,
+        "confidence": 0.67,
         "probabilities": {
-          "supports": 0.73,
+          "supports": 0.75,
           "contradicts": 0.19,
-          "unrelated": 0.01,
-          "insufficient_context": 0.07
+          "unrelated": 0,
+          "insufficient_context": 0.06
         }
       }
     },
@@ -89,7 +89,7 @@
       "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
       "mode": "semantic",
       "reference": {
-        "source": "source6",
+        "source": "source7",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 168,
         "endLine": 184,
@@ -105,16 +105,16 @@
         "contentHash": "b176304fc1a0010889309d581f35955ae7aaf3967080b1f31226a2cfaa6cf633"
       },
       "context": [],
-      "candidateId": "7b8302d997aff89e1abfa6fd05434576981df10c29c8d407a75ab47362a93e15",
-      "contextHash": "cc2f8f384f1946b5308186853f2f6d8e961b1d2f5ac9eac629a856bafc400fcd",
+      "candidateId": "01559f373ef85a420b232e7b619af50f985fb8e53b2843f9b63d8d9e2eb8ab5b",
+      "contextHash": "a10447b620232d8b5426ce213ceb0da18c84c46e4b712d26e4507520bd27fea4",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.61,
+        "confidence": 0.65,
         "probabilities": {
-          "supports": 0.71,
-          "contradicts": 0.13,
-          "unrelated": 0.02,
-          "insufficient_context": 0.14
+          "supports": 0.74,
+          "contradicts": 0.12,
+          "unrelated": 0.01,
+          "insufficient_context": 0.13
         }
       }
     },
@@ -123,7 +123,7 @@
       "topic": "有限式、action、CASE、Apalache folds、限定したVariants、SelectSeq/SortSeq/Assertのlowering",
       "mode": "semantic",
       "reference": {
-        "source": "source6",
+        "source": "source7",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 320,
         "endLine": 1508,
@@ -139,16 +139,16 @@
         "contentHash": "b176304fc1a0010889309d581f35955ae7aaf3967080b1f31226a2cfaa6cf633"
       },
       "context": [],
-      "candidateId": "7eee772b7f353d4eb031d3307906d18b6ab4e11335b3d6dab366445f9e1c022e",
-      "contextHash": "0ecf8a22cad0033d6d261b88124f9e5b8630f5e878eed2b09dbde0d1e80171d9",
+      "candidateId": "0b3dd4db325259d1c46dd3fb725a82ed870693d549759f681ad2cf36437f6ac9",
+      "contextHash": "52a48f0c6f9acf45ea3f8ac9a7a81b0eb02250079e824d1cfb10856933019588",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.64,
+        "confidence": 0.68,
         "probabilities": {
-          "supports": 0.73,
-          "contradicts": 0.24,
-          "unrelated": 0,
-          "insufficient_context": 0.03
+          "supports": 0.76,
+          "contradicts": 0.19,
+          "unrelated": 0.01,
+          "insufficient_context": 0.04
         }
       }
     },
@@ -157,7 +157,7 @@
       "topic": "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source6",
+        "source": "source7",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 320,
         "endLine": 1508,
@@ -173,16 +173,16 @@
         "contentHash": "b176304fc1a0010889309d581f35955ae7aaf3967080b1f31226a2cfaa6cf633"
       },
       "context": [],
-      "candidateId": "0225d405852bb7c8f71e53e2cdfb662303472c76a8f8af4c48fe259181e5d627",
-      "contextHash": "333215140b5a300b535ab512c53768191923ca1c7b891320a3fe7dfc96c0ffb9",
+      "candidateId": "46b684e222df52d5ae87292efab3f6a681226681648fcda7dfb1e7cbc9314eaf",
+      "contextHash": "ca1a34f8581869af5595e62cb8c0f264c1b401d9f372d691ce76654e3865f3ef",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.77,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.09,
+          "supports": 0.83,
+          "contradicts": 0.1,
           "unrelated": 0,
-          "insufficient_context": 0.05
+          "insufficient_context": 0.07
         }
       }
     }

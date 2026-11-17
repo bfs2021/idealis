@@ -27,54 +27,58 @@
       "role": "reference"
     },
     "source6": {
-      "path": "crates/rtla-compiler/src/lib.rs",
+      "path": "crates/rtla-compiler/examples/temporal-profile.rs",
       "role": "reference"
     },
     "source7": {
-      "path": "crates/rtla-compiler/src/link.rs",
+      "path": "crates/rtla-compiler/src/lib.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "crates/rtla-compiler/src/rewrite.rs",
+      "path": "crates/rtla-compiler/src/link.rs",
       "role": "reference"
     },
     "source9": {
-      "path": "crates/rtla-compiler/tests/compiler.rs",
+      "path": "crates/rtla-compiler/src/rewrite.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "crates/rtla-compiler/tests/finite-support.json",
+      "path": "crates/rtla-compiler/tests/compiler.rs",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/rtla-compiler/tests/finite_support.rs",
+      "path": "crates/rtla-compiler/tests/finite-support.json",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/rtla-compiler/tests/modules-support.json",
+      "path": "crates/rtla-compiler/tests/finite_support.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/rtla-compiler/tests/modules.rs",
+      "path": "crates/rtla-compiler/tests/modules-support.json",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/rtla-compiler/tests/operators-support.json",
+      "path": "crates/rtla-compiler/tests/modules.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtla-compiler/tests/operators.rs",
+      "path": "crates/rtla-compiler/tests/operators-support.json",
       "role": "reference"
     },
     "source16": {
-      "path": "package.json",
+      "path": "crates/rtla-compiler/tests/operators.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "pnpm-lock.yaml",
+      "path": "package.json",
       "role": "reference"
     },
     "source18": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source19": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -96,14 +100,14 @@
       "topic": "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
       "mode": "semantic",
       "reference": {
-        "source": "source7"
+        "source": "source8"
       },
       "target": {
         "source": "source3"
       },
       "context": [
         {
-          "source": "source8"
+          "source": "source9"
         }
       ]
     },
@@ -112,7 +116,7 @@
       "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
       "mode": "semantic",
       "reference": {
-        "source": "source6",
+        "source": "source7",
         "contains": "pub fn compile("
       },
       "target": {
@@ -125,7 +129,7 @@
       "topic": "有限式、action、CASE、Apalache folds、限定したVariants、SelectSeq/SortSeq/Assertのlowering",
       "mode": "semantic",
       "reference": {
-        "source": "source6",
+        "source": "source7",
         "contains": "fn apply("
       },
       "target": {
@@ -138,7 +142,7 @@
       "topic": "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source6",
+        "source": "source7",
         "contains": "fn parts("
       },
       "target": {

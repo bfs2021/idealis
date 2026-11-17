@@ -163,9 +163,41 @@ impl<'a> Pool<'a> {
     }
 }
 #[derive(Clone)]
+enum Seen {
+    Dense([u64; 4]),
+    Sparse(HashSet<usize>),
+}
+impl Seen {
+    fn new(formulas: usize) -> Self {
+        if formulas <= 256 {
+            Self::Dense([0; 4])
+        } else {
+            Self::Sparse(HashSet::new())
+        }
+    }
+    fn insert(&mut self, id: usize) -> bool {
+        match self {
+            Self::Dense(words) => {
+                let word = &mut words[id / 64];
+                let mask = 1 << (id % 64);
+                let fresh = *word & mask == 0;
+                *word |= mask;
+                fresh
+            }
+            Self::Sparse(set) => set.insert(id),
+        }
+    }
+    fn contains(&self, id: usize) -> bool {
+        match self {
+            Self::Dense(words) => words[id / 64] & (1 << (id % 64)) != 0,
+            Self::Sparse(set) => set.contains(&id),
+        }
+    }
+}
+#[derive(Clone)]
 struct Expansion {
     todo: Vec<usize>,
-    seen: HashSet<usize>,
+    seen: Seen,
     next: Vec<usize>,
     pending: Vec<usize>,
 }
@@ -181,7 +213,7 @@ fn expand(
 ) -> Result<Vec<Alternative>, CoreError> {
     let mut stack = vec![Expansion {
         todo: required.to_vec(),
-        seen: HashSet::new(),
+        seen: Seen::new(pool.formulas.len()),
         next: vec![],
         pending: vec![],
     }];
@@ -235,7 +267,7 @@ fn expand(
         state.next.sort_unstable();
         state.next.dedup();
         state.pending.retain(|id| match pool.formulas[*id] {
-            Formula::Until(_, right) => !state.seen.contains(&right),
+            Formula::Until(_, right) => !state.seen.contains(right),
             _ => false,
         });
         state.pending.sort_unstable();

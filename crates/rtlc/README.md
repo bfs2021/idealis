@@ -12,6 +12,8 @@ select-seq / sort-seqのIRは、1引数の選択predicateと2引数の比較body
 
 model valueのwire表現は`{"type":"model-value","value":"p_1"}`。文字列の`"p_1"`とは異なる値で、反例にもtagを保持する。型名はTLCと同じく名前の先頭1文字とunderscoreで表す。集合foldでmodel valueの順序を使う入力は拒否する。
 
+時間論理の展開では、256式以下のpoolの訪問済み式を固定長bit集合で保持する。分岐のcloneでHashSetのhash・確保を繰り返す費用を減らす。257式以上のpoolはHashSetを使い、分岐ごとに全pool分のbitmapを確保しない。式の展開順とworkのtickは同じ。
+
 ## Rustから使う
 
 ローカルcheckoutでは`rtlc = { path = "../idealis/crates/rtlc" }`を依存に追加する。JSON IRを読む場合は`serde_json`も使う。

@@ -23,6 +23,7 @@
 - [x] 有限domainの式CHOOSE。正規化した順序の最初の一致を選び、tuple pattern、短絡と無解時エラーを扱う。Step::Chooseによる状態の候補代入とは別。
 - [x] state/action constraintで探索を制限する。除外する境界候補もinvariantと対応するpropertyを検査し、除外をdeadlockとは扱わない。completeは制約後のグラフに対する結果。
 - [x] 時間論理のforall/existsを定数の有限domainで展開する。tuple、空domain、入れ子を扱い、展開もwork予算を消費する。
+- [x] temporal展開の訪問済み式は256式以下で固定長bit集合に保持し、それより大きいpoolはHashSetへ戻す。todo/next/pendingの順序とworkのtickは変えない。
 - [ ] SYMMETRYによる状態削減。活性検査への適用条件も必要。
 - [ ] VIEWによる状態の同一視。
 - [ ] ディスクへの状態・queueの退避とcheckpoint/resume。
