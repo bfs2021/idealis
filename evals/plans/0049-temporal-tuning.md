@@ -21,3 +21,9 @@ compilerの既存27本をfresh before/afterで測る。20 sample、warmup 0.5 s�
 ## 回帰と記録
 
 52ケースのnative/Wasm/TLC判定・計数と4反例の再生を検査する。変更前binaryとも完全な応答を比較し、workを含む結果の差を許容しない。小さいwork/state/depth/temporal予算と評価エラーも比較する。Chromium、crate fmt/clippy/test、just check/browser、portable-build/test、safety-test、runtime-build/test、evaluate/replay、package consumerとSUPPORT/Jevのstaged検査を通す。runを編集せず、採用と保留の判断をiterationへ記録する。
+
+## profile後の候補（実装前）
+
+[変更前profile](../runs/0049-profile-before/result.json)のSFは11,245 sample。HashMap<usize, ()>::insertはinclusive 1,646 sample、Expansion::cloneは1,319 sample。WFもそれぞれ1,182/1,133 sampleだった。訪問済み式のHashSetが小さい整数のhash・rehashとcloneを発生させている。
+
+候補はExpansion.seenだけの変更。poolが256式以下なら[u64; 4]へ、257式以上なら従来のHashSetへ保存する。疎な大きいpoolの分岐ごとに全pool分のbitmapを確保しない。挿入・所属だけを置き換え、todo/next/pendingの順序とarena.tick、SCC・witnessの処理は保持する。16/17/64/65要素の時間論理forallでword境界とfallbackの両側、正常・違反・予算境界を比較する。高速化のためにテストの意味を変えない。
