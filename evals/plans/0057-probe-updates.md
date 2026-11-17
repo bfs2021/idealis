@@ -19,3 +19,9 @@ beforeのnative/Wasm、Criterion executable、sourceとhashを凍結する。005
 ## 終了条件
 
 fmt/clippy、check/browser、portable/safety/criterion、runtime、evaluate/replay、package、SUPPORT/Jevとstaged検査を行う。TLC既存corpusと保存再生を確認する。失敗runも上書きせず、条件・結果・採用判断をiterationへ記録する。ローカルcommitまでで、push/PR/mergeは行わない。
+
+## 候補Aからの見直し
+
+AのCriterionはchannelの8 workersで約8%改善したが、大規模functionの8 workersでは小幅な後退が見えた。Aのrunは最後まで保存する。packed値はprobeを使わないため、guardの追加費用とcode generationの影響を確認する。
+
+候補BはviewがFunction全体ではなくdomainとScalar sliceを直接借用する。hash/比較時にpayload表現を要素ごとに判定せず、変更位置の前後をsliceで比較する。scalar_updateのpacked guardにinline指定を付ける。runtimeはAの通常測定が完了してから変更する。Bも同じ14本と9経路で別runへ測り、A/Bを混在した表にしない。
