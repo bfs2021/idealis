@@ -177,9 +177,9 @@ if (command === "snapshot") {
               mode === "cold"
                 ? "fresh process, JSONL transport, request and response serialization"
                 : "reused independent JSONL processes, transport, request and response serialization",
-            samples: 7,
-            warmup: 1,
-            iterations: 3,
+            samples: mode === "cold" ? 10 : 20,
+            warmup: mode === "cold" ? 2 : 75,
+            iterations: mode === "cold" ? 1 : 25,
             max_evaluations: 10000,
           },
         };

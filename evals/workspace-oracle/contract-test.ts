@@ -122,3 +122,16 @@ test("declared workspace migration sites all use the shared oracle", async () =>
     );
   }
 });
+
+test("mutating an input is observed on the next call and does not alter a previous report", () => {
+  const actual = { nested: [1, 2] };
+  const expected = { nested: [1, 2] };
+  const previous = compareOracle(actual, expected);
+  const saved = JSON.stringify(previous);
+  actual.nested.push(3);
+  assert.equal(previous.status, "matched");
+  assert.equal(compareOracle(actual, expected).status, "mismatch");
+  assert.equal(JSON.stringify(previous), saved);
+  expected.nested.push(3);
+  assert.equal(compareOracle(actual, expected).status, "matched");
+});

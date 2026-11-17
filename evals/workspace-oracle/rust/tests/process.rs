@@ -15,9 +15,15 @@ fn run(kind: &str, mode: &str) -> (bool, serde_json::Value) {
     } else {
         binary
     };
+    let request = if kind == "echo" {
+        json!({"kind":"fixture","status":"complete","data":(0..4096).map(|index| json!({"index":index,"value":"large payload across buffer boundaries"})).collect::<Vec<_>>()})
+    } else {
+        json!({})
+    };
+    let reference = if kind == "echo" { "echo" } else { "stable" };
     let manifest = json!({"version":1,"name":"process-control","mode":mode,
-        "baseline":{"path":binary,"args":["--fixture","stable"]},"candidate":{"path":candidate,"args":["--fixture",kind]},
-        "cases":[{"id":"input","request":{},"requirements":[{"pointer":"/kind","value":"fixture"},{"pointer":"/status","value":"complete"}]}],
+        "baseline":{"path":binary,"args":["--fixture",reference]},"candidate":{"path":candidate,"args":["--fixture",kind]},
+        "cases":[{"id":"input","request":request,"requirements":[{"pointer":"/kind","value":"fixture"},{"pointer":"/status","value":"complete"}]}],
         "config":{"baseline":"baseline","scope":"process test","samples":2,"warmup":1,"iterations":1,"max_evaluations":20}});
     std::fs::write(
         root.join("manifest.json"),
@@ -87,4 +93,20 @@ fn invalid_manifest_is_rejected_before_spawning_an_implementation() {
     );
     assert!(!root.join("output").exists());
     std::fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
+fn large_payloads_are_flushed_and_preserved_before_reading_a_reply() {
+    for mode in ["cold", "reused"] {
+        let (success, report) = run("echo", mode);
+        assert!(success, "{report}");
+        assert_eq!(
+            report["preflight"]["cases"][0]["reference"]["value"]["data"]
+                .as_array()
+                .unwrap()
+                .len(),
+            4096
+        );
+        assert_eq!(report["status"], "matched");
+    }
 }

@@ -127,3 +127,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [backend契約](iterations/0028-backend-contract.md)は、explicit complete、有界の反例なし、帰納性と個別obligationを分ける。`backend-test` / `backend-eval`で実rtlc native/Wasm、0027の保存したApalache応答、非空性と帰納性の集約条件を確認する。新しい速度比較や汎用Apalache adapterの評価ではない。
 
 [Rust frontend](iterations/0029-rtla-compiler.md)は、rtlaのASTからrtlcのIRを生成する。`compiler-test` / `compiler-eval`で既存TS frontendとのIR・結果の一致、`compiler-tlc`で固定20件の直接比較を行う。意味の一致を確認する回帰で、性能や未知故障発見の実験とは区別する。
+
+[0054の結果](iterations/0054-oracle-bench-tuning.md)は、workspace比較のpipe bufferingとoracle JSON境界の借用・直接serializationを、旧版を固定して評価する。通信・照合kernel・モデル検査の費用を区別する。

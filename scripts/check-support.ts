@@ -183,7 +183,13 @@ const scopes: readonly CrateScope[] = [
         path: "src/wire.rs",
         topic:
           "version付き観測batchをOracleGroupへ通すJSON境界、件数と入力size、CLIとWasm ABI",
-        context: ["src/wasm.rs", "src/main.rs", "tests/json.rs"],
+        context: [
+          "src/wasm.rs",
+          "src/main.rs",
+          "tests/json.rs",
+          "tests/bytes.rs",
+          "benches/wire.rs",
+        ],
       },
       {
         path: "src/report.rs",

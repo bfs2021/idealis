@@ -1,0 +1,41 @@
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { cpus } from "node:os";
+import { join, resolve } from "node:path";
+
+const before = process.argv[2];
+const after = process.argv[3];
+const output = process.argv[4];
+assert.ok(before && after && output);
+const metadata = await Promise.all(
+  [before, after].map(async (root) => {
+    const manifest = JSON.parse(
+      await readFile(join(root, "criterion.json"), "utf8"),
+    );
+    assert.equal(
+      createHash("sha256")
+        .update(await readFile(join(root, "wire-bench")))
+        .digest("hex"),
+      manifest.binarySha256,
+    );
+    return manifest;
+  }),
+);
+assert.equal(metadata[0].benchSha256, metadata[1].benchSha256);
+await mkdir(output);
+await writeFile(
+  join(output, "manifest.json"),
+  `${JSON.stringify({ metadata, cpu: cpus()[0]?.model, sampleSize: 20, warmupMs: 500, measurementMs: 1000, order: ["before", "after", "after", "before"] }, null, 2)}\n`,
+  { flag: "wx" },
+);
+for (const [index, root] of [before, after, after, before].entries()) {
+  const directory = resolve(output, String(index));
+  await mkdir(directory);
+  const log = execFileSync(resolve(root, "wire-bench"), ["--bench"], {
+    env: { ...process.env, CARGO_TARGET_DIR: directory },
+  });
+  await writeFile(join(directory, "stdout.log"), log, { flag: "wx" });
+}
+console.log(`Saved four isolated Criterion runs: ${output}`);

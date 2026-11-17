@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::cell::RefCell;
 use std::fs::{self, OpenOptions};
-use std::io::{self, BufRead, BufReader, Read, Write};
+use std::io::{self, BufRead, BufReader, BufWriter, Read, Write};
 use std::path::Path;
 use std::process::{Child, ChildStdin, ChildStdout, Command, Stdio};
 use std::rc::Rc;
@@ -41,7 +41,7 @@ struct Input {
 }
 struct Running {
     child: Child,
-    input: Option<ChildStdin>,
+    input: Option<BufWriter<ChildStdin>>,
     output: BufReader<ChildStdout>,
 }
 impl Running {
@@ -56,7 +56,7 @@ impl Running {
         let output = BufReader::new(child.stdout.take().ok_or("missing process stdout")?);
         Ok(Self {
             child,
-            input: Some(input),
+            input: Some(BufWriter::new(input)),
             output,
         })
     }
@@ -107,9 +107,10 @@ impl Client {
                     .stdout(Stdio::piped())
                     .stderr(Stdio::inherit())
                     .spawn()?;
-                let mut input = child.stdin.take().ok_or("missing cold stdin")?;
+                let mut input = BufWriter::new(child.stdin.take().ok_or("missing cold stdin")?);
                 serde_json::to_writer(&mut input, &case.request)?;
                 input.write_all(b"\n")?;
+                input.flush()?;
                 drop(input);
                 let result = child.wait_with_output()?;
                 if !result.status.success() {
@@ -206,7 +207,12 @@ fn save(path: &Path, value: &impl Serialize) -> Result<()> {
 fn fixture(kind: &str) -> Result<()> {
     let mut count = 0;
     for line in io::stdin().lock().lines() {
-        line?;
+        let line = line?;
+        if kind == "echo" {
+            println!("{line}");
+            io::stdout().flush()?;
+            continue;
+        }
         count += 1;
         if kind == "exit" {
             std::process::exit(7);

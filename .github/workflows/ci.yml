@@ -32,6 +32,7 @@ jobs:
       - run: cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
       - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml
+      - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml --bench wire
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
       - run: node dist/scripts/prepare-tlc-modules.js

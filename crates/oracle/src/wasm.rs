@@ -24,8 +24,7 @@ pub extern "C" fn oracle_input_resize(length: u32) -> *mut u8 {
 #[unsafe(no_mangle)]
 pub extern "C" fn oracle_dispatch() {
     RUNTIME.with_borrow_mut(|runtime| {
-        runtime.output =
-            serde_json::to_vec(&crate::dispatch(&runtime.input)).expect("serialize oracle reply");
+        crate::wire::dispatch_into(&runtime.input, &mut runtime.output);
     });
 }
 #[unsafe(no_mangle)]

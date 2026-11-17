@@ -26,9 +26,11 @@ export const createOracle = (bytes: Uint8Array) => {
     version() !== 1
   )
     throw new Error("Unsupported oracle Wasm ABI");
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
   return {
     request: (input: unknown): OracleReport => {
-      const data = new TextEncoder().encode(JSON.stringify(input));
+      const data = encoder.encode(JSON.stringify(input));
       if (data.length > 16 * 1024 * 1024)
         throw new Error("Oracle request exceeds 16 MiB");
       const pointer = resize(data.length);
@@ -46,7 +48,7 @@ export const createOracle = (bytes: Uint8Array) => {
       )
         throw new Error("Invalid oracle output buffer");
       const reply: unknown = JSON.parse(
-        new TextDecoder().decode(new Uint8Array(memory.buffer, start, length)),
+        decoder.decode(new Uint8Array(memory.buffer, start, length)),
       );
       if (
         !isRecord(reply) ||

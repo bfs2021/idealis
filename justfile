@@ -61,6 +61,22 @@ workspace-oracle-cost run:
 workspace-oracle-cost-replay run replay:
   node dist/evals/workspace-oracle/cost.js {{quote(replay)}} {{quote(run)}}
 
+# Build and test first. Frozen binaries keep compilation outside the measurement.
+oracle-tuning-freeze directory:
+  node dist/evals/oracle-tuning/run.js freeze {{quote(directory)}}
+
+oracle-tuning-measure before transport after run:
+  node dist/evals/oracle-tuning/run.js measure {{quote(before)}} {{quote(transport)}} {{quote(after)}} {{quote(run)}}
+
+oracle-tuning-compat before after run:
+  node dist/evals/oracle-tuning/compat.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
+
+oracle-tuning-kernel before after run:
+  node dist/evals/oracle-tuning/kernel.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
+
+oracle-criterion:
+  cargo bench --locked --manifest-path crates/oracle/Cargo.toml --bench wire
+
 oracle-build:
   cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
@@ -71,6 +87,7 @@ oracle-test: oracle-build workspace-oracle-test
   cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path crates/oracle/Cargo.toml
+  cargo test --locked --manifest-path crates/oracle/Cargo.toml --bench wire
   cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml

@@ -32,7 +32,7 @@ just workspace-replay evals/runs/my-tuning evals/runs/my-tuning-replay
 
 snapshotは6実行境界のbinaryとsourceを別directoryへコピーし、hash・revision・環境・caseを保存する。coreの境界はrtla/rtla-compiler/rtlcを含む。caseのrequest・ID・受理条件が異なるsnapshotは比較しない。baselineとcandidateのbinaryが同じsnapshot同士も、測定器の正常対照として実行できる。
 
-13 casesをcold/reusedで分け、12 groupで実行する。referenceはbaseline専用の別process、速度baselineもbaselineを明示する。coldは毎回起動し、reusedは3つの独立した常駐JSONL processを使う。起動やIPC、JSONの費用を含む。7 samples・1 warmup・3 iterationsで、全呼出結果を保存したreferenceへ照合する。受理条件はunknown/boundedや意図しないエラーを拒否する。
+13 casesをcold/reusedで分け、12 groupで実行する。referenceはbaseline専用の別process、速度baselineもbaselineを明示する。coldは毎回起動し、reusedは3つの独立した常駐JSONL processを使う。起動やIPC、JSONの費用を含む。coldは10 samples・2 warmup呼出・1 iteration、reusedは20 samples・75 warmup呼出・25 iterationsで、全呼出結果を保存したreferenceへ照合する。受理条件はunknown/boundedや意図しないエラーを拒否する。
 
 異常終了、応答欠落、不正JSON、途中の結果変化を成功にしない。最後のJSONを返してから異常終了した場合や余分なstdoutが残る場合も、process終了時に検査して全速度比を無効化する。自動timeoutは設けていない。任意の外部programの停止は呼び出し側が管理する。statefulなhandle/sessionを含める場合は、その初期化・解放を独立したcaseへ設計する。
 
@@ -45,8 +45,29 @@ just workspace-oracle-cost evals/runs/my-oracle-cost
 just workspace-oracle-cost-replay evals/runs/my-oracle-cost evals/runs/my-oracle-cost-replay
 ```
 
-従来のNode strict equalityと新しいsnapshot/Wasm照合を、同じJSONL runnerで比較する。実parser/coreの応答を使い、7 samples・1 warmup・3 iterationsで測る。Nodeの常駐process、IPCとJSONを含むため、Wasmの純粋な関数時間とは呼ばない。
+従来のNode strict equalityと新しいsnapshot/Wasm照合を、同じJSONL runnerで比較する。実parser/coreの応答を使い、coldは10 samples・2 warmup呼出・1 iteration、reusedは20 samples・75 warmup呼出・25 iterationsで測る。Nodeの常駐process、IPCとJSONを含むため、Wasmの純粋な関数時間とは呼ばない。
 
 検査kernelの改善は既存のCriterion/profileを使う。このrunnerは、その変更前後の応答が保たれるかと、呼び出し境界全体の費用を確認する。測定中はbuild、test、別のsolver/profileを並走させない。
 
 既存GoのEOF入力型CLIは、そのまま常駐JSONLとして使えない。実装比較はcross/asyncの既存runnerで行い、汎用process runnerへ接続する場合はcoldまたはJSONL adapterを使う。
+
+## 通信と照合の変更を分けて測る
+
+0054では親processの小さなpipe writeがCPU profileの約79%を占めた。BufWriterでJSONの書き込みをまとめ、request serializationは時計内に残す。Wasm照合器はJSON観測のコピーと中間reportを減らし、全応答とsnapshotの表現を維持する。
+
+```sh
+# 対象をbuildして回帰確認後、変更前を保存する
+just oracle-tuning-freeze .artifacts/oracle-before
+# transportだけを変更してrelease buildする
+just oracle-tuning-freeze .artifacts/oracle-transport
+# bridgeも変更してnative/Wasm/TSをbuildする
+just oracle-tuning-freeze .artifacts/oracle-after
+just oracle-tuning-compat .artifacts/oracle-before .artifacts/oracle-after evals/runs/oracle-compat
+just oracle-tuning-measure .artifacts/oracle-before .artifacts/oracle-transport .artifacts/oracle-after evals/runs/oracle-roundtrip
+```
+
+測定順はbefore/transport/bridge/bridge/transport/before。bridgeはtransportと同じ親runnerを使い、各stageのlegacy Node比較も対照として保存する。固定した実rtla/core応答を使い、20 samples・75 warmup呼出・25 iterations、予定呼出上限10000で測る。snapshotにはJS adapterとWasmもコピーし、frozen workerの作業directoryを固定する。
+
+Criterionは同じ`benches/wire.rs`でbuildした`wire-bench`とhashを保存してから、`node dist/evals/oracle-tuning/kernel.js <before> <after> <new-run>`でbefore/after/after/beforeを実行する。各snapshotに実行ファイル`wire-bench`と`criterion.json`（binarySha256、benchSha256）を置く。出力の各directoryにCriterionのraw sampleと推定値を保存する。通常のbenchは`just oracle-criterion`を使う。
+
+[0054の結果](../iterations/0054-oracle-bench-tuning.md)には通信・bridge・kernelを別々に記録する。固定応答の照合費用から、TLCやZ3との探索速度比は求めない。過去の7/1/3の測定とも混ぜない。

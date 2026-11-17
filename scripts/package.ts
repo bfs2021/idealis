@@ -73,7 +73,7 @@ for (const name of [
     "SUPPORT.md",
     "LICENSE",
     ...(["rtla", "ralloy"].includes(name) ? ["NOTICE"] : []),
-    ...(name === "idealis-smt" ? ["benches"] : []),
+    ...(["idealis-smt", "oracle"].includes(name) ? ["benches"] : []),
   ])
     await cp(`crates/${name}/${file}`, resolve(workspace, name, file), {
       recursive: true,

@@ -76,10 +76,10 @@ if (parent) {
       baseline: "baseline",
       scope:
         "Node reused process roundtrip: legacy strict equality vs snapshot/Wasm oracle/JSON report; includes IPC and serialization",
-      samples: 7,
-      warmup: 1,
-      iterations: 3,
-      max_evaluations: 1000,
+      samples: 20,
+      warmup: 75,
+      iterations: 25,
+      max_evaluations: 10000,
     },
   };
   await save("input.json", input);
