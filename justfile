@@ -405,10 +405,19 @@ complex-tlc-replay java jar run:
   node dist/evals/collections-temporal/tlc-replay.js {{quote(java)}} {{quote(jar)}} {{quote(run)}}
 
 
-tlc-diff java jar phase run: safety-build
+tlc-modules:
+  pnpm build
+  node dist/scripts/prepare-tlc-modules.js
+
+tlc-diff-test java jar: safety-build tlc-modules
+  node --test dist/evals/tlc-differential/compare-test.js dist/evals/tlc-differential/standard-modules-test.js
+  TLC_JAVA={{quote(java)}} TLC_JAR={{quote(jar)}} node --test dist/evals/tlc-differential/standard-modules-tlc-test.js
+
+
+tlc-diff java jar phase run: safety-build tlc-modules
   node dist/evals/tlc-differential/run.js {{quote(java)}} {{quote(jar)}} {{quote(phase)}} {{quote(run)}}
 
-tlc-diff-replay java jar saved run: safety-build
+tlc-diff-replay java jar saved run: safety-build tlc-modules
   node dist/evals/tlc-differential/run.js {{quote(java)}} {{quote(jar)}} replay {{quote(run)}} {{quote(saved)}}
 
 checker-bench-test:

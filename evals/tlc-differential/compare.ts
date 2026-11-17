@@ -15,6 +15,11 @@ export const classifyTlc = (
   if (reference.exit === null || !reference.log.includes("TLC2 Version"))
     return "infrastructure-error";
   if (
+    reference.status === "error" &&
+    /^Cannot find source file for module /m.test(reference.log)
+  )
+    return "infrastructure-error";
+  if (
     /^java\.lang\.(NullPointerException|OutOfMemoryError|NoClassDefFoundError)/m.test(
       reference.log,
     )

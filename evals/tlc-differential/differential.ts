@@ -19,6 +19,7 @@ export const differential = async (
   jar: string,
   directory: string,
   frontend: typeof compileTlaSafety = compileTlaSafety,
+  options: NonNullable<Parameters<typeof runTlc>[5]> = {},
 ) => {
   const observe = (): Observation => {
     try {
@@ -75,6 +76,7 @@ export const differential = async (
     `${directory}/model`,
     input,
     "Differential",
+    options,
   );
   const rejected =
     input.expectedRejection === true &&
@@ -130,6 +132,7 @@ export const differential = async (
       `${directory}/witness`,
       forced,
       "Differential",
+      options,
     );
     witness = {
       input: forced,
@@ -160,6 +163,7 @@ export const differential = async (
           ),
         },
         "Differential",
+        options,
       );
       witness = {
         ...witness,

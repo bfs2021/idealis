@@ -34,6 +34,8 @@ jobs:
       - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
+      - run: node dist/scripts/prepare-tlc-modules.js
+      - run: node --test dist/evals/tlc-differential/compare-test.js dist/evals/tlc-differential/standard-modules-test.js
       - run: cargo fmt --manifest-path evals/workspace-oracle/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
       - run: cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml

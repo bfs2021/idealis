@@ -132,3 +132,20 @@ test("a TLC parser crash is infrastructure failure, not rejected model input", (
     "infrastructure-error",
   );
 });
+
+test("a missing imported module is reference infrastructure failure", () => {
+  const missing = {
+    ...reference,
+    status: "error",
+    exit: 150,
+    log: "TLC2 Version\nFatal errors while parsing TLA+ spec\nCannot find source file for module Apalache imported in module Differential.\nStarting...\nError: Parsing or semantic analysis failed.",
+  };
+  assert.equal(classifyTlc(missing), "infrastructure-error");
+  assert.deepEqual(
+    differences(
+      { error: { phase: "check", code: "protocol", message: "model failed" } },
+      missing,
+    ),
+    ["infrastructure-error"],
+  );
+});

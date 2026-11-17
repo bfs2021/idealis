@@ -136,7 +136,7 @@ Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅
 
 ringは1,000状態、function-cubeは8 bitの256状態で、3実装の完了判定・distinct・generatedが一致した。小さいモデルの起動費用を含み、検査kernelの速度差を示す値ではない。Rustのprepared check/coverage比較、測定中のdrift検出、保存oracleからの再生と最初の失敗は[評価0051](evals/iterations/0051-oracle-library.md)へ記録した。APIは[RustのテストとCriterion風のgroup登録](crates/oracle/README.md)を参照。
 
-workspaceの差分検査は23ファイル・99比較を同じRust/Wasm照合器へ移した。変更前後のbinary/source snapshot、cold/reusedの比較、保存oracleへの再生を[チューニング手順](evals/workspace-oracle/README.md)で実行できる。正常対照の12 group・1222回の一致と、JSON bridgeの追加費用は[評価0052](evals/iterations/0052-workspace-oracle.md)へ記録した。
+workspaceの差分検査は23ファイル・99比較を同じRust/Wasm照合器へ移した。変更前後のbinary/source snapshot、cold/reusedの比較、保存oracleへの再生を[チューニング手順](evals/workspace-oracle/README.md)で実行できる。正常対照の12 group・1222回の一致と、JSON bridgeの追加費用は[評価0052](evals/iterations/0052-workspace-oracle.md)へ記録した。 TLCの参照環境を修正し、既存24不一致も[評価0053](evals/iterations/0053-tlc-standard-modules.md)で解消した。155件の検査・32件の確認・155件の保存再生で不一致0を確認している。
 
 ## Rustコアの最適化前後
 

@@ -14,6 +14,7 @@ import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
 import { corpus, type Input, seeds } from "./corpus.js";
 import { differential, type Report } from "./differential.js";
+import { loadTlcStandardModules } from "./standard-modules.js";
 
 const [java, jar, phase, directory, parent] = process.argv.slice(2);
 assert.ok(
@@ -23,6 +24,7 @@ assert.ok(
     (phase === "development" || phase === "confirmation" || phase === "replay"),
 );
 const source = await fingerprint();
+const standardModules = await loadTlcStandardModules();
 const bytes = await readFile(
   "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
 );
@@ -31,6 +33,7 @@ const artifacts = {
   wasmSha256: digest(bytes),
   nativeSha256: digest(await readFile(nativePath)),
   jarSha256: digest(await readFile(jar)),
+  standardModules: standardModules.modules,
 };
 let saved: Report[] | undefined;
 let inputs: readonly Input[];
@@ -50,7 +53,7 @@ if (phase === "replay") {
     await readFile(join(parent, "manifest.json"), "utf8"),
   );
   for (const [key, value] of Object.entries(artifacts))
-    assert.equal(manifest[key], value);
+    assert.deepEqual(manifest[key], value);
   inputs = JSON.parse(await readFile(join(parent, "inputs.json"), "utf8"));
   saved = JSON.parse(await readFile(join(parent, "reports.json"), "utf8"));
 } else inputs = corpus(phase);
@@ -85,6 +88,8 @@ try {
       java,
       jar,
       join(directory, input.name),
+      undefined,
+      { libraryPath: standardModules.libraryPath },
     );
     reports.push(report);
     console.log(
@@ -112,6 +117,8 @@ try {
     artifacts.wasmSha256,
   );
   assert.equal(digest(await readFile(jar)), artifacts.jarSha256);
+  for (const module of standardModules.modules)
+    assert.equal(digest(await readFile(module.path)), module.sha256);
   await write("reports.json", reports);
   const files = [];
   for (const path of ["manifest.json", "inputs.json", "reports.json"])

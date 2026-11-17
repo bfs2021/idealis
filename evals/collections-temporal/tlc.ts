@@ -17,7 +17,7 @@ const valueExpression = (
 ): string => {
   switch (value.type) {
     case "int":
-      return value.value;
+      return value.value === "-2147483648" ? "(-2147483647 - 1)" : value.value;
     case "bool":
       return value.value ? "TRUE" : "FALSE";
     case "string":
@@ -50,6 +50,7 @@ export const tlaValue = (value: PortableValue): string =>
   valueExpression(value, 0);
 interface TlcOptions {
   readonly coverage?: boolean;
+  readonly libraryPath?: string;
 }
 export const runTlc = async (
   java: string,
@@ -77,6 +78,9 @@ export const runTlc = async (
     [
       "-XX:+UseParallelGC",
       `-Djava.io.tmpdir=${scratch}`,
+      ...(options.libraryPath
+        ? [`-DTLA-Library=${resolve(options.libraryPath)}`]
+        : []),
       "-jar",
       resolve(jar),
       "-workers",

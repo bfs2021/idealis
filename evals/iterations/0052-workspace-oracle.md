@@ -55,3 +55,5 @@ just workspace-replay evals/runs/new-tuning evals/runs/new-tuning-replay
 ```
 
 TS adapterはworkspaceのeval用で、公開npm APIには追加していない。Goの既存EOF入力CLIは常駐JSONLではないため、3言語の既存runnerまたはcoldのprocess adapterで使う。汎用runnerの並列計測と自動timeoutは追加していない。
+
+追記: [0053](0053-tlc-standard-modules.md)で参照環境と整数境界のtrace表記を修正し、24不一致を解消した。本iterationの過去runと判定は保持している。
