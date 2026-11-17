@@ -9,3 +9,7 @@ differentialの本体と全witness再実行で同じ検索pathを使う。module
 TDDでmissing/corrupt cache、固定digest、引数の検索pathと空白、明示module優先、missing module分類を検査する。TLC実行でfold/empty/評価エラー/Nextと反例を確認し、developmentとconfirmationを新規実行する。同じ入力の回帰であり新しい検出力の主張はしない。保存runを上書きせず、replayも新directoryへ保存する。
 
 just check/browser、専用TLCテスト、evaluate/replay-evaluation、共有検証のmutation、supportのoffline/staged gateを実行する。実装とチェックリストの変更があればJevのlive比較も更新する。条件と残差はiterationへ記録する。PR/push/mergeは行わない。
+
+## 最初の参照環境修正後
+
+0053-tlc-developmentは155件の元のモデル判定が揃い、24不一致のうち21件はwitnessも一致した。残った3件はwitnessにint32の最小値を直接出力すると、TLCが正の整数token 2147483648を拒否する問題だった。TLCのSpecProcessorとNaturals.Minus/Integers.Minusを確認し、最小値だけを(-2147483647 - 1)として出力する。元のモデルと期待値は変えず、direct/list/set/mapの境界値を実TLCで検査する。最初のrunを保存し、修正後のdevelopment/confirmation/replayは新directoryで実行する。
