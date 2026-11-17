@@ -29,14 +29,17 @@ const directory = process.argv[2];
 const java = process.argv[3];
 const jar = process.argv[4];
 const saved = process.argv[5];
+const suite = process.env.IDEALIS_TLC_SUITE ?? "module-linking";
+assert.ok(suite === "module-linking" || suite === "fairness-operators");
+const plan =
+  suite === "module-linking"
+    ? "0047-module-linking"
+    : "0048-fairness-operators";
 assert.ok(directory && java && jar);
 await mkdir(dirname(directory), { recursive: true });
 await mkdir(directory);
 const base = await fingerprint();
-const extra = [
-  "evals/plans/0047-module-linking.md",
-  "evals/module-linking/run.ts",
-];
+const extra = [`evals/plans/${plan}.md`, "evals/module-linking/run.ts"];
 const sources = [
   ...base.sources,
   ...(await Promise.all(
@@ -53,7 +56,10 @@ const binaries = await Promise.all(
   ].map(async (path) => ({ path, sha256: digest(await readFile(path)) })),
 );
 const inputs: Input[] = JSON.parse(
-  await readFile("crates/rtla-compiler/tests/modules-support.json", "utf8"),
+  await readFile(
+    `crates/rtla-compiler/tests/${suite === "module-linking" ? "modules" : "operators"}-support.json`,
+    "utf8",
+  ),
 );
 if (saved) {
   const previous = JSON.parse(
@@ -73,7 +79,7 @@ await writeFile(
   join(directory, "manifest.json"),
   JSON.stringify(
     {
-      plan: "0047-module-linking",
+      plan,
       sourceVersion,
       sources,
       binaries,
@@ -252,7 +258,7 @@ try {
   );
   await appendFile(
     "evals/runs/ledger.jsonl",
-    `${JSON.stringify({ runId: basename(directory), kind: "module-linking", status: "complete", sourceVersion })}\n`,
+    `${JSON.stringify({ runId: basename(directory), kind: suite, status: "complete", sourceVersion })}\n`,
   );
 } catch (error) {
   await writeFile(
@@ -262,7 +268,7 @@ try {
   );
   await appendFile(
     "evals/runs/ledger.jsonl",
-    `${JSON.stringify({ runId: basename(directory), kind: "module-linking", status: "error", sourceVersion })}\n`,
+    `${JSON.stringify({ runId: basename(directory), kind: suite, status: "error", sourceVersion })}\n`,
   );
   throw error;
 } finally {

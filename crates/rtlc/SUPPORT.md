@@ -10,6 +10,7 @@
 - [x] signed 32-bit整数、Bool、文字列、有限集合・有限関数。recordとsequenceも有限関数として等価性を判定する。
 - [x] IRの算術・集合・関数・record・sequence操作、有限量化、EXCEPTと@、foldの評価。
 - [x] 未一致CASEの評価時エラーと、singletonの文字列domainに限定したvariant-tag。
+- [x] select-seq / sort-seqのcallback IRとassert。選択は順序・重複を保ち、sortはTLCと同じ挿入順で新要素と直前要素を比較する。callbackのslotを検査し、反復・比較でworkを消費する。assertはmessageも評価する。
 - [x] maxDepth/maxStates/maxWorkとtemporal積グラフの予算を扱う。
 - [x] nativeのcheck_parallelは1〜256 worker上限を受け取り、適したsafety frontierを並列展開する。
 - [x] 軽いscalar・狭いfrontier・action/temporal property・fairnessは逐次へfallbackする。Wasmは逐次check。

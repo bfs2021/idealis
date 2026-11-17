@@ -52,6 +52,9 @@ test.beforeAll(async () => {
   const modules = await readFile(
     "crates/rtla-compiler/tests/modules-support.json",
   );
+  const operators = await readFile(
+    "crates/rtla-compiler/tests/operators-support.json",
+  );
   server = createServer((request, response) => {
     response.setHeader(
       "Content-Type",
@@ -76,7 +79,9 @@ test.beforeAll(async () => {
                 ? finite
                 : request.url === "/modules.json"
                   ? modules
-                  : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
+                  : request.url === "/operators.json"
+                    ? operators
+                    : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));

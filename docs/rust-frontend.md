@@ -49,6 +49,8 @@ native JSONLでは`{"version":1,"request":{"kind":"compile-tla","source":"…","
 
 目標は[既存の有限fragment](rust-safety.md#対応範囲)との一致。名前解決、定数、非再帰operator、lexicalなLET、有限量化、集合・関数・record・sequence、action列挙、temporal/fairnessを変換する。全TLA+やSANYの型検査ではない。引数付きINSTANCE、nested module、一般の高階・再帰operator、無限集合の列挙、symmetry、VIEWは未対応。
 
+Rust frontendは定数有限domain上のSPECIFICATIONの量化fairnessと、SelectSeq / SortSeq / Assertにも対応する。callbackは可視の非再帰operator名に限定する。[演算と公平性の契約](../crates/rtla-compiler/README.md#標準演算と量化された公平性)を参照。
+
 追加のTLA+ソースは`modules: { ModuleName: source }`で渡す。非再帰EXTENDS、引数なしnamed/unnamed INSTANCE、LOCAL、WITH、設定の定数・operator置換は[compilerの契約](../crates/rtla-compiler/README.md#モジュールと設定置換)に従う。ファイルシステムやネットワークを読まず、nativeとWasmで同じModule集合を解決する。Rust単体では`compile_modules(&root, &config, &modules)`を使う。
 
 整数はTLC 1.7.4に合わせたsigned 32 bit。未使用の定義・theoremの正しさは保証しない。既存の`compileTlaSafety`はtla-tsを使う独立したfrontendとして残しており、自動で切り替えない。

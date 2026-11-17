@@ -21,9 +21,11 @@ for (const directory of process.argv.slice(2)) {
   assert.equal(
     result.estimates.length,
     manifest.target === "rtla-compiler"
-      ? manifest.benchmarkSuite === "finite-and-modules-v1"
-        ? 17
-        : 12
+      ? manifest.benchmarkSuite === "finite-modules-operators-v1"
+        ? 27
+        : manifest.benchmarkSuite === "finite-and-modules-v1"
+          ? 17
+          : 12
       : 14,
   );
   const files = new Set<string>();
@@ -48,8 +50,13 @@ for (const directory of process.argv.slice(2)) {
   for (const path of ["manifest.json", "inputs.json", "criterion.log"])
     assert.ok(files.has(path));
   if (manifest.baselineRevision) assert.ok(files.has("source.tar"));
-  if (manifest.benchmarkSuite === "finite-and-modules-v1")
+  if (
+    manifest.benchmarkSuite === "finite-and-modules-v1" ||
+    manifest.benchmarkSuite === "finite-modules-operators-v1"
+  )
     assert.ok(files.has("module-inputs.json"));
+  if (manifest.benchmarkSuite === "finite-modules-operators-v1")
+    assert.ok(files.has("operator-inputs.json"));
   for (const estimate of result.estimates) {
     assert.ok(isRecord(estimate) && typeof estimate.benchmark === "string");
     const path = `criterion/${estimate.benchmark}/${String(result.stage)}/estimates.json`;

@@ -68,6 +68,20 @@ pub enum Expression {
         order: FoldOrder,
         body: Box<Self>,
     },
+    SelectSeq {
+        slot: usize,
+        sequence: Box<Self>,
+        body: Box<Self>,
+    },
+    SortSeq {
+        slot: usize,
+        sequence: Box<Self>,
+        body: Box<Self>,
+    },
+    Assert {
+        condition: Box<Self>,
+        message: Box<Self>,
+    },
     Domain {
         argument: Box<Self>,
     },

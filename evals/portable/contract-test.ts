@@ -25,6 +25,8 @@ import {
   toPortableTrace,
   toPortableValue,
 } from "../../src/portable.js";
+import { decodeSafetyProgram } from "../../src/safety-program.js";
+import { compileTlaSource } from "../../src/tla-source.js";
 import {
   counterFaults,
   createFaultyCounter,
@@ -324,4 +326,37 @@ test("encoding errors clean up and lossy state encodings are rejected", async ()
       .status,
     "matched",
   );
+});
+
+test("sequence callbacks and Assert preserve strict portable IR fields", async () => {
+  const core = await load();
+  const program = compileTlaSource(core, {
+    source:
+      '---- MODULE Operators ----\nEXTENDS Integers, Sequences, TLC\nVARIABLE x\nKeep(v) == v > 1\nBefore(left,right) == left < right\nInit == x = SortSeq(SelectSeq(<<3,1,2>>, Keep), Before)\nNext == UNCHANGED x\nSafe == Assert(x = <<2,3>>, "sequence")\n====',
+    config: "INIT Init\nNEXT Next\nINVARIANT Safe\nCHECK_DEADLOCK FALSE",
+  });
+  assert.deepEqual(
+    decodeSafetyProgram(JSON.parse(JSON.stringify(program))),
+    program,
+  );
+  const sequence = { op: "tuple", values: [] };
+  const body = { op: "literal", value: { type: "bool", value: true } };
+  for (const expression of [
+    { op: "select-seq", slot: -1, sequence, body },
+    { op: "sort-seq", slot: 0.5, sequence, body },
+    { op: "select-seq", slot: 0, sequence },
+    { op: "sort-seq", slot: 0, sequence, body, extra: true },
+    { op: "assert", condition: body },
+    { op: "assert", condition: body, message: null },
+    { op: "assert", condition: body, message: body, extra: true },
+  ]) {
+    assert.throws(
+      () =>
+        decodeSafetyProgram({
+          ...program,
+          invariants: [{ name: "Invalid", expression }],
+        }),
+      PortableCoreError,
+    );
+  }
 });

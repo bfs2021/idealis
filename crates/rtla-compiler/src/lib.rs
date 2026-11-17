@@ -385,6 +385,16 @@ impl Compiler<'_> {
         Ok((body, child))
     }
     fn let_context(&mut self, definitions: &[Definition], context: &Context) -> Result<Context> {
+        for definition in definitions {
+            let imported = match definition.name.as_str() {
+                "SelectSeq" => self.extends("Sequences"),
+                "SortSeq" | "Assert" => self.extends("TLC"),
+                _ => false,
+            };
+            if imported {
+                return unsupported(format!("duplicate LET definition {}", definition.name));
+            }
+        }
         if definitions
             .iter()
             .map(|definition| &definition.name)
@@ -669,11 +679,25 @@ impl Compiler<'_> {
         context: &Context,
         child: &Context,
     ) -> Result<Json> {
-        let E::Identifier { name } = &args[0].node else {
-            return unsupported("fold operator argument");
+        let initial = self.expression(&args[1], child)?;
+        let collection = self.expression(&args[2], child)?;
+        let body = self.callback(&args[0], 2, context, child)?;
+        Ok(
+            json!({"op":"fold", "accumulator":context.bound,"initial":initial,"collection":collection,"order":if sequence { "sequence-left" } else { "set-members" },"body":body}),
+        )
+    }
+    fn callback(
+        &mut self,
+        argument: &Expression,
+        arity: usize,
+        context: &Context,
+        child: &Context,
+    ) -> Result<Json> {
+        let E::Identifier { name } = &argument.node else {
+            return unsupported("callback operator argument");
         };
         if context.locals.contains_key(name) {
-            return unsupported(format!("fold operator {name}"));
+            return unsupported(format!("callback operator {name}"));
         }
         let entry = self.scopes[context.scope]
             .get(name)
@@ -685,40 +709,28 @@ impl Compiler<'_> {
             return unsupported(format!("operator {name}"));
         }
         let DefinitionKind::Operator { params } = &entry.definition.head else {
-            return unsupported(format!("fold operator {name}"));
+            return unsupported(format!("callback operator {name}"));
         };
-        if params.len() != 2 || params.iter().any(|param| param.arity != 0) {
-            return unsupported(format!("fold operator {name}"));
+        if params.len() != arity || params.iter().any(|param| param.arity != 0) {
+            return unsupported(format!("callback operator {name}"));
         }
         let accumulator = context.bound;
-        if accumulator + 2 > 40 {
+        if accumulator + arity > 40 {
             return unsupported("more than 40 bound variables");
         }
-        let initial = self.expression(&args[1], child)?;
-        let collection = self.expression(&args[2], child)?;
         let mut locals = entry.locals;
-        locals.insert(
-            params[0].name.clone(),
-            json!({"op":"bound","slot":accumulator}),
-        );
-        locals.insert(
-            params[1].name.clone(),
-            json!({"op":"bound","slot":accumulator + 1}),
-        );
+        for (index, param) in params.iter().enumerate() {
+            locals.insert(
+                param.name.clone(),
+                json!({"op":"bound","slot":accumulator+index}),
+            );
+        }
         let mut inner = child.nested()?;
         inner.locals = locals;
         inner.scope = entry.scope;
         inner.calls.push(name.clone());
-        inner.bound = accumulator + 2;
-        let body = self.expression(&entry.definition.body, &inner)?;
-        Ok(json!({
-            "op": "fold",
-            "accumulator": accumulator,
-            "initial": initial,
-            "collection": collection,
-            "order": if sequence { "sequence-left" } else { "set-members" },
-            "body": body,
-        }))
+        inner.bound = accumulator + arity;
+        self.expression(&entry.definition.body, &inner)
     }
     fn key(&mut self, args: &[Expression], context: &Context) -> Result<Json> {
         if args.len() == 1 {
@@ -737,6 +749,31 @@ impl Compiler<'_> {
         if self.has(context, operator) {
             let (body, expanded) = self.call(operator, args, context)?;
             return self.expression(&body, &expanded);
+        }
+        if (operator == "SelectSeq" && self.extends("Sequences"))
+            || (operator == "SortSeq" && self.extends("TLC"))
+        {
+            if args.len() != 2 {
+                return unsupported(format!("operator arity {operator}"));
+            }
+            let sequence = self.expression(&args[0], child)?;
+            let body = self.callback(
+                &args[1],
+                if operator == "SortSeq" { 2 } else { 1 },
+                context,
+                child,
+            )?;
+            return Ok(
+                json!({"op":if operator == "SelectSeq" { "select-seq" } else { "sort-seq" },"slot":context.bound,"sequence":sequence,"body":body}),
+            );
+        }
+        if operator == "Assert" && self.extends("TLC") {
+            if args.len() != 2 {
+                return unsupported("operator arity Assert");
+            }
+            return Ok(
+                json!({"op":"assert","condition":self.expression(&args[0],child)?,"message":self.expression(&args[1],child)?}),
+            );
         }
         if self.extends("Apalache") && ["ApaFoldSet", "ApaFoldSeqLeft"].contains(&operator) {
             if args.len() != 3 {
@@ -1230,10 +1267,30 @@ impl Compiler<'_> {
         next: &mut Option<Vec<Json>>,
         fairness: &mut Vec<Json>,
     ) -> Result<()> {
+        if matches!(value.node, E::Forall { .. } | E::Exists { .. }) {
+            let formula = self.temporal(value, context)?;
+            if formula["kind"] != "atom" {
+                fairness.push(formula);
+                return Ok(());
+            }
+        }
         match &value.node {
             E::Identifier { name } if self.has(context, name) => {
                 let (body, expanded) = self.call(name, &[], context)?;
                 self.parts(&body, &expanded, initial, next, fairness)
+            }
+            E::Apply { operator, args } if self.has(context, operator) => {
+                for argument in args {
+                    if level(&self.expression(argument, context)?) > 0 {
+                        return unsupported("SPECIFICATION operator arguments must be constant");
+                    }
+                }
+                let (body, expanded) = self.call(operator, args, context)?;
+                self.parts(&body, &expanded, initial, next, fairness)
+            }
+            E::Let { definitions, body } => {
+                let expanded = self.let_context(definitions, context)?;
+                self.parts(body, &expanded, initial, next, fairness)
             }
             E::And { operands, .. } => {
                 for operand in operands {

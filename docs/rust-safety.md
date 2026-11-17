@@ -80,6 +80,8 @@ primed variable は、同じ分岐で代入した後に読み取る。部分的�
 
 selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。引数付きINSTANCE・nested module、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、symmetry、VIEW は未対応。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
 
+Rustのsource経路は定数有限domain上のSPECIFICATIONの量化fairnessと、SelectSeq / SortSeq / Assertを追加で扱う。callbackは可視の非再帰operator名に限定する。SortSeqはTLCの挿入順・比較順を保持し、反復・比較でworkを消費する。Assertはmessageも評価する。[追加の契約](../crates/rtla-compiler/README.md#標準演算と量化された公平性)を参照。既存のcompileTlaSafetyへ同じソース対応を追加した意味ではない。
+
 Rustのsource経路は`modules: { ModuleName: source }`を受け取り、非再帰EXTENDSと引数なしINSTANCEを解決する。LOCAL、WITH、定数・operatorの設定置換は[compilerの契約](../crates/rtla-compiler/README.md#モジュールと設定置換)を参照。自動のファイル読み込みや全SANY互換は提供しない。
 
 frontend の上限は、変数256、分岐4096、分岐あたり256 step、展開深さ40、bound variable 40。実行側も IR のフィールド・参照・式を検証する。複合値の深さは64で、それを超える state の生成はエラー。探索中は状態と親 index を保存し、temporal property がある場合だけ遷移グラフも保存する。

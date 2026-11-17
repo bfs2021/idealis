@@ -89,7 +89,7 @@ await writeFile(
       memory: totalmem(),
       platform: platform(),
       target,
-      ...(compiler ? { benchmarkSuite: "finite-and-modules-v1" } : {}),
+      ...(compiler ? { benchmarkSuite: "finite-modules-operators-v1" } : {}),
       baselineRevision,
       benchmarkImplementation: baselineRevision
         ? "source.tar from the pinned Git revision"
@@ -127,6 +127,11 @@ if (compiler)
   await copyFile(
     "crates/rtla-compiler/tests/modules-support.json",
     join(directory, "module-inputs.json"),
+  );
+if (compiler)
+  await copyFile(
+    "crates/rtla-compiler/tests/operators-support.json",
+    join(directory, "operator-inputs.json"),
   );
 const log = join(directory, "criterion.log");
 const child = spawn("cargo", args, { stdio: ["ignore", "pipe", "pipe"] });
@@ -190,7 +195,7 @@ for (const path of [
   "criterion.log",
   "manifest.json",
   "inputs.json",
-  ...(compiler ? ["module-inputs.json"] : []),
+  ...(compiler ? ["module-inputs.json", "operator-inputs.json"] : []),
   ...(archivedRoot ? ["source.tar"] : []),
 ])
   files.push({ path, sha256: digest(await readFile(join(directory, path))) });
@@ -198,7 +203,7 @@ const status =
   exit === 0 &&
   sourceUnchanged &&
   archiveError === null &&
-  estimates.length === (compiler ? 17 : 14) &&
+  estimates.length === (compiler ? 27 : 14) &&
   estimates.every(
     (estimate) => Number.isFinite(estimate.mean) && estimate.mean > 0,
   )

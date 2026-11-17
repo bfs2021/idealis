@@ -81,9 +81,17 @@ export const run = async (): Promise<Record<string, unknown>> => {
     expected: string;
     states?: number;
     action?: string;
-  })[] = await (await fetch("/modules.json")).json();
+  })[] = [
+    ...(await (await fetch("/modules.json")).json()),
+    ...(await (await fetch("/operators.json")).json()),
+  ];
   for (const input of moduleInputs) {
-    const bounds = { maxDepth: 100, maxStates: 1000, maxWork: 1_000_000 };
+    const bounds = {
+      maxDepth: 100,
+      maxStates: 1000,
+      maxWork: 1_000_000,
+      maxTemporalNodes: 10000,
+    };
     const observe = (run: () => unknown): unknown => {
       try {
         return run();

@@ -260,6 +260,18 @@ const expression = (input: unknown, depth: number): void => {
       binding(input.binding, child);
       expression(input.body, child);
       return;
+    case "select-seq":
+    case "sort-seq":
+      fields(input, ["op", "slot", "sequence", "body"]);
+      count(input.slot);
+      expression(input.sequence, child);
+      expression(input.body, child);
+      return;
+    case "assert":
+      fields(input, ["op", "condition", "message"]);
+      expression(input.condition, child);
+      expression(input.message, child);
+      return;
     case "if":
       fields(input, ["op", "condition", "consequent", "alternative"]);
       expression(input.condition, child);

@@ -29,9 +29,10 @@
 - [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。
 - [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。
 - [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。
-- [ ] SequencesのSelectSeq。
-- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。
-- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。
+- [x] EXTENDS SequencesのSelectSeqとEXTENDS TLCのSortSeq。callbackは可視の非再帰operator名に限定し、SelectSeqは1引数、SortSeqは2引数。定義元scope、LET捕捉とprimeを保持する。
+- [x] EXTENDS TLCのAssert。conditionとmessageの両方を評価し、TRUE以外はmessage付きの評価エラーにする。
+- [x] SPECIFICATION内の定数有限domain上のforall/exists fairness。tuple・入れ子・空domainと定数引数のwrapperを扱う。state依存domainと量化したInit/Nextの一般的な分解は対象外。
+- [ ] TLCのRandomElement、TLCGet、TLCSet。
 - [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。
 
 ## 非対応・対象外
@@ -50,4 +51,4 @@
 - [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。
 - [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。
 
-[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。
+[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[標準演算と公平性の回帰](tests/operators.rs)、[その比較入力](tests/operators-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。

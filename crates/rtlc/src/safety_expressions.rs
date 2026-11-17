@@ -339,6 +339,10 @@ impl Expression {
                 consequent,
                 alternative,
             } => vec![condition, consequent, alternative],
+            Self::Assert { condition, message } => vec![condition, message],
+            Self::SelectSeq { sequence, body, .. } | Self::SortSeq { sequence, body, .. } => {
+                vec![sequence, body]
+            }
             Self::In { value, domain } => {
                 let mut children = vec![value.as_ref()];
                 children.extend(domain.children());
@@ -522,6 +526,33 @@ impl Expression {
                 body.validate_with(child)?;
                 return Ok(());
             }
+            Self::SelectSeq {
+                slot,
+                sequence,
+                body,
+            }
+            | Self::SortSeq {
+                slot,
+                sequence,
+                body,
+            } => {
+                let arity = if matches!(self, Self::SortSeq { .. }) {
+                    2
+                } else {
+                    1
+                };
+                if *slot != ctx.locals || ctx.locals + arity > 40 {
+                    return Err(CoreError::protocol(
+                        "Invalid sequence callback variable slot",
+                    ));
+                }
+                sequence.validate_with(ctx.child())?;
+                body.validate_with(Validation {
+                    locals: ctx.locals + arity,
+                    ..ctx.child()
+                })?;
+                return Ok(());
+            }
             Self::Update { target, updates } => {
                 target.validate_with(ctx.child())?;
                 for update in updates {
@@ -592,6 +623,17 @@ impl Expression {
                 return Err(CoreError::protocol(&format!(
                     "Attempted to evaluate a CASE with no conditions true at {location}"
                 )));
+            }
+            Self::Assert { condition, message } => {
+                let condition = condition.eval(ctx, arena)?;
+                let message = message.eval(ctx, arena)?;
+                if condition != Scalar::Bool(true) {
+                    return Err(CoreError::protocol(&format!(
+                        "TLC assertion failed: {:?}",
+                        arena.portable(message)?
+                    )));
+                }
+                Scalar::Bool(true)
             }
             Self::Prime { argument } => argument.eval(EvalContext { prime: true, ..ctx }, arena)?,
             Self::Not { argument } => Scalar::Bool(!argument.eval(ctx, arena)?.boolean()?),
@@ -839,6 +881,82 @@ impl Expression {
                     locals.truncate(ctx.locals.len());
                 }
                 result
+            }
+            Self::SelectSeq {
+                slot,
+                sequence,
+                body,
+            } => {
+                if *slot != ctx.locals.len() {
+                    return Err(CoreError::protocol(
+                        "Invalid sequence callback variable slot",
+                    ));
+                }
+                let source = sequence.eval(ctx, arena)?;
+                let elements = arena.sequence(source)?;
+                arena.consume(elements.len())?;
+                let mut locals = ctx.locals.to_vec();
+                locals.push(Scalar::Bool(false));
+                let mut selected = vec![];
+                for element in elements {
+                    arena.tick()?;
+                    locals[*slot] = element;
+                    if body
+                        .eval(
+                            EvalContext {
+                                locals: &locals,
+                                ..ctx
+                            },
+                            arena,
+                        )?
+                        .boolean()?
+                    {
+                        selected.push(element);
+                    }
+                }
+                arena.tuple(selected)?
+            }
+            Self::SortSeq {
+                slot,
+                sequence,
+                body,
+            } => {
+                if *slot != ctx.locals.len() {
+                    return Err(CoreError::protocol(
+                        "Invalid sequence callback variable slot",
+                    ));
+                }
+                let source = sequence.eval(ctx, arena)?;
+                let mut elements = arena.sequence(source)?;
+                arena.consume(elements.len())?;
+                let mut locals = ctx.locals.to_vec();
+                locals.extend([Scalar::Bool(false); 2]);
+                for index in 1..elements.len() {
+                    arena.tick()?;
+                    let element = elements[index];
+                    let mut position = index;
+                    while position > 0 {
+                        arena.tick()?;
+                        locals[*slot] = element;
+                        locals[*slot + 1] = elements[position - 1];
+                        if !body
+                            .eval(
+                                EvalContext {
+                                    locals: &locals,
+                                    ..ctx
+                                },
+                                arena,
+                            )?
+                            .boolean()?
+                        {
+                            break;
+                        }
+                        elements[position] = elements[position - 1];
+                        position -= 1;
+                    }
+                    elements[position] = element;
+                }
+                arena.tuple(elements)?
             }
             Self::Domain { argument } => {
                 let value = argument.eval(ctx, arena)?;

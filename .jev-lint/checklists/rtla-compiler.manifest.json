@@ -59,14 +59,22 @@
       "role": "reference"
     },
     "source14": {
-      "path": "package.json",
+      "path": "crates/rtla-compiler/tests/operators-support.json",
       "role": "reference"
     },
     "source15": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/rtla-compiler/tests/operators.rs",
       "role": "reference"
     },
     "source16": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source17": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source18": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -114,11 +122,24 @@
     },
     {
       "id": "rtla-compiler-implementation-2",
-      "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
+      "topic": "有限式、action、CASE、Apalache folds、限定したVariants、SelectSeq/SortSeq/Assertのlowering",
       "mode": "semantic",
       "reference": {
         "source": "source6",
         "contains": "fn apply("
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "rtla-compiler-implementation-3",
+      "topic": "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
+      "mode": "semantic",
+      "reference": {
+        "source": "source6",
+        "contains": "fn parts("
       },
       "target": {
         "source": "source3"

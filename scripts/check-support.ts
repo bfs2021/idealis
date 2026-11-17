@@ -68,7 +68,13 @@ const scopes: readonly CrateScope[] = [
         path: "src/lib.rs",
         contains: "fn apply(",
         topic:
-          "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
+          "有限式、action、CASE、Apalache folds、限定したVariants、SelectSeq/SortSeq/Assertのlowering",
+      },
+      {
+        path: "src/lib.rs",
+        contains: "fn parts(",
+        topic:
+          "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
       },
     ],
   },

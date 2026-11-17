@@ -357,6 +357,17 @@ export type SafetyExpression =
       readonly body: SafetyExpression;
     }
   | {
+      readonly op: "select-seq" | "sort-seq";
+      readonly slot: number;
+      readonly sequence: SafetyExpression;
+      readonly body: SafetyExpression;
+    }
+  | {
+      readonly op: "assert";
+      readonly condition: SafetyExpression;
+      readonly message: SafetyExpression;
+    }
+  | {
       readonly op:
         | "sequence-set"
         | "domain"

@@ -66,6 +66,8 @@ RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → 
 
 TLA+・SMT-LIB・Alloyの対応はサブセットに限られる。モデル検査が確認するのは、指定したモデル・仮定・探索範囲に対する性質。実装との照合は、実行した操作列と観測を対象にする。予算内で反例が見つからなかった結果や、実装との一致を、全入力・全実行の正しさの証明へ読み替えない。[検証範囲](#検証の範囲)と各crateの制約を確認する。
 
+Rust/Wasm frontendは有限domain上の量化fairness、SelectSeq / SortSeq / Assertを扱う。callbackや探索範囲の制約は[対応チェックリスト](crates/rtla-compiler/SUPPORT.md)に記録している。
+
 TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT adapterとして利用する。Quint Connectのモデルと実装をつなぐアプローチを参考に、TSの`Driver`を実装との境界にした。Quint言語やApalacheの再実装ではない。
 
 [独立した`idealis-smt` crate](crates/idealis-smt)は、整数の差分制約とBoolean式をnative/Wasmで解く。定数倍、整数`ite`、Rust/JSONのassert・push/pop・一時Bool assumptionsに対応する。SMT-LIB scriptのpush/pop・複数checkも、冒頭で宣言を固定する範囲で実行できる。[対応チェックリスト](docs/smt-checklist.md)と[SMT-LIBサブセット](docs/smt-subset.md)を明示し、idealisの他crateやZ3には依存しない。Z3を再利用した比較でも小さいTTL・amount・schedulerはnativeで約3.0-3.4倍速い一方、Boolean UNSATには後退と予算切れが残る。[全17入力の比較](evals/iterations/0031-smt-reuse.md)は切り出し前の測定で、idealisの公開backendへの組み込みは保留している。

@@ -8,6 +8,8 @@ TLCの意味論に合わせた、有限TLA+ fragmentのモデル検査ライブ�
 
 整数の\div / % / ^、有限CHOOSE、state/action constraint、model value、定数有限domain上の時間論理量化を扱う。探索制約で除外した候補もinvariantと対応するpropertyを検査する。SYMMETRY、VIEW、ディスク退避、checkpoint、simulation/DFID、式単位のcoverageは未対応。各項目は[チェックリスト](SUPPORT.md)で管理する。
 
+select-seq / sort-seqのIRは、1引数の選択predicateと2引数の比較bodyを束縛slotで評価する。sortはTLCの挿入sortと同じ順序で比較し、常に真・偽の比較も扱う。反復・比較はwork予算を消費する。assertはconditionとmessageを順に評価し、TRUE以外ならmessage付きの評価エラーを返す。対応するTLA+ソースの制約はrtla-compilerが定める。
+
 model valueのwire表現は`{"type":"model-value","value":"p_1"}`。文字列の`"p_1"`とは異なる値で、反例にもtagを保持する。型名はTLCと同じく名前の先頭1文字とunderscoreで表す。集合foldでmodel valueの順序を使う入力は拒否する。
 
 ## Rustから使う

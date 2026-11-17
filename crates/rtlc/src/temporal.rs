@@ -58,6 +58,33 @@ struct Pool<'a> {
 }
 impl<'a> Pool<'a> {
     fn add(&mut self, formula: Formula<'a>) -> usize {
+        match &formula {
+            Formula::And(left, right) => {
+                if matches!(self.formulas[*left], Formula::False)
+                    || matches!(self.formulas[*right], Formula::True)
+                {
+                    return *left;
+                }
+                if matches!(self.formulas[*right], Formula::False)
+                    || matches!(self.formulas[*left], Formula::True)
+                {
+                    return *right;
+                }
+            }
+            Formula::Or(left, right) => {
+                if matches!(self.formulas[*left], Formula::True)
+                    || matches!(self.formulas[*right], Formula::False)
+                {
+                    return *left;
+                }
+                if matches!(self.formulas[*right], Formula::True)
+                    || matches!(self.formulas[*left], Formula::False)
+                {
+                    return *right;
+                }
+            }
+            _ => {}
+        }
         let index = self.formulas.len();
         if matches!(formula, Formula::Until(..)) {
             self.until.push(index);

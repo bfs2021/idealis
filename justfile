@@ -481,6 +481,12 @@ module-eval run java jar: safety-build
 module-replay saved run java jar: safety-build
   node dist/evals/module-linking/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(saved)}}
 
+operators-eval run java jar: safety-build
+  IDEALIS_TLC_SUITE=fairness-operators node dist/evals/module-linking/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+operators-replay saved run java jar: safety-build
+  IDEALIS_TLC_SUITE=fairness-operators node dist/evals/module-linking/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(saved)}}
+
 tlc-finite-eval run java jar: safety-build
   node dist/evals/tlc-finite/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
@@ -488,7 +494,7 @@ tlc-finite-replay saved run java jar: safety-build
   node dist/evals/tlc-finite/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(saved)}}
 
 compiler-criterion stage run: criterion-prepare
-  IDEALIS_CRITERION_PLAN=0047-module-linking IDEALIS_CRITERION_TARGET=rtla-compiler node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+  IDEALIS_CRITERION_PLAN=0048-fairness-operators IDEALIS_CRITERION_TARGET=rtla-compiler node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
 
 criterion-baseline revision stage run: criterion-prepare
   IDEALIS_CRITERION_PLAN=0046-tlc-finite-support IDEALIS_CRITERION_REVISION={{quote(revision)}} node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}

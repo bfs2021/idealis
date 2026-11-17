@@ -12,7 +12,7 @@ root moduleの`EXTENDS Apalache`がある場合、`:=`を同モジュールの�
 
 CASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) と同様に評価時に未一致エラーとソース位置を返す。未評価の分岐内ではエラーにしない。
 
-defining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
+defining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、foldと後述するSelectSeq / SortSeqのoperator名を限定して扱う。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
 
 sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
@@ -44,3 +44,13 @@ ASTの書き換え深さは64段まで。ModuleをRustから直接渡した場�
 just module-eval evals/runs/my-module-check /path/to/java /path/to/tla2tools.jar
 just module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/to/java /path/to/tla2tools.jar
 ```
+
+## 標準演算と量化された公平性
+
+定義元が`EXTENDS Sequences`を指定すると`SelectSeq(sequence, Predicate)`を扱う。Predicateは可視の非再帰1引数operator名。`EXTENDS TLC`の`SortSeq(sequence, Before)`は非再帰2引数operator名を取る。LETの捕捉とlexical scopeを保持し、一般の高階引数・LAMBDAには広げない。空列ではcallbackを評価せず、SortSeqのsingletonも比較しない。SelectSeqは順序・重複を保つ。SortSeqは新要素を既存列へ挿入し、比較が真の間、直前の要素を移動する。等順位の順序は比較operatorに従う。
+
+`Assert(condition, message)`は両方の引数を評価し、conditionがTRUE以外なら評価エラーを返す。messageは文字列に限定しない。RandomElement、TLCGet、TLCSetは未対応。
+
+`SPECIFICATION`内の`\A p \in Processes: WF_vars(Step(p))`と対応するexists/SFを扱う。domainは定数の有限集合。tuple・入れ子・空domain・定数引数のwrapperに対応し、state依存domainや量化したInit/Nextの一般的な分解は拒否する。空existsによりfairnessが偽になる入力は、比較元TLCと同じくtautologyのモデルエラーとして検査する。fair behaviorの存在の一般的な証明ではない。
+
+[固定入力](tests/operators-support.json)はnative/Wasm/TLCとChromiumで検査する。反例は元のSPECIFICATIONを保持してTLCで再生する。`just operators-eval RUN JAVA JAR`と`just operators-replay SAVED RUN JAVA JAR`で実行・再現する。

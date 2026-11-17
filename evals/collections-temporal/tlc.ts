@@ -173,17 +173,20 @@ export const traceInput = (
     program.actionProperties?.some(
       (predicate) => predicate.name === violation.name,
     );
+  const specification =
+    /^\s*SPECIFICATION\s+([A-Za-z_][A-Za-z_0-9!]*)\s*$/m.exec(
+      input.config,
+    )?.[1];
+  assert.ok(
+    !isTemporal || !program.fairness?.length || specification,
+    "Fair witness replay requires the original SPECIFICATION",
+  );
   const expected = isAction
     ? violation.name
     : isTemporal
-      ? `${program.fairness?.length ? "__OriginalFairness /\\ " : ""}${negate ? "~" : ""}(${violation.name})`
+      ? `${specification ? `(${specification}) /\\ ` : ""}${negate ? "~" : ""}(${violation.name})`
       : `<>(~(${violation.name}))`;
-  // Use the source fairness formulas, never the Rust lowering, for witness validation.
-  const specBody = /Spec\s*==\s*([\s\S]*?)(?=\n\w+\s*==|\n====)/.exec(
-    input.source,
-  )?.[1];
-  const fairness = specBody?.match(/(?:WF_|SF_)[\s\S]*$/)?.[0];
-  const extra = `\n${models.size ? `CONSTANT ${[...models.values()].join(", ")}\n` : ""}VARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (${state(0, false)})\n__TraceNext == (${next}) /\\ (Next \\/ UNCHANGED ${originalVariables})\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_${variables} /\\ WF_${variables}(__TraceNext)\n${fairness ? `__OriginalFairness == ${fairness}\n` : ""}__Expected == ${expected}\n`;
+  const extra = `\n${models.size ? `CONSTANT ${[...models.values()].join(", ")}\n` : ""}VARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (${state(0, false)})\n__TraceNext == (${next}) /\\ (Next \\/ UNCHANGED ${originalVariables})\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_${variables} /\\ WF_${variables}(__TraceNext)\n__Expected == ${expected}\n`;
   const source = input.source.replace(/=+\s*$/, () => `${extra}====`);
   const constants = input.config
     .split("\n")

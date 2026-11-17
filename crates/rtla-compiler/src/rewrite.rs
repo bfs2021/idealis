@@ -32,10 +32,11 @@ impl Rewriter {
                 .iter()
                 .any(|name| self.imports.contains(*name)),
             "Int" | "-." => self.imports.contains("Integers"),
-            "Seq" | "Len" | "Head" | "Tail" | "Append" | "SubSeq" | "\\o" => {
+            "Seq" | "Len" | "Head" | "Tail" | "Append" | "SubSeq" | "SelectSeq" | "\\o" => {
                 self.imports.contains("Sequences")
             }
             "Cardinality" => self.imports.contains("FiniteSets"),
+            "SortSeq" | "Assert" => self.imports.contains("TLC"),
             "ApaFoldSet" | "ApaFoldSeqLeft" | ":=" => self.imports.contains("Apalache"),
             "Variant" | "VariantTag" | "VariantGetUnsafe" => self.imports.contains("Variants"),
             _ => true,
@@ -145,6 +146,9 @@ impl Rewriter {
                         "Tail",
                         "Append",
                         "SubSeq",
+                        "SelectSeq",
+                        "SortSeq",
+                        "Assert",
                         "Seq",
                         "ApaFoldSet",
                         "ApaFoldSeqLeft",
@@ -190,7 +194,12 @@ impl Rewriter {
             E::Let { definitions, body } => {
                 let mut names = names.clone();
                 for definition in definitions.iter_mut() {
-                    if self.strict && names.contains_key(&definition.name) {
+                    let standard = match definition.name.as_str() {
+                        "SelectSeq" => self.imports.contains("Sequences"),
+                        "SortSeq" | "Assert" => self.imports.contains("TLC"),
+                        _ => false,
+                    };
+                    if self.strict && (names.contains_key(&definition.name) || standard) {
                         return unsupported(format!(
                             "duplicate LET definition {}",
                             definition.name
