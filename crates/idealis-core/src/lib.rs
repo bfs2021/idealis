@@ -16,12 +16,39 @@ mod wasm;
 use serde::{Deserialize, Serialize};
 
 pub fn compile_tla(source: &str, config: &str) -> Result<SafetyProgram, CoreError> {
+    compile_tla_bundle(source, config, &BTreeMap::new())
+}
+
+fn compile_tla_bundle(
+    source: &str,
+    config: &str,
+    sources: &BTreeMap<String, String>,
+) -> Result<SafetyProgram, CoreError> {
+    if sources.len() > 256 {
+        return Err(CoreError::protocol("source bundle exceeds 256 modules"));
+    }
     let module = rtla::parse_module(source)
         .map_err(|error| CoreError::protocol(&format!("TLA parsing: {error}")))?;
     let config = rtla::parse_config(config)
         .map_err(|error| CoreError::protocol(&format!("TLC configuration: {error}")))?;
-    rtla_compiler::compile(&module, &config)
-        .map_err(|error| CoreError::protocol(&error.to_string()))
+    let mut modules = vec![];
+    for (name, source) in sources {
+        let module = rtla::parse_module(source)
+            .map_err(|error| CoreError::protocol(&format!("TLA module {name}: {error}")))?;
+        if module.name != *name {
+            return Err(CoreError::protocol(&format!(
+                "module key {name} differs from MODULE {}",
+                module.name
+            )));
+        }
+        modules.push(module);
+    }
+    let result = if modules.is_empty() {
+        rtla_compiler::compile(&module, &config)
+    } else {
+        rtla_compiler::compile_modules(&module, &config, &modules)
+    };
+    result.map_err(|error| CoreError::protocol(&error.to_string()))
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -123,10 +150,14 @@ pub enum Request {
     CompileTla {
         source: String,
         config: String,
+        #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+        modules: BTreeMap<String, String>,
     },
     CheckTla {
         source: String,
         config: String,
+        #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+        modules: BTreeMap<String, String>,
         bounds: SafetyBounds,
     },
     #[cfg(not(target_arch = "wasm32"))]
@@ -450,15 +481,20 @@ impl Engine {
             return Err(CoreError::protocol("Unsupported protocol version"));
         }
         match command.request {
-            Request::CompileTla { source, config } => Ok(Message::Compiled {
-                program: compile_tla(&source, &config)?,
+            Request::CompileTla {
+                source,
+                config,
+                modules,
+            } => Ok(Message::Compiled {
+                program: compile_tla_bundle(&source, &config, &modules)?,
             }),
             Request::CheckTla {
                 source,
                 config,
+                modules,
                 bounds,
             } => Ok(Message::Safety {
-                result: compile_tla(&source, &config)?.check(bounds)?,
+                result: compile_tla_bundle(&source, &config, &modules)?.check(bounds)?,
             }),
             #[cfg(not(target_arch = "wasm32"))]
             Request::CheckSafetyParallel {

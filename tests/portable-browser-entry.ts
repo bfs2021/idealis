@@ -6,6 +6,7 @@ import type {
   SafetyBounds,
   SafetyProgram,
   SafetyResult,
+  TlaSourceInput,
 } from "../src/contracts.js";
 import { compileFiniteModel } from "../src/finite.js";
 import { createSimulationHost } from "../src/host.js";
@@ -74,6 +75,45 @@ export const run = async (): Promise<Record<string, unknown>> => {
       observe(() => checkSafety(core, program, bounds)) !== input.expected
     )
       throw new Error(`Finite TLC support differs in browser: ${input.name}`);
+  }
+  const moduleInputs: (TlaSourceInput & {
+    name: string;
+    expected: string;
+    states?: number;
+    action?: string;
+  })[] = await (await fetch("/modules.json")).json();
+  for (const input of moduleInputs) {
+    const bounds = { maxDepth: 100, maxStates: 1000, maxWork: 1_000_000 };
+    const observe = (run: () => unknown): unknown => {
+      try {
+        return run();
+      } catch (error) {
+        if (!(error instanceof PortableCoreError)) throw error;
+        return null;
+      }
+    };
+    const program = observe(() => compileTlaSource(core, input));
+    if (input.expected === "unsupported") {
+      if (program !== null)
+        throw new Error(`Browser accepted unsupported module ${input.name}`);
+      continue;
+    }
+    const result = observe(() => checkTlaSource(core, input, bounds));
+    if (input.expected === "model-error") {
+      if (program === null || result !== null)
+        throw new Error(`Browser module error differs ${input.name}`);
+      continue;
+    }
+    if (program === null || result === null)
+      throw new Error(`Browser module failed ${input.name}`);
+    const checked = checkTlaSource(core, input, bounds);
+    if (input.action && checked.violation?.trace[1]?.action !== input.action)
+      throw new Error(`Browser module action differs ${input.name}`);
+    if (
+      checked.status !== input.expected ||
+      (input.states !== undefined && checked.states !== input.states)
+    )
+      throw new Error(`Browser module result differs ${input.name}`);
   }
   const actions = [
     { type: "add", id: "a", amount: 1 },

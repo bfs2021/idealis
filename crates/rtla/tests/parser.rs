@@ -83,7 +83,7 @@ fn parses_config_and_diagnoses_incomplete_input() {
     ] {
         assert_eq!(parse_config(source).unwrap_err().kind, ErrorKind::Syntax);
     }
-    let error = parse_module("---- MODULE M ----\nINSTANCE Other\n====").unwrap_err();
+    let error = parse_module("---- MODULE M ----\nRECURSIVE Op(_)\n====").unwrap_err();
     assert_eq!(error.kind, ErrorKind::Unsupported);
     assert_eq!((error.location.line, error.location.column), (2, 1));
 }

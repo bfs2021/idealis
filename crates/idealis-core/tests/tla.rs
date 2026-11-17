@@ -29,3 +29,30 @@ fn source_is_compiled_and_checked_without_a_host_frontend() {
         "error"
     );
 }
+
+#[test]
+fn source_bundles_are_isolated_between_requests() {
+    let source = "---- MODULE Root ----\nEXTENDS Counter\nSafe == x < 2\n====";
+    let config = "INIT Init\nNEXT Next\nINVARIANT Safe\nCHECK_DEADLOCK FALSE";
+    let mut engine = Engine::default();
+    for (next, status) in [
+        ("x' = x + 1", "invariant-violation"),
+        ("UNCHANGED x", "complete"),
+    ] {
+        let dependency = format!(
+            "---- MODULE Counter ----\nEXTENDS Naturals\nVARIABLE x\nInit == x = 0\nNext == {next}\n===="
+        );
+        let command = json!({"version":1,"request":{"kind":"check-tla","source":source,"config":config,"modules":{"Counter":dependency},"bounds":{"maxDepth":10,"maxStates":100,"maxWork":100000}}});
+        let response =
+            serde_json::to_value(engine.dispatch(&serde_json::to_vec(&command).unwrap())).unwrap();
+        assert_eq!(response["result"]["status"], status, "{response}");
+    }
+    for modules in [json!({}), json!({"Counter":"---- MODULE Wrong ----\n===="})] {
+        let command = json!({"version":1,"request":{"kind":"compile-tla","source":source,"config":config,"modules":modules}});
+        assert_eq!(
+            serde_json::to_value(engine.dispatch(&serde_json::to_vec(&command).unwrap())).unwrap()
+                ["kind"],
+            "error"
+        );
+    }
+}

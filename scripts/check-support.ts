@@ -54,6 +54,12 @@ const scopes: readonly CrateScope[] = [
     name: "rtla-compiler",
     evidence: [
       {
+        path: "src/link.rs",
+        topic:
+          "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
+        context: ["src/rewrite.rs"],
+      },
+      {
         path: "src/lib.rs",
         contains: "pub fn compile(",
         topic: "受理するmodule/configと、実行しない・拒否する構文の境界",

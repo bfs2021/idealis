@@ -3,12 +3,13 @@ import type {
   SafetyBounds,
   SafetyProgram,
   SafetyResult,
+  TlaSourceInput,
 } from "./contracts.js";
 import { PortableCoreError } from "./portable-value.js";
 
 export const compileTlaSource = (
   core: PortableCore,
-  input: { readonly source: string; readonly config: string },
+  input: TlaSourceInput,
 ): SafetyProgram => {
   const result = core.request({
     version: 1,
@@ -16,6 +17,7 @@ export const compileTlaSource = (
       kind: "compile-tla",
       source: input.source,
       config: input.config,
+      ...(input.modules ? { modules: input.modules } : {}),
     },
   });
   if (result.kind !== "compiled")
@@ -24,7 +26,7 @@ export const compileTlaSource = (
 };
 export const checkTlaSource = (
   core: PortableCore,
-  input: { readonly source: string; readonly config: string },
+  input: TlaSourceInput,
   bounds: SafetyBounds,
 ): SafetyResult => {
   const result = core.request({
@@ -33,6 +35,7 @@ export const checkTlaSource = (
       kind: "check-tla",
       source: input.source,
       config: input.config,
+      ...(input.modules ? { modules: input.modules } : {}),
       bounds,
     },
   });

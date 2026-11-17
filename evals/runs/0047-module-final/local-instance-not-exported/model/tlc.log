@@ -1,0 +1,21 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 79 and seed 2172831312325770632 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 38688] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-final/local-instance-not-exported/model/Differential.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-final/local-instance-not-exported/model/Facade.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-final/local-instance-not-exported/model/Values.tla
+Semantic processing of module Values
+Semantic processing of module Facade
+Semantic processing of module Differential
+Semantic errors:
+
+*** Errors: 1
+
+line 4, col 15 to line 4, col 19 of module Differential
+
+Unknown operator: `Value'.
+
+
+
+Starting... (2026-11-17 09:14:02)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 09:14:02)

@@ -7,8 +7,8 @@ import type {
   PortableValue,
   SafetyProgram,
   SafetyResult,
+  TlaSourceInput,
 } from "../../src/contracts.js";
-import type { Case } from "./cases.js";
 
 const valueExpression = (
   value: PortableValue,
@@ -52,7 +52,7 @@ export const runTlc = async (
   java: string,
   jar: string,
   directory: string,
-  input: Pick<Case, "source" | "config">,
+  input: TlaSourceInput,
   moduleName: string,
 ) => {
   await mkdir(directory, { recursive: false });
@@ -62,6 +62,11 @@ export const runTlc = async (
   await writeFile(join(directory, `${moduleName}.cfg`), input.config, {
     flag: "wx",
   });
+  for (const [name, source] of Object.entries(input.modules ?? {})) {
+    assert.match(name, /^[A-Za-z_][A-Za-z_0-9]*$/);
+    assert.notEqual(name, moduleName);
+    await writeFile(join(directory, `${name}.tla`), source, { flag: "wx" });
+  }
   const scratch = await mkdtemp(join(tmpdir(), "idealis-tlc-"));
   const result = spawnSync(
     resolve(java),
@@ -109,7 +114,7 @@ export const runTlc = async (
 };
 
 export const traceInput = (
-  input: Pick<Case, "source" | "config">,
+  input: TlaSourceInput,
   program: SafetyProgram,
   result: SafetyResult,
   negate = true,
@@ -117,6 +122,7 @@ export const traceInput = (
   source: string;
   config: string;
   expected: "complete" | "liveness-violation";
+  modules?: Readonly<Record<string, string>>;
 } => {
   const violation = result.violation;
   assert.ok(violation && violation.trace.length > 0);
@@ -185,6 +191,7 @@ export const traceInput = (
     .join("\n");
   return {
     source,
+    ...(input.modules ? { modules: input.modules } : {}),
     expected: isAction ? "liveness-violation" : "complete",
     config: `SPECIFICATION __TraceSpec\n${constants}\n${[...models].map(([value, name]) => `CONSTANT ${name} = ${value}`).join("\n")}\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE`,
   };

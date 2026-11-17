@@ -4,6 +4,8 @@ use rtla::ast::{
 };
 use serde_json::{Value as Json, json};
 use std::collections::{BTreeMap, HashSet};
+mod link;
+mod rewrite;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct CompileError {
@@ -165,6 +167,39 @@ fn unchanged(value: Json) -> Result<Vec<Json>> {
 
 /// Compile the selected finite TLA+ fragment. Parsing and execution remain separate.
 pub fn compile(module: &Module, config: &Config) -> Result<rtlc::SafetyProgram> {
+    if !module.instances.is_empty()
+        || !config.substitutions.is_empty()
+        || config.constants.iter().any(|assignment| {
+            assignment.module.is_some()
+                || assignment.args.is_some()
+                || module
+                    .definitions
+                    .iter()
+                    .any(|definition| definition.name == assignment.name)
+        })
+    {
+        return compile_modules(module, config, &[]);
+    }
+    compile_flat(module, config)
+}
+
+/// Compile an explicit in-memory module bundle without filesystem access.
+pub fn compile_modules(
+    module: &Module,
+    config: &Config,
+    modules: &[Module],
+) -> Result<rtlc::SafetyProgram> {
+    let (module, config, action_names) = link::resolve(module, config, modules)?;
+    let mut program = compile_flat(&module, &config)?;
+    for branch in program.initial.iter_mut().chain(program.next.iter_mut()) {
+        if let Some(name) = action_names.get(&branch.name) {
+            branch.name = name.clone();
+        }
+    }
+    Ok(program)
+}
+
+fn compile_flat(module: &Module, config: &Config) -> Result<rtlc::SafetyProgram> {
     if module.extends.iter().any(|name| {
         ![
             "Naturals",

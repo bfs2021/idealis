@@ -1,0 +1,21 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 128 and seed -357523925329853153 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 42643] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-labeled-replay/unknown-instance-parameter/model/Differential.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-labeled-replay/unknown-instance-parameter/model/Values.tla
+Semantic processing of module Values
+Semantic processing of module Differential
+Semantic errors:
+
+*** Errors: 1
+
+line 3, col 27 to line 3, col 33 of module Differential
+
+Identifier 'Missing' is not a legal target of a substitution. 
+A legal target must be a declared CONSTANT or VARIABLE in the module being instantiated. 
+(Also, check for warnings about multiple declarations of this same identifier.)
+
+
+
+Starting... (2026-11-17 09:20:18)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 09:20:18)

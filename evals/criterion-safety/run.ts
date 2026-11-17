@@ -89,6 +89,7 @@ await writeFile(
       memory: totalmem(),
       platform: platform(),
       target,
+      ...(compiler ? { benchmarkSuite: "finite-and-modules-v1" } : {}),
       baselineRevision,
       benchmarkImplementation: baselineRevision
         ? "source.tar from the pinned Git revision"
@@ -122,6 +123,11 @@ const args = [
   "--save-baseline",
   stage,
 ];
+if (compiler)
+  await copyFile(
+    "crates/rtla-compiler/tests/modules-support.json",
+    join(directory, "module-inputs.json"),
+  );
 const log = join(directory, "criterion.log");
 const child = spawn("cargo", args, { stdio: ["ignore", "pipe", "pipe"] });
 let output = "";
@@ -184,6 +190,7 @@ for (const path of [
   "criterion.log",
   "manifest.json",
   "inputs.json",
+  ...(compiler ? ["module-inputs.json"] : []),
   ...(archivedRoot ? ["source.tar"] : []),
 ])
   files.push({ path, sha256: digest(await readFile(join(directory, path))) });
@@ -191,7 +198,7 @@ const status =
   exit === 0 &&
   sourceUnchanged &&
   archiveError === null &&
-  estimates.length === (compiler ? 12 : 14) &&
+  estimates.length === (compiler ? 17 : 14) &&
   estimates.every(
     (estimate) => Number.isFinite(estimate.mean) && estimate.mean > 0,
   )

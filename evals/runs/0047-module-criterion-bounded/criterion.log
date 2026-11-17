@@ -1,0 +1,140 @@
+   Compiling rtla-compiler v0.1.0-alpha.0 (/Users/mz/ghq/github.com/mizchi/idealis/crates/rtla-compiler)
+    Finished `bench` profile [optimized] target(s) in 4.53s
+     Running benches/compatibility.rs (crates/rtla-compiler/target/release/deps/compatibility-f9686946d3db949d)
+Benchmarking compile/model-untyped
+Benchmarking compile/model-untyped: Warming up for 500.00 ms
+Benchmarking compile/model-untyped: Collecting 20 samples in estimated 1.0006 s (69k iterations)
+Benchmarking compile/model-untyped: Analyzing
+compile/model-untyped   time:   [14.391 µs 14.482 µs 14.605 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+
+Benchmarking check/model-untyped
+Benchmarking check/model-untyped: Warming up for 500.00 ms
+Benchmarking check/model-untyped: Collecting 20 samples in estimated 1.0002 s (911k iterations)
+Benchmarking check/model-untyped: Analyzing
+check/model-untyped     time:   [1.0943 µs 1.0959 µs 1.0976 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  2 (10.00%) low mild
+  1 (5.00%) high mild
+
+Benchmarking compile/state-constraint
+Benchmarking compile/state-constraint: Warming up for 500.00 ms
+Benchmarking compile/state-constraint: Collecting 20 samples in estimated 1.0020 s (93k iterations)
+Benchmarking compile/state-constraint: Analyzing
+compile/state-constraint
+                        time:   [10.633 µs 10.754 µs 10.944 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) high mild
+  2 (10.00%) high severe
+
+Benchmarking check/state-constraint
+Benchmarking check/state-constraint: Warming up for 500.00 ms
+Benchmarking check/state-constraint: Collecting 20 samples in estimated 1.0001 s (2.1M iterations)
+Benchmarking check/state-constraint: Analyzing
+check/state-constraint  time:   [486.59 ns 487.10 ns 487.63 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking compile/action-constraint
+Benchmarking compile/action-constraint: Warming up for 500.00 ms
+Benchmarking compile/action-constraint: Collecting 20 samples in estimated 1.0016 s (93k iterations)
+Benchmarking compile/action-constraint: Analyzing
+compile/action-constraint
+                        time:   [10.706 µs 10.809 µs 10.936 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high mild
+
+Benchmarking check/action-constraint
+Benchmarking check/action-constraint: Warming up for 500.00 ms
+Benchmarking check/action-constraint: Collecting 20 samples in estimated 1.0000 s (2.2M iterations)
+Benchmarking check/action-constraint: Analyzing
+check/action-constraint time:   [456.89 ns 458.72 ns 461.31 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking compile/choose-order
+Benchmarking compile/choose-order: Warming up for 500.00 ms
+Benchmarking compile/choose-order: Collecting 20 samples in estimated 1.0036 s (56k iterations)
+Benchmarking compile/choose-order: Analyzing
+compile/choose-order    time:   [17.740 µs 17.839 µs 17.946 µs]
+
+Benchmarking check/choose-order
+Benchmarking check/choose-order: Warming up for 500.00 ms
+Benchmarking check/choose-order: Collecting 20 samples in estimated 1.0001 s (1.9M iterations)
+Benchmarking check/choose-order: Analyzing
+check/choose-order      time:   [517.46 ns 522.77 ns 528.69 ns]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking compile/power-min
+Benchmarking compile/power-min: Warming up for 500.00 ms
+Benchmarking compile/power-min: Collecting 20 samples in estimated 1.0018 s (68k iterations)
+Benchmarking compile/power-min: Analyzing
+compile/power-min       time:   [14.447 µs 14.773 µs 15.089 µs]
+
+Benchmarking check/power-min
+Benchmarking check/power-min: Warming up for 500.00 ms
+Benchmarking check/power-min: Collecting 20 samples in estimated 1.0001 s (2.3M iterations)
+Benchmarking check/power-min: Analyzing
+check/power-min         time:   [429.54 ns 430.27 ns 431.13 ns]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+
+Benchmarking compile/temporal-fair
+Benchmarking compile/temporal-fair: Warming up for 500.00 ms
+Benchmarking compile/temporal-fair: Collecting 20 samples in estimated 1.0058 s (24k iterations)
+Benchmarking compile/temporal-fair: Analyzing
+compile/temporal-fair   time:   [42.857 µs 43.168 µs 43.528 µs]
+Found 4 outliers among 20 measurements (20.00%)
+  4 (20.00%) high mild
+
+Benchmarking check/temporal-fair
+Benchmarking check/temporal-fair: Warming up for 500.00 ms
+Benchmarking check/temporal-fair: Collecting 20 samples in estimated 1.0023 s (90k iterations)
+Benchmarking check/temporal-fair: Analyzing
+check/temporal-fair     time:   [11.059 µs 11.081 µs 11.100 µs]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) low mild
+
+Benchmarking modules/extends-counter
+Benchmarking modules/extends-counter: Warming up for 500.00 ms
+Benchmarking modules/extends-counter: Collecting 20 samples in estimated 1.0043 s (37k iterations)
+Benchmarking modules/extends-counter: Analyzing
+modules/extends-counter time:   [27.333 µs 27.410 µs 27.525 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+
+Benchmarking modules/extends-diamond
+Benchmarking modules/extends-diamond: Warming up for 500.00 ms
+Benchmarking modules/extends-diamond: Collecting 20 samples in estimated 1.0006 s (53k iterations)
+Benchmarking modules/extends-diamond: Analyzing
+modules/extends-diamond time:   [18.739 µs 18.776 µs 18.804 µs]
+
+Benchmarking modules/instance-twice
+Benchmarking modules/instance-twice: Warming up for 500.00 ms
+Benchmarking modules/instance-twice: Collecting 20 samples in estimated 1.0093 s (13k iterations)
+Benchmarking modules/instance-twice: Analyzing
+modules/instance-twice  time:   [75.015 µs 75.198 µs 75.430 µs]
+Found 3 outliers among 20 measurements (15.00%)
+  1 (5.00%) high mild
+  2 (10.00%) high severe
+
+Benchmarking modules/module-definition-override
+Benchmarking modules/module-definition-override: Warming up for 500.00 ms
+Benchmarking modules/module-definition-override: Collecting 20 samples in estimated 1.0002 s (42k iterations)
+Benchmarking modules/module-definition-override: Analyzing
+modules/module-definition-override
+                        time:   [23.595 µs 23.674 µs 23.747 µs]
+
+Benchmarking modules/flat-counter
+Benchmarking modules/flat-counter: Warming up for 500.00 ms
+Benchmarking modules/flat-counter: Collecting 20 samples in estimated 1.0029 s (59k iterations)
+Benchmarking modules/flat-counter: Analyzing
+modules/flat-counter    time:   [17.227 µs 17.688 µs 18.095 µs]
+Found 4 outliers among 20 measurements (20.00%)
+  4 (20.00%) high severe
+

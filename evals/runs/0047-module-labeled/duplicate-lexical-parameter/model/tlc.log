@@ -1,0 +1,31 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 79 and seed -1512775354927029632 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 41845] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-labeled/duplicate-lexical-parameter/model/Differential.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-labeled/duplicate-lexical-parameter/model/Params.tla
+Semantic processing of module Params
+Semantic errors:
+
+*** Errors: 1
+
+line 2, col 23 to line 2, col 23 of module Params
+
+Multiply-defined symbol 'x': this definition or declaration conflicts 
+with the one at line 2, col 7 to line 2, col 7 of module Params.
+
+
+
+Semantic processing of module Differential
+Semantic errors:
+
+*** Errors: 1
+
+line 2, col 23 to line 2, col 23 of module Params
+
+Multiply-defined symbol 'x': this definition or declaration conflicts 
+with the one at line 2, col 7 to line 2, col 7 of module Params.
+
+
+
+Starting... (2026-11-17 09:19:15)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 09:19:15)

@@ -28,10 +28,11 @@ fn main() -> Result<(), rtla::ParseError> {
 - IF、CASE、LET、有限/非有界量化、CHOOSE、集合・関数・record・tuple、EXCEPT、action/temporal/fairness構文
 - 算術・比較・集合・論理operatorの対応範囲、prime、関数適用、field参照、bulleted junctionとoffside規則
 - TLC設定のInit/Next/Spec、定数・集合・model value・置換、invariant/property、制約等の設定値
+- top-levelの引数なしnamed/unnamed INSTANCE、LOCAL、WITHの式置換、修飾名A!B!Op
 
 名前解決、モジュールの読込、型/level検査、標準operatorの評価、ASTからIRへの変換、モデル検査は行わない。設定に制約や置換が存在してもASTとして保持するため、実行側は対応可否を別途検査する。
 
-proof、INSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析とASTの深さは64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。
+proof、引数付きINSTANCE、LET内のINSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析とASTの深さは64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。
 
 RustでのIR生成は`rtla-compiler`が担当し、rtlaのASTを`rtlc::SafetyProgram`へ変換する。`idealis-core::compile_tla`は解析と変換を接続する。既存のTS API `compileTlaSafety`は独立した比較対象としてtla-ts parserを使う。
 
