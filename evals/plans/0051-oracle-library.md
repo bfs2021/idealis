@@ -25,3 +25,7 @@ CLIの外部processやファイルI/Oはeval adapterへ置き、libraryはserde/
 ## 完了条件
 
 TDDで比較・エラー/unknown・空集合・不正設定・保存report改ざん・測定中のdrift・clock・予算・実行順の挙動を検査する。crate fmt/clippy/test、native/Wasm、単独consumer、既存frameworkのcheck/browser、runtime-build/test、evaluate/replayを通す。SUPPORT.mdとJev、CI/packageへ追加する。raw runを編集せず、比較表と採用範囲をiterationへ保存する。registry publishやPR/mergeは今回行わない。
+
+## 01試行後の対照修正
+
+0051-oracle-01ではcold/preparedの正常照合は完了したが、極小の人工drift callbackがnative clockで0 nsとなり、drift検出より先にunknownで停止した。0 nsをunknownにする契約は維持する。人工driftの対照だけを10 ns刻みの論理clockに変更し、不一致検出をclockの分解能から独立させる。実性能のcold/preparedのモデル・回数・計測境界は変えない。01のrawは保存し、次の新しいrunを完全実行として記録する。Java版はstderrから保存し、tla-tsのpackage.jsonもfingerprintへ加える。
