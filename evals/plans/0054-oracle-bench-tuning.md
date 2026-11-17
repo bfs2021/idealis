@@ -21,3 +21,7 @@ Rustのwire境界はOracleGroupの比較を保ち、観測JSONのdeep cloneを�
 costの既定値を20/3/25へ揃える。workspaceはcold 10 samples・2 warmup・1 iteration、reused 20/3/25として、実行回数上限を事前検査する。coldとreused、transportとchecker kernelを別指標にする。過去の7/1/3と混ぜて速度比を作らない。
 
 TDDでbytes API、full report互換、失敗、large payloadのflushとEOF、mutable入力の再照合を検査する。既存native/Wasm/browserと移行した差分テスト、cross/async、check/browser、runtime/evaluate/replay、配布consumerを確認する。SUPPORT/JevとCI、justfileへ追加する。測定中は他のbuild/test/profileを動かさず、raw runを上書きしない。PR/push/mergeは行わない。
+
+## 測定開始前のwarmup単位確認
+
+BenchConfig.warmupはbatch数ではなく関数の呼出回数だった。通常測定を始める前に、reused/costのwarmupを3 sample相当の75呼出（3×25）へ固定する。20 samples・25 iterations、上限10000は維持する。初期samplyは3呼出のprofileとして保存し、性能値には使わない。
