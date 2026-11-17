@@ -27,3 +27,9 @@ Criterionは既存14本を同じbench sourceで20 samples・warmup 0.5秒・meas
 ## 入力の型を確認した補足
 
 既存のfunction-cubeはTLA+のBOOLEANではなく整数0/1を使う。channel内のval/rdy/ackも整数0/1だった。最初の候補に、64要素以下の全Int(0/1)を保持する別tagのbit表現を含める。BoolとIntを混同せず、混在・範囲外の値・65要素以上はScalar列へ戻す。任意の小整数packingは今回は含めない。
+
+## 初期候補Aの並列後退を受けた候補B
+
+大規模比較の途中で、Aはfunctionのnative 1が約6.5→3.9秒になった一方、8 workersでは後退が見えた。channelsのwarmupもnative 8が約6.6→9.0秒だった。Aのrunは最後まで保存する。mergeが、既にroot Arenaに属するdomainにも毎回key remap判定とdomain pool検索を行っていた。
+
+Bではdomainにroot所属のimmutable metadataを持たせ、既にrootのdomainはArcをそのまま移送する。workerで新規作成したdomainは従来どおりkeyをremapしroot poolへ登録する。所属metadataは値の等値性・hashに含めない。Aの実行ファイルは変えず、測定中にbuild/testを並行しない。Bを同じ固定条件で新しいrunへ測り直し、最終採否はBの結果で判断する。
