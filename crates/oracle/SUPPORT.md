@@ -11,6 +11,8 @@
 - [x] nativeのInstantとWasmで使うhost clock。ゼロ・逆行・累積ns overflowをunknownへする。
 - [x] serde/serde_jsonだけに依存する独立crate。native単独consumerと実ブラウザWasmの差分・再生・host clock経路。
 
+- [x] version 1の収集済みJSON観測batchを同じOracleGroupへ通すdispatch、native JSONLとホストimport不要のWasm ABI。入力16 MiB・4096 cases・256 implementations、空・重複・観測数のずれを拒否する。
+
 ## 非対応・対象外
 
 - [ ] PBTの生成器・縮小・seed互換。idealis-testingの役割であり、このcrateでは提供しない。
@@ -24,4 +26,4 @@
 - [x] 測定は関数呼び出しと出力構築を含み、比較と出力破棄は含まない。初期化を含めるかはadapterが決めscopeへ記録する。
 - [x] 集約はerror > mismatch > unknown > invalid > matched。非成功の保存値も保持し、replayは保存判定を再計算する。
 
-[README](README.md)、[比較とreport](src/report.rs)、[groupとreplay](src/group.rs)、[測定](src/bench.rs)、[挙動テスト](tests/oracle.rs)を参照。
+[README](README.md)、[比較とreport](src/report.rs)、[groupとreplay](src/group.rs)、[測定](src/bench.rs)、[JSON境界](src/wire.rs)、[Wasm ABI](src/wasm.rs)、[挙動テスト](tests/oracle.rs)を参照。

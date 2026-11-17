@@ -6,6 +6,7 @@ import type {
   PortableOutput,
 } from "../../src/contracts.js";
 import { createPortableWasm } from "../../src/portable.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 
 export const createNativeComparison = async (bytes: Uint8Array) => {
   const start = performance.now();
@@ -39,7 +40,7 @@ export const createNativeComparison = async (bytes: Uint8Array) => {
         .map((line) => JSON.parse(line));
       assert.equal(native.length, outputs.length, "Native reply count differs");
       for (const [index, output] of outputs.entries())
-        assert.deepEqual(
+        assertOracle(
           native[index],
           output,
           `Native/Wasm reply ${index} differs`,

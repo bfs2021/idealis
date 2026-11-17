@@ -7,6 +7,7 @@ import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
 import { compileTlaSafety } from "../../src/tla-safety.js";
 import { isRecord } from "../../src/trace.js";
 import { startNative } from "../usable/native.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { bounds, cases } from "./cases.js";
 
 test("Rust generates TLA states and checks safety in native and Wasm without a materialized graph", async () => {
@@ -39,7 +40,7 @@ test("Rust generates TLA states and checks safety in native and Wasm without a m
           `${entry.name}: ${JSON.stringify(actual)}`,
         );
         const result = decodeSafetyResult(actual.result);
-        assert.deepEqual(checkSafety(core, program, limit), result, entry.name);
+        assertOracle(checkSafety(core, program, limit), result, entry.name);
         assert.equal(result.status, entry.expected, entry.name);
       }
       if (entry.bounds || entry.name === "empty") continue;
@@ -59,7 +60,7 @@ test("Rust generates TLA states and checks safety in native and Wasm without a m
         assert.equal(result.states, reference.distinctStates, entry.name);
         assert.equal(result.generated, reference.generatedStates, entry.name);
         if (result.violation && reference.violation) {
-          assert.deepEqual(
+          assertOracle(
             result.violation.trace.map((step) =>
               Object.fromEntries(
                 program.variables.map((name, index) => {
@@ -109,7 +110,7 @@ test("the unmodified upstream DieHard model finds the same shortest solution", a
     assert.equal(actual.generated, reference.generatedStates);
     if (actual.violation) {
       assert.equal(actual.violation.trace.length, 7);
-      assert.deepEqual(
+      assertOracle(
         actual.violation.trace.map((step) =>
           step.values.map((value) =>
             Number(value.type === "int" ? value.value : NaN),

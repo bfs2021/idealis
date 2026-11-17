@@ -236,3 +236,19 @@
 {"runId":"0050-controls-specialized-comparison","kind":"coverage-comparison","status":"complete","resultSha256":"9bb5b0c34c0800483deb488ab299e784f841cb0359659677f30007f087b1c5dd"}
 {"runId": "0051-oracle-01", "kind": "oracle-comparison", "status": "controls-failed", "errorSha256": "5f23d5ecd5b9f480dd29d4c274b75ea17eb6a4ba0b281fef6d92504aaaa5c4e8"}
 {"runId": "0051-oracle-02", "kind": "oracle-comparison", "status": "complete", "resultSha256": "66c1e1e7d424fbf6e1442b417ab5af7f66e3148806df10cbb2f6f98b229e830d"}
+{"runId":"0052-tlc-development","kind":"tlc-differential","status":"mismatch","phase":"development","sourceVersion":"de6c7a7034f67d535a3abee56723e0776a25a08632b2e527ab8e47c616968718","plan":"0015-tlc-differential"}
+{"runId":"0052-compiler","kind":"rtla-compiler","status":"complete","sourceVersion":"b73d56c00085155aae54243b8bda976adc9b2a319235c615c4e675128838cd55"}
+{"runId":"0052-cross","kind":"shared-oracle","phase":"regression","status":"complete","sourceVersion":"ffa1e15c28f812022fe37cfe6512f434a5ff2a2c7eefbe8165726c8ba8e21fe4","plan":"0007-shared-oracle"}
+{"runId":"0052-async","kind":"async-tuning","phase":"regression","status":"complete","sourceVersion":"29445d672af9ef82a0845f5fc6f51d9ad08633b5941f0f1daa596af2ef50350a","plan":"0008-async-tuning"}
+{"runId": "0052-legacy-parity", "kind": "oracle-legacy-parity", "status": "complete", "resultSha256": "d27ba319b329bd38d99a4e9ec04fa070b9a092b1b38286324970a8fbe72ac6e0"}
+{"runId": "0052-workspace-bench", "kind": "workspace-oracle-benchmark", "status": "complete", "resultSha256": "4d12e6ed262e145d6f746ac2ce6f4a0a145988636721b1a1a53e585bd1e125c9"}
+{"runId": "0052-workspace-replay", "kind": "workspace-oracle-replay", "status": "complete", "resultSha256": "89ba06d7afe1dd38fe803503648f323fff7b708bd8c9a7034995230c482f8fad"}
+{"runId": "0052-bridge-cost", "kind": "oracle-bridge-cost", "status": "complete", "resultSha256": "fd5b61f0ccb0507fbac5afc3730815438bd2238e0d0ed2a56e4ef8d117d70fd8"}
+{"runId": "0052-bridge-cost-replay", "kind": "oracle-bridge-cost-replay", "status": "complete", "resultSha256": "f0c265e060a9a33ece3d5b35c1dfd9647e90bff597e842fc4ea3bf3ff1c34dd0"}
+{"runId":"0052-compiler-02","kind":"rtla-compiler","status":"complete","sourceVersion":"50a027bcf4543a36d78fe43e224b100b33e499a7c0f0471507e01aac312ada93"}
+{"runId":"0052-cross-02","kind":"shared-oracle","phase":"regression","status":"complete","sourceVersion":"c766cfff7d1eed703158d5932e8be2a7357b44e21943c9b37270286e572e7c8a","plan":"0007-shared-oracle"}
+{"runId":"0052-async-02","kind":"async-tuning","phase":"regression","status":"complete","sourceVersion":"9dc108876fda3cfd5bafa29ced54ade9a930f89510cb94a57427e7063c97ffbb","plan":"0008-async-tuning"}
+{"runId": "0052-workspace-bench-02", "kind": "workspace-oracle-benchmark", "status": "complete", "resultSha256": "5751f7bda058ae109da1480531648997aa09ee9e6ddaceaecde917506d3b6de7"}
+{"runId": "0052-workspace-replay-02", "kind": "workspace-oracle-replay", "status": "complete", "resultSha256": "4d03683c72a9303d23b7ddc4724e5a06c3c0397fd80a1f1e6b86710a7aff1d4c"}
+{"runId": "0052-bridge-cost-02", "kind": "oracle-bridge-cost", "status": "complete", "resultSha256": "3f25e083adec88bb86a49d38896e382ac701c07df43d8c8ef618842d9bce41c3"}
+{"runId": "0052-bridge-cost-replay-02", "kind": "oracle-bridge-cost-replay", "status": "complete", "resultSha256": "d20c206228d9512480cbfcb68d66d19f2a051f2ab6350e40531887fbd5beae61"}

@@ -12,6 +12,7 @@ import { isRecord } from "../../src/trace.js";
 import { corpus } from "../rtla-parser/corpus.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 
 const directory = process.argv[2];
 assert.ok(directory);
@@ -156,8 +157,8 @@ try {
       "compiled",
       `${input.name}: ${JSON.stringify(compiled)}`,
     );
-    assert.deepEqual(normalize(wasm), normalize(reference.program), input.name);
-    assert.deepEqual(
+    assertOracle(normalize(wasm), normalize(reference.program), input.name);
+    assertOracle(
       normalize(decodeSafetyProgram(compiled.program)),
       normalize(reference.program),
       input.name,
@@ -184,8 +185,8 @@ try {
       wasm: checked,
       native: nativeChecked,
     });
-    assert.deepEqual(checked, expected, input.name);
-    assert.deepEqual(nativeChecked, expected, input.name);
+    assertOracle(checked, expected, input.name);
+    assertOracle(nativeChecked, expected, input.name);
     accepted++;
   }
   for (const source of sources)

@@ -17,6 +17,7 @@ import {
   interleavings,
   runScheduledCounter,
 } from "../harness/scheduled-counter.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 
 interface Case {
   readonly history: ConcurrentHistory;
@@ -35,7 +36,7 @@ export const compareHistories = async (
     ),
   );
   const loaded = loadFiniteModel(core, model);
-  assert.deepEqual(
+  assertOracle(
     cases.map((entry) => loaded.checkHistory(entry.history, entry.maxNodes)),
     expected,
   );
@@ -60,7 +61,7 @@ export const compareHistories = async (
     .split("\n")
     .slice(1)
     .map((line) => JSON.parse(line).result);
-  assert.deepEqual(native, expected);
+  assertOracle(native, expected);
   const go = JSON.parse(
     execFileSync(
       ".artifacts/go/history-check",
@@ -70,7 +71,7 @@ export const compareHistories = async (
       { input: JSON.stringify({ model, cases }), maxBuffer: 16 * 1024 * 1024 },
     ).toString(),
   );
-  assert.deepEqual(go, expected);
+  assertOracle(go, expected);
   return expected;
 };
 

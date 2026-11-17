@@ -14,6 +14,7 @@ import {
   type Request,
   solution,
 } from "../smt-subset/wire.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { controls, integer } from "./corpus.js";
 
 export const verify = async (
@@ -37,7 +38,7 @@ export const verify = async (
     const wasm = core.request(command);
     const actual = await native.request(command);
     onRecord({ request: command, native: actual, wasm });
-    assert.deepEqual(actual, wasm);
+    assertOracle(actual, wasm);
     return wasm;
   };
   const validate = async (input: Input, reply: Reply) => {
@@ -47,11 +48,11 @@ export const verify = async (
     assert.equal(actual.status, input.expected, input.name);
     assert.equal(actual.status, reference.status, input.name);
     if (actual.status === "sat") {
-      assert.deepEqual(
+      assertOracle(
         Object.keys(actual.values).sort(),
         [...input.integers].sort(),
       );
-      assert.deepEqual(
+      assertOracle(
         Object.keys(actual.booleans).sort(),
         [...input.booleans].sort(),
       );
@@ -82,7 +83,7 @@ export const verify = async (
           source: input.source,
           maxWork,
         });
-        assert.deepEqual(reply, wasmReply, "baseline native/Wasm");
+        assertOracle(reply, wasmReply, "baseline native/Wasm");
         onRecord({ baseline: input.name, reply, wasm: wasmReply });
         if (reply.kind === "solution" && reply.result.status !== "unknown") {
           assert.equal(reply.result.status, input.expected);
@@ -238,8 +239,8 @@ export const verify = async (
       }),
     );
     assert.equal(bounded.status, "unknown");
-    assert.deepEqual(bounded.values, {});
-    assert.deepEqual(bounded.booleans, {});
+    assertOracle(bounded.values, {});
+    assertOracle(bounded.booleans, {});
     await check("sat", [], other.handle);
     await pop();
     await add("(<= x 0)");

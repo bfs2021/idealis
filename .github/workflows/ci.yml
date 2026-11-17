@@ -33,6 +33,11 @@ jobs:
       - run: cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
       - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
+      - run: cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
+      - run: cargo fmt --manifest-path evals/workspace-oracle/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
+      - run: cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
+      - run: node --test dist/evals/workspace-oracle/contract-test.js
       - run: cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
       - run: cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
@@ -111,6 +116,7 @@ jobs:
       - run: node dist/evals/async-tuning/evaluate.js regression .artifacts/async-tuning
       - run: node dist/evals/async-tuning/replay.js .artifacts/async-tuning
       - run: pnpm portable:test
+      - run: node --test dist/evals/workspace-oracle/catalog-test.js
       - run: pnpm usable:test
       - run: pnpm runtime:build
       - run: pnpm runtime:test

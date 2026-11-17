@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { isDeepStrictEqual } from "node:util";
 import type { PortableCore } from "../../src/contracts.js";
 import { PortableCoreError } from "../../src/portable-value.js";
 import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
@@ -8,6 +7,7 @@ import { isRecord } from "../../src/trace.js";
 import { bounds } from "../collections-temporal/cases.js";
 import { runTlc, traceInput } from "../collections-temporal/tlc.js";
 import type { startNative } from "../usable/native.js";
+import { compareOracle } from "../workspace-oracle/node.js";
 import { classifyTlc, differences, type Observation } from "./compare.js";
 import type { Input } from "./corpus.js";
 
@@ -82,7 +82,7 @@ export const differential = async (
     /TLC 1.7.4 string literal/.test(ours.error.message) &&
     classifyTlc(reference) === "input-error";
   const mismatches = rejected ? [] : [...differences(ours, reference)];
-  if (nativeResult && !isDeepStrictEqual(ours, nativeResult))
+  if (nativeResult && compareOracle(nativeResult, ours).status !== "matched")
     mismatches.push("native-wasm");
   if (
     input.name === "positive-control" &&

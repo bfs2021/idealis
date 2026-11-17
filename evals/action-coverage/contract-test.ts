@@ -7,6 +7,7 @@ import { PortableCoreError } from "../../src/portable-value.js";
 import { createPortableWasm } from "../../src/portable-wasm.js";
 import { compileTlaSource } from "../../src/tla-source.js";
 import { startNative } from "../usable/native.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { coverageBounds, coverageInputs } from "./cases.js";
 
 const core = await createPortableWasm(
@@ -39,12 +40,12 @@ for (const input of coverageInputs)
           request: { kind: "check-safety-coverage", program, bounds },
         };
         const measured = observe(() => core.request(command));
-        assert.deepEqual(await native.request(command), measured);
+        assertOracle(await native.request(command), measured);
         const expected = observe(() => checkSafety(core, program, bounds));
         const actual = observe(
           () => checkSafetyCoverage(core, program, bounds).result,
         );
-        assert.deepEqual(actual, expected, input.name);
+        assertOracle(actual, expected, input.name);
       }
       if (input.expected === "error")
         assert.throws(
@@ -54,16 +55,16 @@ for (const input of coverageInputs)
       else {
         const report = checkSafetyCoverage(core, program, coverageBounds);
         assert.equal(report.result.status, input.expected);
-        assert.deepEqual(
+        assertOracle(
           report.coverage.initial.map((row) => row.name),
           program.initial.map((row) => row.name),
         );
-        assert.deepEqual(
+        assertOracle(
           report.coverage.next.map((row) => row.name),
           program.next.map((row) => row.name),
         );
         if (input.name === "counter") {
-          assert.deepEqual(
+          assertOracle(
             report.coverage.next.map((row) => ({
               name: row.name,
               attempts: row.attempts,

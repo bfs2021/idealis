@@ -11,6 +11,7 @@ import { createPortableWasm } from "../../src/portable-wasm.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 
 interface Input extends TlaSourceInput {
   readonly name: string;
@@ -102,13 +103,13 @@ try {
     const responses = [];
     for (const command of requests) {
       const expected = observe(before, command);
-      assert.deepEqual(observe(after, command), expected, input.name);
-      assert.deepEqual(
+      assertOracle(observe(after, command), expected, input.name);
+      assertOracle(
         await nativeBefore.request(command),
         expected,
         `${input.name}: before native/Wasm`,
       );
-      assert.deepEqual(
+      assertOracle(
         await nativeAfter.request(command),
         expected,
         `${input.name}: after native/Wasm`,

@@ -16,6 +16,7 @@ import { isRecord } from "../../src/trace.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 
 interface Entry {
   readonly name: string;
@@ -125,8 +126,8 @@ try {
         assert.equal(result.status, "bounded");
         assert.equal(result.reason, "work");
         assert.equal(result.violation, null);
-      } else assert.deepEqual(actual, expected, entry.name);
-    } else assert.deepEqual(actual, expected, entry.name);
+      } else assertOracle(actual, expected, entry.name);
+    } else assertOracle(actual, expected, entry.name);
     records.push({
       name: entry.name,
       backend: "native",
@@ -146,7 +147,7 @@ try {
       } as const;
       const expected = capture(wasmBefore, command);
       const actual = capture(wasmAfter, command);
-      assert.deepEqual(actual, expected, entry.name);
+      assertOracle(actual, expected, entry.name);
       records.push({ name: entry.name, backend: "wasm", expected, actual });
       wasmComparisons++;
     }

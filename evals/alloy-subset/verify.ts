@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { createNative, maxWork } from "./clients.js";
 import { type Case, controls, source } from "./corpus.js";
 import type { createWasm } from "./wasm.js";
@@ -19,7 +20,7 @@ export const verify = async (
         maxWork,
       };
       const result = analysis(await native.request(request));
-      assert.deepEqual(
+      assertOracle(
         wasm.request(request),
         { kind: "analysis", result },
         input.name,
@@ -32,7 +33,7 @@ export const verify = async (
       const request = { kind: "analyze" as const, source, command: 0, maxWork };
       const result = await native.request(request);
       assert.equal(result.kind, "error", source);
-      assert.deepEqual(wasm.request(request), result);
+      assertOracle(wasm.request(request), result);
       onRecord({ control: source, result });
     }
     const input = inputs[0];

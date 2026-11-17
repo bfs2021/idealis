@@ -15,6 +15,7 @@ import {
   toPortableValue,
 } from "../../src/portable.js";
 import { generateCorpus } from "../harness/search.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { generateFeedbackCorpus } from "./feedback.js";
 import { liveHistories, uncertainHistories } from "./histories.js";
 import { runPatterns } from "./patterns.js";
@@ -57,7 +58,7 @@ test("indexed handles and concurrent histories agree across TS native Wasm and G
   const expected = cases.map((entry) =>
     checkConcurrentHistory(artifact, entry.history, entry.maxNodes),
   );
-  assert.deepEqual(
+  assertOracle(
     cases.map((entry) => loaded.checkHistory(entry.history, entry.maxNodes)),
     expected,
   );
@@ -83,7 +84,7 @@ test("indexed handles and concurrent histories agree across TS native Wasm and G
     .split("\n")
     .slice(1)
     .map((line) => JSON.parse(line).result);
-  assert.deepEqual(native, expected);
+  assertOracle(native, expected);
   const go = JSON.parse(
     execFileSync(
       ".artifacts/go/history-check",
@@ -93,7 +94,7 @@ test("indexed handles and concurrent histories agree across TS native Wasm and G
       { input: JSON.stringify({ model: artifact, cases }) },
     ).toString(),
   );
-  assert.deepEqual(go, expected);
+  assertOracle(go, expected);
   const trace = {
     format: "modelt.portable-trace",
     version: 1,
@@ -101,7 +102,7 @@ test("indexed handles and concurrent histories agree across TS native Wasm and G
     initial: toPortableValue(0),
     steps: [],
   } as const;
-  assert.deepEqual(
+  assertOracle(
     loaded.checkHistories([trace]),
     checkFiniteHistories(core, artifact, [trace]),
   );
@@ -131,7 +132,7 @@ test("live concurrent implementations and fault boundaries are load-bearing", as
 test("feedback preserves enabled workloads, budgets and deterministic replay", () => {
   const options = { seed: 231, maxOperations: 512, maxDepth: 16 };
   const feedback = generateFeedbackCorpus(options);
-  assert.deepEqual(feedback, generateFeedbackCorpus(options));
+  assertOracle(feedback, generateFeedbackCorpus(options));
   const baseline = generateCorpus(counterModel, "alternating", options);
   assert.equal(feedback.operations, baseline.operations);
   assert.equal(feedback.cases.length, baseline.cases.length);

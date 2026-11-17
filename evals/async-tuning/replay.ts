@@ -13,6 +13,7 @@ import { isFault, parseSuite } from "../cross-language/suite.js";
 import { createFaultyCounter } from "../harness/counter-faults.js";
 import { runScheduledCounter } from "../harness/scheduled-counter.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { compareHistories } from "./histories.js";
 import { runPatterns } from "./patterns.js";
 import { fingerprint } from "./provenance.js";
@@ -39,7 +40,7 @@ const names = [
   "shrink.json",
   "benchmark.json",
 ];
-assert.deepEqual(
+assertOracle(
   result.files.map((file: { path: string }) => file.path).sort(),
   [...names].sort(),
 );
@@ -83,7 +84,7 @@ for (const group of [histories.live, histories.uncertain]) {
       maxNodes: entry.maxNodes,
     };
   });
-  assert.deepEqual(
+  assertOracle(
     await compareHistories(parseFiniteModel(group.model), cases),
     group.results,
   );
@@ -129,16 +130,12 @@ for (const [index, reference] of live.references.entries()) {
     .map((entry) => entry.event);
   const entry = liveCases[index];
   assert.ok(isRecord(entry) && isRecord(entry.history));
-  assert.deepEqual(
-    events,
-    entry.history.events,
-    "Live schedule did not reproduce",
-  );
+  assertOracle(events, entry.history.events, "Live schedule did not reproduce");
 }
 const patterns = JSON.parse(
   await readFile(join(directory, "patterns.json"), "utf8"),
 );
-assert.deepEqual(await runPatterns(), patterns);
+assertOracle(await runPatterns(), patterns);
 const witnesses: unknown = JSON.parse(
   await readFile(join(directory, "witnesses.json"), "utf8"),
 );
@@ -160,7 +157,7 @@ for (const witness of witnesses) {
     actions,
   );
   assert.equal(failure.status, "mismatch");
-  assert.deepEqual(
+  assertOracle(
     {
       ...failure,
       actual: toPortableValue(failure.actual),

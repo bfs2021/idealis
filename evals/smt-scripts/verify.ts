@@ -12,6 +12,7 @@ import {
   type Request,
   solution,
 } from "../smt-subset/wire.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { controls, type ScriptInput } from "./corpus.js";
 
 export const verify = async (
@@ -33,7 +34,7 @@ export const verify = async (
     const wasm = core.request(command);
     const actual = await native.request(command);
     onRecord({ request: command, native: actual, wasm });
-    assert.deepEqual(actual, wasm);
+    assertOracle(actual, wasm);
     return wasm;
   };
   try {
@@ -55,7 +56,7 @@ export const verify = async (
         source: input.source,
         z3ScriptOutput: output,
       });
-      assert.deepEqual(
+      assertOracle(
         statuses,
         input.snapshots.map((value) => value.expected),
       );
@@ -67,8 +68,8 @@ export const verify = async (
         assert.equal(result.status, snapshot.expected, snapshot.name);
         assert.equal(result.status, reference.status, snapshot.name);
         if (result.status === "sat") {
-          assert.deepEqual(Object.keys(result.values), snapshot.integers);
-          assert.deepEqual(Object.keys(result.booleans), snapshot.booleans);
+          assertOracle(Object.keys(result.values), snapshot.integers);
+          assertOracle(Object.keys(result.booleans), snapshot.booleans);
           await z3.validate(snapshot, result);
           sat++;
         } else unsat++;
@@ -86,7 +87,7 @@ export const verify = async (
             ),
           ),
         );
-        assert.deepEqual(previous, baselineCore?.request(command));
+        assertOracle(previous, baselineCore?.request(command));
         onRecord({ baseline: input.name, reply: previous });
         if (previous.kind === "solution") {
           assert.equal(input.snapshots.length, 1);
@@ -124,10 +125,10 @@ export const verify = async (
       "released",
     );
     for (const source of ["", "(declare-const x Int)(assert (> x 0))"])
-      assert.deepEqual(
-        await request({ kind: "run-script", source, maxWork: 0 }),
-        { kind: "script-results", results: [] },
-      );
+      assertOracle(await request({ kind: "run-script", source, maxWork: 0 }), {
+        kind: "script-results",
+        results: [],
+      });
     const source =
       "(declare-const x Int)(assert (= x 7))(check-sat)(check-sat)(check-sat)";
     const full = await request({ kind: "run-script", source, maxWork });
@@ -142,7 +143,7 @@ export const verify = async (
     });
     assert.equal(bounded.kind, "script-results");
     if (bounded.kind !== "script-results") throw new Error("Expected results");
-    assert.deepEqual(
+    assertOracle(
       bounded.results.map((value) => value.status),
       ["sat", "unknown", "unknown"],
     );
@@ -153,14 +154,11 @@ export const verify = async (
     const zero = await request({ kind: "run-script", source, maxWork: 0 });
     assert.equal(zero.kind, "script-results");
     if (zero.kind !== "script-results") throw new Error("Expected results");
-    assert.deepEqual(
+    assertOracle(
       zero.results.map((value) => value.status),
       ["unknown", "unknown", "unknown"],
     );
-    assert.deepEqual(
-      await request({ kind: "run-script", source, maxWork }),
-      full,
-    );
+    assertOracle(await request({ kind: "run-script", source, maxWork }), full);
     assert.ok(sat > 0 && unsat > 0);
     return {
       scripts: inputs.length,

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createTestingWasm, type TestingResult } from "../../src/testing.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { createNative, wasmPath } from "./clients.js";
 import { property } from "./reference.js";
 import { differentialCase, evaluate, plan, reproduce } from "./scenario.js";
@@ -27,20 +28,20 @@ export const verify = async (
         const wasmResult = await wasm.property(input, (testCase) =>
           evaluate(testCase, broken),
         );
-        assert.deepEqual(wasmResult, result);
+        assertOracle(wasmResult, result);
         const reference = await property(input, (testCase) =>
           evaluate(testCase, broken),
         );
         assert.equal(result.status, reference.status);
         assert.equal(result.cases, reference.cases);
-        assert.deepEqual(
+        assertOracle(
           result.trials
             .filter((trial) => trial.phase === "generation")
             .map((trial) => trial.case),
           reference.generated,
         );
-        assert.deepEqual(result.counterexample, reference.counterexample);
-        assert.deepEqual(result.shrink, reference.shrink);
+        assertOracle(result.counterexample, reference.counterexample);
+        assertOracle(result.shrink, reference.shrink);
         if (!broken) assert.equal(result.status, "passed");
         let reproduction: unknown = null;
         if (result.counterexample) {
@@ -72,7 +73,7 @@ export const verify = async (
           comparison.oracle,
           comparison.targets,
         );
-        assert.deepEqual(
+        assertOracle(
           await wasm.compare(comparison.oracle, comparison.targets),
           compared,
         );

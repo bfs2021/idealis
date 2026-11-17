@@ -1,5 +1,6 @@
 import type { SafetyResult } from "../../src/contracts.js";
 import type { runTlc } from "../collections-temporal/tlc.js";
+import { compareOracle } from "../workspace-oracle/node.js";
 export interface Observation {
   readonly result?: SafetyResult;
   readonly error?: {
@@ -51,14 +52,19 @@ export const differences = (
   const expected = classifyTlc(reference);
   if (expected === "infrastructure-error") return ["infrastructure-error"];
   if (actual === "unsupported" || actual === "bounded") return [String(actual)];
-  if (actual !== expected) return [`verdict: ${actual} != ${expected}`];
+  if (compareOracle(actual, expected).status !== "matched")
+    return [`verdict: ${actual} != ${expected}`];
   if (!ours.result) return [];
   const result: string[] = [];
-  if (reference.states !== null && ours.result.states !== reference.states)
+  if (
+    reference.states !== null &&
+    compareOracle(ours.result.states, reference.states).status !== "matched"
+  )
     result.push(`states: ${ours.result.states} != ${reference.states}`);
   if (
     reference.generated !== null &&
-    ours.result.generated !== reference.generated
+    compareOracle(ours.result.generated, reference.generated).status !==
+      "matched"
   )
     result.push(
       `generated: ${ours.result.generated} != ${reference.generated}`,
@@ -72,7 +78,10 @@ export const differences = (
     const length = /violated by the initial state/.test(reference.log)
       ? 1
       : [...reference.log.matchAll(/^State \d+:/gm)].length;
-    if (length !== ours.result.violation.trace.length)
+    if (
+      compareOracle(ours.result.violation.trace.length, length).status !==
+      "matched"
+    )
       result.push(
         `trace-length: ${ours.result.violation.trace.length} != ${length}`,
       );

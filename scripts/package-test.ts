@@ -609,6 +609,24 @@ const oracle = execFileSync("cargo", ["run", "--offline", "--quiet"], {
   .toString()
   .trim();
 assert.equal(oracle, "standalone idealis-oracle consumer checked");
+await writeFile(
+  join(oracleConsumer, "main.rs"),
+  await readFile(
+    join(
+      oracleConsumer,
+      `idealis-oracle-${version}`,
+      "examples",
+      "observations.rs",
+    ),
+  ),
+);
+const oracleJson = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+  cwd: oracleConsumer,
+  stdio: "pipe",
+})
+  .toString()
+  .trim();
+assert.equal(oracleJson, "standalone oracle JSON consumer checked");
 const oracleMetadata = JSON.parse(
   execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
     cwd: oracleConsumer,
@@ -631,6 +649,7 @@ assert.ok(
 const result = {
   status: "complete",
   oracle,
+  oracleJson,
   oracleDependencies: oracleMetadata.packages
     .map((entry: { name: string }) => entry.name)
     .sort(),

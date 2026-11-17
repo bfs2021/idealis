@@ -5,6 +5,7 @@ import { decodePortableResult } from "../../src/portable-wasm.js";
 import { isRecord } from "../../src/trace.js";
 import { counterFaults } from "../harness/counter-faults.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { fingerprint } from "./provenance.js";
 import { executeSuite } from "./runners.js";
 import { isFault, parseSuite } from "./suite.js";
@@ -21,10 +22,12 @@ assert.equal(
   "Check out the recorded sources before replay",
 );
 assert.ok(Array.isArray(result.files) && result.files.length === 4);
-assert.deepEqual(
-  result.files.map((file: { path: string }) => file.path).sort(),
-  ["manifest.json", "matrix.json", "suite.json", "witnesses.json"],
-);
+assertOracle(result.files.map((file: { path: string }) => file.path).sort(), [
+  "manifest.json",
+  "matrix.json",
+  "suite.json",
+  "witnesses.json",
+]);
 for (const file of result.files)
   assert.equal(
     digest(await readFile(join(directory, file.path))),
@@ -63,11 +66,7 @@ const selected = witnesses.map((witness: unknown) => {
   const savedCase = witness.case;
   const entry = suite.cases.find((entry) => entry.id === savedCase.id);
   assert.ok(entry);
-  assert.deepEqual(
-    entry,
-    savedCase,
-    "Witness must retain the saved model oracle",
-  );
+  assertOracle(entry, savedCase, "Witness must retain the saved model oracle");
   return {
     fault: witness.fault,
     case: entry,
@@ -94,7 +93,7 @@ for (const witness of selected) {
   );
   assert.ok(row);
   assert.equal(row.result.status, "mismatch");
-  assert.deepEqual(row.result, witness.result);
+  assertOracle(row.result, witness.result);
 }
 console.log(
   `${selected.length} saved model oracles reproduced faults in TS / Rust / Go; normal implementations passed`,

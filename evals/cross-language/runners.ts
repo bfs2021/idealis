@@ -23,6 +23,7 @@ import {
   createFaultyCounter,
 } from "../harness/counter-faults.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { isFault, type OracleSuite, parseSuite } from "./suite.js";
 
 interface Calls {
@@ -90,7 +91,7 @@ const runTS = async (suite: OracleSuite): Promise<readonly Execution[]> => {
         createFaultyCounter(fault),
         entry.oracle.steps.map((step) => action(step.action)),
       );
-      assert.deepEqual(finiteResult, {
+      assertOracle(finiteResult, {
         ...reference,
         actual: toPortableValue(reference.actual),
         expected: reference.expected.map(toPortableValue),
@@ -172,12 +173,12 @@ export const executeSuite = async (input: OracleSuite) => {
   for (const rows of [ts, rust, go]) {
     assert.equal(rows.length, ts.length, "Missing backend executions");
     for (const [index, row] of rows.entries()) {
-      assert.deepEqual(
+      assertOracle(
         row,
         ts[index],
         `Backend differs at ${row.caseId}/${row.fault}`,
       );
-      assert.deepEqual(
+      assertOracle(
         row.finite,
         row.replay,
         `Oracle replay differs at ${row.caseId}/${row.fault}`,
@@ -187,11 +188,11 @@ export const executeSuite = async (input: OracleSuite) => {
         "invalid",
         "An enabled corpus became invalid",
       );
-      assert.deepEqual(row.finiteCalls, {
+      assertOracle(row.finiteCalls, {
         resets: 1,
         steps: row.finite.checkedSteps,
       });
-      assert.deepEqual(row.replayCalls, row.finiteCalls);
+      assertOracle(row.replayCalls, row.finiteCalls);
       if (row.fault === "none")
         assert.equal(
           row.finite.status,

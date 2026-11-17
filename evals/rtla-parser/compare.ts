@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { parseConfig, parseModule } from "tla-ts";
 import { isRecord } from "../../src/trace.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { corpus, moduleFields, normalize } from "./corpus.js";
 import { syntaxCases } from "./syntax.js";
 import { createParserWasm } from "./wasm.js";
@@ -31,12 +32,12 @@ export const compare = async () => {
   for (const [index, input] of inputs.entries()) {
     const module = native[2 * index];
     const config = native[2 * index + 1];
-    assert.deepEqual(
+    assertOracle(
       wasm.request(requests[2 * index]),
       module,
       `${input.name}: native/Wasm module`,
     );
-    assert.deepEqual(
+    assertOracle(
       wasm.request(requests[2 * index + 1]),
       config,
       `${input.name}: native/Wasm config`,
@@ -50,12 +51,12 @@ export const compare = async () => {
       `${input.name}: ${JSON.stringify(config)}`,
     );
     const reference = parseModule(input.source);
-    assert.deepEqual(
+    assertOracle(
       moduleFields(module.module),
       moduleFields(reference),
       `${input.name}: module`,
     );
-    assert.deepEqual(
+    assertOracle(
       normalize(config.config),
       normalize(parseConfig(input.config)),
       `${input.name}: config`,
@@ -70,7 +71,7 @@ export const compare = async () => {
         input: `${JSON.stringify(request)}\n`,
       }).toString(),
     );
-    assert.deepEqual(wasm.request(request), actual, input.name);
+    assertOracle(wasm.request(request), actual, input.name);
     assert.ok(isRecord(actual));
     if (input.expected === "module") {
       assert.equal(
@@ -78,7 +79,7 @@ export const compare = async () => {
         "module",
         `${input.name}: ${JSON.stringify(actual)}`,
       );
-      assert.deepEqual(
+      assertOracle(
         moduleFields(actual.module),
         moduleFields(parseModule(input.source)),
         input.name,
@@ -112,7 +113,7 @@ export const compare = async () => {
         input: `${JSON.stringify(request)}\n`,
       }).toString(),
     );
-    assert.deepEqual(wasm.request(request), actual);
+    assertOracle(wasm.request(request), actual);
     assert.ok(
       isRecord(actual) && actual.kind === "error" && isRecord(actual.error),
     );

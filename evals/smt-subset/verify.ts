@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { checkConformance } from "../../src/conformance.js";
 import { createTtlDriver, type TtlAction, ttlModel } from "../harness/ttl.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { createNative, createZ3, maxWork } from "./clients.js";
 import type { Input } from "./corpus.js";
 import { benchmarks, controls } from "./corpus.js";
@@ -26,15 +27,15 @@ export const verify = async (
       );
       const reference = await z3.solve(input);
       onRecord({ input, wasm, native: actual, reference });
-      assert.deepEqual(actual, wasm, input.name);
+      assertOracle(actual, wasm, input.name);
       assert.equal(wasm.status, input.expected, input.name);
       assert.equal(reference.status, input.expected, input.name);
       if (wasm.status === "sat") {
-        assert.deepEqual(
+        assertOracle(
           Object.keys(wasm.values).sort(),
           [...input.integers].sort(),
         );
-        assert.deepEqual(
+        assertOracle(
           Object.keys(wasm.booleans).sort(),
           [...input.booleans].sort(),
         );
@@ -44,7 +45,7 @@ export const verify = async (
       const handle = core.request({ kind: "prepare", source: input.source });
       assert.equal(handle.kind, "prepared");
       if (handle.kind !== "prepared") throw new Error("Expected prepared");
-      assert.deepEqual(
+      assertOracle(
         solution(
           core.request({ kind: "check", handle: handle.handle, maxWork }),
         ),
@@ -63,7 +64,7 @@ export const verify = async (
       const wasm = core.request({ kind: "solve", source, maxWork });
       const actual = await native.request({ kind: "solve", source, maxWork });
       assert.equal(wasm.kind, "error", source);
-      assert.deepEqual(actual, wasm);
+      assertOracle(actual, wasm);
       onRecord({ control: source, reply: wasm });
     }
     const input = benchmarks()[0];
@@ -72,7 +73,7 @@ export const verify = async (
       core.request({ kind: "solve", source: input.source, maxWork: 0 }),
     );
     assert.equal(cut.status, "unknown");
-    assert.deepEqual(cut.values, {});
+    assertOracle(cut.values, {});
     onRecord({ budget: 0, reply: cut });
     const model = solution(
       core.request({ kind: "solve", source: input.source, maxWork }),

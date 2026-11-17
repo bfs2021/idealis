@@ -20,6 +20,7 @@ import { fingerprint } from "../rust-safety/provenance.js";
 import { classifyTlc } from "../tlc-differential/compare.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { coverageBounds, coverageInputs } from "./cases.js";
 
 interface Input extends TlaSourceInput {
@@ -90,8 +91,8 @@ if (saved) {
   const manifest = JSON.parse(
     await readFile(join(saved, "manifest.json"), "utf8"),
   );
-  assert.deepEqual(manifest.binaries, binaries);
-  assert.deepEqual(manifest.inputs, inputs);
+  assertOracle(manifest.binaries, binaries);
+  assertOracle(manifest.inputs, inputs);
 }
 await writeFile(
   join(directory, "manifest.json"),
@@ -163,19 +164,14 @@ try {
       };
       const measured = observe(measuredCommand);
       const normal = observe(normalCommand);
-      assert.deepEqual(
-        await native.request(measuredCommand),
-        measured,
-        input.name,
-      );
-      assert.deepEqual(await native.request(normalCommand), normal, input.name);
-      if (measured.kind === "error")
-        assert.deepEqual(measured, normal, input.name);
+      assertOracle(await native.request(measuredCommand), measured, input.name);
+      assertOracle(await native.request(normalCommand), normal, input.name);
+      if (measured.kind === "error") assertOracle(measured, normal, input.name);
       else {
         assert.equal(measured.kind, "safety-coverage");
         assert.equal(normal.kind, "safety");
         if (measured.kind === "safety-coverage" && normal.kind === "safety")
-          assert.deepEqual(measured.report.result, normal.result, input.name);
+          assertOracle(measured.report.result, normal.result, input.name);
       }
       probes.push({ bounds, measured });
     }
@@ -254,7 +250,7 @@ try {
         }
         let nextDistinct = 0;
         for (const [name, row] of aggregate(full.report.coverage.next)) {
-          assert.deepEqual(
+          assertOracle(
             counts.get(name),
             { second: row.generated, first: row.distinct },
             `${input.name}/${name}`,
@@ -313,7 +309,7 @@ try {
     console.log(`${input.name}: matched`);
   }
   if (saved)
-    assert.deepEqual(
+    assertOracle(
       reports,
       JSON.parse(await readFile(join(saved, "reports.json"), "utf8")),
     );

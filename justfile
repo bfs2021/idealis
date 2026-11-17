@@ -31,13 +31,43 @@ support-replay run:
   pnpm build
   node dist/evals/crate-checklists/run.js {{quote(run)}} --replay
 
+oracle-wire-build:
+  pnpm oracle:build
+
+workspace-oracle-build: oracle-wire-build
+  cargo build --release --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
+
+workspace-oracle-test: workspace-oracle-build portable-build testing-build ralloy-build rsmt-build rtla-build
+  cargo fmt --manifest-path evals/workspace-oracle/rust/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
+  cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
+  pnpm build
+  node --test dist/evals/workspace-oracle/contract-test.js dist/evals/workspace-oracle/catalog-test.js
+
+# Run builds and tests first; snapshots freeze their executables and sources.
+workspace-snapshot directory:
+  pnpm build
+  node dist/evals/workspace-oracle/tune.js snapshot {{quote(directory)}}
+
+workspace-bench baseline candidate run:
+  node dist/evals/workspace-oracle/tune.js run {{quote(baseline)}} {{quote(candidate)}} {{quote(run)}}
+
+workspace-replay run replay:
+  node dist/evals/workspace-oracle/tune.js replay {{quote(run)}} {{quote(replay)}}
+
+workspace-oracle-cost run:
+  node dist/evals/workspace-oracle/cost.js {{quote(run)}}
+
+workspace-oracle-cost-replay run replay:
+  node dist/evals/workspace-oracle/cost.js {{quote(replay)}} {{quote(run)}}
+
 oracle-build:
   cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
   cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/oracle-comparison/rust/Cargo.toml
 
-oracle-test: oracle-build
+oracle-test: oracle-build workspace-oracle-test
   cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path crates/oracle/Cargo.toml
@@ -127,7 +157,7 @@ sat-replay run:
   pnpm build
   node dist/evals/sat-foundation/replay.js {{quote(run)}}
 
-testing-build:
+testing-build: oracle-wire-build
   cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml
 
@@ -155,7 +185,7 @@ testing-replay run:
   pnpm build
   node dist/evals/testing-core/replay.js {{quote(run)}}
 
-ralloy-build:
+ralloy-build: oracle-wire-build
   cargo build --release --locked --manifest-path crates/ralloy/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/ralloy/Cargo.toml
 
@@ -198,7 +228,7 @@ alloy-instance-replay run:
   pnpm build
   node dist/evals/alloy-instance/replay.js {{quote(run)}}
 
-rsmt-build:
+rsmt-build: oracle-wire-build
   pnpm rsmt:build
 
 rsmt-test:
@@ -273,7 +303,7 @@ runtime-test:
 runtime-eval:
   pnpm runtime:eval
 
-portable-build:
+portable-build: oracle-wire-build
   pnpm portable:build
 
 portable-test:
@@ -492,7 +522,7 @@ rtlc-compare run:
   pnpm build
   node dist/evals/rtlc-extraction/compare.js {{quote(run)}}
 
-rtla-build:
+rtla-build: oracle-wire-build
   pnpm rtla:build
 
 compiler-test:

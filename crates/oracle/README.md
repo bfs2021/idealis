@@ -60,8 +60,16 @@ report.assert_matched();
 
 sampleごとに開始実装を回し、隣のsampleで順序を逆にする。reportには実行順と、固定iterationsの合計nsを保存する。mean/median/min/maxは1呼び出し当たりのns。速度比は`baselineのmedian / 対象のmedian`で、対象が速いほど1を超える。信頼区間や有意差は出さない。`max_evaluations`はreference・preflight・warmupを含む予定呼び出し数の上限で、壁時計のtimeoutではない。
 
-nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`へ単調増加するns時計を渡す。0時間・逆行・累積時間overflowは`unknown`にし、速度比を返さない。時計を関数へ渡すため、このcrateにWasmのJS bindingはない。実行例は[comparison.rs](examples/comparison.rs)、外部実装比較は[評価アダプタ](../../evals/oracle-comparison)を参照。
+nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`へ単調増加するns時計を渡す。0時間・逆行・累積時間overflowは`unknown`にし、速度比を返さない。JSON ABIは観測batchの照合を扱う。benchmarkのcallbackとclockのJS bindingは提供しない。実行例は[comparison.rs](examples/comparison.rs)、外部実装比較は[評価アダプタ](../../evals/oracle-comparison)を参照。
 
 ## 対応範囲
 
 [`idealis-testing`](../idealis-testing)は有限生成器・feedback・縮小を管理する。このcrateは固定入力に対する実装登録・照合・測定・reportを担当する。生成したcaseを`case`へ登録して併用できる。自動PBT、縮小、並列実行、プロセス隔離、任意言語のbindingはこのcrateには含まない。[対応チェックリスト](SUPPORT.md)を参照。
+
+## 観測batchのJSON境界
+
+`dispatch(&[u8])`とnative JSONL executable `idealis-oracle`は、ホストが収集済みの観測を同じOracleGroupへ通す。version 1の入力例は[observations.rs](examples/observations.rs)を参照。`group`・`reference`・`implementations`、caseごとの`id`・`input`・`reference`・実装順の`actual`を渡す。出力は`{kind:"checked", report}`または`{kind:"error", message}`。不正な入力をmatchedのreportにしない。
+
+入力は16 MiB、4096 cases、256 implementationsまで。caseと実装は空にできず、IDの重複と観測数のずれを拒否する。JSONの構文と入れ子の制限もserde_jsonに従う。この境界は収集済み観測の照合であり、実装関数の実行や計測は行わない。
+
+Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracle_output_ptr/len`とmemoryをexportする。inputへUTF-8 JSONを書き、dispatch後にoutputをコピーする。過大なresizeは0を返して前のinputを消す。bufferは次のresize/dispatchで無効になり、runtimeへの呼び出しは直列にする。JS bindingはworkspaceの[eval adapter](../../evals/workspace-oracle/README.md)へ置き、npm公開APIには追加していない。

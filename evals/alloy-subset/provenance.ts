@@ -11,6 +11,8 @@ export const fingerprint = async () => {
     "--others",
     "--exclude-standard",
     "--",
+    "crates/oracle",
+    "evals/workspace-oracle",
     "crates/ralloy",
     "evals/alloy-subset",
     "evals/plans/0034-alloy-subset.md",
@@ -34,7 +36,12 @@ export const fingerprint = async () => {
         path === "evals/plans/0034-alloy-subset.md",
     );
   const sources = await Promise.all(
-    [...new Set(paths)]
+    [
+      ...new Set([
+        ...paths,
+        "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
+      ]),
+    ]
       .sort()
       .map(async (path) => ({ path, sha256: digest(await readFile(path)) })),
   );

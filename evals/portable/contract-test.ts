@@ -32,6 +32,7 @@ import {
   createFaultyCounter,
 } from "../harness/counter-faults.js";
 import { generateCorpus } from "../harness/search.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 import { createNativeComparison } from "./transcript.js";
 
 test("independent native and Wasm instances have matching protocol lifetimes", async () => {
@@ -96,7 +97,7 @@ test("Rust native and Wasm process the same conformance transcripts as the origi
         createFaultyCounter(fault),
         actions,
       );
-      assert.deepEqual(actual, {
+      assertOracle(actual, {
         ...reference,
         actual: toPortableValue(reference.actual),
         expected: reference.expected.map(toPortableValue),
@@ -115,7 +116,7 @@ test("Rust native and Wasm process the same conformance transcripts as the origi
     .trim()
     .split("\n")
     .map((line) => JSON.parse(line));
-  assert.deepEqual(native, expected);
+  assertOracle(native, expected);
 });
 
 test("portable replay uses the saved oracle and reproduces a persistence fault", async () => {
@@ -135,7 +136,7 @@ test("portable replay uses the saved oracle and reproduces a persistence fault",
       decodeAction,
     );
     assert.equal(actual.status, expected.status);
-    assert.deepEqual(actual.trace, toPortableTrace(expected.trace));
+    assertOracle(actual.trace, toPortableTrace(expected.trace));
     assert.equal(actual.checkedSteps, 3);
   }
 });
@@ -166,7 +167,7 @@ test("candidate histories remain consistent and invalid input never executes a d
     "next",
   ]);
   assert.equal(actual.status, "mismatch");
-  assert.deepEqual(actual.expected, expected.expected.map(toPortableValue));
+  assertOracle(actual.expected, expected.expected.map(toPortableValue));
   assert.equal(actual.checkedSteps, 2);
   const empty = await checkPortableConformance(
     core,
@@ -192,7 +193,7 @@ test("the Wasm codec follows the shared fixtures and protocol rejects stale repl
     await readFile("fixtures/portable-values.json", "utf8"),
   );
   for (const fixture of fixtures.valid)
-    assert.deepEqual(
+    assertOracle(
       core.request({
         version: 1,
         request: { kind: "canonicalize", value: fixture.input },
@@ -335,7 +336,7 @@ test("sequence callbacks and Assert preserve strict portable IR fields", async (
       '---- MODULE Operators ----\nEXTENDS Integers, Sequences, TLC\nVARIABLE x\nKeep(v) == v > 1\nBefore(left,right) == left < right\nInit == x = SortSeq(SelectSeq(<<3,1,2>>, Keep), Before)\nNext == UNCHANGED x\nSafe == Assert(x = <<2,3>>, "sequence")\n====',
     config: "INIT Init\nNEXT Next\nINVARIANT Safe\nCHECK_DEADLOCK FALSE",
   });
-  assert.deepEqual(
+  assertOracle(
     decodeSafetyProgram(JSON.parse(JSON.stringify(program))),
     program,
   );

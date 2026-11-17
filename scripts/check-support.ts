@@ -180,6 +180,12 @@ const scopes: readonly CrateScope[] = [
     name: "oracle",
     evidence: [
       {
+        path: "src/wire.rs",
+        topic:
+          "version付き観測batchをOracleGroupへ通すJSON境界、件数と入力size、CLIとWasm ABI",
+        context: ["src/wasm.rs", "src/main.rs", "tests/json.rs"],
+      },
+      {
         path: "src/report.rs",
         topic:
           "typed observation比較とmatched/mismatch/invalid/unknown/error、集約の優先順位",

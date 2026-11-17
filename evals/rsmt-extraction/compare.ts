@@ -12,6 +12,7 @@ import { maxWork } from "../smt-subset/paths.js";
 import { digest } from "../smt-subset/provenance.js";
 import { createWasm } from "../smt-subset/wasm.js";
 import type { Reply, Request } from "../smt-subset/wire.js";
+import { assertOracle } from "../workspace-oracle/node.js";
 
 interface Record {
   readonly request: Request;
@@ -44,7 +45,7 @@ const baseline: readonly Record[] =
     : [];
 if (phase === "check") {
   assert.ok(parent);
-  assert.deepEqual(
+  assertOracle(
     baseline.map((record) => record.request),
     requests,
   );
@@ -60,8 +61,8 @@ try {
     const response = await native.request(request);
     records.push({ request, response });
     if (phase !== "check") continue;
-    assert.deepEqual(response, baseline[index]?.response, `native ${index}`);
-    assert.deepEqual(wasm?.request(request), response, `Wasm ${index}`);
+    assertOracle(response, baseline[index]?.response, `native ${index}`);
+    assertOracle(wasm?.request(request), response, `Wasm ${index}`);
     const input =
       request.kind === "solve"
         ? inputs.find((input) => input.source === request.source)
