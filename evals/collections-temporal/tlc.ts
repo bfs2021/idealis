@@ -48,12 +48,16 @@ const valueExpression = (
 };
 export const tlaValue = (value: PortableValue): string =>
   valueExpression(value, 0);
+interface TlcOptions {
+  readonly coverage?: boolean;
+}
 export const runTlc = async (
   java: string,
   jar: string,
   directory: string,
   input: TlaSourceInput,
   moduleName: string,
+  options: TlcOptions = {},
 ) => {
   await mkdir(directory, { recursive: false });
   await writeFile(join(directory, `${moduleName}.tla`), input.source, {
@@ -77,6 +81,7 @@ export const runTlc = async (
       resolve(jar),
       "-workers",
       "1",
+      ...(options.coverage ? ["-coverage", "0"] : []),
       "-cleanup",
       "-config",
       `${moduleName}.cfg`,

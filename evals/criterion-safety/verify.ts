@@ -26,7 +26,9 @@ for (const directory of process.argv.slice(2)) {
         : manifest.benchmarkSuite === "finite-and-modules-v1"
           ? 17
           : 12
-      : 14,
+      : manifest.target === "rtlc-coverage"
+        ? 4
+        : 14,
   );
   const files = new Set<string>();
   for (const file of result.files) {

@@ -1,4 +1,4 @@
-use super::Search;
+use super::{Recording, Search};
 use crate::CoreError;
 use crate::ir::{SafetyProgram, Scalar, Step};
 use crate::safety_expressions::{EvalContext, visit_branch};
@@ -99,7 +99,7 @@ pub(super) fn is_expensive(program: &SafetyProgram) -> bool {
             .any(|predicate| !predicate.expression.is_scalar_cost())
 }
 
-impl Search<'_> {
+impl<R: Recording> Search<'_, R> {
     pub(super) fn parallel_frontier(
         &mut self,
         frontier: Range<usize>,

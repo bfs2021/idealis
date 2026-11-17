@@ -1,9 +1,13 @@
+#[path = "safety_coverage.rs"]
+mod coverage;
 use crate::safety_expressions::{EvalContext, validate_branches, visit_branch};
+use coverage::{NoCoverage, Recording, WithCoverage};
 #[cfg(not(target_arch = "wasm32"))]
 #[path = "safety_parallel.rs"]
 mod parallel;
 use crate::ir::{
-    Branch, SafetyBounds, SafetyProgram, SafetyResult, SafetyTraceStep, SafetyViolation, Scalar,
+    Branch, SafetyBounds, SafetyCoverageReport, SafetyProgram, SafetyResult, SafetyTraceStep,
+    SafetyViolation, Scalar,
 };
 use crate::safety_values::Arena;
 use crate::temporal::GraphEdge;
@@ -83,7 +87,7 @@ fn get_hash(values: &[Option<Scalar>]) -> Result<u64, CoreError> {
         })
 }
 
-struct Search<'a> {
+struct Search<'a, R: Recording = NoCoverage> {
     program: &'a SafetyProgram,
     bounds: SafetyBounds,
     nodes: Vec<Node>,
@@ -91,11 +95,18 @@ struct Search<'a> {
     result: SafetyResult,
     graph: Option<Vec<Vec<GraphEdge>>>,
     roots: Vec<usize>,
+    coverage: R,
 }
 
 impl SafetyProgram {
     pub fn check(&self, bounds: SafetyBounds) -> Result<SafetyResult, CoreError> {
         self.check_with_workers(bounds, 1)
+    }
+    pub fn check_with_coverage(
+        &self,
+        bounds: SafetyBounds,
+    ) -> Result<SafetyCoverageReport, CoreError> {
+        self.check_measured::<WithCoverage>(bounds, 1)
     }
     #[cfg(not(target_arch = "wasm32"))]
     pub fn check_parallel(
@@ -115,6 +126,13 @@ impl SafetyProgram {
         bounds: SafetyBounds,
         workers: usize,
     ) -> Result<SafetyResult, CoreError> {
+        self.check_measured::<NoCoverage>(bounds, workers)
+    }
+    fn check_measured<R: Recording>(
+        &self,
+        bounds: SafetyBounds,
+        workers: usize,
+    ) -> Result<R::Output, CoreError> {
         if self.format != "modelt.safety-program"
             || self.version != 1
             || self.name.is_empty()
@@ -128,13 +146,14 @@ impl SafetyProgram {
             return Err(CoreError::protocol("Invalid safety program or bounds"));
         }
         let mut arena = Arena::new(bounds.max_work);
-        let mut search = Search {
+        let mut search = Search::<R> {
             program: self,
             bounds,
             nodes: vec![],
             graph: (!self.properties.is_empty()).then(Vec::new),
             roots: vec![],
             store: StateStore::new(self.variables.len()),
+            coverage: R::new(self),
             result: SafetyResult {
                 status: "complete".into(),
                 reason: None,
@@ -161,11 +180,11 @@ impl SafetyProgram {
             );
         }
         search.result.work = arena.work;
-        Ok(search.result)
+        Ok(search.coverage.finish(search.result))
     }
 }
 
-impl<'program> Search<'program> {
+impl<'program, R: Recording> Search<'program, R> {
     fn run(&mut self, arena: &mut Arena<'program>, workers: usize) -> Result<(), CoreError> {
         let program = self.program;
         validate_branches(&program.initial, program.variables.len(), 0, 0)?;
@@ -262,7 +281,7 @@ impl<'program> Search<'program> {
         #[cfg(not(target_arch = "wasm32"))]
         let mut pool = None;
         #[cfg(not(target_arch = "wasm32"))]
-        let parallel = workers > 1 && parallel::is_expensive(program);
+        let parallel = !R::ENABLED && workers > 1 && parallel::is_expensive(program);
         #[cfg(target_arch = "wasm32")]
         let _ = workers;
         while index < self.nodes.len() {
@@ -375,7 +394,12 @@ impl<'program> Search<'program> {
         parent: Option<usize>,
         enabled: &mut bool,
     ) -> Result<(), CoreError> {
-        visit_branch(
+        let before = if R::ENABLED {
+            Some((arena.work, self.result.generated, self.result.states))
+        } else {
+            None
+        };
+        let outcome = visit_branch(
             branch.definition,
             position,
             context,
@@ -386,7 +410,17 @@ impl<'program> Search<'program> {
                 self.accept(values, parent, branch.index, arena)?;
                 Ok(self.stopped())
             },
-        )?;
+        );
+        if let Some((work, generated, states)) = before {
+            self.coverage.record(
+                parent.is_none(),
+                branch.index,
+                arena.work - work,
+                self.result.generated - generated,
+                self.result.states - states,
+            );
+        }
+        outcome?;
         Ok(())
     }
     fn accept(

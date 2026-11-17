@@ -146,6 +146,11 @@ export interface PortableCommand {
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
       }
+    | {
+        readonly kind: "check-safety-coverage";
+        readonly program: SafetyProgram;
+        readonly bounds: SafetyBounds;
+      }
     | { readonly kind: "load-model"; readonly model: FiniteModel }
     | { readonly kind: "release-model"; readonly handle: number }
     | {
@@ -194,6 +199,7 @@ export interface PortableCommand {
 export type PortableOutput =
   | { readonly kind: "compiled"; readonly program: SafetyProgram }
   | { readonly kind: "safety"; readonly result: SafetyResult }
+  | { readonly kind: "safety-coverage"; readonly report: SafetyCoverageReport }
   | { readonly kind: "loaded"; readonly handle: number }
   | { readonly kind: "released" }
   | { readonly kind: "history"; readonly result: ConcurrentResult }
@@ -558,6 +564,26 @@ export interface SafetyResult {
     readonly loopStart?: number;
     readonly loopAction?: string;
   } | null;
+}
+
+export interface SafetyActionCoverage {
+  readonly name: string;
+  readonly attempts: number;
+  readonly enabled: number;
+  readonly generated: number;
+  readonly distinct: number;
+  readonly work: number;
+}
+
+export interface SafetyCoverage {
+  readonly initial: readonly SafetyActionCoverage[];
+  readonly next: readonly SafetyActionCoverage[];
+  readonly unattributedWork: number;
+}
+
+export interface SafetyCoverageReport {
+  readonly result: SafetyResult;
+  readonly coverage: SafetyCoverage;
 }
 
 export interface PortableEncoding<State, Action, Observation> {

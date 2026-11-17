@@ -14,6 +14,14 @@ model valueのwire表現は`{"type":"model-value","value":"p_1"}`。文字列の
 
 時間論理の展開では、256式以下のpoolの訪問済み式を固定長bit集合で保持する。分岐のcloneでHashSetのhash・確保を繰り返す費用を減らす。257式以上のpoolはHashSetを使い、分岐ごとに全pool分のbitmapを確保しない。式の展開順とworkのtickは同じ。
 
+## アクションのcoverage
+
+`program.check_with_coverage(bounds)`は`SafetyCoverageReport { result, coverage }`を返す。resultは通常のcheckと同じ判定・反例・work。coverage.initialとcoverage.nextはIR branch順の配列で、同名のbranchも統合しない。attemptsは評価を始めた回数、enabledは完成した候補を1つ以上生成したattempt数。generatedは重複・constraint除外を含む完成候補数、distinctは保存した新規state数で、最初に発見したbranchへ帰属する。
+
+各行のworkはbranchの評価と受理時のconstraint/property検査を含む。事前検査や時間論理等のworkはunattributedWorkへ残す。行のgenerated/distinctの和はresultのgenerated/statesに一致し、行のworkの和とunattributedWorkはresult.workに一致する。boundedや違反では途中までの計数になる。評価エラーは通常と同じErrを返す。
+
+これは逐次BFSのIR branch計数。式・source location単位や並列のcoverage、TLCの全cost modelは未対応。TLCのInit行は重複や棄却候補を含むcounterを出し、活性反例の再構築も行counterを増やすため、出力の全数値の一致は保証しない。workは時間やTLCの式costではない。通常checkではgeneric recorderで計測処理を除く。
+
 ## Rustから使う
 
 ローカルcheckoutでは`rtlc = { path = "../idealis/crates/rtlc" }`を依存に追加する。JSON IRを読む場合は`serde_json`も使う。

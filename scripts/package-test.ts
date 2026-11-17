@@ -125,7 +125,7 @@ await writeFile(
 import {readFile} from 'node:fs/promises';
 import {createTestingWasm} from '@mizchi/idealis/testing';
 import {createAlloyWasm,AlloyError} from '@mizchi/idealis/alloy';
-import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety} from '@mizchi/idealis/portable';
+import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety,checkSafetyCoverage} from '@mizchi/idealis/portable';
 import {createHistoryRecorder} from '@mizchi/idealis/history';
 import {parseFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
@@ -168,6 +168,7 @@ const backendResult=await runBackend(createRtlcBackend(core,{version:'0.1.0-alph
 assert.equal(backendResult.outcome.kind,'counterexample');assert.equal(backendResult.outcome.witness.kind,'behavior');
 assert.deepEqual(parseBackendResult(JSON.parse(JSON.stringify(backendResult))),backendResult);
 assert.equal(checkSafety(core,safety.program,safety.bounds).violation.trace.length,4);
+assert.deepEqual(checkSafetyCoverage(core,safety.program,safety.bounds).result,checkSafety(core,safety.program,safety.bounds));
 const source=JSON.parse(await readFile('source.json','utf8'));
 const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'PackageSafety');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
@@ -192,7 +193,7 @@ import {createAlloyWasm,type AlloyInstance} from '@mizchi/idealis/alloy';
 const observed:AlloyInstance={signatures:{N:[]},fields:{edge:[]}};void observed;void createAlloyWasm;
 import {compileFiniteModel,createFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
-import {createPortableWasm,compileTlaSource,checkTlaSource} from '@mizchi/idealis/portable';
+import {createPortableWasm,compileTlaSource,checkTlaSource,checkSafetyCoverage,type SafetyCoverageReport} from '@mizchi/idealis/portable';
 import {planSchedule} from '@mizchi/idealis/scheduling';
 import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/idealis/history';
 import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/idealis/backend';
@@ -200,7 +201,8 @@ const model:Model<number,'tick',number>={name:'typed',initial:()=>[{state:0,obse
 const compiled=compileFiniteModel(model,{maxDepth:1,maxStates:1});
 if(compiled.model){createFiniteModel(compiled.model);checkConcurrentHistory(compiled.model,createHistoryRecorder(model.name,{type:'int',value:'0'}).snapshot(),100);}
 createSimulationHost({seed:1});
-void createPortableWasm;void compileTlaSource;void checkTlaSource;
+void createPortableWasm;void compileTlaSource;void checkTlaSource;void checkSafetyCoverage;
+const coverageCount=(report:SafetyCoverageReport)=>report.coverage.next.reduce((total,row)=>total+row.generated,0);void coverageCount;
 void planSchedule;
 const backendTypes:(value:unknown)=>BackendResult=parseBackendResult;
 void backendTypes;void createRtlcBackend;void runBackend;
@@ -313,7 +315,7 @@ await writeFile(
 );
 await writeFile(
   join(rtlcConsumer, "main.rs"),
-  `fn main(){let bytes=std::fs::read("safety-request.json").unwrap();let request:serde_json::Value=serde_json::from_slice(&bytes).unwrap();let program:rtlc::SafetyProgram=serde_json::from_value(request["request"]["program"].clone()).unwrap();let bounds:rtlc::SafetyBounds=serde_json::from_value(request["request"]["bounds"].clone()).unwrap();let result=program.check(bounds).unwrap();assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4);println!("standalone rtlc consumer checked");}`,
+  `fn main(){let bytes=std::fs::read("safety-request.json").unwrap();let request:serde_json::Value=serde_json::from_slice(&bytes).unwrap();let program:rtlc::SafetyProgram=serde_json::from_value(request["request"]["program"].clone()).unwrap();let bounds:rtlc::SafetyBounds=serde_json::from_value(request["request"]["bounds"].clone()).unwrap();let result=program.check(bounds).unwrap();let report:rtlc::SafetyCoverageReport=program.check_with_coverage(bounds).unwrap();assert_eq!(report.result,result);assert!(!report.coverage.initial.is_empty());assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4);println!("standalone rtlc consumer checked");}`,
 );
 const rtlc = execFileSync(
   "cargo",

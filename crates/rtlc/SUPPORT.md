@@ -28,7 +28,8 @@
 - [ ] VIEWによる状態の同一視。
 - [ ] ディスクへの状態・queueの退避とcheckpoint/resume。
 - [ ] seed付きのIR simulation、DFID探索。
-- [ ] アクション・式ごとのcoverageと評価コストの計測。
+- [x] check_with_coverageの逐次action coverage。initial/nextのIR branch順を保ち、attempts、enabled、generated、distinct、受理時の検査を含むworkとunattributedWorkを返す。resultとwork予算は通常checkと一致する。
+- [ ] 式・source locationごとのcoverage、TLCの全cost model、並列coverage。
 - [ ] TLC CLIの全オプションと反例出力形式。ALIASはcompiler/host側の未対応項目。
 
 ## 移植性・追加保証と対象外

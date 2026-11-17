@@ -17,11 +17,14 @@ import { digest } from "../usable/provenance.js";
 
 const plan = process.env.IDEALIS_CRITERION_PLAN ?? "0023-criterion-safety";
 const target = process.env.IDEALIS_CRITERION_TARGET ?? "rtlc";
-assert.ok(target === "rtlc" || target === "rtla-compiler");
+assert.ok(
+  target === "rtlc" || target === "rtla-compiler" || target === "rtlc-coverage",
+);
 const compiler = target === "rtla-compiler";
+const coverage = target === "rtlc-coverage";
 const revision = process.env.IDEALIS_CRITERION_REVISION;
 assert.ok(
-  !revision || !compiler,
+  !revision || (!compiler && !coverage),
   "Archived revision control is for the existing rtlc benchmark",
 );
 assert.match(plan, /^\d{4}-[a-z0-9-]+$/);
@@ -55,7 +58,7 @@ if (baselineRevision && archivedRoot) {
 }
 const crateRoot = archivedRoot
   ? join(archivedRoot, "crates/rtlc")
-  : `crates/${target}`;
+  : `crates/${coverage ? "rtlc" : target}`;
 const paths = [
   `evals/plans/${plan}.md`,
   "evals/plans/0023-adaptive-policy.md",
@@ -90,6 +93,7 @@ await writeFile(
       platform: platform(),
       target,
       ...(compiler ? { benchmarkSuite: "finite-modules-operators-v1" } : {}),
+      ...(coverage ? { benchmarkSuite: "action-coverage-v1" } : {}),
       baselineRevision,
       benchmarkImplementation: baselineRevision
         ? "source.tar from the pinned Git revision"
@@ -108,7 +112,9 @@ await writeFile(
 await copyFile(
   compiler
     ? "crates/rtla-compiler/tests/finite-support.json"
-    : ".artifacts/criterion-safety/inputs.json",
+    : coverage
+      ? "crates/rtlc/tests/coverage-bench.json"
+      : ".artifacts/criterion-safety/inputs.json",
   join(directory, "inputs.json"),
 );
 const args = [
@@ -117,7 +123,7 @@ const args = [
   "--manifest-path",
   join(crateRoot, "Cargo.toml"),
   "--bench",
-  compiler ? "compatibility" : "safety",
+  compiler ? "compatibility" : coverage ? "coverage" : "safety",
   "--",
   "--noplot",
   "--save-baseline",
@@ -203,7 +209,7 @@ const status =
   exit === 0 &&
   sourceUnchanged &&
   archiveError === null &&
-  estimates.length === (compiler ? 27 : 14) &&
+  estimates.length === (compiler ? 27 : coverage ? 4 : 14) &&
   estimates.every(
     (estimate) => Number.isFinite(estimate.mean) && estimate.mean > 0,
   )

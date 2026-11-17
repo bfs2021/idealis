@@ -1,3 +1,7 @@
+import {
+  coverageBounds,
+  coverageInputs,
+} from "../evals/action-coverage/cases.js";
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
 import { createRtlcBackend, runBackend } from "../src/backend.js";
@@ -15,6 +19,7 @@ import {
   checkPortableConformance,
   checkPortableTrace,
   checkSafety,
+  checkSafetyCoverage,
   coreDeletionCandidates,
   createHistoryRecorder,
   createPortableWasm,
@@ -31,6 +36,31 @@ export const run = async (): Promise<Record<string, unknown>> => {
   const core = await createPortableWasm(
     new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
   );
+  for (const input of coverageInputs) {
+    const program = compileTlaSource(core, input);
+    const observe = (run: () => SafetyResult) => {
+      try {
+        return { result: run(), error: null };
+      } catch (error) {
+        if (!(error instanceof PortableCoreError)) throw error;
+        return {
+          result: null,
+          error: { code: error.code, message: error.message },
+        };
+      }
+    };
+    const normal = observe(() => checkSafety(core, program, coverageBounds));
+    const measured = observe(
+      () => checkSafetyCoverage(core, program, coverageBounds).result,
+    );
+    if (
+      JSON.stringify(normal) !== JSON.stringify(measured) ||
+      (input.expected === "error"
+        ? normal.error === null
+        : normal.result?.status !== input.expected)
+    )
+      throw new Error(`Browser coverage differs: ${input.name}`);
+  }
   const source = {
     source:
       "---- MODULE BrowserSource ----\nEXTENDS Naturals\nVARIABLE x\nInit == x = 0\nNext == x' = x + 1\nSafe == x < 2\n====",
@@ -279,5 +309,6 @@ export const run = async (): Promise<Record<string, unknown>> => {
     replay: replay.status,
     steps: broken.checkedSteps,
     isolated: globalThis.crossOriginIsolated,
+    coverageCases: coverageInputs.length,
   };
 };

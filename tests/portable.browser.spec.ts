@@ -119,5 +119,6 @@ test("runs the shared Rust core in Chromium without host imports or cross-origin
     replay: "mismatch",
     steps: 3,
     isolated: false,
+    coverageCases: 14,
   });
 });

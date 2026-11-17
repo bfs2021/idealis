@@ -475,6 +475,21 @@ compiler-test:
   cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
 
+coverage-test: safety-build
+  node --test dist/evals/action-coverage/contract-test.js
+
+coverage-eval run java jar: safety-build
+  node dist/evals/action-coverage/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+coverage-replay saved run java jar: safety-build
+  node dist/evals/action-coverage/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(saved)}}
+
+coverage-controls stage run: criterion-prepare
+  IDEALIS_CRITERION_PLAN=0050-action-coverage node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
+coverage-bench stage run: criterion-prepare
+  IDEALIS_CRITERION_PLAN=0050-action-coverage IDEALIS_CRITERION_TARGET=rtlc-coverage node dist/evals/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
+
 module-eval run java jar: safety-build
   node dist/evals/module-linking/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 

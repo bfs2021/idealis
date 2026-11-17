@@ -88,7 +88,9 @@ const scopes: readonly CrateScope[] = [
       },
       {
         path: "src/safety.rs",
-        topic: "有限BFS、invariantとdeadlock、結果と探索予算",
+        topic:
+          "有限BFS、invariantとdeadlock、結果と探索予算、opt-inの逐次action coverageとworkの内訳",
+        context: ["src/safety_coverage.rs"],
       },
       {
         path: "src/temporal.rs",

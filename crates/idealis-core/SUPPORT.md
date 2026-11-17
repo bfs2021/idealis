@@ -15,6 +15,7 @@
 - [x] compile-tla / check-tlaのmodulesへ明示した追加source集合を渡す。modulesを省略した既存要求と、要求間で異なる同名moduleを区別する。ファイルシステムへ依存しない。
 - [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。
 - [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。
+- [x] check-safety-coverageでSafetyCoverageReportをnative/Wasmへ返す。通常のsafety応答とは別のopt-in要求で、逐次のbranch計数とworkの内訳を保持する。
 - [x] version 1のnative JSONLとホストimport不要のWasm境界。
 
 ## 非対応・対象外

@@ -1,5 +1,8 @@
 mod finite;
-pub use rtlc::{CoreError, SafetyBounds, SafetyProgram, SafetyResult, Value};
+pub use rtlc::{
+    CoreError, SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport,
+    SafetyProgram, SafetyResult, Value,
+};
 mod history;
 pub use history::{ConcurrentHistory, ConcurrentResult, ConcurrentStatus, HistoryEvent};
 mod host;
@@ -170,6 +173,10 @@ pub enum Request {
         program: SafetyProgram,
         bounds: SafetyBounds,
     },
+    CheckSafetyCoverage {
+        program: SafetyProgram,
+        bounds: SafetyBounds,
+    },
     LoadModel {
         model: FiniteModel,
     },
@@ -233,6 +240,7 @@ pub struct Command {
 pub enum Message {
     Compiled { program: SafetyProgram },
     Safety { result: SafetyResult },
+    SafetyCoverage { report: SafetyCoverageReport },
     Loaded { handle: u32 },
     Released,
     History { result: ConcurrentResult },
@@ -506,6 +514,9 @@ impl Engine {
             }),
             Request::CheckSafety { program, bounds } => Ok(Message::Safety {
                 result: program.check(bounds)?,
+            }),
+            Request::CheckSafetyCoverage { program, bounds } => Ok(Message::SafetyCoverage {
+                report: program.check_with_coverage(bounds)?,
             }),
             Request::LoadModel { model } => {
                 let model = Arc::new(model.prepare()?);

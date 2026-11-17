@@ -7,5 +7,8 @@ mod safety_work;
 mod temporal;
 mod value;
 
-pub use ir::{SafetyBounds, SafetyProgram, SafetyResult};
+pub use ir::{
+    SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport, SafetyProgram,
+    SafetyResult,
+};
 pub use value::{CoreError, Value};

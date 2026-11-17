@@ -1,5 +1,7 @@
 # idealis-core
 
+`check-safety-coverage`は逐次のSafetyProgram検査へcoverageを付ける。応答は`{kind:"safety-coverage",report:{result,coverage}}`。通常の`check-safety`の結果形は変えない。branchのattempts/生成・新規state/workとunattributedWorkは[rtlcの契約](../rtlc/README.md#アクションのcoverage)に従う。
+
 [対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
 
 Rust native / Wasm core for finite state models, conformance checking, trace replay, and failure-preserving sequence shrinking.

@@ -16,7 +16,10 @@ export type {
   PortableResult,
   PortableTrace,
   PortableValue,
+  SafetyActionCoverage,
   SafetyBounds,
+  SafetyCoverage,
+  SafetyCoverageReport,
   SafetyProgram,
   SafetyResult,
   ShrinkResult,
@@ -53,5 +56,6 @@ export {
   verifyHostTape,
 } from "./portable-wasm.js";
 export { checkSafety } from "./safety.js";
+export { checkSafetyCoverage } from "./safety-coverage.js";
 export { deletionCandidates, shrinkCounterexample } from "./shrink.js";
 export { checkTlaSource, compileTlaSource } from "./tla-source.js";

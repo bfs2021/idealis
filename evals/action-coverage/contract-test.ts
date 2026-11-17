@@ -1,0 +1,103 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { test } from "node:test";
+import type { PortableCommand } from "../../src/contracts.js";
+import { checkSafety, checkSafetyCoverage } from "../../src/portable.js";
+import { PortableCoreError } from "../../src/portable-value.js";
+import { createPortableWasm } from "../../src/portable-wasm.js";
+import { compileTlaSource } from "../../src/tla-source.js";
+import { startNative } from "../usable/native.js";
+import { coverageBounds, coverageInputs } from "./cases.js";
+
+const core = await createPortableWasm(
+  await readFile(
+    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
+  ),
+);
+for (const input of coverageInputs)
+  test(`coverage: ${input.name}`, async () => {
+    const program = compileTlaSource(core, input);
+    const native = startNative();
+    const observe = (run: () => unknown) => {
+      try {
+        return run();
+      } catch (error) {
+        assert.ok(error instanceof PortableCoreError);
+        return { kind: "error", code: error.code, message: error.message };
+      }
+    };
+    try {
+      for (const bounds of [
+        coverageBounds,
+        { ...coverageBounds, maxWork: 1 },
+        { ...coverageBounds, maxStates: 1 },
+        { ...coverageBounds, maxDepth: 0 },
+        { ...coverageBounds, maxTemporalNodes: 1 },
+      ]) {
+        const command: PortableCommand = {
+          version: 1,
+          request: { kind: "check-safety-coverage", program, bounds },
+        };
+        const measured = observe(() => core.request(command));
+        assert.deepEqual(await native.request(command), measured);
+        const expected = observe(() => checkSafety(core, program, bounds));
+        const actual = observe(
+          () => checkSafetyCoverage(core, program, bounds).result,
+        );
+        assert.deepEqual(actual, expected, input.name);
+      }
+      if (input.expected === "error")
+        assert.throws(
+          () => checkSafetyCoverage(core, program, coverageBounds),
+          PortableCoreError,
+        );
+      else {
+        const report = checkSafetyCoverage(core, program, coverageBounds);
+        assert.equal(report.result.status, input.expected);
+        assert.deepEqual(
+          report.coverage.initial.map((row) => row.name),
+          program.initial.map((row) => row.name),
+        );
+        assert.deepEqual(
+          report.coverage.next.map((row) => row.name),
+          program.next.map((row) => row.name),
+        );
+        if (input.name === "counter") {
+          assert.deepEqual(
+            report.coverage.next.map((row) => ({
+              name: row.name,
+              attempts: row.attempts,
+              enabled: row.enabled,
+              generated: row.generated,
+              distinct: row.distinct,
+            })),
+            [
+              {
+                name: "Advance",
+                attempts: 4,
+                enabled: 3,
+                generated: 3,
+                distinct: 3,
+              },
+              {
+                name: "Stay",
+                attempts: 4,
+                enabled: 4,
+                generated: 4,
+                distinct: 0,
+              },
+              {
+                name: "Unused",
+                attempts: 4,
+                enabled: 0,
+                generated: 0,
+                distinct: 0,
+              },
+            ],
+          );
+        }
+      }
+    } finally {
+      await native.close();
+    }
+  });

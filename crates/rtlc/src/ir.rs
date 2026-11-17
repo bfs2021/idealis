@@ -383,6 +383,32 @@ pub struct SafetyResult {
     pub violation: Option<SafetyViolation>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct SafetyActionCoverage {
+    pub name: String,
+    pub attempts: u32,
+    pub enabled: u32,
+    pub generated: u32,
+    pub distinct: usize,
+    pub work: u32,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct SafetyCoverage {
+    pub initial: Vec<SafetyActionCoverage>,
+    pub next: Vec<SafetyActionCoverage>,
+    pub unattributed_work: u32,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SafetyCoverageReport {
+    pub result: SafetyResult,
+    pub coverage: SafetyCoverage,
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(try_from = "Value")]
 pub enum Scalar {
