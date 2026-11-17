@@ -1,3 +1,4 @@
+use crate::wire_observation::WireObservation;
 use crate::{Case, CaseReport, CheckReport, Error, Observation, OracleGroup};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -16,8 +17,8 @@ struct Request {
 struct Input {
     id: String,
     input: Value,
-    reference: Observation<Value>,
-    actual: Vec<Observation<Value>>,
+    reference: WireObservation,
+    actual: Vec<WireObservation>,
 }
 
 #[derive(Serialize)]
@@ -108,12 +109,12 @@ fn execute<R>(
         group.case(&case.id, index);
     }
     group.reference(request.reference, |index| {
-        borrow(&request.cases[*index].reference)
+        borrow(&request.cases[*index].reference.0)
     });
     for (implementation, id) in request.implementations.iter().enumerate() {
         let cases = &request.cases;
         group.test_function(id, move |index| {
-            borrow(&cases[*index].actual[implementation])
+            borrow(&cases[*index].actual[implementation].0)
         });
     }
     let report = group.check()?;

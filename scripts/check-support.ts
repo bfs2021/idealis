@@ -186,6 +186,7 @@ const scopes: readonly CrateScope[] = [
         context: [
           "src/wasm.rs",
           "src/main.rs",
+          "src/wire_observation.rs",
           "tests/json.rs",
           "tests/bytes.rs",
           "benches/wire.rs",

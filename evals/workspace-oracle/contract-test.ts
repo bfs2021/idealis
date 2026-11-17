@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { isDeepStrictEqual } from "node:util";
+import { runInNewContext } from "node:vm";
 import { assertOracle, compareOracle } from "./node.js";
 import { snapshot } from "./snapshot.js";
 import { createOracle } from "./wasm.js";
@@ -134,4 +135,86 @@ test("mutating an input is observed on the next call and does not alter a previo
   assert.equal(JSON.stringify(previous), saved);
   expected.nested.push(3);
   assert.equal(compareOracle(actual, expected).status, "matched");
+});
+
+test("snapshot traversal preserves special keys, shared values and exact depth", () => {
+  const special = JSON.parse(
+    '{"__proto__":{"polluted":true},"constructor":null,"日本語":"雪"}',
+  );
+  const saved = snapshot(special);
+  assert.deepEqual(saved, {
+    type: "object",
+    value: {
+      ["__proto__"]: {
+        type: "object",
+        value: { polluted: { type: "boolean", value: true } },
+      },
+      constructor: { type: "null" },
+      日本語: { type: "string", value: "雪" },
+    },
+  });
+  assert.equal(Object.getPrototypeOf(saved.value), Object.prototype);
+  const shared = { item: 7 };
+  assert.deepEqual(
+    snapshot([shared, shared]),
+    snapshot([{ item: 7 }, { item: 7 }]),
+  );
+  const hiddenIndex = Object.defineProperty([7], "0", {
+    value: 7,
+    enumerable: false,
+  });
+  assert.deepEqual(snapshot(hiddenIndex), snapshot([7]));
+  const nested = (depth: number): unknown =>
+    depth === 0 ? null : [nested(depth - 1)];
+  assert.doesNotThrow(() => snapshot(nested(48)));
+  assert.throws(() => snapshot(nested(49)), /nesting exceeds 48/);
+});
+
+test("snapshot rejects hidden fields, extended arrays and accessors without invoking them", () => {
+  for (const value of [
+    Object.defineProperty({}, "hidden", { value: 7 }),
+    Object.defineProperty([7], "hidden", { value: 7 }),
+    Object.defineProperty([7], "extra", { value: 7, enumerable: true }),
+    Object.assign({}, { [Symbol("hidden")]: 7 }),
+    Object.assign([7], { [Symbol("hidden")]: 7 }),
+    Object.create(null),
+    [7].concat(new Array(1)),
+  ])
+    assert.throws(() => snapshot(value));
+  for (const value of [
+    Object.defineProperty({}, "field", {
+      get: () => {
+        throw new Error("getter invoked");
+      },
+      enumerable: true,
+    }),
+    Object.defineProperty([7], "0", {
+      get: () => {
+        throw new Error("getter invoked");
+      },
+      enumerable: true,
+    }),
+  ])
+    assert.throws(() => snapshot(value), /accessor/);
+});
+
+test("snapshot output defines own data properties without invoking inherited setters", () => {
+  const object = runInNewContext(`
+    const snapshot = (${snapshot.toString()});
+    Object.defineProperty(Object.prototype, "inherited", {set() {throw new Error("inherited object setter invoked");}});
+    JSON.stringify(snapshot(JSON.parse('{"inherited":7}')));
+  `);
+  assert.deepEqual(JSON.parse(object), {
+    type: "object",
+    value: { inherited: { type: "number", value: "7" } },
+  });
+  const array = runInNewContext(`
+    const snapshot = (${snapshot.toString()});
+    Object.defineProperty(Array.prototype, "0", {set() {throw new Error("inherited array setter invoked");}});
+    JSON.stringify(snapshot([7]));
+  `);
+  assert.deepEqual(JSON.parse(array), {
+    type: "array",
+    value: [{ type: "number", value: "7" }],
+  });
 });

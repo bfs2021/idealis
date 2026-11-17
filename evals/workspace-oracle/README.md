@@ -71,3 +71,17 @@ just oracle-tuning-measure .artifacts/oracle-before .artifacts/oracle-transport 
 Criterionは同じ`benches/wire.rs`でbuildした`wire-bench`とhashを保存してから、`node dist/evals/oracle-tuning/kernel.js <before> <after> <new-run>`でbefore/after/after/beforeを実行する。各snapshotに実行ファイル`wire-bench`と`criterion.json`（binarySha256、benchSha256）を置く。出力の各directoryにCriterionのraw sampleと推定値を保存する。通常のbenchは`just oracle-criterion`を使う。
 
 [0054の結果](../iterations/0054-oracle-bench-tuning.md)には通信・bridge・kernelを別々に記録する。固定応答の照合費用から、TLCやZ3との探索速度比は求めない。過去の7/1/3の測定とも混ぜない。
+
+## 残る処理費用を調べる
+
+```sh
+just oracle-tuning-phases .artifacts/my-before evals/runs/my-profile profile
+just oracle-tuning-phases .artifacts/my-before evals/runs/my-phases
+# Rustの変更だけをfreezeし、次にJS側の変更もfreezeする
+just oracle-tuning-compare .artifacts/my-before .artifacts/my-wire .artifacts/my-combined evals/runs/my-compare
+node dist/evals/oracle-tuning/snapshot-compat.js .artifacts/my-before .artifacts/my-combined evals/runs/my-snapshot-compat
+```
+
+phasesはsnapshot・JSON文字列化・UTF-8 encode・Wasm dispatch・decodeとparse・全compareOracleを分ける。入力と全出力を照合し、正順/逆順のraw sampleを保存する。profileは別runで5000回の全照合を記録する。区間測定には時計とloopの費用も入るので、IPC込みの往復やCriterionと混ぜて速度比を作らない。
+
+compareはbefore/wire/combined/combined/wire/beforeを、全stageでbeforeの同じ親runnerで実行する。各snapshotのsource/binary hashを検査する。[0055の結果](../iterations/0055-oracle-hotspots.md)では公開Observationのserdeとwire parserを照合し、snapshotの全reportと拒否入力も旧版と比較した。

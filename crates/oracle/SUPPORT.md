@@ -15,6 +15,8 @@
 
 - [x] JSON観測の借用と直接bytes serialization、Wasm出力bufferの再利用。Value/bytes・単独/32 cases/入れ子/unknownのCriterionベンチ。JSON objectのkey順は保証しない。
 
+- [x] wire専用visitorによる観測payloadの直接deserialize。公開Observationのserdeに対し、kind/field・順序・重複・null・数値・2要素sequenceの受理/拒否と保持した観測を検査する。公開型と全reportは保ち、不正variantの詳細診断文は固定しない。
+
 ## 非対応・対象外
 
 - [ ] PBTの生成器・縮小・seed互換。idealis-testingの役割であり、このcrateでは提供しない。
@@ -28,4 +30,4 @@
 - [x] 測定は関数呼び出しと出力構築を含み、比較と出力破棄は含まない。初期化を含めるかはadapterが決めscopeへ記録する。
 - [x] 集約はerror > mismatch > unknown > invalid > matched。非成功の保存値も保持し、replayは保存判定を再計算する。
 
-[README](README.md)、[比較とreport](src/report.rs)、[groupとreplay](src/group.rs)、[測定](src/bench.rs)、[JSON境界](src/wire.rs)、[Wasm ABI](src/wasm.rs)、[挙動テスト](tests/oracle.rs)、[bytes互換テスト](tests/bytes.rs)、[Criterion](benches/wire.rs)を参照。
+[README](README.md)、[比較とreport](src/report.rs)、[groupとreplay](src/group.rs)、[測定](src/bench.rs)、[JSON境界](src/wire.rs)、[観測visitor](src/wire_observation.rs)、[Wasm ABI](src/wasm.rs)、[挙動テスト](tests/oracle.rs)、[bytes互換テスト](tests/bytes.rs)、[Criterion](benches/wire.rs)を参照。

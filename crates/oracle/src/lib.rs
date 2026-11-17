@@ -5,6 +5,7 @@ mod report;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 mod wire;
+mod wire_observation;
 
 pub use bench::{BenchCase, BenchConfig, BenchFailure, BenchReport, Measurement, Statistics};
 pub use group::OracleGroup;

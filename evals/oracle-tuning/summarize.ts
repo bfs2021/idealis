@@ -39,8 +39,12 @@ const median = (values: readonly number[]) => {
     2
   );
 };
+const direct = result.records.some((record) => record.stage === "wire");
+const names = direct
+  ? ["before", "wire", "combined"]
+  : ["before", "transport", "bridge"];
 const roundtrips = ["rtla", "idealis-core"].map((id) => {
-  const stages = ["before", "transport", "bridge"].map((stage) => {
+  const stages = names.map((stage) => {
     const records = result.records.filter((record) => record.stage === stage);
     assert.equal(records.length, 2);
     const measurements = ["baseline", "candidate"].map((implementation) => {
@@ -62,8 +66,18 @@ const roundtrips = ["rtla", "idealis-core"].map((id) => {
   return {
     id,
     stages,
-    transportSpeedup: (candidates[0] ?? NaN) / (candidates[1] ?? NaN),
-    bridgeSpeedup: (candidates[1] ?? NaN) / (candidates[2] ?? NaN),
+    stageSpeedups: [
+      {
+        from: names[0],
+        to: names[1],
+        speedup: (candidates[0] ?? NaN) / (candidates[1] ?? NaN),
+      },
+      {
+        from: names[1],
+        to: names[2],
+        speedup: (candidates[1] ?? NaN) / (candidates[2] ?? NaN),
+      },
+    ],
     totalSpeedup: (candidates[0] ?? NaN) / (candidates[2] ?? NaN),
   };
 });

@@ -68,6 +68,12 @@ oracle-tuning-freeze directory:
 oracle-tuning-measure before transport after run:
   node dist/evals/oracle-tuning/run.js measure {{quote(before)}} {{quote(transport)}} {{quote(after)}} {{quote(run)}}
 
+oracle-tuning-compare before wire combined run:
+  node dist/evals/oracle-tuning/run.js compare {{quote(before)}} {{quote(wire)}} {{quote(combined)}} {{quote(run)}}
+
+oracle-tuning-phases snapshot run mode="measure":
+  node dist/evals/oracle-tuning/phases.js {{quote(snapshot)}} {{quote(run)}} {{quote(mode)}}
+
 oracle-tuning-compat before after run:
   node dist/evals/oracle-tuning/compat.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
 

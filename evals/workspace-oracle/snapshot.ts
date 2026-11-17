@@ -36,13 +36,15 @@ export const snapshot = (value: unknown): Snapshot => {
       throw new Error("Symbol keys are not portable oracle snapshots");
     ancestors.add(input);
     if (Array.isArray(input)) {
-      const descriptors = Object.getOwnPropertyDescriptors(input);
-      if (Object.keys(descriptors).length !== input.length + 1)
+      if (Object.getOwnPropertyNames(input).length !== input.length + 1)
         throw new Error(
           "Sparse or extended arrays are not portable oracle snapshots",
         );
       const items = Array.from({ length: input.length }, (_, index) => {
-        const descriptor = descriptors[String(index)];
+        const descriptor = Object.getOwnPropertyDescriptor(
+          input,
+          String(index),
+        );
         if (!descriptor || !("value" in descriptor))
           throw new Error("Sparse array or accessor in oracle snapshot");
         return visit(descriptor.value, depth + 1);
@@ -52,17 +54,26 @@ export const snapshot = (value: unknown): Snapshot => {
     }
     if (Object.getPrototypeOf(input) !== Object.prototype)
       throw new Error("Oracle snapshots require plain objects");
-    const entries = Object.entries(Object.getOwnPropertyDescriptors(input)).map(
-      ([key, descriptor]) => {
-        if (!("value" in descriptor))
-          throw new Error("Object accessor in oracle snapshot");
-        if (!descriptor.enumerable)
-          throw new Error("Nonenumerable oracle snapshot property");
-        return [key, visit(descriptor.value, depth + 1)];
-      },
-    );
+    const descriptors = Object.getOwnPropertyDescriptors(input);
+    const fields: Record<string, Snapshot> = {};
+    for (const key of Object.keys(descriptors)) {
+      const descriptor = descriptors[key];
+      if (!descriptor || !("value" in descriptor))
+        throw new Error("Object accessor in oracle snapshot");
+      if (!descriptor.enumerable)
+        throw new Error("Nonenumerable oracle snapshot property");
+      const child = visit(descriptor.value, depth + 1);
+      if (key in fields)
+        Object.defineProperty(fields, key, {
+          value: child,
+          enumerable: true,
+          writable: true,
+          configurable: true,
+        });
+      else fields[key] = child;
+    }
     ancestors.delete(input);
-    return { type: "object", value: Object.fromEntries(entries) };
+    return { type: "object", value: fields };
   };
   return visit(value, 0);
 };

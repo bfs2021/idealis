@@ -22,8 +22,16 @@ export const run = async () => {
     }).status;
   return {
     matched: check(
-      { value: 7n, optional: undefined },
-      { optional: undefined, value: 7n },
+      {
+        value: 7n,
+        optional: undefined,
+        nested: [true, undefined, JSON.parse('{"__proto__":7,"日本語":"雪"}')],
+      },
+      {
+        optional: undefined,
+        value: 7n,
+        nested: [true, undefined, JSON.parse('{"日本語":"雪","__proto__":7}')],
+      },
     ),
     mismatch: check(-0, 0),
     isolated: crossOriginIsolated,

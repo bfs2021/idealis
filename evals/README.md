@@ -129,3 +129,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [Rust frontend](iterations/0029-rtla-compiler.md)は、rtlaのASTからrtlcのIRを生成する。`compiler-test` / `compiler-eval`で既存TS frontendとのIR・結果の一致、`compiler-tlc`で固定20件の直接比較を行う。意味の一致を確認する回帰で、性能や未知故障発見の実験とは区別する。
 
 [0054の結果](iterations/0054-oracle-bench-tuning.md)は、workspace比較のpipe bufferingとoracle JSON境界の借用・直接serializationを、旧版を固定して評価する。通信・照合kernel・モデル検査の費用を区別する。
+
+[0055の結果](iterations/0055-oracle-hotspots.md)は、Node CPU profileから観測JSONの二重構築とsnapshotの中間配列を減らす。区間別測定、同じ親runnerでの往復、Criterionを分けて比較する。

@@ -110,7 +110,11 @@ if (command === "freeze") {
     memoryBytes: totalmem(),
   });
   console.log(`frozen ${files.length} artifacts: ${first}`);
-} else if (command === "measure" || command === "profile") {
+} else if (
+  command === "measure" ||
+  command === "profile" ||
+  command === "compare"
+) {
   const transport = process.argv[4];
   const after = process.argv[5];
   const output = process.argv[6];
@@ -125,7 +129,7 @@ if (command === "freeze") {
   await mkdir(dirname(output), { recursive: true });
   await mkdir(output);
   await save(join(output, "manifest.json"), {
-    plan: "0054",
+    plan: command === "compare" ? "0055" : "0054",
     snapshots: await Promise.all(
       [first, transport, after].map(async (path) => ({
         path: resolve(path),
@@ -140,11 +144,21 @@ if (command === "freeze") {
   const stages =
     command === "profile"
       ? ["before"]
-      : ["before", "transport", "bridge", "bridge", "transport", "before"];
+      : command === "compare"
+        ? ["before", "wire", "combined", "combined", "wire", "before"]
+        : ["before", "transport", "bridge", "bridge", "transport", "before"];
   const records = [];
   for (const [index, stage] of stages.entries()) {
-    const root = stage === "bridge" ? after : first;
-    const runner = resolve(stage === "before" ? first : transport, "runner");
+    const root =
+      stage === "bridge" || stage === "combined"
+        ? after
+        : stage === "wire"
+          ? transport
+          : first;
+    const runner = resolve(
+      command === "compare" || stage === "before" ? first : transport,
+      "runner",
+    );
     const name = `${index}-${stage}`;
     const input = {
       version: 1,
@@ -200,10 +214,10 @@ if (command === "freeze") {
   }
   await save(join(output, "result.json"), {
     status: "complete",
-    measurement: command === "measure",
+    measurement: command !== "profile",
     records,
   });
 } else
   throw new Error(
-    "Use freeze <new-dir> or measure/profile <before> <transport> <after> <new-run>",
+    "Use freeze <new-dir> or measure/profile/compare <before> <transport> <after> <new-run>",
   );

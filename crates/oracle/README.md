@@ -70,7 +70,7 @@ nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`
 
 `dispatch(&[u8])`はJSON Valueを、`dispatch_json(&[u8])`はUTF-8のJSON bytesを返す。bytes APIは中間Valueを作らずに全reportをserializeする。JSONの内容は同じで、objectのkey順は保証しない。native JSONL executable `idealis-oracle`は、ホストが収集済みの観測を同じOracleGroupへ通す。version 1の入力例は[observations.rs](examples/observations.rs)を参照。`group`・`reference`・`implementations`、caseごとの`id`・`input`・`reference`・実装順の`actual`を渡す。出力は`{kind:"checked", report}`または`{kind:"error", message}`。不正な入力をmatchedのreportにしない。
 
-入力は16 MiB、4096 cases、256 implementationsまで。caseと実装は空にできず、IDの重複と観測数のずれを拒否する。JSONの構文と入れ子の制限もserde_jsonに従う。この境界は収集済み観測の照合であり、実装関数の実行や計測は行わない。
+入力は16 MiB、4096 cases、256 implementationsまで。caseと実装は空にできず、IDの重複と観測数のずれを拒否する。JSONの構文と入れ子の制限もserde_jsonに従う。観測は`kind`とvariantに必要なfieldだけを受理する。公開Observationのserdeと同じ`[kind, payload]`形式も受理する。wire専用visitorでpayloadを一度だけ読み、公開ObservationのDeserialize実装は変えない。不正なvariantに対するmessageの詳細は旧版と変わる場合がある。この境界は収集済み観測の照合であり、実装関数の実行や計測は行わない。
 
 Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracle_output_ptr/len`とmemoryをexportする。inputへUTF-8 JSONを書き、dispatch後にoutputをコピーする。過大なresizeは0を返して前のinputを消す。bufferは次のresize/dispatchで無効になり、runtimeへの呼び出しは直列にする。JS bindingはworkspaceの[eval adapter](../../evals/workspace-oracle/README.md)へ置き、npm公開APIには追加していない。
 
@@ -79,3 +79,5 @@ Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracl
 `just oracle-criterion`で単独・32 cases・入れ子256要素・unknownの4入力を測る。Valueとbytesの2出力を分け、入力の構築と出力の破棄は時計の外へ置く。parse・照合・全reportの生成は時計内に含む。Criterionは開発用依存で、配布libraryの実行時依存には含まない。
 
 変更前後は同じbenchの実行ファイルを保存し、buildやtestと同時に測定しない。[0054の比較](../../evals/iterations/0054-oracle-bench-tuning.md)と[workspace手順](../../evals/workspace-oracle/README.md)を参照。
+
+[0055の比較](../../evals/iterations/0055-oracle-hotspots.md)は、JSON観測の読み直しとJS snapshotの中間配列を減らした結果を記録する。native/Wasmの境界、Nodeの全照合、IPC込みの往復は別々に測る。
