@@ -23,3 +23,7 @@ Criterionは既存14本を同じbench sourceで20 samples・warmup 0.5秒・meas
 共有domain、64/65境界、Boolean→一般値→Booleanのcanonical identity、domain外/入れ子EXCEPT、collision、overlayのdomainとpayload Ref競合をテストする。内部表現のテストだけでなく既存213件等の有限モデル、native/Wasmの全応答・予算・反例を基準へ照合し、TLC差分と反例再生を行う。
 
 終了前にfmt/clippy、rtlc/portable/safety/criterion/check/browser、runtime、evaluate/replay、cross/async、package consumer、SUPPORT/Jevを確認する。測定・失敗runは上書きしない。採用判断と残るTLCとの差をiterationへ記す。ローカルcommitまでとし、PR/push/mergeは含めない。
+
+## 入力の型を確認した補足
+
+既存のfunction-cubeはTLA+のBOOLEANではなく整数0/1を使う。channel内のval/rdy/ackも整数0/1だった。最初の候補に、64要素以下の全Int(0/1)を保持する別tagのbit表現を含める。BoolとIntを混同せず、混在・範囲外の値・65要素以上はScalar列へ戻す。任意の小整数packingは今回は含めない。
