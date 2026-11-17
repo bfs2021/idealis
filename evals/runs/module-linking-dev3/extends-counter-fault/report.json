@@ -1,0 +1,159 @@
+{
+  "name": "extends-counter-fault",
+  "compiled": {
+    "kind": "compiled",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Differential",
+      "variables": [
+        "value"
+      ],
+      "initial": [
+        {
+          "name": "$linked2",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "$linked3",
+          "steps": [
+            {
+              "kind": "guard",
+              "expression": {
+                "op": "lt",
+                "left": {
+                  "op": "read",
+                  "slot": 0,
+                  "next": false
+                },
+                "right": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "2"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "add",
+                "left": {
+                  "op": "read",
+                  "slot": 0,
+                  "next": false
+                },
+                "right": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "1"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "lt",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "2"
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": false
+    }
+  },
+  "checked": {
+    "kind": "safety",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 3,
+      "generated": 3,
+      "depth": 2,
+      "work": 8,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "$linked3",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "$linked3",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "reference": {
+    "status": "invariant-violation",
+    "states": 3,
+    "generated": 3,
+    "exit": 12
+  },
+  "witness": {
+    "input": {
+      "source": "---- MODULE Differential ----\nEXTENDS Counter\nSafe == value < Limit\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (value = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 1 /\\ (value' = 1)) \\/ (__position = 1 /\\ __position' = 2 /\\ (value' = 2)) \\/ (__position = 2 /\\ __position' = 2 /\\ (value' = 2))) /\\ (Next \\/ UNCHANGED <<value>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<value,__position>> /\\ WF_<<value,__position>>(__TraceNext)\n__Expected == <>(~(Safe))\n====",
+      "modules": {
+        "Counter": "---- MODULE Counter ----\nEXTENDS Naturals\nCONSTANT Limit\nVARIABLE value\nInit == value = 0\nNext == value < Limit /\\ value' = value + 1\n===="
+      },
+      "expected": "complete",
+      "config": "SPECIFICATION __TraceSpec\nCONSTANT Limit = 2\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+    },
+    "status": "complete",
+    "states": 3
+  }
+}

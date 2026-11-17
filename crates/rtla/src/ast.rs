@@ -252,9 +252,28 @@ pub struct Module {
     pub constants: Vec<Declaration>,
     pub variables: Vec<Declaration>,
     pub definitions: Vec<Definition>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub instances: Vec<Instance>,
     pub assumptions: Vec<Assumption>,
     pub theorems: Vec<Theorem>,
     pub location: Location,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct Instance {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    pub module: String,
+    pub substitutions: Vec<InstanceSubstitution>,
+    #[serde(rename = "isLocal")]
+    pub is_local: bool,
+    pub location: Location,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct InstanceSubstitution {
+    pub name: String,
+    pub expression: Expression,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

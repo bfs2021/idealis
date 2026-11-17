@@ -8,6 +8,7 @@
 - [x] MODULE、EXTENDS、変数・定数、非再帰operator、関数定義、ASSUME、THEOREMの構文。
 - [x] 算術・比較・論理、集合・tuple・record・関数、量化とtuple pattern、EXCEPTと@。
 - [x] LET、IF、OTHERを省略したCASE、prime、UNCHANGED、ENABLED、temporal/fairnessの構文。
+- [x] top-levelの引数なしnamed/unnamed INSTANCE、LOCAL、WITHの式置換、A!B!Op形式の修飾名をASTへ保持する。
 - [x] infixの優先順位、括弧、コメント、文字列、bulleted junctionとoffside規則。Apalacheの`:=`もASTとして解析する。
 - [x] INIT/NEXT/SPECIFICATION、CONSTANT、INVARIANT/PROPERTY、constraintや置換の設定値の保持。実行の可否はcompilerが判断する。
 - [x] native JSONLとホストimport不要のWasm ABI v1。
@@ -17,7 +18,7 @@
 
 - [ ] 外部モジュールの読み込み、名前解決、型/level検査、標準operatorの評価。
 - [ ] ASTから検査IRへの変換、状態探索、invariantの評価。
-- [ ] proof、INSTANCE、nested module、RECURSIVE宣言、一般の高階引数。
+- [ ] proof、引数付きINSTANCE、LET内のINSTANCE、nested module、RECURSIVE宣言、一般の高階引数。
 - [ ] 全TLA+構文やSANYとの完全互換。
 
 ## 制約と根拠

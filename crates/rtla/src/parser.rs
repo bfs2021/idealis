@@ -1,6 +1,7 @@
 use crate::ast::{
     Assumption, Bound, CaseArm, Declaration, Definition, DefinitionKind, ExceptPath, ExceptUpdate,
-    Expression, ExpressionKind, Location, Module, Pattern, RecordField, Theorem,
+    Expression, ExpressionKind, Instance, InstanceSubstitution, Location, Module, Pattern,
+    RecordField, Theorem,
 };
 use crate::lexer::{Kind, Token, tokenize};
 use crate::{ErrorKind, ParseError};
@@ -448,22 +449,7 @@ impl Parser {
             }
             Kind::Decimal => ExpressionKind::Decimal { text: token.text },
             Kind::String => ExpressionKind::String { value: token.text },
-            Kind::Name => {
-                if self.accept("::") {
-                    ExpressionKind::Label {
-                        name: token.text,
-                        params: vec![],
-                        body: Box::new(self.expression(0)?),
-                    }
-                } else if self.accept("(") {
-                    ExpressionKind::Apply {
-                        operator: token.text,
-                        args: self.expression_list(")")?,
-                    }
-                } else {
-                    ExpressionKind::Identifier { name: token.text }
-                }
-            }
+            Kind::Name => return self.named_expression(token),
             _ => match token.text.as_str() {
                 "(" => {
                     let expression = self.expression(0)?;
@@ -780,6 +766,32 @@ impl Parser {
         };
         Ok(Expression { node, location })
     }
+    fn named_expression(&mut self, token: Token) -> Result<Expression, ParseError> {
+        let mut name = token.text;
+        while self.accept("!") {
+            name.push('!');
+            name.push_str(&self.name()?.text);
+        }
+        let node = if self.accept("::") {
+            ExpressionKind::Label {
+                name,
+                params: vec![],
+                body: Box::new(self.expression(0)?),
+            }
+        } else if self.accept("(") {
+            ExpressionKind::Apply {
+                operator: name,
+                args: self.expression_list(")")?,
+            }
+        } else {
+            ExpressionKind::Identifier { name }
+        };
+        Ok(Expression {
+            node,
+            location: token.location,
+        })
+    }
+
     fn brace(&mut self, location: Location) -> Result<Expression, ParseError> {
         if self.accept("}") {
             return Ok(Expression {
@@ -873,6 +885,43 @@ impl Parser {
             location: name.location,
         })
     }
+    fn instance(&mut self) -> Result<Instance, ParseError> {
+        let location = self.raw().location;
+        let is_local = self.accept("LOCAL");
+        let name = if self.at("INSTANCE") {
+            None
+        } else {
+            let name = self.name()?.text;
+            self.expect("==")?;
+            Some(name)
+        };
+        self.expect("INSTANCE")?;
+        let module = self.name()?.text;
+        let mut substitutions: Vec<InstanceSubstitution> = vec![];
+        if self.accept("WITH") {
+            loop {
+                let name = self.name()?.text;
+                if substitutions.iter().any(|entry| entry.name == name) {
+                    return Err(self.error("Duplicate INSTANCE substitution"));
+                }
+                self.expect("<-")?;
+                substitutions.push(InstanceSubstitution {
+                    name,
+                    expression: self.expression(0)?,
+                });
+                if !self.accept(",") {
+                    break;
+                }
+            }
+        }
+        Ok(Instance {
+            name,
+            module,
+            substitutions,
+            is_local,
+            location,
+        })
+    }
     fn module(&mut self) -> Result<Module, ParseError> {
         let location = self.expect("----")?.location;
         self.expect("MODULE")?;
@@ -884,6 +933,7 @@ impl Parser {
             constants: vec![],
             variables: vec![],
             definitions: vec![],
+            instances: vec![],
             assumptions: vec![],
             theorems: vec![],
             location,
@@ -945,6 +995,16 @@ impl Parser {
                     statement: self.expression(0)?,
                     location: keyword.location,
                 });
+            } else if self.at("INSTANCE")
+                || (self.at("LOCAL") && self.peek(1).text == "INSTANCE")
+                || (self.raw().kind == Kind::Name
+                    && self.peek(1).text == "=="
+                    && self.peek(2).text == "INSTANCE")
+                || (self.at("LOCAL")
+                    && self.peek(2).text == "=="
+                    && self.peek(3).text == "INSTANCE")
+            {
+                module.instances.push(self.instance()?);
             } else if [
                 "MODULE",
                 "INSTANCE",

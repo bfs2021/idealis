@@ -70,7 +70,7 @@ maxStatesとmaxDepthは全体に適用する。maxWorkも全worker共通だが�
 - sequence の Len / Head / Tail / Append / SubSeq / 連結、有限集合を要素にする Seq への所属。
 - 変数全体への代入、有限領域からの選択、UNCHANGED、存在量化による action の列挙。
 
-root module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
+defining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。呼び出し位置で body を展開し、bound slot を2つ使う。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
 
 sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
@@ -78,7 +78,9 @@ primed variable は、同じ分岐で代入した後に読み取る。部分的�
 
 設定は INIT / NEXT または SPECIFICATION に、INVARIANT / PROPERTY / CONSTANT / CHECK_DEADLOCK を組み合わせる。SPECIFICATION は初期述語、全 state variable を列挙した subscript の `[][Next]_vars`、WF / SF の連言を扱う。PROPERTY は state / action predicate、論理結合、always / eventually / leads-to を扱う。action を含む一般の temporal property は `[]<>A` / `<>[]A` の範囲に限る。定数の ASSUME も確認する。
 
-selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。INSTANCE・ユーザーモジュール、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、symmetry、VIEW は未対応。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
+selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。引数付きINSTANCE・nested module、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、symmetry、VIEW は未対応。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
+
+Rustのsource経路は`modules: { ModuleName: source }`を受け取り、非再帰EXTENDSと引数なしINSTANCEを解決する。LOCAL、WITH、定数・operatorの設定置換は[compilerの契約](../crates/rtla-compiler/README.md#モジュールと設定置換)を参照。自動のファイル読み込みや全SANY互換は提供しない。
 
 frontend の上限は、変数256、分岐4096、分岐あたり256 step、展開深さ40、bound variable 40。実行側も IR のフィールド・参照・式を検証する。複合値の深さは64で、それを超える state の生成はエラー。探索中は状態と親 index を保存し、temporal property がある場合だけ遷移グラフも保存する。
 

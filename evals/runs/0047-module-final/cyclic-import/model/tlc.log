@@ -1,0 +1,21 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 22 and seed 713595687140077056 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 39519] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-final/cyclic-import/model/Differential.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-final/cyclic-import/model/Left.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-final/cyclic-import/model/Right.tla
+
+Fatal errors while parsing TLA+ spec in file Differential
+
+tla2sany.semantic.AbortException
+*** Abort messages: 1
+
+Unknown location
+
+Circular dependency among .tla files; dependency cycle is:
+
+  Left.tla --> Right.tla --> Left.tla
+
+
+Starting... (2026-11-17 09:14:07)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 09:14:07)

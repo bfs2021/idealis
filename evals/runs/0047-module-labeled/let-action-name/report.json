@@ -1,0 +1,141 @@
+{
+  "name": "let-action-name",
+  "compiled": {
+    "kind": "compiled",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 1,
+      "name": "Differential",
+      "variables": [
+        "x"
+      ],
+      "initial": [
+        {
+          "name": "Init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "Advance",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "add",
+                "left": {
+                  "op": "read",
+                  "slot": 0,
+                  "next": false
+                },
+                "right": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "1"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "Safe",
+          "expression": {
+            "op": "lt",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "2"
+              }
+            }
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": false
+    }
+  },
+  "checked": {
+    "kind": "safety",
+    "result": {
+      "status": "invariant-violation",
+      "reason": null,
+      "states": 3,
+      "generated": 3,
+      "depth": 2,
+      "work": 6,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Advance",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "action": "Advance",
+            "values": [
+              {
+                "type": "int",
+                "value": "2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "reference": {
+    "status": "invariant-violation",
+    "states": 3,
+    "generated": 3,
+    "exit": 12
+  },
+  "witness": {
+    "input": {
+      "source": "---- MODULE Differential ----\nEXTENDS Helper\nVARIABLE x\nInit == x = 0\nNext == LET Advance == x' = x + 1 IN Advance\nSafe == x < 2\n\nVARIABLE __position\n__TraceInit == Init /\\ __position = 0 /\\ (x = 0)\n__TraceNext == ((__position = 0 /\\ __position' = 1 /\\ (x' = 1)) \\/ (__position = 1 /\\ __position' = 2 /\\ (x' = 2)) \\/ (__position = 2 /\\ __position' = 2 /\\ (x' = 2))) /\\ (Next \\/ UNCHANGED <<x>>)\n__TraceSpec == __TraceInit /\\ [][__TraceNext]_<<x,__position>> /\\ WF_<<x,__position>>(__TraceNext)\n__Expected == <>(~(Safe))\n====",
+      "modules": {
+        "Helper": "---- MODULE Helper ----\nEXTENDS Naturals\nValue == 1\n===="
+      },
+      "expected": "complete",
+      "config": "SPECIFICATION __TraceSpec\n\n\nPROPERTY __Expected\nCHECK_DEADLOCK TRUE"
+    },
+    "status": "complete",
+    "states": 3
+  }
+}

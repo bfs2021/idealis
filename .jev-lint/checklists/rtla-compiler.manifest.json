@@ -31,26 +31,42 @@
       "role": "reference"
     },
     "source7": {
-      "path": "crates/rtla-compiler/tests/compiler.rs",
+      "path": "crates/rtla-compiler/src/link.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "crates/rtla-compiler/tests/finite-support.json",
+      "path": "crates/rtla-compiler/src/rewrite.rs",
       "role": "reference"
     },
     "source9": {
-      "path": "crates/rtla-compiler/tests/finite_support.rs",
+      "path": "crates/rtla-compiler/tests/compiler.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "package.json",
+      "path": "crates/rtla-compiler/tests/finite-support.json",
       "role": "reference"
     },
     "source11": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/rtla-compiler/tests/finite_support.rs",
       "role": "reference"
     },
     "source12": {
+      "path": "crates/rtla-compiler/tests/modules-support.json",
+      "role": "reference"
+    },
+    "source13": {
+      "path": "crates/rtla-compiler/tests/modules.rs",
+      "role": "reference"
+    },
+    "source14": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source15": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source16": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -69,6 +85,22 @@
     },
     {
       "id": "rtla-compiler-implementation-0",
+      "topic": "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
+      "mode": "semantic",
+      "reference": {
+        "source": "source7"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": [
+        {
+          "source": "source8"
+        }
+      ]
+    },
+    {
+      "id": "rtla-compiler-implementation-1",
       "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
       "mode": "semantic",
       "reference": {
@@ -81,7 +113,7 @@
       "context": []
     },
     {
-      "id": "rtla-compiler-implementation-1",
+      "id": "rtla-compiler-implementation-2",
       "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
       "mode": "semantic",
       "reference": {

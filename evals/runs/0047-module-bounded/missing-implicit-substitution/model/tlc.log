@@ -1,0 +1,20 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 17 and seed -6241470042586208429 with 1 worker on 10 cores with 7282MB heap and 64MB offheap memory [pid: 47422] (Mac OS X 26.6.2 aarch64, Eclipse Adoptium 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-bounded/missing-implicit-substitution/model/Differential.tla
+Parsing file /Users/mz/ghq/github.com/mizchi/idealis/evals/runs/0047-module-bounded/missing-implicit-substitution/model/Values.tla
+Semantic processing of module Values
+Semantic processing of module Differential
+Semantic errors:
+
+*** Errors: 1
+
+line 3, col 1 to line 3, col 20 of module Differential
+
+Substitution missing for symbol N declared at line 2, col 10 to line 2, col 10 of module Values 
+and instantiated in module Differential.
+
+
+
+Starting... (2026-11-17 09:30:15)
+Error: Parsing or semantic analysis failed.
+Finished in 00s at (2026-11-17 09:30:15)

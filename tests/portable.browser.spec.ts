@@ -49,6 +49,9 @@ test.beforeAll(async () => {
   const finite = await readFile(
     "crates/rtla-compiler/tests/finite-support.json",
   );
+  const modules = await readFile(
+    "crates/rtla-compiler/tests/modules-support.json",
+  );
   server = createServer((request, response) => {
     response.setHeader(
       "Content-Type",
@@ -71,7 +74,9 @@ test.beforeAll(async () => {
               ? complex
               : request.url === "/finite.json"
                 ? finite
-                : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
+                : request.url === "/modules.json"
+                  ? modules
+                  : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));

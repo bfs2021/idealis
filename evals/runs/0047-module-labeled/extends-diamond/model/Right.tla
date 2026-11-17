@@ -1,0 +1,4 @@
+---- MODULE Right ----
+EXTENDS Base
+
+====

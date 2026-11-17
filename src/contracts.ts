@@ -113,6 +113,12 @@ export type PortableEffect =
     }
   | { readonly kind: "done"; readonly result: PortableResult };
 
+export interface TlaSourceInput {
+  readonly source: string;
+  readonly config: string;
+  readonly modules?: Readonly<Record<string, string>>;
+}
+
 export interface PortableCommand {
   readonly version: 1;
   readonly request:
@@ -120,11 +126,13 @@ export interface PortableCommand {
         readonly kind: "compile-tla";
         readonly source: string;
         readonly config: string;
+        readonly modules?: Readonly<Record<string, string>>;
       }
     | {
         readonly kind: "check-tla";
         readonly source: string;
         readonly config: string;
+        readonly modules?: Readonly<Record<string, string>>;
         readonly bounds: SafetyBounds;
       }
     | {
