@@ -71,3 +71,5 @@ workerで作ったdomainはkeyとpayloadのRefをrootへ移す。rootのdomain�
 packed関数と完全に一致する有限rangeでは、domainを確認してから、要素数と同じ論理workを一括計上する。異なる型・rangeとbudget付きworkerは元の要素順に検査する。通常のmembershipも値だけのowned iteratorを使い、key/value列の構築を避ける。
 
 nativeのforkでは、rootのdomainが16個以下なら、64 key以下のdomainにworker専用wrapperを使う。候補更新ごとに全workerが同じArcカウンタへ書く費用を避け、merge時にrootのdomainへ戻す。対象外の入力は通常の共有へ戻し、対応する仕様の範囲は変えない。
+
+汎用Scalar列のEXCEPTは、domainとpayloadを借用したviewで更新後の値を検索する。既存の値があればpayloadのcloneとdomain参照の取得を省く。新規の値だけを確保し、同じhashを登録に使う。packed値とpackedへ復帰する更新は既存の経路を使う。hash衝突時はdomainとpayloadを完全比較する。[0057の比較](../../evals/iterations/0057-probe-updates.md)を参照。

@@ -19,7 +19,9 @@ for (const [source, name] of [
     mode: name === "idealis-core" ? 0o755 : 0o644,
   });
 const entries = await readdir("crates/rtlc/target/release/deps");
-const executable = entries.find((name) => /^safety-[a-f0-9]+$/.test(name));
+const executables = entries.filter((name) => /^safety-[a-f0-9]+$/.test(name));
+assert.equal(executables.length, 1, "Use an unambiguous safety bench build");
+const executable = executables[0];
 assert.ok(executable);
 const binary = await readFile(
   join("crates/rtlc/target/release/deps", executable),
@@ -53,6 +55,6 @@ const files = await Promise.all(
 );
 await writeFile(
   join(output, "manifest.json"),
-  `${JSON.stringify({ plan: "0056", revision: execFileSync("git", ["rev-parse", "HEAD"]).toString().trim(), files, sources: await Promise.all(paths.map(async (path) => ({ path, sha256: digest(await readFile(path)) }))) }, null, 2)}\n`,
+  `${JSON.stringify({ plan: process.env.IDEALIS_COMPACT_PLAN ?? "0056", revision: execFileSync("git", ["rev-parse", "HEAD"]).toString().trim(), files, sources: await Promise.all(paths.map(async (path) => ({ path, sha256: digest(await readFile(path)) }))) }, null, 2)}\n`,
   { flag: "wx" },
 );

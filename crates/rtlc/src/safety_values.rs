@@ -5,18 +5,29 @@ use crate::safety_expressions::MembershipSet;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_work::WorkBudget;
 use crate::{CoreError, Value};
-use functions::{Function, FunctionDomain, FunctionValues};
+use functions::{Function, FunctionDomain, FunctionUpdate, FunctionValues};
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::hash::{BuildHasherDefault, Hash, Hasher};
 use std::sync::Arc;
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq)]
 enum Cell {
     String(String),
     Set(Vec<Scalar>),
     Function(Function),
     ModelValue(String),
+}
+
+impl Hash for Cell {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        std::mem::discriminant(self).hash(state);
+        match self {
+            Self::String(value) | Self::ModelValue(value) => value.hash(state),
+            Self::Set(values) => values.hash(state),
+            Self::Function(function) => function.hash(state),
+        }
+    }
 }
 
 struct ValueHasher(u64);
@@ -351,6 +362,19 @@ impl<'scope> Arena<'scope> {
         }
         self.base.and_then(|base| base.find(hash, cell))
     }
+    fn find_updated(&self, hash: u64, update: &FunctionUpdate<'_>) -> Option<u32> {
+        let mut candidate = self.index.get(&hash).copied();
+        while let Some(index) = candidate {
+            let local = index as usize - self.offset;
+            if let Cell::Function(function) = &self.cells[local]
+                && update.matches(function)
+            {
+                return Some(index);
+            }
+            candidate = self.links[local];
+        }
+        self.base.and_then(|base| base.find_updated(hash, update))
+    }
     fn depth(&self, index: u32) -> u8 {
         if (index as usize) < self.offset {
             self.base.unwrap().depth(index)
@@ -365,6 +389,9 @@ impl<'scope> Arena<'scope> {
         if let Some(index) = self.find(hash, &cell) {
             return Ok(Scalar::Ref(index));
         }
+        self.insert_new(cell, hash, charge)
+    }
+    fn insert_new(&mut self, cell: Cell, hash: u64, charge: bool) -> Result<Scalar, CoreError> {
         let depth = |value: &Scalar| match value {
             Scalar::Ref(index) => self.depth(*index),
             _ => 0,
@@ -931,6 +958,17 @@ impl<'scope> Arena<'scope> {
         let Cell::Function(entries) = self.cell(function)? else {
             unreachable!()
         };
+        if let Some(probe) = entries.scalar_update(position, updated) {
+            let mut hasher = ValueHasher::default();
+            std::mem::discriminant(self.cell(function)?).hash(&mut hasher);
+            probe.hash(&mut hasher);
+            let hash = hasher.finish();
+            if let Some(index) = self.find_updated(hash, &probe) {
+                return Ok(Scalar::Ref(index));
+            }
+            let updated = probe.materialize(self.update_domain(&entries.domain));
+            return self.insert_new(Cell::Function(updated), hash, true);
+        }
         let updated = entries.updated(position, updated, self.update_domain(&entries.domain));
         self.intern(Cell::Function(updated))
     }
@@ -1526,5 +1564,125 @@ mod compact_worker_alias_tests {
             assert!(function.domain.root.is_none());
         }
         assert_eq!(root.at(original, Scalar::Int(1)).unwrap(), Scalar::Int(0));
+    }
+}
+
+#[cfg(test)]
+mod function_probe_tests {
+    use super::{Arena, Cell, ValueHasher};
+    use crate::ir::Scalar;
+    use std::hash::{Hash, Hasher};
+
+    #[test]
+    fn borrowed_updates_match_independently_constructed_values_and_hashes() {
+        let mut arena = Arena::new(1000);
+        let child = arena.set(vec![Scalar::Int(7)]).unwrap();
+        for (original, replacement, width) in [
+            (Scalar::Int(9), Scalar::Int(8), 1),
+            (Scalar::Int(9), Scalar::Int(8), 2),
+            (child, Scalar::Int(8), 7),
+            (child, Scalar::Int(8), 64),
+            (Scalar::Int(0), Scalar::Int(1), 65),
+        ] {
+            let base = arena.tuple(vec![original; width]).unwrap();
+            for position in 0..width {
+                let mut expected = vec![original; width];
+                expected[position] = replacement;
+                let expected = arena.tuple(expected).unwrap();
+                let before = arena.cell(base).unwrap();
+                let after = arena.cell(expected).unwrap();
+                let (Cell::Function(before_function), Cell::Function(after_function)) =
+                    (before, after)
+                else {
+                    panic!("function")
+                };
+                let probe = before_function
+                    .scalar_update(position, replacement)
+                    .unwrap();
+                assert!(probe.matches(after_function));
+                assert!(!probe.matches(before_function));
+                let mut borrowed_hash = ValueHasher::default();
+                std::mem::discriminant(before).hash(&mut borrowed_hash);
+                probe.hash(&mut borrowed_hash);
+                let mut stored_hash = ValueHasher::default();
+                after.hash(&mut stored_hash);
+                assert_eq!(borrowed_hash.finish(), stored_hash.finish());
+                assert_eq!(
+                    arena
+                        .replace(base, &[Scalar::Int(position as i32 + 1)], replacement)
+                        .unwrap(),
+                    expected
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn packed_values_and_repacking_keep_the_existing_canonical_path() {
+        let mut arena = Arena::new(100);
+        let values = arena.tuple(vec![Scalar::Int(9), Scalar::Int(0)]).unwrap();
+        let Cell::Function(function) = arena.cell(values).unwrap() else {
+            panic!("function")
+        };
+        assert!(function.scalar_update(0, Scalar::Int(1)).is_none());
+        let expected = arena.tuple(vec![Scalar::Int(1), Scalar::Int(0)]).unwrap();
+        assert_eq!(
+            arena
+                .replace(values, &[Scalar::Int(1)], Scalar::Int(1))
+                .unwrap(),
+            expected
+        );
+        let Cell::Function(function) = arena.cell(expected).unwrap() else {
+            panic!("function")
+        };
+        assert!(function.scalar_update(0, Scalar::Int(9)).is_none());
+        assert_eq!(
+            arena
+                .replace(expected, &[Scalar::Int(1)], Scalar::Int(9))
+                .unwrap(),
+            values
+        );
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn an_update_collision_in_the_base_does_not_replace_the_local_value() {
+        use crate::safety_work::WorkBudget;
+        let mut root = Arena::new(1000);
+        let collision = root
+            .function(vec![
+                (Scalar::Int(0), Scalar::Int(803_057_848)),
+                (Scalar::Int(1_091_714_232), Scalar::Int(-1_935_938_920)),
+            ])
+            .unwrap();
+        let budget = WorkBudget::new(900, 1);
+        let mut worker = root.fork(&budget, 0);
+        let source = worker
+            .function(vec![
+                (Scalar::Int(0), Scalar::Int(2)),
+                (Scalar::Int(95_947_124), Scalar::Int(0)),
+            ])
+            .unwrap();
+        let updated = worker
+            .replace(source, &[Scalar::Int(0)], Scalar::Int(-1_370_170_012))
+            .unwrap();
+        assert_ne!(updated, collision);
+        assert_eq!(
+            worker.at(updated, Scalar::Int(0)).unwrap(),
+            Scalar::Int(-1_370_170_012)
+        );
+        assert_eq!(
+            worker
+                .replace(source, &[Scalar::Int(0)], Scalar::Int(-1_370_170_012))
+                .unwrap(),
+            updated
+        );
+        let delta = worker.into_delta();
+        let mapping = root.merge(delta).unwrap();
+        assert_ne!(mapping.get(updated), collision);
+        assert_eq!(
+            root.at(collision, Scalar::Int(0)).unwrap(),
+            Scalar::Int(803_057_848)
+        );
     }
 }

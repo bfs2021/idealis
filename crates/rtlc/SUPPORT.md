@@ -20,6 +20,8 @@
 - [x] packed関数の型と完全に一致する有限rangeのmembershipでは、domain確認後に同じ要素数の論理workを一括計上する。workerのbudget付きoverlayは既存の要素順へ戻す。通常の関数検査も値だけのowned iteratorを使う。
 - [x] native forkはroot domainが16個以下なら、64 key以下のdomainにworker専用wrapperを持ち、参照カウンタを分離する。merge後はcanonical rootへ戻し、対象外は通常のArc共有へ戻す。
 
+- [x] 汎用Scalar列の関数更新は、コピー前のborrowed viewでbase/localの既存値を検索する。hash衝突はdomain/payloadを完全比較し、新規の値だけを確保する。packed値とpackedへの復帰、workと深さの検査を維持する。
+
 ## TLC互換の追加対応
 
 - [x] model valueを文字列と区別して保持・比較し、typed model valueの不正な等価比較を評価エラーにする。portable値のtagはmodel-value。

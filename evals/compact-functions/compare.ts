@@ -75,7 +75,7 @@ const routes = [
   },
 ] as const;
 await save("manifest.json", {
-  plan: "0056",
+  plan: process.env.IDEALIS_COMPACT_PLAN ?? "0056",
   environment: await environment(java, jar, archive),
   routes,
   bounds: { maxDepth: 10000000, maxStates: 10000000, maxWork: 4000000000 },

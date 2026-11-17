@@ -133,3 +133,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [0055の結果](iterations/0055-oracle-hotspots.md)は、Node CPU profileから観測JSONの二重構築とsnapshotの中間配列を減らす。区間別測定、同じ親runnerでの往復、Criterionを分けて比較する。
 
 [0056: 関数値と並列domain共有](iterations/0056-compact-functions.md)は、domain共有・64要素のBool/整数bit表現とworker参照を実装し、旧native/Wasm・TLC・tla-tsへ同じ完全探索を比較する。初期候補の並列後退、最終候補の改善と残るWasmの遅さを分けて記録した。
+
+[0057: 重複する関数更新のコピー削減](iterations/0057-probe-updates.md)は、borrowed viewで更新後の既存値を検索する。Aの関数並列の後退、Bのチャネル並列の改善、Wasmに残る差を、同じ条件のbefore/after・TLC・tla-tsで記録した。

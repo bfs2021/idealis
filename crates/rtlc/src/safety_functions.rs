@@ -118,6 +118,53 @@ pub(super) struct Function {
     values: Values,
 }
 
+pub(super) struct FunctionUpdate<'a> {
+    domain: &'a Arc<FunctionDomain>,
+    values: &'a [Scalar],
+    index: usize,
+    value: Scalar,
+}
+
+impl FunctionUpdate<'_> {
+    pub fn matches(&self, function: &Function) -> bool {
+        let Values::Scalars(values) = &function.values else {
+            return false;
+        };
+        *self.domain == function.domain
+            && values[..self.index] == self.values[..self.index]
+            && values[self.index] == self.value
+            && values[self.index + 1..] == self.values[self.index + 1..]
+    }
+
+    pub fn materialize(self, domain: Arc<FunctionDomain>) -> Function {
+        let mut values = self.values.to_vec();
+        values[self.index] = self.value;
+        Function {
+            domain,
+            values: Values::Scalars(values),
+        }
+    }
+}
+
+impl Hash for FunctionUpdate<'_> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.values.len().hash(state);
+        for (key, value) in self.domain.keys[..self.index]
+            .iter()
+            .zip(&self.values[..self.index])
+        {
+            (*key, *value).hash(state);
+        }
+        (self.domain.keys[self.index], self.value).hash(state);
+        for (key, value) in self.domain.keys[self.index + 1..]
+            .iter()
+            .zip(&self.values[self.index + 1..])
+        {
+            (*key, *value).hash(state);
+        }
+    }
+}
+
 impl Function {
     pub fn from_entries(domain: Arc<FunctionDomain>, entries: Vec<(Scalar, Scalar)>) -> Self {
         debug_assert_eq!(domain.keys.len(), entries.len());
@@ -179,6 +226,25 @@ impl Function {
             domain,
             values: self.values.updated(index, value, self.len()),
         }
+    }
+    #[inline]
+    pub fn scalar_update(&self, index: usize, value: Scalar) -> Option<FunctionUpdate<'_>> {
+        let Values::Scalars(values) = &self.values else {
+            return None;
+        };
+        if Values::packed(values.iter().enumerate().map(|(position, previous)| {
+            if position == index { value } else { *previous }
+        }))
+        .is_some()
+        {
+            return None;
+        }
+        Some(FunctionUpdate {
+            domain: &self.domain,
+            values,
+            index,
+            value,
+        })
     }
     pub fn depth(&self, mut depth: impl FnMut(Scalar) -> u8) -> u8 {
         let values = match &self.values {
