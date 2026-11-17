@@ -11,3 +11,9 @@ profileは通常測定から分離する。固定入力で旧新版を同じ回�
 目標はrtlaの全compareOracleまたは往復で1.15倍以上。core・unknown・mismatch対照の10%以上の後退は明記し、変更範囲を見直す。独立した旧snapshot/旧native/旧Wasmと全結果、拒否入力を比較する。型付きscalar、負のzero、NaN、bigint、Unicode、key順、共有参照、cycle、accessor、疎配列、非列挙property、symbol、prototypeと深さ制限を検査する。
 
 TDDで回帰を追加し、変更内容に必要なnative/Wasm/browser、check/browser、evaluate/replay、既存契約・cross/async、runtime、SUPPORT/Jevを確認する。配布を変える場合はpackage consumerまで確認する。raw runは上書き・編集しない。ローカルcommitまで行い、PR/push/mergeは依頼に含めない。
+
+## profile後に選んだ変更
+
+Node CPU profileでsnapshot visitがself約23%、Wasmのserde ContentDeserializer/ContentVisitorが目立った。区間測定はrtlaのsnapshot pair約76〜84 µs、Wasm dispatch約181〜183 µs。serde_deriveのinternally tagged実装も、TaggedContentVisitorでContentへ受けてからvariantをdeserializeしている。wire専用の厳密なfield structを通し、観測payloadのValueを一度だけdeserializeする候補を評価する。公開Observation型とOracleGroupの比較は変えない。不正なvariantの診断文はserde由来の可変情報とし、受理/拒否とerror envelopeを互換検査する。正常・非成功reportと不正JSON等の既存比較は全応答を照合する。
+
+変更を分離するため、固定の同じ親runnerでbefore/wire/combined/combined/wire/beforeを測る。wireはRust parserだけの変更、combinedはsnapshotの中間配列削減も含む候補。snapshot候補は既存形状とdescriptor検査を保つ。各stageのcase・予算・対照は上の計画を維持する。改善しない候補は採用せず、採用したstageを明記する。
