@@ -252,7 +252,7 @@ test("the real offline gate rejects stale, missing and corrupted staged Jev evid
     const manifests = view.paths.filter((path) =>
       /^\.jev-lint\/checklists\/[^/]+\.manifest.json$/.test(path),
     );
-    assert.equal(manifests.length, 7);
+    assert.equal(manifests.length, 8);
     for (const path of manifests) {
       const manifest = parseDocumentManifest(
         JSON.parse((await view.read(path)).toString()),

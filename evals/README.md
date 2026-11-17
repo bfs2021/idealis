@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0051: idealis-oracle](iterations/0051-oracle-library.md)は、固定入力・実装登録を差分検査・保存oracle再生・比較ベンチで共有する独立crateを追加した。TLC/tla-ts/idealisのcold比較とprepared Rustを分け、人工故障・測定中drift・clock分解能による最初の失敗も記録した。
+
 [0050: アクション単位のcoverage](iterations/0050-action-coverage.md)は、Rust/TS/native/Wasmへopt-inのbranch計数とwork内訳を追加した。162入力と840回のon/off照合、TLCの14仕様、3反例の再生、旧APIとの完全応答比較を記録した。式・source location・並列のcoverageは未対応。
 
 [0049: 時間論理のmicro tuning](iterations/0049-temporal-tuning.md)は、profileに基づき小さい式集合をbit集合へ置き換えた。交互測定で時間論理のcheckは1.35-1.42倍となり、156ケース・各10要求でbefore/afterの完全応答を照合した。対照8件に残る後退も記録している。

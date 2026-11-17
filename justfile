@@ -31,6 +31,31 @@ support-replay run:
   pnpm build
   node dist/evals/crate-checklists/run.js {{quote(run)}} --replay
 
+oracle-build:
+  cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
+  cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/oracle-comparison/rust/Cargo.toml
+
+oracle-test: oracle-build
+  cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
+  cargo test --locked --manifest-path crates/oracle/Cargo.toml
+  cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
+  cargo test --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
+  cargo run --example comparison --locked --manifest-path crates/oracle/Cargo.toml
+  pnpm exec playwright test --config oracle-playwright.config.ts
+
+# Build and run other checks before this recipe; measurements run alone.
+oracle-eval run java jar:
+  pnpm build
+  node dist/evals/oracle-comparison/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+oracle-replay run:
+  pnpm build
+  node dist/evals/oracle-comparison/replay.js {{quote(run)}}
+
 fuzz-build: testing-build
   cargo build --release --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
   cargo +nightly-2026-08-27 metadata --locked --format-version 1 --manifest-path evals/structured-fuzz/fuzz/Cargo.toml > /dev/null

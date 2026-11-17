@@ -31,6 +31,9 @@ const ralloyCrate = files.find(
 const testingCrate = files.find(
   (file) => file.startsWith("idealis-testing-") && file.endsWith(".crate"),
 );
+const oracleCrate = files.find(
+  (file) => file.startsWith("idealis-oracle-") && file.endsWith(".crate"),
+);
 assert.ok(
   tarball &&
     crate &&
@@ -39,8 +42,9 @@ assert.ok(
     compilerCrate &&
     rsmtCrate &&
     ralloyCrate &&
-    testingCrate,
-  "Prepare npm and all seven Rust packages first, including standalone idealis-testing",
+    testingCrate &&
+    oracleCrate,
+  "Prepare npm and all eight Rust packages first, including standalone idealis-testing",
 );
 const consumer = await mkdtemp(join(tmpdir(), "idealis-consumer-"));
 await writeFile(
@@ -275,6 +279,7 @@ for (const archive of [
   rsmtCrate,
   ralloyCrate,
   testingCrate,
+  oracleCrate,
 ]) {
   const entries = execFileSync("tar", ["-tzf", join(directory, archive)])
     .toString()
@@ -573,8 +578,62 @@ assert.deepEqual(
   ),
   [],
 );
+const oracleConsumer = await mkdtemp(
+  join(tmpdir(), "idealis-oracle-consumer-"),
+);
+execFileSync("tar", [
+  "-xzf",
+  join(directory, oracleCrate),
+  "-C",
+  oracleConsumer,
+]);
+await writeFile(
+  join(oracleConsumer, "Cargo.toml"),
+  `[package]\nname="oracle-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-oracle={path="idealis-oracle-${version}"}\nserde_json="1.0"\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+);
+await writeFile(
+  join(oracleConsumer, "main.rs"),
+  await readFile(
+    join(
+      oracleConsumer,
+      `idealis-oracle-${version}`,
+      "examples",
+      "comparison.rs",
+    ),
+  ),
+);
+const oracle = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+  cwd: oracleConsumer,
+  stdio: "pipe",
+})
+  .toString()
+  .trim();
+assert.equal(oracle, "standalone idealis-oracle consumer checked");
+const oracleMetadata = JSON.parse(
+  execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
+    cwd: oracleConsumer,
+    stdio: "pipe",
+  }).toString(),
+);
+assert.ok(
+  !oracleMetadata.packages.some((entry: { name: string }) =>
+    [
+      "rtla",
+      "rtlc",
+      "rtla-compiler",
+      "idealis-core",
+      "idealis-testing",
+      "z3",
+      "z3-sys",
+    ].includes(entry.name),
+  ),
+);
 const result = {
   status: "complete",
+  oracle,
+  oracleDependencies: oracleMetadata.packages
+    .map((entry: { name: string }) => entry.name)
+    .sort(),
   node,
   typecheck: "passed without solver declarations",
   rust,
@@ -605,6 +664,7 @@ const result = {
     rsmtCrate,
     ralloyCrate,
     testingCrate,
+    oracleCrate,
   ],
 };
 await writeFile(

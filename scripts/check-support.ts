@@ -176,6 +176,27 @@ const scopes: readonly CrateScope[] = [
       },
     ],
   },
+  {
+    name: "oracle",
+    evidence: [
+      {
+        path: "src/report.rs",
+        topic:
+          "typed observation比較とmatched/mismatch/invalid/unknown/error、集約の優先順位",
+      },
+      {
+        path: "src/group.rs",
+        topic:
+          "groupとcase登録、入力付きreport、保存oracleを呼ばないreplay、構造検査",
+      },
+      {
+        path: "src/bench.rs",
+        topic:
+          "preflightと全呼出照合、予算、clock、順序、raw samplesと速度比、部分失敗",
+        context: ["tests/oracle.rs"],
+      },
+    ],
+  },
 ];
 const shared = ["scripts/check-support.ts", "package.json", "pnpm-lock.yaml"];
 const manifestPath = (name: string) =>

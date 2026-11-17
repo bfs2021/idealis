@@ -60,6 +60,7 @@ for (const name of [
   "idealis-smt",
   "ralloy",
   "idealis-testing",
+  "oracle",
 ]) {
   await mkdir(resolve(workspace, name));
   for (const file of [
@@ -80,7 +81,7 @@ for (const name of [
 }
 await writeFile(
   resolve(workspace, "Cargo.toml"),
-  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt","ralloy","idealis-testing"]\nresolver="3"\n',
+  '[workspace]\nmembers=["rtla","rtlc","rtla-compiler","idealis-core","idealis-smt","ralloy","idealis-testing","oracle"]\nresolver="3"\n',
 );
 await copyFile("crates/rtlc/Cargo.lock", resolve(workspace, "Cargo.lock"));
 execFileSync(
@@ -116,6 +117,7 @@ for (const name of [
   "idealis-smt",
   "ralloy",
   "idealis-testing",
+  "idealis-oracle",
 ]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
@@ -155,5 +157,5 @@ await copyFile(
   resolve(target, "idealis-testing-manifest.json"),
 );
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing/idealis-oracle Cargo and Wasm artifacts: ${target}`,
 );

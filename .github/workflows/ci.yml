@@ -29,6 +29,14 @@ jobs:
       - run: cargo build --release --locked --manifest-path evals/sat-foundation/rust/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/sat-foundation/rust/Cargo.toml
       - run: node --test dist/evals/sat-foundation/contract-test.js
+      - run: cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
+      - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
+      - run: cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
+      - run: cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/oracle-comparison/rust/Cargo.toml
       - run: cargo fmt --manifest-path crates/idealis-testing/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
@@ -107,6 +115,7 @@ jobs:
       - run: pnpm runtime:build
       - run: pnpm runtime:test
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright test --config oracle-playwright.config.ts
       - run: pnpm test:browser
       - run: pnpm exec playwright test --config sat-playwright.config.ts
       - run: pnpm exec playwright test --config testing-playwright.config.ts

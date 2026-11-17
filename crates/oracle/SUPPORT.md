@@ -1,0 +1,27 @@
+# idealis-oracleの対応範囲
+
+## 対応
+
+- [x] Rustの`#[test]`から使うgroup・case・reference・test_function登録とassert_matched。
+- [x] genericな入力・観測、PartialEqによる等値と有限許容値集合、serdeのreport保存。
+- [x] matched/mismatch/invalid/unknown/errorの区別、空suite・空許容値・重複IDの非成功扱い。
+- [x] 保存入力と保存referenceを使い、reference callbackを呼ばないreplay。ID・件数・保存判定の整合性検査。
+- [x] referenceと速度baselineの分離、preflight後のwarmup・全測定呼び出しの照合と失敗時の全速度比無効化。
+- [x] 固定sample/iteration、予定呼び出し数予算、開始順回転と逆順、raw ns・実行順・mean/median/min/max・median比の保存。
+- [x] nativeのInstantとWasmで使うhost clock。ゼロ・逆行・累積ns overflowをunknownへする。
+- [x] serde/serde_jsonだけに依存する独立crate。native単独consumerと実ブラウザWasmの差分・再生・host clock経路。
+
+## 非対応・対象外
+
+- [ ] PBTの生成器・縮小・seed互換。idealis-testingの役割であり、このcrateでは提供しない。
+- [ ] solverやcheckerの内蔵、自動的な観測の正規化、任意言語のbinding。
+- [ ] 信頼区間・統計検定・Criterion互換のrunner/proc macro、並列測定やsharding。
+- [ ] callbackのtimeout・panic捕捉・プロセス隔離、共有可変入力の検出、保存データの真正性検証。
+
+## 制約と根拠
+
+- [x] referenceが正しいことや実装との独立性はホストが確認する。照合一致は実行した入力と射影した観測の範囲。
+- [x] 測定は関数呼び出しと出力構築を含み、比較と出力破棄は含まない。初期化を含めるかはadapterが決めscopeへ記録する。
+- [x] 集約はerror > mismatch > unknown > invalid > matched。非成功の保存値も保持し、replayは保存判定を再計算する。
+
+[README](README.md)、[比較とreport](src/report.rs)、[groupとreplay](src/group.rs)、[測定](src/bench.rs)、[挙動テスト](tests/oracle.rs)を参照。

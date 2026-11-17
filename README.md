@@ -53,6 +53,7 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 | [`idealis-smt`](crates/idealis-smt)（旧rsmt） | 対応するSMT-LIB式                              | 任意精度Intの差分制約とBool式。SATモデル、UNSAT、work切れのunknownを返す独立した試作。     |
 | [`ralloy`](crates/ralloy)                     | 静的なAlloyソースと有限scope                   | sig・二項関係・fact・assertの解析と、有限構造の列挙・instanceや反例の生成。                |
 | [`idealis-testing`](crates/idealis-testing)   | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
+| [`idealis-oracle`](crates/oracle)             | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
 | [`@mizchi/idealis`](src)                      | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
 | [Go adapter](adapters/go)                     | 共通コアのWasmとGoのモデル・実装・履歴         | CGOなしでRustコアへ接続し、同じ値・オラクル・観測で照合と再生を行う。                      |
 
@@ -75,6 +76,8 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 [`ralloy`](crates/ralloy)は、静的なsig・二項field・関係演算・量化・run/checkを有限scope内で検査する独立crate。JVMやZ3に依存せず、nativeとホストimportのないWasmで同じ探索器を使う。Alloy AnalyzerのSAT変換、継承、時間・var、整数演算は未対応。`@mizchi/idealis/alloy`からWasmを読み、モデルの探索と実装の関係スナップショットの照合に使える。[利用手順](docs/alloy.md)と[評価手順](evals/alloy-subset/README.md)を参照。汎用backend契約とCLIへの接続は今後の対象。
 
 [`idealis-testing`](crates/idealis-testing)は、有限状態機械のPBT・縮小・差分比較・保存caseの再生を行う独立crate。TSは`@mizchi/idealis/testing`から同じWasmを使い、Vitest・node:test・ブラウザでDriverを動かす。[明示したactor列からのスケジュール生成](docs/testing.md#actorの操作順を制御する)も扱う。既存fast-check経路のStrategy/seed互換、任意threadの自動計装、全実行の証明は含めない。
+
+[`idealis-oracle`](crates/oracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
 
 開発用の[構造付きfuzzing](evals/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
 
@@ -122,6 +125,17 @@ Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅
 
 <!-- checker-comparison:end -->
 
+## 同じ登録による差分検査と比較ベンチ
+
+新しい`idealis-oracle`で、TLC・tla-ts・idealisへ同じ小さいモデルを渡した。下表は起動込みのcold source-to-result中央値、7 sample・1 warmup、すべて1 worker。process起動・輸送・解析・raw log書き込みを含む。
+
+| モデル        | idealis native (ms) | tla-ts (ms) | TLC (ms) |
+| ------------- | ------------------: | ----------: | -------: |
+| linear-ring   |               4.505 |      71.607 |  584.650 |
+| function-cube |               2.675 |      78.875 |  593.217 |
+
+ringは1,000状態、function-cubeは8 bitの256状態で、3実装の完了判定・distinct・generatedが一致した。小さいモデルの起動費用を含み、検査kernelの速度差を示す値ではない。Rustのprepared check/coverage比較、測定中のdrift検出、保存oracleからの再生と最初の失敗は[評価0051](evals/iterations/0051-oracle-library.md)へ記録した。APIは[RustのテストとCriterion風のgroup登録](crates/oracle/README.md)を参照。
+
 ## Rustコアの最適化前後
 
 上の6経路比較は最適化前の0022時点の記録。今回の6項目の最適化は、変更前後のnative/Wasmを別途交互に測った。起動込み秒、1 warmup後3回の中央値。比率は変更前/変更後。TLC/tla-tsの過去値はこの表へ混ぜていない。
@@ -168,7 +182,7 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、idealis-coreへの依存はない。idealis-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
 
-構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で5つのcrateとWasmの配布物を確認できる。
+構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で8つのcrateとWasmの配布物を確認できる。
 
 [Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
 

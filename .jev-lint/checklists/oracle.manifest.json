@@ -1,0 +1,111 @@
+{
+  "schema": "jev-lint-documents-manifest-1",
+  "roots": ["crates/oracle/SUPPORT.md"],
+  "files": {
+    "source0": {
+      "path": "crates/oracle/Cargo.lock",
+      "role": "reference"
+    },
+    "source1": {
+      "path": "crates/oracle/Cargo.toml",
+      "role": "reference"
+    },
+    "source2": {
+      "path": "crates/oracle/README.md",
+      "role": "reference"
+    },
+    "source3": {
+      "path": "crates/oracle/SUPPORT.md",
+      "role": "document"
+    },
+    "source4": {
+      "path": "crates/oracle/examples/comparison.rs",
+      "role": "reference"
+    },
+    "source5": {
+      "path": "crates/oracle/src/bench.rs",
+      "role": "reference"
+    },
+    "source6": {
+      "path": "crates/oracle/src/group.rs",
+      "role": "reference"
+    },
+    "source7": {
+      "path": "crates/oracle/src/lib.rs",
+      "role": "reference"
+    },
+    "source8": {
+      "path": "crates/oracle/src/report.rs",
+      "role": "reference"
+    },
+    "source9": {
+      "path": "crates/oracle/tests/oracle.rs",
+      "role": "reference"
+    },
+    "source10": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source11": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source12": {
+      "path": "scripts/check-support.ts",
+      "role": "reference"
+    }
+  },
+  "comparisons": [
+    {
+      "id": "oracle-readme",
+      "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
+      "mode": "semantic",
+      "reference": {
+        "source": "source2"
+      },
+      "target": {
+        "source": "source3"
+      }
+    },
+    {
+      "id": "oracle-implementation-0",
+      "topic": "typed observation比較とmatched/mismatch/invalid/unknown/error、集約の優先順位",
+      "mode": "semantic",
+      "reference": {
+        "source": "source8"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "oracle-implementation-1",
+      "topic": "groupとcase登録、入力付きreport、保存oracleを呼ばないreplay、構造検査",
+      "mode": "semantic",
+      "reference": {
+        "source": "source6"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "oracle-implementation-2",
+      "topic": "preflightと全呼出照合、予算、clock、順序、raw samplesと速度比、部分失敗",
+      "mode": "semantic",
+      "reference": {
+        "source": "source5"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": [
+        {
+          "source": "source9"
+        }
+      ]
+    }
+  ]
+}
