@@ -1,5 +1,9 @@
+mod bounded_drop;
 pub mod ir;
 mod safety;
+#[cfg(test)]
+mod safety_definition_tests;
+mod safety_definitions;
 mod safety_expressions;
 mod safety_values;
 #[cfg(not(target_arch = "wasm32"))]

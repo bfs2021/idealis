@@ -1,9 +1,62 @@
 use crate::{CoreError, Value};
 use serde::{Deserialize, Serialize};
 
+pub const WIRE_INDEX_MAX: u64 = 4_294_967_295;
+
+pub(crate) fn validate_wire_index(value: usize) -> Result<(), CoreError> {
+    if value as u64 > WIRE_INDEX_MAX {
+        return Err(CoreError::protocol("Invalid compiled program count"));
+    }
+    Ok(())
+}
+
+fn deserialize_wire_index<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> Result<usize, D::Error> {
+    let value = u64::deserialize(deserializer)?;
+    if value > WIRE_INDEX_MAX {
+        return Err(serde::de::Error::custom("Invalid compiled program count"));
+    }
+    usize::try_from(value).map_err(serde::de::Error::custom)
+}
+
+fn deserialize_optional_wire_index<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> Result<Option<usize>, D::Error> {
+    deserialize_wire_index(deserializer).map(Some)
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
 #[serde(tag = "op", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Expression {
+    Frame {
+        arguments: Vec<Expression>,
+        captures: Vec<Expression>,
+        #[serde(rename = "parameterCount")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        parameter_count: usize,
+        #[serde(rename = "captureCount")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        capture_count: usize,
+        #[serde(rename = "localScope")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        local_scope: usize,
+        body: Box<Self>,
+    },
+    Call {
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        definition: usize,
+        arguments: Vec<Self>,
+        captures: Vec<Self>,
+    },
+    Parameter {
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        slot: usize,
+    },
+    Capture {
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        slot: usize,
+    },
     Prime {
         argument: Box<Self>,
     },
@@ -11,6 +64,7 @@ pub enum Expression {
         value: Value,
     },
     Bound {
+        #[serde(deserialize_with = "deserialize_wire_index")]
         slot: usize,
     },
     Old,
@@ -62,6 +116,7 @@ pub enum Expression {
         body: Box<Self>,
     },
     Fold {
+        #[serde(deserialize_with = "deserialize_wire_index")]
         accumulator: usize,
         initial: Box<Self>,
         collection: Box<Self>,
@@ -145,6 +200,7 @@ pub enum Expression {
         value: Scalar,
     },
     Read {
+        #[serde(deserialize_with = "deserialize_wire_index")]
         slot: usize,
         next: bool,
     },
@@ -250,20 +306,38 @@ pub enum Domain {
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Step {
+    Frame {
+        arguments: Vec<Expression>,
+        captures: Vec<Expression>,
+        #[serde(rename = "parameterCount")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        parameter_count: usize,
+        #[serde(rename = "captureCount")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        capture_count: usize,
+        #[serde(rename = "localScope")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        local_scope: usize,
+        branches: Vec<Branch>,
+    },
     Bind {
+        #[serde(deserialize_with = "deserialize_wire_index")]
         slot: usize,
         domain: Domain,
         #[serde(rename = "tupleSize", default, skip_serializing_if = "Option::is_none")]
+        #[serde(deserialize_with = "deserialize_optional_wire_index")]
         tuple_size: Option<usize>,
     },
     Guard {
         expression: Expression,
     },
     Assign {
+        #[serde(deserialize_with = "deserialize_wire_index")]
         slot: usize,
         value: Expression,
     },
     Choose {
+        #[serde(deserialize_with = "deserialize_wire_index")]
         slot: usize,
         domain: Domain,
     },
@@ -273,7 +347,9 @@ pub enum Step {
 #[serde(deny_unknown_fields)]
 pub struct Binding {
     #[serde(rename = "tupleSize", default, skip_serializing_if = "Option::is_none")]
+    #[serde(deserialize_with = "deserialize_optional_wire_index")]
     pub tuple_size: Option<usize>,
+    #[serde(deserialize_with = "deserialize_wire_index")]
     pub slot: usize,
     pub domain: Domain,
 }
@@ -301,6 +377,27 @@ pub struct Predicate {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct Definition {
+    #[serde(deserialize_with = "deserialize_wire_index")]
+    pub id: usize,
+    #[serde(deserialize_with = "deserialize_wire_index")]
+    pub parameter_count: usize,
+    #[serde(deserialize_with = "deserialize_wire_index")]
+    pub capture_count: usize,
+    pub body_kind: BodyKind,
+    #[serde(deserialize_with = "deserialize_wire_index")]
+    pub local_scope: usize,
+    pub body: Expression,
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum BodyKind {
+    Expression,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(try_from = "SafetyProgramWire", rename_all = "camelCase")]
 pub struct SafetyProgram {
     pub format: String,
     pub version: u32,
@@ -323,6 +420,170 @@ pub struct SafetyProgram {
     pub constraints: Vec<Predicate>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub action_constraints: Vec<Predicate>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub definitions: Option<Vec<Definition>>,
+}
+
+#[derive(Default)]
+enum DefinitionTable {
+    #[default]
+    Missing,
+    Present(Vec<Definition>),
+}
+
+impl<'de> Deserialize<'de> for DefinitionTable {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        Vec::<Definition>::deserialize(deserializer).map(Self::Present)
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+struct SafetyProgramWire {
+    format: String,
+    version: u32,
+    name: String,
+    variables: Vec<String>,
+    initial: Vec<Branch>,
+    next: Vec<Branch>,
+    invariants: Vec<Predicate>,
+    assumptions: Vec<Predicate>,
+    check_deadlock: bool,
+    #[serde(default)]
+    initial_properties: Vec<Predicate>,
+    #[serde(default)]
+    action_properties: Vec<Predicate>,
+    #[serde(default)]
+    properties: Vec<TemporalProperty>,
+    #[serde(default)]
+    fairness: Vec<TemporalFormula>,
+    #[serde(default)]
+    constraints: Vec<Predicate>,
+    #[serde(default)]
+    action_constraints: Vec<Predicate>,
+    #[serde(default)]
+    definitions: DefinitionTable,
+}
+
+impl TryFrom<SafetyProgramWire> for SafetyProgram {
+    type Error = CoreError;
+
+    fn try_from(wire: SafetyProgramWire) -> Result<Self, Self::Error> {
+        let definitions = match (wire.version, wire.definitions) {
+            (1, DefinitionTable::Missing) => None,
+            (2, DefinitionTable::Present(definitions)) => Some(definitions),
+            _ => {
+                return Err(CoreError::protocol(
+                    "Invalid safety program version or definitions",
+                ));
+            }
+        };
+        let program = Self {
+            format: wire.format,
+            version: wire.version,
+            name: wire.name,
+            variables: wire.variables,
+            initial: wire.initial,
+            next: wire.next,
+            invariants: wire.invariants,
+            assumptions: wire.assumptions,
+            check_deadlock: wire.check_deadlock,
+            initial_properties: wire.initial_properties,
+            action_properties: wire.action_properties,
+            properties: wire.properties,
+            fairness: wire.fairness,
+            constraints: wire.constraints,
+            action_constraints: wire.action_constraints,
+            definitions,
+        };
+        if program.version == 1 && program.has_shared_expressions() {
+            return Err(CoreError::protocol(
+                "Shared expressions require safety IR v2",
+            ));
+        }
+        Ok(program)
+    }
+}
+
+impl SafetyProgram {
+    fn has_shared_expressions(&self) -> bool {
+        fn branch<'a>(branches: &'a [Branch], pending: &mut Vec<&'a Expression>) -> bool {
+            for branch in branches {
+                for step in &branch.steps {
+                    match step {
+                        Step::Frame { .. } => return true,
+                        Step::Guard { expression }
+                        | Step::Assign {
+                            value: expression, ..
+                        } => pending.push(expression),
+                        Step::Bind { domain, .. } | Step::Choose { domain, .. } => {
+                            pending.extend(domain.children())
+                        }
+                    }
+                }
+            }
+            false
+        }
+        let mut pending = vec![];
+        if branch(&self.initial, &mut pending) || branch(&self.next, &mut pending) {
+            return true;
+        }
+        for predicate in self
+            .invariants
+            .iter()
+            .chain(&self.assumptions)
+            .chain(&self.initial_properties)
+            .chain(&self.action_properties)
+            .chain(&self.constraints)
+            .chain(&self.action_constraints)
+        {
+            pending.push(&predicate.expression);
+        }
+        let mut formulas: Vec<_> = self
+            .properties
+            .iter()
+            .map(|property| &property.formula)
+            .chain(&self.fairness)
+            .collect();
+        while let Some(formula) = formulas.pop() {
+            match formula {
+                TemporalFormula::Frame { .. } => return true,
+                TemporalFormula::Atom { expression } => pending.push(expression),
+                TemporalFormula::Not { formula }
+                | TemporalFormula::Always { formula }
+                | TemporalFormula::Eventually { formula } => formulas.push(formula),
+                TemporalFormula::And { left, right } | TemporalFormula::Or { left, right } => {
+                    formulas.extend([left.as_ref(), right.as_ref()])
+                }
+                TemporalFormula::Forall { bounds, formula }
+                | TemporalFormula::Exists { bounds, formula } => {
+                    for binding in bounds {
+                        pending.extend(binding.domain.children());
+                    }
+                    formulas.push(formula);
+                }
+            }
+        }
+        while let Some(expression) = pending.pop() {
+            match expression {
+                Expression::Frame { .. }
+                | Expression::Call { .. }
+                | Expression::Parameter { .. }
+                | Expression::Capture { .. } => return true,
+                Expression::Enabled {
+                    branches,
+                    subscript,
+                } => {
+                    if branch(branches, &mut pending) {
+                        return true;
+                    }
+                    pending.extend(subscript.as_deref());
+                }
+                _ => pending.extend(expression.children()),
+            }
+        }
+        false
+    }
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -430,6 +691,20 @@ impl Scalar {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum TemporalFormula {
+    Frame {
+        arguments: Vec<Expression>,
+        captures: Vec<Expression>,
+        #[serde(rename = "parameterCount")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        parameter_count: usize,
+        #[serde(rename = "captureCount")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        capture_count: usize,
+        #[serde(rename = "localScope")]
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        local_scope: usize,
+        formula: Box<Self>,
+    },
     Atom {
         expression: Expression,
     },

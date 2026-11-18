@@ -22,7 +22,7 @@ fn execute(mut session: Session, persist: bool) -> ConformanceResult {
                 let transitions = states
                     .into_iter()
                     .map(|entry| {
-                        let Value::List(values) = entry.state else {
+                        let Value::List(values) = &entry.state else {
                             panic!("invalid state")
                         };
                         let Value::Int(current) = &values[0] else {
@@ -62,7 +62,7 @@ fn execute(mut session: Session, persist: bool) -> ConformanceResult {
                 )
             }
             Effect::DriverStep { id, action } => {
-                match action {
+                match &action {
                     Value::String(name) if name == "add" => {
                         memory += 1;
                         if persist {

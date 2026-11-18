@@ -11,6 +11,9 @@
 - [x] IRの算術・集合・関数・record・sequence操作、有限量化、EXCEPTと@、foldの評価。
 - [x] 未一致CASEの評価時エラーと、singletonの文字列domainに限定したvariant-tag。
 - [x] maxDepth/maxStates/maxWorkとtemporal積グラフの予算を扱う。
+- [x] safety IR v1を維持し、明示v2のexpression定義表とcall / parameter / captureを検証・評価する。定義graphの循環、ID、arity、capture、frame内slot、phase違反を拒否する。
+- [x] v2の引数はcallerのlexical frameを保持し、要求時のcurrent / next / primeで毎回評価する。値cacheを持たず、call entryと引数評価に各1 workを課金し、枯渇をbounded/workにする。
+- [ ] 再帰定義、action template共有。ソースからのv2生成は両frontendが担当し、このcrateのIR検証・実行とは分離する。
 - [x] nativeのcheck_parallelは1〜256 worker上限を受け取り、適したsafety frontierを並列展開する。
 - [x] 軽いscalar・狭いfrontier・action/temporal property・fairnessは逐次へfallbackする。Wasmは逐次check。
 - [x] Rust rlibとしてnative/Wasmへビルドでき、idealis-coreやparser、外部solverには依存しない。
@@ -40,7 +43,13 @@
 ## 制約と根拠
 
 - [x] complete / bounded / empty / 各違反 / 評価エラーを区別する。boundedやemptyを安全の証明にしない。
+- [x] v2の型所属はidentity range map-setを列挙せず判定する。通常値のmap-setとv1の評価は列挙を維持する。
+- [x] v2の動的評価の入れ子は128までで、超過はprotocolエラー。定義内expression深さ48や既存v1の制限とは別に扱う。
 - [x] workはwall timeや厳密なメモリ上限ではない。並列探索のworkと予算境界の部分結果は逐次と同じとは限らない。
 - [x] 集合foldの文字列・record、関数key幅等の制限を維持する。model valueを含む集合foldも未対応。汎用Valueのvariantの存在だけで対応とは数えない。
 
-[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[時間的性質](src/temporal.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。
+[README](README.md)、[IR](src/ir.rs)、[v2契約](../../docs/safety-ir-v2.md)、[定義検証](src/safety_definitions.rs)、[探索](src/safety.rs)、[時間的性質](src/temporal.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。
+
+v2のmembership descriptorは条件分岐の選択枝へ用途を保ち、未選択枝を評価しない。通常の値評価とv1の列挙は維持する。
+
+- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。

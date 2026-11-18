@@ -14,7 +14,72 @@ pub(crate) struct EvalContext<'a> {
     pub locals: &'a [Scalar],
     pub old: Option<Scalar>,
     pub prime: bool,
+    pub(crate) frame: Option<&'a CallFrame>,
+    pub(crate) evaluation_depth: usize,
 }
+
+#[derive(Clone)]
+pub(crate) struct CallFrame {
+    arguments: Vec<Argument>,
+    captures: Vec<Argument>,
+}
+
+#[derive(Clone)]
+struct Argument {
+    expression: Arc<Expression>,
+    locals: Vec<Scalar>,
+    frame: Option<Arc<CallFrame>>,
+    old: Option<Scalar>,
+}
+
+impl Argument {
+    fn new(expression: &Expression, context: EvalContext<'_>) -> Self {
+        Self {
+            expression: Arc::new(expression.clone()),
+            locals: context.locals.to_vec(),
+            frame: context.frame.cloned().map(Arc::new),
+            old: context.old,
+        }
+    }
+
+    fn evaluate<T>(
+        &self,
+        context: EvalContext<'_>,
+        arena: &mut Arena,
+        evaluate: fn(&Expression, EvalContext<'_>, &mut Arena) -> Result<T, CoreError>,
+    ) -> Result<T, CoreError> {
+        arena.consume(1)?;
+        evaluate(
+            &self.expression,
+            EvalContext {
+                locals: &self.locals,
+                frame: self.frame.as_deref(),
+                old: self.old,
+                ..context
+            },
+            arena,
+        )
+    }
+}
+impl CallFrame {
+    pub(crate) fn new(
+        arguments: &[Expression],
+        captures: &[Expression],
+        context: EvalContext<'_>,
+    ) -> Self {
+        Self {
+            arguments: arguments
+                .iter()
+                .map(|value| Argument::new(value, context))
+                .collect(),
+            captures: captures
+                .iter()
+                .map(|value| Argument::new(value, context))
+                .collect(),
+        }
+    }
+}
+
 impl<'a> EvalContext<'a> {
     pub fn new(current: &'a [Scalar], next: &'a [Option<Scalar>]) -> Self {
         Self {
@@ -23,7 +88,21 @@ impl<'a> EvalContext<'a> {
             locals: &[],
             old: None,
             prime: false,
+            frame: None,
+            evaluation_depth: 0,
         }
+    }
+    fn descend(self, arena: &Arena) -> Result<Self, CoreError> {
+        if arena.metadata.is_none() && arena.definitions.is_empty() && self.frame.is_none() {
+            return Ok(self);
+        }
+        if self.evaluation_depth >= 128 {
+            return Err(CoreError::protocol("Safety evaluation nesting exceeds 128"));
+        }
+        Ok(Self {
+            evaluation_depth: self.evaluation_depth + 1,
+            ..self
+        })
     }
     fn read(self, slot: usize, next: bool) -> Result<Scalar, CoreError> {
         if next || self.prime {
@@ -67,6 +146,17 @@ pub(crate) fn register_branch_memberships<'a>(
     for branch in branches {
         for step in &branch.steps {
             match step {
+                Step::Frame {
+                    arguments,
+                    captures,
+                    branches,
+                    ..
+                } => {
+                    for expression in arguments.iter().chain(captures) {
+                        visitor(expression);
+                    }
+                    register_branch_memberships(branches, visitor);
+                }
                 Step::Guard { expression }
                 | Step::Assign {
                     value: expression, ..
@@ -113,7 +203,7 @@ impl Iterator for Values {
 }
 
 impl Domain {
-    fn children(&self) -> Vec<&Expression> {
+    pub(crate) fn children(&self) -> Vec<&Expression> {
         match self {
             Self::Range { lower, upper } => vec![lower, upper],
             Self::Set { values } => values.iter().collect(),
@@ -203,6 +293,11 @@ pub(crate) fn validate_branches(
         };
         for step in &branch.steps {
             match step {
+                Step::Frame { .. } => {
+                    return Err(CoreError::protocol(
+                        "Operator references require safety IR v2",
+                    ));
+                }
                 Step::Guard { expression } => expression.validate_with(context)?,
                 Step::Assign { slot, value } => {
                     if *slot >= variables {
@@ -291,12 +386,29 @@ impl Expression {
         };
         simple && self.children().into_iter().all(Self::is_scalar_cost)
     }
-    fn children(&self) -> Vec<&Self> {
+    pub(crate) fn children(&self) -> Vec<&Self> {
         match self {
+            Self::Frame {
+                arguments,
+                captures,
+                body,
+                ..
+            } => arguments
+                .iter()
+                .chain(captures)
+                .chain(std::iter::once(body.as_ref()))
+                .collect(),
+            Self::Call {
+                arguments,
+                captures,
+                ..
+            } => arguments.iter().chain(captures).collect(),
             Self::Literal { .. }
             | Self::Data { .. }
             | Self::Read { .. }
             | Self::Bound { .. }
+            | Self::Parameter { .. }
+            | Self::Capture { .. }
             | Self::Old => vec![],
             Self::Prime { argument }
             | Self::Not { argument }
@@ -388,6 +500,10 @@ impl Expression {
         !matches!(
             self,
             Self::Read { .. }
+                | Self::Frame { .. }
+                | Self::Call { .. }
+                | Self::Parameter { .. }
+                | Self::Capture { .. }
                 | Self::Enabled { .. }
                 | Self::UnmatchedCase { .. }
                 | Self::Bound { .. }
@@ -401,7 +517,13 @@ impl Expression {
     pub(crate) fn is_constant(&self) -> bool {
         !matches!(
             self,
-            Self::Read { .. } | Self::Enabled { .. } | Self::UnmatchedCase { .. }
+            Self::Read { .. }
+                | Self::Enabled { .. }
+                | Self::UnmatchedCase { .. }
+                | Self::Frame { .. }
+                | Self::Call { .. }
+                | Self::Parameter { .. }
+                | Self::Capture { .. }
         ) && self.children().iter().all(|value| value.is_constant())
     }
     pub(crate) fn validate(
@@ -437,6 +559,14 @@ impl Expression {
             return Err(CoreError::protocol("Safety expression nesting exceeds 48"));
         }
         match self {
+            Self::Frame { .. }
+            | Self::Call { .. }
+            | Self::Parameter { .. }
+            | Self::Capture { .. } => {
+                return Err(CoreError::protocol(
+                    "Operator references require safety IR v2",
+                ));
+            }
             Self::UnmatchedCase { location } => {
                 if location.is_empty() {
                     return Err(CoreError::protocol("Invalid unmatched CASE location"));
@@ -567,7 +697,33 @@ impl Expression {
         ctx: EvalContext<'_>,
         arena: &mut Arena,
     ) -> Result<Scalar, CoreError> {
+        let ctx = ctx.descend(arena)?;
         match self {
+            Self::Prime { .. }
+            | Self::Not { .. }
+            | Self::Neg { .. }
+            | Self::Add { .. }
+            | Self::Sub { .. }
+            | Self::Mul { .. }
+            | Self::Div { .. }
+            | Self::Mod { .. }
+            | Self::Pow { .. }
+            | Self::Eq { .. }
+            | Self::Ne { .. }
+            | Self::Lt { .. }
+            | Self::Le { .. }
+            | Self::Gt { .. }
+            | Self::Ge { .. }
+            | Self::And { .. }
+            | Self::Or { .. }
+            | Self::Implies { .. }
+            | Self::If { .. }
+            | Self::In { .. } => self.eval_scalar_operator(ctx, arena),
+            Self::Enabled { .. } => self.eval_enabled(ctx, arena),
+            Self::Frame { .. }
+            | Self::Call { .. }
+            | Self::Parameter { .. }
+            | Self::Capture { .. } => self.eval_reference(ctx, arena, Self::eval),
             Self::Literal { value } => Ok(*value),
             Self::Read { slot, next } => ctx.read(*slot, *next),
             Self::Bound { slot } => ctx
@@ -581,18 +737,77 @@ impl Expression {
             _ => self.eval_operator(ctx, arena),
         }
     }
-    #[inline(never)]
-    fn eval_operator(&self, ctx: EvalContext<'_>, arena: &mut Arena) -> Result<Scalar, CoreError> {
+    fn eval_reference<T>(
+        &self,
+        ctx: EvalContext<'_>,
+        arena: &mut Arena,
+        evaluate: fn(&Expression, EvalContext<'_>, &mut Arena) -> Result<T, CoreError>,
+    ) -> Result<T, CoreError> {
+        match self {
+            Self::Frame {
+                arguments,
+                captures,
+                body,
+                ..
+            } => {
+                arena.consume(1)?;
+                let frame = CallFrame::new(arguments, captures, ctx);
+                evaluate(
+                    body,
+                    EvalContext {
+                        locals: &[],
+                        frame: Some(&frame),
+                        old: None,
+                        ..ctx
+                    },
+                    arena,
+                )
+            }
+            Self::Call {
+                definition,
+                arguments,
+                captures,
+            } => {
+                arena.consume(1)?;
+                let definition = arena
+                    .definitions
+                    .get(*definition)
+                    .ok_or_else(|| CoreError::protocol("Unknown safety definition"))?;
+                let frame = CallFrame::new(arguments, captures, ctx);
+                evaluate(
+                    &definition.body,
+                    EvalContext {
+                        locals: &[],
+                        frame: Some(&frame),
+                        old: None,
+                        ..ctx
+                    },
+                    arena,
+                )
+            }
+            Self::Parameter { slot } | Self::Capture { slot } => {
+                let frame = ctx
+                    .frame
+                    .ok_or_else(|| CoreError::protocol("Missing lexical call frame"))?;
+                let bindings = if matches!(self, Self::Parameter { .. }) {
+                    &frame.arguments
+                } else {
+                    &frame.captures
+                };
+                bindings
+                    .get(*slot)
+                    .ok_or_else(|| CoreError::protocol("Invalid lexical reference"))?
+                    .evaluate(ctx, arena, evaluate)
+            }
+            _ => Err(CoreError::protocol("Expected a lexical reference")),
+        }
+    }
+    fn eval_scalar_operator(
+        &self,
+        ctx: EvalContext<'_>,
+        arena: &mut Arena,
+    ) -> Result<Scalar, CoreError> {
         Ok(match self {
-            Self::Literal { .. } | Self::Read { .. } | Self::Bound { .. } | Self::Old => {
-                return self.eval(ctx, arena);
-            }
-            Self::Data { value } => arena.data(value)?,
-            Self::UnmatchedCase { location } => {
-                return Err(CoreError::protocol(&format!(
-                    "Attempted to evaluate a CASE with no conditions true at {location}"
-                )));
-            }
             Self::Prime { argument } => argument.eval(EvalContext { prime: true, ..ctx }, arena)?,
             Self::Not { argument } => Scalar::Bool(!argument.eval(ctx, arena)?.boolean()?),
             Self::Neg { argument } => Scalar::Int(
@@ -692,6 +907,122 @@ impl Expression {
                 let value = value.eval(ctx, arena)?;
                 Scalar::Bool(domain.contains(value, ctx, arena)?)
             }
+            _ => return Err(CoreError::protocol("Expected a scalar operator")),
+        })
+    }
+    fn eval_enabled(&self, ctx: EvalContext<'_>, arena: &mut Arena) -> Result<Scalar, CoreError> {
+        let old = if arena.metadata.is_some() || !arena.definitions.is_empty() {
+            ctx.old
+        } else {
+            None
+        };
+        Ok(match self {
+            Self::Enabled {
+                branches,
+                subscript,
+            } => {
+                let current = if ctx.current.is_empty() || ctx.prime {
+                    ctx.next
+                        .iter()
+                        .map(|value| {
+                            value.ok_or_else(|| {
+                                CoreError::protocol("ENABLED requires assigned initial variables")
+                            })
+                        })
+                        .collect::<Result<Vec<_>, _>>()?
+                } else {
+                    ctx.current.to_vec()
+                };
+                let mut enabled = false;
+                for branch in branches {
+                    let mut next = vec![None; current.len()];
+                    visit_branch(
+                        branch,
+                        0,
+                        EvalContext {
+                            current: &current,
+                            next: &[],
+                            locals: ctx.locals,
+                            old,
+                            prime: false,
+                            frame: ctx.frame,
+                            evaluation_depth: ctx.evaluation_depth,
+                        },
+                        &mut next,
+                        arena,
+                        &mut |next, arena| {
+                            if let Some(subscript) = subscript {
+                                let context = EvalContext {
+                                    locals: ctx.locals,
+                                    frame: ctx.frame,
+                                    evaluation_depth: ctx.evaluation_depth + branch.steps.len() + 1,
+                                    old,
+                                    ..EvalContext::new(&current, next)
+                                };
+                                let before = subscript.eval(context, arena)?;
+                                let after = subscript.eval(
+                                    EvalContext {
+                                        prime: true,
+                                        ..context
+                                    },
+                                    arena,
+                                )?;
+                                if arena.equal(before, after)? {
+                                    return Ok(false);
+                                }
+                            }
+                            enabled = true;
+                            Ok(true)
+                        },
+                    )?;
+                    if enabled {
+                        break;
+                    }
+                }
+                Scalar::Bool(enabled)
+            }
+            _ => return Err(CoreError::protocol("Expected ENABLED")),
+        })
+    }
+    #[inline(never)]
+    fn eval_operator(&self, ctx: EvalContext<'_>, arena: &mut Arena) -> Result<Scalar, CoreError> {
+        Ok(match self {
+            Self::Literal { .. }
+            | Self::Read { .. }
+            | Self::Bound { .. }
+            | Self::Old
+            | Self::Frame { .. }
+            | Self::Call { .. }
+            | Self::Parameter { .. }
+            | Self::Capture { .. } => {
+                return self.eval(ctx, arena);
+            }
+            Self::Data { value } => arena.data(value)?,
+            Self::UnmatchedCase { location } => {
+                return Err(CoreError::protocol(&format!(
+                    "Attempted to evaluate a CASE with no conditions true at {location}"
+                )));
+            }
+            Self::Prime { .. }
+            | Self::Not { .. }
+            | Self::Neg { .. }
+            | Self::Add { .. }
+            | Self::Sub { .. }
+            | Self::Mul { .. }
+            | Self::Div { .. }
+            | Self::Mod { .. }
+            | Self::Pow { .. }
+            | Self::Eq { .. }
+            | Self::Ne { .. }
+            | Self::Lt { .. }
+            | Self::Le { .. }
+            | Self::Gt { .. }
+            | Self::Ge { .. }
+            | Self::And { .. }
+            | Self::Or { .. }
+            | Self::Implies { .. }
+            | Self::If { .. }
+            | Self::In { .. } => self.eval_scalar_operator(ctx, arena)?,
             Self::Set { values } | Self::Tuple { values } => {
                 let mut result = vec![];
                 for value in values {
@@ -1055,65 +1386,7 @@ impl Expression {
             Self::SequenceSet { .. } => {
                 return Err(CoreError::protocol("Sequence sets cannot be enumerated"));
             }
-            Self::Enabled {
-                branches,
-                subscript,
-            } => {
-                let current = if ctx.current.is_empty() || ctx.prime {
-                    ctx.next
-                        .iter()
-                        .map(|value| {
-                            value.ok_or_else(|| {
-                                CoreError::protocol("ENABLED requires assigned initial variables")
-                            })
-                        })
-                        .collect::<Result<Vec<_>, _>>()?
-                } else {
-                    ctx.current.to_vec()
-                };
-                let mut enabled = false;
-                for branch in branches {
-                    let mut next = vec![None; current.len()];
-                    visit_branch(
-                        branch,
-                        0,
-                        EvalContext {
-                            current: &current,
-                            next: &[],
-                            locals: ctx.locals,
-                            old: None,
-                            prime: false,
-                        },
-                        &mut next,
-                        arena,
-                        &mut |next, arena| {
-                            if let Some(subscript) = subscript {
-                                let context = EvalContext {
-                                    locals: ctx.locals,
-                                    ..EvalContext::new(&current, next)
-                                };
-                                let before = subscript.eval(context, arena)?;
-                                let after = subscript.eval(
-                                    EvalContext {
-                                        prime: true,
-                                        ..context
-                                    },
-                                    arena,
-                                )?;
-                                if arena.equal(before, after)? {
-                                    return Ok(false);
-                                }
-                            }
-                            enabled = true;
-                            Ok(true)
-                        },
-                    )?;
-                    if enabled {
-                        break;
-                    }
-                }
-                Scalar::Bool(enabled)
-            }
+            Self::Enabled { .. } => self.eval_enabled(ctx, arena)?,
         })
     }
 }
@@ -1127,6 +1400,10 @@ pub(crate) struct MembershipSet {
 #[derive(PartialEq, Eq, Hash)]
 enum MembershipKind {
     Finite(Scalar),
+    Range {
+        lower: i32,
+        upper: i32,
+    },
     Sequences(Arc<MembershipSet>),
     Functions {
         domain: Scalar,
@@ -1158,6 +1435,33 @@ impl MembershipSet {
         ctx: EvalContext<'_>,
         arena: &mut Arena,
     ) -> Result<Arc<Self>, CoreError> {
+        let ctx = ctx.descend(arena)?;
+        if matches!(
+            expression,
+            Expression::Frame { .. }
+                | Expression::Call { .. }
+                | Expression::Parameter { .. }
+                | Expression::Capture { .. }
+        ) {
+            return expression.eval_reference(ctx, arena, Self::eval);
+        }
+        if arena.metadata.is_some()
+            && let Expression::If {
+                condition,
+                consequent,
+                alternative,
+            } = expression
+        {
+            return Self::eval(
+                if condition.eval(ctx, arena)?.boolean()? {
+                    consequent
+                } else {
+                    alternative
+                },
+                ctx,
+                arena,
+            );
+        }
         let cached = arena.prepared_membership(expression);
         if let Some(Some(prepared)) = &cached {
             return Ok(Arc::clone(prepared));
@@ -1166,8 +1470,34 @@ impl MembershipSet {
             false
         } else {
             expression.is_context_free()
+                && arena
+                    .metadata
+                    .as_ref()
+                    .is_none_or(|metadata| metadata.is_context_free(expression))
         };
         let kind = match expression {
+            Expression::MapSet { bounds, body }
+                if arena.metadata.is_some()
+                    && matches!(
+                        (bounds.as_slice(), body.as_ref()),
+                        (
+                            [Binding {
+                                slot,
+                                tuple_size: None,
+                                domain: Domain::Range { .. },
+                            }],
+                            Expression::Bound { slot: body_slot }
+                        ) if slot == body_slot
+                    ) =>
+            {
+                let Domain::Range { lower, upper } = &bounds[0].domain else {
+                    unreachable!()
+                };
+                MembershipKind::Range {
+                    lower: lower.eval(ctx, arena)?.integer()?,
+                    upper: upper.eval(ctx, arena)?.integer()?,
+                }
+            }
             Expression::SequenceSet { argument } => {
                 MembershipKind::Sequences(Self::eval(argument, ctx, arena)?)
             }
@@ -1212,6 +1542,7 @@ impl MembershipSet {
             MembershipKind::Finite(value) | MembershipKind::Subsets(value) => {
                 mapping.get(*value) != *value
             }
+            MembershipKind::Range { .. } => false,
             MembershipKind::Sequences(set) => !Arc::ptr_eq(set, &set.remap(mapping)),
             MembershipKind::Functions { domain, range } => {
                 mapping.get(*domain) != *domain || !Arc::ptr_eq(range, &range.remap(mapping))
@@ -1226,6 +1557,10 @@ impl MembershipSet {
         let kind = match &self.kind {
             MembershipKind::Finite(value) => MembershipKind::Finite(mapping.get(*value)),
             MembershipKind::Subsets(value) => MembershipKind::Subsets(mapping.get(*value)),
+            MembershipKind::Range { lower, upper } => MembershipKind::Range {
+                lower: *lower,
+                upper: *upper,
+            },
             MembershipKind::Sequences(set) => MembershipKind::Sequences(set.remap(mapping)),
             MembershipKind::Functions { domain, range } => MembershipKind::Functions {
                 domain: mapping.get(*domain),
@@ -1243,13 +1578,23 @@ impl MembershipSet {
     fn contains_uncached(&self, value: Scalar, arena: &mut Arena) -> Result<bool, CoreError> {
         if !matches!(
             self.kind,
-            MembershipKind::Finite(_) | MembershipKind::Subsets(_)
+            MembershipKind::Finite(_) | MembershipKind::Subsets(_) | MembershipKind::Range { .. }
         ) && arena.model_membership(value)?
         {
             return Ok(false);
         }
         match &self.kind {
             MembershipKind::Finite(set) => arena.contains(value, *set),
+            MembershipKind::Range { lower, upper } => {
+                if lower > upper {
+                    return Ok(false);
+                }
+                if arena.model_membership(value)? {
+                    return Ok(false);
+                }
+                let value = value.integer()?;
+                Ok(*lower <= value && value <= *upper)
+            }
             MembershipKind::Subsets(set) => {
                 for element in arena.members(value)? {
                     arena.tick()?;
@@ -1313,6 +1658,7 @@ pub(crate) fn visit_bindings(
     arena: &mut Arena,
     visitor: &mut impl FnMut(EvalContext<'_>, &mut Arena) -> Result<bool, CoreError>,
 ) -> Result<bool, CoreError> {
+    let ctx = ctx.descend(arena)?;
     let Some(binding) = bindings.get(position) else {
         return visitor(ctx, arena);
     };
@@ -1376,20 +1722,47 @@ fn enumerate_functions(
     }
 }
 
+type BranchVisitor<'a> =
+    dyn FnMut(&mut [Option<Scalar>], &mut Arena) -> Result<bool, CoreError> + 'a;
+
 pub(crate) fn visit_branch(
     branch: &Branch,
     position: usize,
     ctx: EvalContext<'_>,
     next: &mut [Option<Scalar>],
     arena: &mut Arena,
-    visitor: &mut impl FnMut(&[Option<Scalar>], &mut Arena) -> Result<bool, CoreError>,
+    visitor: &mut BranchVisitor<'_>,
 ) -> Result<bool, CoreError> {
+    let ctx = ctx.descend(arena)?;
     arena.tick()?;
     let Some(step) = branch.steps.get(position) else {
         return visitor(next, arena);
     };
     let context = EvalContext { next, ..ctx };
     match step {
+        Step::Frame {
+            arguments,
+            captures,
+            branches,
+            ..
+        } => {
+            arena.consume(1)?;
+            let frame = CallFrame::new(arguments, captures, context);
+            let inner = EvalContext {
+                locals: &[],
+                frame: Some(&frame),
+                old: None,
+                ..ctx
+            };
+            for inner_branch in branches {
+                if visit_branch(inner_branch, 0, inner, next, arena, &mut |next, arena| {
+                    visit_branch(branch, position + 1, ctx, next, arena, visitor)
+                })? {
+                    return Ok(true);
+                }
+            }
+            Ok(false)
+        }
         Step::Guard { expression } => {
             if expression.eval(context, arena)?.boolean()? {
                 visit_branch(branch, position + 1, ctx, next, arena, visitor)
@@ -1783,6 +2156,8 @@ mod tests {
             locals: &locals,
             old: Some(Scalar::Int(-1)),
             prime: false,
+            frame: None,
+            evaluation_depth: 0,
         };
         let mut arena = Arena::new(0);
         for (expression, expected) in [
