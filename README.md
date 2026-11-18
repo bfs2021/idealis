@@ -107,6 +107,20 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
+## operatorを共有するIR v2
+
+`compileTlaSource(core, { source, config, irVersion: 2 })`またはTS frontendの`compileTlaSafety({ source, config, irVersion: 2 })`で、operatorの式定義を共有できる。既定はv1。引数はcallerの字句環境を保持し、要求時のcurrent/next/primeで評価する。未使用引数を先に実行せず、callと引数要求はworkへ課金する。
+
+v2のmodule連結・設定置換・SYMMETRY、action templateの共有は未対応。TS frontendとRust frontendの受理範囲も異なる。公開`TCommit`のRM=8はRustのv1/v2とTLCで6,816状態・53,513生成が一致し、Quintの6生成物・正常/故障12設定も検査する。これらは有限scopeでの照合で、THEOREMの証明ではない。[IR契約と制限](docs/safety-ir-v2.md)を参照。
+
+| 固定したsharing chain  |                v1 | 明示v2 |
+| ---------------------- | ----------------: | -----: |
+| 深さ10のIR bytes       |           330,878 |  4,707 |
+| 深さ10のcompile要求 ms |            35.534 |  0.359 |
+| 深さ60のIR bytes       | nesting上限で拒否 | 24,557 |
+
+compileは常駐native JSONLの要求・IR応答を含む中央値。未選択branchのinlineを除く効果で、指数的な評価仕事をなくしたものではない。公開TCommitの新規Rust processは統合前114.85 ms、統合後v1が124.05 ms、v2が129.32 msで、実行費用の増加も残る。[費用・profile・採否](evals/iterations/0062-p0-checker.md)を参照。
+
 ## node関数に限定したSYMMETRY
 
 Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value集合を指定できる。全Nodesをdomainに持つInt/Bool関数の値をnodeごとの行へまとめ、複数関数の相関と具体的な反例を保って状態を同一視する。3ノード・3値のcounterは27状態から10状態へ縮約した。7ノード・6値では279,936→792状態となり、Rust逐次の起動込み中央値は673.5→36.5 ms（約18.5倍）、prepared探索は633.2→3.89 ms（約163倍）だった。この限定したモデルでの結果で、全TLA+への速度保証ではない。
@@ -159,18 +173,20 @@ Apple M5 arm64、Node 24.22.2、tla-ts 0.0.10、固定arm64 Java/TLCを使用し
 <!-- checker-comparison:start -->
 ## モデル検査の速度比較
 
-同じTLA+ source/configを各回別processで解析し、完全探索した起動込み時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、TLC v1.7.4 / Temurin 21.0.13+9で測った。
+0062の同一runで、同じTLA+ source/configを各回別processから完全探索した時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、tla2tools v1.7.4 / Temurin 21.0.13+9。native/Wasmは共通のTS frontend・Node起動・IR転送を含むIR v1経路で、Rustのsource APIだけの時間とは分ける。
 
 | モデル      |    状態数 | tla-ts 1 worker | TLC 1 worker | TLC 8 workers | idealis Wasm 1 worker | idealis native 1 worker | idealis native 8 workers |
 | ----------- | --------: | --------------: | -----------: | ------------: | --------------------: | ----------------------: | -----------------------: |
-| カウンタ群  | 5,308,416 |           5.190 |        6.134 |         6.476 |                 3.818 |                   2.851 |                    3.646 |
-| Boolean関数 | 1,048,576 |           5.388 |       12.647 |         4.444 |                18.666 |                   9.345 |                    5.101 |
-| チャネル群  | 2,097,152 |          16.371 |       23.825 |         6.807 |                31.415 |                  20.733 |                    9.537 |
-| 幅1のring   | 1,000,000 |           0.410 |        0.900 |         1.440 |                 0.244 |                   0.186 |                    0.187 |
+| カウンタ群  | 5,308,416 |           6.490 |        6.913 |         7.922 |                 4.195 |                   3.218 |                    2.968 |
+| Boolean関数 | 1,048,576 |           5.424 |       12.781 |         4.325 |                 4.613 |                   3.485 |                    2.440 |
+| チャネル群  | 2,097,152 |          15.728 |       23.247 |         6.285 |                19.977 |                  13.809 |                    5.497 |
+| 幅1のring   | 1,000,000 |           0.407 |        0.926 |         1.474 |                 0.255 |                   0.182 |                    0.181 |
 
-Wasm列はNode上の実行で、ブラウザの速度ではない。nativeの幅1モデルはpoolを起動しない。tla-tsは今回1 workerのみを測っており、その並列性能との比較はしていない。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。idealisは対応する有限fragmentを検査し、TLA+全体の互換性やモデル全般の速度を保証する結果ではない。
+Wasm列はNode上の値。worker数は要求上限で、nativeの幅1モデルはpoolを起動しない。tla-tsは1 workerのみを測った。TLCとNodeのheap設定は8 GiBで、共通の厳密なRSS上限ではない。非専用ホストの負荷変動を含む。対応する有限fragmentの測定で、モデル全般の速度を保証しない。
 
-[全sample・最小/最大・条件と再実行](evals/iterations/0022-readme-comparison.md)を保存した。表は同じrunから生成し、過去の値を混在させていない。常駐APIの比較は[別の0016測定](evals/iterations/0016-checker-benchmark.md#apiを再利用した全探索)を参照。上の起動込み時間と同じ指標として扱わない。
+nativeの8-worker要求は同じrunのTLC 8 workers比でcounter 2.67倍、function 1.77倍、channel 1.14倍。共有IR統合前との比較ではfunctionのnative 1/8が約8%/6%遅くなった。channelのnative 8は速くなったが、変更前の反復間の幅も大きい。Wasmのchannelは同じrunのtla-tsより約27%遅い。
+
+[全sample・最小/最大・profileと条件](evals/iterations/0062-p0-checker.md)を保存する。旧[0022の4モデル比較](evals/iterations/0022-readme-comparison.md)と同じ表へ値を混ぜない。常駐APIやIR v2の費用は別に記録する。
 
 <!-- checker-comparison:end -->
 

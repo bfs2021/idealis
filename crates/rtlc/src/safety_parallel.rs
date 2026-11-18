@@ -92,7 +92,7 @@ pub(super) fn is_expensive(program: &SafetyProgram) -> bool {
         .any(|step| match step {
             Step::Assign { value, .. } => !value.is_scalar_cost(),
             Step::Guard { expression } => !expression.is_scalar_cost(),
-            Step::Bind { .. } | Step::Choose { .. } => true,
+            Step::Frame { .. } | Step::Bind { .. } | Step::Choose { .. } => true,
         })
         || program
             .invariants

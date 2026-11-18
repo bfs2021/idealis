@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0062: 共有IRと最新版の比較](iterations/0062-p0-checker.md)はdraft実装を0061へ統合し、4モデル9経路、Quint生成物と原本TCommit、IRの線形成長、profileとv1の費用増を比較する。静的visitorは撤去し、共有IRは明示選択で採用する。
+
 [0061: symmetry拡張と探索削減](iterations/0061-symmetry-next.md)は、record・集合、代表展開、並列化、命令ID、限定PORを順に試した。命令IDは後退して撤去し、採用した条件・具体反例の再生・計数の違いを記録する。
 
 [0053: TLCの24不一致解消](iterations/0053-tlc-standard-modules.md)は標準moduleを固定して参照pathを渡し、int32最小値のtrace表記も修正した。155件の検査・32件の確認・155件の保存再生で不一致0を確認した。
@@ -15,6 +17,7 @@
 [0049: 時間論理のmicro tuning](iterations/0049-temporal-tuning.md)は、profileに基づき小さい式集合をbit集合へ置き換えた。交互測定で時間論理のcheckは1.35-1.42倍となり、156ケース・各10要求でbefore/afterの完全応答を照合した。対照8件に残る後退も記録している。
 
 [0048: 量化fairnessと標準演算](iterations/0048-fairness-operators.md)は、SPECIFICATIONの定数有限domain上のfairnessとSelectSeq / SortSeq / Assertを追加した。52ケースのnative/Wasm/TLC比較、4反例の再生、Chromiumと27本のCriterionで対応と費用を検査した。
+[0048: operator定義の共有](iterations/0048-operator-sharing.md)は、safety IR v2で式定義を共有する変更を、実装の前に置いた回帰とRedで検査する。既存239入力と追加17入力でv1の出力が変わらないこと、17入力のTLC照合、両frontendの解析の一致（4236件）、深い公開IRの破棄で許す確保の上限を扱う。
 
 [0047: TLA+モジュールと設定置換](iterations/0047-module-linking.md)は、外部EXTENDS・引数なしINSTANCE・LOCAL・WITH・設定置換を扱う。37ケースのnative/Wasm/TLC比較、3反例の再生、Chromiumと17本のCriterionで対応と初期費用を検査した。
 

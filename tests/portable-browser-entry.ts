@@ -2,6 +2,7 @@ import {
   coverageBounds,
   coverageInputs,
 } from "../evals/action-coverage/cases.js";
+import { sharing } from "../evals/p0-checker/inputs.js";
 import { monotone, nodeSets, recordNodes } from "../evals/symmetry/cases.js";
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
@@ -367,6 +368,32 @@ export const runSymmetry = async () => {
     },
     originalStates: original.states,
     por: { status: por.status, states: por.states, generated: por.generated },
+    isolated: globalThis.crossOriginIsolated,
+  };
+};
+
+export const runSharedIr = async () => {
+  const core = await createPortableWasm(
+    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+  );
+  const bounds = { maxDepth: 64, maxStates: 10000, maxWork: 1000000 };
+  const program = compileTlaSource(core, { ...sharing(60), irVersion: 2 });
+  const result = checkSafety(core, program, bounds);
+  const bounded = checkTlaSource(
+    core,
+    { ...sharing(60, true), irVersion: 2 },
+    { ...bounds, maxWork: 256 },
+  );
+  return {
+    version: program.version,
+    status: result.status,
+    states: result.states,
+    generated: result.generated,
+    bounded: {
+      status: bounded.status,
+      reason: bounded.reason,
+      work: bounded.work,
+    },
     isolated: globalThis.crossOriginIsolated,
   };
 };

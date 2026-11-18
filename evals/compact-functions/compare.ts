@@ -74,6 +74,12 @@ const routes = [
     binary: resolve(after, "idealis_core.wasm"),
   },
 ] as const;
+const largeInputs = cases("large").filter(
+  (input) =>
+    process.env.IDEALIS_COMPACT_ALL_MODELS === "1" ||
+    input.name === "function-cube" ||
+    input.name === "parallel-channels",
+);
 await save("manifest.json", {
   plan: process.env.IDEALIS_COMPACT_PLAN ?? "0056",
   environment: await environment(java, jar, archive),
@@ -81,6 +87,7 @@ await save("manifest.json", {
   bounds: { maxDepth: 10000000, maxStates: 10000000, maxWork: 4000000000 },
   warmup: 1,
   samples: 3,
+  models: largeInputs.map((input) => input.name),
   scope: "fresh source-to-result process, same TLA/config and complete graph",
   snapshots: await Promise.all(
     [before, after].map(async (root) =>
@@ -117,10 +124,7 @@ try {
           status: broken ? "invariant-violation" : "complete",
         });
       }
-  for (const input of cases("large").filter(
-    (item) =>
-      item.name === "function-cube" || item.name === "parallel-channels",
-  )) {
+  for (const input of largeInputs) {
     for (let iteration = 0; iteration < 4; iteration++) {
       const rotated = routes.map(
         (_, index) => routes[(index + iteration) % routes.length],

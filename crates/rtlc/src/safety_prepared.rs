@@ -11,6 +11,13 @@ pub(crate) struct PreparedProgram<'a> {
 impl<'a> PreparedProgram<'a> {
     pub fn new(program: &'a SafetyProgram) -> Self {
         let mut roots = Vec::new();
+        roots.extend(
+            program
+                .definitions
+                .iter()
+                .flatten()
+                .map(|definition| &definition.body),
+        );
         register_branch_memberships(&program.initial, &mut |expression| roots.push(expression));
         register_branch_memberships(&program.next, &mut |expression| roots.push(expression));
         roots.extend(
@@ -44,6 +51,15 @@ impl<'a> PreparedProgram<'a> {
                     for bound in bounds {
                         roots.extend(bound.domain.children());
                     }
+                    formulas.push(formula);
+                }
+                TemporalFormula::Frame {
+                    arguments,
+                    captures,
+                    formula,
+                    ..
+                } => {
+                    roots.extend(arguments.iter().chain(captures));
                     formulas.push(formula);
                 }
             }

@@ -1,0 +1,151 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "apalacheRelease": "0.56.1",
+  "apalacheModulePath": "tla2sany/StandardModules/Apalache.tla",
+  "apalacheModuleSha256": "a9115b404e72c58fd085f81bc59cc918f8adac49feabfb57f8e285bc7ab5cfac",
+  "environment": {
+    "java": "OpenJDK 21.0.11, Temurin-21.0.11+10-LTS",
+    "workers": 1,
+    "heap": "256m",
+    "timeoutSeconds": 60
+  },
+  "command": "timeout 60 java -Xmx256m -Djava.io.tmpdir=<tlc-tmp> -cp <tlc-jar> tlc2.TLC -workers 1 -nowarning Differential.tla",
+  "streams": "stdout and stderr merged in capture order",
+  "cases": [
+    {
+      "name": "sharing-action-frame-enabled-value",
+      "source": "sharing-action-frame-enabled-value/Differential.tla",
+      "config": "sharing-action-frame-enabled-value/Differential.cfg",
+      "sourceSha256": "c7cd4b25ce45e89f1639803c0241eb4ea993e707bbfc59d71b6a898cbd20c2c6",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-enabled-value.log",
+      "logSha256": "33edb6af0a9b44caa6579abad80d3b6c920345eba6e5583a761ca75a041845f1",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-action-frame-temporal",
+      "source": "sharing-action-frame-temporal/Differential.tla",
+      "config": "sharing-action-frame-temporal/Differential.cfg",
+      "sourceSha256": "e97cb4213863c20ea35db000aa15dd30f905f57ac5df095f8975bf170b21c076",
+      "configSha256": "ea1efc087945ad1d01bb697c389b9fdee410fff61a8974f984d25ee4c25899b6",
+      "log": "sharing-action-frame-temporal.log",
+      "logSha256": "ead581d1de898735f760c27d4874c866b0614787ea73be0ee27b6305fb0d1acd",
+      "exit": 13,
+      "status": "liveness-violation",
+      "message": "Temporal properties were violated.",
+      "states": 1,
+      "generated": 2,
+      "violation": {
+        "name": "P",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ],
+        "loopStart": 0,
+        "loopAction": "<stuttering>"
+      }
+    },
+    {
+      "name": "sharing-action-frame-prime",
+      "source": "sharing-action-frame-prime/Differential.tla",
+      "config": "sharing-action-frame-prime/Differential.cfg",
+      "sourceSha256": "f376d40610160ba0cb7f649f704f5f9e374759b4e618dbc1cabe7e2fc1716a79",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-prime.log",
+      "logSha256": "70d9bd6e36911daf9fc991a080950d879a2ae0dc50a87282a2d2c42e9c2c7675",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 1,
+      "states": 2,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-action-frame-generative",
+      "source": "sharing-action-frame-generative/Differential.tla",
+      "config": "sharing-action-frame-generative/Differential.cfg",
+      "sourceSha256": "d74f5d372895845d0c906b5967eb1b295152e0627e5f78b8bbb6512f37b1e49a",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-generative.log",
+      "logSha256": "40365f3ec63d9696bab0c83846ff63b7f41a8db4c1e64532b17e75dd39929885",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-action-frame-temporal-state",
+      "source": "sharing-action-frame-temporal-state/Differential.tla",
+      "config": "sharing-action-frame-temporal-state/Differential.cfg",
+      "sourceSha256": "74284f8c9c245e9041d261fc79c3cca48d4286dd83b3dfa581128f1d5636c41f",
+      "configSha256": "ea1efc087945ad1d01bb697c389b9fdee410fff61a8974f984d25ee4c25899b6",
+      "log": "sharing-action-frame-temporal-state.log",
+      "logSha256": "3ffc2d8ee8992317b72d2e719a075660c81ed5b156f1d3f001444444c7ccd918",
+      "exit": 255,
+      "status": "input-error",
+      "message": "TLC cannot handle the temporal formula line 4, col 6 to line 4, col 36 of module Differential",
+      "location": "line 4, col 6 to line 4, col 36 of module Differential"
+    },
+    {
+      "name": "sharing-temporal-true-step3e-b",
+      "source": "sharing-temporal-true-step3e-b/Differential.tla",
+      "config": "sharing-temporal-true-step3e-b/Differential.cfg",
+      "sourceSha256": "363ea0d29b0426be38fc51b88d116f20e152d22394714316a8201decec6590ce",
+      "configSha256": "ea1efc087945ad1d01bb697c389b9fdee410fff61a8974f984d25ee4c25899b6",
+      "log": "sharing-temporal-true-step3e-b.log",
+      "logSha256": "adf16bc2374fa44e232fb8adb931a3e83a4a35c66aa5a01e7441b623b9711649",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-temporal-forall-step3e-b",
+      "source": "sharing-temporal-forall-step3e-b/Differential.tla",
+      "config": "sharing-temporal-forall-step3e-b/Differential.cfg",
+      "sourceSha256": "e50c4699121d4e9750d0ea56a9c1dcd5630bbd8de670d953bc875bc685957138",
+      "configSha256": "ea1efc087945ad1d01bb697c389b9fdee410fff61a8974f984d25ee4c25899b6",
+      "log": "sharing-temporal-forall-step3e-b.log",
+      "logSha256": "1716cd8299d7b70199878fd33a0121e524d5613206d9dbb030fe31e7834108a4",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 #[path = "safety_functions.rs"]
 mod functions;
-use crate::ir::{Expression, Scalar};
+use crate::ir::{Definition, Expression, Scalar};
 use crate::safety_expressions::MembershipSet;
 use crate::safety_prepared::PreparedProgram;
 #[cfg(not(target_arch = "wasm32"))]
@@ -68,6 +68,8 @@ type RegisteredMembership = HashMap<usize, Option<Option<Arc<MembershipSet>>>>;
 type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
 
 pub(crate) struct Arena<'a> {
+    pub definitions: &'a [Definition],
+    pub metadata: Option<Arc<crate::safety_definitions::Metadata<'a>>>,
     base: Option<&'a Arena<'a>>,
     prepared: Option<&'a PreparedProgram<'a>>,
     constants: Vec<Option<Scalar>>,
@@ -92,6 +94,8 @@ pub(crate) struct Arena<'a> {
 impl<'scope> Arena<'scope> {
     pub fn new(maximum: u32) -> Self {
         Self {
+            definitions: &[],
+            metadata: None,
             base: None,
             prepared: None,
             constants: Vec::new(),
@@ -165,6 +169,8 @@ impl<'scope> Arena<'scope> {
     #[cfg(not(target_arch = "wasm32"))]
     pub fn fork<'a>(&'a self, budget: &'a WorkBudget, worker: usize) -> Arena<'a> {
         let mut worker = Arena {
+            definitions: self.definitions,
+            metadata: self.metadata.clone(),
             base: Some(self),
             prepared: self.prepared,
             constants: vec![None; self.constants.len()],

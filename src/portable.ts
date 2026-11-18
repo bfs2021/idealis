@@ -25,6 +25,7 @@ export type {
   SafetyResult,
   ShrinkResult,
   ShrinkVerdict,
+  TlaSourceOptions,
 } from "./contracts.js";
 export {
   checkFiniteHistory,

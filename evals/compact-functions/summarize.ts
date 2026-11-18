@@ -31,7 +31,19 @@ const result: Result = JSON.parse(
 );
 assert.equal(result.status, "complete");
 assert.equal(result.controls.length, 72);
-assert.equal(result.samples.length, 72);
+const manifest: { readonly models?: readonly string[] } = JSON.parse(
+  await readFile(join(comparison, "manifest.json"), "utf8"),
+);
+const expectedModels = manifest.models ?? [
+  "function-cube",
+  "parallel-channels",
+];
+assert.equal(new Set(expectedModels).size, expectedModels.length);
+assert.deepEqual(
+  [...new Set(result.samples.map((sample) => sample.input))].sort(),
+  [...expectedModels].sort(),
+);
+assert.equal(result.samples.length, expectedModels.length * 9 * 4);
 assert.ok(result.files?.length);
 for (const file of result.files)
   assert.equal(
@@ -56,9 +68,8 @@ const stats = (values: readonly number[]) => {
   };
 };
 const models = cases("large")
-  .filter(
-    (input) =>
-      input.name === "function-cube" || input.name === "parallel-channels",
+  .filter((input) =>
+    result.samples.some((sample) => sample.input === input.name),
   )
   .map((input) => {
     const selected = result.samples.filter(

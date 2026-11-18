@@ -17,6 +17,7 @@ pub fn ring() -> SafetyProgram {
         symmetry: None,
         format: "modelt.safety-program".into(),
         version: 1,
+        definitions: None,
         name: "Ring".into(),
         variables: vec!["x".into()],
         initial: vec![Branch {

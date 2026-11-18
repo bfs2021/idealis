@@ -165,7 +165,7 @@ impl SafetyProgram {
         options: SafetyOptions,
     ) -> Result<R::Output, CoreError> {
         if self.format != "modelt.safety-program"
-            || self.version != 1
+            || !matches!(self.version, 1 | 2)
             || self.name.is_empty()
             || self.variables.is_empty()
             || self.variables.len() > 256
@@ -178,6 +178,7 @@ impl SafetyProgram {
         }
         let prepared = PreparedProgram::new(self);
         let mut arena = Arena::with_prepared(bounds.max_work, &prepared);
+        arena.definitions = self.definitions.as_deref().unwrap_or_default();
         let mut search = Search::<R> {
             program: self,
             bounds,
@@ -222,8 +223,22 @@ impl SafetyProgram {
 impl<'program, R: Recording> Search<'program, R> {
     fn run(&mut self, arena: &mut Arena<'program>, workers: usize) -> Result<(), CoreError> {
         let program = self.program;
-        validate_branches(&program.initial, program.variables.len(), 0, 0)?;
-        validate_branches(&program.next, program.variables.len(), 1, 0)?;
+        let metadata = if program.version == 2 {
+            Some(std::sync::Arc::new(
+                crate::safety_definitions::validate_program(program)?,
+            ))
+        } else {
+            if program.definitions.is_some() {
+                return Err(CoreError::protocol("Definitions require safety IR v2"));
+            }
+            validate_branches(&program.initial, program.variables.len(), 0, 0)?;
+            validate_branches(&program.next, program.variables.len(), 1, 0)?;
+            None
+        };
+        arena.metadata = metadata.clone();
+        for definition in arena.definitions {
+            arena.register_memberships(&definition.body);
+        }
         if self.options.partial_order {
             self.partial_order = Some(PartialOrder::prepare(program));
         }
@@ -241,15 +256,19 @@ impl<'program, R: Recording> Search<'program, R> {
             arena.register_memberships(expression)
         });
         for predicate in program.invariants.iter().chain(&program.initial_properties) {
-            predicate
-                .expression
-                .validate(program.variables.len(), 2, 0)?;
-            arena.register_memberships(&predicate.expression);
-            if predicate.expression.is_constant()
-                && !predicate
+            if metadata.is_none() {
+                predicate
                     .expression
-                    .eval(EvalContext::new(&[], &[]), arena)?
-                    .boolean()?
+                    .validate(program.variables.len(), 2, 0)?;
+            }
+            arena.register_memberships(&predicate.expression);
+            if metadata.as_ref().map_or_else(
+                || predicate.expression.is_constant(),
+                |metadata| metadata.is_constant(&predicate.expression),
+            ) && !predicate
+                .expression
+                .eval(EvalContext::new(&[], &[]), arena)?
+                .boolean()?
             {
                 return Err(CoreError::protocol(
                     "Constant invariant or property is false",
@@ -261,27 +280,37 @@ impl<'program, R: Recording> Search<'program, R> {
             .iter()
             .chain(&program.action_constraints)
         {
-            predicate
-                .expression
-                .validate(program.variables.len(), 1, 0)?;
+            if metadata.is_none() {
+                predicate
+                    .expression
+                    .validate(program.variables.len(), 1, 0)?;
+            }
             arena.register_memberships(&predicate.expression);
         }
         for predicate in &program.constraints {
-            predicate
-                .expression
-                .validate(program.variables.len(), 2, 0)?;
+            if metadata.is_none() {
+                predicate
+                    .expression
+                    .validate(program.variables.len(), 2, 0)?;
+            }
             arena.register_memberships(&predicate.expression);
         }
         for property in &program.properties {
-            property.formula.validate(program.variables.len(), 0)?;
+            if metadata.is_none() {
+                property.formula.validate(program.variables.len(), 0)?;
+            }
         }
         for fairness in &program.fairness {
-            fairness.validate(program.variables.len(), 0)?;
+            if metadata.is_none() {
+                fairness.validate(program.variables.len(), 0)?;
+            }
         }
         for predicate in &program.assumptions {
-            predicate
-                .expression
-                .validate(program.variables.len(), 3, 0)?;
+            if metadata.is_none() {
+                predicate
+                    .expression
+                    .validate(program.variables.len(), 3, 0)?;
+            }
             arena.register_memberships(&predicate.expression);
             if !predicate
                 .expression

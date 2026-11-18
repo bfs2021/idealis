@@ -9,6 +9,7 @@ const before = process.argv[2];
 const after = process.argv[3];
 const output = process.argv[4];
 const binaryName = process.argv[5] ?? "wire-bench";
+const filter = process.argv[6];
 assert.ok(binaryName === "wire-bench" || binaryName === "safety-bench");
 assert.ok(before && after && output);
 const metadata = await Promise.all(
@@ -29,15 +30,19 @@ assert.equal(metadata[0].benchSha256, metadata[1].benchSha256);
 await mkdir(output);
 await writeFile(
   join(output, "manifest.json"),
-  `${JSON.stringify({ metadata, cpu: cpus()[0]?.model, sampleSize: 20, warmupMs: 500, measurementMs: 1000, order: ["before", "after", "after", "before"] }, null, 2)}\n`,
+  `${JSON.stringify({ metadata, filter, cpu: cpus()[0]?.model, sampleSize: 20, warmupMs: 500, measurementMs: 1000, order: ["before", "after", "after", "before"] }, null, 2)}\n`,
   { flag: "wx" },
 );
 for (const [index, root] of [before, after, after, before].entries()) {
   const directory = resolve(output, String(index));
   await mkdir(directory);
-  const log = execFileSync(resolve(root, binaryName), ["--bench"], {
-    env: { ...process.env, CARGO_TARGET_DIR: directory },
-  });
+  const log = execFileSync(
+    resolve(root, binaryName),
+    ["--bench", ...(filter ? [filter] : [])],
+    {
+      env: { ...process.env, CARGO_TARGET_DIR: directory },
+    },
+  );
   await writeFile(join(directory, "stdout.log"), log, { flag: "wx" });
 }
 console.log(`Saved four isolated Criterion runs: ${output}`);

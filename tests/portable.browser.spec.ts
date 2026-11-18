@@ -150,3 +150,28 @@ test("reduces a model-value symmetry group in Chromium without host imports", as
     isolated: false,
   });
 });
+
+test("executes shared operator IR and bounds exponential work in Chromium", async ({
+  page,
+}) => {
+  await page.goto(origin);
+  const result = await page.evaluate(async () => {
+    const api: unknown = Reflect.get(globalThis, "portableBrowser");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runSharedIr" in api) ||
+      typeof api.runSharedIr !== "function"
+    )
+      throw new Error("Missing shared IR browser API");
+    return api.runSharedIr();
+  });
+  expect(result).toEqual({
+    version: 2,
+    status: "complete",
+    states: 1,
+    generated: 2,
+    bounded: { status: "bounded", reason: "work", work: 256 },
+    isolated: false,
+  });
+});

@@ -28,7 +28,7 @@ fn host_replay_preserves_choices_messages_and_recovery() {
             &[Value::Int("0".into()), Value::Int("1".into())],
         )
         .unwrap();
-    let Value::Int(index) = choice else {
+    let Value::Int(index) = &choice else {
         panic!("expected index")
     };
     host.deliver(index.parse().unwrap()).unwrap();

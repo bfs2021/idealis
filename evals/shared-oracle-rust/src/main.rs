@@ -41,12 +41,12 @@ struct Execution {
     replay_calls: Calls,
 }
 
-fn native_value(value: Value) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
-    match value {
-        Value::String(value) => Ok(value.into()),
+fn native_value(mut value: Value) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
+    match &mut value {
+        Value::String(value) => Ok(std::mem::take(value).into()),
         Value::Int(value) => Ok(value.parse::<i64>()?.into()),
         Value::Record(fields) => Ok(serde_json::Value::Object(
-            fields
+            std::mem::take(fields)
                 .into_iter()
                 .map(|(key, value)| Ok((key, native_value(value)?)))
                 .collect::<Result<_, Box<dyn std::error::Error>>>()?,

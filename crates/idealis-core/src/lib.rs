@@ -1,4 +1,5 @@
 mod finite;
+pub use rtla_compiler::{CompileOptions, IrVersion};
 pub use rtlc::{
     CoreError, SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport,
     SafetyOptions, SafetyProgram, SafetyResult, Value,
@@ -19,13 +20,22 @@ mod wasm;
 use serde::{Deserialize, Serialize};
 
 pub fn compile_tla(source: &str, config: &str) -> Result<SafetyProgram, CoreError> {
-    compile_tla_bundle(source, config, &BTreeMap::new())
+    compile_tla_with_options(source, config, CompileOptions::default())
+}
+
+pub fn compile_tla_with_options(
+    source: &str,
+    config: &str,
+    options: CompileOptions,
+) -> Result<SafetyProgram, CoreError> {
+    compile_tla_bundle(source, config, &BTreeMap::new(), options)
 }
 
 fn compile_tla_bundle(
     source: &str,
     config: &str,
     sources: &BTreeMap<String, String>,
+    options: CompileOptions,
 ) -> Result<SafetyProgram, CoreError> {
     if sources.len() > 256 {
         return Err(CoreError::protocol("source bundle exceeds 256 modules"));
@@ -47,9 +57,9 @@ fn compile_tla_bundle(
         modules.push(module);
     }
     let result = if modules.is_empty() {
-        rtla_compiler::compile(&module, &config)
+        rtla_compiler::compile_with_options(&module, &config, options)
     } else {
-        rtla_compiler::compile_modules(&module, &config, &modules)
+        rtla_compiler::compile_modules_with_options(&module, &config, &modules, options)
     };
     result.map_err(|error| CoreError::protocol(&error.to_string()))
 }
@@ -147,6 +157,10 @@ pub enum Response {
     Transitions { transitions: Vec<Transition> },
     Observation { observation: Value },
 }
+fn default_ir_version() -> u8 {
+    1
+}
+#[allow(non_snake_case)]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Request {
@@ -155,12 +169,16 @@ pub enum Request {
         config: String,
         #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
         modules: BTreeMap<String, String>,
+        #[serde(default = "default_ir_version")]
+        irVersion: u8,
     },
     CheckTla {
         source: String,
         config: String,
         #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
         modules: BTreeMap<String, String>,
+        #[serde(default = "default_ir_version")]
+        irVersion: u8,
         bounds: SafetyBounds,
     },
     #[cfg(not(target_arch = "wasm32"))]
@@ -495,16 +513,35 @@ impl Engine {
                 source,
                 config,
                 modules,
+                irVersion,
             } => Ok(Message::Compiled {
-                program: compile_tla_bundle(&source, &config, &modules)?,
+                program: compile_tla_bundle(
+                    &source,
+                    &config,
+                    &modules,
+                    CompileOptions {
+                        irVersion: IrVersion::try_from(irVersion)
+                            .map_err(|error| CoreError::protocol(&error.to_string()))?,
+                    },
+                )?,
             }),
             Request::CheckTla {
                 source,
                 config,
                 modules,
+                irVersion,
                 bounds,
             } => Ok(Message::Safety {
-                result: compile_tla_bundle(&source, &config, &modules)?.check(bounds)?,
+                result: compile_tla_bundle(
+                    &source,
+                    &config,
+                    &modules,
+                    CompileOptions {
+                        irVersion: IrVersion::try_from(irVersion)
+                            .map_err(|error| CoreError::protocol(&error.to_string()))?,
+                    },
+                )?
+                .check(bounds)?,
             }),
             #[cfg(not(target_arch = "wasm32"))]
             Request::CheckSafetyParallel {

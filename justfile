@@ -679,6 +679,28 @@ quint-test: portable-build
   pnpm build
   node --test dist/evals/quint-generated/contract-test.js
 
+analysis-test: portable-build rtla-build
+  cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
+  pnpm build
+  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js
+
+# Freeze binaries first. These recipes do not rebuild Rust during measurement.
+p0-corpus before after java jar archive run:
+  pnpm build
+  node dist/evals/p0-checker/corpus.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+p0-profile binary run:
+  pnpm build
+  node dist/evals/p0-checker/profile.js {{quote(binary)}} {{quote(run)}}
+
+p0-comparison before after java jar archive run:
+  pnpm build
+  IDEALIS_COMPACT_ALL_MODELS=1 IDEALIS_COMPACT_PLAN=0062-p0-checker node dist/evals/compact-functions/compare.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+p0-verify run:
+  pnpm build
+  node dist/evals/p0-checker/verify.js {{quote(run)}}
+
 quint-generate output endpoint apalache_jar:
   pnpm build
   node dist/evals/quint-generated/generate.js {{quote(output)}} {{quote(endpoint)}} {{quote(apalache_jar)}}

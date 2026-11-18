@@ -81,6 +81,9 @@ jobs:
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
+      - run: pnpm rtla:build
+      - run: cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
+      - run: node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js
       - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
       - run: node --test dist/evals/quint-generated/contract-test.js
       - run: node --test dist/evals/frontier-safety/contract-test.js

@@ -81,6 +81,16 @@ const scopes: readonly CrateScope[] = [
         topic:
           "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
       },
+      {
+        path: "src/typed_expr.rs",
+        topic:
+          "明示v2の型付きexpression lowering、共有callとframe-localなbinder、v1だけのsource演算との区別",
+      },
+      {
+        path: "src/typed_lower.rs",
+        topic:
+          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、action template非共有と未対応module連結",
+      },
     ],
   },
   {
@@ -89,7 +99,6 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/ir.rs",
         topic: "IRの値と式・予算・結果の公開契約",
-        context: ["src/value.rs", "src/safety.rs"],
       },
       {
         path: "src/safety.rs",
@@ -134,6 +143,22 @@ const scopes: readonly CrateScope[] = [
         topic:
           "immutable domain共有、Boolと整数の別bit表現、membershipの論理work、worker参照とremap、hash衝突の完全比較",
         context: ["src/safety_functions.rs"],
+      },
+      {
+        path: "src/safety_definitions.rs",
+        topic:
+          "v2の定義graph、ID/arity/capture/phaseとframe-local slotの検証、metadataと再帰の拒否",
+      },
+      {
+        path: "src/safety_expressions.rs",
+        contains: "fn eval_reference<T>(",
+        topic:
+          "call-by-nameの要求時評価、callerのlexical環境とphase、callと引数のwork課金。値のmemoizationとの区別",
+      },
+      {
+        path: "src/bounded_drop.rs",
+        topic:
+          "深いIR/Valueの破棄を32段の再帰とworklistで制限する。評価・compileの既存深さ上限とは区別する",
       },
     ],
   },
@@ -368,11 +393,22 @@ export const checkSupport = async (
   }
 };
 
-const manifestFor = (view: SourceView, scope: CrateScope): DocumentManifest => {
+const manifestFor = async (
+  view: SourceView,
+  scope: CrateScope,
+): Promise<DocumentManifest> => {
   const prefix = `crates/${scope.name}/`;
+  const support = (await view.read(`${prefix}SUPPORT.md`)).toString();
+  const linked = [...support.matchAll(/\]\(([^)]+)\)/g)].flatMap((match) => {
+    const target = match[1] ?? "";
+    return /^(?:https?:|#)/.test(target)
+      ? []
+      : [posix.normalize(posix.join(prefix, target.split("#")[0] ?? ""))];
+  });
   const paths = [
     ...new Set([
       ...shared,
+      ...linked,
       ...view.paths.filter(
         (path) =>
           path.startsWith(prefix) &&
@@ -502,7 +538,7 @@ const run = async () => {
   for (const scope of scopes) {
     const directory = await mkdtemp(join(tmpdir(), "idealis-support-"));
     try {
-      const manifest = manifestFor(view, scope);
+      const manifest = await manifestFor(view, scope);
       const input = await snapshot(view, manifest, directory);
       if (args.includes("--dry-run")) {
         console.log(
@@ -520,7 +556,7 @@ const run = async () => {
           clientOptions: { model: "jev-1.14.0" },
           snapshotCheck: async () => {
             const current = sourceView(root, staged);
-            assert.deepEqual(manifestFor(current, scope), manifest);
+            assert.deepEqual(await manifestFor(current, scope), manifest);
             for (const source of Object.values(manifest.files))
               assert.deepEqual(
                 await current.read(source.path),

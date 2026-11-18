@@ -85,3 +85,59 @@ fn assert_evaluates_its_message_before_testing_the_condition() {
         assert!(error.message.contains("zero"), "{error}");
     }
 }
+
+#[test]
+fn v2_callbacks_validate_binder_slots_and_reach_shared_definitions() {
+    for sort in [false, true] {
+        let sequence = json!({"op":"tuple","values":[integer(2),integer(1)]});
+        let predicate = if sort {
+            json!({"op":"lt","left":{"op":"bound","slot":0},"right":{"op":"bound","slot":1}})
+        } else {
+            json!({"op":"gt","left":{"op":"bound","slot":0},"right":integer(1)})
+        };
+        let selected = json!({"op":if sort {"sort-seq"} else {"select-seq"},"slot":0,"sequence":sequence,"body":{"op":"call","definition":0,"arguments":[predicate],"captures":[]}});
+        let expected = if sort {
+            vec![integer(1), integer(2)]
+        } else {
+            vec![integer(2)]
+        };
+        let mut wire = serde_json::to_value(counter::ring()).unwrap();
+        wire["invariants"][0]["expression"] =
+            json!({"op":"eq","left":selected,"right":{"op":"tuple","values":expected}});
+        wire["version"] = json!(2);
+        wire["definitions"] = json!([{"id":0,"parameterCount":1,"captureCount":0,"bodyKind":"expression","localScope":0,"body":{"op":"parameter","slot":0}}]);
+        let input: SafetyProgram = serde_json::from_value(wire.clone()).unwrap();
+        assert_eq!(input.check(bounds(10000)).unwrap().status, "complete");
+        wire["invariants"][0]["expression"]["left"]["slot"] = json!(1);
+        let invalid: SafetyProgram = serde_json::from_value(wire).unwrap();
+        assert_eq!(invalid.check(bounds(10000)).unwrap_err().code, "protocol");
+    }
+}
+
+#[test]
+fn deeply_nested_action_frames_are_rejected_and_dropped_on_a_small_stack() {
+    std::thread::Builder::new()
+        .stack_size(2 * 1024 * 1024)
+        .spawn(|| {
+            let mut input = counter::ring();
+            input.version = 2;
+            input.definitions = Some(vec![]);
+            for _ in 0..10000 {
+                input.next = vec![rtlc::ir::Branch {
+                    name: "Nested".into(),
+                    steps: vec![rtlc::ir::Step::Frame {
+                        arguments: vec![],
+                        captures: vec![],
+                        parameter_count: 0,
+                        capture_count: 0,
+                        local_scope: 0,
+                        branches: std::mem::take(&mut input.next),
+                    }],
+                }];
+            }
+            assert_eq!(input.check(bounds(1000)).unwrap_err().code, "protocol");
+        })
+        .unwrap()
+        .join()
+        .unwrap();
+}

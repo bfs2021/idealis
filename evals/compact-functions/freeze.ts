@@ -5,15 +5,19 @@ import { join, resolve } from "node:path";
 import { digest } from "../usable/provenance.js";
 
 const output = process.argv[2];
+const kernelOnly = process.argv[3] === "kernel";
+assert.ok(process.argv[3] === undefined || kernelOnly);
 assert.ok(output);
 await mkdir(output);
-for (const [source, name] of [
-  ["crates/idealis-core/target/release/idealis-core", "idealis-core"],
-  [
-    "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
-    "idealis_core.wasm",
-  ],
-] as const)
+for (const [source, name] of kernelOnly
+  ? []
+  : ([
+      ["crates/idealis-core/target/release/idealis-core", "idealis-core"],
+      [
+        "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
+        "idealis_core.wasm",
+      ],
+    ] as const))
   await writeFile(join(output, name), await readFile(source), {
     flag: "wx",
     mode: name === "idealis-core" ? 0o755 : 0o644,

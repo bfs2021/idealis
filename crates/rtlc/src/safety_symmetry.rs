@@ -47,6 +47,9 @@ impl Symmetry {
     }
     pub fn prepare(program: &SafetyProgram, arena: &mut Arena) -> Result<Self, CoreError> {
         let definition = program.symmetry.as_ref().unwrap();
+        if program.version != 1 {
+            return Err(CoreError::protocol("Unsupported symmetry: safety IR v2"));
+        }
         let mut names = definition.model_values.clone();
         names.sort();
         if !(2..=64).contains(&names.len())
@@ -81,6 +84,9 @@ impl Symmetry {
                     } => expressions.push(expression),
                     Step::Bind { domain, .. } | Step::Choose { domain, .. } => {
                         domain_roots(domain, &names, &mut expressions)
+                    }
+                    Step::Frame { .. } => {
+                        return Err(CoreError::protocol("Unsupported symmetry: lexical frame"));
                     }
                 }
             }
@@ -310,7 +316,7 @@ pub(crate) fn visit_representatives(
             },
             next,
             arena,
-            visitor,
+            &mut |values, arena| visitor(values, arena),
         )? {
             return Ok(true);
         }

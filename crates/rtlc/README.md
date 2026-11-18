@@ -2,7 +2,7 @@
 
 [対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
 
-TLCの意味論に合わせた、有限TLA+ fragmentのモデル検査ライブラリ。コンパイル済みIRから状態を生成し、BFS、invariant/deadlock検査、最短反例、temporal property、WF/SFを検査する。nativeと`wasm32-unknown-unknown`で同じ実装を使う。
+有限TLA+ fragmentのモデル検査ライブラリ。コンパイル済みIRから状態を生成し、BFS、invariant/deadlock、temporal property、WF/SFを検査する。通常BFSのsafety反例は最短で、temporalのlassoとopt-in PORでは元のgraphでの最短反例を保証しない。nativeと`wasm32-unknown-unknown`で同じ実装を使う。
 
 実行コードは`idealis-core`へ依存しない。RustのTLA+経路ではrtlaが構文解析、rtla-compilerがIR生成を担当する。既存のTypeScript frontendも比較対象として残す。[対応範囲と制約](../../docs/rust-safety.md)を参照。TLC CLIやTLA+全体の互換性を示すcrateではない。
 
@@ -43,13 +43,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-`rtlc::ir`に`Expression`、`Branch`、`Step`、`Predicate`、`TemporalFormula`などの公開契約を置く。JSONを経由しない[型付きcounterの例](examples/counter.rs)もある。Arena、探索queue、worker、intern tableはprivate。
+`rtlc::ir`に`Expression`、`Branch`、`Step`、`Predicate`、`TemporalFormula`などの公開契約を置く。JSONを経由しない[型付きcounterの例](examples/counter.rs)もある。Arena、探索queue、worker、intern tableはprivate。`Expression`・`Branch`・`TemporalFormula`・`Value`は深さによらず有界なstackで破棄するため`Drop`を実装し、これらの値から非Copyのfieldをpatternでmoveできない。参照で照合し、`Vec`・`String`のfieldは`std::mem::take`、`Default`を持たない`Expression`・`TemporalFormula`・`Value`のfieldは`Expression::Old`・`Value::Null`などの葉との`std::mem::replace`で取り出す。
 
-既存の`modelt.safety-program` v1を入力形式として維持する。`complete`、`bounded`、`empty`、違反と評価エラーは区別する。`bounded`を安全性の証明として扱わない。`Value`と`CoreError`はidealisと共有するwire契約で、idealis-coreからも同じ型を再exportする。汎用Valueのvariantが存在することをTLA検査側の対応保証にはしない。
+既存の`modelt.safety-program` v1を既定の入力形式として維持する。v2ではexpression定義表とcall / parameter / captureを受理し、callerのlexical frameを持つ引数を要求時に毎回評価する。call entryと引数評価へ各1 workを課金する。再帰定義とaction templateの共有は受理しない。定義ID・capture順とwire契約は[IR v2](../../docs/safety-ir-v2.md)を参照。両frontendは明示`irVersion: 2`でこのIRを生成する。型所属ではv2のidentity range map-setを列挙せず検査する。`complete`、`bounded`、`empty`、違反と評価エラーは区別する。`bounded`を安全性の証明として扱わない。`Value`と`CoreError`はidealisと共有するwire契約で、idealis-coreからも同じ型を再exportする。汎用Valueのvariantが存在することをTLA検査側の対応保証にはしない。
 
 nativeの`check_parallel(bounds, workers)`は1〜256 workerの上限を受け取る。軽いscalarや狭いfrontierは逐次実行する。action/temporal propertyとfairnessを含む探索も逐次へfallbackする。Wasmは逐次の`check`を使う。
 
 `check_with_options(bounds, SafetyOptions)`でworker上限とopt-inの遷移削減を選べる。`symmetry_actions`は限定SYMMETRYの同じnode行の代表展開、`partial_order`は他の操作・invariantが参照しない単調なBool flag操作の順序削減。既定は両方false。SYMMETRYとPORは併用できない。[対応条件と反例の制限](../../docs/reductions.md)を参照。
+
+固定TLCとの照合には、temporal helperへ定数の量化式を渡す既知の乖離が1入力ある。TLC一致として数えず、保存したログと実装の意味結果を別に検査する。[IR v2の乖離と制限](../../docs/safety-ir-v2.md)を参照。
 
 ## 検証と配布
 
@@ -82,6 +84,9 @@ Data式はprogram内のアドレスからslotを作り、各Arenaで初めて評
 
 ## 限定したSYMMETRY
 
-全nodeをdomainに持つInt/Bool関数とglobal Int/Boolの状態を、同じnodeの値の行で同一視する。複数関数の相関と具体的な反例を保ち、全N!置換を列挙しない。SYMMETRY宣言がInit/Next/invariantを保つことは利用者の前提。自動的な対称性の証明ではない。
+全nodeをdomainに持つInt/Bool関数、flatなInt/Bool recordの関数、node部分集合とglobal Int/Boolの状態を、同じnodeの値の行で同一視する。複数関数の相関と具体的な反例を保ち、全N!置換を列挙しない。SYMMETRY宣言がInit/Next/invariantを保つことは利用者の前提。自動的な対称性の証明ではない。
 
-単一の2〜64個のuntyped model value集合とsafety検査に限定する。typed値・node参照やnested payload・temporal/fairness・constraints・initial/action property・coverageは対象外で、複数worker要求は逐次へfallbackする。JSONのsymmetryはoptionalで、Rustのstruct literalにはsymmetry: Noneを追加する。[設定例と適用条件](../../docs/symmetry.md)を参照。
+単一の2〜64個のuntyped model value集合とsafety検査に限定する。typed値・node参照やnested payload・temporal/fairness・constraints・initial/action property・coverageとIR v2は対象外。nativeではfrontierが64状態以上なら並列展開し、それ未満は逐次へ戻す。JSONのsymmetryはoptionalで、Rustのstruct literalにはsymmetry: Noneを追加する。[設定例と適用条件](../../docs/symmetry.md)を参照。
+v2のmembership descriptorはcall/parameter/captureと条件分岐を通って要求時ごとに解釈する。通常の値とv1の列挙は維持する。
+
+明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。LET本体の自由な`@`はtyped protocol拒否とし、action template共有・再帰・全TLA+互換を保証しない。

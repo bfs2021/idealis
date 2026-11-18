@@ -1,0 +1,22 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 44 and seed 375884327716830944 with 1 worker on <cores> cores with 256MB heap and 64MB offheap memory [pid: <pid>] (<host>, MSBDiskFPSet, DiskStateQueue).
+Parsing file <capture>/Differential.tla
+Parsing file <tlc-tmp>/Naturals.tla
+Parsing file <tlc-tmp>/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module Differential
+Starting... (<time>)
+Computing initial states...
+Error: Attempted to apply Head to the empty sequence.
+Error: The error occurred when TLC was evaluating the nested
+expressions at the following positions:
+0. Line 4, column 9 to line 4, column 13 in Differential
+1. Line 7, column 9 to line 7, column 23 in Differential
+2. Line 6, column 11 to line 6, column 15 in Differential
+3. Line 6, column 11 to line 6, column 11 in Differential
+4. Line 7, column 13 to line 7, column 22 in Differential
+
+
+1 states generated, 1 distinct states found, 1 states left on queue.
+Finished in 00s at (<time>)

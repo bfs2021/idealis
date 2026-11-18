@@ -1,0 +1,57 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "apalacheRelease": "0.56.1",
+  "apalacheModulePath": "tla2sany/StandardModules/Apalache.tla",
+  "apalacheModuleSha256": "a9115b404e72c58fd085f81bc59cc918f8adac49feabfb57f8e285bc7ab5cfac",
+  "environment": {
+    "java": "OpenJDK 21.0.11, Temurin-21.0.11+10-LTS",
+    "workers": 1,
+    "heap": "256m",
+    "timeoutSeconds": 60
+  },
+  "command": "timeout 60 java -Xmx256m -Djava.io.tmpdir=<tlc-tmp> -cp <tlc-jar> tlc2.TLC -workers 1 -nowarning Differential.tla",
+  "streams": "stdout and stderr merged in capture order",
+  "cases": [
+    {
+      "name": "sharing-unchanged-alias",
+      "source": "sharing-unchanged-alias/Differential.tla",
+      "config": "sharing-unchanged-alias/Differential.cfg",
+      "sourceSha256": "a7c58a05e96df2930d4613d2c48a73ed74628726edfe15711fb35630b2bde24d",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-unchanged-alias.log",
+      "logSha256": "83045a9e021e951461af5ccc461d9444aa3a99e417e24a0e80d732a6250632c0",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-unchanged-parameter",
+      "source": "sharing-unchanged-parameter/Differential.tla",
+      "config": "sharing-unchanged-parameter/Differential.cfg",
+      "sourceSha256": "1f3c9c31caefa7126fb185df64749fa951059602a05679e2ca4ec3ed1dec591a",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-unchanged-parameter.log",
+      "logSha256": "2e04c60520adedcbfc4bf4ffa76cd1d6a97f39ebea2dd6af0cf1e076c4bfc540",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-unchanged-nested",
+      "source": "sharing-unchanged-nested/Differential.tla",
+      "config": "sharing-unchanged-nested/Differential.cfg",
+      "sourceSha256": "00bbe1ed5dea24d95c6783d36c39207507cd76473cb7e4ae2b3a227917b53b77",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-unchanged-nested.log",
+      "logSha256": "18f292020a4bfa657f345433392b5753d5709304807f447be9f738e490e4b165",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    }
+  ]
+}

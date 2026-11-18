@@ -16,6 +16,27 @@ const STANDARD: &[&str] = &[
     "Variants",
 ];
 
+pub(crate) fn declares_instances_or_overrides(module: &Module, config: &Config) -> bool {
+    !module.instances.is_empty()
+        || !config.substitutions.is_empty()
+        || config.constants.iter().any(|assignment| {
+            assignment.module.is_some()
+                || assignment.args.is_some()
+                || module
+                    .definitions
+                    .iter()
+                    .any(|definition| definition.name == assignment.name)
+        })
+}
+
+pub(crate) fn needs_linking(module: &Module, config: &Config) -> bool {
+    declares_instances_or_overrides(module, config)
+        || module
+            .extends
+            .iter()
+            .any(|name| !STANDARD.contains(&name.as_str()))
+}
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Kind {
     Constant,

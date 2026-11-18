@@ -2,6 +2,8 @@ import type { SafetyProgram } from "./contracts.js";
 import { normalizePortableValue, PortableCoreError } from "./portable-value.js";
 import { isRecord } from "./trace.js";
 
+export const WIRE_INDEX_MAX = 4_294_967_295;
+
 const fields = (
   input: unknown,
   required: readonly string[],
@@ -20,6 +22,7 @@ const fields = (
 const array = (input: unknown): readonly unknown[] => {
   if (!Array.isArray(input))
     throw new PortableCoreError("protocol", "Expected compiled program array");
+  count(input.length);
   return input;
 };
 const text = (input: unknown): void => {
@@ -34,39 +37,69 @@ const count = (input: unknown): void => {
     typeof input !== "number" ||
     !Number.isSafeInteger(input) ||
     input < 0 ||
-    input > 0xffff_ffff
+    input > WIRE_INDEX_MAX
   )
     throw new PortableCoreError("protocol", "Invalid compiled program count");
 };
-const domain = (input: unknown, depth: number): void => {
+const domain = (input: unknown, depth: number, version: 1 | 2): void => {
   const value = fields(input, ["kind"], ["values", "lower", "upper", "value"]);
   switch (value.kind) {
     case "set":
       fields(value, ["kind", "values"]);
       array(value.values).forEach((item) => {
-        expression(item, depth);
+        expression(item, depth, version);
       });
       return;
     case "range":
       fields(value, ["kind", "lower", "upper"]);
-      expression(value.lower, depth);
-      expression(value.upper, depth);
+      expression(value.lower, depth, version);
+      expression(value.upper, depth, version);
       return;
     case "value":
       fields(value, ["kind", "value"]);
-      expression(value.value, depth);
+      expression(value.value, depth, version);
       return;
     default:
       throw new PortableCoreError("protocol", "Invalid compiled domain");
   }
 };
-const binding = (input: unknown, depth: number): void => {
+const binding = (input: unknown, depth: number, version: 1 | 2): void => {
   const value = fields(input, ["slot", "domain"], ["tupleSize"]);
   count(value.slot);
-  domain(value.domain, depth);
+  domain(value.domain, depth, version);
   if (value.tupleSize !== undefined) count(value.tupleSize);
 };
-const branches = (input: unknown, depth: number): void => {
+const frame = (
+  input: Record<string, unknown>,
+  tag: "op" | "kind",
+  body: "body" | "branches" | "formula",
+  depth: number,
+  version: 1 | 2,
+): void => {
+  if (version !== 2 || depth > 128)
+    throw new PortableCoreError("protocol", "Invalid compiled frame");
+  fields(input, [
+    tag,
+    "arguments",
+    "captures",
+    "parameterCount",
+    "captureCount",
+    "localScope",
+    body,
+  ]);
+  count(input.parameterCount);
+  count(input.captureCount);
+  count(input.localScope);
+  if (
+    input.parameterCount !== array(input.arguments).length ||
+    input.captureCount !== array(input.captures).length ||
+    Number(input.localScope) > 40
+  )
+    throw new PortableCoreError("protocol", "Invalid compiled frame signature");
+  for (const item of [...array(input.arguments), ...array(input.captures)])
+    expression(item, depth + 1, version);
+};
+const branches = (input: unknown, depth: number, version: 1 | 2): void => {
   for (const item of array(input)) {
     const branch = fields(item, ["name", "steps"]);
     text(branch.name);
@@ -74,6 +107,10 @@ const branches = (input: unknown, depth: number): void => {
       if (!isRecord(input))
         throw new PortableCoreError("protocol", "Invalid compiled step");
       switch (input.kind) {
+        case "frame":
+          frame(input, "kind", "branches", depth, version);
+          branches(input.branches, depth + 1, version);
+          break;
         case "bind": {
           const step = fields(input, ["kind", "slot", "domain"], ["tupleSize"]);
           binding(
@@ -85,24 +122,25 @@ const branches = (input: unknown, depth: number): void => {
                 : { tupleSize: step.tupleSize }),
             },
             depth,
+            version,
           );
           break;
         }
         case "choose": {
           const step = fields(input, ["kind", "slot", "domain"]);
           count(step.slot);
-          domain(step.domain, depth);
+          domain(step.domain, depth, version);
           break;
         }
         case "assign": {
           const step = fields(input, ["kind", "slot", "value"]);
           count(step.slot);
-          expression(step.value, depth);
+          expression(step.value, depth, version);
           break;
         }
         case "guard": {
           const step = fields(input, ["kind", "expression"]);
-          expression(step.expression, depth);
+          expression(step.expression, depth, version);
           break;
         }
         default:
@@ -111,7 +149,7 @@ const branches = (input: unknown, depth: number): void => {
     }
   }
 };
-const expression = (input: unknown, depth: number): void => {
+const expression = (input: unknown, depth: number, version: 1 | 2): void => {
   if (!isRecord(input) || depth > 128)
     throw new PortableCoreError("protocol", "Invalid compiled expression");
   const child = depth + 1;
@@ -157,16 +195,35 @@ const expression = (input: unknown, depth: number): void => {
   ];
   if (typeof input.op === "string" && unary.includes(input.op)) {
     const value = fields(input, ["op", "argument"]);
-    expression(value.argument, child);
+    expression(value.argument, child, version);
     return;
   }
   if (typeof input.op === "string" && binary.includes(input.op)) {
     const value = fields(input, ["op", "left", "right"]);
-    expression(value.left, child);
-    expression(value.right, child);
+    expression(value.left, child, version);
+    expression(value.right, child, version);
     return;
   }
   switch (input.op) {
+    case "frame":
+      frame(input, "op", "body", depth, version);
+      expression(input.body, child, version);
+      return;
+    case "call":
+      if (version !== 2)
+        throw new PortableCoreError("protocol", "Unknown compiled expression");
+      fields(input, ["op", "definition", "arguments", "captures"]);
+      count(input.definition);
+      for (const item of [...array(input.arguments), ...array(input.captures)])
+        expression(item, child, version);
+      return;
+    case "parameter":
+    case "capture":
+      if (version !== 2)
+        throw new PortableCoreError("protocol", "Unknown compiled expression");
+      fields(input, ["op", "slot"]);
+      count(input.slot);
+      return;
     case "unmatched-case":
       fields(input, ["op", "location"]);
       text(input.location);
@@ -199,7 +256,7 @@ const expression = (input: unknown, depth: number): void => {
     case "tuple":
       fields(input, ["op", "values"]);
       array(input.values).forEach((item) => {
-        expression(item, child);
+        expression(item, child, version);
       });
       return;
     case "record":
@@ -209,23 +266,23 @@ const expression = (input: unknown, depth: number): void => {
         const pair = array(item);
         if (pair.length !== 2 || typeof pair[0] !== "string")
           throw new PortableCoreError("protocol", "Invalid compiled field");
-        expression(pair[1], child);
+        expression(pair[1], child, version);
       }
       return;
     case "at":
       fields(input, ["op", "target", "key"]);
-      expression(input.target, child);
-      expression(input.key, child);
+      expression(input.target, child, version);
+      expression(input.key, child, version);
       return;
     case "update":
       fields(input, ["op", "target", "updates"]);
-      expression(input.target, child);
+      expression(input.target, child, version);
       for (const item of array(input.updates)) {
         const update = fields(item, ["path", "value"]);
         array(update.path).forEach((part) => {
-          expression(part, child);
+          expression(part, child, version);
         });
-        expression(update.value, child);
+        expression(update.value, child, version);
       }
       return;
     case "forall":
@@ -235,9 +292,9 @@ const expression = (input: unknown, depth: number): void => {
     case "map-set":
       fields(input, ["op", "bounds", "body"]);
       array(input.bounds).forEach((item) => {
-        binding(item, child);
+        binding(item, child, version);
       });
-      expression(input.body, child);
+      expression(input.body, child, version);
       return;
     case "fold":
       fields(input, [
@@ -251,84 +308,89 @@ const expression = (input: unknown, depth: number): void => {
       count(input.accumulator);
       if (input.order !== "set-members" && input.order !== "sequence-left")
         throw new PortableCoreError("protocol", "Invalid compiled fold order");
-      expression(input.initial, child);
-      expression(input.collection, child);
-      expression(input.body, child);
+      expression(input.initial, child, version);
+      expression(input.collection, child, version);
+      expression(input.body, child, version);
       return;
     case "choose":
       fields(input, ["op", "binding", "body"]);
-      binding(input.binding, child);
-      expression(input.body, child);
+      binding(input.binding, child, version);
+      expression(input.body, child, version);
       return;
     case "select-seq":
     case "sort-seq":
       fields(input, ["op", "slot", "sequence", "body"]);
       count(input.slot);
-      expression(input.sequence, child);
-      expression(input.body, child);
+      expression(input.sequence, child, version);
+      expression(input.body, child, version);
       return;
     case "assert":
       fields(input, ["op", "condition", "message"]);
-      expression(input.condition, child);
-      expression(input.message, child);
+      expression(input.condition, child, version);
+      expression(input.message, child, version);
       return;
     case "if":
       fields(input, ["op", "condition", "consequent", "alternative"]);
-      expression(input.condition, child);
-      expression(input.consequent, child);
-      expression(input.alternative, child);
+      expression(input.condition, child, version);
+      expression(input.consequent, child, version);
+      expression(input.alternative, child, version);
       return;
     case "subseq":
       fields(input, ["op", "sequence", "from", "to"]);
-      expression(input.sequence, child);
-      expression(input.from, child);
-      expression(input.to, child);
+      expression(input.sequence, child, version);
+      expression(input.from, child, version);
+      expression(input.to, child, version);
       return;
     case "in":
       fields(input, ["op", "value", "domain"]);
-      expression(input.value, child);
-      domain(input.domain, child);
+      expression(input.value, child, version);
+      domain(input.domain, child, version);
       return;
     case "enabled":
       fields(input, ["op", "branches"], ["subscript"]);
-      branches(input.branches, child);
-      if (input.subscript === null) delete input.subscript;
-      if (input.subscript !== undefined) expression(input.subscript, child);
+      branches(input.branches, child, version);
+      if (input.subscript === null && version === 1) delete input.subscript;
+      if (input.subscript !== undefined && input.subscript !== null)
+        expression(input.subscript, child, version);
       return;
     default:
       throw new PortableCoreError("protocol", "Unknown compiled expression");
   }
 };
-const formula = (input: unknown, depth = 0): void => {
+const formula = (input: unknown, version: 1 | 2, depth = 0): void => {
   if (!isRecord(input) || depth > 128)
     throw new PortableCoreError(
       "protocol",
       "Invalid compiled temporal formula",
     );
   switch (input.kind) {
+    case "frame":
+      frame(input, "kind", "formula", depth, version);
+      formula(input.formula, version, depth + 1);
+      return;
     case "atom":
       fields(input, ["kind", "expression"]);
-      expression(input.expression, 0);
+      expression(input.expression, 0, version);
       return;
     case "forall":
     case "exists":
       fields(input, ["kind", "bounds", "formula"]);
       array(input.bounds).forEach((item) => {
-        binding(item, 0);
+        binding(item, 0, version);
       });
-      formula(input.formula, depth + 1);
+      formula(input.formula, version, depth + 1);
       return;
     case "not":
     case "always":
     case "eventually":
       fields(input, ["kind", "formula"]);
-      formula(input.formula, depth + 1);
+      formula(input.formula, version, depth + 1);
       return;
     case "and":
     case "or":
       fields(input, ["kind", "left", "right"]);
-      formula(input.left, depth + 1);
-      formula(input.right, depth + 1);
+      formula(input.left, version, depth + 1);
+      formula(input.right, version, depth + 1);
       return;
     default:
       throw new PortableCoreError(
@@ -338,8 +400,12 @@ const formula = (input: unknown, depth = 0): void => {
   }
 };
 export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
+  const cloned: unknown = structuredClone(input);
+  if (!isRecord(cloned) || (cloned.version !== 1 && cloned.version !== 2))
+    throw new PortableCoreError("protocol", "Invalid compiled program version");
+  const version = cloned.version;
   const value = fields(
-    structuredClone(input),
+    cloned,
     [
       "format",
       "version",
@@ -350,6 +416,7 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
       "invariants",
       "assumptions",
       "checkDeadlock",
+      ...(version === 2 ? ["definitions"] : []),
     ],
     [
       "symmetry",
@@ -363,10 +430,31 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
   );
   if (
     value.format !== "modelt.safety-program" ||
-    value.version !== 1 ||
     typeof value.checkDeadlock !== "boolean"
   )
     throw new PortableCoreError("protocol", "Invalid compiled program version");
+  if (version === 2)
+    array(value.definitions).forEach((input, id) => {
+      const definition = fields(input, [
+        "id",
+        "parameterCount",
+        "captureCount",
+        "bodyKind",
+        "localScope",
+        "body",
+      ]);
+      count(definition.id);
+      count(definition.parameterCount);
+      count(definition.captureCount);
+      count(definition.localScope);
+      if (
+        definition.id !== id ||
+        definition.bodyKind !== "expression" ||
+        (definition.localScope as number) > 40
+      )
+        throw new PortableCoreError("protocol", "Invalid compiled definition");
+      expression(definition.body, 0, version);
+    });
   text(value.name);
   if (value.symmetry !== undefined) {
     const symmetry = fields(value.symmetry, ["modelValues"]);
@@ -391,8 +479,8 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
   variables.forEach(text);
   if (!variables.length || new Set(variables).size !== variables.length)
     throw new PortableCoreError("protocol", "Invalid compiled variables");
-  branches(value.initial, 0);
-  branches(value.next, 0);
+  branches(value.initial, 0, version);
+  branches(value.next, 0, version);
   for (const key of [
     "invariants",
     "assumptions",
@@ -405,18 +493,18 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
     for (const item of array(value[key])) {
       const predicate = fields(item, ["name", "expression"]);
       text(predicate.name);
-      expression(predicate.expression, 0);
+      expression(predicate.expression, 0, version);
     }
   }
   if (value.properties !== undefined)
     for (const item of array(value.properties)) {
       const property = fields(item, ["name", "formula"]);
       text(property.name);
-      formula(property.formula);
+      formula(property.formula, version);
     }
   if (value.fairness !== undefined)
     array(value.fairness).forEach((item) => {
-      formula(item);
+      formula(item, version);
     });
   return value as unknown as SafetyProgram;
 };

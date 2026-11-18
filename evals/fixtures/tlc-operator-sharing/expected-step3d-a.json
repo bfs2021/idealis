@@ -1,0 +1,135 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "apalacheRelease": "0.56.1",
+  "apalacheModulePath": "tla2sany/StandardModules/Apalache.tla",
+  "apalacheModuleSha256": "a9115b404e72c58fd085f81bc59cc918f8adac49feabfb57f8e285bc7ab5cfac",
+  "environment": {
+    "java": "OpenJDK 21.0.11, Temurin-21.0.11+10-LTS",
+    "workers": 1,
+    "heap": "256m",
+    "timeoutSeconds": 60
+  },
+  "command": "timeout 60 java -Xmx256m -Djava.io.tmpdir=<tlc-tmp> -cp <tlc-jar> tlc2.TLC -workers 1 -nowarning Differential.tla",
+  "streams": "stdout and stderr merged in capture order",
+  "cases": [
+    {
+      "name": "sharing-generative-except",
+      "source": "sharing-generative-except/Differential.tla",
+      "config": "sharing-generative-except/Differential.cfg",
+      "sourceSha256": "2275c8ebd933facb0c06306d894e918dda728b46e5434d677afa076e14bc6d34",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-except.log",
+      "logSha256": "733e998254d4fe4891d53a67c7edb9a5418e1eb409afc2f61273d931f858c72b",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-generative-except-control",
+      "source": "sharing-generative-except-control/Differential.tla",
+      "config": "sharing-generative-except-control/Differential.cfg",
+      "sourceSha256": "bb5a9f4560ae78c2289d9593a4123ffdbd88b74a58ed40691a2340bef8ebc45e",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-except-control.log",
+      "logSha256": "0182ed0db630266a74cb658bae0fa02468c50f62c614ecda1bf89e5fde2eb0cf",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-generative-binder",
+      "source": "sharing-generative-binder/Differential.tla",
+      "config": "sharing-generative-binder/Differential.cfg",
+      "sourceSha256": "fb267a2152d93e927d6c4de52bad6a4e5739140cd46dd78a927db0e01f096ae1",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-binder.log",
+      "logSha256": "b16b9ac67344a34d28d71c297f4badb556e5b34696798b2dc1921e25bc68bbeb",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-generative-binder-control",
+      "source": "sharing-generative-binder-control/Differential.tla",
+      "config": "sharing-generative-binder-control/Differential.cfg",
+      "sourceSha256": "ac5c871ba6504ade0302e32ed6ee4f70921183785f516c2c8ace1bb479b5399a",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-binder-control.log",
+      "logSha256": "5ae1bcf17dc72ec412b94ad4647985b5796508030d648375141a674199aa0f63",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-generative-membership",
+      "source": "sharing-generative-membership/Differential.tla",
+      "config": "sharing-generative-membership/Differential.cfg",
+      "sourceSha256": "43303f0163a6e2cd7811a6f02fbd3509959e847b3b5a7222a2497a55cf848a45",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-membership.log",
+      "logSha256": "10cbbd7e53a1fa84bef01695e2cfdff5d9111a46d5a66dea6f28c9c32cefc251",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-generative-membership-alias",
+      "source": "sharing-generative-membership-alias/Differential.tla",
+      "config": "sharing-generative-membership-alias/Differential.cfg",
+      "sourceSha256": "52707687cd1745d1c115cc2ae70e99b1727938ee657cd63ba868c5cb3815bef7",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-membership-alias.log",
+      "logSha256": "05f9c6e0b9ccbd8f12a7c278e020853ea9c72d97c4a7d4abd4f5339aaaa77ced",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-generative-binder-exact",
+      "source": "sharing-generative-binder-exact/Differential.tla",
+      "config": "sharing-generative-binder-exact/Differential.cfg",
+      "sourceSha256": "cebd007282806bc5bad17a024d44596d2a57a56304ce78048e6b30b1e3c2d5e3",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-binder-exact.log",
+      "logSha256": "d42c2e611e55a9ee0af354b8c3f3479dca2465091dc2d9c039a78272a7d5d6ff",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-generative-binder-exact-control",
+      "source": "sharing-generative-binder-exact-control/Differential.tla",
+      "config": "sharing-generative-binder-exact-control/Differential.cfg",
+      "sourceSha256": "7798d272da127e5b402432189ee605a07ff0ce119688a5eb4f18b633fd9e37d1",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-generative-binder-exact-control.log",
+      "logSha256": "fe714c00ae52336eebda10eaf724a61c25cb5a61274adc8b204631f55c32c1a5",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    }
+  ]
+}
