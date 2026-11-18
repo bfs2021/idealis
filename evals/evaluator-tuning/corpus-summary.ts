@@ -42,6 +42,7 @@ interface Manifest {
 }
 
 const [input, output] = process.argv.slice(2);
+const plan = process.env.IDEALIS_CHECKER_PLAN ?? "0063-evaluator-tuning";
 assert.ok(input && output);
 const resultBytes = await readFile(join(input, "result.json"));
 const result: Results = JSON.parse(resultBytes.toString());
@@ -138,12 +139,12 @@ const models = manifest.inputs.map((model) => ({
 await mkdir(output);
 await writeFile(
   join(output, "result.json"),
-  `${JSON.stringify({ status: "complete", plan: "0063-evaluator-tuning", input, resultSha256: digest(resultBytes), comparisons, checks: "Exact IR version, compiled program, result including work, and unsupported response equality for each version across before/after native/Wasm, including warmups.", models }, null, 2)}\n`,
+  `${JSON.stringify({ status: "complete", plan, input, resultSha256: digest(resultBytes), comparisons, checks: "Exact IR version, compiled program, result including work, and unsupported response equality for each version across before/after native/Wasm, including warmups.", models }, null, 2)}\n`,
   { flag: "wx" },
 );
 await appendFile(
   "evals/runs/ledger.jsonl",
-  `${JSON.stringify({ runId: basename(output), plan: "0063-evaluator-tuning", kind: "corpus-summary", status: "complete" })}\n`,
+  `${JSON.stringify({ runId: basename(output), plan, kind: "corpus-summary", status: "complete" })}\n`,
 );
 console.log(
   JSON.stringify({

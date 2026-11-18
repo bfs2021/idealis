@@ -718,14 +718,14 @@ evaluator-kernel before after run filter="":
 evaluator-summary run output count plan="0063-evaluator-tuning":
   node dist/evals/evaluator-tuning/summarize.js {{quote(run)}} {{quote(output)}} {{quote(count)}} {{quote(plan)}}
 
-evaluator-corpus before after java jar archive run:
-  IDEALIS_CHECKER_PLAN=0063-evaluator-tuning IDEALIS_CHECKER_COMPARE_V2=1 node dist/evals/p0-checker/corpus.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+evaluator-corpus before after java jar archive run plan="0063-evaluator-tuning":
+  IDEALIS_CHECKER_PLAN={{quote(plan)}} IDEALIS_CHECKER_COMPARE_V2=1 node dist/evals/p0-checker/corpus.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
 
 evaluator-verify snapshot run:
   IDEALIS_CHECKER_PLAN=0063-evaluator-tuning IDEALIS_CHECKER_SNAPSHOT={{quote(snapshot)}} node dist/evals/p0-checker/verify.js {{quote(run)}}
 
-evaluator-corpus-summary run output:
-  node dist/evals/evaluator-tuning/corpus-summary.js {{quote(run)}} {{quote(output)}}
+evaluator-corpus-summary run output plan="0063-evaluator-tuning":
+  IDEALIS_CHECKER_PLAN={{quote(plan)}} node dist/evals/evaluator-tuning/corpus-summary.js {{quote(run)}} {{quote(output)}}
 
 quint-generate output endpoint apalache_jar:
   pnpm build

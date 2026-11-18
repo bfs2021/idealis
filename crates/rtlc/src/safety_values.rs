@@ -1297,6 +1297,68 @@ mod tests {
         );
     }
     #[test]
+    fn model_value_lookup_preserves_semantic_order_and_missing_keys() {
+        for names in [["a", "b", "c"], ["c", "b", "a"]] {
+            let mut arena = Arena::new(1000);
+            let keys: Vec<_> = names
+                .iter()
+                .map(|name| {
+                    arena
+                        .data(&crate::Value::ModelValue((*name).into()))
+                        .unwrap()
+                })
+                .collect();
+            let function = arena
+                .function(
+                    keys.iter()
+                        .enumerate()
+                        .map(|(index, key)| (*key, Scalar::Int(index as i32 + 10)))
+                        .collect(),
+                )
+                .unwrap();
+            for (index, key) in keys.into_iter().enumerate() {
+                assert_eq!(
+                    arena.at(function, key).unwrap(),
+                    Scalar::Int(index as i32 + 10)
+                );
+            }
+            let missing = arena
+                .data(&crate::Value::ModelValue("missing".into()))
+                .unwrap();
+            assert_eq!(arena.select(function, missing).unwrap(), None);
+            assert!(arena.at(function, missing).is_err());
+            let string = arena.string("a".into()).unwrap();
+            assert_eq!(arena.select(function, string).unwrap(), None);
+            assert_eq!(arena.select(function, Scalar::Int(1)).unwrap(), None);
+        }
+    }
+
+    #[test]
+    fn sparse_model_value_domains_preserve_updates_and_missing_keys() {
+        let mut arena = Arena::new(1000);
+        let first = arena.data(&crate::Value::ModelValue("a".into())).unwrap();
+        let missing = arena.data(&crate::Value::ModelValue("b".into())).unwrap();
+        let last = arena.data(&crate::Value::ModelValue("c".into())).unwrap();
+        let original = arena
+            .function(vec![(last, Scalar::Int(30)), (first, Scalar::Int(10))])
+            .unwrap();
+        assert_eq!(arena.at(original, first).unwrap(), Scalar::Int(10));
+        assert_eq!(arena.at(original, last).unwrap(), Scalar::Int(30));
+        assert_eq!(arena.select(original, missing).unwrap(), None);
+        assert!(arena.at(original, missing).is_err());
+        assert_eq!(
+            arena
+                .replace(original, &[missing], Scalar::Int(99))
+                .unwrap(),
+            original
+        );
+        let updated = arena.replace(original, &[last], Scalar::Int(99)).unwrap();
+        assert_eq!(arena.at(updated, last).unwrap(), Scalar::Int(99));
+        assert_eq!(arena.at(updated, first).unwrap(), Scalar::Int(10));
+        assert_eq!(arena.at(original, last).unwrap(), Scalar::Int(30));
+    }
+
+    #[test]
     fn integer_positions_preserve_sparse_domains_and_missing_keys() {
         let mut arena = Arena::new(1000);
         let dense = arena

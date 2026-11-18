@@ -365,6 +365,20 @@
     },
     {
       "id": "rtlc-implementation-10",
+      "topic": "Int/Refの添字候補を完全key一致のときだけ使用し、疎なdomain・Ref順が異なる場合・欠落keyを線形検索へ戻す",
+      "mode": "semantic",
+      "reference": {
+        "source": "source18",
+        "contains": "pub fn position("
+      },
+      "target": {
+        "source": "source4",
+        "contains": "Int/Ref domainのlookupは"
+      },
+      "context": []
+    },
+    {
+      "id": "rtlc-implementation-11",
       "topic": "v2の定義graph、ID/arity/capture/phaseとframe-local slotの検証、metadataと再帰の拒否",
       "mode": "semantic",
       "reference": {
@@ -376,7 +390,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-11",
+      "id": "rtlc-implementation-12",
       "topic": "call-by-nameの要求時評価、callerのlexical環境とphase、callと引数のwork課金。値のmemoizationとの区別",
       "mode": "semantic",
       "reference": {
@@ -389,7 +403,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-12",
+      "id": "rtlc-implementation-13",
       "topic": "深いIR/Valueの破棄を32段の再帰とworklistで制限する。評価・compileの既存深さ上限とは区別する",
       "mode": "semantic",
       "reference": {

@@ -155,6 +155,13 @@ const scopes: readonly CrateScope[] = [
         context: ["src/safety_functions.rs"],
       },
       {
+        path: "src/safety_functions.rs",
+        contains: "pub fn position(",
+        targetContains: "Int/Ref domainのlookupは",
+        topic:
+          "Int/Refの添字候補を完全key一致のときだけ使用し、疎なdomain・Ref順が異なる場合・欠落keyを線形検索へ戻す",
+      },
+      {
         path: "src/safety_definitions.rs",
         topic:
           "v2の定義graph、ID/arity/capture/phaseとframe-local slotの検証、metadataと再帰の拒否",

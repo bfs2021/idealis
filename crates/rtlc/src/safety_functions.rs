@@ -198,6 +198,12 @@ impl Function {
                 return Some(index);
             }
         }
+        if let (Scalar::Ref(index), Some(Scalar::Ref(first))) = (key, self.domain.keys.first())
+            && let Some(position) = index.checked_sub(*first)
+            && self.domain.keys.get(position as usize) == Some(&key)
+        {
+            return Some(position as usize);
+        }
         self.domain
             .keys
             .iter()

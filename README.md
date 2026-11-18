@@ -202,6 +202,8 @@ nativeの8-worker要求は同じrunのTLC 8 workers比でcounter 2.67倍、funct
 
 [採用したhash変更・撤去したinline・全sample](evals/iterations/0063-evaluator-tuning.md)を参照。上の0062のTLC比較とは別runの値。
 
+0066ではRef domainのlookupで候補添字を完全key一致後に使い、外れたら線形検索へ戻す。固定binaryのTCommit IR検査要求を各12回測ると、native v1は105.01→97.61 ms、v2は109.61→102.55 msだった。初回の3 samplesとcoldでは約3〜4%の短縮で、条件の異なる値を混ぜない。通常14本には最大約6%の後退も残る。[条件・対照・採否](evals/iterations/0066-domain-offset.md)を参照。
+
 ## 同じ登録による差分検査と比較ベンチ
 
 新しい`idealis-oracle`で、TLC・tla-ts・idealisへ同じ小さいモデルを渡した。下表は起動込みのcold source-to-result中央値、7 sample・1 warmup、すべて1 worker。process起動・輸送・解析・raw log書き込みを含む。

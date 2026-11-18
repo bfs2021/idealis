@@ -11,3 +11,5 @@ beforeのnative/Wasm・Criterionとsourceを固定する。初期の判定は原
 rawは追記のみ。before/afterのsource、binary/input/driver hash、全sample、失敗を保存する。採用なら旧版156モデル・1,560要求と必要な21検査・SUPPORT/Jevまで実行する。撤去なら元のproduction sourceへ戻ったことを確認し、残す挙動testとcheck/browser・Rust/portableの検査を実行する。実験変更のevaluate/replay、runtime build/testも確認する。
 
 この小さい候補が有用でなければ、今回は追加のmicro tuningを停止する。小整数圧縮やworker制御の拡張は、既存0/1圧縮で足りない実モデルのRSS制約、または新しいprofileで支配費用が示せるまで保留し、未検証の高速化と数えない。採否と再開条件をiterationと#68/#63へ記録する。
+
+初回corpusのTCommit native checkはv1で約4.3%、v2で約2.8%短縮し、5%に届かなかった。固定したbefore/after binaryを使い、TCommitのcompiled IR checkだけをnative v1/v2・1 warmup + 12 measured samplesで追加確認する。経路順を回転・反転し、各回の完全応答と6,816状態・53,513生成を照合する。追加後も5%未満なら撤去し、14本へ広げない。追加の値を初回へ混ぜない。

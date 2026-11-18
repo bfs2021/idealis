@@ -29,6 +29,7 @@
 - [x] Rust rlibとしてnative/Wasmへビルドでき、idealis-coreやparser、外部solverには依存しない。
 - [x] 関数・record・sequenceのimmutable domainを共有し、64要素以下の全Boolまたは全Int(0/1)を別tagのbit列に保持する。混在・範囲外・65要素以上はScalar列へ戻す。公開Value/IRとcanonical identity、workを維持する。
 - [x] domainと関数のhash衝突を完全比較し、worker新規domainのkey/payload Refをrootへremapする。root所属domainはimmutableに共有し、所属metadataを等値性へ含めない。
+- [x] Int/Ref domainのlookupは候補添字のkey一致を検証し、一致しない場合は線形検索へ戻す。疎なdomainと意味順がRef割り当て順と異なるdomain、欠落key、更新後の元の不変性を保つ。
 - [x] packed関数の型と完全に一致する有限rangeのmembershipでは、domain確認後に同じ要素数の論理workを一括計上する。workerのbudget付きoverlayは既存の要素順へ戻す。通常の関数検査も値だけのowned iteratorを使う。
 - [x] native forkはroot domainが16個以下なら、64 key以下のdomainにworker専用wrapperを持ち、参照カウンタを分離する。merge後はcanonical rootへ戻し、対象外は通常のArc共有へ戻す。
 
