@@ -515,6 +515,10 @@ export interface SafetyPredicate {
   readonly expression: SafetyExpression;
 }
 
+export interface SafetySymmetry {
+  readonly modelValues: readonly string[];
+}
+
 export interface SafetyProgram {
   readonly format: "modelt.safety-program";
   readonly version: 1;
@@ -525,6 +529,7 @@ export interface SafetyProgram {
   readonly invariants: readonly SafetyPredicate[];
   readonly assumptions: readonly SafetyPredicate[];
   readonly checkDeadlock: boolean;
+  readonly symmetry?: SafetySymmetry;
   readonly initialProperties?: readonly SafetyPredicate[];
   readonly actionProperties?: readonly SafetyPredicate[];
   readonly constraints?: readonly SafetyPredicate[];

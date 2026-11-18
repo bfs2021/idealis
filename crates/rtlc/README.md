@@ -6,7 +6,7 @@ TLCの意味論に合わせた、有限TLA+ fragmentのモデル検査ライブ�
 
 実行コードは`idealis-core`へ依存しない。RustのTLA+経路ではrtlaが構文解析、rtla-compilerがIR生成を担当する。既存のTypeScript frontendも比較対象として残す。[対応範囲と制約](../../docs/rust-safety.md)を参照。TLC CLIやTLA+全体の互換性を示すcrateではない。
 
-整数の\div / % / ^、有限CHOOSE、state/action constraint、model value、定数有限domain上の時間論理量化を扱う。探索制約で除外した候補もinvariantと対応するpropertyを検査する。SYMMETRY、VIEW、ディスク退避、checkpoint、simulation/DFID、式単位のcoverageは未対応。各項目は[チェックリスト](SUPPORT.md)で管理する。
+整数の\div / % / ^、有限CHOOSE、state/action constraint、model value、定数有限domain上の時間論理量化を扱う。探索制約で除外した候補もinvariantと対応するpropertyを検査する。一般のSYMMETRY、VIEW、ディスク退避、checkpoint、simulation/DFID、式単位のcoverageは未対応。各項目は[チェックリスト](SUPPORT.md)で管理する。
 
 select-seq / sort-seqのIRは、1引数の選択predicateと2引数の比較bodyを束縛slotで評価する。sortはTLCの挿入sortと同じ順序で比較し、常に真・偽の比較も扱う。反復・比較はwork予算を消費する。assertはconditionとmessageを順に評価し、TRUE以外ならmessage付きの評価エラーを返す。対応するTLA+ソースの制約はrtla-compilerが定める。
 
@@ -77,3 +77,9 @@ nativeのforkでは、rootのdomainが16個以下なら、64 key以下のdomain�
 packed関数の内部hashはcached domain hash・payload・Bool/Intのsaltをfmix64で混合する。MurmurHash3のpublic domain実装を参照し、公式C++のgolden vectorへ照合する。衝突時はdomain/payloadを完全比較し、hash形式を公開APIへ含めない。[0058の比較](../../evals/iterations/0058-packed-hash.md)を参照。
 
 Data式はprogram内のアドレスからslotを作り、各Arenaで初めて評価が成功したScalarを再利用する。値全体のhashを繰り返さず、未評価分岐や不正値を先に評価しない。失敗はcacheせず、未登録の式は従来の評価を使う。workerのlocal Refはmergeで補正し、別のcheckへcacheを持ち越さない。[0059の比較](../../evals/iterations/0059-prepared-execution.md)を参照。
+
+## 限定したSYMMETRY
+
+全nodeをdomainに持つInt/Bool関数とglobal Int/Boolの状態を、同じnodeの値の行で同一視する。複数関数の相関と具体的な反例を保ち、全N!置換を列挙しない。SYMMETRY宣言がInit/Next/invariantを保つことは利用者の前提。自動的な対称性の証明ではない。
+
+単一の2〜64個のuntyped model value集合とsafety検査に限定する。typed値・node参照やnested payload・temporal/fairness・constraints・initial/action property・coverageは対象外で、複数worker要求は逐次へfallbackする。JSONのsymmetryはoptionalで、Rustのstruct literalにはsymmetry: Noneを追加する。[設定例と適用条件](../../docs/symmetry.md)を参照。

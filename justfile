@@ -742,3 +742,20 @@ smt-tuning-eval phase run baseline parent="": smt-build
 smt-tuning-replay run:
   pnpm build
   node dist/evals/smt-tuning/replay.js {{quote(run)}}
+
+symmetry-test: safety-build
+  cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test symmetry
+  node --test dist/evals/symmetry/contract-test.js
+
+symmetry-prepare: safety-build
+  node dist/evals/symmetry/prepare.js
+
+symmetry-eval run java jar: safety-build
+  node dist/evals/symmetry/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+# Build and freeze first; timing runs alone.
+symmetry-benchmark run java jar archive binary:
+  node dist/evals/symmetry/benchmark.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(binary)}}
+
+symmetry-criterion binary run:
+  node dist/evals/symmetry/criterion.js {{quote(binary)}} {{quote(run)}}

@@ -37,3 +37,8 @@ lto = true
 codegen-units = 1
 panic = "abort"
 strip = true
+
+[[bench]]
+name = "symmetry"
+path = "src/symmetry_benchmarks.rs"
+harness = false

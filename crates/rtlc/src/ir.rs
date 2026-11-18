@@ -315,6 +315,12 @@ pub struct Predicate {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct SafetySymmetry {
+    pub model_values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct SafetyProgram {
     pub format: String,
     pub version: u32,
@@ -325,6 +331,8 @@ pub struct SafetyProgram {
     pub invariants: Vec<Predicate>,
     pub assumptions: Vec<Predicate>,
     pub check_deadlock: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub symmetry: Option<SafetySymmetry>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub initial_properties: Vec<Predicate>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]

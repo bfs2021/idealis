@@ -4,7 +4,7 @@
 
 rtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust frontend。parserとcheckerを別crateに保ち、両者の公開契約をつなぐ。Nodeやsolverには依存しない。
 
-`compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。明示したユーザーモジュール集合と引数なしINSTANCEにも対応する。一般の高階・再帰operator、無限集合の列挙、symmetry、VIEWは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
+`compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。明示したユーザーモジュール集合と引数なしINSTANCEにも対応する。一般の高階・再帰operator、無限集合の列挙、一般のsymmetry、VIEWは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
 
 内部ではJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。
 
@@ -54,3 +54,5 @@ just module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/
 `SPECIFICATION`内の`\A p \in Processes: WF_vars(Step(p))`と対応するexists/SFを扱う。domainは定数の有限集合。tuple・入れ子・空domain・定数引数のwrapperに対応し、state依存domainや量化したInit/Nextの一般的な分解は拒否する。空existsによりfairnessが偽になる入力は、比較元TLCと同じくtautologyのモデルエラーとして検査する。fair behaviorの存在の一般的な証明ではない。
 
 [固定入力](tests/operators-support.json)はnative/Wasm/TLCとChromiumで検査する。反例は元のSPECIFICATIONを保持してTLCで再生する。`just operators-eval RUN JAVA JAR`と`just operators-replay SAVED RUN JAVA JAR`で実行・再現する。
+
+SYMMETRYはflat moduleのSymm == Permutations(Nodes)に限定してlowerする。TLC importと、直接割り当てた2〜64個の異なるuntyped model valueの集合を必要とする。rtlcの状態形状・safety限定の条件に従い、宣言のequivarianceは利用者の前提。[条件と制約](../../docs/symmetry.md)を参照。

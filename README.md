@@ -107,6 +107,12 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
+## node関数に限定したSYMMETRY
+
+Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value集合を指定できる。全Nodesをdomainに持つInt/Bool関数の値をnodeごとの行へまとめ、複数関数の相関と具体的な反例を保って状態を同一視する。3ノード・3値のcounterは27状態から10状態へ縮約した。7ノード・6値では279,936→792状態となり、Rust逐次の起動込み中央値は673.5→36.5 ms（約18.5倍）、prepared探索は633.2→3.89 ms（約163倍）だった。この限定したモデルでの結果で、全TLA+への速度保証ではない。
+
+宣言がInit/Next/invariantを保つことは利用者の前提。自動的な対称性の証明ではない。対象はsafetyのみで、nested/node参照payloadやtemporal/fairness等との併用を拒否する。SYMMETRY時の複数worker要求は逐次へfallbackする。[設定例と条件](docs/symmetry.md)、[0060の評価](evals/iterations/0060-restricted-symmetry.md)を参照。高速化の採否はRust nativeを主指標にし、Wasmは可搬性と挙動一致を保つ。
+
 ## Data定数のprepared化
 
 0059ではData定数の初回成功結果をslotへ保持し、繰り返しの値全体のhashを省いた。以下は約210万状態のチャネル群を全探索した同じrunの起動込み秒、1 warmup後3回の中央値。

@@ -34,7 +34,9 @@
 - [x] state/action constraintで探索を制限する。除外する境界候補もinvariantと対応するpropertyを検査し、除外をdeadlockとは扱わない。completeは制約後のグラフに対する結果。
 - [x] 時間論理のforall/existsを定数の有限domainで展開する。tuple、空domain、入れ子を扱い、展開もwork予算を消費する。
 - [x] temporal展開の訪問済み式は256式以下で固定長bit集合に保持し、それより大きいpoolはHashSetへ戻す。todo/next/pendingの順序とworkのtickは変えない。
-- [ ] SYMMETRYによる状態削減。活性検査への適用条件も必要。
+- [x] 単一の2〜64個のuntyped model value群に対する限定SYMMETRY。全群をdomainに持つ関数の同じnodeのInt/Bool値を行としてまとめ、global Int/Boolと併せて完全比較する。群の個別要素参照・順序依存式と未対応shapeは拒否する。
+- [x] 同一視用keyと具体状態を分離し、元の具体状態から探索・traceを作る。workへkey構築を計上し、symmetry時の複数worker要求は逐次へ戻す。宣言がInit/Next/invariantを保つことは利用者の前提で、gateをequivariance証明とは扱わない。
+- [ ] 一般のSYMMETRY、複数群、typed model value、node参照やnested payload、temporal/fairness・constraint・initial/action property・coverageとの併用。
 - [ ] VIEWによる状態の同一視。
 - [ ] ディスクへの状態・queueの退避とcheckpoint/resume。
 - [ ] seed付きのIR simulation、DFID探索。
@@ -57,4 +59,4 @@
 - [x] workはwall timeや厳密なメモリ上限ではない。並列探索のworkと予算境界の部分結果は逐次と同じとは限らない。
 - [x] 集合foldの文字列・record、関数key幅等の制限を維持する。model valueを含む集合foldも未対応。汎用Valueのvariantの存在だけで対応とは数えない。
 
-[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[関数値](src/safety_functions.rs)、[値の登録・移送](src/safety_values.rs)、[時間的性質](src/temporal.rs)、[定数の準備](src/safety_prepared.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。
+[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[関数値](src/safety_functions.rs)、[値の登録・移送](src/safety_values.rs)、[時間的性質](src/temporal.rs)、[定数の準備](src/safety_prepared.rs)、[限定symmetry](src/safety_symmetry.rs)、[適用条件](../../docs/symmetry.md)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。

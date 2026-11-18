@@ -122,3 +122,27 @@ test("runs the shared Rust core in Chromium without host imports or cross-origin
     coverageCases: 14,
   });
 });
+
+test("reduces a model-value symmetry group in Chromium without host imports", async ({
+  page,
+}) => {
+  await page.goto(origin);
+  const result = await page.evaluate(async () => {
+    const api: unknown = Reflect.get(globalThis, "portableBrowser");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runSymmetry" in api) ||
+      typeof api.runSymmetry !== "function"
+    )
+      throw new Error("Missing browser symmetry API");
+    return api.runSymmetry();
+  });
+  expect(result).toEqual({
+    status: "complete",
+    states: 10,
+    generated: 31,
+    originalStates: 27,
+    isolated: false,
+  });
+});

@@ -43,42 +43,50 @@
       "role": "reference"
     },
     "source10": {
-      "path": "crates/rtla-compiler/tests/compiler.rs",
+      "path": "crates/rtla-compiler/src/symmetry.rs",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/rtla-compiler/tests/finite-support.json",
+      "path": "crates/rtla-compiler/tests/compiler.rs",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/rtla-compiler/tests/finite_support.rs",
+      "path": "crates/rtla-compiler/tests/finite-support.json",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/rtla-compiler/tests/modules-support.json",
+      "path": "crates/rtla-compiler/tests/finite_support.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/rtla-compiler/tests/modules.rs",
+      "path": "crates/rtla-compiler/tests/modules-support.json",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtla-compiler/tests/operators-support.json",
+      "path": "crates/rtla-compiler/tests/modules.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/rtla-compiler/tests/operators.rs",
+      "path": "crates/rtla-compiler/tests/operators-support.json",
       "role": "reference"
     },
     "source17": {
-      "path": "package.json",
+      "path": "crates/rtla-compiler/tests/operators.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/rtla-compiler/tests/symmetry.rs",
       "role": "reference"
     },
     "source19": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source20": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source21": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -97,6 +105,18 @@
     },
     {
       "id": "rtla-compiler-implementation-0",
+      "topic": "限定したSYMMETRY設定のlowering、untyped model valueとflat moduleの条件、対称性証明との区別",
+      "mode": "semantic",
+      "reference": {
+        "source": "source10"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "rtla-compiler-implementation-1",
       "topic": "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
       "mode": "semantic",
       "reference": {
@@ -112,7 +132,7 @@
       ]
     },
     {
-      "id": "rtla-compiler-implementation-1",
+      "id": "rtla-compiler-implementation-2",
       "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
       "mode": "semantic",
       "reference": {
@@ -125,7 +145,7 @@
       "context": []
     },
     {
-      "id": "rtla-compiler-implementation-2",
+      "id": "rtla-compiler-implementation-3",
       "topic": "有限式、action、CASE、Apalache folds、限定したVariants、SelectSeq/SortSeq/Assertのlowering",
       "mode": "semantic",
       "reference": {
@@ -138,7 +158,7 @@
       "context": []
     },
     {
-      "id": "rtla-compiler-implementation-3",
+      "id": "rtla-compiler-implementation-4",
       "topic": "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
       "mode": "semantic",
       "reference": {

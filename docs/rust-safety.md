@@ -82,7 +82,7 @@ primed variable は、同じ分岐で代入した後に読み取る。部分的�
 
 設定は INIT / NEXT または SPECIFICATION に、INVARIANT / PROPERTY / CONSTANT / CHECK_DEADLOCK を組み合わせる。SPECIFICATION は初期述語、全 state variable を列挙した subscript の `[][Next]_vars`、WF / SF の連言を扱う。PROPERTY は state / action predicate、論理結合、always / eventually / leads-to を扱う。action を含む一般の temporal property は `[]<>A` / `<>[]A` の範囲に限る。定数の ASSUME も確認する。
 
-selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。引数付きINSTANCE・nested module、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、symmetry、VIEW は未対応。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
+selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。引数付きINSTANCE・nested module、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、一般のsymmetry、VIEW は未対応。[node関数に限定したSYMMETRY](symmetry.md)はRust frontendで扱う。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
 
 Rustのsource経路は定数有限domain上のSPECIFICATIONの量化fairnessと、SelectSeq / SortSeq / Assertを追加で扱う。callbackは可視の非再帰operator名に限定する。SortSeqはTLCの挿入順・比較順を保持し、反復・比較でworkを消費する。Assertはmessageも評価する。[追加の契約](../crates/rtla-compiler/README.md#標準演算と量化された公平性)を参照。既存のcompileTlaSafetyへ同じソース対応を追加した意味ではない。
 

@@ -12,6 +12,7 @@
 - [x] 操作列の削除・依存を扱う縮小候補。SUTで同じ失敗が残るかの判断は呼び出し側が担当する。
 - [x] SimulationHostの時計・乱数・通信・永続化とHostTapeの再生。
 - [x] compile_tlaでrtla → rtla-compiler → rtlcを接続し、対応fragmentをnative/Wasmで検査する。
+- [x] optionalなsymmetry.modelValuesを運び、Rust frontendとrtlcの限定SYMMETRYをnative/Wasmで扱う。適用形状・safety限定と宣言の前提はrtlcへ委譲し、一般の対称性証明やVIEWとは区別する。
 - [x] compile-tla / check-tlaのmodulesへ明示した追加source集合を渡す。modulesを省略した既存要求と、要求間で異なる同名moduleを区別する。ファイルシステムへ依存しない。
 - [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。
 - [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。

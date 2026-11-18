@@ -352,6 +352,7 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
       "checkDeadlock",
     ],
     [
+      "symmetry",
       "initialProperties",
       "actionProperties",
       "properties",
@@ -367,6 +368,25 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
   )
     throw new PortableCoreError("protocol", "Invalid compiled program version");
   text(value.name);
+  if (value.symmetry !== undefined) {
+    const symmetry = fields(value.symmetry, ["modelValues"]);
+    const members = array(symmetry.modelValues);
+    if (
+      members.length < 2 ||
+      members.length > 64 ||
+      new Set(members).size !== members.length ||
+      members.some(
+        (member) =>
+          typeof member !== "string" ||
+          !/^[A-Za-z_][A-Za-z_0-9]*$/.test(member) ||
+          member[1] === "_",
+      )
+    )
+      throw new PortableCoreError(
+        "protocol",
+        "Invalid compiled symmetry group",
+      );
+  }
   const variables = array(value.variables);
   variables.forEach(text);
   if (!variables.length || new Set(variables).size !== variables.length)

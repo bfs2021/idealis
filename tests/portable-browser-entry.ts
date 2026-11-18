@@ -312,3 +312,32 @@ export const run = async (): Promise<Record<string, unknown>> => {
     coverageCases: coverageInputs.length,
   };
 };
+
+export const runSymmetry = async () => {
+  const core = await createPortableWasm(
+    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+  );
+  const input = {
+    source:
+      "---- MODULE BrowserSymmetry ----\nEXTENDS Naturals,TLC\nCONSTANT Nodes\nVARIABLE f\nSymm == Permutations(Nodes)\nInit == f = [n \\in Nodes |-> 0]\nNext == \\E n \\in Nodes: f' = [f EXCEPT ![n] = IF @ < 2 THEN @+1 ELSE 0]\nSafe == f \\in [Nodes -> 0..2]\n====",
+    config:
+      "CONSTANT Nodes={a,b,c}\nINIT Init\nNEXT Next\nINVARIANT Safe\nSYMMETRY Symm",
+  };
+  const bounds = { maxDepth: 100, maxStates: 1000, maxWork: 1000000 };
+  const reduced = checkSafety(core, compileTlaSource(core, input), bounds);
+  const original = checkSafety(
+    core,
+    compileTlaSource(core, {
+      ...input,
+      config: input.config.replace("\nSYMMETRY Symm", ""),
+    }),
+    bounds,
+  );
+  return {
+    status: reduced.status,
+    states: reduced.states,
+    generated: reduced.generated,
+    originalStates: original.states,
+    isolated: globalThis.crossOriginIsolated,
+  };
+};

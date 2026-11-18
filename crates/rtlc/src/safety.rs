@@ -10,6 +10,7 @@ use crate::ir::{
     SafetyViolation, Scalar,
 };
 use crate::safety_prepared::PreparedProgram;
+use crate::safety_symmetry::Symmetry;
 use crate::safety_values::Arena;
 use crate::temporal::GraphEdge;
 use crate::{CoreError, Value};
@@ -97,6 +98,7 @@ struct Search<'a, R: Recording = NoCoverage> {
     graph: Option<Vec<Vec<GraphEdge>>>,
     roots: Vec<usize>,
     coverage: R,
+    symmetry: Option<Symmetry>,
 }
 
 impl SafetyProgram {
@@ -156,6 +158,7 @@ impl SafetyProgram {
             roots: vec![],
             store: StateStore::new(self.variables.len()),
             coverage: R::new(self),
+            symmetry: None,
             result: SafetyResult {
                 status: "complete".into(),
                 reason: None,
@@ -191,6 +194,12 @@ impl<'program, R: Recording> Search<'program, R> {
         let program = self.program;
         validate_branches(&program.initial, program.variables.len(), 0, 0)?;
         validate_branches(&program.next, program.variables.len(), 1, 0)?;
+        if program.symmetry.is_some() {
+            if R::ENABLED {
+                return Err(CoreError::protocol("Unsupported symmetry: coverage"));
+            }
+            self.symmetry = Some(Symmetry::prepare(program, arena)?);
+        }
         crate::safety_expressions::register_branch_memberships(
             &program.initial,
             &mut |expression| arena.register_memberships(expression),
@@ -283,7 +292,10 @@ impl<'program, R: Recording> Search<'program, R> {
         #[cfg(not(target_arch = "wasm32"))]
         let mut pool = None;
         #[cfg(not(target_arch = "wasm32"))]
-        let parallel = !R::ENABLED && workers > 1 && parallel::is_expensive(program);
+        let parallel = !R::ENABLED
+            && self.symmetry.is_none()
+            && workers > 1
+            && parallel::is_expensive(program);
         #[cfg(target_arch = "wasm32")]
         let _ = workers;
         while index < self.nodes.len() {
@@ -493,7 +505,18 @@ impl<'program, R: Recording> Search<'program, R> {
                 return Ok(());
             }
         }
-        let existing = self.store.find(hash, values);
+        let key = self
+            .symmetry
+            .as_ref()
+            .map(|symmetry| symmetry.key(values, arena))
+            .transpose()?;
+        let key_hash = key.as_ref().map(|key| Symmetry::hash(key));
+        let existing =
+            if let (Some(symmetry), Some(key), Some(hash)) = (&self.symmetry, &key, key_hash) {
+                symmetry.find(hash, key)
+            } else {
+                self.store.find(hash, values)
+            };
         let index = if let Some(index) = existing {
             index
         } else {
@@ -509,6 +532,9 @@ impl<'program, R: Recording> Search<'program, R> {
                 return Ok(());
             }
             let index = self.store.push(hash, values)?;
+            if let (Some(symmetry), Some(key), Some(hash)) = (&mut self.symmetry, key, key_hash) {
+                symmetry.insert(hash, key, index);
+            }
             self.nodes.push(Node {
                 parent,
                 action: parent.map(|_| action),

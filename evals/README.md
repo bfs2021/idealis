@@ -139,3 +139,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [0058: packed関数のhash](iterations/0058-packed-hash.md)は、公式C++のgolden vectorへ照合したfmix64で内部索引を軽くする。functionのnative/Wasmの改善、対照の後退、負荷変動でチャネルの速度判断を見送った条件を記録した。
 
 [0059: prepared定数・型別命令・並列照合](iterations/0059-prepared-execution.md)は3案を順に試し、Data定数cacheを採用する。型別命令と並列照合の後退、最終9経路と14本の段階別比較、旧版への完全応答照合を残す。チャネルのWasmは改善後もtla-tsより遅い。
+
+[0060: 限定したSYMMETRY](iterations/0060-restricted-symmetry.md)は、scalar node関数の行で状態を同一視する。宣言の前提、nativeの起動込み・prepared比較、TLCと具体traceの照合、通常ringで残る変動、失敗した測定driverも保存した。

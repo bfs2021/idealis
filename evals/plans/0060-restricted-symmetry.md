@@ -33,3 +33,7 @@ TLCに対する固定corpusはN=2/3/4、local counter上限K=1/2、安全版とf
 新しいCriterion targetにN5/K3、N7/K5、N5の2つのBool関数を置く。同じ候補binaryのplain/symmetryを20 samples、warmup 0.5秒、measurement 1秒で測る。既存14本は同じsourceでbefore/after/after/beforeを測り、10%以上の後退を明記する。通常測定中にbuild/test/profileを並行しない。nativeで有用な短縮がなく、誤った反例や見逃しがあれば採用しない。
 
 基準native/Wasmへの既存172入力・全応答照合とTLC既存155件・32件・保存再生も回帰として行う。check/browser、portable/safety、fmt/clippy、runtime、evaluate/replay、package、SUPPORT/Jevとstaged検査を通す。既存確認seedを新しい独立した確認実験と数えない。READMEと各SUPPORTに条件・前提・対象外・nativeの採否を残す。ローカルcommitまでとし、push/PR/mergeは行わない。
+
+## 対照測定後の追加診断
+
+最初の14本のrunは変更前binaryのring/channelが反復間で数倍変動し、counterの8-worker要求は平均で約13%後退した。原因は特定できておらず、初回を破棄せず、同じ入力・凍結binary・順序とsample条件で全14本を再実行する。追加診断は元のrunと併記し、独立した確認seedや改善の再現と数えない。通常経路の10%以上の後退が再現する場合は、その箇所を修正して再検査する。初回の異常な対照から高速化を主張しない。

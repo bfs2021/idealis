@@ -54,6 +54,11 @@ const scopes: readonly CrateScope[] = [
     name: "rtla-compiler",
     evidence: [
       {
+        path: "src/symmetry.rs",
+        topic:
+          "限定したSYMMETRY設定のlowering、untyped model valueとflat moduleの条件、対称性証明との区別",
+      },
+      {
         path: "src/link.rs",
         topic:
           "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
@@ -95,6 +100,11 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/temporal.rs",
         topic: "temporal/fairnessの検査とlasso、保証範囲の区別",
+      },
+      {
+        path: "src/safety_symmetry.rs",
+        topic:
+          "単一のuntypedモデル値群とscalar node関数に限定したsymmetry、利用者のequivariance前提、完全key比較と具体状態・traceの分離、予算と対象外",
       },
       {
         path: "src/safety_prepared.rs",

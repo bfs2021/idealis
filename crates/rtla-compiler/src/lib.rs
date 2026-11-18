@@ -6,6 +6,7 @@ use serde_json::{Value as Json, json};
 use std::collections::{BTreeMap, HashSet};
 mod link;
 mod rewrite;
+mod symmetry;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct CompileError {
@@ -189,6 +190,19 @@ pub fn compile_modules(
     config: &Config,
     modules: &[Module],
 ) -> Result<rtlc::SafetyProgram> {
+    if config.symmetry.is_some() {
+        if !modules.is_empty()
+            || !module.instances.is_empty()
+            || !config.substitutions.is_empty()
+            || config
+                .constants
+                .iter()
+                .any(|assignment| assignment.module.is_some() || assignment.args.is_some())
+        {
+            return unsupported("SYMMETRY requires a flat module and direct constants");
+        }
+        return compile_flat(module, config);
+    }
     let (module, config, action_names) = link::resolve(module, config, modules)?;
     let mut program = compile_flat(&module, &config)?;
     for branch in program.initial.iter_mut().chain(program.next.iter_mut()) {
@@ -215,7 +229,6 @@ fn compile_flat(module: &Module, config: &Config) -> Result<rtlc::SafetyProgram>
         return unsupported("EXTENDS");
     }
     if !config.substitutions.is_empty()
-        || config.symmetry.is_some()
         || config.view.is_some()
         || config.alias.is_some()
         || !config.postconditions.is_empty()
@@ -1428,6 +1441,9 @@ impl Compiler<'_> {
             assumptions.push(json!({"name":assumption.name.clone().unwrap_or_else(||format!("ASSUME {}",index+1)),"expression":self.expression(&assumption.expression,&self.root(Phase::Constant))?}));
         }
         let mut result = json!({"format":"modelt.safety-program","version":1,"name":self.module.name,"variables":self.module.variables.iter().map(|value|&value.name).collect::<Vec<_>>(),"initial":initial,"next":next,"invariants":invariants,"assumptions":assumptions,"checkDeadlock":self.config.check_deadlock});
+        if let Some(symmetry) = self.node_symmetry()? {
+            result["symmetry"] = symmetry;
+        }
         for (key, names, phase) in [
             ("constraints", self.config.constraints.clone(), Phase::State),
             (

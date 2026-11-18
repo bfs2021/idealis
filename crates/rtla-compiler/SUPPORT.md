@@ -25,7 +25,8 @@
 - [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。
 - [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。
 - [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。
-- [ ] SYMMETRY、VIEWの設定とlowering。
+- [x] flat moduleのゼロ引数定義Symm == Permutations(Nodes)とTLC import、CONSTANTへ直接与えた2〜64個の異なるuntyped model value集合をoptionalなsymmetry.modelValuesへlowerする。宣言のequivarianceを自動証明せず、実行時の状態形状と組合せはrtlcが制限する。
+- [ ] 一般のSYMMETRY設定、複数群・任意の置換・typed model value・module bundle/INSTANCEとの併用。VIEWの設定とlowering。
 - [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。
 - [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。
 - [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。

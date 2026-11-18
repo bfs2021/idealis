@@ -1,0 +1,23 @@
+import { readdir, readFile } from "node:fs/promises";
+import { fingerprint } from "../rust-safety/provenance.js";
+import { digest } from "../usable/provenance.js";
+
+export const symmetryFingerprint = async () => {
+  const base = await fingerprint();
+  const paths = [
+    "evals/plans/0060-restricted-symmetry.md",
+    ...(await readdir("evals/symmetry"))
+      .filter((path) => path.endsWith(".ts"))
+      .map((path) => `evals/symmetry/${path}`),
+  ];
+  const sources = [
+    ...base.sources,
+    ...(await Promise.all(
+      paths.map(async (path) => ({
+        path,
+        sha256: digest(await readFile(path)),
+      })),
+    )),
+  ].sort((left, right) => left.path.localeCompare(right.path));
+  return { sources, sourceVersion: digest(JSON.stringify(sources)) };
+};
