@@ -111,7 +111,13 @@ just browser
 
 Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value集合を指定できる。全Nodesをdomainに持つInt/Bool関数の値をnodeごとの行へまとめ、複数関数の相関と具体的な反例を保って状態を同一視する。3ノード・3値のcounterは27状態から10状態へ縮約した。7ノード・6値では279,936→792状態となり、Rust逐次の起動込み中央値は673.5→36.5 ms（約18.5倍）、prepared探索は633.2→3.89 ms（約163倍）だった。この限定したモデルでの結果で、全TLA+への速度保証ではない。
 
-宣言がInit/Next/invariantを保つことは利用者の前提。自動的な対称性の証明ではない。対象はsafetyのみで、nested/node参照payloadやtemporal/fairness等との併用を拒否する。SYMMETRY時の複数worker要求は逐次へfallbackする。[設定例と条件](docs/symmetry.md)、[0060の評価](evals/iterations/0060-restricted-symmetry.md)を参照。高速化の採否はRust nativeを主指標にし、Wasmは可搬性と挙動一致を保つ。
+宣言がInit/Next/invariantを保つことは利用者の前提。自動的な対称性の証明ではない。対象はsafetyのみで、node参照payloadやtemporal/fairness等との併用を拒否する。[設定例と条件](docs/symmetry.md)、上記数値を測った[0060の評価](evals/iterations/0060-restricted-symmetry.md)を参照。高速化の採否はRust nativeを主指標にし、Wasmは可搬性と挙動一致を保つ。
+
+0061ではnodeごとのflat Int/Bool recordとnode部分集合へ拡張した。`symmetryActions`で同じnode行の遷移を代表だけ生成し、nativeは64状態以上のfrontierで並列展開できる。最終版の確認測定ではrecord N5が縮約なし20.69→縮約あり2.12→代表展開1.60 ms、record N12の代表展開は1→8 workerで92.6→80.9 msだった。いずれもprepared探索で、起動込みの速度比ではない。反復間の大きな変動と再測定も保存している。
+
+独立したBool flagの一度だけの設定操作には、opt-inの限定PORも使える。10 flagの人工モデルでは4,096→14状態、prepared探索3.74→0.0105 msだった。一般のPORへ適用範囲を広げず、元のグラフでの最短反例も保証しない。命令IDの直接実行はcounterで約40%後退したため不採用。[実行optionと制限](docs/reductions.md)、[0061の採否と測定](evals/iterations/0061-symmetry-next.md)を参照。
+
+起動とcompiled IRのJSON境界を含む別測定では、record N12の代表展開は99.3→84.6 ms、ピークRSSの中央値は12.8→15.2 MiB（1→8 worker）だった。Node計測driverとtime wrapperの費用を含み、Node hostの起動とTLA+ frontendは含まない。小さいPORモデルのwallは6.89→3.70 msで、prepared探索の倍率とは分ける。
 
 ## Data定数のprepared化
 

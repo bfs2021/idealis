@@ -49,6 +49,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 nativeの`check_parallel(bounds, workers)`は1〜256 workerの上限を受け取る。軽いscalarや狭いfrontierは逐次実行する。action/temporal propertyとfairnessを含む探索も逐次へfallbackする。Wasmは逐次の`check`を使う。
 
+`check_with_options(bounds, SafetyOptions)`でworker上限とopt-inの遷移削減を選べる。`symmetry_actions`は限定SYMMETRYの同じnode行の代表展開、`partial_order`は他の操作・invariantが参照しない単調なBool flag操作の順序削減。既定は両方false。SYMMETRYとPORは併用できない。[対応条件と反例の制限](../../docs/reductions.md)を参照。
+
 ## 検証と配布
 
 ```sh

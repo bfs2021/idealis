@@ -20,6 +20,7 @@ export type {
   SafetyBounds,
   SafetyCoverage,
   SafetyCoverageReport,
+  SafetyOptions,
   SafetyProgram,
   SafetyResult,
   ShrinkResult,

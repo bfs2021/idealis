@@ -918,6 +918,30 @@ impl<'scope> Arena<'scope> {
             _ => Err(CoreError::protocol("Expected a function")),
         }
     }
+    pub fn scalar_record_shape(&self, value: Scalar) -> Result<Vec<(Scalar, bool)>, CoreError> {
+        let Cell::Function(function) = self.cell(value)? else {
+            return Err(CoreError::protocol(
+                "Unsupported symmetry: expected a flat scalar record",
+            ));
+        };
+        function
+            .iter()
+            .map(|(key, value)| {
+                if !matches!(self.cell(key)?, Cell::String(_)) {
+                    return Err(CoreError::protocol(
+                        "Unsupported symmetry: record fields must be strings",
+                    ));
+                }
+                match value {
+                    Scalar::Int(_) => Ok((key, false)),
+                    Scalar::Bool(_) => Ok((key, true)),
+                    Scalar::Ref(_) => Err(CoreError::protocol(
+                        "Unsupported symmetry: record fields must be Int/Bool",
+                    )),
+                }
+            })
+            .collect()
+    }
     pub fn function_values(&self, function: Scalar) -> Result<FunctionValues, CoreError> {
         match self.cell(function)? {
             Cell::Function(function) => Ok(function.values()),

@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0061: symmetry拡張と探索削減](iterations/0061-symmetry-next.md)は、record・集合、代表展開、並列化、命令ID、限定PORを順に試した。命令IDは後退して撤去し、採用した条件・具体反例の再生・計数の違いを記録する。
+
 [0053: TLCの24不一致解消](iterations/0053-tlc-standard-modules.md)は標準moduleを固定して参照pathを渡し、int32最小値のtrace表記も修正した。155件の検査・32件の確認・155件の保存再生で不一致0を確認した。
 
 [0052: workspaceのoracle統合](iterations/0052-workspace-oracle.md)は23ファイル・99比較をRust/Wasmへ通し、3言語と保存反例を再検査した。source/binary snapshotからのbefore/after比較と再生、JSON bridgeの追加費用、当時のTLCの24不一致も記録する（0053で解消）。

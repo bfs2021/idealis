@@ -39,6 +39,106 @@ fn compile(source: &str, config: &str) -> Result<SafetyProgram, rtla_compiler::C
 }
 
 #[test]
+fn node_records_and_sets_reduce_joint_orbits_without_losing_correlations() {
+    for count in [2, 3] {
+        for record in [false, true] {
+            let source = if record {
+                r#"---- MODULE RecordNodes ----
+EXTENDS Naturals, TLC
+CONSTANT Nodes
+VARIABLE local
+Symm == Permutations(Nodes)
+Init == local = [n \in Nodes |-> [term |-> 0, ready |-> FALSE]]
+Next == \/ (\E n \in Nodes: local' = [local EXCEPT ![n].term = IF @ < 2 THEN @ + 1 ELSE 0])
+        \/ (\E n \in Nodes: local' = [local EXCEPT ![n].ready = ~@])
+Safe == \A n \in Nodes: local[n].term <= 2
+===="#
+            } else {
+                r#"---- MODULE SetNodes ----
+EXTENDS TLC
+CONSTANT Nodes
+VARIABLES first, second
+Symm == Permutations(Nodes)
+Init == /\ first = {} /\ second = {}
+Next == \/ (\E n \in Nodes: /\ first' = (IF n \in first THEN first \ {n} ELSE first \cup {n}) /\ UNCHANGED second)
+        \/ (\E n \in Nodes: /\ second' = (IF n \in second THEN second \ {n} ELSE second \cup {n}) /\ UNCHANGED first)
+Safe == /\ first \subseteq Nodes /\ second \subseteq Nodes
+===="#
+            };
+            let (_, config) = input(count, 2);
+            let plain = compile(source, &config.replace("\nSYMMETRY Symm", "")).unwrap();
+            let reduced = compile(source, &config).unwrap();
+            let actual = reduced.check(bounds()).unwrap();
+            assert_eq!(actual.status, "complete");
+            assert_eq!(
+                actual.states,
+                match (record, count) {
+                    (true, 2) => 21,
+                    (true, _) => 56,
+                    (false, 2) => 10,
+                    (false, _) => 20,
+                }
+            );
+            assert_eq!(
+                plain.check(bounds()).unwrap().states,
+                if record {
+                    6_usize.pow(count as u32)
+                } else {
+                    4_usize.pow(count as u32)
+                }
+            );
+            let faulty = source
+                .replace("local[n].term <= 2", "local[n].term < 2")
+                .replace("first \\subseteq Nodes", "first = {}");
+            let result = compile(&faulty, &config).unwrap().check(bounds()).unwrap();
+            assert_eq!(result.status, "invariant-violation");
+            assert!(result.violation.unwrap().trace.len() >= 2);
+        }
+    }
+}
+
+#[test]
+fn action_orbits_are_opt_in_and_keep_shortest_concrete_fault_traces() {
+    let (source, config) = input(3, 2);
+    let program = compile(&source, &config).unwrap();
+    let options = rtlc::SafetyOptions {
+        symmetry_actions: true,
+        ..Default::default()
+    };
+    let reduced = program.check_with_options(bounds(), options).unwrap();
+    let original = program.check(bounds()).unwrap();
+    assert_eq!(
+        (reduced.status.as_str(), reduced.states, reduced.depth),
+        ("complete", original.states, original.depth)
+    );
+    assert_eq!(reduced.generated, 19);
+    assert_eq!(original.generated, 31);
+    let source = source.replace(
+        "Safe == counters \\in [Nodes -> 0..2]",
+        "Safe == \\A node \\in Nodes: counters[node] < 2",
+    );
+    let program = compile(&source, &config).unwrap();
+    let result = program.check_with_options(bounds(), options).unwrap();
+    assert_eq!(result.status, "invariant-violation");
+    assert_eq!(result.violation.as_ref().unwrap().trace.len(), 3);
+    for maximum in [1, 2, 17, 50] {
+        let result = program
+            .check_with_options(
+                SafetyBounds {
+                    max_work: maximum,
+                    ..bounds()
+                },
+                options,
+            )
+            .unwrap();
+        assert_eq!(result.status, "bounded");
+        assert!(result.work <= maximum);
+    }
+    let plain = compile(&source, &config.replace("\nSYMMETRY Symm", "")).unwrap();
+    assert!(plain.check_with_options(bounds(), options).is_err());
+}
+
+#[test]
 fn full_node_permutations_reduce_counter_orbits_and_keep_plain_wire_unchanged() {
     let (source, config) = input(3, 2);
     let reduced = compile(&source, &config).unwrap();

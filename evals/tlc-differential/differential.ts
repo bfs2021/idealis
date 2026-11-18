@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import type { PortableCore } from "../../src/contracts.js";
+import type { PortableCore, SafetyOptions } from "../../src/contracts.js";
 import { PortableCoreError } from "../../src/portable-value.js";
 import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
 import { compileTlaSafety } from "../../src/tla-safety.js";
@@ -20,12 +20,13 @@ export const differential = async (
   directory: string,
   frontend: typeof compileTlaSafety = compileTlaSafety,
   options: NonNullable<Parameters<typeof runTlc>[5]> = {},
+  safetyOptions?: SafetyOptions,
 ) => {
   const observe = (): Observation => {
     try {
       const program = frontend(input);
       try {
-        return { result: checkSafety(core, program, bounds) };
+        return { result: checkSafety(core, program, bounds, safetyOptions) };
       } catch (error) {
         assert.ok(error instanceof PortableCoreError);
         return {
@@ -52,6 +53,7 @@ export const differential = async (
         kind: "check-safety",
         program: frontend(input),
         bounds,
+        ...(safetyOptions === undefined ? {} : { options: safetyOptions }),
       },
     });
     assert.ok(isRecord(response));
@@ -83,7 +85,14 @@ export const differential = async (
     ours.error?.phase === "compile" &&
     /TLC 1.7.4 string literal/.test(ours.error.message) &&
     classifyTlc(reference) === "input-error";
-  const mismatches = rejected ? [] : [...differences(ours, reference)];
+  const comparison = safetyOptions?.partialOrder
+    ? { states: false, generated: false, shortestTrace: false }
+    : safetyOptions?.symmetryActions
+      ? { generated: false }
+      : {};
+  const mismatches = rejected
+    ? []
+    : [...differences(ours, reference, comparison)];
   if (nativeResult && compareOracle(nativeResult, ours).status !== "matched")
     mismatches.push("native-wasm");
   if (
@@ -182,6 +191,13 @@ export const differential = async (
   }
   return {
     input,
+    comparison,
+    ...(safetyOptions?.symmetryActions
+      ? {
+          generatedComparison: "not comparable: action orbit representatives",
+          safetyOptions,
+        }
+      : {}),
     classification: rejected ? "rejected-input" : "compared",
     ours,
     ...(nativeResult ? { native: nativeResult } : {}),

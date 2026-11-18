@@ -34,9 +34,13 @@
 - [x] state/action constraintで探索を制限する。除外する境界候補もinvariantと対応するpropertyを検査し、除外をdeadlockとは扱わない。completeは制約後のグラフに対する結果。
 - [x] 時間論理のforall/existsを定数の有限domainで展開する。tuple、空domain、入れ子を扱い、展開もwork予算を消費する。
 - [x] temporal展開の訪問済み式は256式以下で固定長bit集合に保持し、それより大きいpoolはHashSetへ戻す。todo/next/pendingの順序とworkのtickは変えない。
-- [x] 単一の2〜64個のuntyped model value群に対する限定SYMMETRY。全群をdomainに持つ関数の同じnodeのInt/Bool値を行としてまとめ、global Int/Boolと併せて完全比較する。群の個別要素参照・順序依存式と未対応shapeは拒否する。
-- [x] 同一視用keyと具体状態を分離し、元の具体状態から探索・traceを作る。workへkey構築を計上し、symmetry時の複数worker要求は逐次へ戻す。宣言がInit/Next/invariantを保つことは利用者の前提で、gateをequivariance証明とは扱わない。
-- [ ] 一般のSYMMETRY、複数群、typed model value、node参照やnested payload、temporal/fairness・constraint・initial/action property・coverageとの併用。
+- [x] 単一の2〜64個のuntyped model value群に対する限定SYMMETRY。全群をdomainに持つ関数のInt/Boolまたはflat recordと、node部分集合を扱う。recordのfield名・Int/Bool型を関数内で揃える。同じnodeの関数値・集合所属を同じ行として完全比較する。個別の群要素・順序依存式と未対応shapeは拒否する。
+- [x] 同一視用keyと具体状態を分離し、元の具体状態から探索・traceを作る。workへkey構築を計上する。宣言がInit/Next/invariantを保つことは利用者の前提で、gateをequivariance証明とは扱わない。
+- [x] SafetyOptionsのsymmetry_actionsはopt-in。先頭に単一node bindingを持つbranchの同じ行を代表だけ展開する。Init・複数binding・tuple binding・全群以外のdomainは通常展開。generated/workは削減後の計数。
+- [x] nativeのsymmetryは64状態以上のfrontierを並列展開する。rootへのRef移送後に逐次にkeyを照合し、代表展開とも併用する。狭いfrontierとWasmは逐次へ戻す。
+- [x] SafetyOptionsのpartial_orderはopt-inで逐次実行する。invariantと他branchが参照せず、他branchが戻せないBool flagのFALSE→TRUE操作だけを先に実行する。依存・未知の式・不正な状態型では通常展開へ戻す。temporal/fairness・constraint・initial/action propertyでは通常探索、SYMMETRYとの併用は拒否する。元のグラフの最短反例は保証しない。
+- [ ] 一般のSYMMETRY、複数群、typed model value、node参照やrecord内のnested payload、temporal/fairness・constraint・initial/action property・coverageとの併用。
+- [ ] 任意の独立性解析や循環に対応する一般のPOR。現在の限定PORの条件外への適用。
 - [ ] VIEWによる状態の同一視。
 - [ ] ディスクへの状態・queueの退避とcheckpoint/resume。
 - [ ] seed付きのIR simulation、DFID探索。
@@ -49,7 +53,7 @@
 - [ ] TLA+の構文解析・名前解決・IRへのコンパイル、TLC CLI全体の互換性。
 - [ ] 無限状態の完全探索、任意のTLA+構文やSMT理論。TLC互換性の不足とは別に扱う。
 - [ ] Wasm内部の探索マルチスレッド、temporal/fairness探索の内部並列化。
-- [ ] 型別命令VM、訪問済み照合やstate受理の内部並列化。0059の限定した試作は後退があり不採用。
+- [ ] 型別命令VM、訪問済み照合やstate受理の内部並列化。0059の試作と0061の命令IDによる直接実行は後退があり不採用。
 - [ ] liveness反例の最短性、fairnessを満たすbehaviorの存在の別証明。
 - [ ] このcrate単体のブラウザJSON ABI。Wasm境界はidealis-coreが提供する。
 
@@ -60,3 +64,5 @@
 - [x] 集合foldの文字列・record、関数key幅等の制限を維持する。model valueを含む集合foldも未対応。汎用Valueのvariantの存在だけで対応とは数えない。
 
 [README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[関数値](src/safety_functions.rs)、[値の登録・移送](src/safety_values.rs)、[時間的性質](src/temporal.rs)、[定数の準備](src/safety_prepared.rs)、[限定symmetry](src/safety_symmetry.rs)、[適用条件](../../docs/symmetry.md)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。
+
+[限定POR](src/safety_partial_order.rs)と[optionの制限](../../docs/reductions.md)を参照。

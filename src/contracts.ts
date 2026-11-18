@@ -145,6 +145,7 @@ export interface PortableCommand {
         readonly kind: "check-safety";
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
+        readonly options?: SafetyOptions;
       }
     | {
         readonly kind: "check-safety-coverage";
@@ -517,6 +518,12 @@ export interface SafetyPredicate {
 
 export interface SafetySymmetry {
   readonly modelValues: readonly string[];
+}
+
+export interface SafetyOptions {
+  readonly workers?: number;
+  readonly symmetryActions?: boolean;
+  readonly partialOrder?: boolean;
 }
 
 export interface SafetyProgram {

@@ -1,6 +1,7 @@
 import type {
   PortableCore,
   SafetyBounds,
+  SafetyOptions,
   SafetyProgram,
   SafetyResult,
 } from "./contracts.js";
@@ -127,14 +128,25 @@ export const checkSafety = (
   core: PortableCore,
   program: SafetyProgram,
   bounds: SafetyBounds,
+  options?: SafetyOptions,
 ): SafetyResult => {
   const output = core.request({
     version: 1,
-    request: { kind: "check-safety", program, bounds },
+    request: {
+      kind: "check-safety",
+      program,
+      bounds,
+      ...(options === undefined ? {} : { options }),
+    },
   });
   if (output.kind !== "safety")
     throw new PortableCoreError("protocol", "Expected a safety result");
   return output.result;
 };
 
-export type { SafetyBounds, SafetyProgram, SafetyResult } from "./contracts.js";
+export type {
+  SafetyBounds,
+  SafetyOptions,
+  SafetyProgram,
+  SafetyResult,
+} from "./contracts.js";

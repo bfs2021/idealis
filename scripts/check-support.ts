@@ -104,7 +104,20 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/safety_symmetry.rs",
         topic:
-          "単一のuntypedモデル値群とscalar node関数に限定したsymmetry、利用者のequivariance前提、完全key比較と具体状態・traceの分離、予算と対象外",
+          "単一のuntypedモデル値群、scalar/flat recordのnode関数とnode部分集合、同じnode行のopt-in代表展開、equivarianceの利用者前提、具体traceと計数、対象外",
+        context: ["src/safety_parallel.rs"],
+      },
+      {
+        path: "src/safety_values.rs",
+        contains: "pub fn scalar_record_shape(",
+        topic:
+          "symmetryのflat record payloadのfield名・Int/Bool型の検証とnested/node参照の拒否",
+      },
+      {
+        path: "src/safety_partial_order.rs",
+        topic:
+          "opt-inの限定POR、不可視で独立な単調Bool flagの条件、他branchによるresetの禁止、fallback、一般PORとの区別",
+        context: ["src/safety.rs", "src/ir.rs"],
       },
       {
         path: "src/safety_prepared.rs",

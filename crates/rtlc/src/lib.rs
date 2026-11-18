@@ -1,6 +1,7 @@
 pub mod ir;
 mod safety;
 mod safety_expressions;
+mod safety_partial_order;
 mod safety_prepared;
 mod safety_symmetry;
 mod safety_values;
@@ -10,7 +11,7 @@ mod temporal;
 mod value;
 
 pub use ir::{
-    SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport, SafetyProgram,
-    SafetyResult,
+    SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport, SafetyOptions,
+    SafetyProgram, SafetyResult,
 };
 pub use value::{CoreError, Value};

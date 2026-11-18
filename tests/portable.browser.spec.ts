@@ -143,6 +143,10 @@ test("reduces a model-value symmetry group in Chromium without host imports", as
     states: 10,
     generated: 31,
     originalStates: 27,
+    records: { status: "complete", states: 56, generated: 337 },
+    sets: { status: "complete", states: 20, generated: 121 },
+    actions: { status: "complete", states: 10, generated: 19 },
+    por: { status: "complete", states: 7, generated: 8 },
     isolated: false,
   });
 });

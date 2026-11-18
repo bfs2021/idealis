@@ -6,6 +6,7 @@ export const symmetryFingerprint = async () => {
   const base = await fingerprint();
   const paths = [
     "evals/plans/0060-restricted-symmetry.md",
+    "evals/plans/0061-symmetry-next.md",
     ...(await readdir("evals/symmetry"))
       .filter((path) => path.endsWith(".ts"))
       .map((path) => `evals/symmetry/${path}`),

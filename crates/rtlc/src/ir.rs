@@ -319,6 +319,24 @@ pub struct SafetySymmetry {
     pub model_values: Vec<String>,
 }
 
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[serde(default, deny_unknown_fields, rename_all = "camelCase")]
+pub struct SafetyOptions {
+    pub workers: usize,
+    pub symmetry_actions: bool,
+    pub partial_order: bool,
+}
+
+impl Default for SafetyOptions {
+    fn default() -> Self {
+        Self {
+            workers: 1,
+            symmetry_actions: false,
+            partial_order: false,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct SafetyProgram {

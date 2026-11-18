@@ -2,6 +2,7 @@ import {
   coverageBounds,
   coverageInputs,
 } from "../evals/action-coverage/cases.js";
+import { monotone, nodeSets, recordNodes } from "../evals/symmetry/cases.js";
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
 import { createRtlcBackend, runBackend } from "../src/backend.js";
@@ -325,6 +326,18 @@ export const runSymmetry = async () => {
   };
   const bounds = { maxDepth: 100, maxStates: 1000, maxWork: 1000000 };
   const reduced = checkSafety(core, compileTlaSource(core, input), bounds);
+  const records = checkSafety(
+    core,
+    compileTlaSource(core, recordNodes(3)),
+    bounds,
+  );
+  const sets = checkSafety(core, compileTlaSource(core, nodeSets(3)), bounds);
+  const por = checkSafety(core, compileTlaSource(core, monotone(3)), bounds, {
+    partialOrder: true,
+  });
+  const actions = checkSafety(core, compileTlaSource(core, input), bounds, {
+    symmetryActions: true,
+  });
   const original = checkSafety(
     core,
     compileTlaSource(core, {
@@ -337,7 +350,23 @@ export const runSymmetry = async () => {
     status: reduced.status,
     states: reduced.states,
     generated: reduced.generated,
+    records: {
+      status: records.status,
+      states: records.states,
+      generated: records.generated,
+    },
+    sets: {
+      status: sets.status,
+      states: sets.states,
+      generated: sets.generated,
+    },
+    actions: {
+      status: actions.status,
+      states: actions.states,
+      generated: actions.generated,
+    },
     originalStates: original.states,
+    por: { status: por.status, states: por.states, generated: por.generated },
     isolated: globalThis.crossOriginIsolated,
   };
 };

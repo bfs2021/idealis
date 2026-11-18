@@ -9,6 +9,11 @@ export interface Observation {
     readonly message: string;
   };
 }
+export interface Comparison {
+  readonly states?: boolean;
+  readonly generated?: boolean;
+  readonly shortestTrace?: boolean;
+}
 export const classifyTlc = (
   reference: Awaited<ReturnType<typeof runTlc>>,
 ): string => {
@@ -46,6 +51,7 @@ export const classifyTlc = (
 export const differences = (
   ours: Observation,
   reference: Awaited<ReturnType<typeof runTlc>>,
+  comparison: Comparison = {},
 ): readonly string[] => {
   const actual = ours.error
     ? ours.error.phase === "compile"
@@ -62,11 +68,13 @@ export const differences = (
   if (!ours.result) return [];
   const result: string[] = [];
   if (
+    comparison.states !== false &&
     reference.states !== null &&
     compareOracle(ours.result.states, reference.states).status !== "matched"
   )
     result.push(`states: ${ours.result.states} != ${reference.states}`);
   if (
+    comparison.generated !== false &&
     reference.generated !== null &&
     compareOracle(ours.result.generated, reference.generated).status !==
       "matched"
@@ -75,6 +83,7 @@ export const differences = (
       `generated: ${ours.result.generated} != ${reference.generated}`,
     );
   if (
+    comparison.shortestTrace !== false &&
     ours.result.violation &&
     ["invariant-violation", "property-violation", "deadlock"].includes(
       ours.result.status,

@@ -6,11 +6,12 @@ use coverage::{NoCoverage, Recording, WithCoverage};
 #[path = "safety_parallel.rs"]
 mod parallel;
 use crate::ir::{
-    Branch, SafetyBounds, SafetyCoverageReport, SafetyProgram, SafetyResult, SafetyTraceStep,
-    SafetyViolation, Scalar,
+    Branch, SafetyBounds, SafetyCoverageReport, SafetyOptions, SafetyProgram, SafetyResult,
+    SafetyTraceStep, SafetyViolation, Scalar,
 };
+use crate::safety_partial_order::PartialOrder;
 use crate::safety_prepared::PreparedProgram;
-use crate::safety_symmetry::Symmetry;
+use crate::safety_symmetry::{Symmetry, visit_representatives};
 use crate::safety_values::Arena;
 use crate::temporal::GraphEdge;
 use crate::{CoreError, Value};
@@ -99,17 +100,38 @@ struct Search<'a, R: Recording = NoCoverage> {
     roots: Vec<usize>,
     coverage: R,
     symmetry: Option<Symmetry>,
+    options: SafetyOptions,
+    partial_order: Option<PartialOrder>,
 }
 
 impl SafetyProgram {
     pub fn check(&self, bounds: SafetyBounds) -> Result<SafetyResult, CoreError> {
         self.check_with_workers(bounds, 1)
     }
+    pub fn check_with_options(
+        &self,
+        bounds: SafetyBounds,
+        options: SafetyOptions,
+    ) -> Result<SafetyResult, CoreError> {
+        if options.partial_order && self.symmetry.is_some() {
+            return Err(CoreError::protocol(
+                "Unsupported reduction: partial order with symmetry",
+            ));
+        }
+        if !(1..=256).contains(&options.workers)
+            || (options.symmetry_actions && self.symmetry.is_none())
+        {
+            return Err(CoreError::protocol(
+                "Invalid safety options: workers must be 1 to 256 and symmetry actions require symmetry",
+            ));
+        }
+        self.check_measured::<NoCoverage>(bounds, options)
+    }
     pub fn check_with_coverage(
         &self,
         bounds: SafetyBounds,
     ) -> Result<SafetyCoverageReport, CoreError> {
-        self.check_measured::<WithCoverage>(bounds, 1)
+        self.check_measured::<WithCoverage>(bounds, SafetyOptions::default())
     }
     #[cfg(not(target_arch = "wasm32"))]
     pub fn check_parallel(
@@ -129,12 +151,18 @@ impl SafetyProgram {
         bounds: SafetyBounds,
         workers: usize,
     ) -> Result<SafetyResult, CoreError> {
-        self.check_measured::<NoCoverage>(bounds, workers)
+        self.check_with_options(
+            bounds,
+            SafetyOptions {
+                workers,
+                ..Default::default()
+            },
+        )
     }
     fn check_measured<R: Recording>(
         &self,
         bounds: SafetyBounds,
-        workers: usize,
+        options: SafetyOptions,
     ) -> Result<R::Output, CoreError> {
         if self.format != "modelt.safety-program"
             || self.version != 1
@@ -159,6 +187,8 @@ impl SafetyProgram {
             store: StateStore::new(self.variables.len()),
             coverage: R::new(self),
             symmetry: None,
+            options,
+            partial_order: None,
             result: SafetyResult {
                 status: "complete".into(),
                 reason: None,
@@ -169,7 +199,7 @@ impl SafetyProgram {
                 violation: None,
             },
         };
-        let outcome = search.run(&mut arena, workers);
+        let outcome = search.run(&mut arena, options.workers);
         if let Err(error) = outcome {
             if error.code != "budget" && error.code != "temporal-budget" {
                 return Err(error);
@@ -194,6 +224,9 @@ impl<'program, R: Recording> Search<'program, R> {
         let program = self.program;
         validate_branches(&program.initial, program.variables.len(), 0, 0)?;
         validate_branches(&program.next, program.variables.len(), 1, 0)?;
+        if self.options.partial_order {
+            self.partial_order = Some(PartialOrder::prepare(program));
+        }
         if program.symmetry.is_some() {
             if R::ENABLED {
                 return Err(CoreError::protocol("Unsupported symmetry: coverage"));
@@ -293,7 +326,7 @@ impl<'program, R: Recording> Search<'program, R> {
         let mut pool = None;
         #[cfg(not(target_arch = "wasm32"))]
         let parallel = !R::ENABLED
-            && self.symmetry.is_none()
+            && !self.options.partial_order
             && workers > 1
             && parallel::is_expensive(program);
         #[cfg(target_arch = "wasm32")]
@@ -302,7 +335,7 @@ impl<'program, R: Recording> Search<'program, R> {
             let end = self.nodes.len();
             #[cfg(not(target_arch = "wasm32"))]
             if parallel
-                && end - index >= 16
+                && end - index >= if self.symmetry.is_some() { 64 } else { 16 }
                 && program.action_properties.is_empty()
                 && program.properties.is_empty()
                 && program.fairness.is_empty()
@@ -364,7 +397,14 @@ impl<'program, R: Recording> Search<'program, R> {
         let program = self.program;
         current.copy_from_slice(self.store.state(index));
         let mut enabled = false;
+        let selected = self
+            .partial_order
+            .as_ref()
+            .and_then(|partial_order| partial_order.selected(current));
         for (branch_index, branch) in program.next.iter().enumerate() {
+            if selected.is_some_and(|selected| selected != branch_index) {
+                continue;
+            }
             self.walk(
                 arena,
                 BranchCursor {
@@ -413,18 +453,41 @@ impl<'program, R: Recording> Search<'program, R> {
         } else {
             None
         };
-        let outcome = visit_branch(
-            branch.definition,
-            position,
-            context,
-            next,
-            arena,
-            &mut |values, arena| {
-                *enabled = true;
-                self.accept(values, parent, branch.index, arena)?;
-                Ok(self.stopped())
-            },
-        );
+        let members = if self.options.symmetry_actions && parent.is_some() {
+            self.symmetry
+                .as_ref()
+                .unwrap()
+                .action_members(branch.definition, context, arena)?
+        } else {
+            None
+        };
+        let outcome = if let Some(members) = members {
+            visit_representatives(
+                branch.definition,
+                context,
+                next,
+                arena,
+                &members,
+                &mut |values, arena| {
+                    *enabled = true;
+                    self.accept(values, parent, branch.index, arena)?;
+                    Ok(self.stopped())
+                },
+            )
+        } else {
+            visit_branch(
+                branch.definition,
+                position,
+                context,
+                next,
+                arena,
+                &mut |values, arena| {
+                    *enabled = true;
+                    self.accept(values, parent, branch.index, arena)?;
+                    Ok(self.stopped())
+                },
+            )
+        };
         if let Some((work, generated, states)) = before {
             self.coverage.record(
                 parent.is_none(),

@@ -1,4 +1,5 @@
-use crate::ir::{Domain, Expression, SafetyProgram, Scalar, Step};
+use crate::ir::{Branch, Domain, Expression, SafetyProgram, Scalar, Step};
+use crate::safety_expressions::{EvalContext, visit_branch};
 use crate::safety_values::Arena;
 use crate::{CoreError, Value};
 use std::collections::{HashMap, HashSet};
@@ -9,12 +10,41 @@ struct Representative {
     index: usize,
 }
 
+struct NodeRows {
+    header: Vec<Scalar>,
+    values: Vec<Vec<Scalar>>,
+    columns: usize,
+}
+
 pub(crate) struct Symmetry {
     group: Vec<Scalar>,
     keys: HashMap<u64, Vec<Representative>>,
 }
 
 impl Symmetry {
+    pub fn action_members(
+        &self,
+        branch: &Branch,
+        context: EvalContext<'_>,
+        arena: &mut Arena,
+    ) -> Result<Option<Vec<Scalar>>, CoreError> {
+        if let [
+            Step::Bind {
+                slot: 0,
+                domain,
+                tuple_size: None,
+            },
+            rest @ ..,
+        ] = branch.steps.as_slice()
+            && !rest.iter().any(|step| matches!(step, Step::Bind { .. }))
+        {
+            let values: Vec<_> = domain.values(context, arena)?.collect();
+            return self
+                .representatives(context.current, &values, arena)
+                .map(Some);
+        }
+        Ok(None)
+    }
     pub fn prepare(program: &SafetyProgram, arena: &mut Arena) -> Result<Self, CoreError> {
         let definition = program.symmetry.as_ref().unwrap();
         let mut names = definition.model_values.clone();
@@ -145,6 +175,39 @@ impl Symmetry {
         values: &[Option<Scalar>],
         arena: &mut Arena,
     ) -> Result<Vec<Scalar>, CoreError> {
+        let mut rows = self.rows(values, arena)?;
+        if rows.columns != 0 {
+            arena.consume(self.group.len() * self.group.len() * rows.columns)?;
+            rows.values.sort_unstable();
+            rows.header.extend(rows.values.into_iter().flatten());
+        }
+        Ok(rows.header)
+    }
+
+    pub fn representatives(
+        &self,
+        current: &[Scalar],
+        members: &[Scalar],
+        arena: &mut Arena,
+    ) -> Result<Vec<Scalar>, CoreError> {
+        if members != self.group {
+            return Ok(members.to_vec());
+        }
+        let rows = self.rows(
+            &current.iter().copied().map(Some).collect::<Vec<_>>(),
+            arena,
+        )?;
+        let mut seen = HashSet::new();
+        Ok(self
+            .group
+            .iter()
+            .copied()
+            .zip(rows.values)
+            .filter_map(|(member, row)| seen.insert(row).then_some(member))
+            .collect())
+    }
+
+    fn rows(&self, values: &[Option<Scalar>], arena: &mut Arena) -> Result<NodeRows, CoreError> {
         arena.consume(values.len())?;
         let mut key = Vec::with_capacity(values.len());
         let mut rows = vec![Vec::new(); self.group.len()];
@@ -154,22 +217,43 @@ impl Symmetry {
                 value @ (Scalar::Bool(_) | Scalar::Int(_)) => key.push(value),
                 value @ Scalar::Ref(_) => {
                     arena.consume(self.group.len())?;
+                    if let Ok(members) = arena.members(value) {
+                        if members.iter().any(|member| !self.group.contains(member)) {
+                            return Err(CoreError::protocol(
+                                "Unsupported symmetry: set contains a non-node value",
+                            ));
+                        }
+                        for (row, member) in rows.iter_mut().zip(&self.group) {
+                            row.push(Scalar::Bool(members.contains(member)));
+                        }
+                        columns += 1;
+                        key.push(Scalar::Ref(1));
+                        continue;
+                    }
                     let entries = arena.entries(value).map_err(|_| CoreError::protocol("Unsupported symmetry: state must contain scalar node functions or Int/Bool"))?;
                     if entries.len() != self.group.len()
                         || !entries
                             .iter()
                             .zip(&self.group)
                             .all(|((key, _), member)| key == member)
-                        || !entries
-                            .iter()
-                            .all(|(_, value)| matches!(value, Scalar::Int(_) | Scalar::Bool(_)))
                         || !entries.iter().all(|(_, value)| {
                             std::mem::discriminant(value) == std::mem::discriminant(&entries[0].1)
                         })
                     {
                         return Err(CoreError::protocol(
-                            "Unsupported symmetry: node function needs the complete domain and homogeneous Int/Bool payload",
+                            "Unsupported symmetry: node function needs the complete domain and homogeneous payload",
                         ));
+                    }
+                    if matches!(entries[0].1, Scalar::Ref(_)) {
+                        let shape = arena.scalar_record_shape(entries[0].1)?;
+                        for (_, record) in &entries {
+                            arena.consume(shape.len())?;
+                            if arena.scalar_record_shape(*record)? != shape {
+                                return Err(CoreError::protocol(
+                                    "Unsupported symmetry: record schema and field types must agree",
+                                ));
+                            }
+                        }
                     }
                     for (row, (_, value)) in rows.iter_mut().zip(entries) {
                         row.push(value);
@@ -179,12 +263,11 @@ impl Symmetry {
                 }
             }
         }
-        if columns != 0 {
-            arena.consume(self.group.len() * self.group.len() * columns)?;
-            rows.sort_unstable();
-            key.extend(rows.into_iter().flatten());
-        }
-        Ok(key)
+        Ok(NodeRows {
+            header: key,
+            values: rows,
+            columns,
+        })
     }
 
     pub fn hash(key: &[Scalar]) -> u64 {
@@ -206,6 +289,33 @@ impl Symmetry {
             index,
         });
     }
+}
+
+pub(crate) fn visit_representatives(
+    branch: &Branch,
+    context: EvalContext<'_>,
+    next: &mut [Option<Scalar>],
+    arena: &mut Arena,
+    members: &[Scalar],
+    visitor: &mut impl FnMut(&[Option<Scalar>], &mut Arena) -> Result<bool, CoreError>,
+) -> Result<bool, CoreError> {
+    arena.tick()?;
+    for member in members {
+        if visit_branch(
+            branch,
+            1,
+            EvalContext {
+                locals: &[*member],
+                ..context
+            },
+            next,
+            arena,
+            visitor,
+        )? {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 fn node_members<'a>(values: impl Iterator<Item = Option<&'a str>>, names: &[String]) -> bool {
@@ -343,6 +453,66 @@ mod tests {
         assert_eq!(symmetry.find(0, &[Scalar::Int(2)]), Some(8));
         assert_eq!(symmetry.find(0, &[Scalar::Bool(true)]), None);
         assert_eq!(symmetry.find(0, &[Scalar::Int(1), Scalar::Int(2)]), None);
+    }
+
+    #[test]
+    fn records_and_node_sets_preserve_joint_membership_and_schema() {
+        let mut arena = Arena::new(10000);
+        let symmetry = symmetry(&mut arena);
+        let records: Vec<_> = [0, 1]
+            .into_iter()
+            .map(|number| {
+                arena
+                    .data(&Value::Record(vec![
+                        ("term".into(), Value::Int(number.to_string())),
+                        ("ready".into(), Value::Bool(false)),
+                    ]))
+                    .unwrap()
+            })
+            .collect();
+        let forward = function(&mut arena, &symmetry, [records[0], records[1]]);
+        let reverse = function(&mut arena, &symmetry, [records[1], records[0]]);
+        let first = arena.set(vec![symmetry.group[0]]).unwrap();
+        let second = arena.set(vec![symmetry.group[1]]).unwrap();
+        let key = symmetry
+            .key(&[Some(forward), Some(first)], &mut arena)
+            .unwrap();
+        assert_eq!(
+            key,
+            symmetry
+                .key(&[Some(reverse), Some(second)], &mut arena)
+                .unwrap()
+        );
+        assert_ne!(
+            key,
+            symmetry
+                .key(&[Some(forward), Some(second)], &mut arena)
+                .unwrap()
+        );
+        let renamed = arena
+            .data(&Value::Record(vec![
+                ("other".into(), Value::Int("0".into())),
+                ("ready".into(), Value::Bool(false)),
+            ]))
+            .unwrap();
+        let renamed = function(&mut arena, &symmetry, [renamed, renamed]);
+        assert_ne!(
+            symmetry.key(&[Some(forward)], &mut arena).unwrap(),
+            symmetry.key(&[Some(renamed)], &mut arena).unwrap()
+        );
+        let outsider = arena.string("a".into()).unwrap();
+        let invalid = arena.set(vec![outsider]).unwrap();
+        assert!(symmetry.key(&[Some(invalid)], &mut arena).is_err());
+        let pointer = arena
+            .data(&Value::Record(vec![(
+                "peer".into(),
+                Value::ModelValue("a".into()),
+            )]))
+            .unwrap();
+        let pointer = function(&mut arena, &symmetry, [pointer, pointer]);
+        assert!(symmetry.key(&[Some(pointer)], &mut arena).is_err());
+        let mixed = function(&mut arena, &symmetry, [records[0], records[1]]);
+        assert!(symmetry.key(&[Some(mixed)], &mut arena).is_ok());
     }
 
     #[test]

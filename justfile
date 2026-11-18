@@ -745,6 +745,7 @@ smt-tuning-replay run:
 
 symmetry-test: safety-build
   cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test symmetry
+  cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test partial_order
   node --test dist/evals/symmetry/contract-test.js
 
 symmetry-prepare: safety-build
@@ -757,5 +758,20 @@ symmetry-eval run java jar: safety-build
 symmetry-benchmark run java jar archive binary:
   node dist/evals/symmetry/benchmark.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(binary)}}
 
-symmetry-criterion binary run:
-  node dist/evals/symmetry/criterion.js {{quote(binary)}} {{quote(run)}}
+symmetry-criterion binary run filter="":
+  node dist/evals/symmetry/criterion.js {{quote(binary)}} {{quote(run)}} {{quote(filter)}}
+
+symmetry-actions-eval run java jar: safety-build
+  node dist/evals/symmetry/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} --actions
+
+partial-order-eval run java jar: safety-build
+  node dist/evals/symmetry/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} --por
+
+symmetry-diagnose before after run model="linear-ring":
+  node dist/evals/symmetry/diagnose.js {{quote(before)}} {{quote(after)}} {{quote(run)}} {{quote(model)}}
+
+native-resources binary run:
+  node dist/evals/native-resources/run.js {{quote(binary)}} {{quote(run)}}
+
+symmetry-verify run:
+  node dist/evals/symmetry/verify.js {{quote(run)}}

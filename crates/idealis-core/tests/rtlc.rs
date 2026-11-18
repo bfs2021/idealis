@@ -22,6 +22,7 @@ fn legacy_api_uses_the_standalone_types_and_the_same_checker() {
         request: Request::CheckSafety {
             program: program.clone(),
             bounds,
+            options: None,
         },
     }) else {
         panic!("expected safety result")
@@ -38,6 +39,7 @@ fn legacy_api_uses_the_standalone_types_and_the_same_checker() {
         request: Request::CheckSafety {
             program: invalid,
             bounds,
+            options: None,
         },
     }) else {
         panic!("expected error")

@@ -22,3 +22,21 @@ Redを先に実行し、logを保存する。recordはN2/3とInt(0..2)・Bool fi
 TLCへの判定・利用可能な計数の一致、反例再生、既存回帰を前提にする。速度の採用は同じホストで順序を入れ替えた測定から判断し、10%以上の後退を明記する。record/集合は対応範囲の追加価値も評価する。実際の改善がない試作は撤去し、試作source・失敗log・結果を保存する。
 
 終了前にcheck/browser、portable-build/test、safety-test、runtime-build/test、fmt/clippy、evaluate/replay-evaluationを実行する。共有TSテストの変更があればmutation、配布変更があればpackageも実行する。SUPPORT/Jevのliveとofflineを確認し、キーなしのskipと検査済みを区別する。各段階の採否、未解決の制限、追加測定の条件をiterationへ記録する。
+
+## 段階3の追加入力
+
+段階1/2の小さいquotientに加え、recordのN12を使う。各nodeはInt(0..2)とBoolの6状態、2操作を持つ。縮約後は6,188状態、全node展開では148,513生成、代表展開では52,417生成を期待する。縮約なしの6^12状態はこの比較で探索しない。同じbinaryの1/8 worker、代表展開on/offを順序を入れ替えて測る。symmetry時の並列閾値はfrontier 64状態とし、閾値未満は逐次へ戻す。改善がない場合は段階3を撤去して、段階2の明示的な逐次経路を維持する。
+
+## 段階4の実行計画
+
+命令列はguard/assignのみのbranchを対象にする。literal/read、Intの加減乗算・比較、Boolのnot/and/or/impliesとif、等値比較を扱い、未対応式はbranch全体を既存評価器へ戻す。型確認の順序、短絡、overflow、next変数の読み取り、代入の巻き戻し、workを比較する。命令IDはVecの添字で、hot pathで式addressのHashMap検索をしない。既存bench-fixturesのcounter-product/linear-ringを同じbinaryのon/offで20 samples、warmup 0.5秒、measurement 1秒、順序を反転して比較する。1 workerを使う。準備費用を含め、速度が改善しない場合は試作sourceを保存して撤去する。
+
+初回の段階4 driverはsymmetry用のmaxDepth=1000でringを実行し、boundedを検出して停止した。失敗runを残し、既存の通常benchと同じmaxDepth=100000へ変更して全4ケースを再測定する。途中までのcounter sampleだけで採否を決めない。
+
+## 段階5の適用条件
+
+PORは、他の操作・invariantから観測されないBool flagをFALSEからTRUEへ一度だけ変える独立な操作に限定する。候補は `~flag /\ flag' = TRUE /\ UNCHANGED otherVariables` の形。別branchがflagを読み書きする場合と、未解析の式がある場合は候補から外す。単なるUNCHANGEDは書き込み依存に含めない。選ぶたびに未設定flagが減り、他の操作がflagを戻せないことをcycle条件にする。有限scalarのinvariant/deadlockだけを対象にし、SYMMETRYとの併用は拒否する。temporal/fairness・constraint・initial/action propertyは通常探索へ戻す。
+
+N2/3の独立flagとvisible counter(0..3)について安全版、visible counter<3という故障版、deadlockを比較する。依存するguard・可視のflag・flagを戻す操作を拒否対照にし、通常探索へのfallbackを確認する。反例は元のNextで再生する。POR時は元のグラフでの最短反例を保証しない。generated/states/workは削減後の計数であり、TLCとの計数一致を求めない。
+
+性能はN10のflagと4状態のvisible counterを使う。通常は4,096状態・24,577生成、PORは14状態・15生成を期待する。同じbinaryのon/offを20 samples、warmup 0.5秒、measurement 1秒、順序反転で測る。これは限定した条件での実験で、一般のPORへ保証を広げない。

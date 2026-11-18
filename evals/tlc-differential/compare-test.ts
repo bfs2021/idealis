@@ -19,6 +19,39 @@ const result = {
   work: 3,
   violation: null,
 } as const;
+test("reduction comparisons keep verdict and infrastructure checks when counts differ", () => {
+  const comparison = { states: false, generated: false, shortestTrace: false };
+  assert.deepEqual(
+    differences(
+      { result: { ...result, states: 9, generated: 99 } },
+      reference,
+      comparison,
+    ),
+    [],
+  );
+  assert.equal(
+    differences({ result: { ...result, states: 9, generated: 99 } }, reference)
+      .length,
+    2,
+  );
+  assert.deepEqual(
+    differences({ result }, { ...reference, generated: null }, comparison),
+    ["infrastructure-error"],
+  );
+  assert.deepEqual(
+    differences(
+      { result: { ...result, status: "bounded", reason: "work" } },
+      reference,
+      comparison,
+    ),
+    ["bounded"],
+  );
+  assert.equal(
+    differences({ result }, { ...reference, status: "deadlock" }, comparison)
+      .length,
+    1,
+  );
+});
 test("TLC differences reject count mismatches and incomplete checking", () => {
   assert.deepEqual(differences({ result }, reference), []);
   assert.equal(

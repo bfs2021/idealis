@@ -3,6 +3,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { monotone, recordNodes } from "../evals/symmetry/cases.js";
 import { compileTlaSafety } from "../src/tla-safety.js";
 
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
@@ -106,6 +107,10 @@ const sourceInput = {
 const safety = compileTlaSafety(sourceInput);
 await writeFile(join(consumer, "source.json"), JSON.stringify(sourceInput));
 await writeFile(
+  join(consumer, "reductions.json"),
+  JSON.stringify([recordNodes(3), monotone(3)]),
+);
+await writeFile(
   join(consumer, "safety-request.json"),
   JSON.stringify({
     version: 1,
@@ -175,6 +180,8 @@ assert.equal(checkSafety(core,safety.program,safety.bounds).violation.trace.leng
 assert.deepEqual(checkSafetyCoverage(core,safety.program,safety.bounds).result,checkSafety(core,safety.program,safety.bounds));
 const source=JSON.parse(await readFile('source.json','utf8'));
 const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'PackageSafety');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
+const reductions=JSON.parse(await readFile('reductions.json','utf8'));
+for(const [index,input] of reductions.entries()){const program=compileTlaSource(core,input);const result=checkSafety(core,program,{maxDepth:100,maxStates:10000,maxWork:10000000},index===0?{symmetryActions:true}:{partialOrder:true});assert.equal(result.status,'complete');assert.equal(result.states,index===0?56:7);assert.equal(result.generated,index===0?253:8);}
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
 const scheduled=await runSchedule(planned,[{execute:async ids=>ids.map(id=>({id,result:checkSafety(core,safety.program,safety.bounds)}))}]);
 assert.equal(scheduled.executionStatus,'complete');assert.equal(scheduled.completed[0].result.status,'invariant-violation');
@@ -296,7 +303,7 @@ await writeFile(
 await writeFile(
   join(consumer, "consumer.rs"),
   `use idealis_core::{Engine,Message,Status};
-fn main(){let source:serde_json::Value=serde_json::from_slice(&std::fs::read("source.json").unwrap()).unwrap();let program=idealis_core::compile_tla(source["source"].as_str().unwrap(),source["config"].as_str().unwrap()).unwrap();let checked=program.check(idealis_core::SafetyBounds{max_depth:10,max_states:100,max_work:10000,max_temporal_nodes:None}).unwrap();assert_eq!(checked.violation.unwrap().trace.len(),4);let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: idealis_core::Command = serde_json::from_slice(&bytes).unwrap(); if let idealis_core::Request::CheckSafety { program, bounds } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check(bounds).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; println!("packaged Rust consumer matched");}
+fn main(){let source:serde_json::Value=serde_json::from_slice(&std::fs::read("source.json").unwrap()).unwrap();let program=idealis_core::compile_tla(source["source"].as_str().unwrap(),source["config"].as_str().unwrap()).unwrap();let checked=program.check(idealis_core::SafetyBounds{max_depth:10,max_states:100,max_work:10000,max_temporal_nodes:None}).unwrap();assert_eq!(checked.violation.unwrap().trace.len(),4);let bytes=std::fs::read("request.json").unwrap();let response=Engine::default().dispatch(&bytes);match response{Message::Results{results}=>assert_eq!(results[0].status,Status::Matched),_=>panic!("unexpected result")};let bytes=std::fs::read("safety-request.json").unwrap();match Engine::default().dispatch(&bytes){Message::Safety{result}=>{assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4)},_=>panic!("missing safety result")};let command: idealis_core::Command = serde_json::from_slice(&bytes).unwrap(); if let idealis_core::Request::CheckSafety { program, bounds, options } = command.request { let program: rtlc::SafetyProgram = program; assert_eq!(program.check_with_options(bounds, options.unwrap_or_default()).unwrap().status, "invariant-violation"); } else { panic!("missing typed program") }; let inputs:serde_json::Value=serde_json::from_slice(&std::fs::read("reductions.json").unwrap()).unwrap();for(index,input)in inputs.as_array().unwrap().iter().enumerate(){let program=idealis_core::compile_tla(input["source"].as_str().unwrap(),input["config"].as_str().unwrap()).unwrap();let result=program.check_with_options(rtlc::SafetyBounds{max_depth:100,max_states:10000,max_work:10000000,max_temporal_nodes:None},rtlc::SafetyOptions{symmetry_actions:index==0,partial_order:index==1,..Default::default()}).unwrap();assert_eq!(result.states,if index==0{56}else{7});assert_eq!(result.generated,if index==0{253}else{8});}println!("packaged Rust consumer matched");}
 `,
 );
 const rust = execFileSync(

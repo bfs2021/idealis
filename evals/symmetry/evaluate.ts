@@ -8,10 +8,15 @@ import { isRecord } from "../../src/trace.js";
 import { differential } from "../tlc-differential/differential.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
-import { bounds, corpus, plain } from "./cases.js";
+import { bounds, corpus, partialOrderCorpus, plain } from "./cases.js";
 import { symmetryFingerprint } from "./provenance.js";
 
 const [directory, java, jar] = process.argv.slice(2);
+const options = process.argv.includes("--por")
+  ? { partialOrder: true }
+  : process.argv.includes("--actions")
+    ? { symmetryActions: true }
+    : undefined;
 assert.ok(directory && java && jar);
 await mkdir(directory);
 const source = await symmetryFingerprint();
@@ -20,7 +25,7 @@ const bytes = await readFile(
 );
 const core = await createPortableWasm(bytes);
 const native = startNative();
-const inputs = corpus();
+const inputs = options?.partialOrder ? partialOrderCorpus() : corpus();
 const files: string[] = [];
 const save = async (path: string, value: unknown) => {
   await writeFile(
@@ -31,7 +36,7 @@ const save = async (path: string, value: unknown) => {
   files.push(path);
 };
 await save("manifest.json", {
-  plan: "0060-restricted-symmetry",
+  plan: process.env.IDEALIS_SYMMETRY_PLAN ?? "0061-symmetry-next",
   ...source,
   nativeSha256: digest(
     await readFile("crates/idealis-core/target/release/idealis-core"),
@@ -39,6 +44,7 @@ await save("manifest.json", {
   wasmSha256: digest(bytes),
   jarSha256: digest(await readFile(jar)),
   inputs,
+  options,
   performanceMeasurement: false,
 });
 const reports = [];
@@ -54,6 +60,8 @@ try {
       jar,
       path,
       (input) => compileTlaSource(core, input),
+      {},
+      options,
     );
     assert.deepEqual(report.differences, [], input.name);
     const original = checkSafety(
@@ -62,18 +70,19 @@ try {
       bounds,
     );
     assert.equal(report.ours.result?.status, original.status, input.name);
-    assert.equal(
-      report.ours.result?.violation?.trace.length,
-      original.violation?.trace.length,
-      input.name,
-    );
+    if (!options?.partialOrder)
+      assert.equal(
+        report.ours.result?.violation?.trace.length,
+        original.violation?.trace.length,
+        input.name,
+      );
     const response = await native.request({
       version: 1,
       request: {
-        kind: "check-safety-parallel",
+        kind: "check-safety",
         program: compileTlaSource(core, input),
         bounds,
-        workers: 8,
+        options: { ...options, workers: 8 },
       },
     });
     assert.ok(isRecord(response) && response.kind === "safety");

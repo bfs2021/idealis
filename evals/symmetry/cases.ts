@@ -34,6 +34,79 @@ export const plain = (input: Input): Input => ({
   config: input.config.replace("\nSYMMETRY Symm", ""),
 });
 
+export const recordNodes = (count: number, fault = false): Input => ({
+  name: `record-${count}-${fault ? "fault" : "safe"}`,
+  source: `---- MODULE Differential ----
+EXTENDS Naturals, TLC
+CONSTANT Nodes
+VARIABLE local
+Symm == Permutations(Nodes)
+Init == local = [n \\in Nodes |-> [term |-> 0, ready |-> FALSE]]
+Next == \\/ (\\E n \\in Nodes: local' = [local EXCEPT ![n].term = IF @ < 2 THEN @ + 1 ELSE 0])
+        \\/ (\\E n \\in Nodes: local' = [local EXCEPT ![n].ready = ~@])
+Safe == \\A n \\in Nodes: local[n].term ${fault ? "<" : "<="} 2
+====`,
+  config: configuration(count),
+});
+
+export const nodeSets = (count: number, fault = false): Input => ({
+  name: `sets-${count}-${fault ? "fault" : "safe"}`,
+  source: `---- MODULE Differential ----
+EXTENDS TLC
+CONSTANT Nodes
+VARIABLES first, second
+Symm == Permutations(Nodes)
+Init == /\\ first = {} /\\ second = {}
+Next == \\/ (\\E n \\in Nodes: /\\ first' = (IF n \\in first THEN first \\ {n} ELSE first \\cup {n}) /\\ UNCHANGED second)
+        \\/ (\\E n \\in Nodes: /\\ second' = (IF n \\in second THEN second \\ {n} ELSE second \\cup {n}) /\\ UNCHANGED first)
+Safe == /\\ ${fault ? "first = {}" : "first \\subseteq Nodes"} /\\ second \\subseteq Nodes
+====`,
+  config: configuration(count),
+});
+
+export const monotone = (count: number, fault = false): Input => {
+  const flags = Array.from({ length: count }, (_, index) => `flag${index}`);
+  const variables = ["visible", ...flags];
+  return {
+    name: `por-${count}-${fault ? "fault" : "safe"}`,
+    source: `---- MODULE Differential ----
+EXTENDS Naturals
+VARIABLES ${variables.join(",")}
+Init == visible = 0 ${flags.map((name) => `/\\ ${name} = FALSE`).join(" ")}
+Next == ${flags.map((name) => `(/\\ ~${name} /\\ ${name}' = TRUE /\\ UNCHANGED <<${variables.filter((variable) => variable !== name).join(",")}>>)`).join(" \\/ ")} \\/ (visible' = (IF visible < 3 THEN visible + 1 ELSE 0) /\\ UNCHANGED <<${flags.join(",")}>>)
+Safe == visible ${fault ? "<" : "<="} 3
+====`,
+    config: "INIT Init\nNEXT Next\nINVARIANT Safe",
+  };
+};
+
+export const partialOrderCorpus = (): readonly Input[] => [
+  ...[2, 3].flatMap((count) => [
+    monotone(count),
+    monotone(count, true),
+    {
+      ...monotone(count),
+      name: `por-${count}-deadlock`,
+      source: monotone(count).source.replace(
+        "(visible' =",
+        "(visible < 3 /\\ visible' =",
+      ),
+    },
+  ]),
+  ...(
+    [
+      ["visible", "Safe == visible <= 3", "Safe == ~flag0"],
+      ["cycle", "flag0' = TRUE", "flag0' = ~flag0"],
+      ["dependent", "(visible' =", "(~flag0 /\\ visible' ="],
+      ["reset", "ELSE 0", "ELSE IF flag0 THEN 0 ELSE 0"],
+    ] as const
+  ).map(([name, before, after]) => ({
+    ...monotone(1),
+    name: `por-fallback-${name}`,
+    source: monotone(1).source.replace(before, after),
+  })),
+];
+
 export const corpus = (): readonly Input[] => {
   const input = counter(3, 2);
   const pair = joint(3);
@@ -50,6 +123,12 @@ export const corpus = (): readonly Input[] => {
       ),
   };
   return [
+    ...[2, 3].flatMap((count) => [
+      recordNodes(count),
+      recordNodes(count, true),
+      nodeSets(count),
+      nodeSets(count, true),
+    ]),
     ...[2, 3, 4].flatMap((count) =>
       [1, 2].flatMap((maximum) => [
         counter(count, maximum),

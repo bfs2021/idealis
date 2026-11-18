@@ -5,7 +5,7 @@ import { join, relative, resolve } from "node:path";
 import { digest } from "../usable/provenance.js";
 import { symmetryFingerprint } from "./provenance.js";
 
-const [binary, directory] = process.argv.slice(2);
+const [binary, directory, filter] = process.argv.slice(2);
 assert.ok(binary && directory);
 await mkdir(directory);
 const source = await symmetryFingerprint();
@@ -20,7 +20,7 @@ const save = async (path: string, value: unknown) => {
   files.push(path);
 };
 await save("manifest.json", {
-  plan: "0060-restricted-symmetry",
+  plan: process.env.IDEALIS_SYMMETRY_PLAN ?? "0061-symmetry-next",
   ...source,
   binary,
   binarySha256,
@@ -34,13 +34,16 @@ await save("manifest.json", {
   fixtureSha256: digest(
     await readFile("crates/rtlc/src/symmetry-fixtures.json"),
   ),
+  reductionFixtureSha256: digest(
+    await readFile("crates/rtlc/src/reduction-fixtures.json"),
+  ),
 });
 for (const index of [0, 1]) {
   const output = resolve(directory, String(index));
   await mkdir(output);
   const result: SpawnSyncReturns<string> = spawnSync(
     resolve(binary),
-    ["--bench"],
+    ["--bench", ...(filter ? [filter] : [])],
     {
       encoding: "utf8",
       maxBuffer: 16 * 1024 * 1024,
@@ -72,7 +75,20 @@ const find = async (directory: string): Promise<string[]> =>
     )
   ).flat();
 const estimates = await find(join(directory, "0/criterion"));
-assert.equal(estimates.length, 6);
+const fixtures: { name: string }[] = JSON.parse(
+  await readFile("crates/rtlc/src/symmetry-fixtures.json", "utf8"),
+);
+fixtures.push(
+  ...JSON.parse(
+    await readFile("crates/rtlc/src/reduction-fixtures.json", "utf8"),
+  ),
+);
+assert.equal(
+  estimates.length,
+  fixtures.filter(
+    (fixture) => !filter || new RegExp(filter).test(`symmetry/${fixture.name}`),
+  ).length,
+);
 const kernels = await Promise.all(
   estimates.sort().map(async (path) => {
     const name = relative(join(directory, "0/criterion"), path);

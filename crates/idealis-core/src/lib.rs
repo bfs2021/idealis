@@ -1,7 +1,7 @@
 mod finite;
 pub use rtlc::{
     CoreError, SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport,
-    SafetyProgram, SafetyResult, Value,
+    SafetyOptions, SafetyProgram, SafetyResult, Value,
 };
 mod history;
 pub use history::{ConcurrentHistory, ConcurrentResult, ConcurrentStatus, HistoryEvent};
@@ -172,6 +172,8 @@ pub enum Request {
     CheckSafety {
         program: SafetyProgram,
         bounds: SafetyBounds,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        options: Option<SafetyOptions>,
     },
     CheckSafetyCoverage {
         program: SafetyProgram,
@@ -512,8 +514,12 @@ impl Engine {
             } => Ok(Message::Safety {
                 result: program.check_parallel(bounds, workers)?,
             }),
-            Request::CheckSafety { program, bounds } => Ok(Message::Safety {
-                result: program.check(bounds)?,
+            Request::CheckSafety {
+                program,
+                bounds,
+                options,
+            } => Ok(Message::Safety {
+                result: program.check_with_options(bounds, options.unwrap_or_default())?,
             }),
             Request::CheckSafetyCoverage { program, bounds } => Ok(Message::SafetyCoverage {
                 report: program.check_with_coverage(bounds)?,

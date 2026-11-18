@@ -43,90 +43,102 @@
       "role": "reference"
     },
     "source10": {
-      "path": "crates/rtlc/src/safety.rs",
+      "path": "crates/rtlc/src/reduction-fixtures.json",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/rtlc/src/safety_coverage.rs",
+      "path": "crates/rtlc/src/safety.rs",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/rtlc/src/safety_expressions.rs",
+      "path": "crates/rtlc/src/safety_coverage.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/rtlc/src/safety_functions.rs",
+      "path": "crates/rtlc/src/safety_expressions.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/rtlc/src/safety_parallel.rs",
+      "path": "crates/rtlc/src/safety_functions.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtlc/src/safety_prepared.rs",
+      "path": "crates/rtlc/src/safety_parallel.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/rtlc/src/safety_symmetry.rs",
+      "path": "crates/rtlc/src/safety_partial_order.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "crates/rtlc/src/safety_values.rs",
+      "path": "crates/rtlc/src/safety_prepared.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "crates/rtlc/src/safety_work.rs",
+      "path": "crates/rtlc/src/safety_symmetry.rs",
       "role": "reference"
     },
     "source19": {
-      "path": "crates/rtlc/src/symmetry-fixtures.json",
+      "path": "crates/rtlc/src/safety_values.rs",
       "role": "reference"
     },
     "source20": {
-      "path": "crates/rtlc/src/symmetry_benchmarks.rs",
+      "path": "crates/rtlc/src/safety_work.rs",
       "role": "reference"
     },
     "source21": {
-      "path": "crates/rtlc/src/temporal.rs",
+      "path": "crates/rtlc/src/symmetry-fixtures.json",
       "role": "reference"
     },
     "source22": {
-      "path": "crates/rtlc/src/value.rs",
+      "path": "crates/rtlc/src/symmetry_benchmarks.rs",
       "role": "reference"
     },
     "source23": {
-      "path": "crates/rtlc/tests/coverage-bench.json",
+      "path": "crates/rtlc/src/temporal.rs",
       "role": "reference"
     },
     "source24": {
-      "path": "crates/rtlc/tests/coverage.rs",
+      "path": "crates/rtlc/src/value.rs",
       "role": "reference"
     },
     "source25": {
-      "path": "crates/rtlc/tests/operators.rs",
+      "path": "crates/rtlc/tests/coverage-bench.json",
       "role": "reference"
     },
     "source26": {
-      "path": "crates/rtlc/tests/parallel_safety.rs",
+      "path": "crates/rtlc/tests/coverage.rs",
       "role": "reference"
     },
     "source27": {
-      "path": "crates/rtlc/tests/standalone.rs",
+      "path": "crates/rtlc/tests/operators.rs",
       "role": "reference"
     },
     "source28": {
-      "path": "crates/rtlc/tests/temporal_sets.rs",
+      "path": "crates/rtlc/tests/parallel_safety.rs",
       "role": "reference"
     },
     "source29": {
-      "path": "package.json",
+      "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
     "source30": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/rtlc/tests/symmetry_parallel.rs",
       "role": "reference"
     },
     "source31": {
+      "path": "crates/rtlc/tests/temporal_sets.rs",
+      "role": "reference"
+    },
+    "source32": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source33": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source34": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -155,10 +167,10 @@
       },
       "context": [
         {
-          "source": "source22"
+          "source": "source24"
         },
         {
-          "source": "source10"
+          "source": "source11"
         }
       ]
     },
@@ -167,14 +179,14 @@
       "topic": "有限BFS、invariantとdeadlock、結果と探索予算、opt-inの逐次action coverageとworkの内訳",
       "mode": "semantic",
       "reference": {
-        "source": "source10"
+        "source": "source11"
       },
       "target": {
         "source": "source3"
       },
       "context": [
         {
-          "source": "source11"
+          "source": "source12"
         }
       ]
     },
@@ -183,7 +195,7 @@
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source21"
+        "source": "source23"
       },
       "target": {
         "source": "source3"
@@ -192,10 +204,27 @@
     },
     {
       "id": "rtlc-implementation-3",
-      "topic": "単一のuntypedモデル値群とscalar node関数に限定したsymmetry、利用者のequivariance前提、完全key比較と具体状態・traceの分離、予算と対象外",
+      "topic": "単一のuntypedモデル値群、scalar/flat recordのnode関数とnode部分集合、同じnode行のopt-in代表展開、equivarianceの利用者前提、具体traceと計数、対象外",
       "mode": "semantic",
       "reference": {
-        "source": "source16"
+        "source": "source18"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": [
+        {
+          "source": "source15"
+        }
+      ]
+    },
+    {
+      "id": "rtlc-implementation-4",
+      "topic": "symmetryのflat record payloadのfield名・Int/Bool型の検証とnested/node参照の拒否",
+      "mode": "semantic",
+      "reference": {
+        "source": "source19",
+        "contains": "pub fn scalar_record_shape("
       },
       "target": {
         "source": "source3"
@@ -203,8 +232,39 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-4",
+      "id": "rtlc-implementation-5",
+      "topic": "opt-inの限定POR、不可視で独立な単調Bool flagの条件、他branchによるresetの禁止、fallback、一般PORとの区別",
+      "mode": "semantic",
+      "reference": {
+        "source": "source16"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": [
+        {
+          "source": "source11"
+        },
+        {
+          "source": "source8"
+        }
+      ]
+    },
+    {
+      "id": "rtlc-implementation-6",
       "topic": "immutableなData式のslot登録、未評価分岐や失敗を先に評価しない定数の準備。状態依存式と型別命令VMは対象外",
+      "mode": "semantic",
+      "reference": {
+        "source": "source17"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "rtlc-implementation-7",
+      "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
         "source": "source15"
@@ -215,23 +275,11 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-5",
-      "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
-      "mode": "semantic",
-      "reference": {
-        "source": "source14"
-      },
-      "target": {
-        "source": "source3"
-      },
-      "context": []
-    },
-    {
-      "id": "rtlc-implementation-6",
+      "id": "rtlc-implementation-8",
       "topic": "immutable domain共有、Boolと整数の別bit表現、membershipの論理work、worker参照とremap、hash衝突の完全比較",
       "mode": "semantic",
       "reference": {
-        "source": "source17",
+        "source": "source19",
         "contains": "impl<'scope> Arena<'scope>"
       },
       "target": {
@@ -239,7 +287,7 @@
       },
       "context": [
         {
-          "source": "source13"
+          "source": "source14"
         }
       ]
     }
