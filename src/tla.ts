@@ -6,6 +6,7 @@ import {
 } from "tla-ts";
 import type { Trace } from "./contracts.js";
 
+export type { TlaSourceOptions } from "./contracts.js";
 export { compileTlaSafety } from "./tla-safety.js";
 
 export interface TlaMapping<Action, Observation> {

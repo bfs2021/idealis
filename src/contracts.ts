@@ -113,9 +113,13 @@ export type PortableEffect =
     }
   | { readonly kind: "done"; readonly result: PortableResult };
 
-export interface TlaSourceInput {
+export interface TlaSourceOptions {
   readonly source: string;
   readonly config: string;
+  readonly irVersion?: 1 | 2;
+}
+
+export interface TlaSourceInput extends TlaSourceOptions {
   readonly modules?: Readonly<Record<string, string>>;
 }
 
@@ -127,12 +131,14 @@ export interface PortableCommand {
         readonly source: string;
         readonly config: string;
         readonly modules?: Readonly<Record<string, string>>;
+        readonly irVersion?: 1 | 2;
       }
     | {
         readonly kind: "check-tla";
         readonly source: string;
         readonly config: string;
         readonly modules?: Readonly<Record<string, string>>;
+        readonly irVersion?: 1 | 2;
         readonly bounds: SafetyBounds;
       }
     | {
@@ -312,49 +318,60 @@ export type SafetyScalar =
   | { readonly type: "int"; readonly value: string }
   | { readonly type: "bool"; readonly value: boolean };
 
-export type SafetyExpression =
+interface SafetyFrameFor<Version extends 1 | 2> {
+  readonly arguments: readonly SafetyExpressionFor<Version>[];
+  readonly captures: readonly SafetyExpressionFor<Version>[];
+  readonly parameterCount: number;
+  readonly captureCount: number;
+  readonly localScope: number;
+}
+
+type SafetyExpressionFor<Version extends 1 | 2> =
   | { readonly op: "data"; readonly value: PortableValue }
   | { readonly op: "bound"; readonly slot: number }
   | { readonly op: "old" }
   | { readonly op: "unmatched-case"; readonly location: string }
   | {
       readonly op: "set" | "tuple";
-      readonly values: readonly SafetyExpression[];
+      readonly values: readonly SafetyExpressionFor<Version>[];
     }
   | {
       readonly op: "record" | "record-set";
-      readonly fields: readonly (readonly [string, SafetyExpression])[];
+      readonly fields: readonly (readonly [
+        string,
+        SafetyExpressionFor<Version>,
+      ])[];
     }
   | {
       readonly op: "at";
-      readonly target: SafetyExpression;
-      readonly key: SafetyExpression;
+      readonly target: SafetyExpressionFor<Version>;
+      readonly key: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "update";
-      readonly target: SafetyExpression;
+      readonly target: SafetyExpressionFor<Version>;
       readonly updates: readonly {
-        readonly path: readonly SafetyExpression[];
-        readonly value: SafetyExpression;
+        readonly path: readonly SafetyExpressionFor<Version>[];
+        readonly value: SafetyExpressionFor<Version>;
       }[];
     }
   | {
       readonly op: "forall" | "exists" | "function" | "filter" | "map-set";
-      readonly bounds: readonly SafetyBinding[];
-      readonly body: SafetyExpression;
+      readonly bounds: readonly SafetyBinding<Version>[];
+      readonly body: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "fold";
       readonly accumulator: number;
-      readonly initial: SafetyExpression;
-      readonly collection: SafetyExpression;
+      readonly initial: SafetyExpressionFor<Version>;
+      readonly collection: SafetyExpressionFor<Version>;
       readonly order: "set-members" | "sequence-left";
-      readonly body: SafetyExpression;
+      readonly body: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "choose";
-      readonly binding: SafetyBinding;
-      readonly body: SafetyExpression;
+      readonly binding: SafetyBinding<Version>;
+      readonly body: SafetyExpressionFor<Version>;
     }
   | {
       readonly op:
@@ -367,7 +384,7 @@ export type SafetyExpression =
         | "tail"
         | "powerset"
         | "union";
-      readonly argument: SafetyExpression;
+      readonly argument: SafetyExpressionFor<Version>;
     }
   | {
       readonly op:
@@ -380,25 +397,27 @@ export type SafetyExpression =
         | "function-set"
         | "function-in"
         | "sequence-in";
-      readonly left: SafetyExpression;
-      readonly right: SafetyExpression;
+      readonly left: SafetyExpressionFor<Version>;
+      readonly right: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "subseq";
-      readonly sequence: SafetyExpression;
-      readonly from: SafetyExpression;
-      readonly to: SafetyExpression;
+      readonly sequence: SafetyExpressionFor<Version>;
+      readonly from: SafetyExpressionFor<Version>;
+      readonly to: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "enabled";
-      readonly branches: readonly SafetyBranch[];
-      readonly subscript?: SafetyExpression;
+      readonly branches: readonly SafetyBranch<Version>[];
+      readonly subscript?:
+        | SafetyExpressionFor<Version>
+        | (Version extends 2 ? null : never);
     }
   | { readonly op: "literal"; readonly value: SafetyScalar }
   | { readonly op: "read"; readonly slot: number; readonly next: boolean }
   | {
       readonly op: "not" | "neg" | "prime";
-      readonly argument: SafetyExpression;
+      readonly argument: SafetyExpressionFor<Version>;
     }
   | {
       readonly op:
@@ -417,104 +436,157 @@ export type SafetyExpression =
         | "and"
         | "or"
         | "implies";
-      readonly left: SafetyExpression;
-      readonly right: SafetyExpression;
+      readonly left: SafetyExpressionFor<Version>;
+      readonly right: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "if";
-      readonly condition: SafetyExpression;
-      readonly consequent: SafetyExpression;
-      readonly alternative: SafetyExpression;
+      readonly condition: SafetyExpressionFor<Version>;
+      readonly consequent: SafetyExpressionFor<Version>;
+      readonly alternative: SafetyExpressionFor<Version>;
     }
   | {
       readonly op: "in";
-      readonly value: SafetyExpression;
-      readonly domain: SafetyDomain;
-    };
+      readonly value: SafetyExpressionFor<Version>;
+      readonly domain: SafetyDomain<Version>;
+    }
+  | (Version extends 2
+      ?
+          | (SafetyFrameFor<Version> & {
+              readonly op: "frame";
+              readonly body: SafetyExpressionFor<Version>;
+            })
+          | {
+              readonly op: "call";
+              readonly definition: number;
+              readonly arguments: readonly SafetyExpressionFor<Version>[];
+              readonly captures: readonly SafetyExpressionFor<Version>[];
+            }
+          | { readonly op: "parameter" | "capture"; readonly slot: number }
+      : never);
 
-export type SafetyDomain =
-  | { readonly kind: "value"; readonly value: SafetyExpression }
+export type SafetyExpression = SafetyExpressionFor<1>;
+
+export type SafetyExpressionV2 = SafetyExpressionFor<2>;
+
+export type SafetyDomain<Version extends 1 | 2 = 1> =
+  | { readonly kind: "value"; readonly value: SafetyExpressionFor<Version> }
   | {
       readonly kind: "range";
-      readonly lower: SafetyExpression;
-      readonly upper: SafetyExpression;
+      readonly lower: SafetyExpressionFor<Version>;
+      readonly upper: SafetyExpressionFor<Version>;
     }
-  | { readonly kind: "set"; readonly values: readonly SafetyExpression[] };
+  | {
+      readonly kind: "set";
+      readonly values: readonly SafetyExpressionFor<Version>[];
+    };
 
-export type SafetyStep =
+export type SafetyStep<Version extends 1 | 2 = 1> =
   | {
       readonly kind: "bind";
       readonly slot: number;
-      readonly domain: SafetyDomain;
+      readonly domain: SafetyDomain<Version>;
       readonly tupleSize?: number;
     }
-  | { readonly kind: "guard"; readonly expression: SafetyExpression }
+  | {
+      readonly kind: "guard";
+      readonly expression: SafetyExpressionFor<Version>;
+    }
   | {
       readonly kind: "assign";
       readonly slot: number;
-      readonly value: SafetyExpression;
+      readonly value: SafetyExpressionFor<Version>;
     }
   | {
       readonly kind: "choose";
       readonly slot: number;
-      readonly domain: SafetyDomain;
-    };
+      readonly domain: SafetyDomain<Version>;
+    }
+  | (Version extends 2
+      ? SafetyFrameFor<Version> & {
+          readonly kind: "frame";
+          readonly branches: readonly SafetyBranch<Version>[];
+        }
+      : never);
 
-export interface SafetyBranch {
+export interface SafetyBranch<Version extends 1 | 2 = 1> {
   readonly name: string;
-  readonly steps: readonly SafetyStep[];
+  readonly steps: readonly SafetyStep<Version>[];
 }
 
-export interface SafetyBinding {
+export interface SafetyBinding<Version extends 1 | 2 = 1> {
   readonly tupleSize?: number;
   readonly slot: number;
-  readonly domain: SafetyDomain;
+  readonly domain: SafetyDomain<Version>;
 }
 
-export type TemporalFormula =
-  | { readonly kind: "atom"; readonly expression: SafetyExpression }
+export type TemporalFormula<Version extends 1 | 2 = 1> =
+  | { readonly kind: "atom"; readonly expression: SafetyExpressionFor<Version> }
   | {
       readonly kind: "forall" | "exists";
-      readonly bounds: readonly SafetyBinding[];
-      readonly formula: TemporalFormula;
+      readonly bounds: readonly SafetyBinding<Version>[];
+      readonly formula: TemporalFormula<Version>;
     }
   | {
       readonly kind: "not" | "always" | "eventually";
-      readonly formula: TemporalFormula;
+      readonly formula: TemporalFormula<Version>;
     }
   | {
       readonly kind: "and" | "or";
-      readonly left: TemporalFormula;
-      readonly right: TemporalFormula;
-    };
+      readonly left: TemporalFormula<Version>;
+      readonly right: TemporalFormula<Version>;
+    }
+  | (Version extends 2
+      ? SafetyFrameFor<Version> & {
+          readonly kind: "frame";
+          readonly formula: TemporalFormula<Version>;
+        }
+      : never);
 
-export interface TemporalProperty {
+export interface TemporalProperty<Version extends 1 | 2 = 1> {
   readonly name: string;
-  readonly formula: TemporalFormula;
+  readonly formula: TemporalFormula<Version>;
 }
 
-export interface SafetyPredicate {
+export interface SafetyPredicate<Version extends 1 | 2 = 1> {
   readonly name: string;
-  readonly expression: SafetyExpression;
+  readonly expression: SafetyExpressionFor<Version>;
 }
 
-export interface SafetyProgram {
+interface SafetyProgramFields<Version extends 1 | 2> {
   readonly format: "modelt.safety-program";
-  readonly version: 1;
+  readonly version: Version;
   readonly name: string;
   readonly variables: readonly string[];
-  readonly initial: readonly SafetyBranch[];
-  readonly next: readonly SafetyBranch[];
-  readonly invariants: readonly SafetyPredicate[];
-  readonly assumptions: readonly SafetyPredicate[];
+  readonly initial: readonly SafetyBranch<Version>[];
+  readonly next: readonly SafetyBranch<Version>[];
+  readonly invariants: readonly SafetyPredicate<Version>[];
+  readonly assumptions: readonly SafetyPredicate<Version>[];
   readonly checkDeadlock: boolean;
-  readonly initialProperties?: readonly SafetyPredicate[];
-  readonly actionProperties?: readonly SafetyPredicate[];
-  readonly constraints?: readonly SafetyPredicate[];
-  readonly actionConstraints?: readonly SafetyPredicate[];
-  readonly properties?: readonly TemporalProperty[];
-  readonly fairness?: readonly TemporalFormula[];
+  readonly initialProperties?: readonly SafetyPredicate<Version>[];
+  readonly actionProperties?: readonly SafetyPredicate<Version>[];
+  readonly constraints?: readonly SafetyPredicate<Version>[];
+  readonly actionConstraints?: readonly SafetyPredicate<Version>[];
+  readonly properties?: readonly TemporalProperty<Version>[];
+  readonly fairness?: readonly TemporalFormula<Version>[];
 }
+
+export interface SafetyDefinition {
+  readonly id: number;
+  readonly parameterCount: number;
+  readonly captureCount: number;
+  readonly bodyKind: "expression";
+  readonly localScope: number;
+  readonly body: SafetyExpressionV2;
+}
+
+export type SafetyProgramV1 = SafetyProgramFields<1>;
+
+export interface SafetyProgramV2 extends SafetyProgramFields<2> {
+  readonly definitions: readonly SafetyDefinition[];
+}
+
+export type SafetyProgram = SafetyProgramV1 | SafetyProgramV2;
 
 export interface SafetyBounds {
   readonly maxDepth: number;

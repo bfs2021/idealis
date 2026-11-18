@@ -18,6 +18,7 @@ export const compileTlaSource = (
       source: input.source,
       config: input.config,
       ...(input.modules ? { modules: input.modules } : {}),
+      ...(input.irVersion === undefined ? {} : { irVersion: input.irVersion }),
     },
   });
   if (result.kind !== "compiled")
@@ -36,6 +37,7 @@ export const checkTlaSource = (
       source: input.source,
       config: input.config,
       ...(input.modules ? { modules: input.modules } : {}),
+      ...(input.irVersion === undefined ? {} : { irVersion: input.irVersion }),
       bounds,
     },
   });
