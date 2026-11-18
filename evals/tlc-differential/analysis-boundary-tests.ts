@@ -16,7 +16,9 @@ interface CompileExpectation {
 }
 interface ParserExpectation {
   readonly kind?: string;
+  readonly name?: string;
   readonly operator?: string;
+  readonly args?: number;
   readonly operandUnary?: string;
   readonly error?: string;
   readonly errorKind?: "syntax" | "unsupported";
@@ -150,7 +152,12 @@ const expectedAst = (
   const node = atPath(actual, expected.path);
   assert.ok(isRecord(node), route);
   if (expected.kind) assert.equal(node.kind, expected.kind, route);
+  if (expected.name) assert.equal(node.name, expected.name, route);
   if (expected.operator) assert.equal(node.operator, expected.operator, route);
+  if (expected.args !== undefined) {
+    assert.ok(Array.isArray(node.args), route);
+    assert.equal(node.args.length, expected.args, route);
+  }
   if (expected.operandUnary) {
     assert.ok(Array.isArray(node.args));
     assert.ok(isRecord(node.args[1]));

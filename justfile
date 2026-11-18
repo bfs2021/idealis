@@ -665,6 +665,18 @@ rtla-compat-test: rtla-build
   pnpm build
   node --test dist/evals/rtla-compatibility/contract-test.js
 
+rtla-symbols run java_home stable_jar preview_jar snapshot:
+  pnpm build
+  node dist/evals/symbolic-operators/run.js {{quote(run)}} {{quote(java_home)}} {{quote(stable_jar)}} {{quote(preview_jar)}} {{quote(snapshot)}}
+
+rtla-symbols-tlc run java jar: portable-build
+  pnpm build
+  node dist/evals/symbolic-operators/tlc.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+rtla-symbols-test: rtla-build portable-build
+  pnpm build
+  node --test dist/evals/symbolic-operators/contract-test.js
+
 apalache-test:
   pnpm build
   node --test dist/evals/apalache-comparison/contract-test.js

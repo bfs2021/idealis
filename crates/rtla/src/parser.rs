@@ -139,6 +139,30 @@ fn within_ast_limit(expression: &Expression) -> bool {
     true
 }
 
+fn prefix_declaration(operator: &str) -> bool {
+    matches!(
+        operator,
+        "~" | "-." | "[]" | "<>" | "ENABLED" | "UNCHANGED" | "SUBSET" | "UNION" | "DOMAIN"
+    )
+}
+
+fn postfix(operator: &str) -> bool {
+    matches!(operator, "'" | "^+" | "^*" | "^#")
+}
+
+fn symbolic(token: &Token) -> bool {
+    matches!(token.kind, Kind::Symbol | Kind::Keyword)
+        && (prefix_declaration(&token.text) || postfix(&token.text) || infix(&token.text).is_some())
+}
+
+fn parameter(token: Token) -> Declaration {
+    Declaration {
+        name: token.text,
+        arity: 0,
+        location: token.location,
+    }
+}
+
 pub(crate) struct Parser {
     pub tokens: Vec<Token>,
     pub cursor: usize,
@@ -488,6 +512,9 @@ impl Parser {
     fn primary(&mut self) -> Result<Expression, ParseError> {
         let token = self.advance()?;
         let location = token.location;
+        if symbolic(&token) && (!prefix_declaration(&token.text) || token.text == "-.") {
+            return self.named_expression(token);
+        }
         let node = match token.kind {
             Kind::Number => {
                 let value = if token.text.starts_with('\\') {
@@ -677,6 +704,27 @@ impl Parser {
         self.expect(closing)?;
         Ok(expressions)
     }
+    fn operator_argument(&mut self) -> Result<Expression, ParseError> {
+        if symbolic(self.raw()) && matches!(self.peek(1).text.as_str(), "," | ")") {
+            if self.at("\\X") {
+                return Err(self.error("Cartesian product is not an operator argument"));
+            }
+            let token = self.advance()?;
+            return Ok(Expression {
+                location: token.location,
+                node: ExpressionKind::Identifier { name: token.text },
+            });
+        }
+        self.expression(0)
+    }
+    fn operator_arguments(&mut self) -> Result<Vec<Expression>, ParseError> {
+        let mut expressions = vec![self.operator_argument()?];
+        while self.accept(",") {
+            expressions.push(self.operator_argument()?);
+        }
+        self.expect(")")?;
+        Ok(expressions)
+    }
     fn bound_ahead(&self) -> bool {
         let mut offset = 0;
         if self.peek(offset).text == "<<" {
@@ -832,7 +880,12 @@ impl Parser {
         let mut name = token.text;
         while self.accept("!") {
             name.push('!');
-            name.push_str(&self.name()?.text);
+            let part = if symbolic(self.raw()) {
+                self.advance()?
+            } else {
+                self.name()?
+            };
+            name.push_str(&part.text);
         }
         let node = if self.accept("::") {
             ExpressionKind::Label {
@@ -843,7 +896,7 @@ impl Parser {
         } else if self.accept("(") {
             ExpressionKind::Apply {
                 operator: name,
-                args: self.expression_list(")")?,
+                args: self.operator_arguments()?,
             }
         } else {
             ExpressionKind::Identifier { name }
@@ -898,6 +951,34 @@ impl Parser {
         Ok(Expression { node, location })
     }
     fn declaration(&mut self) -> Result<Declaration, ParseError> {
+        if symbolic(self.raw()) && prefix_declaration(&self.raw().text) {
+            let token = self.advance()?;
+            self.expect("_")?;
+            return Ok(Declaration {
+                name: token.text,
+                arity: 1,
+                location: token.location,
+            });
+        }
+        if self.accept("_") {
+            if !symbolic(self.raw()) {
+                return Err(self.error("Expected infix or postfix operator"));
+            }
+            let token = self.advance()?;
+            let arity = if postfix(&token.text) {
+                1
+            } else if infix(&token.text).is_some() {
+                self.expect("_")?;
+                2
+            } else {
+                return Err(self.error("Expected infix or postfix operator"));
+            };
+            return Ok(Declaration {
+                name: token.text,
+                arity,
+                location: token.location,
+            });
+        }
         let token = self.name()?;
         let mut arity = 0;
         if self.accept("(") {
@@ -920,11 +1001,31 @@ impl Parser {
         if self.at("INSTANCE") || self.at("RECURSIVE") {
             return Err(self.unsupported("INSTANCE and RECURSIVE declarations are not supported"));
         }
-        let name = self.name()?;
-        let head = if self.accept("[") {
+        let name = if symbolic(self.raw()) && prefix_declaration(&self.raw().text) {
+            self.advance()?
+        } else {
+            self.name()?
+        };
+        let (name, head) = if symbolic(&name) {
+            (
+                name,
+                DefinitionKind::Operator {
+                    params: vec![parameter(self.name()?)],
+                },
+            )
+        } else if symbolic(self.raw())
+            && (postfix(&self.raw().text) || infix(&self.raw().text).is_some())
+        {
+            let operator = self.advance()?;
+            let mut params = vec![parameter(name)];
+            if !postfix(&operator.text) {
+                params.push(parameter(self.name()?));
+            }
+            (operator, DefinitionKind::Operator { params })
+        } else if self.accept("[") {
             let bounds = self.bounds()?;
             self.expect("]")?;
-            DefinitionKind::Function { bounds }
+            (name, DefinitionKind::Function { bounds })
         } else {
             let mut params = vec![];
             if self.accept("(") {
@@ -934,7 +1035,7 @@ impl Parser {
                 }
                 self.expect(")")?;
             }
-            DefinitionKind::Operator { params }
+            (name, DefinitionKind::Operator { params })
         };
         self.expect("==")?;
         let body = self.expression(0)?;
@@ -1010,20 +1111,15 @@ impl Parser {
             if self.accept("----") {
                 continue;
             }
-            if self.at("CONSTANT")
-                || self.at("CONSTANTS")
-                || self.at("VARIABLE")
-                || self.at("VARIABLES")
-            {
-                let constants = self.advance()?.text.starts_with("CONSTANT");
-                let declarations = if constants {
-                    &mut module.constants
-                } else {
-                    &mut module.variables
-                };
-                declarations.push(self.declaration()?);
+            if self.accept("CONSTANT") || self.accept("CONSTANTS") {
+                module.constants.push(self.declaration()?);
                 while self.accept(",") {
-                    declarations.push(self.declaration()?);
+                    module.constants.push(self.declaration()?);
+                }
+            } else if self.accept("VARIABLE") || self.accept("VARIABLES") {
+                module.variables.push(parameter(self.name()?));
+                while self.accept(",") {
+                    module.variables.push(parameter(self.name()?));
                 }
             } else if self.at("ASSUME") || self.at("ASSUMPTION") || self.at("AXIOM") {
                 let keyword = self.advance()?;

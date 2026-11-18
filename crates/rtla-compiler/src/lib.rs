@@ -9,6 +9,7 @@ use std::rc::Rc;
 mod analysis;
 mod link;
 mod rewrite;
+mod symbols;
 mod symmetry;
 mod typed;
 mod typed_expr;
@@ -303,6 +304,7 @@ pub fn compile_with_options(
     if link::declares_instances_or_overrides(module, config) {
         return compile_modules_with_options(module, config, &[], options);
     }
+    symbols::validate(module)?;
     compile_flat(module, config, options, false)
 }
 
@@ -321,6 +323,10 @@ pub fn compile_modules_with_options(
     modules: &[Module],
     options: CompileOptions,
 ) -> Result<rtlc::SafetyProgram> {
+    symbols::validate(module)?;
+    for dependency in modules {
+        symbols::validate(dependency)?;
+    }
     if config.symmetry.is_some() {
         if !modules.is_empty()
             || !module.instances.is_empty()

@@ -51,90 +51,102 @@
       "role": "reference"
     },
     "source12": {
-      "path": "crates/rtla-compiler/src/symmetry.rs",
+      "path": "crates/rtla-compiler/src/symbols.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/rtla-compiler/src/typed.rs",
+      "path": "crates/rtla-compiler/src/symmetry.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/rtla-compiler/src/typed_expr.rs",
+      "path": "crates/rtla-compiler/src/typed.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtla-compiler/src/typed_lower.rs",
+      "path": "crates/rtla-compiler/src/typed_expr.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/rtla-compiler/tests/analysis_parity.rs",
+      "path": "crates/rtla-compiler/src/typed_lower.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "crates/rtla-compiler/tests/compiler.rs",
+      "path": "crates/rtla-compiler/tests/analysis_parity.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "crates/rtla-compiler/tests/finite-support.json",
+      "path": "crates/rtla-compiler/tests/compiler.rs",
       "role": "reference"
     },
     "source19": {
-      "path": "crates/rtla-compiler/tests/finite_support.rs",
+      "path": "crates/rtla-compiler/tests/finite-support.json",
       "role": "reference"
     },
     "source20": {
-      "path": "crates/rtla-compiler/tests/modules-support.json",
+      "path": "crates/rtla-compiler/tests/finite_support.rs",
       "role": "reference"
     },
     "source21": {
-      "path": "crates/rtla-compiler/tests/modules.rs",
+      "path": "crates/rtla-compiler/tests/modules-support.json",
       "role": "reference"
     },
     "source22": {
-      "path": "crates/rtla-compiler/tests/operator_sharing.rs",
+      "path": "crates/rtla-compiler/tests/modules.rs",
       "role": "reference"
     },
     "source23": {
-      "path": "crates/rtla-compiler/tests/operator_sharing_bundle.rs",
+      "path": "crates/rtla-compiler/tests/operator_sharing.rs",
       "role": "reference"
     },
     "source24": {
-      "path": "crates/rtla-compiler/tests/operators-support.json",
+      "path": "crates/rtla-compiler/tests/operator_sharing_bundle.rs",
       "role": "reference"
     },
     "source25": {
-      "path": "crates/rtla-compiler/tests/operators.rs",
+      "path": "crates/rtla-compiler/tests/operators-support.json",
       "role": "reference"
     },
     "source26": {
-      "path": "crates/rtla-compiler/tests/partial_order.rs",
+      "path": "crates/rtla-compiler/tests/operators.rs",
       "role": "reference"
     },
     "source27": {
-      "path": "crates/rtla-compiler/tests/symmetry.rs",
+      "path": "crates/rtla-compiler/tests/partial_order.rs",
       "role": "reference"
     },
     "source28": {
-      "path": "docs/quint-generated.md",
+      "path": "crates/rtla-compiler/tests/symbolic.rs",
       "role": "reference"
     },
     "source29": {
-      "path": "evals/iterations/0029-rtla-compiler.md",
+      "path": "crates/rtla-compiler/tests/symmetry.rs",
       "role": "reference"
     },
     "source30": {
-      "path": "evals/tlc-differential/operator-sharing-test.ts",
+      "path": "docs/quint-generated.md",
       "role": "reference"
     },
     "source31": {
-      "path": "package.json",
+      "path": "evals/iterations/0029-rtla-compiler.md",
       "role": "reference"
     },
     "source32": {
-      "path": "pnpm-lock.yaml",
+      "path": "evals/iterations/0069-symbolic-operators.md",
       "role": "reference"
     },
     "source33": {
+      "path": "evals/tlc-differential/operator-sharing-test.ts",
+      "role": "reference"
+    },
+    "source34": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source35": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source36": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -156,7 +168,7 @@
       "topic": "限定したSYMMETRY設定のlowering、untyped model valueとflat moduleの条件、対称性証明との区別",
       "mode": "semantic",
       "reference": {
-        "source": "source12"
+        "source": "source13"
       },
       "target": {
         "source": "source3"
@@ -223,7 +235,7 @@
       "topic": "明示v2の型付きexpression lowering、共有callとframe-localなbinder、v1だけのsource演算との区別",
       "mode": "semantic",
       "reference": {
-        "source": "source14"
+        "source": "source15"
       },
       "target": {
         "source": "source3"
@@ -235,7 +247,7 @@
       "topic": "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、action template非共有と未対応module連結",
       "mode": "semantic",
       "reference": {
-        "source": "source15"
+        "source": "source16"
       },
       "target": {
         "source": "source3"

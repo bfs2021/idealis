@@ -4,6 +4,8 @@
 
 rtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust frontend。parserとcheckerを別crateに保ち、両者の公開契約をつなぐ。Nodeやsolverには依存しない。
 
+既存語彙のcustom記号operatorは通常の定義として解決する。`left %% right == ~left`、`-. value == ~value`、`value ^+ == ~value`とnonfix呼出しをIR v1/v2で扱う。builtinやimport済み記号のbinding衝突は、未使用定義・LET/formal宣言を含めて拒否する。[固定した構文・TLC比較](../../evals/iterations/0069-symbolic-operators.md)を参照。operator値・builtin callbackの一般的な受け渡しを追加するものではない。
+
 `compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。明示したユーザーモジュール集合と引数なしINSTANCEにも対応する。一般の高階・再帰operator、無限集合の列挙、一般のsymmetry、VIEWは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
 
 省略・明示v1はJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。明示v2は型付きIRを保持し、同じ木を解析・更新してSafetyProgramを返す。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。

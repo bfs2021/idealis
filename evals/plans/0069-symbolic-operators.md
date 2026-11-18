@@ -9,3 +9,5 @@ DefinitionKind::Operator.params、Declaration.name/arity、Apply.operator/args�
 モデル検査の可否はparserの構文受理と分ける。custom infix/postfix/prefixが既存compilerで名前解決できるか検証する。builtinの記号やimport済みの定義を上書きする入力は、SANY/TLCの意味解析へ照合して明示的に拒否する。compilerの対応を推測で広げない。有限の正常/故障モデルをIR v1/v2とTLCで比較する。
 
 TDDでRedを保存し、native/Wasm/Chromium、旧corpusと0068の二版対照を別runへ記録する。source inventoryは再抽出し、追加された語彙・文脈とhashをレビューして更新する。raw runは上書きせず、source/binary/reference hashと失敗も保持する。最終的にSUPPORT/README/evalsへ範囲を記録し、Jev live/offline/staged、check/browser、rtla/portable/compiler/safety/analysis、runtime build/test、evaluate/replay、配布consumerを確認する。
+
+33対照を両SANYで実行したところ、infix記号単独のbody・集合要素・index、括弧で囲ったinfix参照、修飾したCartesian productは構文として受理された。これら5件をsyntax拒否と想定した初期対照はcontrols-failedとして保持する。PrimitiveExp/BangExtを確認し、前者の4件は記号の値としての適否を意味解析へ委ねること、修飾したCartesian productもsemanticエラーになることを確認した。構文の期待だけを修正し、OpOrExprが拒否する引数の裸の\\Xとは分ける。

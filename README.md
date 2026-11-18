@@ -59,7 +59,7 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 
 RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
 
-rtlaの[構文互換性監査](evals/iterations/0068-rtla-compatibility.md)では、公式corpus 355件とprefix対照13件をSANY 1.7.4/1.8.0 prereleaseへ比較した。prefixの既定は1.7.4に合わせている。記号operator定義、Unicode構文、高階引数やproofには未対応が残る。[対応チェックリスト](crates/rtla/SUPPORT.md)を参照。構文の受理は名前解決・level検査・モデル検査の成功を意味しない。
+rtlaの[構文互換性監査](evals/iterations/0068-rtla-compatibility.md)では、公式corpus 355件とprefix対照13件をSANY 1.7.4/1.8.0 prereleaseへ比較した。prefixの既定は1.7.4に合わせている。[記号operatorの定義・宣言・nonfix参照](evals/iterations/0069-symbolic-operators.md)は既存語彙で対応し、custom記号の有限モデルをIR v1/v2とTLCへ照合した。全operator語彙、Unicode構文、LAMBDAやproofには未対応が残る。[対応チェックリスト](crates/rtla/SUPPORT.md)を参照。構文の受理は名前解決・level検査・モデル検査の成功を意味しない。
 
 [QuintがApalache経由で生成したTLA+の実行確認](docs/quint-generated.md)は、6モデル・12件の正常/違反設定をnative/WasmとTLCへ照合する。`:=`、fold、有限選択、VariantsとCASEを含む限定したfragmentで、Quint言語やQuint Connect API全体の互換実装ではない。
 

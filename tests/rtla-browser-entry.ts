@@ -28,6 +28,11 @@ export const run = async () => {
     kind: "expression",
     source: "a * lab :: b + c",
   });
+  const symbolic = parser.request({
+    kind: "module",
+    source:
+      "---- MODULE Symbolic ----\nleft %% right == left\n-. value == value\nvalue ^+ == value\nMain == M!%%(1, 2)\n====",
+  });
   const repeated = parser.request({ kind: "module", source });
   if (
     !isRecord(module) ||
@@ -42,7 +47,10 @@ export const run = async () => {
     !isRecord(limit.error) ||
     !isRecord(config) ||
     !isRecord(label) ||
-    !isRecord(label.error)
+    !isRecord(label.error) ||
+    !isRecord(symbolic) ||
+    !isRecord(symbolic.module) ||
+    !Array.isArray(symbolic.module.definitions)
   )
     throw new Error("Invalid rtla response");
   return {
@@ -54,6 +62,10 @@ export const run = async () => {
         : 0,
     invalid: invalid.error.kind,
     label: label.error.kind,
+    symbols: symbolic.module.definitions.map((definition) => {
+      if (!isRecord(definition)) throw new Error("Invalid symbolic definition");
+      return definition.name;
+    }),
     limit: limit.error.kind,
     config: config.kind,
     repeat: JSON.stringify(module) === JSON.stringify(repeated),

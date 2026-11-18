@@ -6,6 +6,7 @@
 
 - [x] Module・Expression・TLC Configの型付きASTと、Rustのparse_module / parse_expression / parse_config。
 - [x] MODULE、EXTENDS、変数・定数、通常の名前を持つ非再帰operator、関数定義、ASSUME、THEOREMの構文。
+- [x] 既存operator語彙のprefix/infix/postfix定義、記号の定数・formal宣言、operator引数と修飾nonfix参照を既存のDefinition/Declaration/Apply/Identifierへ保持する。変数宣言は識別子に限る。
 - [x] 算術・比較・論理、集合・tuple・record・関数、量化とtuple pattern、EXCEPTと@。
 - [x] LET、IF、OTHERを省略したCASE、prime、UNCHANGED、ENABLED、temporal/fairnessの構文。
 - [x] top-levelの引数なしnamed/unnamed INSTANCE、LOCAL、WITHの式置換、A!B!Op形式の修飾名をASTへ保持する。
@@ -20,8 +21,8 @@
 
 - [ ] 外部モジュールの読み込み、名前解決、型/level検査、標準operatorの評価。
 - [ ] ASTから検査IRへの変換、状態探索、invariantの評価。
-- [ ] proof、引数付きINSTANCE、LET内のINSTANCE、nested module、RECURSIVE宣言、一般の高階引数。
-- [ ] 記号によるprefix/infix/postfixの定義・宣言とnonfix参照、全operator語彙、labelの引数、一般のsubexpression selector。
+- [ ] proof、引数付きINSTANCE、LET内のINSTANCE、nested module、RECURSIVE宣言、LAMBDA。
+- [ ] 全operator語彙、記号をWITH左辺に使う置換、labelの引数、一般のsubexpression selector。
 - [ ] 1.8.0のprefix優先順位を選ぶsyntax dialect、全Unicode operator/bullet/CASE alias。
 - [ ] 対応外だがSANYが受理する全構文を、一貫してunsupportedへ分類する診断。
 - [ ] 全TLA+構文やSANYとの完全互換。
@@ -34,3 +35,5 @@
 [README](README.md)、[公開境界](src/lib.rs)、[parser](src/parser.rs)、[回帰](tests/parser.rs)、[SANYとの対照](../../evals/iterations/0026-rtla-parser.md)を参照。
 
 [355公式case・13 prefix対照の二版比較](../../evals/iterations/0068-rtla-compatibility.md)と[labelの回帰](tests/labels.rs)を参照。受理率を言語全体の対応率やAST全体の正しさへ読み替えない。
+
+[記号operatorの構文と実行の比較](../../evals/iterations/0069-symbolic-operators.md)、[構文回帰](tests/symbolic.rs)と[固定入力](tests/fixtures/symbolic.json)を参照。記号定義の構文受理と、builtinとの衝突や高階operatorの実行可否を分ける。

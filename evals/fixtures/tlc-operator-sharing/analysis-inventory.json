@@ -7,10 +7,10 @@
       "node_modules/tla-ts/src/parser.ts": "57794c837ea7313274563e879334c9bb54784bdca28d946f780dbd070b3e0d62",
       "node_modules/tla-ts/src/ast.ts": "8e522aa040267c2727cb38c51d93d01b4c72ed4f59fdc7ed6ab97fdfa92bd459",
       "src/tla-safety.ts": "809956226ddd0ed1356f28848da91237ed2cef55f64941dc756e8b3b9287dd6e",
-      "crates/rtla/src/lexer.rs": "b705cadc17efe3df98c564e92afea8b080aad8af25bc4cceaee811a72450cfe5",
-      "crates/rtla/src/parser.rs": "2343e41c8ff6a4070572f0758f9d5d7665b734870bda69a86a8d36d85f827b75",
+      "crates/rtla/src/lexer.rs": "cb47b4f5a6ffcf93fcfd931fd0a745da509e1f072933c6939b4c3f6c08fe6cd5",
+      "crates/rtla/src/parser.rs": "c7c7fe29ef904ea39d97e56278659ac6b60056f05d54cd1d4bf58e9ae0ad5a37",
       "crates/rtla/src/ast.rs": "d8929e28558bef691b8e84376e22f7ca23726fdb4650ca79d6007da0e1aa33af",
-      "crates/rtla-compiler/src/lib.rs": "3c4ecb701e5310840361f97c1b17cdde7dc186a2190d2e25010299acf734c30e",
+      "crates/rtla-compiler/src/lib.rs": "1ef5df019b79c1a8379a34b01867698596fdafa78fd46a0b88e3e72acc32048d",
       "crates/rtla-compiler/src/typed.rs": "787b2c12dcbdb34e4d79aa2a854225c2f11a9ecc3517334331f2fcba6947fd95",
       "crates/rtla-compiler/src/typed_lower.rs": "76fc992f2524eba4aa09026180eaf7d300ba4a13968f30b9a43fad9954a8effc",
       "crates/rtla-compiler/src/typed_expr.rs": "672ca09772d95a93d44c585415724b23789b1819350042ab71ab7ebaeb40adca"
@@ -1057,6 +1057,7 @@
         "-",
         "-+->",
         "--",
+        "-.",
         "->",
         ".",
         "..",
@@ -7763,17 +7764,17 @@
     {
       "id": "context/syntax/nonfix-minus/value",
       "classification": "named nonshared",
-      "context": "fixed value context; TS accepted; Rust TLA parsing: Unexpected token \".\" at 6:11"
+      "context": "Both frontends now accept nonfix -. in this lowering context (0069); not added to the fixed shared structural corpus."
     },
     {
       "id": "context/syntax/nonfix-minus/action",
       "classification": "named nonshared",
-      "context": "fixed action context; TS accepted; Rust TLA parsing: Unexpected token \".\" at 6:11"
+      "context": "Both frontends now accept nonfix -. in this lowering context (0069); not added to the fixed shared structural corpus."
     },
     {
       "id": "context/syntax/nonfix-minus/temporal",
       "classification": "named nonshared",
-      "context": "fixed temporal context; TS accepted; Rust TLA parsing: Unexpected token \".\" at 6:11"
+      "context": "Both frontends now accept nonfix -. in this lowering context (0069); not added to the fixed shared structural corpus."
     },
     {
       "id": "context/syntax/div/value",
@@ -7973,87 +7974,87 @@
     {
       "id": "context/nonfix/=>",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/<=>",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/~>",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/=",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/#",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/<",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/>",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/<=",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/>=",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\in",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\notin",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\subseteq",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\cup",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\cap",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/..",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/+",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/-",
@@ -8063,102 +8064,107 @@
     {
       "id": "context/nonfix/*",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\o",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\union",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\intersect",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\circ",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\equiv",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\leq",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/\\geq",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix//=",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/=<",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/∈",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/∩",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/∪",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/≥",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/⇔",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/⇒",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/≤",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/≠",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/∉",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
     },
     {
       "id": "context/nonfix/⊆",
       "classification": "named nonshared",
-      "context": "TS symbolic nonfix call; Rust syntax refusal"
+      "context": "Both parsers accept this nonfix form. Parser acceptance is replayed in 0069; this context remains outside the fixed shared lowering corpus."
+    },
+    {
+      "id": "lexical/Rust/-.",
+      "classification": "annotation",
+      "context": "lexer token for negative operator declaration/reference; prefix expression - keeps its existing -. AST name"
     }
   ],
   "reviewedSpellings": [
@@ -11475,22 +11481,22 @@
       "id": "nonfix-minus",
       "source": "---- MODULE Probe ----\nEXTENDS Naturals, Integers, Sequences, FiniteSets, Apalache\nVARIABLE x\nInit == x = 0\nNext == UNCHANGED x\nProbe == -.(1)\n====",
       "ts_parser": true,
-      "rust_parser": false,
+      "rust_parser": true,
       "lowering": [
         {
           "context": "value",
           "TS": "accepted",
-          "Rust": "TLA parsing: Unexpected token \".\" at 6:11"
+          "Rust": "accepted"
         },
         {
           "context": "action",
           "TS": "accepted",
-          "Rust": "TLA parsing: Unexpected token \".\" at 6:11"
+          "Rust": "accepted"
         },
         {
           "context": "temporal",
           "TS": "accepted",
-          "Rust": "TLA parsing: Unexpected token \".\" at 6:11"
+          "Rust": "accepted"
         }
       ]
     },
@@ -11805,10 +11811,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"=>\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "=>",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -11828,10 +11856,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"<=>\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=>",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 7
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -11851,10 +11901,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"~>\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "~>",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -11874,10 +11946,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"=\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -11897,10 +11991,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"#\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "#",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -11920,10 +12036,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"<\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -11943,10 +12081,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \">\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": ">",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -11966,10 +12126,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"<=\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -11989,10 +12171,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \">=\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": ">=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -12012,10 +12216,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\in\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\in",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 7
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12035,10 +12261,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\notin\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\notin",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 9,
+                "end": 10,
+                "line": 1,
+                "column": 10
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 6,
@@ -12058,10 +12306,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\subseteq\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\subseteq",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 10,
+                "end": 11,
+                "line": 1,
+                "column": 11
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 12,
+                "end": 13,
+                "line": 1,
+                "column": 13
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 9,
@@ -12081,10 +12351,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\cup\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\cup",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 4,
@@ -12104,10 +12396,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\cap\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\cap",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 4,
@@ -12127,10 +12441,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -12150,10 +12486,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"..\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "..",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -12173,10 +12531,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"+\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "+",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -12214,10 +12594,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"*\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "*",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 2,
+                "end": 3,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 1,
@@ -12237,10 +12639,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\o\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\o",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -12260,10 +12684,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\union\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\cup",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 9,
+                "end": 10,
+                "line": 1,
+                "column": 10
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 6,
@@ -12283,10 +12729,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\intersect\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\cap",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 11,
+                "end": 12,
+                "line": 1,
+                "column": 12
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 13,
+                "end": 14,
+                "line": 1,
+                "column": 14
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 10,
@@ -12306,10 +12774,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\circ\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\o",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 8,
+                "end": 9,
+                "line": 1,
+                "column": 9
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 5,
@@ -12329,10 +12819,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\equiv\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=>",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 9,
+                "end": 10,
+                "line": 1,
+                "column": 10
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 6,
@@ -12352,10 +12864,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\leq\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 4,
@@ -12375,10 +12909,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"\\\\geq\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": ">=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 7,
+                "end": 8,
+                "line": 1,
+                "column": 8
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 4,
@@ -12398,10 +12954,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"/=\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "#",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -12421,10 +12999,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"=<\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 3,
+                "end": 4,
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 5,
+                "end": 6,
+                "line": 1,
+                "column": 6
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 2,
@@ -12444,10 +13044,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"∈\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\in",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12467,10 +13089,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"∩\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\cap",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12490,10 +13134,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"∪\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\cup",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12513,10 +13179,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"≥\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": ">=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12536,10 +13224,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"⇔\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=>",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12559,10 +13269,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"⇒\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "=>",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12582,10 +13314,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"≤\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "<=",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12605,10 +13359,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"≠\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "#",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12628,10 +13404,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"∉\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\notin",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,
@@ -12651,10 +13449,32 @@
       },
       "lower": "accepted",
       "rustResponse": {
-        "kind": "error",
-        "error": {
-          "kind": "syntax",
-          "message": "Unexpected token \"⊆\"",
+        "kind": "expression",
+        "expression": {
+          "kind": "Apply",
+          "operator": "\\subseteq",
+          "args": [
+            {
+              "kind": "Number",
+              "value": 1,
+              "location": {
+                "start": 4,
+                "end": 5,
+                "line": 1,
+                "column": 3
+              }
+            },
+            {
+              "kind": "Number",
+              "value": 2,
+              "location": {
+                "start": 6,
+                "end": 7,
+                "line": 1,
+                "column": 5
+              }
+            }
+          ],
           "location": {
             "start": 0,
             "end": 3,

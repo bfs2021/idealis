@@ -443,3 +443,17 @@
 {"runId":"0068-verification","kind":"workspace-verification","status":"failed","reason":"analysis inventory source digest required review"}
 {"runId":"0068-final-verification","kind":"workspace-verification","status":"complete","gates":21}
 {"runId":"0068-final-audit","kind":"rtla-compatibility-evidence","status":"complete","compatibility":"partial"}
+{"runId":"0069-before","kind":"symbolic-operator-controls","status":"controls-failed","compatibility":"partial"}
+{"runId":"0069-baseline","kind":"symbolic-operator-controls","status":"partial","compatibility":"partial"}
+{"runId":"0069-parser","kind":"symbolic-operator-controls","status":"complete","compatibility":"partial"}
+{"runId":"0069-stable-audit","kind":"rtla-compatibility-audit","status":"partial-reference","compatibility":"partial"}
+{"runId":"0069-preview-audit","kind":"rtla-compatibility-audit","status":"complete","compatibility":"partial"}
+{"runId":"0069-models-final","kind":"symbolic-tlc-differential","status":"complete","compatibility":"partial"}
+{"runId":"0069-stable","kind":"symbolic-operator-setup","status":"error","reason":"incorrect upstream path"}
+{"runId":"0069-models","kind":"symbolic-tlc-differential","status":"error","reason":"native compile error code expectation"}
+{"runId":"0069-models-fixed","kind":"symbolic-tlc-differential","status":"error","reason":"import redefinition reference expectation"}
+{"runId":"0069-inventory","kind":"parser-source-inventory","status":"complete"}
+{"runId":"0069-boundary-review","kind":"analysis-boundary-refresh","status":"complete"}
+{"runId":"0069-boundary-diagnostics","kind":"analysis-boundary-refresh","status":"complete"}
+{"runId":"0069-verification","kind":"workspace-verification","status":"complete","gates":21}
+{"runId":"0069-audit","kind":"symbolic-operator-evidence","status":"complete","compatibility":"partial"}

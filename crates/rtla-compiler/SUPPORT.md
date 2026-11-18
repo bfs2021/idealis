@@ -13,6 +13,8 @@
 - [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。
 
 - [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。
+- [x] 既存語彙のcustom記号operatorを通常の定義として解決する。prefix `-.`、infix、postfix `^+`/`^*`/`^#`とnonfix呼出しをIR v1/v2で扱う。
+- [x] builtin・対応する標準moduleからimportした記号とのbinding衝突を拒否する。未使用定義とLET/formal宣言も検査し、SANY全体の意味解析とは区別する。
 - [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。
 - [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。
 - [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。
@@ -68,6 +70,7 @@
 
 [実装](src/lib.rs)、[回帰](tests/compiler.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[標準演算と公平性の回帰](tests/operators.rs)、[その比較入力](tests/operators-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。
 [operator共有の回帰](tests/operator_sharing.rs)も参照。
+[記号operatorの回帰](tests/symbolic.rs)、[binding検査](src/symbols.rs)と[構文・TLC比較](../../evals/iterations/0069-symbolic-operators.md)も参照。記号の値としての受け渡し、builtin callbackやoperator定数の一般的な実行を追加した意味ではない。
 
 [operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。
 

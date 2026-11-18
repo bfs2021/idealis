@@ -28,6 +28,14 @@ interface LabelReference {
     }[];
   }[];
 }
+interface CorpusReference {
+  readonly records: readonly {
+    readonly name: string;
+    readonly sany: string;
+    readonly family: string;
+    readonly rtla: string;
+  }[];
+}
 
 test("native/Wasm label junctions match both saved SANY references", async () => {
   const root = "evals/runs/0068-label-junction-reference";
@@ -68,9 +76,9 @@ test("native/Wasm label junctions match both saved SANY references", async () =>
   }
 });
 
-test("rtla replays the fixed corpus snapshots; only the invalid label changes", async () => {
-  const root = "evals/runs/0068-stable-fixed";
-  const before = "evals/runs/0068-stable-audit";
+test("rtla replays the revised corpus and new symbolic acceptances have a SANY reference", async () => {
+  const root = "evals/runs/0069-stable-audit";
+  const before = "evals/runs/0068-stable-fixed";
   const inputs: readonly { readonly source: string }[] = JSON.parse(
     await readFile(join(root, "inputs.json"), "utf8"),
   );
@@ -106,10 +114,33 @@ test("rtla replays the fixed corpus snapshots; only the invalid label changes", 
       expected.actual,
       record.name,
     );
-    if (JSON.stringify(old.actual) !== JSON.stringify(expected.actual))
+    if (
+      isRecord(old.actual) &&
+      old.actual.kind === "error" &&
+      isRecord(expected.actual) &&
+      expected.actual.kind === "module"
+    )
       changes.push(record.name);
   }
-  assert.deepEqual(changes, ["Label interfering with precedence"]);
+  assert.equal(changes.length, 17);
+  const preview: CorpusReference = JSON.parse(
+    await readFile("evals/runs/0069-preview-audit/result.json", "utf8"),
+  );
+  for (const name of changes)
+    assert.equal(
+      preview.records.find((record) => record.name === name)?.sany,
+      "accepted",
+      name,
+    );
+  assert.deepEqual(
+    preview.records.filter(
+      (record) =>
+        record.family !== "prefix-focus" &&
+        record.sany === "syntax" &&
+        record.rtla === "accepted",
+    ),
+    [],
+  );
 });
 
 test("stable prefix binding is retained and reference exceptions are not syntax matches", async () => {
