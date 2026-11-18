@@ -5,6 +5,9 @@ import { join } from "node:path";
 import { digest } from "../usable/provenance.js";
 
 const directory = process.argv[2];
+const planName = process.env.IDEALIS_CHECKER_PLAN ?? "0062-p0-checker";
+const snapshotRoot =
+  process.env.IDEALIS_CHECKER_SNAPSHOT ?? ".artifacts/0062-release";
 assert.ok(directory);
 await mkdir(directory);
 const commands = [
@@ -52,7 +55,7 @@ const commands = [
   ["just", ["support-check"]],
 ] as const;
 const snapshots = JSON.parse(
-  await readFile(".artifacts/0062-release/manifest.json", "utf8"),
+  await readFile(join(snapshotRoot, "manifest.json"), "utf8"),
 );
 const before = await Promise.all(
   snapshots.sources.map(async (source: { path: string }) => ({
@@ -65,7 +68,7 @@ const save = async (path: string, value: unknown) =>
     flag: "wx",
   });
 await save("manifest.json", {
-  plan: "0062-p0-checker",
+  plan: planName,
   commands,
   sources: before,
   snapshots,

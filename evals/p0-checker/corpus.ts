@@ -18,7 +18,8 @@ import { sharing } from "./inputs.js";
 const [before, after, java, jar, archive, directory] = process.argv.slice(2);
 assert.ok(before && after && java && jar && archive && directory);
 await mkdir(directory);
-const plan = await readFile("evals/plans/0062-p0-checker.md");
+const planName = process.env.IDEALIS_CHECKER_PLAN ?? "0062-p0-checker";
+const plan = await readFile(`evals/plans/${planName}.md`);
 await writeFile(join(directory, "plan.md"), plan, { flag: "wx" });
 const inputs = [
   ...(await Promise.all(
@@ -90,14 +91,29 @@ const snapshots = await Promise.all(
 );
 const specs = [
   { name: "before-native-v1", root: before, backend: "native", version: 1 },
+  ...(process.env.IDEALIS_CHECKER_COMPARE_V2 === "1"
+    ? ([
+        {
+          name: "before-native-v2",
+          root: before,
+          backend: "native",
+          version: 2,
+        },
+      ] as const)
+    : []),
   { name: "after-native-v1", root: after, backend: "native", version: 1 },
   { name: "after-native-v2", root: after, backend: "native", version: 2 },
   { name: "before-wasm-v1", root: before, backend: "wasm", version: 1 },
+  ...(process.env.IDEALIS_CHECKER_COMPARE_V2 === "1"
+    ? ([
+        { name: "before-wasm-v2", root: before, backend: "wasm", version: 2 },
+      ] as const)
+    : []),
   { name: "after-wasm-v1", root: after, backend: "wasm", version: 1 },
   { name: "after-wasm-v2", root: after, backend: "wasm", version: 2 },
 ] as const;
 await save("manifest.json", {
-  plan: "0062-p0-checker",
+  plan: planName,
   planSha256: digest(plan),
   environment: await environment(java, jar, archive),
   snapshots,
@@ -148,7 +164,7 @@ try {
         const source = {
           source: input.source,
           config: input.config,
-          ...(route.name.startsWith("before-")
+          ...(route.name.startsWith("before-") && route.version === 1
             ? {}
             : { irVersion: route.version }),
         };
@@ -250,7 +266,7 @@ try {
             source: input.source,
             config: input.config,
             bounds,
-            ...(route.name.startsWith("before-")
+            ...(route.name.startsWith("before-") && route.version === 1
               ? {}
               : { irVersion: route.version }),
           },
@@ -327,7 +343,7 @@ try {
   await save("result.json", { status: "complete", records, cold, ts });
   await appendFile(
     "evals/runs/ledger.jsonl",
-    `${JSON.stringify({ runId: basename(directory), kind: "p0-corpus", plan: "0062-p0-checker", status: "complete" })}\n`,
+    `${JSON.stringify({ runId: basename(directory), kind: "p0-corpus", plan: planName, status: "complete" })}\n`,
   );
 } catch (error) {
   await save("error.json", {

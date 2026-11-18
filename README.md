@@ -190,6 +190,10 @@ nativeの8-worker要求は同じrunのTLC 8 workers比でcounter 2.67倍、funct
 
 <!-- checker-comparison:end -->
 
+0063ではData定数のslot検索を調整し、同じrunのTCommit（RM=8）のnative IR検査要求がv1で143.77→113.24 ms、v2で140.55→118.32 msになった。起動込みは138.70→118.61 ms / 143.87→125.93 ms。各1 warmup + 3 samples、非専用M5での中央値で、IR decode・prepared構築を含む。14本のkernelには数%の後退も残る。
+
+[採用したhash変更・撤去したinline・全sample](evals/iterations/0063-evaluator-tuning.md)を参照。上の0062のTLC比較とは別runの値。
+
 ## 同じ登録による差分検査と比較ベンチ
 
 新しい`idealis-oracle`で、TLC・tla-ts・idealisへ同じ小さいモデルを渡した。下表は起動込みのcold source-to-result中央値、7 sample・1 warmup、すべて1 worker。process起動・輸送・解析・raw log書き込みを含む。

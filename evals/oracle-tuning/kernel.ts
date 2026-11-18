@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { cpus } from "node:os";
 import { join, resolve } from "node:path";
@@ -27,10 +28,21 @@ const metadata = await Promise.all(
   }),
 );
 assert.equal(metadata[0].benchSha256, metadata[1].benchSha256);
+const inputPath =
+  binaryName === "safety-bench"
+    ? existsSync(".artifacts/criterion-safety/inputs.json")
+      ? ".artifacts/criterion-safety/inputs.json"
+      : "crates/rtlc/src/bench-fixtures.json"
+    : undefined;
+const input = inputPath ? await readFile(inputPath) : undefined;
+const inputSha256 = input
+  ? createHash("sha256").update(input).digest("hex")
+  : undefined;
 await mkdir(output);
+if (input) await writeFile(join(output, "inputs.json"), input, { flag: "wx" });
 await writeFile(
   join(output, "manifest.json"),
-  `${JSON.stringify({ metadata, filter, cpu: cpus()[0]?.model, sampleSize: 20, warmupMs: 500, measurementMs: 1000, order: ["before", "after", "after", "before"] }, null, 2)}\n`,
+  `${JSON.stringify({ metadata, filter, inputPath, inputSha256, cpu: cpus()[0]?.model, sampleSize: 20, warmupMs: 500, measurementMs: 1000, order: ["before", "after", "after", "before"] }, null, 2)}\n`,
   { flag: "wx" },
 );
 for (const [index, root] of [before, after, after, before].entries()) {
@@ -45,4 +57,12 @@ for (const [index, root] of [before, after, after, before].entries()) {
   );
   await writeFile(join(directory, "stdout.log"), log, { flag: "wx" });
 }
+if (inputPath)
+  assert.equal(
+    createHash("sha256")
+      .update(await readFile(inputPath))
+      .digest("hex"),
+    inputSha256,
+    "Safety inputs changed during measurement",
+  );
 console.log(`Saved four isolated Criterion runs: ${output}`);

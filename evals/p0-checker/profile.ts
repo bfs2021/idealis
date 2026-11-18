@@ -13,7 +13,8 @@ import { digest } from "../usable/provenance.js";
 const [binary, directory] = process.argv.slice(2);
 assert.ok(binary && directory);
 await mkdir(directory);
-const plan = await readFile("evals/plans/0062-p0-checker.md");
+const planName = process.env.IDEALIS_CHECKER_PLAN ?? "0062-p0-checker";
+const plan = await readFile(`evals/plans/${planName}.md`);
 await writeFile(join(directory, "plan.md"), plan, { flag: "wx" });
 const sources = await fingerprint();
 const sha256 = digest(await readFile(binary));
@@ -26,7 +27,7 @@ const save = async (path: string, value: unknown) =>
     flag: "wx",
   });
 await save("manifest.json", {
-  plan: "0062-p0-checker",
+  plan: planName,
   planSha256: digest(plan),
   sources,
   binary,
@@ -114,5 +115,5 @@ assert.deepEqual(await fingerprint(), sources);
 await save("result.json", { status: "complete", records });
 await appendFile(
   "evals/runs/ledger.jsonl",
-  `${JSON.stringify({ runId: basename(directory), plan: "0062-p0-checker", kind: "tcommit-profile", status: "complete" })}\n`,
+  `${JSON.stringify({ runId: basename(directory), plan: planName, kind: "tcommit-profile", status: "complete" })}\n`,
 );

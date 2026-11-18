@@ -126,7 +126,7 @@ const scopes: readonly CrateScope[] = [
         path: "src/safety_partial_order.rs",
         topic:
           "opt-inの限定POR、不可視で独立な単調Bool flagの条件、他branchによるresetの禁止、fallback、一般PORとの区別",
-        context: ["src/safety.rs", "src/ir.rs"],
+        context: ["src/safety.rs"],
       },
       {
         path: "src/safety_prepared.rs",

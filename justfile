@@ -701,6 +701,21 @@ p0-verify run:
   pnpm build
   node dist/evals/p0-checker/verify.js {{quote(run)}}
 
+evaluator-kernel before after run filter="":
+  node dist/evals/oracle-tuning/kernel.js {{quote(before)}} {{quote(after)}} {{quote(run)}} safety-bench {{quote(filter)}}
+
+evaluator-summary run output count:
+  node dist/evals/evaluator-tuning/summarize.js {{quote(run)}} {{quote(output)}} {{quote(count)}}
+
+evaluator-corpus before after java jar archive run:
+  IDEALIS_CHECKER_PLAN=0063-evaluator-tuning IDEALIS_CHECKER_COMPARE_V2=1 node dist/evals/p0-checker/corpus.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
+
+evaluator-verify snapshot run:
+  IDEALIS_CHECKER_PLAN=0063-evaluator-tuning IDEALIS_CHECKER_SNAPSHOT={{quote(snapshot)}} node dist/evals/p0-checker/verify.js {{quote(run)}}
+
+evaluator-corpus-summary run output:
+  node dist/evals/evaluator-tuning/corpus-summary.js {{quote(run)}} {{quote(output)}}
+
 quint-generate output endpoint apalache_jar:
   pnpm build
   node dist/evals/quint-generated/generate.js {{quote(output)}} {{quote(endpoint)}} {{quote(apalache_jar)}}

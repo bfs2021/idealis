@@ -34,6 +34,7 @@
 - [x] packed関数の内部hashはdomain/payload/型saltをfmix64で混合する。公式C++の7出力、固定4,096値の分布、Bool/Intの衝突で完全比較とcanonical identityを検査する。汎用関数のhashと公開Value/IRは維持する。
 
 - [x] immutableなprogramのData式をslotへ登録し、Arenaごとに初回成功後のScalarをcacheする。未評価分岐の値を先に評価せず、失敗・状態依存式をcacheしない。未登録の式は従来の評価へ戻り、workerのlocal Refはmergeでremapする。
+- [x] Data式のslot索引では内部address専用hashと完全なkey比較を使う。ユーザー値・集合・関数・探索状態のhashと等価性、lazy評価・work課金は変更しない。
 
 ## TLC互換の追加対応
 

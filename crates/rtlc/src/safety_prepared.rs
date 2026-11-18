@@ -2,9 +2,35 @@ use crate::Value;
 use crate::ir::{Expression, SafetyProgram, TemporalFormula};
 use crate::safety_expressions::register_branch_memberships;
 use std::collections::HashMap;
+use std::hash::{BuildHasherDefault, Hasher};
+
+#[derive(Default)]
+struct AddressHasher(u64);
+
+impl Hasher for AddressHasher {
+    fn finish(&self) -> u64 {
+        self.0
+    }
+
+    fn write(&mut self, bytes: &[u8]) {
+        for byte in bytes {
+            self.0 = self.0.wrapping_mul(0x0000_0100_0000_01b3) ^ u64::from(*byte);
+        }
+    }
+
+    fn write_usize(&mut self, value: usize) {
+        // MurmurHash3 fmix64 by Austin Appleby (public domain), for internal addresses only.
+        let mut hash = value as u64;
+        hash ^= hash >> 33;
+        hash = hash.wrapping_mul(0xff51_afd7_ed55_8ccd);
+        hash ^= hash >> 33;
+        hash = hash.wrapping_mul(0xc4ce_b9fe_1a85_ec53);
+        self.0 = hash ^ (hash >> 33);
+    }
+}
 
 pub(crate) struct PreparedProgram<'a> {
-    slots: HashMap<usize, usize>,
+    slots: HashMap<usize, usize, BuildHasherDefault<AddressHasher>>,
     values: Vec<&'a Value>,
 }
 
@@ -69,7 +95,7 @@ impl<'a> PreparedProgram<'a> {
 
     pub fn from_roots(mut roots: Vec<&'a Expression>) -> Self {
         let mut prepared = Self {
-            slots: HashMap::new(),
+            slots: HashMap::default(),
             values: Vec::new(),
         };
         while let Some(expression) = roots.pop() {

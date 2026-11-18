@@ -21,3 +21,17 @@
 runは追記のみ。source/binary/input・driver・実行順・予算・host・全sampleを保存し、失敗と撤去した候補も残す。既知のTLC乖離1入力と未対応は一致へ読み替えない。同じ固定benchの反復を独立モデルでの確認とは数えない。
 
 終了前にcheck/browser、compiler/safety/portable、fmt/clippy、analysis、runtime build/test、evaluate/replay-evaluation、packageを実行する。SUPPORT/Jevの46比較をlive/offline/stagedで同期する。API keyなしのskipは検査済みと区別する。採否と残る費用をiterationとREADME、#65/#63へ戻す。
+
+## Aの初回と追加条件
+
+初回4モデルはcounter -6%、function/channel約-1%、ring +5%だった。途中のTS driver buildが約0.7秒重なったため、採用判断はこのrunだけで行わない。固定binaryで後に独立した時間帯の再確認を行う。実モデルTCommitも別に測る。初回rawは保持する。
+
+Criterion driverはruntimeに読み込む.artifacts/criterion-safety/inputs.json（なければ固定bench-fixtures.json）の原本とhashを今後のrunへ保存し、実行前後の一致を検査する。既存の初回rawを修正しない。binaryごとの同じhashだけでなく、実際に読む入力も固定するための追加条件である。
+
+AのTCommit v1はcheck要求が121.52→103.28 ms、coldが124.65→106.74 msだった。v2の変更前も比較するため、最終corpusはIDEALIS_CHECKER_COMPARE_V2=1でbefore-native-v2/before-wasm-v2を追加する。初期0062のbaselineはv2非対応だったため、既定の6経路を変えず、今回だけ8経路・cold 4経路とする。元のAの計測と混ぜない。
+
+## inline候補の撤去と最終確認
+
+BはArena::cell、CはBにFunction::positionのinline(always)を加えた。4モデルの逐次searchでは一部が約4-8%短縮したが、A/B/C全体と基準版の14本ではmembership/channelが+11.7%、search/channel1が+20.5%、既存functionのinternが+15.0%だった。指定した3本の固定binaryの追加ABBAでは順に+24.2%、-7.7%、+4.3%で、membershipの後退が再現した。B/Cのinlineは両方撤去し、sourceとrawを保持する。個々のinlineの因果をこの組み合わせの差だけから断定しない。
+
+最終候補はAのみ。既存14本を再度ABBAで比較し、8経路のcorpusを測る。前の14本と追加確認は不採用Cの結果として残し、新しいrunへ上書きしない。共通評価の深さ判定は今回変更せず、v2の拒否境界を保つ。

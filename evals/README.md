@@ -4,6 +4,8 @@
 
 [0062: 共有IRと最新版の比較](iterations/0062-p0-checker.md)はdraft実装を0061へ統合し、4モデル9経路、Quint生成物と原本TCommit、IRの線形成長、profileとv1の費用増を比較する。静的visitorは撤去し、共有IRは明示選択で採用する。
 
+[0063: Data定数のslot検索](iterations/0063-evaluator-tuning.md)は内部addressのhashだけを変更し、TCommitのnative検査要求・起動を短縮した。14本に残る数%の後退と、membershipの後退で撤去したinline、v1/v2の完全応答比較を記録する。
+
 [0061: symmetry拡張と探索削減](iterations/0061-symmetry-next.md)は、record・集合、代表展開、並列化、命令ID、限定PORを順に試した。命令IDは後退して撤去し、採用した条件・具体反例の再生・計数の違いを記録する。
 
 [0053: TLCの24不一致解消](iterations/0053-tlc-standard-modules.md)は標準moduleを固定して参照pathを渡し、int32最小値のtrace表記も修正した。155件の検査・32件の確認・155件の保存再生で不一致0を確認した。
