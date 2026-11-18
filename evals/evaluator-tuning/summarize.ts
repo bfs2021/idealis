@@ -9,7 +9,8 @@ import {
 import { basename, join, relative } from "node:path";
 import { digest } from "../usable/provenance.js";
 
-const [input, output, expected] = process.argv.slice(2);
+const [input, output, expected, plan = "0063-evaluator-tuning"] =
+  process.argv.slice(2);
 assert.ok(input && output && expected);
 const count = Number(expected);
 assert.ok(Number.isSafeInteger(count) && count > 0);
@@ -64,12 +65,12 @@ const manifest = await readFile(join(input, "manifest.json"));
 await mkdir(output);
 await writeFile(
   join(output, "result.json"),
-  `${JSON.stringify({ status: "complete", plan: "0063-evaluator-tuning", input, manifest: JSON.parse(manifest.toString()), manifestSha256: digest(manifest), method: "Arithmetic mean of two Criterion mean estimates per side in ABBA order. Intervals are per repetition, not pooled.", records }, null, 2)}\n`,
+  `${JSON.stringify({ status: "complete", plan, input, manifest: JSON.parse(manifest.toString()), manifestSha256: digest(manifest), method: "Arithmetic mean of two Criterion mean estimates per side in ABBA order. Intervals are per repetition, not pooled.", records }, null, 2)}\n`,
   { flag: "wx" },
 );
 await appendFile(
   "evals/runs/ledger.jsonl",
-  `${JSON.stringify({ runId: basename(output), plan: "0063-evaluator-tuning", kind: "criterion-summary", status: "complete" })}\n`,
+  `${JSON.stringify({ runId: basename(output), plan, kind: "criterion-summary", status: "complete" })}\n`,
 );
 console.log(
   records.map((record) => ({ name: record.name, ratio: record.ratio })),

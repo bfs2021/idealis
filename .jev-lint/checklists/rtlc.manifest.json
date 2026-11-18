@@ -151,46 +151,54 @@
       "role": "reference"
     },
     "source37": {
-      "path": "crates/rtlc/tests/standalone.rs",
+      "path": "crates/rtlc/tests/prepared_safety.rs",
       "role": "reference"
     },
     "source38": {
-      "path": "crates/rtlc/tests/symmetry_parallel.rs",
+      "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
     "source39": {
-      "path": "crates/rtlc/tests/temporal_sets.rs",
+      "path": "crates/rtlc/tests/symmetry_parallel.rs",
       "role": "reference"
     },
     "source40": {
-      "path": "crates/rtlc/tests/value_normalize_errors.rs",
+      "path": "crates/rtlc/tests/temporal_sets.rs",
       "role": "reference"
     },
     "source41": {
-      "path": "docs/reductions.md",
+      "path": "crates/rtlc/tests/value_normalize_errors.rs",
       "role": "reference"
     },
     "source42": {
-      "path": "docs/rust-safety.md",
+      "path": "docs/prepared-safety.md",
       "role": "reference"
     },
     "source43": {
-      "path": "docs/safety-ir-v2.md",
+      "path": "docs/reductions.md",
       "role": "reference"
     },
     "source44": {
-      "path": "docs/symmetry.md",
+      "path": "docs/rust-safety.md",
       "role": "reference"
     },
     "source45": {
-      "path": "package.json",
+      "path": "docs/safety-ir-v2.md",
       "role": "reference"
     },
     "source46": {
-      "path": "pnpm-lock.yaml",
+      "path": "docs/symmetry.md",
       "role": "reference"
     },
     "source47": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source48": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source49": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -209,18 +217,40 @@
     },
     {
       "id": "rtlc-implementation-0",
-      "topic": "IRの値と式・予算・結果の公開契約",
+      "topic": "IRの値と式・予算・結果のwire契約。準備済み所有型の実装は別比較",
       "mode": "semantic",
       "reference": {
         "source": "source10"
       },
       "target": {
-        "source": "source4"
+        "source": "source4",
+        "contains": "IRのwire構造は"
       },
-      "context": []
+      "context": [
+        {
+          "source": "source11"
+        }
+      ]
     },
     {
       "id": "rtlc-implementation-1",
+      "topic": "所有するPreparedSafetyProgramの静的準備、値やASSUMEを先に評価しない契約、Data索引の再利用",
+      "mode": "semantic",
+      "reference": {
+        "source": "source13",
+        "contains": "pub fn prepare(self)"
+      },
+      "target": {
+        "source": "source4"
+      },
+      "context": [
+        {
+          "source": "source21"
+        }
+      ]
+    },
+    {
+      "id": "rtlc-implementation-2",
       "topic": "有限BFS、invariantとdeadlock、結果と探索予算、opt-inの逐次action coverageとworkの内訳",
       "mode": "semantic",
       "reference": {
@@ -236,7 +266,7 @@
       ]
     },
     {
-      "id": "rtlc-implementation-2",
+      "id": "rtlc-implementation-3",
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
@@ -248,7 +278,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-3",
+      "id": "rtlc-implementation-4",
       "topic": "単一のuntypedモデル値群、scalar/flat recordのnode関数とnode部分集合、同じnode行のopt-in代表展開、equivarianceの利用者前提、具体traceと計数、対象外",
       "mode": "semantic",
       "reference": {
@@ -264,7 +294,7 @@
       ]
     },
     {
-      "id": "rtlc-implementation-4",
+      "id": "rtlc-implementation-5",
       "topic": "symmetryのflat record payloadのfield名・Int/Bool型の検証とnested/node参照の拒否",
       "mode": "semantic",
       "reference": {
@@ -277,7 +307,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-5",
+      "id": "rtlc-implementation-6",
       "topic": "opt-inの限定POR、不可視で独立な単調Bool flagの条件、他branchによるresetの禁止、fallback、一般PORとの区別",
       "mode": "semantic",
       "reference": {
@@ -293,7 +323,7 @@
       ]
     },
     {
-      "id": "rtlc-implementation-6",
+      "id": "rtlc-implementation-7",
       "topic": "immutableなData式のslot登録、未評価分岐や失敗を先に評価しない定数の準備。状態依存式と型別命令VMは対象外",
       "mode": "semantic",
       "reference": {
@@ -305,7 +335,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-7",
+      "id": "rtlc-implementation-8",
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
@@ -317,7 +347,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-8",
+      "id": "rtlc-implementation-9",
       "topic": "immutable domain共有、Boolと整数の別bit表現、membershipの論理work、worker参照とremap、hash衝突の完全比較",
       "mode": "semantic",
       "reference": {
@@ -334,7 +364,7 @@
       ]
     },
     {
-      "id": "rtlc-implementation-9",
+      "id": "rtlc-implementation-10",
       "topic": "v2の定義graph、ID/arity/capture/phaseとframe-local slotの検証、metadataと再帰の拒否",
       "mode": "semantic",
       "reference": {
@@ -346,7 +376,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-10",
+      "id": "rtlc-implementation-11",
       "topic": "call-by-nameの要求時評価、callerのlexical環境とphase、callと引数のwork課金。値のmemoizationとの区別",
       "mode": "semantic",
       "reference": {
@@ -359,7 +389,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-11",
+      "id": "rtlc-implementation-12",
       "topic": "深いIR/Valueの破棄を32段の再帰とworklistで制限する。評価・compileの既存深さ上限とは区別する",
       "mode": "semantic",
       "reference": {

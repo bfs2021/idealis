@@ -23,3 +23,15 @@ beforeのsource/native/Wasmを固定する。Quint6生成物、TCommit RM=8、�
 反復nativeで約20%以上の有用な短縮、または受理範囲を保った明確な境界費用削減を採用の根拠とする。既存14本のCriterionも20 samples、warmup 0.5秒、measurement 1秒のABBAで検査し、10%以上の後退は固定binaryで再確認する。後退が再現する汎用変更を採用しない。build/test/profileと通常計測を重ねず、runは追記のみ。
 
 終了前にcheck/browser、compiler/safety/portable、analysis、fmt/clippy、runtime build/test、evaluate/replay-evaluation、usable/cross-language、packageを通す。共有テスト変更時はmutation。SUPPORT/Jevのlive/offline/stagedを同期する。キーなしのskipを検査済みと数えない。採否、残る費用と次の優先度をiteration/README/#63へ戻す。
+
+## 反復数と実行費用の区別（計測前）
+
+TCommitは既存runで1検査が約0.1秒だったため反復1/10とし、他の小さい入力は1/10/100を測る。inputはQuint6・TCommit・small4モデル・chain10/60の13件。v1のchain60拒否は保存して計測対象から外す。prepare/check/releaseの区間を分け、合計は各区間の和とする。結果の照合は時間区間の外へ置く。
+
+batch/handleのWasmと常駐nativeは同じプロセス/instanceを使い、各sampleでhandleを作って破棄する。coldとRSSはnativeの同じrequest列をmacOS time -lで別processに渡して測る。生の応答列はgzipで全件保存し、rawの情報を捨てずに巨大なpretty JSONの重複を避ける。
+
+## 予算を変える問い合わせ（追加計測前）
+
+固定queryの100反復ではCounter nativeのone-shot約3.88 ms→batch約0.64 msだった。一方、TCommitの探索費用はほぼ変わらず、反復するだけでSUTの追加故障を検出したとは数えない。SafetyProgramの再利用は同じ仕様の予算・optionsを変えるquery向けで、異なるモデルや実装traceのoracle再利用は既存のfinite handleと区別する。
+
+実用上の対照としてIDEALIS_PREPARED_BUDGETS=1で同じ13入力・反復数をもう1 run測る。job indexごとにmaxWork=2^(index mod 20)、maxDepth=[0,1,2,4,16][index mod 5]とし、各jobの予算と期待するone-shotの完全応答を保存する。oracle取得は時間外。bounded/completeの混在をそのまま照合し、同じ結果のcacheで成功しないことを確認する。固定queryのrunを上書きしない。

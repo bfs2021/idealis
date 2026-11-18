@@ -1,5 +1,7 @@
 # rtlc
 
+`SafetyProgram::prepare(self)`は所有する`PreparedSafetyProgram`を返し、静的検証とData索引を繰り返すcheckへ再利用する。ASSUME・定数invariant・値の評価はcheckで行い、Arena・visited・work・coverageは毎回新規となる。[再利用の契約](../../docs/prepared-safety.md)を参照。
+
 [対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
 
 有限TLA+ fragmentのモデル検査ライブラリ。コンパイル済みIRから状態を生成し、BFS、invariant/deadlock、temporal property、WF/SFを検査する。通常BFSのsafety反例は最短で、temporalのlassoとopt-in PORでは元のgraphでの最短反例を保証しない。nativeと`wasm32-unknown-unknown`で同じ実装を使う。

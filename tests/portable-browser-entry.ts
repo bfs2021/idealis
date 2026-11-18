@@ -27,6 +27,7 @@ import {
   createPortableWasm,
   fromPortableValue,
   loadFiniteModel,
+  prepareSafetyProgram,
   toPortableTrace,
   toPortableValue,
   verifyHostTape,
@@ -74,6 +75,33 @@ export const run = async (): Promise<Record<string, unknown>> => {
     maxStates: 100,
     maxWork: 10000,
   });
+  for (const irVersion of [1, 2] as const) {
+    const program = compileTlaSource(core, { ...source, irVersion });
+    const prepared = prepareSafetyProgram(core, program);
+    const bounds = { maxDepth: 10, maxStates: 100, maxWork: 10000 };
+    const expected = checkSafety(core, program, bounds);
+    const results = prepared.checkBatch([
+      { bounds },
+      { bounds: { ...bounds, maxWork: 0 } },
+      { bounds },
+    ]);
+    if (
+      JSON.stringify(prepared.check(bounds)) !== JSON.stringify(expected) ||
+      results[0]?.kind !== "safety" ||
+      results[1]?.kind !== "error" ||
+      results[2]?.kind !== "safety" ||
+      JSON.stringify(results[0].result) !== JSON.stringify(expected) ||
+      JSON.stringify(results[2].result) !== JSON.stringify(expected)
+    )
+      throw new Error("Prepared safety or batch differs in browser");
+    prepared.release();
+    try {
+      prepared.check(bounds);
+      throw new Error("Released safety handle was accepted");
+    } catch (error) {
+      if (!(error instanceof PortableCoreError)) throw error;
+    }
+  }
   if (
     sourceProgram.name !== "BrowserSource" ||
     sourceResult.status !== "invariant-violation" ||

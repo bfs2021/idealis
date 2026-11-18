@@ -26,8 +26,13 @@ impl Summary {
     }
 }
 
-pub(crate) struct Metadata<'a> {
-    definitions: &'a [Definition],
+struct DefinitionSignature {
+    parameter_count: usize,
+    capture_count: usize,
+}
+
+pub(crate) struct Metadata {
+    definitions: Vec<DefinitionSignature>,
     summaries: Vec<[Option<Summary>; 4]>,
     variables: usize,
 }
@@ -214,13 +219,13 @@ fn definition_order(definitions: &[Definition]) -> Result<Vec<usize>, CoreError>
 
 type CachedAnalysis = Result<Summary, (&'static str, String)>;
 
-struct Analyzer<'metadata, 'program> {
-    metadata: &'metadata Metadata<'program>,
+struct Analyzer<'metadata> {
+    metadata: &'metadata Metadata,
     cache: HashMap<(usize, Context), CachedAnalysis>,
 }
 
-impl<'metadata, 'program> Analyzer<'metadata, 'program> {
-    fn new(metadata: &'metadata Metadata<'program>) -> Self {
+impl<'metadata> Analyzer<'metadata> {
+    fn new(metadata: &'metadata Metadata) -> Self {
         Self {
             metadata,
             cache: HashMap::new(),
@@ -228,7 +233,7 @@ impl<'metadata, 'program> Analyzer<'metadata, 'program> {
     }
 }
 
-impl Analyzer<'_, '_> {
+impl Analyzer<'_> {
     fn domain(&mut self, domain: &Domain, context: Context) -> Result<Summary, CoreError> {
         let mut summary = Summary::default();
         for child in domain.children() {
@@ -772,7 +777,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Metadata<'_> {
+impl Metadata {
     fn expression(&self, expression: &Expression, context: Context) -> Result<Summary, CoreError> {
         Analyzer::new(self).expression(expression, context)
     }
@@ -805,7 +810,7 @@ impl Metadata<'_> {
     }
 }
 
-pub(crate) fn validate_program(program: &SafetyProgram) -> Result<Metadata<'_>, CoreError> {
+pub(crate) fn validate_program(program: &SafetyProgram) -> Result<Metadata, CoreError> {
     validate_wire_index(program.variables.len())?;
     let definitions = program
         .definitions
@@ -814,7 +819,13 @@ pub(crate) fn validate_program(program: &SafetyProgram) -> Result<Metadata<'_>, 
     validate_wire_index(definitions.len())?;
     let order = definition_order(definitions)?;
     let mut metadata = Metadata {
-        definitions,
+        definitions: definitions
+            .iter()
+            .map(|definition| DefinitionSignature {
+                parameter_count: definition.parameter_count,
+                capture_count: definition.capture_count,
+            })
+            .collect(),
         summaries: (0..definitions.len())
             .map(|_| std::array::from_fn(|_| None))
             .collect(),

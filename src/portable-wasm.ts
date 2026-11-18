@@ -192,6 +192,45 @@ export const createPortableWasm = async (
         fields(output, ["kind", "result"]);
         return { kind: "safety", result: decodeSafetyResult(output.result) };
       }
+      if (output.kind === "safety-batch") {
+        fields(output, ["kind", "results"]);
+        if (
+          !Array.isArray(output.results) ||
+          output.results.length < 1 ||
+          output.results.length > 256
+        )
+          throw new PortableCoreError(
+            "protocol",
+            "Invalid safety batch results",
+          );
+        return {
+          kind: "safety-batch",
+          results: output.results.map((value: unknown) => {
+            if (isRecord(value) && value.kind === "safety") {
+              fields(value, ["kind", "result"]);
+              return {
+                kind: "safety",
+                result: decodeSafetyResult(value.result),
+              } as const;
+            }
+            const error = fields(value, ["kind", "code", "message"]);
+            if (
+              error.kind !== "error" ||
+              (error.code !== "protocol" && error.code !== "value") ||
+              typeof error.message !== "string"
+            )
+              throw new PortableCoreError(
+                "protocol",
+                "Invalid safety batch error",
+              );
+            return {
+              kind: "error",
+              code: error.code,
+              message: error.message,
+            } as const;
+          }),
+        };
+      }
       if (output.kind === "safety-coverage") {
         fields(output, ["kind", "report"]);
         return {
@@ -206,9 +245,9 @@ export const createPortableWasm = async (
           program: decodeSafetyProgram(output.program),
         };
       }
-      if (output.kind === "loaded") {
+      if (output.kind === "loaded" || output.kind === "safety-prepared") {
         fields(output, ["kind", "handle"]);
-        return { kind: "loaded", handle: requestId(output.handle) };
+        return { kind: output.kind, handle: requestId(output.handle) };
       }
       if (output.kind === "released") {
         fields(output, ["kind"]);

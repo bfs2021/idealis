@@ -134,7 +134,7 @@ await writeFile(
 import {readFile} from 'node:fs/promises';
 import {createTestingWasm} from '@mizchi/idealis/testing';
 import {createAlloyWasm,AlloyError} from '@mizchi/idealis/alloy';
-import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety,checkSafetyCoverage} from '@mizchi/idealis/portable';
+import {compileTlaSource,checkTlaSource,createPortableWasm,checkFiniteHistories,decodePortableTrace,loadFiniteModel,checkSafety,checkSafetyCoverage,prepareSafetyProgram} from '@mizchi/idealis/portable';
 import {createHistoryRecorder} from '@mizchi/idealis/history';
 import {parseFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
@@ -181,6 +181,7 @@ assert.deepEqual(checkSafetyCoverage(core,safety.program,safety.bounds).result,c
 const source=JSON.parse(await readFile('source.json','utf8'));
 const sourceProgram=compileTlaSource(core,source);assert.equal(sourceProgram.name,'PackageSafety');assert.equal(checkTlaSource(core,source,safety.bounds).violation.trace.length,4);
 const sharedProgram=compileTlaSource(core,{...source,irVersion:2});assert.equal(sharedProgram.version,2);assert.equal(checkSafety(core,sharedProgram,safety.bounds).violation.trace.length,4);
+for(const program of [safety.program,sharedProgram]){const prepared=prepareSafetyProgram(core,program);const expected=checkSafety(core,program,safety.bounds);assert.deepEqual(prepared.check(safety.bounds),expected);assert.deepEqual(prepared.checkBatch([{bounds:safety.bounds},{bounds:safety.bounds}]),[{kind:'safety',result:expected},{kind:'safety',result:expected}]);prepared.release();assert.throws(()=>prepared.check(safety.bounds),{code:'protocol'});}
 const reductions=JSON.parse(await readFile('reductions.json','utf8'));
 for(const [index,input] of reductions.entries()){const program=compileTlaSource(core,input);const result=checkSafety(core,program,{maxDepth:100,maxStates:10000,maxWork:10000000},index===0?{symmetryActions:true}:{partialOrder:true});assert.equal(result.status,'complete');assert.equal(result.states,index===0?56:7);assert.equal(result.generated,index===0?253:8);}
 const planned=planSchedule([{id:'safety',estimatedMs:1,memoryBytes:1}],[{id:'serial',workers:1,startupMs:0,costScale:1,fixedMemoryBytes:0}],{maxWorkers:1,durationMs:10000,memoryBytes:1024},{policy:'cost',batchTargetMs:4,maxBatchSize:16});
@@ -205,7 +206,7 @@ import {createAlloyWasm,type AlloyInstance} from '@mizchi/idealis/alloy';
 const observed:AlloyInstance={signatures:{N:[]},fields:{edge:[]}};void observed;void createAlloyWasm;
 import {compileFiniteModel,createFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
-import {createPortableWasm,compileTlaSource,checkTlaSource,checkSafetyCoverage,type SafetyCoverageReport} from '@mizchi/idealis/portable';
+import {createPortableWasm,compileTlaSource,checkTlaSource,checkSafetyCoverage,prepareSafetyProgram,type PreparedSafetyProgram,type SafetyCheck,type SafetyBatchResult,type SafetyCoverageReport} from '@mizchi/idealis/portable';
 import {planSchedule} from '@mizchi/idealis/scheduling';
 import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/idealis/history';
 import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/idealis/backend';
@@ -214,6 +215,7 @@ const compiled=compileFiniteModel(model,{maxDepth:1,maxStates:1});
 if(compiled.model){createFiniteModel(compiled.model);checkConcurrentHistory(compiled.model,createHistoryRecorder(model.name,{type:'int',value:'0'}).snapshot(),100);}
 createSimulationHost({seed:1});
 void createPortableWasm;void compileTlaSource;void checkTlaSource;void checkSafetyCoverage;
+const preparedTypes=(prepared:PreparedSafetyProgram,jobs:readonly SafetyCheck[]):readonly SafetyBatchResult[]=>prepared.checkBatch(jobs);void preparedTypes;void prepareSafetyProgram;
 const coverageCount=(report:SafetyCoverageReport)=>report.coverage.next.reduce((total,row)=>total+row.generated,0);void coverageCount;
 void planSchedule;
 const backendTypes:(value:unknown)=>BackendResult=parseBackendResult;
@@ -328,7 +330,7 @@ await writeFile(
 );
 await writeFile(
   join(rtlcConsumer, "main.rs"),
-  `fn main(){let bytes=std::fs::read("safety-request.json").unwrap();let request:serde_json::Value=serde_json::from_slice(&bytes).unwrap();let program:rtlc::SafetyProgram=serde_json::from_value(request["request"]["program"].clone()).unwrap();let bounds:rtlc::SafetyBounds=serde_json::from_value(request["request"]["bounds"].clone()).unwrap();let result=program.check(bounds).unwrap();let report:rtlc::SafetyCoverageReport=program.check_with_coverage(bounds).unwrap();assert_eq!(report.result,result);assert!(!report.coverage.initial.is_empty());assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4);println!("standalone rtlc consumer checked");}`,
+  `fn main(){let bytes=std::fs::read("safety-request.json").unwrap();let request:serde_json::Value=serde_json::from_slice(&bytes).unwrap();let program:rtlc::SafetyProgram=serde_json::from_value(request["request"]["program"].clone()).unwrap();let bounds:rtlc::SafetyBounds=serde_json::from_value(request["request"]["bounds"].clone()).unwrap();let result=program.check(bounds).unwrap();let report:rtlc::SafetyCoverageReport=program.check_with_coverage(bounds).unwrap();assert_eq!(report.result,result);assert!(!report.coverage.initial.is_empty());assert_eq!(result.status,"invariant-violation");assert_eq!(result.violation.unwrap().trace.len(),4);for version in [1,2]{let mut next=program.clone();next.version=version;if version==2{next.definitions=Some(vec![]);}let prepared:rtlc::PreparedSafetyProgram=next.prepare().unwrap();assert_eq!(prepared.check(bounds).unwrap().violation.unwrap().trace.len(),4);}println!("standalone rtlc consumer checked");}`,
 );
 const rtlc = execFileSync(
   "cargo",

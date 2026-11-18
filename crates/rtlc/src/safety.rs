@@ -102,9 +102,85 @@ struct Search<'a, R: Recording = NoCoverage> {
     symmetry: Option<Symmetry>,
     options: SafetyOptions,
     partial_order: Option<PartialOrder>,
+    validated: bool,
+}
+
+pub struct PreparedSafetyProgram {
+    program: Box<SafetyProgram>,
+    prepared: PreparedProgram,
+    metadata: Option<std::sync::Arc<crate::safety_definitions::Metadata>>,
+}
+
+impl PreparedSafetyProgram {
+    pub fn check(&self, bounds: SafetyBounds) -> Result<SafetyResult, CoreError> {
+        self.check_with_options(bounds, SafetyOptions::default())
+    }
+
+    pub fn check_with_options(
+        &self,
+        bounds: SafetyBounds,
+        options: SafetyOptions,
+    ) -> Result<SafetyResult, CoreError> {
+        self.program.validate_options(options)?;
+        self.program
+            .check_measured::<NoCoverage>(bounds, options, Some(self))
+    }
+
+    pub fn check_with_coverage(
+        &self,
+        bounds: SafetyBounds,
+    ) -> Result<SafetyCoverageReport, CoreError> {
+        self.program
+            .check_measured::<WithCoverage>(bounds, SafetyOptions::default(), Some(self))
+    }
 }
 
 impl SafetyProgram {
+    pub fn prepare(self) -> Result<PreparedSafetyProgram, CoreError> {
+        self.validate_header()?;
+        let program = Box::new(self);
+        let metadata = if program.version == 2 {
+            Some(std::sync::Arc::new(
+                crate::safety_definitions::validate_program(&program)?,
+            ))
+        } else {
+            if program.definitions.is_some() {
+                return Err(CoreError::protocol("Definitions require safety IR v2"));
+            }
+            validate_branches(&program.initial, program.variables.len(), 0, 0)?;
+            validate_branches(&program.next, program.variables.len(), 1, 0)?;
+            for (predicates, phase) in [
+                (&program.invariants, 2),
+                (&program.initial_properties, 2),
+                (&program.action_properties, 1),
+                (&program.action_constraints, 1),
+                (&program.constraints, 2),
+                (&program.assumptions, 3),
+            ] {
+                for predicate in predicates {
+                    predicate
+                        .expression
+                        .validate(program.variables.len(), phase, 0)?;
+                }
+            }
+            for formula in program
+                .properties
+                .iter()
+                .map(|property| &property.formula)
+                .chain(&program.fairness)
+            {
+                formula.validate(program.variables.len(), 0)?;
+            }
+            None
+        };
+        let prepared = PreparedProgram::new(&program);
+        Ok(PreparedSafetyProgram {
+            program,
+            prepared,
+            metadata,
+        })
+    }
+
     pub fn check(&self, bounds: SafetyBounds) -> Result<SafetyResult, CoreError> {
         self.check_with_workers(bounds, 1)
     }
@@ -113,6 +189,11 @@ impl SafetyProgram {
         bounds: SafetyBounds,
         options: SafetyOptions,
     ) -> Result<SafetyResult, CoreError> {
+        self.validate_options(options)?;
+        self.check_measured::<NoCoverage>(bounds, options, None)
+    }
+
+    fn validate_options(&self, options: SafetyOptions) -> Result<(), CoreError> {
         if options.partial_order && self.symmetry.is_some() {
             return Err(CoreError::protocol(
                 "Unsupported reduction: partial order with symmetry",
@@ -125,13 +206,13 @@ impl SafetyProgram {
                 "Invalid safety options: workers must be 1 to 256 and symmetry actions require symmetry",
             ));
         }
-        self.check_measured::<NoCoverage>(bounds, options)
+        Ok(())
     }
     pub fn check_with_coverage(
         &self,
         bounds: SafetyBounds,
     ) -> Result<SafetyCoverageReport, CoreError> {
-        self.check_measured::<WithCoverage>(bounds, SafetyOptions::default())
+        self.check_measured::<WithCoverage>(bounds, SafetyOptions::default(), None)
     }
     #[cfg(not(target_arch = "wasm32"))]
     pub fn check_parallel(
@@ -163,21 +244,24 @@ impl SafetyProgram {
         &self,
         bounds: SafetyBounds,
         options: SafetyOptions,
+        preparation: Option<&PreparedSafetyProgram>,
     ) -> Result<R::Output, CoreError> {
-        if self.format != "modelt.safety-program"
-            || !matches!(self.version, 1 | 2)
-            || self.name.is_empty()
-            || self.variables.is_empty()
-            || self.variables.len() > 256
-            || self.variables.iter().any(String::is_empty)
-            || self.variables.iter().collect::<HashSet<_>>().len() != self.variables.len()
-            || bounds.max_states == 0
-            || bounds.max_work == 0
-        {
+        if preparation.is_none() {
+            self.validate_header()?;
+        }
+        if bounds.max_states == 0 || bounds.max_work == 0 {
             return Err(CoreError::protocol("Invalid safety program or bounds"));
         }
-        let prepared = PreparedProgram::new(self);
-        let mut arena = Arena::with_prepared(bounds.max_work, &prepared);
+        let local;
+        let prepared = match preparation {
+            Some(preparation) => &preparation.prepared,
+            None => {
+                local = PreparedProgram::new(self);
+                &local
+            }
+        };
+        let mut arena = Arena::with_prepared(bounds.max_work, prepared);
+        arena.metadata = preparation.and_then(|preparation| preparation.metadata.clone());
         arena.definitions = self.definitions.as_deref().unwrap_or_default();
         let mut search = Search::<R> {
             program: self,
@@ -190,6 +274,7 @@ impl SafetyProgram {
             symmetry: None,
             options,
             partial_order: None,
+            validated: preparation.is_some(),
             result: SafetyResult {
                 status: "complete".into(),
                 reason: None,
@@ -218,12 +303,28 @@ impl SafetyProgram {
         search.result.work = arena.work;
         Ok(search.coverage.finish(search.result))
     }
+
+    fn validate_header(&self) -> Result<(), CoreError> {
+        if self.format != "modelt.safety-program"
+            || !matches!(self.version, 1 | 2)
+            || self.name.is_empty()
+            || self.variables.is_empty()
+            || self.variables.len() > 256
+            || self.variables.iter().any(String::is_empty)
+            || self.variables.iter().collect::<HashSet<_>>().len() != self.variables.len()
+        {
+            return Err(CoreError::protocol("Invalid safety program or bounds"));
+        }
+        Ok(())
+    }
 }
 
 impl<'program, R: Recording> Search<'program, R> {
     fn run(&mut self, arena: &mut Arena<'program>, workers: usize) -> Result<(), CoreError> {
         let program = self.program;
-        let metadata = if program.version == 2 {
+        let metadata = if self.validated {
+            arena.metadata.clone()
+        } else if program.version == 2 {
             Some(std::sync::Arc::new(
                 crate::safety_definitions::validate_program(program)?,
             ))
@@ -256,7 +357,7 @@ impl<'program, R: Recording> Search<'program, R> {
             arena.register_memberships(expression)
         });
         for predicate in program.invariants.iter().chain(&program.initial_properties) {
-            if metadata.is_none() {
+            if !self.validated && metadata.is_none() {
                 predicate
                     .expression
                     .validate(program.variables.len(), 2, 0)?;
@@ -280,7 +381,7 @@ impl<'program, R: Recording> Search<'program, R> {
             .iter()
             .chain(&program.action_constraints)
         {
-            if metadata.is_none() {
+            if !self.validated && metadata.is_none() {
                 predicate
                     .expression
                     .validate(program.variables.len(), 1, 0)?;
@@ -288,7 +389,7 @@ impl<'program, R: Recording> Search<'program, R> {
             arena.register_memberships(&predicate.expression);
         }
         for predicate in &program.constraints {
-            if metadata.is_none() {
+            if !self.validated && metadata.is_none() {
                 predicate
                     .expression
                     .validate(program.variables.len(), 2, 0)?;
@@ -296,17 +397,17 @@ impl<'program, R: Recording> Search<'program, R> {
             arena.register_memberships(&predicate.expression);
         }
         for property in &program.properties {
-            if metadata.is_none() {
+            if !self.validated && metadata.is_none() {
                 property.formula.validate(program.variables.len(), 0)?;
             }
         }
         for fairness in &program.fairness {
-            if metadata.is_none() {
+            if !self.validated && metadata.is_none() {
                 fairness.validate(program.variables.len(), 0)?;
             }
         }
         for predicate in &program.assumptions {
-            if metadata.is_none() {
+            if !self.validated && metadata.is_none() {
                 predicate
                     .expression
                     .validate(program.variables.len(), 3, 0)?;

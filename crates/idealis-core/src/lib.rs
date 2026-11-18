@@ -1,8 +1,8 @@
 mod finite;
 pub use rtla_compiler::{CompileOptions, IrVersion};
 pub use rtlc::{
-    CoreError, SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport,
-    SafetyOptions, SafetyProgram, SafetyResult, Value,
+    CoreError, PreparedSafetyProgram, SafetyActionCoverage, SafetyBounds, SafetyCoverage,
+    SafetyCoverageReport, SafetyOptions, SafetyProgram, SafetyResult, Value,
 };
 mod history;
 pub use history::{ConcurrentHistory, ConcurrentResult, ConcurrentStatus, HistoryEvent};
@@ -160,6 +160,21 @@ pub enum Response {
 fn default_ir_version() -> u8 {
     1
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SafetyCheck {
+    pub bounds: SafetyBounds,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub options: Option<SafetyOptions>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
+pub enum SafetyBatchResult {
+    Safety { result: SafetyResult },
+    Error { code: String, message: String },
+}
 #[allow(non_snake_case)]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
@@ -196,6 +211,22 @@ pub enum Request {
     CheckSafetyCoverage {
         program: SafetyProgram,
         bounds: SafetyBounds,
+    },
+    PrepareSafety {
+        program: SafetyProgram,
+    },
+    CheckPreparedSafety {
+        handle: u32,
+        bounds: SafetyBounds,
+        #[serde(default)]
+        options: Option<SafetyOptions>,
+    },
+    CheckPreparedSafetyBatch {
+        handle: u32,
+        jobs: Vec<SafetyCheck>,
+    },
+    ReleaseSafety {
+        handle: u32,
     },
     LoadModel {
         model: FiniteModel,
@@ -262,6 +293,8 @@ pub enum Message {
     Safety { result: SafetyResult },
     SafetyCoverage { report: SafetyCoverageReport },
     Loaded { handle: u32 },
+    SafetyPrepared { handle: u32 },
+    SafetyBatch { results: Vec<SafetyBatchResult> },
     Released,
     History { result: ConcurrentResult },
     Host { snapshot: Value },
@@ -469,6 +502,7 @@ pub struct Engine {
     session: Option<Session>,
     finite: Option<Arc<PreparedFiniteModel>>,
     models: BTreeMap<u32, Arc<PreparedFiniteModel>>,
+    safety_programs: BTreeMap<u32, PreparedSafetyProgram>,
     active_handle: Option<u32>,
     next_handle: u32,
     next_id: u32,
@@ -479,6 +513,7 @@ impl Default for Engine {
             session: None,
             finite: None,
             models: BTreeMap::new(),
+            safety_programs: BTreeMap::new(),
             active_handle: None,
             next_handle: 1,
             next_id: 1,
@@ -561,6 +596,55 @@ impl Engine {
             Request::CheckSafetyCoverage { program, bounds } => Ok(Message::SafetyCoverage {
                 report: program.check_with_coverage(bounds)?,
             }),
+            Request::PrepareSafety { program } => {
+                let prepared = program.prepare()?;
+                let next = self
+                    .next_handle
+                    .checked_add(1)
+                    .ok_or_else(|| CoreError::protocol("Model handles exhausted"))?;
+                let handle = self.next_handle;
+                self.safety_programs.insert(handle, prepared);
+                self.next_handle = next;
+                Ok(Message::SafetyPrepared { handle })
+            }
+            Request::CheckPreparedSafety {
+                handle,
+                bounds,
+                options,
+            } => Ok(Message::Safety {
+                result: self
+                    .get_safety_program(handle)?
+                    .check_with_options(bounds, options.unwrap_or_default())?,
+            }),
+            Request::CheckPreparedSafetyBatch { handle, jobs } => {
+                let program = self.get_safety_program(handle)?;
+                if jobs.is_empty() || jobs.len() > 256 {
+                    return Err(CoreError::protocol(
+                        "Safety batch must contain 1 to 256 jobs",
+                    ));
+                }
+                let results = jobs
+                    .into_iter()
+                    .map(|job| {
+                        match program
+                            .check_with_options(job.bounds, job.options.unwrap_or_default())
+                        {
+                            Ok(result) => SafetyBatchResult::Safety { result },
+                            Err(error) => SafetyBatchResult::Error {
+                                code: error.code.into(),
+                                message: error.message,
+                            },
+                        }
+                    })
+                    .collect();
+                Ok(Message::SafetyBatch { results })
+            }
+            Request::ReleaseSafety { handle } => {
+                self.safety_programs
+                    .remove(&handle)
+                    .ok_or_else(|| CoreError::protocol("Unknown safety handle"))?;
+                Ok(Message::Released)
+            }
             Request::LoadModel { model } => {
                 let model = Arc::new(model.prepare()?);
                 let next = self
@@ -693,6 +777,12 @@ impl Engine {
         self.active_handle = handle;
         self.drive(effect)
     }
+    fn get_safety_program(&self, handle: u32) -> Result<&PreparedSafetyProgram, CoreError> {
+        self.safety_programs
+            .get(&handle)
+            .ok_or_else(|| CoreError::protocol("Unknown safety handle"))
+    }
+
     fn get_model(&self, handle: u32) -> Result<Arc<PreparedFiniteModel>, CoreError> {
         self.models
             .get(&handle)

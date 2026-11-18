@@ -4,6 +4,9 @@
 
 ## 対応済み
 
+- [x] IRのwire構造はSafetyProgramのformat/version/name/variablesと遷移・predicate・定義を持つ。maxDepth/maxStates/maxWorkはu32、maxTemporalNodesはoptionalなu32。SafetyResultはstatus/reason/states/generated/depth/work/violationを持つ。実行時の意味と拒否は検証器・探索部で扱う。
+
+- [x] SafetyProgram::prepareが不変のprogram・静的検証metadata・Data索引を所有し、繰り返すcheckとcoverageへ再利用する。各探索のArena・visited・workは独立し、prepareで値やASSUMEを評価しない。[再利用の契約](../../docs/prepared-safety.md)を参照。
 - [x] 固定TLCとtemporal helperの既知の1乖離を、TLC一致と区別して保存・検査する。[IR v2の範囲](../../docs/safety-ir-v2.md)を参照し、全TLA+互換とは扱わない。
 
 - [x] v1のSYMMETRY・代表展開・並列展開・限定PORを共有IRと共存させる。v2のSYMMETRYは拒否し、frame/callで独立性を確認できないPORは通常探索へ戻す。

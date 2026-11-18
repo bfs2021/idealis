@@ -1,5 +1,7 @@
 # idealis-core
 
+SafetyProgramのprepare/check/batch/releaseをnative/Wasmの共通protocolで提供する。batchは1〜256件の独立予算・結果・errorを順序を保って扱い、handleはEngine内でのみ有効。[APIと所有の契約](../../docs/prepared-safety.md)を参照。
+
 `check-safety-coverage`は逐次のSafetyProgram検査へcoverageを付ける。応答は`{kind:"safety-coverage",report:{result,coverage}}`。通常の`check-safety`の結果形は変えない。branchのattempts/生成・新規state/workとunattributedWorkは[rtlcの契約](../rtlc/README.md#アクションのcoverage)に従う。
 
 [対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。

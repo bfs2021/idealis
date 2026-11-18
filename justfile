@@ -682,7 +682,18 @@ quint-test: portable-build
 analysis-test: portable-build rtla-build
   cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
   pnpm build
-  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js
+  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js
+
+prepared-test: portable-build
+  pnpm build
+  cargo test --locked --manifest-path crates/idealis-core/Cargo.toml --test prepared_safety
+  node --test dist/evals/prepared-safety/contract-test.js
+
+prepared-eval before after run:
+  node dist/evals/prepared-safety/measure.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
+
+prepared-summary run output:
+  node dist/evals/prepared-safety/summarize.js {{quote(run)}} {{quote(output)}}
 
 # Freeze binaries first. These recipes do not rebuild Rust during measurement.
 p0-corpus before after java jar archive run:
@@ -704,8 +715,8 @@ p0-verify run:
 evaluator-kernel before after run filter="":
   node dist/evals/oracle-tuning/kernel.js {{quote(before)}} {{quote(after)}} {{quote(run)}} safety-bench {{quote(filter)}}
 
-evaluator-summary run output count:
-  node dist/evals/evaluator-tuning/summarize.js {{quote(run)}} {{quote(output)}} {{quote(count)}}
+evaluator-summary run output count plan="0063-evaluator-tuning":
+  node dist/evals/evaluator-tuning/summarize.js {{quote(run)}} {{quote(output)}} {{quote(count)}} {{quote(plan)}}
 
 evaluator-corpus before after java jar archive run:
   IDEALIS_CHECKER_PLAN=0063-evaluator-tuning IDEALIS_CHECKER_COMPARE_V2=1 node dist/evals/p0-checker/corpus.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}

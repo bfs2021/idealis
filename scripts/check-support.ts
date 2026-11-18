@@ -25,6 +25,7 @@ interface Evidence {
   readonly path: string;
   readonly topic: string;
   readonly contains?: string;
+  readonly targetContains?: string;
   readonly context?: readonly string[];
 }
 interface CrateScope {
@@ -98,7 +99,16 @@ const scopes: readonly CrateScope[] = [
     evidence: [
       {
         path: "src/ir.rs",
-        topic: "IRの値と式・予算・結果の公開契約",
+        topic: "IRの値と式・予算・結果のwire契約。準備済み所有型の実装は別比較",
+        context: ["src/lib.rs"],
+        targetContains: "IRのwire構造は",
+      },
+      {
+        path: "src/safety.rs",
+        contains: "pub fn prepare(self)",
+        topic:
+          "所有するPreparedSafetyProgramの静的準備、値やASSUMEを先に評価しない契約、Data索引の再利用",
+        context: ["src/safety_prepared.rs"],
       },
       {
         path: "src/safety.rs",
@@ -448,7 +458,12 @@ const manifestFor = async (
           source: idFor(prefix + evidence.path),
           ...(evidence.contains ? { contains: evidence.contains } : {}),
         },
-        target: { source: idFor(`${prefix}SUPPORT.md`) },
+        target: {
+          source: idFor(`${prefix}SUPPORT.md`),
+          ...(evidence.targetContains
+            ? { contains: evidence.targetContains }
+            : {}),
+        },
         context: (evidence.context ?? []).map((path) => ({
           source: idFor(prefix + path),
         })),

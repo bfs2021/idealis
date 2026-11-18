@@ -4,6 +4,7 @@
 
 ## 対応済み
 
+- [x] SafetyProgramのprepare/check/batch/releaseをnative/Wasmで扱う。batchは1〜256 jobの独立したbounds/optionsと結果・errorを指定順に返し、未知・解放済みhandleや不正requestを拒否する。[再利用の契約](../../docs/prepared-safety.md)を参照。
 - [x] source APIとnative/Wasmのcompile-tla / check-tlaで`irVersion`を明示指定できる。省略・明示1はv1、明示2はexpression定義を共有するv2を生成・実行する。明示2でモジュール連結や設定の上書きを要する入力は、v1と共通の連結と検査が通った場合にprotocol拒否にする。
 
 - [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。

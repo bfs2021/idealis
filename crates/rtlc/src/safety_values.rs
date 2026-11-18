@@ -69,9 +69,9 @@ type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
 
 pub(crate) struct Arena<'a> {
     pub definitions: &'a [Definition],
-    pub metadata: Option<Arc<crate::safety_definitions::Metadata<'a>>>,
+    pub metadata: Option<Arc<crate::safety_definitions::Metadata>>,
     base: Option<&'a Arena<'a>>,
-    prepared: Option<&'a PreparedProgram<'a>>,
+    prepared: Option<&'a PreparedProgram>,
     constants: Vec<Option<Scalar>>,
     offset: usize,
     #[cfg(not(target_arch = "wasm32"))]
@@ -117,7 +117,7 @@ impl<'scope> Arena<'scope> {
             maximum,
         }
     }
-    pub fn with_prepared(maximum: u32, prepared: &'scope PreparedProgram<'scope>) -> Self {
+    pub fn with_prepared(maximum: u32, prepared: &'scope PreparedProgram) -> Self {
         Self {
             prepared: Some(prepared),
             constants: vec![None; prepared.len()],
@@ -130,18 +130,18 @@ impl<'scope> Arena<'scope> {
         value: &Value,
     ) -> Result<Scalar, CoreError> {
         match self.prepared.and_then(|prepared| prepared.slot(expression)) {
-            Some(slot) => self.constant(slot),
+            Some(slot) => self.constant(slot, value),
             None => self.data(value),
         }
     }
     fn cached_constant(&self, slot: usize) -> Option<Scalar> {
         self.constants[slot].or_else(|| self.base.and_then(|base| base.cached_constant(slot)))
     }
-    pub fn constant(&mut self, slot: usize) -> Result<Scalar, CoreError> {
+    fn constant(&mut self, slot: usize, value: &Value) -> Result<Scalar, CoreError> {
         if let Some(value) = self.cached_constant(slot) {
             return Ok(value);
         }
-        let value = self.data(self.prepared.unwrap().value(slot))?;
+        let value = self.data(value)?;
         self.constants[slot] = Some(value);
         Ok(value)
     }

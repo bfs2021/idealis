@@ -1,4 +1,3 @@
-use crate::Value;
 use crate::ir::{Expression, SafetyProgram, TemporalFormula};
 use crate::safety_expressions::register_branch_memberships;
 use std::collections::HashMap;
@@ -29,13 +28,12 @@ impl Hasher for AddressHasher {
     }
 }
 
-pub(crate) struct PreparedProgram<'a> {
+pub(crate) struct PreparedProgram {
     slots: HashMap<usize, usize, BuildHasherDefault<AddressHasher>>,
-    values: Vec<&'a Value>,
 }
 
-impl<'a> PreparedProgram<'a> {
-    pub fn new(program: &'a SafetyProgram) -> Self {
+impl PreparedProgram {
+    pub fn new(program: &SafetyProgram) -> Self {
         let mut roots = Vec::new();
         roots.extend(
             program
@@ -93,19 +91,18 @@ impl<'a> PreparedProgram<'a> {
         Self::from_roots(roots)
     }
 
-    pub fn from_roots(mut roots: Vec<&'a Expression>) -> Self {
+    pub fn from_roots(mut roots: Vec<&Expression>) -> Self {
         let mut prepared = Self {
             slots: HashMap::default(),
-            values: Vec::new(),
         };
         while let Some(expression) = roots.pop() {
-            if let Expression::Data { value } = expression {
+            if let Expression::Data { .. } = expression {
                 let address = std::ptr::from_ref(expression) as usize;
+                let slot = prepared.slots.len();
                 if let std::collections::hash_map::Entry::Vacant(entry) =
                     prepared.slots.entry(address)
                 {
-                    entry.insert(prepared.values.len());
-                    prepared.values.push(value);
+                    entry.insert(slot);
                 }
             }
             if let Expression::Enabled {
@@ -127,11 +124,7 @@ impl<'a> PreparedProgram<'a> {
             .copied()
     }
 
-    pub fn value(&self, slot: usize) -> &'a Value {
-        self.values[slot]
-    }
-
     pub fn len(&self) -> usize {
-        self.values.len()
+        self.slots.len()
     }
 }

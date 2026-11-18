@@ -158,6 +158,19 @@ export interface PortableCommand {
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
       }
+    | { readonly kind: "prepare-safety"; readonly program: SafetyProgram }
+    | {
+        readonly kind: "check-prepared-safety";
+        readonly handle: number;
+        readonly bounds: SafetyBounds;
+        readonly options?: SafetyOptions;
+      }
+    | {
+        readonly kind: "check-prepared-safety-batch";
+        readonly handle: number;
+        readonly jobs: readonly SafetyCheck[];
+      }
+    | { readonly kind: "release-safety"; readonly handle: number }
     | { readonly kind: "load-model"; readonly model: FiniteModel }
     | { readonly kind: "release-model"; readonly handle: number }
     | {
@@ -208,6 +221,11 @@ export type PortableOutput =
   | { readonly kind: "safety"; readonly result: SafetyResult }
   | { readonly kind: "safety-coverage"; readonly report: SafetyCoverageReport }
   | { readonly kind: "loaded"; readonly handle: number }
+  | { readonly kind: "safety-prepared"; readonly handle: number }
+  | {
+      readonly kind: "safety-batch";
+      readonly results: readonly SafetyBatchResult[];
+    }
   | { readonly kind: "released" }
   | { readonly kind: "history"; readonly result: ConcurrentResult }
   | { readonly kind: "host"; readonly snapshot: PortableValue }
@@ -219,6 +237,30 @@ export type PortableOutput =
 
 export interface PortableCore {
   readonly request: (command: PortableCommand) => PortableOutput;
+}
+
+export interface SafetyCheck {
+  readonly bounds: SafetyBounds;
+  readonly options?: SafetyOptions;
+}
+
+export type SafetyBatchResult =
+  | { readonly kind: "safety"; readonly result: SafetyResult }
+  | {
+      readonly kind: "error";
+      readonly code: "protocol" | "value";
+      readonly message: string;
+    };
+
+export interface PreparedSafetyProgram {
+  readonly check: (
+    bounds: SafetyBounds,
+    options?: SafetyOptions,
+  ) => SafetyResult;
+  readonly checkBatch: (
+    jobs: readonly SafetyCheck[],
+  ) => readonly SafetyBatchResult[];
+  readonly release: () => void;
 }
 
 export interface BackendIdentity {

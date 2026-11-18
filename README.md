@@ -121,6 +121,12 @@ v2のmodule連結・設定置換・SYMMETRY、action templateの共有は未対�
 
 compileは常駐native JSONLの要求・IR応答を含む中央値。未選択branchのinlineを除く効果で、指数的な評価仕事をなくしたものではない。公開TCommitの新規Rust processは統合前114.85 ms、統合後v1が124.05 ms、v2が129.32 msで、実行費用の増加も残る。[費用・profile・採否](evals/iterations/0062-p0-checker.md)を参照。
 
+## 同じSafetyProgramの反復検査
+
+`prepareSafetyProgram(core, program)`で同じIRの検証と定数索引を再利用し、`check`と`checkBatch`へ異なる探索予算・optionsを渡せる。各jobの探索状態とworkは独立する。batchは1〜256件の結果またはerrorを位置を保って返し、`release()`で破棄する。Rustは`program.prepare()`が同じ契約を提供する。
+
+Counterの100 queryでは、準備・破棄込みのnative v1 API時間がone-shot 3.883→batch 0.643 ms、予算を変えるqueryが2.162→0.256 msだった。探索主体のTCommitでは効果が小さく、1件だけの検査にも同じ倍率は当てはまらない。[APIと予算の扱い](docs/prepared-safety.md)、[条件・cold/RSS・後退の確認](evals/iterations/0064-prepared-safety.md)を参照。
+
 ## node関数に限定したSYMMETRY
 
 Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value集合を指定できる。全Nodesをdomainに持つInt/Bool関数の値をnodeごとの行へまとめ、複数関数の相関と具体的な反例を保って状態を同一視する。3ノード・3値のcounterは27状態から10状態へ縮約した。7ノード・6値では279,936→792状態となり、Rust逐次の起動込み中央値は673.5→36.5 ms（約18.5倍）、prepared探索は633.2→3.89 ms（約163倍）だった。この限定したモデルでの結果で、全TLA+への速度保証ではない。

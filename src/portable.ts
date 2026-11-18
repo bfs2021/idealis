@@ -16,8 +16,11 @@ export type {
   PortableResult,
   PortableTrace,
   PortableValue,
+  PreparedSafetyProgram,
   SafetyActionCoverage,
+  SafetyBatchResult,
   SafetyBounds,
+  SafetyCheck,
   SafetyCoverage,
   SafetyCoverageReport,
   SafetyOptions,
@@ -57,6 +60,7 @@ export {
   toPortableTrace,
   verifyHostTape,
 } from "./portable-wasm.js";
+export { prepareSafetyProgram } from "./prepared-safety.js";
 export { checkSafety } from "./safety.js";
 export { checkSafetyCoverage } from "./safety-coverage.js";
 export { deletionCandidates, shrinkCounterexample } from "./shrink.js";

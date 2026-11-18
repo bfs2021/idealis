@@ -18,4 +18,5 @@ pub use ir::{
     SafetyActionCoverage, SafetyBounds, SafetyCoverage, SafetyCoverageReport, SafetyOptions,
     SafetyProgram, SafetyResult,
 };
+pub use safety::PreparedSafetyProgram;
 pub use value::{CoreError, Value};
