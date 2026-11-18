@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "cases": [
+    {
+      "name": "sharing-action-frame-temporal",
+      "tlc": {
+        "kind": "liveness-violation",
+        "exit": 13,
+        "message": "Temporal properties were violated.",
+        "logSha256": "ead581d1de898735f760c27d4874c866b0614787ea73be0ee27b6305fb0d1acd",
+        "states": 1,
+        "generated": 2,
+        "violation": {
+          "name": "P",
+          "trace": [
+            {
+              "action": null,
+              "values": [{ "type": "int", "value": "0" }]
+            }
+          ],
+          "loopStart": 0,
+          "loopAction": "<stuttering>"
+        }
+      },
+      "semantic": {
+        "propertyHolds": true,
+        "property": "Temporal((\\A b \\in {0}: b = 0)) is []TRUE and holds in every behaviour.",
+        "outcome": {
+          "kind": "safety",
+          "result": {
+            "status": "complete",
+            "reason": null,
+            "states": 1,
+            "generated": 2,
+            "depth": 0,
+            "work": 11,
+            "violation": null
+          }
+        }
+      },
+      "controls": [
+        { "name": "sharing-temporal-true-step3e-b", "work": 5 },
+        { "name": "sharing-temporal-forall-step3e-b", "work": 7 }
+      ],
+      "reason": "At this fixed revision, the direct boxes are classified as invariants, while the operator application enters the liveness tableau. Source inspection indicates that negation leaves <>FALSE without constant folding; FALSE is not rejected by particle consistency or state-predicate extraction and fulfils the eventuality promise. This explains the saved violation, but is an inference from source, not an instrumented tableau execution or a claim about other revisions.",
+      "sourceLinks": [
+        "https://github.com/tlaplus/tlaplus/blob/5a47802b5c391f59ecdd44117981f4ff8c0656ba/tlatools/org.lamport.tlatools/src/tlc2/tool/impl/SpecProcessor.java#L1349-L1392",
+        "https://github.com/tlaplus/tlaplus/blob/5a47802b5c391f59ecdd44117981f4ff8c0656ba/tlatools/org.lamport.tlatools/src/tlc2/tool/liveness/Liveness.java#L105-L134",
+        "https://github.com/tlaplus/tlaplus/blob/5a47802b5c391f59ecdd44117981f4ff8c0656ba/tlatools/org.lamport.tlatools/src/tlc2/tool/liveness/LNAll.java#L77-L94",
+        "https://github.com/tlaplus/tlaplus/blob/5a47802b5c391f59ecdd44117981f4ff8c0656ba/tlatools/org.lamport.tlatools/src/tlc2/tool/liveness/TBPar.java#L243-L265",
+        "https://github.com/tlaplus/tlaplus/blob/5a47802b5c391f59ecdd44117981f4ff8c0656ba/tlatools/org.lamport.tlatools/src/tlc2/tool/liveness/TBGraphNode.java#L39-L54",
+        "https://github.com/tlaplus/tlaplus/blob/5a47802b5c391f59ecdd44117981f4ff8c0656ba/tlatools/org.lamport.tlatools/src/tlc2/tool/liveness/TBPar.java#L343-L345"
+      ]
+    }
+  ]
+}

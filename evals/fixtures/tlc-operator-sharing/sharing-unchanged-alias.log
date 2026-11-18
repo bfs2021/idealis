@@ -1,0 +1,17 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 33 and seed 6469564181440980311 with 1 worker on <cores> cores with 256MB heap and 64MB offheap memory [pid: <pid>] (<host>, MSBDiskFPSet, DiskStateQueue).
+Parsing file <capture>/Differential.tla
+Parsing file <tlc-tmp>/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Differential
+Starting... (<time>)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at <time>.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 5.4E-20
+2 states generated, 1 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 1.
+The average outdegree of the complete state graph is 0 (minimum is 0, the maximum 0 and the 95th percentile is 0).
+Finished in 00s at (<time>)

@@ -1,0 +1,430 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "apalacheRelease": "0.56.1",
+  "apalacheModulePath": "tla2sany/StandardModules/Apalache.tla",
+  "apalacheModuleSha256": "a9115b404e72c58fd085f81bc59cc918f8adac49feabfb57f8e285bc7ab5cfac",
+  "environment": {
+    "java": "OpenJDK 21.0.11, Temurin-21.0.11+10-LTS",
+    "workers": 1,
+    "heap": "256m",
+    "timeoutSeconds": 60
+  },
+  "command": "timeout 60 java -Xmx256m -Djava.io.tmpdir=<tlc-tmp> -cp <tlc-jar> tlc2.TLC -workers 1 -nowarning Differential.tla",
+  "streams": "stdout and stderr merged in capture order",
+  "cases": [
+    {
+      "name": "sharing-case-condition-step3f",
+      "source": "sharing-case-condition-step3f/Differential.tla",
+      "config": "sharing-case-condition-step3f/Differential.cfg",
+      "sourceSha256": "4da68d087349e9efb7f12b6dec4b8c626f45801292024606b303d460759ce254",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-case-condition-step3f.log",
+      "logSha256": "5b6f651ec6d073d89c43acd0a8d6f8889d261de4f8a12c8800d3974fe99a2591",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-notin-formal-step3f",
+      "source": "sharing-notin-formal-step3f/Differential.tla",
+      "config": "sharing-notin-formal-step3f/Differential.cfg",
+      "sourceSha256": "5bb7fb5b153ef4bd4a551a82407989f19c9f457187afead3497865bc0b80f58c",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-notin-formal-step3f.log",
+      "logSha256": "48fc2ec2e3b19ad2f927e5f87d27c8920bd7101f727461ddb54189be3df8dc49",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-choose-domain-caller-step3f",
+      "source": "sharing-choose-domain-caller-step3f/Differential.tla",
+      "config": "sharing-choose-domain-caller-step3f/Differential.cfg",
+      "sourceSha256": "b2fc288f84d0ba89d2c99b52147fd32014fe81dadba4b81e32c65ee01d56d6a5",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-domain-caller-step3f.log",
+      "logSha256": "34208deef5cda113dbf20774ef4efdb8794a5c088221c7f24d8af2002e1d1b9c",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-choose-predicate-caller-step3f",
+      "source": "sharing-choose-predicate-caller-step3f/Differential.tla",
+      "config": "sharing-choose-predicate-caller-step3f/Differential.cfg",
+      "sourceSha256": "35de3056d21f2511789d0c1774240f673d08e81ffa984a64811b94ff36c91a89",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-predicate-caller-step3f.log",
+      "logSha256": "ec7f255d5c275299f59dde10a47f1f430b0caf401f0cf8f2816c83e7cf846185",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-choose-old-domain-argument-step3f",
+      "source": "sharing-choose-old-domain-argument-step3f/Differential.tla",
+      "config": "sharing-choose-old-domain-argument-step3f/Differential.cfg",
+      "sourceSha256": "17570b61cd28be26fb9c076b0c69d4b5a710c10e8810f84016c91923c1446252",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-old-domain-argument-step3f.log",
+      "logSha256": "b4eb6b10555ea7c3a1406a473f8e81877ce68de4fa7f551c7adc7473a874144d",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-choose-old-predicate-argument-step3f",
+      "source": "sharing-choose-old-predicate-argument-step3f/Differential.tla",
+      "config": "sharing-choose-old-predicate-argument-step3f/Differential.cfg",
+      "sourceSha256": "d60152c724ec1cdab45c5d1184d06bbc78dead7b13caffd595b7d679468a6563",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-old-predicate-argument-step3f.log",
+      "logSha256": "768350e9c4b305f489012a726503b66d729ecce18d88b021f1614e2023512c5a",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-choose-domain-caller-step3f-violation",
+      "source": "sharing-choose-domain-caller-step3f-violation/Differential.tla",
+      "config": "sharing-choose-domain-caller-step3f-violation/Differential.cfg",
+      "sourceSha256": "76cfb87a163a531c6ab1f934dc4ab2fe8f9f2cd337da88eaacac3ab4c8e286b5",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-domain-caller-step3f-violation.log",
+      "logSha256": "6262356b62f9d6ccbd65b7443c562913545b0ed1e1f8a8438b015f0d4f9e651c",
+      "exit": 151,
+      "status": "input-error",
+      "message": "The invariant of Safe is equal to FALSE"
+    },
+    {
+      "name": "sharing-choose-predicate-caller-step3f-violation",
+      "source": "sharing-choose-predicate-caller-step3f-violation/Differential.tla",
+      "config": "sharing-choose-predicate-caller-step3f-violation/Differential.cfg",
+      "sourceSha256": "d454eb135ee7de4cb0ce7053110ba5b4090ac71d56ed34e7d73daa5c55569171",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-predicate-caller-step3f-violation.log",
+      "logSha256": "a27196f45bb6087f05959f090a221485a43619aa69b421c610f6693e52129242",
+      "exit": 151,
+      "status": "input-error",
+      "message": "The invariant of Safe is equal to FALSE"
+    },
+    {
+      "name": "sharing-choose-old-domain-argument-step3f-violation",
+      "source": "sharing-choose-old-domain-argument-step3f-violation/Differential.tla",
+      "config": "sharing-choose-old-domain-argument-step3f-violation/Differential.cfg",
+      "sourceSha256": "f0e2b59d43defbbf3ecea87b7290ede9f24a03097304d91b866e12d2e3bb5a21",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-old-domain-argument-step3f-violation.log",
+      "logSha256": "e101cb4445e624c51d890bd852be40a74b0c2240365f66a0bc5271d2681e3b9c",
+      "exit": 151,
+      "status": "input-error",
+      "message": "The invariant of Safe is equal to FALSE"
+    },
+    {
+      "name": "sharing-choose-old-predicate-argument-step3f-violation",
+      "source": "sharing-choose-old-predicate-argument-step3f-violation/Differential.tla",
+      "config": "sharing-choose-old-predicate-argument-step3f-violation/Differential.cfg",
+      "sourceSha256": "2a1d00fe296c2425226b9d30c49e99a24fea21fdb35c2b407db07147168ae5df",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-old-predicate-argument-step3f-violation.log",
+      "logSha256": "f74400f4ffa68399e01930945c13b7aee72e8de5d05b97274717aca2d0486947",
+      "exit": 151,
+      "status": "input-error",
+      "message": "The invariant of Safe is equal to FALSE"
+    },
+    {
+      "name": "sharing-choose-domain-caller-step3f-state-violation",
+      "source": "sharing-choose-domain-caller-step3f-state-violation/Differential.tla",
+      "config": "sharing-choose-domain-caller-step3f-state-violation/Differential.cfg",
+      "sourceSha256": "d2f857c7567c286fe04f34771403ff8cd46c81512c4ae55f0e1ef60c8194cd61",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-domain-caller-step3f-state-violation.log",
+      "logSha256": "bd669c73957b0a5b4d3a5124b20806abfe1ca28854359d89836ef2bba4e13bb3",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-choose-predicate-caller-step3f-state-violation",
+      "source": "sharing-choose-predicate-caller-step3f-state-violation/Differential.tla",
+      "config": "sharing-choose-predicate-caller-step3f-state-violation/Differential.cfg",
+      "sourceSha256": "574280d9754bea19d399ae8558fbc9cead669d4bcd7fabb124fa9460fbb88b76",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-predicate-caller-step3f-state-violation.log",
+      "logSha256": "e6f4767a5a434e14070f8f96503aa4c20ca1bcafc53270e4956320552ae4f054",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-choose-old-domain-argument-step3f-state-violation",
+      "source": "sharing-choose-old-domain-argument-step3f-state-violation/Differential.tla",
+      "config": "sharing-choose-old-domain-argument-step3f-state-violation/Differential.cfg",
+      "sourceSha256": "9c77439319efc69b0ac2c1ff2425e8c4ad055bf65ab98b3f615fcc502c820502",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-old-domain-argument-step3f-state-violation.log",
+      "logSha256": "d96e12df770a17c2e06e4eb64d7670a90a26cf918fe2ae7211b9c8cc2d1eaff6",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-choose-old-predicate-argument-step3f-state-violation",
+      "source": "sharing-choose-old-predicate-argument-step3f-state-violation/Differential.tla",
+      "config": "sharing-choose-old-predicate-argument-step3f-state-violation/Differential.cfg",
+      "sourceSha256": "3bc83a01c50aba5de895b212e2b9833bf61bf182627a0239a4b14fb9d23fef7d",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-choose-old-predicate-argument-step3f-state-violation.log",
+      "logSha256": "87fe817f71554d69fcefeda46c2ebcda8c88cc5b09e860d3f474fd21e609ac01",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "reusedChoose": [
+    {
+      "name": "choose-order",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-order/model/Differential.tla",
+          "sha256": "4ad9bd1f15564691df2dc3fe54844d6da445913899c73f923f05ab7d568bf40b"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-order/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-order/model/tlc.log",
+          "sha256": "aea3f0a9cc71dd70b2291e7f48f509cff1823b97390fa74000263cf898f7396f"
+        }
+      ]
+    },
+    {
+      "name": "choose-equivalent",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-equivalent/model/Differential.tla",
+          "sha256": "9b7f5e52908972350b64b2877a04db787aa40f5c0716eeed8ceb8381fa40c655"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-equivalent/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-equivalent/model/tlc.log",
+          "sha256": "650b8922b36e77f8cf2da7ce6ab9fb652b24f482f5851c64eb94446fa00c000e"
+        }
+      ]
+    },
+    {
+      "name": "choose-tuple",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-tuple/model/Differential.tla",
+          "sha256": "ad6a77bcb7f6d1df31753b0897c82b04f3243a8232427917dbf1076d44d3e244"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-tuple/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-tuple/model/tlc.log",
+          "sha256": "0d36de91fb5bd388fa1cf7dab9b48934a86afaf43716467a5719c0d60e0f669e"
+        }
+      ]
+    },
+    {
+      "name": "choose-nested",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-nested/model/Differential.tla",
+          "sha256": "af74c5e107520625ce51ef2821a91909a9cffd6080a53d54c259c5a77d68e818"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-nested/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-nested/model/tlc.log",
+          "sha256": "28e1547d94c944830d10b6d40366a2781ff3a1e41fabb8ee98a819ac2233677f"
+        }
+      ]
+    },
+    {
+      "name": "choose-capture",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-capture/model/Differential.tla",
+          "sha256": "7afbf33040d385e9fdd044845c3f38721fdc6b39089117c5259de8f7a7ea8aec"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-capture/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-capture/model/tlc.log",
+          "sha256": "fc86114c39eba065681f11b85d070a1c23bd7e96b0ebfd737dba1f74561a8c7d"
+        }
+      ]
+    },
+    {
+      "name": "choose-no-witness",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-no-witness/model/Differential.tla",
+          "sha256": "f938221095c995451887b645f66a3e7e895931e2cab18849e75d7fc003e705aa"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-no-witness/model/Differential.cfg",
+          "sha256": "ea9bc9a520aaabeae3f9c97592849bf442e3249c8910603fd102a9531e07f97f"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-no-witness/model/tlc.log",
+          "sha256": "fc56e01cdaf18516443380a1d40921047633933d0d09eba132a0412796a9b023"
+        }
+      ]
+    },
+    {
+      "name": "choose-empty",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-empty/model/Differential.tla",
+          "sha256": "243b5e192abab557a3d8260a491f076989e01433e25d0a8b4c74582b40a4cbac"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-empty/model/Differential.cfg",
+          "sha256": "ea9bc9a520aaabeae3f9c97592849bf442e3249c8910603fd102a9531e07f97f"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-empty/model/tlc.log",
+          "sha256": "be27167edcff505c99b9285cc9bcf1cfc0fa10abc52573308e3d9c6af5196696"
+        }
+      ]
+    },
+    {
+      "name": "choose-lazy",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-lazy/model/Differential.tla",
+          "sha256": "ae6a3b7517412e29fe38c41694c02219b622de9ff25cb196bb067a49d30e6f99"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-lazy/model/Differential.cfg",
+          "sha256": "ea9bc9a520aaabeae3f9c97592849bf442e3249c8910603fd102a9531e07f97f"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-lazy/model/tlc.log",
+          "sha256": "0a198b185b857d9ad1fb8de52bc89102c4090c8ae4637cd07642e88f071b9e98"
+        }
+      ]
+    },
+    {
+      "name": "choose-predicate-error",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-predicate-error/model/Differential.tla",
+          "sha256": "9c5fb157bb55ce5a697631c5ed13a75bd68bc5da7ee20ad45a588e075c28d7dd"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-predicate-error/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-predicate-error/model/tlc.log",
+          "sha256": "0b05a4f1213b6060d71bb53b6f7362d7f435008fbb7022a7e0c278cfd8f5c62a"
+        }
+      ]
+    },
+    {
+      "name": "choose-tuple-error",
+      "files": [
+        {
+          "path": "evals/runs/0046-finite-verified/choose-tuple-error/model/Differential.tla",
+          "sha256": "7f131af4f848641f23e78bfab41104aa3b89cc6abf3fdda7619d00171d3bfad2"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-tuple-error/model/Differential.cfg",
+          "sha256": "900bf8fdf1b2a1902cac0f9e4cc8e7f1ed1edc055698c1ef9e3aee1b0e375375"
+        },
+        {
+          "path": "evals/runs/0046-finite-verified/choose-tuple-error/model/tlc.log",
+          "sha256": "2d96156ffe32e987d9a8af695d4ea59e29a53ba2790c6064d552c13b2a306665"
+        }
+      ]
+    }
+  ],
+  "reusedRunFiles": [
+    {
+      "path": "evals/runs/0046-finite-verified/reports.json",
+      "sha256": "4872699bcc40c2de125a135c78cb45070380a18edfad4f260768e8445a5c7128"
+    },
+    {
+      "path": "evals/runs/0046-finite-verified/manifest.json",
+      "sha256": "34c2af10e0dd997c43dc23ea7d3189b430c9f73d28a1d3e6f10efbb865ae3a6f"
+    }
+  ]
+}
