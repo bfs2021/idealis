@@ -73,6 +73,7 @@ test("rtla parses TLA/config in Chromium and reuses memory after a syntax error"
     unicode: "Forall",
     large: 100_000,
     invalid: "syntax",
+    label: "syntax",
     limit: "unsupported",
     config: "config",
     repeat: true,

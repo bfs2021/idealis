@@ -30,6 +30,8 @@ fn main() -> Result<(), rtla::ParseError> {
 - TLC設定のInit/Next/Spec、定数・集合・model value・置換、invariant/property、制約等の設定値
 - top-levelの引数なしnamed/unnamed INSTANCE、LOCAL、WITHの式置換、修飾名A!B!Op
 
+prefixのSUBSET/UNION/DOMAINは固定TLC 1.7.4の優先順位を使う。1.8.0 prereleaseでは表が変わるため、同じsourceでも受理やASTの結合順が異なる。versionを選ぶAPIは未実装であり、どちらの版の完全なSANY互換も保証しない。記号operatorの定義/宣言・nonfix参照、labelの引数、全Unicode aliasも未対応。[二版の構文監査](../../evals/iterations/0068-rtla-compatibility.md)を参照。
+
 名前解決、モジュールの読込、型/level検査、標準operatorの評価、ASTからIRへの変換、モデル検査は行わない。設定に制約や置換が存在してもASTとして保持するため、実行側は対応可否を別途検査する。
 
 proof、引数付きINSTANCE、LET内のINSTANCE、nested module、RECURSIVE宣言、高階引数等は対応外。TLA+全体やSANYとの完全互換は示さない。ASTの整数は正確に表現できる`2^53-1`まで、式と設定値の再帰的な解析とASTの深さは64段までとし、それを超える入力は`unsupported`で返す。TLA+の整数自体の上限を定義するものではない。

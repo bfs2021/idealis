@@ -214,10 +214,72 @@ impl Parser {
         if self.depth >= crate::MAX_NESTING {
             return Err(self.unsupported("Expression nesting exceeds 64"));
         }
+        let start = self.cursor;
         self.depth += 1;
         let result = self.expression_inner(minimum);
         self.depth -= 1;
+        if let Ok(expression) = &result
+            && self.label_changes_precedence(expression, minimum, start)
+        {
+            return Err(ParseError {
+                kind: ErrorKind::Syntax,
+                message: "Label changes operator precedence. Add parentheses".into(),
+                location: self.tokens[start].location,
+            });
+        }
         result
+    }
+    fn label_changes_precedence(&self, expression: &Expression, minimum: u8, start: usize) -> bool {
+        if minimum == 0 || self.tokens[start].kind != Kind::Name {
+            return false;
+        }
+        let ExpressionKind::Label { body, .. } = &expression.node else {
+            return false;
+        };
+        let precedence = match &body.node {
+            ExpressionKind::Apply { operator, args } if args.len() == 2 => {
+                infix(operator).map(|precedence| precedence.low)
+            }
+            ExpressionKind::And {
+                is_bulleted: false, ..
+            }
+            | ExpressionKind::Or {
+                is_bulleted: false, ..
+            } => Some(3),
+            ExpressionKind::Prime { .. } => Some(15),
+            ExpressionKind::Apply { operator, args }
+                if args.len() == 1 && matches!(operator.as_str(), "^+" | "^*" | "^#") =>
+            {
+                Some(15)
+            }
+            _ => None,
+        };
+        if precedence.is_none_or(|precedence| precedence >= minimum) {
+            return false;
+        }
+        let body_start = start
+            + self.tokens[start..self.cursor]
+                .iter()
+                .position(|token| token.kind == Kind::Symbol && token.text == "::")
+                .expect("label separator")
+            + 1;
+        if self.tokens[body_start].text != "(" {
+            return true;
+        }
+        let mut nesting = 0;
+        self.tokens[body_start..self.cursor]
+            .iter()
+            .position(|token| {
+                if token.kind == Kind::Symbol {
+                    if token.text == "(" {
+                        nesting += 1;
+                    } else if token.text == ")" {
+                        nesting -= 1;
+                    }
+                }
+                nesting == 0
+            })
+            != Some(self.cursor - body_start - 1)
     }
     fn expression_inner(&mut self, minimum: u8) -> Result<Expression, ParseError> {
         let mut left = self.prefix()?;

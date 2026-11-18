@@ -657,6 +657,14 @@ rtla-eval run java jar: rtla-build
   pnpm build
   node dist/evals/rtla-parser/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
+rtla-compat run upstream java_home jar snapshot version:
+  pnpm build
+  node dist/evals/rtla-compatibility/run.js {{quote(run)}} {{quote(upstream)}} {{quote(java_home)}} {{quote(jar)}} {{quote(snapshot)}} {{quote(version)}}
+
+rtla-compat-test: rtla-build
+  pnpm build
+  node --test dist/evals/rtla-compatibility/contract-test.js
+
 apalache-test:
   pnpm build
   node --test dist/evals/apalache-comparison/contract-test.js

@@ -24,6 +24,10 @@ export const run = async () => {
     kind: "config",
     source: "CONSTANT Data={a,b}\nSPECIFICATION Spec\nINVARIANT TypeInvariant",
   });
+  const label = parser.request({
+    kind: "expression",
+    source: "a * lab :: b + c",
+  });
   const repeated = parser.request({ kind: "module", source });
   if (
     !isRecord(module) ||
@@ -36,7 +40,9 @@ export const run = async () => {
     !isRecord(invalid.error) ||
     !isRecord(limit) ||
     !isRecord(limit.error) ||
-    !isRecord(config)
+    !isRecord(config) ||
+    !isRecord(label) ||
+    !isRecord(label.error)
   )
     throw new Error("Invalid rtla response");
   return {
@@ -47,6 +53,7 @@ export const run = async () => {
         ? large.expression.name.length
         : 0,
     invalid: invalid.error.kind,
+    label: label.error.kind,
     limit: limit.error.kind,
     config: config.kind,
     repeat: JSON.stringify(module) === JSON.stringify(repeated),

@@ -428,3 +428,18 @@
 {"runId":"0067-actions-tlc","kind":"restricted-symmetry","status":"complete","sourceVersion":"183bb1cdd69bd952869001d80c4bdf11f0e7dab233aade8846d5e1c2a9ff5692"}
 {"runId":"0067-por-tlc","kind":"restricted-symmetry","status":"complete","sourceVersion":"183bb1cdd69bd952869001d80c4bdf11f0e7dab233aade8846d5e1c2a9ff5692"}
 {"runId":"0067-audit","kind":"source-audit","status":"complete"}
+{"runId":"0068-stable-audit","kind":"rtla-compatibility-audit","status":"partial-reference","compatibility":"partial"}
+{"runId":"0068-preview-audit","kind":"rtla-compatibility-audit","status":"complete","compatibility":"partial"}
+{"runId":"0068-stable-fixed","kind":"rtla-compatibility-audit","status":"partial-reference","compatibility":"partial"}
+{"runId":"0068-preview-fixed","kind":"rtla-compatibility-audit","status":"complete","compatibility":"partial"}
+{"runId":"0068-before","kind":"rtla-compatibility-setup","status":"error"}
+{"runId":"0068-baseline","kind":"rtla-compatibility-setup","status":"error"}
+{"runId":"0068-stable","kind":"rtla-compatibility-setup","status":"error"}
+{"runId":"0068-stable-root","kind":"rtla-compatibility-setup","status":"error"}
+{"runId":"0068-audit","kind":"rtla-compatibility-evidence","status":"complete","compatibility":"partial"}
+{"runId":"0068-inventory-review","kind":"parser-source-inventory","status":"complete"}
+{"runId":"0068-final-inventory-review","kind":"parser-source-inventory","status":"complete"}
+{"runId":"0068-label-junction-reference","kind":"sany-syntax-controls","status":"complete","scope":"7 source inputs, 2 references, no semantics"}
+{"runId":"0068-verification","kind":"workspace-verification","status":"failed","reason":"analysis inventory source digest required review"}
+{"runId":"0068-final-verification","kind":"workspace-verification","status":"complete","gates":21}
+{"runId":"0068-final-audit","kind":"rtla-compatibility-evidence","status":"complete","compatibility":"partial"}
