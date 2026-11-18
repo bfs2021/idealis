@@ -11,7 +11,11 @@ const after = process.argv[3];
 const output = process.argv[4];
 const binaryName = process.argv[5] ?? "wire-bench";
 const filter = process.argv[6];
-assert.ok(binaryName === "wire-bench" || binaryName === "safety-bench");
+assert.ok(
+  binaryName === "wire-bench" ||
+    binaryName === "safety-bench" ||
+    binaryName === "symmetry-bench",
+);
 assert.ok(before && after && output);
 const metadata = await Promise.all(
   [before, after].map(async (root) => {

@@ -139,6 +139,8 @@ Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value�
 
 起動とcompiled IRのJSON境界を含む別測定では、record N12の代表展開は99.3→84.6 ms、ピークRSSの中央値は12.8→15.2 MiB（1→8 worker）だった。Node計測driverとtime wrapperの費用を含み、Node hostの起動とTLA+ frontendは含まない。小さいPORモデルのwallは6.89→3.70 msで、prepared探索の倍率とは分ける。
 
+0065ではnode行を連続配置し、現在stateのOption列コピーも省いた。変更前後の固定binaryを交互に測る21本のCriterion比較で、SYMMETRYの検査時間を約8〜17%短縮した。record N12の代表展開は1 workerで85.57→71.80 ms、8 workersで73.01→64.41 ms。縮約条件・生成数・論理workは変えず、以前の測定値とは別に比較する。[条件・対照・採否](evals/iterations/0065-symmetry-allocation.md)を参照。
+
 ## Data定数のprepared化
 
 0059ではData定数の初回成功結果をslotへ保持し、繰り返しの値全体のhashを省いた。以下は約210万状態のチャネル群を全探索した同じrunの起動込み秒、1 warmup後3回の中央値。

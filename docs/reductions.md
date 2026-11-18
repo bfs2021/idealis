@@ -17,6 +17,8 @@ let result = program.check_with_options(bounds, SafetyOptions {
 
 `workers`は1〜256で、既定は1。Wasmは逐次実行する。`symmetryActions`は[限定SYMMETRY](symmetry.md)が必要で、現在状態のnode行が同じ操作を代表だけ展開する。`partialOrder`とSYMMETRYの併用は拒否する。coverage APIは従来の逐次・全展開を維持する。Rustの`Request::CheckSafety`をstruct literalで作る場合は`options: None`を追加する。既存JSONでは省略できる。
 
+`work`は実行した経路の論理費用で、1 workerと複数workersの値が同じとは限らない。同じ`maxWork`でも停止地点の一致は保証しない。変更前後を比較するときはworker数を揃え、予算切れをcompleteへ置き換えない。
+
 ## 独立した単調なflag操作に限定したPOR
 
 部分順序削減（POR）は、独立する操作の実行順の重複を省く。現在の実装は次の形の操作だけを候補にする。

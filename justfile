@@ -809,6 +809,10 @@ symmetry-benchmark run java jar archive binary:
 symmetry-criterion binary run filter="":
   node dist/evals/symmetry/criterion.js {{quote(binary)}} {{quote(run)}} {{quote(filter)}}
 
+# Use frozen executables; do not build during measurements.
+symmetry-allocation before after run:
+  node dist/evals/symmetry/allocation.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
+
 symmetry-actions-eval run java jar: safety-build
   node dist/evals/symmetry/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}} --actions
 

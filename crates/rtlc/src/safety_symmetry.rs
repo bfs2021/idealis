@@ -12,7 +12,7 @@ struct Representative {
 
 struct NodeRows {
     header: Vec<Scalar>,
-    values: Vec<Vec<Scalar>>,
+    values: Vec<Scalar>,
     columns: usize,
 }
 
@@ -181,11 +181,19 @@ impl Symmetry {
         values: &[Option<Scalar>],
         arena: &mut Arena,
     ) -> Result<Vec<Scalar>, CoreError> {
-        let mut rows = self.rows(values, arena)?;
+        let mut rows = self.rows(values.iter().copied(), arena)?;
         if rows.columns != 0 {
             arena.consume(self.group.len() * self.group.len() * rows.columns)?;
-            rows.values.sort_unstable();
-            rows.header.extend(rows.values.into_iter().flatten());
+            let mut order = (0..self.group.len()).collect::<Vec<_>>();
+            order.sort_unstable_by(|left, right| {
+                rows.values[*left * rows.columns..(*left + 1) * rows.columns]
+                    .cmp(&rows.values[*right * rows.columns..(*right + 1) * rows.columns])
+            });
+            for index in order {
+                rows.header.extend_from_slice(
+                    &rows.values[index * rows.columns..(index + 1) * rows.columns],
+                );
+            }
         }
         Ok(rows.header)
     }
@@ -199,25 +207,33 @@ impl Symmetry {
         if members != self.group {
             return Ok(members.to_vec());
         }
-        let rows = self.rows(
-            &current.iter().copied().map(Some).collect::<Vec<_>>(),
-            arena,
-        )?;
+        let rows = self.rows(current.iter().copied().map(Some), arena)?;
+        if rows.columns == 0 {
+            return Ok(self.group.first().copied().into_iter().collect());
+        }
         let mut seen = HashSet::new();
         Ok(self
             .group
             .iter()
             .copied()
-            .zip(rows.values)
+            .zip(rows.values.chunks_exact(rows.columns))
             .filter_map(|(member, row)| seen.insert(row).then_some(member))
             .collect())
     }
 
-    fn rows(&self, values: &[Option<Scalar>], arena: &mut Arena) -> Result<NodeRows, CoreError> {
+    fn rows(
+        &self,
+        values: impl Clone + ExactSizeIterator<Item = Option<Scalar>>,
+        arena: &mut Arena,
+    ) -> Result<NodeRows, CoreError> {
         arena.consume(values.len())?;
         let mut key = Vec::with_capacity(values.len());
-        let mut rows = vec![Vec::new(); self.group.len()];
-        let mut columns = 0;
+        let columns = values
+            .clone()
+            .filter(|value| matches!(value, Some(Scalar::Ref(_))))
+            .count();
+        let mut rows = vec![Scalar::Bool(false); self.group.len() * columns];
+        let mut column = 0;
         for value in values {
             match value.ok_or_else(|| CoreError::protocol("Incomplete safety state"))? {
                 value @ (Scalar::Bool(_) | Scalar::Int(_)) => key.push(value),
@@ -229,10 +245,10 @@ impl Symmetry {
                                 "Unsupported symmetry: set contains a non-node value",
                             ));
                         }
-                        for (row, member) in rows.iter_mut().zip(&self.group) {
-                            row.push(Scalar::Bool(members.contains(member)));
+                        for (index, member) in self.group.iter().enumerate() {
+                            rows[index * columns + column] = Scalar::Bool(members.contains(member));
                         }
-                        columns += 1;
+                        column += 1;
                         key.push(Scalar::Ref(1));
                         continue;
                     }
@@ -261,10 +277,10 @@ impl Symmetry {
                             }
                         }
                     }
-                    for (row, (_, value)) in rows.iter_mut().zip(entries) {
-                        row.push(value);
+                    for (index, (_, value)) in entries.into_iter().enumerate() {
+                        rows[index * columns + column] = value;
                     }
-                    columns += 1;
+                    column += 1;
                     key.push(Scalar::Ref(0));
                 }
             }
@@ -447,6 +463,46 @@ mod tests {
                 )
                 .unwrap()
         );
+    }
+
+    #[test]
+    fn scalar_only_states_keep_the_first_node_as_representative() {
+        let mut arena = Arena::new(100);
+        let symmetry = symmetry(&mut arena);
+        let current = [Scalar::Int(4), Scalar::Bool(true)];
+        assert_eq!(
+            symmetry
+                .representatives(&current, &symmetry.group, &mut arena)
+                .unwrap(),
+            vec![symmetry.group[0]]
+        );
+        assert_eq!(
+            symmetry.key(&current.map(Some), &mut arena).unwrap(),
+            current
+        );
+        let before = arena.work;
+        let error = symmetry
+            .key(&[Some(Scalar::Int(4)), None], &mut arena)
+            .unwrap_err();
+        assert_eq!(error.code, "protocol");
+        assert_eq!(error.message, "Incomplete safety state");
+        assert_eq!(arena.work - before, 2);
+    }
+
+    #[test]
+    fn row_storage_does_not_change_canonical_work() {
+        let mut arena = Arena::new(100);
+        let symmetry = symmetry(&mut arena);
+        let forward = function(&mut arena, &symmetry, [Scalar::Int(0), Scalar::Int(1)]);
+        let reverse = function(&mut arena, &symmetry, [Scalar::Int(1), Scalar::Int(0)]);
+        let before = arena.work;
+        symmetry
+            .key(
+                &[Some(forward), Some(Scalar::Bool(false)), Some(reverse)],
+                &mut arena,
+            )
+            .unwrap();
+        assert_eq!(arena.work - before, 15);
     }
 
     #[test]

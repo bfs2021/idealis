@@ -48,7 +48,7 @@
 - [x] 時間論理のforall/existsを定数の有限domainで展開する。tuple、空domain、入れ子を扱い、展開もwork予算を消費する。
 - [x] temporal展開の訪問済み式は256式以下で固定長bit集合に保持し、それより大きいpoolはHashSetへ戻す。todo/next/pendingの順序とworkのtickは変えない。
 - [x] 単一の2〜64個のuntyped model value群に対する限定SYMMETRY。全群をdomainに持つ関数のInt/Boolまたはflat recordと、node部分集合を扱う。recordのfield名・Int/Bool型を関数内で揃える。同じnodeの関数値・集合所属を同じ行として完全比較する。個別の群要素・順序依存式と未対応shapeは拒否する。
-- [x] 同一視用keyと具体状態を分離し、元の具体状態から探索・traceを作る。workへkey構築を計上する。宣言がInit/Next/invariantを保つことは利用者の前提で、gateをequivariance証明とは扱わない。
+- [x] 同一視用keyと具体状態を分離し、元の具体状態から探索・traceを作る。node行を連続配置し、key構築と代表選択の論理workを維持する。宣言がInit/Next/invariantを保つことは利用者の前提で、gateをequivariance証明とは扱わない。
 - [x] SafetyOptionsのsymmetry_actionsはopt-in。先頭に単一node bindingを持つbranchの同じ行を代表だけ展開する。Init・複数binding・tuple binding・全群以外のdomainは通常展開。generated/workは削減後の計数。
 - [x] nativeのsymmetryは64状態以上のfrontierを並列展開する。rootへのRef移送後に逐次にkeyを照合し、代表展開とも併用する。狭いfrontierとWasmは逐次へ戻す。
 - [x] SafetyOptionsのpartial_orderはopt-inで逐次実行する。invariantと他branchが参照せず、他branchが戻せないBool flagのFALSE→TRUE操作だけを先に実行する。依存・未知の式・不正な状態型では通常展開へ戻す。temporal/fairness・constraint・initial/action propertyでは通常探索、SYMMETRYとの併用は拒否する。元のグラフの最短反例は保証しない。
