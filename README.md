@@ -107,6 +107,18 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
+## Data定数のprepared化
+
+0059ではData定数の初回成功結果をslotへ保持し、繰り返しの値全体のhashを省いた。以下は約210万状態のチャネル群を全探索した同じrunの起動込み秒、1 warmup後3回の中央値。
+
+| 実行方式           | 変更前 | 変更後 | 前/後 |
+| ------------------ | -----: | -----: | ----: |
+| native 1 worker    | 14.075 | 13.463 |  1.05 |
+| native 8 workers   |  5.887 |  5.432 |  1.08 |
+| Node Wasm 1 worker | 21.191 | 19.308 |  1.10 |
+
+native 8は反復の幅が重なり、最終反復では逆転した。関数モデルのnativeはほぼ横ばい。チャネルのWasmは同じrunのtla-ts（16.374秒）より約18%遅い。型別命令と並列の訪問済み事前照合も順に試したが、後退があり本体への採用を見送った。[9経路の全sample・14本の段階別比較・採否](evals/iterations/0059-prepared-execution.md)を参照。
+
 ## packed関数のhash最適化
 
 0058では0/1整数関数N20を完全探索した。共通TS frontendを含む起動込み秒、1 warmup後3回の中央値。Apple M5 arm64、Node 24.22.2、tla-ts 0.0.10で測定した。状態数は1,048,576、生成数は20,971,521で全経路が一致した。

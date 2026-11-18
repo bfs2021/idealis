@@ -9,6 +9,7 @@ use crate::ir::{
     Branch, SafetyBounds, SafetyCoverageReport, SafetyProgram, SafetyResult, SafetyTraceStep,
     SafetyViolation, Scalar,
 };
+use crate::safety_prepared::PreparedProgram;
 use crate::safety_values::Arena;
 use crate::temporal::GraphEdge;
 use crate::{CoreError, Value};
@@ -145,7 +146,8 @@ impl SafetyProgram {
         {
             return Err(CoreError::protocol("Invalid safety program or bounds"));
         }
-        let mut arena = Arena::new(bounds.max_work);
+        let prepared = PreparedProgram::new(self);
+        let mut arena = Arena::with_prepared(bounds.max_work, &prepared);
         let mut search = Search::<R> {
             program: self,
             bounds,

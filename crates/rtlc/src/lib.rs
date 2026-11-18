@@ -1,6 +1,7 @@
 pub mod ir;
 mod safety;
 mod safety_expressions;
+mod safety_prepared;
 mod safety_values;
 #[cfg(not(target_arch = "wasm32"))]
 mod safety_work;

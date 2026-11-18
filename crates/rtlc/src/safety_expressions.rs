@@ -113,7 +113,7 @@ impl Iterator for Values {
 }
 
 impl Domain {
-    fn children(&self) -> Vec<&Expression> {
+    pub(crate) fn children(&self) -> Vec<&Expression> {
         match self {
             Self::Range { lower, upper } => vec![lower, upper],
             Self::Set { values } => values.iter().collect(),
@@ -291,7 +291,7 @@ impl Expression {
         };
         simple && self.children().into_iter().all(Self::is_scalar_cost)
     }
-    fn children(&self) -> Vec<&Self> {
+    pub(crate) fn children(&self) -> Vec<&Self> {
         match self {
             Self::Literal { .. }
             | Self::Data { .. }
@@ -618,7 +618,7 @@ impl Expression {
             Self::Literal { .. } | Self::Read { .. } | Self::Bound { .. } | Self::Old => {
                 return self.eval(ctx, arena);
             }
-            Self::Data { value } => arena.data(value)?,
+            Self::Data { value } => arena.data_expression(self, value)?,
             Self::UnmatchedCase { location } => {
                 return Err(CoreError::protocol(&format!(
                     "Attempted to evaluate a CASE with no conditions true at {location}"

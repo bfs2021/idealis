@@ -2,6 +2,7 @@
 mod functions;
 use crate::ir::{Expression, Scalar};
 use crate::safety_expressions::MembershipSet;
+use crate::safety_prepared::PreparedProgram;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_work::WorkBudget;
 use crate::{CoreError, Value};
@@ -68,6 +69,8 @@ type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
 
 pub(crate) struct Arena<'a> {
     base: Option<&'a Arena<'a>>,
+    prepared: Option<&'a PreparedProgram<'a>>,
+    constants: Vec<Option<Scalar>>,
     offset: usize,
     #[cfg(not(target_arch = "wasm32"))]
     budget: Option<(&'a WorkBudget, usize)>,
@@ -90,6 +93,8 @@ impl<'scope> Arena<'scope> {
     pub fn new(maximum: u32) -> Self {
         Self {
             base: None,
+            prepared: None,
+            constants: Vec::new(),
             offset: 0,
             #[cfg(not(target_arch = "wasm32"))]
             budget: None,
@@ -107,6 +112,34 @@ impl<'scope> Arena<'scope> {
             work: 0,
             maximum,
         }
+    }
+    pub fn with_prepared(maximum: u32, prepared: &'scope PreparedProgram<'scope>) -> Self {
+        Self {
+            prepared: Some(prepared),
+            constants: vec![None; prepared.len()],
+            ..Self::new(maximum)
+        }
+    }
+    pub fn data_expression(
+        &mut self,
+        expression: &Expression,
+        value: &Value,
+    ) -> Result<Scalar, CoreError> {
+        match self.prepared.and_then(|prepared| prepared.slot(expression)) {
+            Some(slot) => self.constant(slot),
+            None => self.data(value),
+        }
+    }
+    fn cached_constant(&self, slot: usize) -> Option<Scalar> {
+        self.constants[slot].or_else(|| self.base.and_then(|base| base.cached_constant(slot)))
+    }
+    pub fn constant(&mut self, slot: usize) -> Result<Scalar, CoreError> {
+        if let Some(value) = self.cached_constant(slot) {
+            return Ok(value);
+        }
+        let value = self.data(self.prepared.unwrap().value(slot))?;
+        self.constants[slot] = Some(value);
+        Ok(value)
     }
     pub fn tick(&mut self) -> Result<(), CoreError> {
         self.consume(1)
@@ -133,6 +166,8 @@ impl<'scope> Arena<'scope> {
     pub fn fork<'a>(&'a self, budget: &'a WorkBudget, worker: usize) -> Arena<'a> {
         let mut worker = Arena {
             base: Some(self),
+            prepared: self.prepared,
+            constants: vec![None; self.constants.len()],
             offset: self.offset + self.cells.len(),
             budget: Some((budget, worker)),
             ..Arena::new(self.maximum)
@@ -162,6 +197,7 @@ impl<'scope> Arena<'scope> {
     pub fn into_delta(self) -> ValueDelta {
         ValueDelta {
             cells: self.cells,
+            constants: self.constants,
             data: self.data,
             types: self.types,
             registered: self.registered,
@@ -205,6 +241,11 @@ impl<'scope> Arena<'scope> {
             self.data
                 .entry(value)
                 .or_insert_with(|| mapping.get(scalar));
+        }
+        for (slot, value) in delta.constants.into_iter().enumerate() {
+            if self.constants[slot].is_none() {
+                self.constants[slot] = value.map(|value| mapping.get(value));
+            }
         }
         for (address, prepared) in delta.registered {
             let target = self.registered.entry(address).or_insert(None);
@@ -1052,6 +1093,7 @@ fn work_exhausted() -> CoreError {
 #[cfg(not(target_arch = "wasm32"))]
 pub(crate) struct ValueDelta {
     cells: Vec<Cell>,
+    constants: Vec<Option<Scalar>>,
     data: HashMap<Value, Scalar>,
     types: HashMap<Expression, Option<Arc<MembershipSet>>>,
     registered: RegisteredMembership,
@@ -1746,5 +1788,122 @@ mod packed_hash_tests {
         assert!(arena.equal(boolean, integer).is_err());
         assert_eq!(arena.tuple(vec![Scalar::Bool(false); 64]).unwrap(), boolean);
         assert_eq!(arena.tuple(integers).unwrap(), integer);
+    }
+}
+
+#[cfg(test)]
+mod prepared_data_tests {
+    use super::Arena;
+    use crate::Value;
+    use crate::ir::{Expression, Scalar};
+    use crate::safety_expressions::EvalContext;
+    use crate::safety_prepared::PreparedProgram;
+
+    #[test]
+    fn constants_are_lazy_and_cached_only_after_success_in_each_arena() {
+        let invalid = Expression::Data {
+            value: Value::Int("invalid".into()),
+        };
+        let text = Expression::Data {
+            value: Value::String("constant".into()),
+        };
+        let program = PreparedProgram::from_roots(vec![&invalid, &text]);
+        let mut arena = Arena::with_prepared(100, &program);
+        assert_eq!(arena.work, 0);
+        for _ in 0..2 {
+            let error = invalid
+                .eval(EvalContext::new(&[], &[]), &mut arena)
+                .unwrap_err();
+            assert_eq!(error.code, "protocol");
+            assert_eq!(arena.work, 0);
+        }
+        let value = text.eval(EvalContext::new(&[], &[]), &mut arena).unwrap();
+        let work = arena.work;
+        for _ in 0..8 {
+            assert_eq!(
+                text.eval(EvalContext::new(&[], &[]), &mut arena).unwrap(),
+                value
+            );
+            assert_eq!(arena.work, work);
+        }
+        let mut other = Arena::with_prepared(100, &program);
+        other.string("different".into()).unwrap();
+        let other_value = text.eval(EvalContext::new(&[], &[]), &mut other).unwrap();
+        assert_ne!(value, other_value);
+        assert_eq!(
+            arena.portable(value).unwrap(),
+            other.portable(other_value).unwrap()
+        );
+    }
+
+    #[test]
+    fn untaken_data_and_unregistered_expressions_keep_interpreter_behavior() {
+        let expression = Expression::If {
+            condition: Box::new(Expression::Literal {
+                value: Scalar::Bool(false),
+            }),
+            consequent: Box::new(Expression::Data {
+                value: Value::Int("invalid".into()),
+            }),
+            alternative: Box::new(Expression::Data {
+                value: Value::String("ok".into()),
+            }),
+        };
+        let program = PreparedProgram::from_roots(vec![&expression]);
+        let mut prepared = Arena::with_prepared(100, &program);
+        let mut plain = Arena::new(100);
+        let expected = expression
+            .eval(EvalContext::new(&[], &[]), &mut plain)
+            .unwrap();
+        let actual = expression
+            .eval(EvalContext::new(&[], &[]), &mut prepared)
+            .unwrap();
+        assert_eq!(
+            plain.portable(expected).unwrap(),
+            prepared.portable(actual).unwrap()
+        );
+        assert_eq!(plain.work, prepared.work);
+        let dynamic = Expression::Data {
+            value: Value::String("dynamic".into()),
+        };
+        let actual = dynamic
+            .eval(EvalContext::new(&[], &[]), &mut prepared)
+            .unwrap();
+        assert_eq!(
+            prepared.portable(actual).unwrap(),
+            Value::String("dynamic".into())
+        );
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn cached_worker_references_are_remapped_when_merged() {
+        use crate::safety_work::WorkBudget;
+        let expression = Expression::Data {
+            value: Value::String("right".into()),
+        };
+        let program = PreparedProgram::from_roots(vec![&expression]);
+        let mut root = Arena::with_prepared(1000, &program);
+        let budget = WorkBudget::new(900, 2);
+        let mut first = root.fork(&budget, 0);
+        let mut second = root.fork(&budget, 1);
+        let left = first.string("left".into()).unwrap();
+        let right = expression
+            .eval(EvalContext::new(&[], &[]), &mut second)
+            .unwrap();
+        assert_eq!(left, right);
+        let first = first.into_delta();
+        let second = second.into_delta();
+        let first_map = root.merge(first).unwrap();
+        let second_map = root.merge(second).unwrap();
+        let actual = expression
+            .eval(EvalContext::new(&[], &[]), &mut root)
+            .unwrap();
+        assert_eq!(actual, second_map.get(right));
+        assert_ne!(actual, first_map.get(left));
+        assert_eq!(
+            root.portable(actual).unwrap(),
+            Value::String("right".into())
+        );
     }
 }

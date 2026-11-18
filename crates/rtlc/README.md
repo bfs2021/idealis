@@ -75,3 +75,5 @@ nativeのforkでは、rootのdomainが16個以下なら、64 key以下のdomain�
 汎用Scalar列のEXCEPTは、domainとpayloadを借用したviewで更新後の値を検索する。既存の値があればpayloadのcloneとdomain参照の取得を省く。新規の値だけを確保し、同じhashを登録に使う。packed値とpackedへ復帰する更新は既存の経路を使う。hash衝突時はdomainとpayloadを完全比較する。[0057の比較](../../evals/iterations/0057-probe-updates.md)を参照。
 
 packed関数の内部hashはcached domain hash・payload・Bool/Intのsaltをfmix64で混合する。MurmurHash3のpublic domain実装を参照し、公式C++のgolden vectorへ照合する。衝突時はdomain/payloadを完全比較し、hash形式を公開APIへ含めない。[0058の比較](../../evals/iterations/0058-packed-hash.md)を参照。
+
+Data式はprogram内のアドレスからslotを作り、各Arenaで初めて評価が成功したScalarを再利用する。値全体のhashを繰り返さず、未評価分岐や不正値を先に評価しない。失敗はcacheせず、未登録の式は従来の評価を使う。workerのlocal Refはmergeで補正し、別のcheckへcacheを持ち越さない。[0059の比較](../../evals/iterations/0059-prepared-execution.md)を参照。

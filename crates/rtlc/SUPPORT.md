@@ -24,6 +24,8 @@
 
 - [x] packed関数の内部hashはdomain/payload/型saltをfmix64で混合する。公式C++の7出力、固定4,096値の分布、Bool/Intの衝突で完全比較とcanonical identityを検査する。汎用関数のhashと公開Value/IRは維持する。
 
+- [x] immutableなprogramのData式をslotへ登録し、Arenaごとに初回成功後のScalarをcacheする。未評価分岐の値を先に評価せず、失敗・状態依存式をcacheしない。未登録の式は従来の評価へ戻り、workerのlocal Refはmergeでremapする。
+
 ## TLC互換の追加対応
 
 - [x] model valueを文字列と区別して保持・比較し、typed model valueの不正な等価比較を評価エラーにする。portable値のtagはmodel-value。
@@ -45,6 +47,7 @@
 - [ ] TLA+の構文解析・名前解決・IRへのコンパイル、TLC CLI全体の互換性。
 - [ ] 無限状態の完全探索、任意のTLA+構文やSMT理論。TLC互換性の不足とは別に扱う。
 - [ ] Wasm内部の探索マルチスレッド、temporal/fairness探索の内部並列化。
+- [ ] 型別命令VM、訪問済み照合やstate受理の内部並列化。0059の限定した試作は後退があり不採用。
 - [ ] liveness反例の最短性、fairnessを満たすbehaviorの存在の別証明。
 - [ ] このcrate単体のブラウザJSON ABI。Wasm境界はidealis-coreが提供する。
 
@@ -54,4 +57,4 @@
 - [x] workはwall timeや厳密なメモリ上限ではない。並列探索のworkと予算境界の部分結果は逐次と同じとは限らない。
 - [x] 集合foldの文字列・record、関数key幅等の制限を維持する。model valueを含む集合foldも未対応。汎用Valueのvariantの存在だけで対応とは数えない。
 
-[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[関数値](src/safety_functions.rs)、[値の登録・移送](src/safety_values.rs)、[時間的性質](src/temporal.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。
+[README](README.md)、[IR](src/ir.rs)、[探索](src/safety.rs)、[関数値](src/safety_functions.rs)、[値の登録・移送](src/safety_values.rs)、[時間的性質](src/temporal.rs)、[定数の準備](src/safety_prepared.rs)、[並列探索](src/safety_parallel.rs)、[回帰](tests/parallel_safety.rs)、[有限対応の比較入力](../rtla-compiler/tests/finite-support.json)、[対応fragment](../../docs/rust-safety.md)を参照。

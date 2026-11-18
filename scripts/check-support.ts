@@ -97,6 +97,11 @@ const scopes: readonly CrateScope[] = [
         topic: "temporal/fairnessの検査とlasso、保証範囲の区別",
       },
       {
+        path: "src/safety_prepared.rs",
+        topic:
+          "immutableなData式のslot登録、未評価分岐や失敗を先に評価しない定数の準備。状態依存式と型別命令VMは対象外",
+      },
+      {
         path: "src/safety_parallel.rs",
         topic: "native内部並列化の対象、逐次fallback、workerとworkの契約",
       },

@@ -63,54 +63,58 @@
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtlc/src/safety_values.rs",
+      "path": "crates/rtlc/src/safety_prepared.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/rtlc/src/safety_work.rs",
+      "path": "crates/rtlc/src/safety_values.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "crates/rtlc/src/temporal.rs",
+      "path": "crates/rtlc/src/safety_work.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "crates/rtlc/src/value.rs",
+      "path": "crates/rtlc/src/temporal.rs",
       "role": "reference"
     },
     "source19": {
-      "path": "crates/rtlc/tests/coverage-bench.json",
+      "path": "crates/rtlc/src/value.rs",
       "role": "reference"
     },
     "source20": {
-      "path": "crates/rtlc/tests/coverage.rs",
+      "path": "crates/rtlc/tests/coverage-bench.json",
       "role": "reference"
     },
     "source21": {
-      "path": "crates/rtlc/tests/operators.rs",
+      "path": "crates/rtlc/tests/coverage.rs",
       "role": "reference"
     },
     "source22": {
-      "path": "crates/rtlc/tests/parallel_safety.rs",
+      "path": "crates/rtlc/tests/operators.rs",
       "role": "reference"
     },
     "source23": {
-      "path": "crates/rtlc/tests/standalone.rs",
+      "path": "crates/rtlc/tests/parallel_safety.rs",
       "role": "reference"
     },
     "source24": {
-      "path": "crates/rtlc/tests/temporal_sets.rs",
+      "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
     "source25": {
-      "path": "package.json",
+      "path": "crates/rtlc/tests/temporal_sets.rs",
       "role": "reference"
     },
     "source26": {
-      "path": "pnpm-lock.yaml",
+      "path": "package.json",
       "role": "reference"
     },
     "source27": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source28": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -139,7 +143,7 @@
       },
       "context": [
         {
-          "source": "source18"
+          "source": "source19"
         },
         {
           "source": "source10"
@@ -167,7 +171,7 @@
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source17"
+        "source": "source18"
       },
       "target": {
         "source": "source3"
@@ -176,6 +180,18 @@
     },
     {
       "id": "rtlc-implementation-3",
+      "topic": "immutableなData式のslot登録、未評価分岐や失敗を先に評価しない定数の準備。状態依存式と型別命令VMは対象外",
+      "mode": "semantic",
+      "reference": {
+        "source": "source15"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "rtlc-implementation-4",
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
@@ -187,11 +203,11 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-4",
+      "id": "rtlc-implementation-5",
       "topic": "immutable domain共有、Boolと整数の別bit表現、membershipの論理work、worker参照とremap、hash衝突の完全比較",
       "mode": "semantic",
       "reference": {
-        "source": "source15",
+        "source": "source16",
         "contains": "impl<'scope> Arena<'scope>"
       },
       "target": {
