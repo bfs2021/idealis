@@ -1,4 +1,4 @@
-# 0047: operator定義を共有するsafety IR v2
+# 0048: operator定義を共有するsafety IR v2
 
 Issue #60の仮説は、非再帰operatorの定義表とlexical frame付きの遅延引数により、call siteごとの本体・引数の複製とbinder slotの混線を除ける、というもの。共有は値のmemoizationではない。本段階は事前計画だけを追加し、実装、TLCログ採取、評価を行わない。結果を見る前の計画確定は後続のorchestratorが担当し、この作業ではコミットしない。
 
