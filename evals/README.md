@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[0048: operator定義の共有](iterations/0048-operator-sharing.md)は、safety IR v2で式定義を共有する変更を、実装の前に置いた回帰とRedで検査する。既存239入力と追加17入力でv1の出力が変わらないこと、17入力のTLC照合、両frontendの解析の一致（4236件）、深い公開IRの破棄で許す確保の上限を扱う。
+
 [0047: TLA+モジュールと設定置換](iterations/0047-module-linking.md)は、外部EXTENDS・引数なしINSTANCE・LOCAL・WITH・設定置換を扱う。37ケースのnative/Wasm/TLC比較、3反例の再生、Chromiumと17本のCriterionで対応と初期費用を検査した。
 
 [0046: TLCの有限モデル対応](iterations/0046-tlc-finite-support.md)はmodel value、探索制約、有限CHOOSE、整数演算、定数有限domain上の時間論理量化をTLC/native/Wasmへ照合する。既存14本のCriterionと、追加6モデルのcompile/checkを分けた12本で費用を測る。
