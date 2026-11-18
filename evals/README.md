@@ -135,3 +135,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [0056: 関数値と並列domain共有](iterations/0056-compact-functions.md)は、domain共有・64要素のBool/整数bit表現とworker参照を実装し、旧native/Wasm・TLC・tla-tsへ同じ完全探索を比較する。初期候補の並列後退、最終候補の改善と残るWasmの遅さを分けて記録した。
 
 [0057: 重複する関数更新のコピー削減](iterations/0057-probe-updates.md)は、borrowed viewで更新後の既存値を検索する。Aの関数並列の後退、Bのチャネル並列の改善、Wasmに残る差を、同じ条件のbefore/after・TLC・tla-tsで記録した。
+
+[0058: packed関数のhash](iterations/0058-packed-hash.md)は、公式C++のgolden vectorへ照合したfmix64で内部索引を軽くする。functionのnative/Wasmの改善、対照の後退、負荷変動でチャネルの速度判断を見送った条件を記録した。

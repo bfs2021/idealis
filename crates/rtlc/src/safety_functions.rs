@@ -1,7 +1,15 @@
 use crate::ir::Scalar;
-use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
+
+// MurmurHash3 fmix64 by Austin Appleby (public domain).
+fn mix_packed(mut value: u64) -> u64 {
+    value ^= value >> 33;
+    value = value.wrapping_mul(0xff51_afd7_ed55_8ccd);
+    value ^= value >> 33;
+    value = value.wrapping_mul(0xc4ce_b9fe_1a85_ec53);
+    value ^ (value >> 33)
+}
 
 #[derive(Debug)]
 pub(super) struct FunctionDomain {
@@ -275,12 +283,33 @@ impl Hash for Function {
                 }
             }
             Values::Booleans(bits) | Values::BinaryIntegers(bits) => {
-                let mut hash = DefaultHasher::new();
-                matches!(self.values, Values::BinaryIntegers(_)).hash(&mut hash);
-                self.domain.hash.hash(&mut hash);
-                bits.hash(&mut hash);
-                hash.finish().hash(state);
+                let kind = if matches!(self.values, Values::BinaryIntegers(_)) {
+                    0x9e37_79b9_7f4a_7c15
+                } else {
+                    0
+                };
+                mix_packed(self.domain.hash ^ bits ^ kind).hash(state);
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod packed_hash_tests {
+    use super::mix_packed;
+
+    #[test]
+    fn finalizer_matches_upstream_cpp_vectors() {
+        for (input, expected) in [
+            (0, 0),
+            (1, 0xb456_bcfc_34c2_cb2c),
+            (0x8000_0000_0000_0000, 0x8f78_0810_af31_a493),
+            (u64::MAX, 0x64b5_720b_4b82_5f21),
+            (0x0123_4567_89ab_cdef, 0x87cb_fbfe_8902_2cea),
+            (0x9e37_79b9_7f4a_7c15, 0x9ca0_66f1_a4ab_2eea),
+            (0x181c_6c6b_0000_0000, 0x29d3_0c42_04df_2565),
+        ] {
+            assert_eq!(mix_packed(input), expected);
         }
     }
 }

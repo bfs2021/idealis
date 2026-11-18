@@ -1686,3 +1686,65 @@ mod function_probe_tests {
         );
     }
 }
+
+#[cfg(test)]
+mod packed_hash_tests {
+    use super::{Arena, ValueHasher};
+    use crate::ir::Scalar;
+    use std::collections::HashSet;
+    use std::hash::{Hash, Hasher};
+
+    #[test]
+    fn packed_cube_hashes_keep_all_values_and_spread_index_bits() {
+        let mut arena = Arena::new(10000);
+        let mut hashes = HashSet::new();
+        let mut buckets = [0_u16; 256];
+        for bits in 0..4096_u64 {
+            let value = arena
+                .tuple(
+                    (0..12)
+                        .map(|bit| Scalar::Int(((bits >> bit) & 1) as i32))
+                        .collect(),
+                )
+                .unwrap();
+            let mut hasher = ValueHasher::default();
+            arena.cell(value).unwrap().hash(&mut hasher);
+            let hash = hasher.finish();
+            assert!(hashes.insert(hash));
+            buckets[(hash & 255) as usize] += 1;
+        }
+        assert!(buckets.iter().all(|count| *count > 0 && *count <= 64));
+        let zero = arena.tuple(vec![Scalar::Int(0); 64]).unwrap();
+        let mut hashes = HashSet::new();
+        let mut hasher = ValueHasher::default();
+        arena.cell(zero).unwrap().hash(&mut hasher);
+        hashes.insert(hasher.finish());
+        for bit in 0..64 {
+            let changed = arena
+                .replace(zero, &[Scalar::Int(bit + 1)], Scalar::Int(1))
+                .unwrap();
+            let mut hasher = ValueHasher::default();
+            arena.cell(changed).unwrap().hash(&mut hasher);
+            assert!(hashes.insert(hasher.finish()));
+        }
+    }
+
+    #[test]
+    fn an_int_bool_hash_collision_preserves_type_and_canonical_identity() {
+        let mut arena = Arena::new(100);
+        let boolean = arena.tuple(vec![Scalar::Bool(false); 64]).unwrap();
+        let integers = (0..64)
+            .map(|bit| Scalar::Int(((0x9e37_79b9_7f4a_7c15_u64 >> bit) & 1) as i32))
+            .collect::<Vec<_>>();
+        let integer = arena.tuple(integers.clone()).unwrap();
+        let mut boolean_hash = ValueHasher::default();
+        arena.cell(boolean).unwrap().hash(&mut boolean_hash);
+        let mut integer_hash = ValueHasher::default();
+        arena.cell(integer).unwrap().hash(&mut integer_hash);
+        assert_eq!(boolean_hash.finish(), integer_hash.finish());
+        assert_ne!(boolean, integer);
+        assert!(arena.equal(boolean, integer).is_err());
+        assert_eq!(arena.tuple(vec![Scalar::Bool(false); 64]).unwrap(), boolean);
+        assert_eq!(arena.tuple(integers).unwrap(), integer);
+    }
+}

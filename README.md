@@ -107,7 +107,19 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
-## 関数更新最適化後の速度比較
+## packed関数のhash最適化
+
+0058では0/1整数関数N20を完全探索した。共通TS frontendを含む起動込み秒、1 warmup後3回の中央値。Apple M5 arm64、Node 24.22.2、tla-ts 0.0.10で測定した。状態数は1,048,576、生成数は20,971,521で全経路が一致した。
+
+| 実行方式           | 変更前 | 変更後 | 前/後 |
+| ------------------ | -----: | -----: | ----: |
+| native 1 worker    |  3.377 |  3.191 |  1.06 |
+| native 8 workers   |  2.399 |  2.280 |  1.05 |
+| Node Wasm 1 worker |  5.017 |  4.548 |  1.10 |
+
+このfunction条件では、native 8 workersはTLC 8 workers比1.84倍、Wasmはtla-ts比1.12倍だった。チャネル側は参照実装も大きく変動し、今回は速度改善の根拠へ使わない。Criterionのring逐次は所要時間が約8%増えた。[全sample・対照・互換性検査](evals/iterations/0058-packed-hash.md)を参照。Node Wasmの結果はブラウザの速度ではない。
+
+## 0057時点の関数更新の比較
 
 0057の同じrunで、tla-ts・TLC・変更後のidealisを完全探索した。起動と共通TS frontendを含む秒数で、1 warmup後3回の中央値。状態数・生成数は全経路で一致した。
 
@@ -116,7 +128,7 @@ just browser
 | 0/1整数関数 |    5.648 | 13.487 | 4.391 |          5.595 |            3.910 |            2.609 |
 | チャネル群  |   15.829 | 23.260 | 6.341 |         20.541 |           13.670 |            5.531 |
 
-今回の変更前比でチャネルのnative並列探索は1.11倍。逐次とWasmの差は小さく、関数モデルは約1〜2%後退した。チャネルのWasmはtla-tsより約30%遅い。全モデルが速くなる変更とは扱わない。
+0057の変更前比でチャネルのnative並列探索は1.11倍。逐次とWasmの差は小さく、関数モデルは約1〜2%後退した。チャネルのWasmはtla-tsより約30%遅い。全モデルが速くなる変更とは扱わない。
 
 Apple M5 arm64、Node 24.22.2、tla-ts 0.0.10、固定arm64 Java/TLCを使用した。WasmはNode上の値。非専用ホストの負荷変動を含む。[全sample・最小/最大・Criterion・互換性検査](evals/iterations/0057-probe-updates.md)を参照。domain共有とbit圧縮の[前回0056](evals/iterations/0056-compact-functions.md)、下の0022時点の4モデル表は別runで、今回の値と混在させていない。
 

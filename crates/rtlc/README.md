@@ -73,3 +73,5 @@ packed関数と完全に一致する有限rangeでは、domainを確認してか
 nativeのforkでは、rootのdomainが16個以下なら、64 key以下のdomainにworker専用wrapperを使う。候補更新ごとに全workerが同じArcカウンタへ書く費用を避け、merge時にrootのdomainへ戻す。対象外の入力は通常の共有へ戻し、対応する仕様の範囲は変えない。
 
 汎用Scalar列のEXCEPTは、domainとpayloadを借用したviewで更新後の値を検索する。既存の値があればpayloadのcloneとdomain参照の取得を省く。新規の値だけを確保し、同じhashを登録に使う。packed値とpackedへ復帰する更新は既存の経路を使う。hash衝突時はdomainとpayloadを完全比較する。[0057の比較](../../evals/iterations/0057-probe-updates.md)を参照。
+
+packed関数の内部hashはcached domain hash・payload・Bool/Intのsaltをfmix64で混合する。MurmurHash3のpublic domain実装を参照し、公式C++のgolden vectorへ照合する。衝突時はdomain/payloadを完全比較し、hash形式を公開APIへ含めない。[0058の比較](../../evals/iterations/0058-packed-hash.md)を参照。

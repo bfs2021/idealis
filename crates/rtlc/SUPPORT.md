@@ -22,6 +22,8 @@
 
 - [x] 汎用Scalar列の関数更新は、コピー前のborrowed viewでbase/localの既存値を検索する。hash衝突はdomain/payloadを完全比較し、新規の値だけを確保する。packed値とpackedへの復帰、workと深さの検査を維持する。
 
+- [x] packed関数の内部hashはdomain/payload/型saltをfmix64で混合する。公式C++の7出力、固定4,096値の分布、Bool/Intの衝突で完全比較とcanonical identityを検査する。汎用関数のhashと公開Value/IRは維持する。
+
 ## TLC互換の追加対応
 
 - [x] model valueを文字列と区別して保持・比較し、typed model valueの不正な等価比較を評価エラーにする。portable値のtagはmodel-value。
