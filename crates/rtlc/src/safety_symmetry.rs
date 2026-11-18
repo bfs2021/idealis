@@ -270,7 +270,9 @@ impl Symmetry {
                         let shape = arena.scalar_record_shape(entries[0].1)?;
                         for (_, record) in &entries {
                             arena.consume(shape.len())?;
-                            if arena.scalar_record_shape(*record)? != shape {
+                            if *record != entries[0].1
+                                && arena.scalar_record_shape(*record)? != shape
+                            {
                                 return Err(CoreError::protocol(
                                     "Unsupported symmetry: record schema and field types must agree",
                                 ));
@@ -487,6 +489,30 @@ mod tests {
         assert_eq!(error.code, "protocol");
         assert_eq!(error.message, "Incomplete safety state");
         assert_eq!(arena.work - before, 2);
+    }
+
+    #[test]
+    fn identical_records_keep_canonical_and_representative_work() {
+        let mut arena = Arena::new(1000);
+        let symmetry = symmetry(&mut arena);
+        let ready = arena.string("ready".into()).unwrap();
+        let term = arena.string("term".into()).unwrap();
+        let record = arena
+            .function(vec![(ready, Scalar::Bool(false)), (term, Scalar::Int(1))])
+            .unwrap();
+        let nodes = function(&mut arena, &symmetry, [record, record]);
+        let before = arena.work;
+        let key = symmetry.key(&[Some(nodes)], &mut arena).unwrap();
+        assert_eq!(arena.work - before, 11);
+        let before = arena.work;
+        assert_eq!(
+            symmetry
+                .representatives(&[nodes], &symmetry.group, &mut arena)
+                .unwrap(),
+            vec![symmetry.group[0]]
+        );
+        assert_eq!(arena.work - before, 7);
+        assert_eq!(symmetry.key(&[Some(nodes)], &mut arena).unwrap(), key);
     }
 
     #[test]

@@ -127,6 +127,8 @@ compileは常駐native JSONLの要求・IR応答を含む中央値。未選択br
 
 Counterの100 queryでは、準備・破棄込みのnative v1 API時間がone-shot 3.883→batch 0.643 ms、予算を変えるqueryが2.162→0.256 msだった。探索主体のTCommitでは効果が小さく、1件だけの検査にも同じ倍率は当てはまらない。[APIと予算の扱い](docs/prepared-safety.md)、[条件・cold/RSS・後退の確認](evals/iterations/0064-prepared-safety.md)を参照。
 
+過去の評価でのprepared探索は、TLA+コンパイル済みIRのone-shot検査を指す。
+
 ## node関数に限定したSYMMETRY
 
 Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value集合を指定できる。全Nodesをdomainに持つInt/Bool関数の値をnodeごとの行へまとめ、複数関数の相関と具体的な反例を保って状態を同一視する。3ノード・3値のcounterは27状態から10状態へ縮約した。7ノード・6値では279,936→792状態となり、Rust逐次の起動込み中央値は673.5→36.5 ms（約18.5倍）、prepared探索は633.2→3.89 ms（約163倍）だった。この限定したモデルでの結果で、全TLA+への速度保証ではない。
@@ -140,6 +142,10 @@ Rust frontendで、`Symm == Permutations(Nodes)`と単一のuntyped model value�
 起動とcompiled IRのJSON境界を含む別測定では、record N12の代表展開は99.3→84.6 ms、ピークRSSの中央値は12.8→15.2 MiB（1→8 worker）だった。Node計測driverとtime wrapperの費用を含み、Node hostの起動とTLA+ frontendは含まない。小さいPORモデルのwallは6.89→3.70 msで、prepared探索の倍率とは分ける。
 
 0065ではnode行を連続配置し、現在stateのOption列コピーも省いた。変更前後の固定binaryを交互に測る21本のCriterion比較で、SYMMETRYの検査時間を約8〜17%短縮した。record N12の代表展開は1 workerで85.57→71.80 ms、8 workersで73.01→64.41 ms。縮約条件・生成数・論理workは変えず、以前の測定値とは別に比較する。[条件・対照・採否](evals/iterations/0065-symmetry-allocation.md)を参照。
+
+0067では検査済みの先頭recordと同じ内部値に限り、schemaの再構築を省いた。21本の同条件比較で、SYMのrecord 6本が約6.5〜9%短縮した。record N12の代表展開はRustのIR検査で73.40→67.95 ms（1 worker）、63.89→59.49 ms（8 workers）。source compileとIR checkの常駐API区間では77.52→75.51 / 67.22→63.64 msだった。論理workと異なるrecordの検査を維持し、Arenaをまたぐcacheは持たない。[全sample・変動・採否と再開条件](evals/iterations/0067-record-schema.md)を参照。
+
+今回のmicro tuningはprepare/batch、行配置、Ref lookup、同一recordのschema再検査までで区切る。shape cacheやborrowed entriesは新しいprofileで支配費用を確認し、小整数圧縮は既存0/1圧縮で足りない実モデルのRSS制約、worker制御は広いfrontierでの待機・merge費用を示せたときに再開する。[残る候補と再開条件](https://github.com/mizchi/idealis/issues/63)を参照。
 
 ## Data定数のprepared化
 

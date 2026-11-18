@@ -9,3 +9,7 @@
 有用なら21本のSYM/通常14本とsource境界・TLCの対照、必要な全体検査へ広げる。撤去する場合はsafety_symmetry.rsのproduction部分が4587a3eaと同じことを確認し、追加した挙動testとcheck/browser、fmt/clippy、portable、runtime build/test、evaluate/replay、SUPPORT/Jevを確認する。rawは追記のみ。不採用のsource・全sample・論理workの対照を保存する。
 
 これを今回の最後の小さい仮説とする。shape cache・borrowed entries・小整数圧縮・worker制御の拡張は、実モデルで支配費用やRSS制約を示せるまで保留する。残る費用を推測だけで高速化と呼ばず、採否と再開条件をiterationと#69/#63へ記録する。
+
+初回は代表展開で約4〜5%、全展開で約6%短縮した。採否の境界に近いため、同じ固定binary・同じ4本をもう一度ABBAで確認する。全4本を報告し、初回とは混ぜない。全展開の1/8 workerで5%以上の短縮が再現し、代表展開にも後退がなければ、recordのschema検査に限定した改善として次の対照へ進む。
+
+追加4本では約8〜16%短縮したが、初回との幅があるため、21本のSYMと14本の通常kernelへ広げる。source境界は既存driverの8モデル・計12設定、record N12は1 query、他は100 query/sample、1 warmup + 3 samplesで固定する。同じworker設定の旧版完全応答へworkも含めて比較する。小さい単発APIの雑音を避けるため、初回から100回反復を用い、0065の単発値とは混ぜない。

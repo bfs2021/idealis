@@ -77,7 +77,7 @@ const inputs = [
   ...cases("small"),
 ];
 await save("manifest.json", {
-  plan: "0065-symmetry-allocation",
+  plan: process.env.IDEALIS_SYMMETRY_PLAN ?? "0065-symmetry-allocation",
   snapshots,
   inputs,
   bounds,
