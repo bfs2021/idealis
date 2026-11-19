@@ -129,6 +129,14 @@ const scopes: readonly CrateScope[] = [
     name: "rtlc",
     evidence: [
       {
+        path: "src/expansions.rs",
+        contains: "impl SafetyExpansionCache",
+        targetContains: "任意のcheck_incremental",
+        context: ["src/safety.rs"],
+        topic:
+          "同一build・全Next/definition・portable状態の完全展開だけを保持し、SHA-256、保持状態数上限とmerge競合拒否を扱う。property/constraintsの再検査と逐次探索の範囲を維持する",
+      },
+      {
         path: "src/ir.rs",
         topic: "IRの値と式・予算・結果の公開契約",
         context: ["src/value.rs", "src/safety.rs"],
@@ -150,6 +158,13 @@ const scopes: readonly CrateScope[] = [
   {
     name: "idealis-core",
     evidence: [
+      {
+        path: "src/lib.rs",
+        contains: "Request::CheckSafetyIncremental",
+        targetContains: "check-safety-incremental / incremental-safety",
+        topic:
+          "rtlcの状態別Next cacheをnative JSONLとWasmで入出力し、同一namespaceのsnapshot mergeへ委譲する。分散BFSやqueue再開とは区別する",
+      },
       {
         path: "src/lib.rs",
         topic: "Model/Driver effect、照合protocol、TLA検査への委譲",

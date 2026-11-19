@@ -195,4 +195,72 @@ theorem cached_graph_safe {State : Type} (initial : State → Prop)
   intro state reachable
   exact checked state (closed_graph_covers initial next cached roots closed state reachable)
 
+structure ReuseProbe where
+  sameBuild : Bool
+  sameNext : Bool
+  sameState : Bool
+  complete : Bool
+  deriving Lean.FromJson, Lean.ToJson
+
+def reuseExpansion (probe : ReuseProbe) : Bool :=
+  probe.sameBuild && probe.sameState && probe.sameNext && probe.complete
+
+theorem changed_next_not_reused (probe : ReuseProbe) (changed : probe.sameNext = false) :
+    reuseExpansion probe = false := by simp [reuseExpansion, changed]
+
+theorem partial_expansion_not_reused (probe : ReuseProbe) (unfinished : probe.complete = false) :
+    reuseExpansion probe = false := by simp [reuseExpansion, unfinished]
+
+theorem changed_build_not_reused (probe : ReuseProbe) (changed : probe.sameBuild = false) :
+    reuseExpansion probe = false := by simp [reuseExpansion, changed]
+
+theorem different_state_not_reused (probe : ReuseProbe) (changed : probe.sameState = false) :
+    reuseExpansion probe = false := by simp [reuseExpansion, changed]
+
+theorem complete_expansion_reused :
+    reuseExpansion ⟨true, true, true, true⟩ = true := by decide
+
+def memoNext {State : Type} (current stored : State → State → Prop)
+    (enabled : State → Bool) (source target : State) : Prop :=
+  if enabled source then stored source target else current source target
+
+theorem memo_next_exact {State : Type} (current stored : State → State → Prop)
+    (enabled : State → Bool)
+    (sound : ∀ source, enabled source = true → ∀ target, stored source target ↔ current source target) :
+    ∀ source target, memoNext current stored enabled source target ↔ current source target := by
+  intro source target
+  unfold memoNext
+  split
+  next cached => exact sound source cached target
+  next => exact Iff.rfl
+
+theorem reachable_congr {State : Type} (initial : State → Prop)
+    (left right : State → State → Prop)
+    (same : ∀ source target, left source target ↔ right source target) :
+    ∀ state, Reachable initial left state ↔ Reachable initial right state := by
+  intro state
+  constructor
+  · intro reachable
+    induction reachable with
+    | root root => exact .root root
+    | edge _ edge reached => exact .edge reached ((same _ _).mp edge)
+  · intro reachable
+    induction reachable with
+    | root root => exact .root root
+    | edge _ edge reached => exact .edge reached ((same _ _).mpr edge)
+
+theorem memo_reachable_exact {State : Type} (initial : State → Prop)
+    (current stored : State → State → Prop) (enabled : State → Bool)
+    (sound : ∀ source, enabled source = true → ∀ target, stored source target ↔ current source target) :
+    ∀ state, Reachable initial (memoNext current stored enabled) state ↔ Reachable initial current state := by
+  exact reachable_congr initial _ current (memo_next_exact current stored enabled sound)
+
+theorem rechecked_memo_safe {State : Type} (initial property : State → Prop)
+    (current stored : State → State → Prop) (enabled : State → Bool)
+    (sound : ∀ source, enabled source = true → ∀ target, stored source target ↔ current source target)
+    (checked : ∀ state, Reachable initial (memoNext current stored enabled) state → property state) :
+    ∀ state, Reachable initial current state → property state := by
+  intro state reachable
+  exact checked state ((memo_reachable_exact initial current stored enabled sound state).mpr reachable)
+
 end Cache

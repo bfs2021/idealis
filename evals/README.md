@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[Rustの状態展開cache](iterations/cached-expansions.md)は、現在のInit/propertyを再検査し、同一Nextの完全なsuccessor列を再利用する。Leanの追加9定理、実Wasmの16条件、native/Wasm/Chromiumと36区間のCriterionで、効く場合と固定費が上回る場合を分ける。
+
 [完了結果の共有キャッシュ](iterations/verified-cache.md)は、Leanの17定理、TSとの23,606遷移の比較、TLCの故障対照、実SQLite/HTTP/Chromiumで再利用条件を検査する。task単位の任意cacheとして採用し、状態単位のインクリメンタル探索は分けて扱う。
 
 [Quint生成物のv1/v2回帰と測定](iterations/quint-sharing-regression.md)は、6実生成物をnative/Wasm/Chromiumで検査し、TLCへ24結果と反例12件を照合する。42区間のCriterionでは、小さいモデルでv2の固定費が上回る結果も保存する。

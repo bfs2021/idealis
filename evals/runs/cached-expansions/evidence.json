@@ -1,0 +1,61 @@
+{
+  "format": "idealis.expansion-cache-evidence",
+  "version": 1,
+  "base": "d329d47aa",
+  "plans": [
+    "evals/plans/cached-expansions.md",
+    "evals/plans/cached-expansions-tuning.md"
+  ],
+  "proofSourceVersion": "a9f5fcbe896ba01b7022dca47af3e3f6892957d75450040f555d68a1d598b4ca",
+  "scope": "sequential per-state Next reuse with fresh Init/property checking; portable snapshots and merge; no distributed BFS coordinator",
+  "archive": {
+    "path": "evidence.tar.gz",
+    "sha256": "f69fd9d1af4ec78fe6acfc020de65f8c65a352930abc3c8e37fad65b90abace8",
+    "bytes": 1005853,
+    "extract": "tar -xzf evidence.tar.gz",
+    "root": "cached-expansions/"
+  },
+  "records": [
+    {
+      "path": "proof-manifest.json",
+      "sha256": "cafb23bbb3dcc354ee2621b5b7982f40fc1abf1ead195a597daa665436b061cf"
+    },
+    {
+      "path": "proof-result.json",
+      "sha256": "0a9c947410561c9e3019d0b3e6fd8324db12e6d0429846d40a2660500270002a"
+    },
+    {
+      "path": "evaluation.json",
+      "sha256": "a84e6ae691d04a08b8e3a44f60ba45ccc11487b544c110f55cb12e9918ab7a48"
+    },
+    {
+      "path": "replay.json",
+      "sha256": "a84e6ae691d04a08b8e3a44f60ba45ccc11487b544c110f55cb12e9918ab7a48"
+    },
+    {
+      "path": "benchmark-before.json",
+      "sha256": "825257236c5b154c933a44ad291a549efd4748c9fea5e10021d4b6198b113dcc"
+    },
+    {
+      "path": "benchmark-after.json",
+      "sha256": "8027dace4e4c142dc640d27025e88b09bc8bda6360acb730839768f2ebb472c9"
+    },
+    {
+      "path": "tlc-derived.json",
+      "sha256": "ddad448bb52f894c35da81fd6e32ac42e098cc46193b62487267ec03135d0bf7"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "3121c470fccfe5897d39c6d5adcf7481fb623788caa23be0303b43e0583898d9"
+    },
+    {
+      "path": "invalidated-runs.json",
+      "sha256": "32ff377b8a8191d070454a58339d6494332c1e6eb952a82cf60b8af535409ad9"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "38253ab6bce25edf718d890a1bb6d393e68710629a854e3438a480d3b13375ad"
+    }
+  ],
+  "remoteCI": "not run for this local branch"
+}

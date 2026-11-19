@@ -69,6 +69,8 @@ jobs:
       - run: pnpm portable:build
       - run: node --test dist/evals/verified-cache/contract-test.js
       - run: pnpm exec vitest run --config cache-vitest.config.ts
+      - run: node --test dist/evals/cached-expansions/contract-test.js
+      - run: pnpm exec vitest run --config expansions-vitest.config.ts
       - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
       - run: node --test dist/evals/quint-generated/contract-test.js
       - run: node --test dist/evals/frontier-safety/contract-test.js

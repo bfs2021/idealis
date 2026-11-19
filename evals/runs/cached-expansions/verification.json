@@ -1,0 +1,263 @@
+{
+  "status": "complete",
+  "cpu": "Apple M5",
+  "memoryGiB": 32,
+  "scope": "sequential per-state Next memoization, portable snapshots and same-namespace merge; graph/policy proofs, not a whole-Rust proof",
+  "validRuns": {
+    "model": "eval-03",
+    "replay": "replay-03",
+    "proof": "proof-04",
+    "benchmarks": [
+      "benchmark-01",
+      "benchmark-02"
+    ],
+    "tlc": "tlc-derived-64m"
+  },
+  "invalidated": [
+    "eval-01",
+    "replay-01"
+  ],
+  "checks": {
+    "check": "check-final.log",
+    "contract": "contract-final-5.log",
+    "taskCache": "task-cache-test.log",
+    "browser": "browser-2.log",
+    "rtlc": "rtlc-test-tuned.log",
+    "rtlcClippy": "rtlc-clippy-tuned.log",
+    "portable": "portable-test-3.log",
+    "runtime": "runtime-test.log",
+    "cross": "cross-test.log",
+    "package": "package.log",
+    "mutation": "mutation.log",
+    "harness": "evaluate.log",
+    "witnesses": "witness-replay.log",
+    "loop": "loop.log",
+    "loopReplay": "loop-replay.log",
+    "supportLive": "support-sync.log",
+    "supportOffline": "support-offline-final.log",
+    "supportSelfTest": "support-test-2.log",
+    "supportStaged": "support-staged.log",
+    "derivedTlc": "tlc-derived-64m.log"
+  },
+  "remoteCI": "not run",
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "0168311370b2abb827f9882db4e923aaef8a42a377d80bc2d6392dfe62245b86"
+    },
+    {
+      "path": ".jev-lint/checklists/idealis-core.manifest.json",
+      "sha256": "94c382dc8b82c13340cc4d91fa27330555f5b8a29998369c7effca7108daa1dc"
+    },
+    {
+      "path": ".jev-lint/checklists/idealis-core.record.json",
+      "sha256": "20d1dafcdfb1d96e037e0f91b3537fda5de7fcadd9b8e2f6db30ac238de58593"
+    },
+    {
+      "path": ".jev-lint/checklists/idealis-smt.record.json",
+      "sha256": "006cb0da5267d785a9e771942efe24cdac589c90a5d59ea3acd22a4f7fd88831"
+    },
+    {
+      "path": ".jev-lint/checklists/idealis-testing.record.json",
+      "sha256": "d97d7557d07bb89bdfa4d1aecaf2cc78a826e121ddfbcef004f234e525f729d7"
+    },
+    {
+      "path": ".jev-lint/checklists/ralloy.record.json",
+      "sha256": "94df44fe25cdaf410e1abfa2314830a21a6de6f2d296b08082dce7691117bea5"
+    },
+    {
+      "path": ".jev-lint/checklists/rtla-compiler.record.json",
+      "sha256": "3d537b695c6fcae9a9428e43de0cc945fdef09ee0b0b4f633507029cb2439276"
+    },
+    {
+      "path": ".jev-lint/checklists/rtla.record.json",
+      "sha256": "0d279bd4cc107c142ef7b152edf6e87bab14af4b2cc8ad23c90af33775b73691"
+    },
+    {
+      "path": ".jev-lint/checklists/rtlc.manifest.json",
+      "sha256": "ac94f60a94d4bb3bffcc87c20ebd7b659b7deefdd10860461ec338a2eccc543b"
+    },
+    {
+      "path": ".jev-lint/checklists/rtlc.record.json",
+      "sha256": "fafa59ea66de0a5196d4a941d2cf38fe35319a122725825cee62c7d412ecfdd4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a856067bad386ca4f97e47ced96f0defe9fd9d602a066ae584670d7a6eefd55e"
+    },
+    {
+      "path": "crates/idealis-core/Cargo.lock",
+      "sha256": "fcc98ecdeba0863751190af514114c9d5057f9401714d1277df31ba6bd83c286"
+    },
+    {
+      "path": "crates/idealis-core/README.md",
+      "sha256": "5db349337bf98fdad1c622d465bb4d8379f806cdd9c8ed90dd76b8a0465c76a2"
+    },
+    {
+      "path": "crates/idealis-core/SUPPORT.md",
+      "sha256": "ce744f77b91e01635572b8d537cc6123cc45e027900ebaa3dd113598a3d2380b"
+    },
+    {
+      "path": "crates/idealis-core/src/lib.rs",
+      "sha256": "7c3871b742cfdc0354dc8edb897acc39b61da4c4f7af892ba167f596678d00d0"
+    },
+    {
+      "path": "crates/rtla-compiler/Cargo.lock",
+      "sha256": "d1200dd348bd65ae28e2a0e4c6787ba9224c95979641fa63482267cebc4104f1"
+    },
+    {
+      "path": "crates/rtlc/Cargo.lock",
+      "sha256": "dd8ff36d4b7b9f554c56190dc4c04dd5f890f178c465dc40264b928ab558f953"
+    },
+    {
+      "path": "crates/rtlc/Cargo.toml",
+      "sha256": "15d887c5e2599aa4da3808867a91f111a4244b3a19d1914ab61d0addfde0da3e"
+    },
+    {
+      "path": "crates/rtlc/README.md",
+      "sha256": "e38bb2d8956b753dc5734043fb1e932565960407764cfd37a59756f81abfb808"
+    },
+    {
+      "path": "crates/rtlc/SUPPORT.md",
+      "sha256": "b52bed3b9a78e1aff299c30854fd2be1b7b50bd2e4add166d1f067791870a7b6"
+    },
+    {
+      "path": "crates/rtlc/src/expansion_benchmarks.rs",
+      "sha256": "8d75457ad9cb731f5d17e2e25024ad78a756cd73ce3887c9c73822f9c2b7e1bb"
+    },
+    {
+      "path": "crates/rtlc/src/expansions.rs",
+      "sha256": "a61ee6435159877ba2f0a72cd9c285c7dc0c97533bcdb9172a98ea465ca57ec5"
+    },
+    {
+      "path": "crates/rtlc/src/lib.rs",
+      "sha256": "e2f6ee7670baf5bf890328687d2139daef766d46ae5f7a9575147115e66bb235"
+    },
+    {
+      "path": "crates/rtlc/src/safety.rs",
+      "sha256": "1de62d5612c611dd1f4d104585c616c50bfe6e0e87aa004841454c2076720f25"
+    },
+    {
+      "path": "crates/rtlc/src/safety_parallel.rs",
+      "sha256": "33c22ec9b602d35d8976939671aed3551960581e1eb04c502663a0062f0e37ea"
+    },
+    {
+      "path": "crates/rtlc/tests/expansions-fixtures.json",
+      "sha256": "df7ea56fe8e5124d1b1c1abcc05c93bfe5540b799ecff5f210b27a2321cb0e70"
+    },
+    {
+      "path": "crates/rtlc/tests/expansions.rs",
+      "sha256": "dcef6b77d4aa5f9f6c6f947955c2276f43afc54ce2ef441645205fdb514ed93d"
+    },
+    {
+      "path": "docs/check-cache.md",
+      "sha256": "c2ec33b3df566dbbdd6346396db0910ff28a0e99339ce340da69d7613d4d6cf8"
+    },
+    {
+      "path": "docs/safety-expansions.md",
+      "sha256": "e96f39b77c487c5924c197792e12296fef54cf369db029259da680f865f961f7"
+    },
+    {
+      "path": "evals/README.md",
+      "sha256": "f56838ec3c77ff46eec6dbdedc73c35dc7776099dc62d6f9e55e0659882eddf2"
+    },
+    {
+      "path": "evals/cached-expansions/benchmark-replay.ts",
+      "sha256": "262ce78004c6c75fe53ba6e6f38270395b65e580c2cf5e0e858b67ed0b5c8b15"
+    },
+    {
+      "path": "evals/cached-expansions/benchmark.ts",
+      "sha256": "718d4caecb61b373c067bab7419a9a8762927ff48c7019ba89df391da11e1e89"
+    },
+    {
+      "path": "evals/cached-expansions/contract-test.ts",
+      "sha256": "46195273962b36743171b6d5e348da63e05509b11d0a31637d19e44d96cea7eb"
+    },
+    {
+      "path": "evals/cached-expansions/contract.vitest.test.ts",
+      "sha256": "22eced5d7b579dff12e193e9903b45d92b0c5df053fc74cb69a3402ca6f08823"
+    },
+    {
+      "path": "evals/cached-expansions/fixtures.ts",
+      "sha256": "63b75f4743f259760212136ebfc8a18de7961863b6a03bdd96b5102580902fff"
+    },
+    {
+      "path": "evals/cached-expansions/run.ts",
+      "sha256": "c2a2311a215ce3d23045a3823ae35e395e6346d3357aba79be2bf11d2f19d0f8"
+    },
+    {
+      "path": "evals/iterations/cached-expansions.md",
+      "sha256": "1b23c6cca71eee2d081046a0339b29de1ca49c78b4c16888af8fa5bd2127d839"
+    },
+    {
+      "path": "evals/shared-oracle-rust/Cargo.lock",
+      "sha256": "905ff145d5cb9767c10bae392dc805ae225fc660590ceedd9e9bd3801ac2c0c1"
+    },
+    {
+      "path": "evals/verified-cache/formal.ts",
+      "sha256": "5797764a954f1176f2c20a5b2dff95b5d575e959f42aea0a3fbdf98c935ea37f"
+    },
+    {
+      "path": "expansions-vitest.config.ts",
+      "sha256": "61f674c87dbaad3fb59d17c72e132365b7e62a8192bee411c5773540f101eac0"
+    },
+    {
+      "path": "formal/cache/Cache.lean",
+      "sha256": "63180558373234d9482e63021ff47879a31cb19e256644c8dfabdb16bbe27d62"
+    },
+    {
+      "path": "formal/cache/ReuseMain.lean",
+      "sha256": "7f3d3b2b2bf11d129f6fa6f2e051ee9225d29d45c46f8952415124e700f8905e"
+    },
+    {
+      "path": "formal/cache/lakefile.toml",
+      "sha256": "b737c7bf0e3d07cae58484683e677114695c6210c112d36d812ee8c619b7cf33"
+    },
+    {
+      "path": "justfile",
+      "sha256": "9435a3eacf5975a0ea42bcab3e7e51cb687ba3736aad74bb00a824be23616778"
+    },
+    {
+      "path": "scripts/check-support.ts",
+      "sha256": "2bd22cb117a51c84db7dc21b1e69da76fb849305793135845d1898d07e73e826"
+    },
+    {
+      "path": "scripts/package-test.ts",
+      "sha256": "13554bc58bffa3259f57b3fff801906bd6b3eba7aa09a4c10dc12746386d8c2b"
+    },
+    {
+      "path": "src/contracts.ts",
+      "sha256": "27999c5139beb60a6fca26a7fcdaff669dbcbc5f6cb05bfe734d51057aebf3ba"
+    },
+    {
+      "path": "src/portable-wasm.ts",
+      "sha256": "c3cfa165f81da7e1c7aed15a854955eabd8c56f65e797d1397d5561ee33c4173"
+    },
+    {
+      "path": "src/portable.ts",
+      "sha256": "332758e05fa7bfe1799c2a66457611ec7676539ed723471d3a2d29dd1b12a6bd"
+    },
+    {
+      "path": "src/safety-expansions.ts",
+      "sha256": "49e342a1ab8d920c2befaf9ff7654c7906ec9d4275344cc62bf4e331ad5a450d"
+    },
+    {
+      "path": "tests/check-cache-browser-entry.ts",
+      "sha256": "647f8faa7786e53275f6a6579e21b315a2310a1f0c418a9a6eeea86cc810dae4"
+    },
+    {
+      "path": "tests/check-cache-browser.spec.ts",
+      "sha256": "ca589798e42535b7be4da1c2326edf8a60c821f241df2edf834dbb81fb473dc5"
+    },
+    {
+      "path": "tests/expansions-contract.ts",
+      "sha256": "9ef4b08e31975f364eda7fd12761d677f2fa0e5395efc7208bd2d6a8752ff103"
+    }
+  ],
+  "resourceFailures": [
+    "proof-02: ENOSPC",
+    "portable-test: ENOSPC",
+    "tlc-derived: Java default stack overflow"
+  ],
+  "acceptedReferenceStackMiB": 64
+}

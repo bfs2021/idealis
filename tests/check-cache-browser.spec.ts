@@ -100,3 +100,58 @@ test("two fresh browser clients reuse genuine Quint checks through HTTP", async 
     cold.rows.map((row: { outcome: unknown }) => row.outcome),
   );
 });
+
+test("fresh Wasm instances reuse state expansions and recheck changed Quint properties", async ({
+  page,
+}) => {
+  await page.goto(origin);
+  const cold = await page.evaluate(async (inputs) => {
+    const api: unknown = Reflect.get(globalThis, "cacheSuite");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runExpansions" in api) ||
+      typeof api.runExpansions !== "function"
+    )
+      throw new Error("Missing expansion API");
+    return api.runExpansions(inputs);
+  }, models);
+  await page.reload();
+  const warm = await page.evaluate(
+    async ({ inputs, saved }) => {
+      const api: unknown = Reflect.get(globalThis, "cacheSuite");
+      if (
+        typeof api !== "object" ||
+        api === null ||
+        !("runExpansions" in api) ||
+        typeof api.runExpansions !== "function"
+      )
+        throw new Error("Missing expansion API");
+      return api.runExpansions(inputs, saved);
+    },
+    {
+      inputs: models,
+      saved: cold.map(
+        (row: { normal: { cache: unknown } }) => row.normal.cache,
+      ),
+    },
+  );
+  expect(
+    warm.map(
+      (row: { normal: { stats: { hits: number; misses: number } } }) =>
+        row.normal.stats.hits,
+    ),
+  ).toEqual([4, 1, 1, 3, 3, 1]);
+  expect(
+    warm.every(
+      (row: { normal: { stats: { misses: number } } }) =>
+        row.normal.stats.misses === 0,
+    ),
+  ).toBe(true);
+  expect(
+    warm.every(
+      (row: { changed: { result: { status: string } } }) =>
+        row.changed.result.status === "invariant-violation",
+    ),
+  ).toBe(true);
+});

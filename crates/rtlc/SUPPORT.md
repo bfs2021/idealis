@@ -17,6 +17,7 @@
 - [x] nativeのcheck_parallelは1〜256 worker上限を受け取り、適したsafety frontierを並列展開する。
 - [x] 軽いscalar・狭いfrontier・action/temporal property・fairnessは逐次へfallbackする。Wasmは逐次check。
 - [x] Rust rlibとしてnative/Wasmへビルドでき、idealis-coreやparser、外部solverには依存しない。
+- [x] 任意のcheck_incrementalで、同じbuild・Next・全definition・変数順とportable状態について、完了したsuccessor列だけを再利用する。Init・property・constraints・deadlock・temporal/fairnessは毎回検査し、visitedや過去の合否を引き継がない。保持状態数の上限、snapshotのSHA-256検査と同じnamespaceのmerge・競合拒否を扱う。この経路は逐次探索で、分散BFSやcheckpoint再開ではない。
 
 ## TLC互換の追加対応
 

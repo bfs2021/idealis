@@ -1,4 +1,6 @@
 mod bounded_drop;
+mod expansions;
+pub use expansions::{ExpansionStats, IncrementalSafetyResult, SafetyExpansionCache};
 pub mod ir;
 mod safety;
 #[cfg(test)]

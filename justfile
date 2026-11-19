@@ -634,3 +634,28 @@ cache-eval output: portable-build
 cache-replay saved output: portable-build
   pnpm build
   node dist/evals/verified-cache/run.js {{quote(output)}} {{quote(saved)}}
+
+expansion-test: portable-build
+  pnpm build
+  node --test dist/evals/cached-expansions/contract-test.js
+  pnpm exec vitest run --config expansions-vitest.config.ts
+
+expansion-eval output: portable-build
+  pnpm build
+  node dist/evals/cached-expansions/run.js {{quote(output)}}
+
+expansion-replay saved output: portable-build
+  pnpm build
+  node dist/evals/cached-expansions/run.js {{quote(output)}} {{quote(saved)}}
+
+expansion-proof output probes:
+  pnpm build
+  node dist/evals/verified-cache/formal.js {{quote(output)}} {{quote(probes)}}
+
+expansion-bench output baseline:
+  pnpm build
+  node dist/evals/cached-expansions/benchmark.js {{quote(output)}} {{quote(baseline)}}
+
+expansion-bench-replay output:
+  pnpm build
+  node dist/evals/cached-expansions/benchmark-replay.js {{quote(output)}}

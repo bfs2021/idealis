@@ -1,0 +1,835 @@
+{
+  "status": "complete",
+  "rows": [
+    {
+      "name": "Counter",
+      "stage": "uncached",
+      "medianUs": 3.9974756329939964,
+      "lowerUs": 3.915426912033412,
+      "upperUs": 4.023052075176194
+    },
+    {
+      "name": "SetFold",
+      "stage": "uncached",
+      "medianUs": 4.437711974344136,
+      "lowerUs": 4.4147170913938485,
+      "upperUs": 4.476478009259259
+    },
+    {
+      "name": "SequenceFold",
+      "stage": "uncached",
+      "medianUs": 5.507009948979592,
+      "lowerUs": 5.47229204324587,
+      "upperUs": 5.6779887755102045
+    },
+    {
+      "name": "Choice",
+      "stage": "uncached",
+      "medianUs": 3.473238566805363,
+      "lowerUs": 3.428815072815534,
+      "upperUs": 3.5359752157497306
+    },
+    {
+      "name": "Match",
+      "stage": "uncached",
+      "medianUs": 23.06679694323144,
+      "lowerUs": 23.007628820960697,
+      "upperUs": 23.210213973799128
+    },
+    {
+      "name": "NestedFold",
+      "stage": "uncached",
+      "medianUs": 12.27661632751938,
+      "lowerUs": 12.137548837209302,
+      "upperUs": 12.951658430232557
+    },
+    {
+      "name": "derived-fold-16",
+      "stage": "uncached",
+      "medianUs": 15.432599285714284,
+      "lowerUs": 15.195892857142857,
+      "upperUs": 16.53883342857143
+    },
+    {
+      "name": "derived-fold-256",
+      "stage": "uncached",
+      "medianUs": 85.21912421875,
+      "lowerUs": 84.23939285714286,
+      "upperUs": 88.80910069444444
+    },
+    {
+      "name": "derived-fold-4096",
+      "stage": "uncached",
+      "medianUs": 1213.2349125,
+      "lowerUs": 1182.962557142857,
+      "upperUs": 1239.8640333333333
+    },
+    {
+      "name": "Counter",
+      "stage": "cold",
+      "medianUs": 20.48604320520581,
+      "lowerUs": 20.061632944915253,
+      "upperUs": 20.887358757062145
+    },
+    {
+      "name": "SetFold",
+      "stage": "cold",
+      "medianUs": 10.607962308920829,
+      "lowerUs": 10.575496919917866,
+      "upperUs": 10.72676026694045
+    },
+    {
+      "name": "SequenceFold",
+      "stage": "cold",
+      "medianUs": 13.895145613456465,
+      "lowerUs": 13.63492231017297,
+      "upperUs": 14.15626693051891
+    },
+    {
+      "name": "Choice",
+      "stage": "cold",
+      "medianUs": 16.017397935779815,
+      "lowerUs": 15.950590978593272,
+      "upperUs": 16.494803601766904
+    },
+    {
+      "name": "Match",
+      "stage": "cold",
+      "medianUs": 97.20260803571428,
+      "lowerUs": 95.89243456632653,
+      "upperUs": 98.15852281746032
+    },
+    {
+      "name": "NestedFold",
+      "stage": "cold",
+      "medianUs": 26.701534131205673,
+      "lowerUs": 26.4661875,
+      "upperUs": 26.97954997783688
+    },
+    {
+      "name": "derived-fold-16",
+      "stage": "cold",
+      "medianUs": 35.13312204301075,
+      "lowerUs": 34.71295944700461,
+      "upperUs": 35.9540853046595
+    },
+    {
+      "name": "derived-fold-256",
+      "stage": "cold",
+      "medianUs": 110.81756326530612,
+      "lowerUs": 109.882125,
+      "upperUs": 113.60379260204083
+    },
+    {
+      "name": "derived-fold-4096",
+      "stage": "cold",
+      "medianUs": 1243.21297,
+      "lowerUs": 1227.06875,
+      "upperUs": 1254.0730416666665
+    },
+    {
+      "name": "Counter",
+      "stage": "warm",
+      "medianUs": 7.995204872646733,
+      "lowerUs": 7.872317898671096,
+      "upperUs": 8.15257926356589
+    },
+    {
+      "name": "SetFold",
+      "stage": "warm",
+      "medianUs": 8.421442786738353,
+      "lowerUs": 8.374658387096773,
+      "upperUs": 8.541969858870967
+    },
+    {
+      "name": "SequenceFold",
+      "stage": "warm",
+      "medianUs": 10.952871858116042,
+      "lowerUs": 10.903684196617336,
+      "upperUs": 11.044917230443975
+    },
+    {
+      "name": "Choice",
+      "stage": "warm",
+      "medianUs": 6.888014227086184,
+      "lowerUs": 6.722637482900137,
+      "upperUs": 7.184830369357045
+    },
+    {
+      "name": "Match",
+      "stage": "warm",
+      "medianUs": 48.7458024691358,
+      "lowerUs": 47.36217650462964,
+      "upperUs": 50.29825972222223
+    },
+    {
+      "name": "NestedFold",
+      "stage": "warm",
+      "medianUs": 24.341150840486407,
+      "lowerUs": 23.679291630901286,
+      "upperUs": 25.061686695278972
+    },
+    {
+      "name": "derived-fold-16",
+      "stage": "warm",
+      "medianUs": 20.74892957130359,
+      "lowerUs": 20.617666092519684,
+      "upperUs": 20.830130483689537
+    },
+    {
+      "name": "derived-fold-256",
+      "stage": "warm",
+      "medianUs": 20.462009950926934,
+      "lowerUs": 20.23137919847328,
+      "upperUs": 21.072519083969468
+    },
+    {
+      "name": "derived-fold-4096",
+      "stage": "warm",
+      "medianUs": 20.287418631178706,
+      "lowerUs": 20.216213267246065,
+      "upperUs": 20.322894803548795
+    },
+    {
+      "name": "Counter",
+      "stage": "snapshot",
+      "medianUs": 29.620691477272725,
+      "lowerUs": 26.61241123737374,
+      "upperUs": 56.48565974025974
+    },
+    {
+      "name": "SetFold",
+      "stage": "snapshot",
+      "medianUs": 13.028522590361446,
+      "lowerUs": 12.937131325301205,
+      "upperUs": 13.178512891566264
+    },
+    {
+      "name": "SequenceFold",
+      "stage": "snapshot",
+      "medianUs": 15.99880105105105,
+      "lowerUs": 15.967453787120453,
+      "upperUs": 16.041744744744744
+    },
+    {
+      "name": "Choice",
+      "stage": "snapshot",
+      "medianUs": 21.043066066796367,
+      "lowerUs": 20.925786964980542,
+      "upperUs": 21.14078579766537
+    },
+    {
+      "name": "Match",
+      "stage": "snapshot",
+      "medianUs": 118.05332754629629,
+      "lowerUs": 114.39984375,
+      "upperUs": 122.80605115327381
+    },
+    {
+      "name": "NestedFold",
+      "stage": "snapshot",
+      "medianUs": 31.47015931372549,
+      "lowerUs": 30.806022689075633,
+      "upperUs": 33.52159607843137
+    },
+    {
+      "name": "derived-fold-16",
+      "stage": "snapshot",
+      "medianUs": 34.60162166591321,
+      "lowerUs": 34.435719936708864,
+      "upperUs": 34.89841772151898
+    },
+    {
+      "name": "derived-fold-256",
+      "stage": "snapshot",
+      "medianUs": 37.96044812362032,
+      "lowerUs": 36.95226269315673,
+      "upperUs": 39.16409644039735
+    },
+    {
+      "name": "derived-fold-4096",
+      "stage": "snapshot",
+      "medianUs": 33.89522587025317,
+      "lowerUs": 33.79054588607595,
+      "upperUs": 34.105028902953585
+    }
+  ],
+  "files": [
+    {
+      "path": "raw/uncached/Counter/benchmark.json",
+      "sha256": "e1fc3b37dfee5ef7a597a8ec4297579f3ef81f9cbf1af0dca04e41a39ed21756"
+    },
+    {
+      "path": "raw/uncached/Counter/estimates.json",
+      "sha256": "f270c80fdc129092dc817fd7d9f3e6b36da7380fda0e2d2e40dd167b10b09689"
+    },
+    {
+      "path": "raw/uncached/Counter/sample.json",
+      "sha256": "d07092709f378000e49848e6cf9498a9953e2615d2bfdcbce1cb311d92982c6a"
+    },
+    {
+      "path": "raw/uncached/Counter/tukey.json",
+      "sha256": "c34a1fce64bd36b43199912544c679e93f5879819ce35bd57b389d731729946d"
+    },
+    {
+      "path": "raw/uncached/SetFold/benchmark.json",
+      "sha256": "f7545b36ea237fe20a2ac8a928c955300615d08c7882e3cdbf24a701270c9cba"
+    },
+    {
+      "path": "raw/uncached/SetFold/estimates.json",
+      "sha256": "5c595b26a88c22b48ea89541b37180e1cb79d24915eaecaa0a908a9b419f2d17"
+    },
+    {
+      "path": "raw/uncached/SetFold/sample.json",
+      "sha256": "e27f8d74ac03394409e4a5f66d0a315ba55a3dffab4e4bf0693e74d50e67a902"
+    },
+    {
+      "path": "raw/uncached/SetFold/tukey.json",
+      "sha256": "db4a6b59fd491bdd2508cacc9edfcaa3e31bb8e6a1d6342d36940ceee87449ee"
+    },
+    {
+      "path": "raw/uncached/SequenceFold/benchmark.json",
+      "sha256": "5932d8a335a257c2474585721085222cdc4209e3aedebc4e1fa662985ed9bbb6"
+    },
+    {
+      "path": "raw/uncached/SequenceFold/estimates.json",
+      "sha256": "312cce91c0d40676ce573511e992cf394dcdb0a524caa231bb68cf109dfdda1e"
+    },
+    {
+      "path": "raw/uncached/SequenceFold/sample.json",
+      "sha256": "bde7a6013392efeac1ffbf9b6e1fd199597a75b0c9c0f3d8cec1348da41863c1"
+    },
+    {
+      "path": "raw/uncached/SequenceFold/tukey.json",
+      "sha256": "c0138d61b15759e9fb47107f09ada42456c909338887a778a9880c1b91a73fc5"
+    },
+    {
+      "path": "raw/uncached/Choice/benchmark.json",
+      "sha256": "dde65a4d25fe976b5415a801b63f4261f4d660571031b54fcbf8af9fe3014ea4"
+    },
+    {
+      "path": "raw/uncached/Choice/estimates.json",
+      "sha256": "cfda76d2f3d5cc58680474d870c42f3b45779de3a1ccad46114f0e8bf6a9d51e"
+    },
+    {
+      "path": "raw/uncached/Choice/sample.json",
+      "sha256": "1f2144d594b8416dd15f7cb4a5e727137ee0e82531dcbb797223452a171ded81"
+    },
+    {
+      "path": "raw/uncached/Choice/tukey.json",
+      "sha256": "d69b831b5012191919c8bc015b08919af92ae84cc01c7a37c39ee2c4aaaf551e"
+    },
+    {
+      "path": "raw/uncached/Match/benchmark.json",
+      "sha256": "a91c6fbf3f04f7c4ada28a15eb3a0a993b9d2375c9ef1267049fd2a7280c0d31"
+    },
+    {
+      "path": "raw/uncached/Match/estimates.json",
+      "sha256": "3e7ec9610d39e26b234a2ba78edfd8bfd47bbc254d3b3c2009c52052d972eac3"
+    },
+    {
+      "path": "raw/uncached/Match/sample.json",
+      "sha256": "94283b89a06c9d1019d20cb1ea7f78f683dd88f0d3989cc273ca76883f6e8f2c"
+    },
+    {
+      "path": "raw/uncached/Match/tukey.json",
+      "sha256": "8a9afccc09f90f4914312c46d24d4c9cb01add2152d3a6da50900997b71c7242"
+    },
+    {
+      "path": "raw/uncached/NestedFold/benchmark.json",
+      "sha256": "3fe9b0e4c2e5d36571ab36622e1b33f472b2d260d4a0d1fab1d0cdbdc2881a68"
+    },
+    {
+      "path": "raw/uncached/NestedFold/estimates.json",
+      "sha256": "d61df17492ae18220d59d87ad251ec153efee4313bebaa0bf28065f38d0c3dce"
+    },
+    {
+      "path": "raw/uncached/NestedFold/sample.json",
+      "sha256": "de1a64a33ec8a6de4f949f76e6bed96c4cd869617e7cebceb62f07b049feb026"
+    },
+    {
+      "path": "raw/uncached/NestedFold/tukey.json",
+      "sha256": "1d948c190a6f0f3a913e1f88e3ff3b6ab3ec315b49ac4512b47e5b12e5bace03"
+    },
+    {
+      "path": "raw/uncached/derived-fold-16/benchmark.json",
+      "sha256": "226a996071f4a73e806387c2e99ce8b3a625076f0ffb3debd24a8ce021beb60b"
+    },
+    {
+      "path": "raw/uncached/derived-fold-16/estimates.json",
+      "sha256": "105780b1a2ed133ac7214a4fcc5adab377def96174e61150d22a8aeebba7bf19"
+    },
+    {
+      "path": "raw/uncached/derived-fold-16/sample.json",
+      "sha256": "e8ec3fa8171db91cf485511fe8c7a4a656bbd47e108876609a0916c596877dc1"
+    },
+    {
+      "path": "raw/uncached/derived-fold-16/tukey.json",
+      "sha256": "202ecccec90a11a9a2f742ae36ae613eb2da3bed99207b47326b028a7fc661bb"
+    },
+    {
+      "path": "raw/uncached/derived-fold-256/benchmark.json",
+      "sha256": "c02bfeca61d21954ebd0550dedcd3861ec000d8a5d76a44a2fecb8489937438f"
+    },
+    {
+      "path": "raw/uncached/derived-fold-256/estimates.json",
+      "sha256": "373326d86025d3960bffb9d8de332a67fb2dda1c0011e15ad7e4d8a25a82446b"
+    },
+    {
+      "path": "raw/uncached/derived-fold-256/sample.json",
+      "sha256": "a7fe761abf2db864b45dc31e28052a033e4757b100074e320e2c54e29531f85f"
+    },
+    {
+      "path": "raw/uncached/derived-fold-256/tukey.json",
+      "sha256": "aa7457d6ef2546eb601a5c04bd1758bfe28de90ff420801e21f4f9893ea975ba"
+    },
+    {
+      "path": "raw/uncached/derived-fold-4096/benchmark.json",
+      "sha256": "ec7c7f5a0c9bb86f32af0133700a498f2dda7c634bd9ac8e3bb785a0ee5ceb71"
+    },
+    {
+      "path": "raw/uncached/derived-fold-4096/estimates.json",
+      "sha256": "c4aec604d1858117b4d1ec3ec06e1594f407e358863da27b43853961b578d849"
+    },
+    {
+      "path": "raw/uncached/derived-fold-4096/sample.json",
+      "sha256": "fb5c56e42febf742510ea72b019be82584de2d2cef640857d4a515beed0a29cd"
+    },
+    {
+      "path": "raw/uncached/derived-fold-4096/tukey.json",
+      "sha256": "e90570b7f9e9673724e9335de717628e4ecd552a447ef4fce9c27c09b6793495"
+    },
+    {
+      "path": "raw/cold/Counter/benchmark.json",
+      "sha256": "447e86bb07427d460320b7595fa8ab2697176a7370fa44fa378a7396895ad026"
+    },
+    {
+      "path": "raw/cold/Counter/estimates.json",
+      "sha256": "5aea27d36fce95edba516ae289c8863a8ca1c65b6459850cff8c42c4e3d31604"
+    },
+    {
+      "path": "raw/cold/Counter/sample.json",
+      "sha256": "e5d88a7891444eb3cc487dbcb765436030c0c599600b668a21144df41c70c918"
+    },
+    {
+      "path": "raw/cold/Counter/tukey.json",
+      "sha256": "37695381839ff9bfdfec59ad740a2e39485091079a6121296833b27b5da42675"
+    },
+    {
+      "path": "raw/cold/SetFold/benchmark.json",
+      "sha256": "fb8152ad586cc4f80c3461749367387a4557ea36921ad6106036c3f0a0b2cb5d"
+    },
+    {
+      "path": "raw/cold/SetFold/estimates.json",
+      "sha256": "3ded99c641418c6dfbc4be5008403dd344b7df9e4f09bd3ece72706b0183ca93"
+    },
+    {
+      "path": "raw/cold/SetFold/sample.json",
+      "sha256": "7d8579714a966e9c00e9b9f5c8726d646e6e229de0ee4f8722501d2375cc4b10"
+    },
+    {
+      "path": "raw/cold/SetFold/tukey.json",
+      "sha256": "8c6447091c1971caf6dc8129d6b6bc77543bc45e7d0453f49035e000a76f1664"
+    },
+    {
+      "path": "raw/cold/SequenceFold/benchmark.json",
+      "sha256": "fb9fd1d3e8aabcf44f001349144eda09f53e798e12f668a0bf2b57b3d40deffd"
+    },
+    {
+      "path": "raw/cold/SequenceFold/estimates.json",
+      "sha256": "beac0897b816540ce33bcdcc9d47404f3096d39ce707bbadfdca1f0c38aa51a8"
+    },
+    {
+      "path": "raw/cold/SequenceFold/sample.json",
+      "sha256": "195cb3a700b70aacc8b9f9e58796d98d1e829dca9fd1b321c5c839ad19828cb1"
+    },
+    {
+      "path": "raw/cold/SequenceFold/tukey.json",
+      "sha256": "f27c3ab74e297c499d1c23679f7e2ce88395e98d0e582f99265e07b5289c6f07"
+    },
+    {
+      "path": "raw/cold/Choice/benchmark.json",
+      "sha256": "5db18ab157b5480263b3cf502591442b65924a9ddb972ac515a7eebc8a9d2ca4"
+    },
+    {
+      "path": "raw/cold/Choice/estimates.json",
+      "sha256": "7e89bba53133b44d42c307927f7688fc668bf6a6f21d04a2c38b4efe9577e50e"
+    },
+    {
+      "path": "raw/cold/Choice/sample.json",
+      "sha256": "1ed5c7dd022c08e7b079fe2489db938157f99115c76d8f25a035412edd3ae13a"
+    },
+    {
+      "path": "raw/cold/Choice/tukey.json",
+      "sha256": "ba583dc15893212fc24b3fa1ba64ed6293f501e44a1db31577f9bfdb03d87732"
+    },
+    {
+      "path": "raw/cold/Match/benchmark.json",
+      "sha256": "b315fea7e6028b5f43c10c5de18840c30dbd330b6e99231ca7fe84aa24ea6648"
+    },
+    {
+      "path": "raw/cold/Match/estimates.json",
+      "sha256": "cc2160ef1bc965270a562288c2ecc30369fa707afe3e245ca630d95cdfd08d36"
+    },
+    {
+      "path": "raw/cold/Match/sample.json",
+      "sha256": "c4e3c6d5b366731744690cbd2d45869a730f23d9e3bca45ef2509837c64c6f23"
+    },
+    {
+      "path": "raw/cold/Match/tukey.json",
+      "sha256": "14828cc38c2a9a24ed1c03e63bdcb64c5329fffad177e5f3bc4224a8e45ce23c"
+    },
+    {
+      "path": "raw/cold/NestedFold/benchmark.json",
+      "sha256": "79371d3f902fe6187f69052a39cc526a94349701a9df5a363c904bdb69550fcd"
+    },
+    {
+      "path": "raw/cold/NestedFold/estimates.json",
+      "sha256": "98a339f9e14c7bfb527252f9e1e70e893dbd4cd6259ab24ec6b9398713df6ca1"
+    },
+    {
+      "path": "raw/cold/NestedFold/sample.json",
+      "sha256": "4a28ade63cd4e9a29483b4a778ab58f23efb23e37a4a75dc0f56f7335562f587"
+    },
+    {
+      "path": "raw/cold/NestedFold/tukey.json",
+      "sha256": "548e30fe7bfbdc3aced3b7c3caaa38895006bdfa2291ffdc37a8962b53788325"
+    },
+    {
+      "path": "raw/cold/derived-fold-16/benchmark.json",
+      "sha256": "989927e224b50f5a2be3bf9e37abc8599862c34896b827bf2ecbd38a1f2334b0"
+    },
+    {
+      "path": "raw/cold/derived-fold-16/estimates.json",
+      "sha256": "c1341f7f3cac58309918178f9727a7ffb5a183fee9ae5b4039212dec8c135169"
+    },
+    {
+      "path": "raw/cold/derived-fold-16/sample.json",
+      "sha256": "1c486425649b076faf8686b168cf1ee29d2cced7e0bba363643a9d055fccf98a"
+    },
+    {
+      "path": "raw/cold/derived-fold-16/tukey.json",
+      "sha256": "48cfacdaaffa4902e0016c00f8a10cb66236cd515c78c0dddd44911b94c918f3"
+    },
+    {
+      "path": "raw/cold/derived-fold-256/benchmark.json",
+      "sha256": "ece3e551ff405ac3e587abc5d0d7871956fae9a90f8ee1eef5aa8994636f66c2"
+    },
+    {
+      "path": "raw/cold/derived-fold-256/estimates.json",
+      "sha256": "610236d956b5d6b3ab7c147c2fcf44b22744f0d5b9768d60e83270d0659c560c"
+    },
+    {
+      "path": "raw/cold/derived-fold-256/sample.json",
+      "sha256": "065a21f768eff8e03e2e8d602462248ee9be98553660346f4e97fad3bd7369da"
+    },
+    {
+      "path": "raw/cold/derived-fold-256/tukey.json",
+      "sha256": "3c6775816c3c0c92a9225a25a8b1077cb638615aa6d2667e76fece5d9185ab05"
+    },
+    {
+      "path": "raw/cold/derived-fold-4096/benchmark.json",
+      "sha256": "6438ac85d11753a1fc11e26425d32cc90d34470070e20e8e82f9c5d3047e39ff"
+    },
+    {
+      "path": "raw/cold/derived-fold-4096/estimates.json",
+      "sha256": "ff0f02895c4141c90595d9054bd0c34d2e913babc6a63730fddc763dc2e7087c"
+    },
+    {
+      "path": "raw/cold/derived-fold-4096/sample.json",
+      "sha256": "cd3f2a55a33e8247bef44d626ce9bf8c134e62faccc16b5b9a10483f091c19c0"
+    },
+    {
+      "path": "raw/cold/derived-fold-4096/tukey.json",
+      "sha256": "5a40e6f170929f9cc1ee525b3fbda681b4e2da68aa881a672afbea1162075bcd"
+    },
+    {
+      "path": "raw/warm/Counter/benchmark.json",
+      "sha256": "03e7be2d288c597c5b6d0a8adf794302a5fbe7e7a6f097769f28cdb44310346e"
+    },
+    {
+      "path": "raw/warm/Counter/estimates.json",
+      "sha256": "79505ff7335f7e83a3f805dde9fff83705c3bff829796d5e2270fdbee073c4d6"
+    },
+    {
+      "path": "raw/warm/Counter/sample.json",
+      "sha256": "95f9d2738c8787154c01732eed73b51d7548d58c9a51549e8856ab63b5cfae32"
+    },
+    {
+      "path": "raw/warm/Counter/tukey.json",
+      "sha256": "4f33be9831617621b4ac1094e6235ad9813d6327b87a9391bc059e0b0996652b"
+    },
+    {
+      "path": "raw/warm/SetFold/benchmark.json",
+      "sha256": "2fb3230267b4eb23f94195ec53158eaa7357a24d7f5db67a126c04f65fc234d4"
+    },
+    {
+      "path": "raw/warm/SetFold/estimates.json",
+      "sha256": "cfb63ee0bec23cd241cd6f50d5580a6fe9fa8fc3125e031293a2be6366f99f32"
+    },
+    {
+      "path": "raw/warm/SetFold/sample.json",
+      "sha256": "a638a06d16a1eb9669d7bddebb8de57af0e5d0ef555996adaf9b40232ee65fc6"
+    },
+    {
+      "path": "raw/warm/SetFold/tukey.json",
+      "sha256": "a22ffc2e5cffa3357145bab565afd22c564c7a51479e64b38a465ca158e7eadf"
+    },
+    {
+      "path": "raw/warm/SequenceFold/benchmark.json",
+      "sha256": "423a5b0cb3e41ea107432965b0e895bb8ba2d8e0fa108d33abeb7031e4124090"
+    },
+    {
+      "path": "raw/warm/SequenceFold/estimates.json",
+      "sha256": "c517021fe5c4f320c239a3c5f1f557fbd956b4f0efa88cdb5923ffc080c5bc11"
+    },
+    {
+      "path": "raw/warm/SequenceFold/sample.json",
+      "sha256": "db81943a591c65fb5c8482ce9e66ff03548e71a139a0d190cfbff21f390e08e5"
+    },
+    {
+      "path": "raw/warm/SequenceFold/tukey.json",
+      "sha256": "cde3773c5c9ee1a93e27eeea003c9323040c8b3107bc25b490ad1ba145e1d8f6"
+    },
+    {
+      "path": "raw/warm/Choice/benchmark.json",
+      "sha256": "560ccf4f1017cda9e3ed1517c9a291487d22a6b2ddbdf3ed7329c3fb71670b99"
+    },
+    {
+      "path": "raw/warm/Choice/estimates.json",
+      "sha256": "c0620fcce2a0c80874ca876dab5a7c46d0620f61f8425c1127ba79ec821665b9"
+    },
+    {
+      "path": "raw/warm/Choice/sample.json",
+      "sha256": "b75672ae3ada540136fef32d4286013a3ba64dd820f48cc41b7ea60714e600f6"
+    },
+    {
+      "path": "raw/warm/Choice/tukey.json",
+      "sha256": "9c31e794b59db7950e6e73dd2a5c80eadbca8ade7c7c6fe27115a18b33bc0d38"
+    },
+    {
+      "path": "raw/warm/Match/benchmark.json",
+      "sha256": "31cbfc98e6d889eb26c9328e536e781a03f444142711d2e34c8cc836be34f469"
+    },
+    {
+      "path": "raw/warm/Match/estimates.json",
+      "sha256": "3a82a2429f80590a61137e7a98ade0e85947df8b9a88841381f57317a7410054"
+    },
+    {
+      "path": "raw/warm/Match/sample.json",
+      "sha256": "4d5dbfc8b80c90e4fb08be4655d2dc32fa45f176325f79d8b7df27fb0182bc93"
+    },
+    {
+      "path": "raw/warm/Match/tukey.json",
+      "sha256": "f3a7961b1ec2c43b10f64bde671bc91c1cdc9c02162802b0097871395173a50c"
+    },
+    {
+      "path": "raw/warm/NestedFold/benchmark.json",
+      "sha256": "26b4d1ccdc507b73c0c39133301718a9da11828da81f8122d68d29e672642262"
+    },
+    {
+      "path": "raw/warm/NestedFold/estimates.json",
+      "sha256": "99f0dfb7cff62d5df2ab472261150696ff87d2e47a563477053b70e08a882f5d"
+    },
+    {
+      "path": "raw/warm/NestedFold/sample.json",
+      "sha256": "c8d30337c323e635d86f0835bc84ddcc7263b2c5b87cf4b4578bff7016748ebf"
+    },
+    {
+      "path": "raw/warm/NestedFold/tukey.json",
+      "sha256": "2c4a89a9c53a6035306ff1c02693cb9d38867e50f0d55c05de37d421c02f604b"
+    },
+    {
+      "path": "raw/warm/derived-fold-16/benchmark.json",
+      "sha256": "928e965f528bd39a604d921e5d757e45f776c9d57f43c82bcd46802528db61c7"
+    },
+    {
+      "path": "raw/warm/derived-fold-16/estimates.json",
+      "sha256": "d216effb5d63381d3a00f5d4055b4dd0ea14da66bd61a7c0b5b79299fd30d33c"
+    },
+    {
+      "path": "raw/warm/derived-fold-16/sample.json",
+      "sha256": "df73ef5a1140fc1e661641550a39b8dd83055eae4dc93b8582bee1b4985a1dfc"
+    },
+    {
+      "path": "raw/warm/derived-fold-16/tukey.json",
+      "sha256": "e8eb50cb0fea320357e53fa09bc73225e47876aa4fce6037be52c8f5a6f035ea"
+    },
+    {
+      "path": "raw/warm/derived-fold-256/benchmark.json",
+      "sha256": "8b33d56c62b16727828ca5cde4189f8999cf44f916aeffc88ad67303e3de01e8"
+    },
+    {
+      "path": "raw/warm/derived-fold-256/estimates.json",
+      "sha256": "328421cddbd524608b173cdfbb4384be331efb7647bd15613a6e0589d4fcf9b4"
+    },
+    {
+      "path": "raw/warm/derived-fold-256/sample.json",
+      "sha256": "49b2b29611e992fb8e75140f44631af73985f8f109e92fe0e7423043218dd112"
+    },
+    {
+      "path": "raw/warm/derived-fold-256/tukey.json",
+      "sha256": "682dfe5d1fdde3e63486a1a2318180d314e025e73404802124c5badcea2034f7"
+    },
+    {
+      "path": "raw/warm/derived-fold-4096/benchmark.json",
+      "sha256": "d49536be1eac59c063154cdbd67f09353400a044d6d0915e464977ec21a0f058"
+    },
+    {
+      "path": "raw/warm/derived-fold-4096/estimates.json",
+      "sha256": "c14789947cc9035e19ec60b43eb5c3b54ca5bec90e46c665881881a8bc62402e"
+    },
+    {
+      "path": "raw/warm/derived-fold-4096/sample.json",
+      "sha256": "561e0cc16df1d1775cd21d4de6e4a486e39137bad0bce0c16c5c5337af4dbd8c"
+    },
+    {
+      "path": "raw/warm/derived-fold-4096/tukey.json",
+      "sha256": "b2ce5e7fc86c87e64b6df781aaacebdc3af7a6007a64b006da8248d2cad193c8"
+    },
+    {
+      "path": "raw/snapshot/Counter/benchmark.json",
+      "sha256": "f3ee3c78167100b45dc5d320f6b130ecece5fc431d764a575880dff81975d8b2"
+    },
+    {
+      "path": "raw/snapshot/Counter/estimates.json",
+      "sha256": "a818baf892159231bd0ebd0e7f3b299676a281afb1daa142a416fee7109a2e90"
+    },
+    {
+      "path": "raw/snapshot/Counter/sample.json",
+      "sha256": "7e8ddd4852c7c60b64383a68c63fe01fa433dfc497999761962fa794ec04eddd"
+    },
+    {
+      "path": "raw/snapshot/Counter/tukey.json",
+      "sha256": "fc855cd7b665077a93c22d917c2e9330ec6302bd9dfbb8b28fe5cd3af4a74079"
+    },
+    {
+      "path": "raw/snapshot/SetFold/benchmark.json",
+      "sha256": "13fdbb43b88d38fc63eb3ab18fa295fea5568b58ab339b19cad896bc279df92b"
+    },
+    {
+      "path": "raw/snapshot/SetFold/estimates.json",
+      "sha256": "a126db40e07f2f11f4db55cb192fd61956d9b4c84bdd150131411b4afe5daa67"
+    },
+    {
+      "path": "raw/snapshot/SetFold/sample.json",
+      "sha256": "5855a7e78b7943233c3ee9a9930703dcf23e676ab72acb59a3b99cc8eee83849"
+    },
+    {
+      "path": "raw/snapshot/SetFold/tukey.json",
+      "sha256": "7be46aeb08f9a8f61cf881a3d1ea680d4e6a03340dd28fd659e323e4231ba4c4"
+    },
+    {
+      "path": "raw/snapshot/SequenceFold/benchmark.json",
+      "sha256": "5db0a610d04466b86ac75797aa4b73ed5969d8fbc5e9dd66c87077d886bd5295"
+    },
+    {
+      "path": "raw/snapshot/SequenceFold/estimates.json",
+      "sha256": "ba48da99805328c57bf9a8a3e41bdd4cb04c1daf95aa56884393131618bcbf86"
+    },
+    {
+      "path": "raw/snapshot/SequenceFold/sample.json",
+      "sha256": "1cd76704a8cf068d9c043e3a7cb7b336e0bc6ba80bb1bd6443da628cdf0d07a2"
+    },
+    {
+      "path": "raw/snapshot/SequenceFold/tukey.json",
+      "sha256": "76a8fbf2a4c24334e56d485b7ea69b31e96dd39f89fdbd4cc420cdd21150bbe7"
+    },
+    {
+      "path": "raw/snapshot/Choice/benchmark.json",
+      "sha256": "8d85f76e2f0583eff5fc9b00321e33140b332f9887bab054af4de85fc6061cbe"
+    },
+    {
+      "path": "raw/snapshot/Choice/estimates.json",
+      "sha256": "233b8cb0173a07666d56a930eca5be432a4d27ea32449c07e977d7db0ccea2ee"
+    },
+    {
+      "path": "raw/snapshot/Choice/sample.json",
+      "sha256": "16a517aa7b069176c9e6c0c972e8123faa5cb52368f174aad5b4facee5078719"
+    },
+    {
+      "path": "raw/snapshot/Choice/tukey.json",
+      "sha256": "64c56274dd8e0404643dda4b3926218f29f0b2b0340351cbbeced5515fb4c347"
+    },
+    {
+      "path": "raw/snapshot/Match/benchmark.json",
+      "sha256": "aa08a657a78dc09bf11d8aa408bb9f33cb04e21784a0000bc72318639cb78722"
+    },
+    {
+      "path": "raw/snapshot/Match/estimates.json",
+      "sha256": "184de5004ddccce8179682733f7c646dd21c17cc049ae4b3bd37c82b665feea2"
+    },
+    {
+      "path": "raw/snapshot/Match/sample.json",
+      "sha256": "ab6392321a2bae6599c4cb47c18691a4b21e9d5381a64096f65ec0ef1cc8401d"
+    },
+    {
+      "path": "raw/snapshot/Match/tukey.json",
+      "sha256": "9a3729befc4d3f56d631967178c73496c17800273f09bd76cf09c7f9d25ac34b"
+    },
+    {
+      "path": "raw/snapshot/NestedFold/benchmark.json",
+      "sha256": "f90dc463b5ad3e31a4c72201b1166eed45b94ff3907096e32b8816b2a6ef35dd"
+    },
+    {
+      "path": "raw/snapshot/NestedFold/estimates.json",
+      "sha256": "fa1832421d89a11dcc44508cb04461f08d3bdf11f11907ebd4996b526b0d55ab"
+    },
+    {
+      "path": "raw/snapshot/NestedFold/sample.json",
+      "sha256": "74ef1ad84198cd194372e52c3a473e8dc9f43a04f9f350609893c7f98231e97e"
+    },
+    {
+      "path": "raw/snapshot/NestedFold/tukey.json",
+      "sha256": "058f35f56a56a56b3b6481bba773a718a7dd4ff7d02b8af50436d855a1f4fe06"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-16/benchmark.json",
+      "sha256": "b637bd724dd47592f7fe98ba373e47c646ea8f5b2fb613ae07384cad8706574d"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-16/estimates.json",
+      "sha256": "bc6c1e55e1e647694fa27a40df11872852dfa6e48f186767091e824ea721462f"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-16/sample.json",
+      "sha256": "92bdea3aecf7a83cd3cc527180e01f657f2e156acbcbd549cfc4705d0cd2e28b"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-16/tukey.json",
+      "sha256": "1e18769d0b52c75fa2c9c8ac29a087050430392e7db53d00117a25fd302b75ae"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-256/benchmark.json",
+      "sha256": "0dd571b7860efc9fc45d0e5c572be0837bded8372ae194c8f65a5011156c525d"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-256/estimates.json",
+      "sha256": "b0ca590858414e9f56ade977f8e703c95428997d1a4c578bc1e5b58e9a781670"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-256/sample.json",
+      "sha256": "f877481678f670dec81993f44780774e1ce900e7566cd49998102c6c77c99528"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-256/tukey.json",
+      "sha256": "462347ed23bb468dd15f6980b33d42dccc66a67aec9196365e00bd70d3950454"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-4096/benchmark.json",
+      "sha256": "23c115ceb05cbed18334c3232056b31bf03fc8e52e313032cb83d33b5abf982b"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-4096/estimates.json",
+      "sha256": "23a7dfd075c1d4983b16b5820208b766d789ed7892ba40ff6b69d85dd6b52ea2"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-4096/sample.json",
+      "sha256": "2f36360b3262d5ea3f479e35c90d9dc78c8f719587e4261f57910784c2f96801"
+    },
+    {
+      "path": "raw/snapshot/derived-fold-4096/tukey.json",
+      "sha256": "1d5bce2d9a7fdf3ae354e407c3cddd2ec8817949ba7edac2d761ce9357f3b01a"
+    }
+  ]
+}

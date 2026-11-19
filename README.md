@@ -102,7 +102,7 @@ just browser
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
-同一入力の完全探索結果を再利用する`./check-cache`は、ブラウザでも動くTSコアとSQLite/HTTP adapterを持つ。[再利用条件・所有権・世代番号をLeanで形式化](docs/check-cache.md)し、有限差分テストと実ブラウザで実装を検査する。Leanは開発時だけ必要。現在はtask単位の再利用で、状態単位のインクリメンタル探索は今後の対象。
+同一入力の完全探索結果を再利用する`./check-cache`は、ブラウザでも動くTSコアとSQLite/HTTP adapterを持つ。[再利用条件・所有権・世代番号をLeanで形式化](docs/check-cache.md)し、有限差分テストと実ブラウザで実装を検査する。Rust/Wasmには[状態ごとのNext評価の再利用](docs/safety-expansions.md)も任意で追加し、現在のInit・property・constraintsを再検査する。Leanは開発時だけ必要。状態探索自体の分散BFSとqueueのcheckpoint再開は今後の対象。
 
 <!-- checker-comparison:start -->
 ## モデル検査の速度比較

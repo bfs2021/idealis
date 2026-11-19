@@ -42,7 +42,7 @@ const command = async (
     assert.notEqual(output.status, 0);
     assert.match(
       output.stdout + output.stderr,
-      /unsolved goals|Tactic.*failed|tactic.*failed/i,
+      /unsolved goals|Tactic.*failed|Application type mismatch/i,
     );
   } else assert.equal(output.status, 0, output.stdout + output.stderr);
   return output.stdout;
@@ -55,6 +55,11 @@ try {
     "formal/cache/lake-manifest.json",
     "formal/cache/Cache.lean",
     "formal/cache/Main.lean",
+    "formal/cache/ReuseMain.lean",
+    "crates/rtlc/src/expansions.rs",
+    "crates/rtlc/src/safety.rs",
+    "crates/rtlc/Cargo.lock",
+    "src/safety-expansions.ts",
     "src/check-cache-policy.ts",
     "src/check-cache.ts",
     "src/check-cache-wire.ts",
@@ -79,7 +84,7 @@ try {
     "manifest.json",
     JSON.stringify(
       {
-        plan: "verified-cache",
+        plan: process.argv[3] ? "cached-expansions" : "verified-cache",
         sourceVersion,
         sources,
         toolchain: "leanprover/lean4:v4.35.0",
@@ -134,6 +139,17 @@ try {
       after: "false",
     },
     { name: "complete", before: "!action.complete", after: "false" },
+    {
+      name: "next",
+      before: "probe.sameNext && probe.complete",
+      after: "true && probe.complete",
+    },
+    {
+      name: "partial",
+      before: "probe.sameNext && probe.complete",
+      after: "probe.sameNext && true",
+    },
+    { name: "memo", before: "if enabled source then", after: "if true then" },
   ];
   for (const mutant of mutants) {
     assert.equal(source.split(mutant.before).length, 2);
@@ -236,6 +252,33 @@ try {
     JSON.stringify(probes),
   );
   assert.deepEqual(JSON.parse(expected), actual);
+  const reuseFile = process.argv[3];
+  const reuse = reuseFile
+    ? JSON.parse(await readFile(reuseFile, "utf8"))
+    : [...Array(16).keys()].map((bits) => ({
+        probe: {
+          sameBuild: !!(bits & 1),
+          sameNext: !!(bits & 2),
+          sameState: !!(bits & 4),
+          complete: !!(bits & 8),
+        },
+        reused: bits === 15,
+      }));
+  assert.equal(reuse.length, 16);
+  await save("reuse-probes.json", JSON.stringify(reuse));
+  const reuseExpected = JSON.parse(
+    await command(
+      "reuse-oracle",
+      resolve(project, ".lake/build/bin/reuse-oracle"),
+      [],
+      false,
+      JSON.stringify(reuse.map((entry: { probe: unknown }) => entry.probe)),
+    ),
+  );
+  assert.deepEqual(
+    reuseExpected,
+    reuse.map((entry: { reused: boolean }) => entry.reused),
+  );
   for (const entry of sources)
     assert.equal(digest(await readFile(entry.path)), entry.sha256, entry.path);
   await save(
@@ -247,6 +290,10 @@ try {
         theorems,
         axioms: [...axioms].sort(),
         negativeProofControls: mutants.map((entry) => entry.name),
+        expansionReuseCases: reuse.length,
+        expansionOracle: reuseFile
+          ? "real Rust/Wasm observations"
+          : "boolean policy table",
         states: states.length,
         actions: actions.length,
         transitions: probes.length,

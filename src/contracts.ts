@@ -152,6 +152,20 @@ export interface PortableCommand {
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
       }
+    | {
+        readonly kind: "check-safety-incremental";
+        readonly program: SafetyProgram;
+        readonly bounds: SafetyBounds;
+        readonly cache: SafetyExpansionCache;
+        readonly buildDigest: string;
+        readonly maxEntries: number;
+      }
+    | {
+        readonly kind: "merge-safety-expansions";
+        readonly left: SafetyExpansionCache;
+        readonly right: SafetyExpansionCache;
+        readonly maxEntries: number;
+      }
     | { readonly kind: "load-model"; readonly model: FiniteModel }
     | { readonly kind: "release-model"; readonly handle: number }
     | {
@@ -200,6 +214,13 @@ export interface PortableCommand {
 export type PortableOutput =
   | { readonly kind: "compiled"; readonly program: SafetyProgram }
   | { readonly kind: "safety"; readonly result: SafetyResult }
+  | {
+      readonly kind: "incremental-safety";
+      readonly result: SafetyResult;
+      readonly cache: SafetyExpansionCache;
+      readonly stats: ExpansionStats;
+    }
+  | { readonly kind: "safety-expansions"; readonly cache: SafetyExpansionCache }
   | { readonly kind: "loaded"; readonly handle: number }
   | { readonly kind: "released" }
   | { readonly kind: "history"; readonly result: ConcurrentResult }
@@ -209,6 +230,36 @@ export type PortableOutput =
   | { readonly kind: "cancelled" }
   | { readonly kind: "value"; readonly value: PortableValue }
   | { readonly kind: "effect"; readonly effect: PortableEffect };
+
+export interface SafetyExpansionCache {
+  readonly format: "idealis.safety-expansions";
+  readonly version: 1;
+  readonly buildDigest: string;
+  readonly transitionIdentity: string;
+  readonly entries: Readonly<
+    Record<
+      string,
+      {
+        readonly digest: string;
+        readonly successors: readonly {
+          readonly action: number;
+          readonly values: readonly PortableValue[];
+        }[];
+      }
+    >
+  >;
+}
+export interface ExpansionStats {
+  readonly hits: number;
+  readonly misses: number;
+  readonly writes: number;
+  readonly invalidated: boolean;
+}
+export interface IncrementalSafetyResult {
+  readonly result: SafetyResult;
+  readonly cache: SafetyExpansionCache;
+  readonly stats: ExpansionStats;
+}
 
 export interface PortableCore {
   readonly request: (command: PortableCommand) => PortableOutput;

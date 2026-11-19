@@ -26,6 +26,10 @@ import {
   toPortableValue,
 } from "./portable-value.js";
 import { decodeSafetyResult } from "./safety.js";
+import {
+  decodeExpansionStats,
+  decodeSafetyExpansionCache,
+} from "./safety-expansions.js";
 import { decodeSafetyProgram } from "./safety-program.js";
 import { isRecord } from "./trace.js";
 
@@ -190,6 +194,22 @@ export const createPortableWasm = async (
       if (output.kind === "safety") {
         fields(output, ["kind", "result"]);
         return { kind: "safety", result: decodeSafetyResult(output.result) };
+      }
+      if (output.kind === "incremental-safety") {
+        fields(output, ["kind", "result", "stats", "cache"]);
+        return {
+          kind: "incremental-safety",
+          result: decodeSafetyResult(output.result),
+          stats: decodeExpansionStats(output.stats),
+          cache: decodeSafetyExpansionCache(output.cache),
+        };
+      }
+      if (output.kind === "safety-expansions") {
+        fields(output, ["kind", "cache"]);
+        return {
+          kind: "safety-expansions",
+          cache: decodeSafetyExpansionCache(output.cache),
+        };
       }
       if (output.kind === "compiled") {
         fields(output, ["kind", "program"]);
