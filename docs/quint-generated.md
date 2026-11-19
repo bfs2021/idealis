@@ -27,6 +27,8 @@ just quint-bench-replay .artifacts/quint-bench-01
 
 新しいrunにsource/toolchain/CPU、コマンド、IR bytes・定義数・work、Criterionの20 sampleと中央値・95%区間を保存する。runの上書きを拒否し、再生はdigestと測定の欠落を検査する。CIのcargo all-targetsはbenchをsmoke実行し、共有runnerの時間を合否の閾値にしない。[計画](../evals/plans/quint-sharing-regression.md)を参照。
 
+[初回の測定](../evals/iterations/quint-sharing-regression.md)では、この小さい6モデルの全体時間はv1が有利だった。v2の全体は約1.06〜1.67倍かかり、共有IRの効果を一般的な高速化とは扱わない。
+
 TLCを含めて再実行するには、Java、TLC jar、Apalache 0.63.0のjarと、新しいrunのパスを指定する。TLCは同じ生成物と設定を使う。12設定を各v1/v2のnative/Wasmと比較し、各versionの反例をTLCへ再生する。Apalache jarは標準モジュールの読み取りに使い、SMT求解はしない。
 
 ```sh

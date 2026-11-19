@@ -2,6 +2,8 @@
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。
 
+[Quint生成物のv1/v2回帰と測定](iterations/quint-sharing-regression.md)は、6実生成物をnative/Wasm/Chromiumで検査し、TLCへ24結果と反例12件を照合する。42区間のCriterionでは、小さいモデルでv2の固定費が上回る結果も保存する。
+
 [0048: operator定義の共有](iterations/0048-operator-sharing.md)は、safety IR v2で式定義を共有する変更を、実装の前に置いた回帰とRedで検査する。既存239入力と追加17入力でv1の出力が変わらないこと、17入力のTLC照合、両frontendの解析の一致（4236件）、深い公開IRの破棄で許す確保の上限を扱う。
 
 [0047: TLA+モジュールと設定置換](iterations/0047-module-linking.md)は、外部EXTENDS・引数なしINSTANCE・LOCAL・WITH・設定置換を扱う。37ケースのnative/Wasm/TLC比較、3反例の再生、Chromiumと17本のCriterionで対応と初期費用を検査した。
