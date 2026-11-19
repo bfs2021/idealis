@@ -25,6 +25,7 @@ interface Evidence {
   readonly path: string;
   readonly topic: string;
   readonly contains?: string;
+  readonly targetContains?: string;
   readonly context?: readonly string[];
 }
 interface CrateScope {
@@ -67,6 +68,7 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/lib.rs",
         contains: "fn apply(",
+        targetContains: "signed 32-bit整数",
         topic:
           "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
       },
@@ -335,7 +337,12 @@ const manifestFor = (view: SourceView, scope: CrateScope): DocumentManifest => {
           source: idFor(prefix + evidence.path),
           ...(evidence.contains ? { contains: evidence.contains } : {}),
         },
-        target: { source: idFor(`${prefix}SUPPORT.md`) },
+        target: {
+          source: idFor(`${prefix}SUPPORT.md`),
+          ...(evidence.targetContains
+            ? { contains: evidence.targetContains }
+            : {}),
+        },
         context: (evidence.context ?? []).map((path) => ({
           source: idFor(prefix + path),
         })),

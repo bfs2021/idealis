@@ -475,6 +475,11 @@ compiler-test:
   cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
 
+analysis-test: portable-build rtla-build
+  cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
+  pnpm build
+  node --test dist/evals/tlc-differential/analysis-parity-test.js
+
 module-eval run java jar: safety-build
   node dist/evals/module-linking/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
