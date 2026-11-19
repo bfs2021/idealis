@@ -11,14 +11,23 @@ Quint 0.33.1がApalache 0.63.0経由で生成したTLA+を、書き換えずにR
 | Match        | sum type、Variants、OTHERのないCASE    | 3 / 4                   |
 | NestedFold   | sequenceと集合の入れ子fold、束縛の捕捉 | 1 / 2                   |
 
-通常の回帰は保存した生成物を使い、Quint・Apalache・JVMを起動しない。CIではnative/Wasmの13テストと、実Chromiumで同じ12入力を実行する。
+通常の回帰は保存した生成物を使い、Quint・Apalache・JVMを起動しない。省略v1・明示v1・明示v2を検査し、コンパイルされたversionも確認する。native/Wasmの38テストは、sourceの直接検査とコンパイル済みIRの検査、TLCの判定・計数、正常/違反の対照を扱う。実Chromiumでも3通りのversionで同じ12入力を実行する。v1とv2のwork量が同じとは仮定しない。
 
 ```sh
 just quint-test
 just browser
 ```
 
-TLCを含めて再実行するには、Java、TLC jar、Apalache 0.63.0のjarと、新しいrunのパスを指定する。TLCは同じ生成物と設定を使う。Apalache jarは標準モジュールの読み取りに使い、SMT求解はしない。
+同じ6生成物をCriterionでも測れる。crate内のbench用fixtureは生成TLA+とTLCオラクルから作り、回帰で原本との一致を確認する。解析（moduleとconfig）、解析済みASTのcompile、コンパイル済みIRのcheck、parse+compile+checkを分け、compile以降はv1/v2で比較する。各測定の前に正常版の完全探索・状態数・生成数をTLCの値と照合する。合計42測定で、結果の破棄は各区間に含める。JVM起動、Quint生成、JSONL輸送は含めない。
+
+```sh
+just quint-bench .artifacts/quint-bench-01
+just quint-bench-replay .artifacts/quint-bench-01
+```
+
+新しいrunにsource/toolchain/CPU、コマンド、IR bytes・定義数・work、Criterionの20 sampleと中央値・95%区間を保存する。runの上書きを拒否し、再生はdigestと測定の欠落を検査する。CIのcargo all-targetsはbenchをsmoke実行し、共有runnerの時間を合否の閾値にしない。[計画](../evals/plans/quint-sharing-regression.md)を参照。
+
+TLCを含めて再実行するには、Java、TLC jar、Apalache 0.63.0のjarと、新しいrunのパスを指定する。TLCは同じ生成物と設定を使う。12設定を各v1/v2のnative/Wasmと比較し、各versionの反例をTLCへ再生する。Apalache jarは標準モジュールの読み取りに使い、SMT求解はしない。
 
 ```sh
 just quint-eval /path/to/java /path/to/tla2tools.jar /path/to/apalache.jar evals/runs/my-quint-run

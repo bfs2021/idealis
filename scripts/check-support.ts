@@ -56,6 +56,13 @@ const scopes: readonly CrateScope[] = [
     name: "rtla-compiler",
     evidence: [
       {
+        path: "benches/quint_generated.rs",
+        contains: "fn measurements(",
+        targetContains: "同じ6生成物の解析",
+        topic:
+          "固定した6つのQuint生成物で解析・v1/v2のcompile・prepared check・全体の42測定を分け、TLCの正常判定・状態数・生成数の検査後に測る",
+      },
+      {
         path: "src/link.rs",
         topic:
           "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",

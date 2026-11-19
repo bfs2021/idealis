@@ -85,40 +85,45 @@ test.afterAll(async () => {
     );
 });
 
-test("checks unchanged Quint output in Chromium", async ({ page }) => {
-  const inputs = (
-    await Promise.all(
-      names.map(async (name) => {
-        const source = await readFile(
-          `evals/fixtures/quint-generated/generated/${name}.tla`,
-          "utf8",
-        );
-        return ["safety", "broken"].map((property) => ({
-          source,
-          config: config(property === "safety" ? "safety" : "broken"),
-        }));
-      }),
-    )
-  ).flat();
-  await page.goto(origin);
-  const result = await page.evaluate(async (cases) => {
-    const api: unknown = Reflect.get(globalThis, "idealisBrowser");
-    if (
-      typeof api !== "object" ||
-      api === null ||
-      !("runGenerated" in api) ||
-      typeof api.runGenerated !== "function"
-    )
-      throw new Error("Browser generated-model API missing");
-    return api.runGenerated(cases);
-  }, inputs);
-  expect(result).toMatchObject(
-    inputs.map((_, index) => ({
-      status: index % 2 === 0 ? "complete" : "invariant-violation",
-      reason: null,
-    })),
-  );
-});
+for (const irVersion of [undefined, 1, 2] as const)
+  test(`checks unchanged Quint output v${irVersion ?? "default"} in Chromium`, async ({
+    page,
+  }) => {
+    const inputs = (
+      await Promise.all(
+        names.map(async (name) => {
+          const source = await readFile(
+            `evals/fixtures/quint-generated/generated/${name}.tla`,
+            "utf8",
+          );
+          return ["safety", "broken"].map((property) => ({
+            source,
+            config: config(property === "safety" ? "safety" : "broken"),
+            ...(irVersion === undefined ? {} : { irVersion }),
+          }));
+        }),
+      )
+    ).flat();
+    await page.goto(origin);
+    const result = await page.evaluate(async (cases) => {
+      const api: unknown = Reflect.get(globalThis, "idealisBrowser");
+      if (
+        typeof api !== "object" ||
+        api === null ||
+        !("runGenerated" in api) ||
+        typeof api.runGenerated !== "function"
+      )
+        throw new Error("Browser generated-model API missing");
+      return api.runGenerated(cases);
+    }, inputs);
+    expect(result).toMatchObject(
+      inputs.map((_, index) => ({
+        version: irVersion ?? 1,
+        status: index % 2 === 0 ? "complete" : "invariant-violation",
+        reason: null,
+      })),
+    );
+  });
 
 test("runs core, shrinking, TLA+ and Z3 Wasm in a real browser", async ({
   page,

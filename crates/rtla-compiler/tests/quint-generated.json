@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Counter",
+    "quint": "0.33.1",
+    "apalache": "0.63.0",
+    "sourceSha256": "f615abfb93666871e27956e77ac3f9d761b3c6564a0dd024e96b9cd0596eebeb",
+    "source": "-------------------------------- MODULE Counter --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  count\n\n(*\n  @type: (() => Bool);\n*)\nstep == count' := (IF count < 3 THEN count + 1 ELSE 0)\n\n(*\n  @type: (() => Bool);\n*)\nsafety == count >= 0 /\\ count <= 3\n\n(*\n  @type: (() => Bool);\n*)\nbroken == count < 2\n\n(*\n  @type: (() => Bool);\n*)\ninit == count = 0\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "expectedStatus": "complete",
+    "expectedStates": 4,
+    "expectedGenerated": 5
+  },
+  {
+    "name": "SetFold",
+    "quint": "0.33.1",
+    "apalache": "0.63.0",
+    "sourceSha256": "c478e170660b4827b0562dac8f1f6df30b1a5609eb852459b39ddcc94101cd12",
+    "source": "-------------------------------- MODULE SetFold --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_13, element_13) == acc_13 + element_13\n    IN\n    ApaFoldSet(__QUINT_LAMBDA0, 0, { 3, 1, 2 }))\n\n(*\n  @type: (() => Bool);\n*)\nstep == total' := total\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total = 6\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 5\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "expectedStatus": "complete",
+    "expectedStates": 1,
+    "expectedGenerated": 2
+  },
+  {
+    "name": "SequenceFold",
+    "quint": "0.33.1",
+    "apalache": "0.63.0",
+    "sourceSha256": "bf36b83c1dcbb09ecb92db48670a20c57bbed8854e5b0e8d4f650ac30bfbe3f3",
+    "source": "----------------------------- MODULE SequenceFold -----------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_15, element_15) == acc_15 * 10 + element_15\n    IN\n    ApaFoldSeqLeft(__QUINT_LAMBDA0, 0, <<3, 1, 2>>))\n\n(*\n  @type: (() => Bool);\n*)\nstep == total' := total\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total = 312\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 123\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "expectedStatus": "complete",
+    "expectedStates": 1,
+    "expectedGenerated": 2
+  },
+  {
+    "name": "Choice",
+    "quint": "0.33.1",
+    "apalache": "0.63.0",
+    "sourceSha256": "47025cc4b360930a733b388b58f3571357c952308dace2b435a444654dec0a98",
+    "source": "-------------------------------- MODULE Choice --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  value\n\n(*\n  @type: (() => Bool);\n*)\nstep == \\E selected \\in { 0, 1, 2 }: value' := selected\n\n(*\n  @type: (() => Bool);\n*)\nsafety == value >= 0 /\\ value <= 2\n\n(*\n  @type: (() => Bool);\n*)\nbroken == value < 2\n\n(*\n  @type: (() => Bool);\n*)\ninit == value = 0\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "expectedStatus": "complete",
+    "expectedStates": 3,
+    "expectedGenerated": 10
+  },
+  {
+    "name": "Match",
+    "quint": "0.33.1",
+    "apalache": "0.63.0",
+    "sourceSha256": "aedb9b150b488da14f487e77ce39de0db0964e992d2e648d47e793220c97197f",
+    "source": "--------------------------------- MODULE Match ---------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\n(*\n  @type: (() => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n*)\nBusy == Variant(\"Busy\", [tag |-> \"UNIT\"])\n\n(*\n  @type: (() => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n*)\nDone == Variant(\"Done\", [tag |-> \"UNIT\"])\n\nVARIABLE\n  (*\n    @type: Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str });\n  *)\n  phase\n\n(*\n  @type: (() => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n*)\nIdle == Variant(\"Idle\", [tag |-> \"UNIT\"])\n\n(*\n  @type: (() => Bool);\n*)\ninit == phase = Idle\n\n(*\n  @type: (() => Bool);\n*)\nstep ==\n  phase'\n    := (CASE VariantTag(phase) = \"Idle\"\n        -> LET (*\n          @type: (({ tag: Str }) => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n        *)\n        __QUINT_LAMBDA0(id__30) == Busy\n        IN\n        __QUINT_LAMBDA0((VariantGetUnsafe(\"Idle\", phase)))\n      [] VariantTag(phase) = \"Busy\"\n        -> LET (*\n          @type: (({ tag: Str }) => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n        *)\n        __QUINT_LAMBDA1(id__33) == Done\n        IN\n        __QUINT_LAMBDA1((VariantGetUnsafe(\"Busy\", phase)))\n      [] VariantTag(phase) = \"Done\"\n        -> LET (*\n          @type: (({ tag: Str }) => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n        *)\n        __QUINT_LAMBDA2(id__36) == Idle\n        IN\n        __QUINT_LAMBDA2((VariantGetUnsafe(\"Done\", phase))))\n\n(*\n  @type: (() => Bool);\n*)\nsafety ==\n  CASE VariantTag(phase) = \"Idle\"\n      -> LET (*\n        @type: (({ tag: Str }) => Bool);\n      *)\n      __QUINT_LAMBDA3(id__47) == TRUE\n      IN\n      __QUINT_LAMBDA3((VariantGetUnsafe(\"Idle\", phase)))\n    [] VariantTag(phase) = \"Busy\"\n      -> LET (*\n        @type: (({ tag: Str }) => Bool);\n      *)\n      __QUINT_LAMBDA4(id__50) == TRUE\n      IN\n      __QUINT_LAMBDA4((VariantGetUnsafe(\"Busy\", phase)))\n    [] VariantTag(phase) = \"Done\"\n      -> LET (*\n        @type: (({ tag: Str }) => Bool);\n      *)\n      __QUINT_LAMBDA5(id__53) == TRUE\n      IN\n      __QUINT_LAMBDA5((VariantGetUnsafe(\"Done\", phase)))\n\n(*\n  @type: (() => Bool);\n*)\nbroken == phase /= Done\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "expectedStatus": "complete",
+    "expectedStates": 3,
+    "expectedGenerated": 4
+  },
+  {
+    "name": "NestedFold",
+    "quint": "0.33.1",
+    "apalache": "0.63.0",
+    "sourceSha256": "e8dbe4e7720ce8da38d4196e8aa0ae7f52c89aa2ababb0db31dc696a8ab93199",
+    "source": "------------------------------ MODULE NestedFold ------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA1(acc_24, outer_24) ==\n      acc_24\n        + (LET (*\n          @type: ((Int, Int) => Int);\n        *)\n        __QUINT_LAMBDA0(inner_21, element_21) == inner_21 + element_21\n        IN\n        ApaFoldSet(__QUINT_LAMBDA0, 0, { outer_24, (outer_24 + 1) }))\n    IN\n    ApaFoldSeqLeft(__QUINT_LAMBDA1, 0, <<1, 2>>))\n\n(*\n  @type: (() => Bool);\n*)\nstep == total' := total\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total = 8\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 6\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "expectedStatus": "complete",
+    "expectedStates": 1,
+    "expectedGenerated": 2
+  }
+]

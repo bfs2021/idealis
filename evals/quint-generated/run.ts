@@ -34,6 +34,7 @@ const paths = execFileSync("git", [
   "evals/quint-generated",
   "evals/fixtures/quint-generated",
   "evals/plans/0044-quint-generated.md",
+  "evals/plans/quint-sharing-regression.md",
 ])
   .toString()
   .split("\0")
@@ -91,7 +92,8 @@ await writeFile(
   join(directory, "manifest.json"),
   JSON.stringify(
     {
-      plan: "0044-quint-generated",
+      plan: "quint-sharing-regression",
+      irVersions: [1, 2],
       sourceVersion,
       sources,
       binaries,
@@ -135,49 +137,57 @@ try {
       assert.equal(classifyTlc(reference), expected, reference.log);
       if (property === "broken")
         assert.match(reference.log, /Invariant broken is violated/);
-      const nativeResponse = await native.request({
-        version: 1,
-        request: { kind: "check-tla", ...input, bounds },
-      });
-      await writeFile(
-        join(caseDirectory, "native.json"),
-        JSON.stringify(nativeResponse, null, 2),
-        { flag: "wx" },
-      );
-      assert.ok(isRecord(nativeResponse));
-      assert.equal(
-        nativeResponse.kind,
-        "safety",
-        JSON.stringify(nativeResponse),
-      );
-      const result = checkTlaSource(core, input, bounds);
-      assert.deepEqual(decodeSafetyResult(nativeResponse.result), result);
-      assert.deepEqual(
-        differences({ result }, reference),
-        [],
-        `${name}-${property}`,
-      );
-      if (result.violation) {
-        const wrapper = `---- MODULE Witness ----\nEXTENDS ${name}\nInit == q_init\nNext == q_step\n====`;
-        const forced = traceInput(
-          { source: wrapper, config: input.config },
-          compileTlaSource(core, input),
-          result,
+      for (const irVersion of [1, 2] as const) {
+        const selected = { ...input, irVersion };
+        const variantDirectory = join(caseDirectory, `v${irVersion}`);
+        await mkdir(variantDirectory);
+        const nativeResponse = await native.request({
+          version: 1,
+          request: { kind: "check-tla", ...selected, bounds },
+        });
+        await writeFile(
+          join(variantDirectory, "native.json"),
+          JSON.stringify(nativeResponse, null, 2),
+          { flag: "wx" },
         );
-        const witness = await runTlc(
-          java,
-          tlcJar,
-          apalacheJar,
-          join(caseDirectory, "witness"),
-          "Witness",
-          forced.source,
-          forced.config,
-          { [name]: source },
+        assert.ok(isRecord(nativeResponse));
+        assert.equal(
+          nativeResponse.kind,
+          "safety",
+          JSON.stringify(nativeResponse),
         );
-        assert.equal(classifyTlc(witness), "complete", witness.log);
-        assert.equal(witness.states, result.violation.trace.length);
+        const result = checkTlaSource(core, selected, bounds);
+        assert.deepEqual(decodeSafetyResult(nativeResponse.result), result);
+        assert.deepEqual(
+          differences({ result }, reference),
+          [],
+          `${name}-${property}`,
+        );
+        if (result.violation) {
+          const wrapper = `---- MODULE Witness ----\nEXTENDS ${name}\nInit == q_init\nNext == q_step\n====`;
+          const forced = traceInput(
+            { source: wrapper, config: input.config },
+            compileTlaSource(core, selected),
+            result,
+          );
+          const witness = await runTlc(
+            java,
+            tlcJar,
+            apalacheJar,
+            join(variantDirectory, "witness"),
+            "Witness",
+            forced.source,
+            forced.config,
+            { [name]: source },
+          );
+          assert.equal(classifyTlc(witness), "complete", witness.log);
+          assert.equal(witness.states, result.violation.trace.length);
+        }
+        records.push({ name, property, irVersion, result });
+        console.log(
+          `${name}-${property} v${irVersion}: ${result.status}, ${result.states} states, ${result.generated} generated`,
+        );
       }
-      records.push({ name, property, result });
       oracle.push({
         name,
         property,
@@ -188,11 +198,9 @@ try {
         configSha256: digest(input.config),
         logSha256: digest(reference.log),
       });
-      console.log(
-        `${name}-${property}: ${result.status}, ${result.states} states, ${result.generated} generated`,
-      );
     }
   }
+  assert.equal(records.length, names.length * 4);
   if (saved) assert.deepEqual(records, previous);
   for (const source of sources)
     assert.equal(
@@ -219,7 +227,8 @@ try {
         cases: records.length,
         nativeWasm: true,
         tlc: true,
-        witnesses: 6,
+        witnesses: records.filter((entry) => entry.result.violation !== null)
+          .length,
         performanceMeasurement: false,
         files: await Promise.all(
           ["manifest.json", "records.json", "oracle.json"].map(

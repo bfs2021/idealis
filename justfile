@@ -542,6 +542,14 @@ quint-test: portable-build
   pnpm build
   node --test dist/evals/quint-generated/contract-test.js
 
+quint-bench run:
+  pnpm build
+  node dist/evals/quint-generated/bench.js {{quote(run)}}
+
+quint-bench-replay run:
+  pnpm build
+  node dist/evals/quint-generated/bench.js {{quote(run)}} --replay
+
 quint-generate output endpoint apalache_jar:
   pnpm build
   node dist/evals/quint-generated/generate.js {{quote(output)}} {{quote(endpoint)}} {{quote(apalache_jar)}}
