@@ -1,8 +1,17 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
+import {
+  cp,
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  realpath,
+  writeFile,
+} from "node:fs/promises";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { compileTlaSafety } from "../src/tla-safety.js";
 
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
@@ -52,14 +61,26 @@ execFileSync(
   [
     "add",
     join(directory, tarball),
-    `@types/node@${JSON.parse(await readFile("node_modules/@types/node/package.json", "utf8")).version}`,
     "--offline",
+    "--store-dir",
+    join(consumer, ".pnpm-store"),
     "--ignore-scripts",
     "--lockfile=false",
     "--config.auto-install-peers=false",
     "--config.node-linker=hoisted",
   ],
-  { cwd: consumer, stdio: "pipe" },
+  { cwd: consumer, stdio: "pipe", encoding: "utf8" },
+);
+const nodeTypes = await realpath("node_modules/@types/node");
+const nodeRequire = createRequire(join(nodeTypes, "package.json"));
+await mkdir(join(consumer, "node_modules/@types"), { recursive: true });
+await cp(nodeTypes, join(consumer, "node_modules/@types/node"), {
+  recursive: true,
+});
+await cp(
+  dirname(nodeRequire.resolve("undici-types/package.json")),
+  join(consumer, "node_modules/undici-types"),
+  { recursive: true },
 );
 const artifact = {
   format: "modelt.finite-model",
