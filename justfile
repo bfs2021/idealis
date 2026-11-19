@@ -67,6 +67,32 @@ oracle-object-replay before saved output:
   pnpm build
   node dist/evals/roracle-native/replay-object.js {{quote(before)}} {{quote(saved)}} {{quote(output)}}
 
+oracle-typed-build:
+  node --experimental-strip-types evals/roracle-wit/build.ts --check
+
+oracle-typed-test: oracle-typed-build oracle-wire-build oracle-native-build
+  cargo fmt --manifest-path evals/roracle-wit/rust/Cargo.toml -- --check
+  cargo clippy --all-targets --all-features --locked --manifest-path evals/roracle-wit/rust/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path evals/roracle-wit/rust/Cargo.toml
+  pnpm build
+  node --test dist/evals/roracle-wit/contract-test.js
+  pnpm exec vitest run --config typed-oracle-vitest.config.ts
+
+oracle-typed-browser: oracle-typed-build oracle-wire-build
+  pnpm exec playwright test --config typed-oracle-playwright.config.ts
+
+oracle-typed-eval output:
+  pnpm build
+  node dist/evals/roracle-wit/measure.js {{quote(output)}}
+
+oracle-typed-replay saved output:
+  pnpm build
+  node dist/evals/roracle-wit/replay.js {{quote(saved)}} {{quote(output)}}
+
+oracle-typed-diagnose saved output:
+  pnpm build
+  node dist/evals/roracle-wit/diagnose.js {{quote(saved)}} {{quote(output)}}
+
 oracle-wire-build:
   pnpm oracle:build
 

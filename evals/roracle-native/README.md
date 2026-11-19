@@ -65,6 +65,8 @@ just oracle-object-replay .artifacts/saved-before .artifacts/my-object-compariso
 
 今回の候補は次の手順で再生できる。native artifactと同じdarwin arm64、同じNode版を使う。
 
+続く[WIT/型付きpayloadの試作](../roracle-wit/README.md)では、汎用Valueを省いてもJS packingが大きく、JSON経路より遅かった。既定化せず、結果と再生を保存している。
+
 ```sh
 mkdir -p .artifacts/saved-object-profile
 tar -xzf evals/runs/native-object-profile/evidence.tar.gz -C .artifacts/saved-object-profile

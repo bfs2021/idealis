@@ -19,6 +19,9 @@
       "!evals/oracle-comparison/rust/target",
       "!evals/workspace-oracle/rust/target",
       "!evals/roracle-native/rust/target",
+      "!evals/roracle-wit/rust/target",
+      "!evals/roracle-wit/generated/*.js",
+      "!evals/roracle-wit/toolchain/pnpm-lock.yaml",
       "!evals/controlled-schedules/rust/target",
       "!evals/structured-fuzz/rust/target",
       "!evals/structured-fuzz/fuzz/target",
@@ -35,5 +38,12 @@
   },
   "formatter": { "indentStyle": "space", "indentWidth": 2 },
   "linter": { "enabled": true, "rules": { "preset": "recommended" } },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } }
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "overrides": [
+    {
+      "includes": ["evals/roracle-wit/generated/**"],
+      "linter": { "enabled": false },
+      "assist": { "enabled": false }
+    }
+  ]
 }
