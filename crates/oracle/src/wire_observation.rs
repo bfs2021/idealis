@@ -4,6 +4,7 @@ use serde::{Deserialize, Deserializer};
 use serde_json::Value;
 use std::fmt;
 
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub(crate) struct WireObservation(pub Observation<Value>);
 
 #[derive(Deserialize)]

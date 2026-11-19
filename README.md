@@ -44,6 +44,8 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 
 各crateの[対応チェックリストとコミット前の同期検査](docs/crate-checklists.md)を参照。
 
+roracleのrequest/report型はRustからTSへ生成する。Node向けnapi-rsは[比較実験](evals/roracle-native/README.md)として追加し、既定のWasm経路を維持する。他crate全体の型生成やnative bindingは未対応。
+
 | ライブラリ                                    | 入力                                           | 担当する処理・出力                                                                         |
 | --------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | [`rtla`](crates/rtla)                         | TLA+ソースとTLC設定                            | 構文解析しASTを返す。名前解決とモデル検査は後段が担当する。                                |

@@ -13,6 +13,7 @@ impl std::error::Error for Error {}
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "kebab-case")]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub enum Status {
     Matched,
     Mismatch,
@@ -37,6 +38,7 @@ impl Status {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub enum Observation<T> {
     Value { value: T },
     Allowed { values: Vec<T> },
@@ -92,6 +94,7 @@ pub(crate) fn compare<T: PartialEq>(reference: &Observation<T>, actual: &Observa
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub struct Case<I> {
     pub id: String,
     pub input: I,
@@ -99,6 +102,7 @@ pub struct Case<I> {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub struct Comparison<O> {
     pub id: String,
     pub status: Status,
@@ -107,6 +111,7 @@ pub struct Comparison<O> {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub struct CaseReport<I, O> {
     pub case: Case<I>,
     pub reference: Observation<O>,
@@ -115,6 +120,7 @@ pub struct CaseReport<I, O> {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
 pub struct CheckReport<I, O> {
     pub version: u32,
     pub group: String,

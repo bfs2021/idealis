@@ -75,6 +75,10 @@
     "./testing.wasm": "./assets/idealis-testing.wasm"
   },
   "scripts": {
+    "oracle:types": "node --experimental-strip-types scripts/oracle-types.ts",
+    "oracle:types:check": "node --experimental-strip-types scripts/oracle-types.ts --check",
+    "oracle:native:build": "pnpm build && node dist/scripts/build-native-oracle.js --check",
+    "oracle:native:test": "pnpm build && node --test dist/evals/roracle-native/contract-test.js && vitest run --config native-oracle-vitest.config.ts",
     "oracle:build": "cargo build --release --locked --manifest-path crates/oracle/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml",
     "rtla:build": "pnpm oracle:build && cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml",
     "rtla:test": "cargo fmt --manifest-path crates/rtla/Cargo.toml -- --check && cargo clippy --all-targets --locked --manifest-path crates/rtla/Cargo.toml -- -D warnings && cargo test --all-targets --locked --manifest-path crates/rtla/Cargo.toml && pnpm build && pnpm rtla:build && node --test dist/evals/rtla-parser/contract-test.js",
@@ -117,6 +121,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.0",
     "@mizchi/mutator": "0.2.0",
+    "@napi-rs/cli": "3.10.12",
     "@playwright/test": "^1.65.0",
     "@types/node": "^24.0.0",
     "esbuild": "^0.27.0",

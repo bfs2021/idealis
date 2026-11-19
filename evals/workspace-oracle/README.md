@@ -15,6 +15,8 @@ assertOracleは不一致でNodeのAssertionErrorを投げ、reportも保持す�
 
 snapshotはplain object・dense arrayとscalarを型付きで符号化する。undefined、bigint、NaN、Infinity、負のzeroを区別し、objectのkey順を比較しない。循環、class instance、Map/Set、symbol、accessor、非列挙property、疎なarrayは明示的に拒否する。深さは48まで。JSの任意objectグラフを輸送する契約ではない。
 
+request/reportのTS宣言はroracleのRust型から生成する。`just oracle-types-check`で鮮度を確認する。Node限定のnapi-rs比較は[実験binding](../roracle-native/README.md)を参照。`IDEALIS_ORACLE_BACKEND`で明示選択できるが、既定はWasmのまま。共通の全report decoderを使い、nativeの欠落時にfallbackしない。
+
 ここでの応答一致はprotocol回帰の意味。意図したエラーやunknownを含む応答snapshotの一致を、モデルの安全性やSATの成功にしない。新しい実装の意味論を検証するには、独立したオラクルとdomainの判定を使う。
 
 ## 変更前後を保存して比較する

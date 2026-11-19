@@ -1,9 +1,6 @@
-import { isRecord } from "../../src/trace.js";
+import { decodeOracleReply } from "./protocol.js";
 
-export interface OracleReport {
-  readonly status: "matched" | "mismatch" | "unknown" | "invalid" | "error";
-  readonly report: Readonly<Record<string, unknown>>;
-}
+export type { OracleReport } from "./protocol.js";
 
 export const createOracle = (bytes: Uint8Array) => {
   const module = new WebAssembly.Module(new Uint8Array(bytes).buffer);
@@ -28,44 +25,30 @@ export const createOracle = (bytes: Uint8Array) => {
     throw new Error("Unsupported oracle Wasm ABI");
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
+  const requestJson = (json: string) => {
+    const data = encoder.encode(json);
+    if (data.length > 16 * 1024 * 1024)
+      throw new Error("Oracle request exceeds 16 MiB");
+    const pointer = resize(data.length);
+    if (!Number.isInteger(pointer) || pointer <= 0)
+      throw new Error("Invalid oracle input pointer");
+    new Uint8Array(memory.buffer, pointer, data.length).set(data);
+    dispatch();
+    const start = outputPointer();
+    const length = outputLength();
+    if (
+      !Number.isInteger(start) ||
+      !Number.isInteger(length) ||
+      start < 0 ||
+      length < 0
+    )
+      throw new Error("Invalid oracle output buffer");
+    return decodeOracleReply(
+      decoder.decode(new Uint8Array(memory.buffer, start, length)),
+    );
+  };
   return {
-    request: (input: unknown): OracleReport => {
-      const data = encoder.encode(JSON.stringify(input));
-      if (data.length > 16 * 1024 * 1024)
-        throw new Error("Oracle request exceeds 16 MiB");
-      const pointer = resize(data.length);
-      if (!Number.isInteger(pointer) || pointer <= 0)
-        throw new Error("Invalid oracle input pointer");
-      new Uint8Array(memory.buffer, pointer, data.length).set(data);
-      dispatch();
-      const start = outputPointer();
-      const length = outputLength();
-      if (
-        !Number.isInteger(start) ||
-        !Number.isInteger(length) ||
-        start < 0 ||
-        length < 0
-      )
-        throw new Error("Invalid oracle output buffer");
-      const reply: unknown = JSON.parse(
-        decoder.decode(new Uint8Array(memory.buffer, start, length)),
-      );
-      if (
-        !isRecord(reply) ||
-        reply.kind !== "checked" ||
-        !isRecord(reply.report)
-      )
-        throw new Error(`Oracle batch failed: ${JSON.stringify(reply)}`);
-      const status = reply.report.status;
-      if (
-        status !== "matched" &&
-        status !== "mismatch" &&
-        status !== "unknown" &&
-        status !== "invalid" &&
-        status !== "error"
-      )
-        throw new Error("Invalid oracle report status");
-      return { status, report: reply.report };
-    },
+    requestJson,
+    request: (input: unknown) => requestJson(JSON.stringify(input)),
   };
 };

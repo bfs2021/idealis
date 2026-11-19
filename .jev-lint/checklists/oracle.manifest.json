@@ -31,58 +31,70 @@
       "role": "reference"
     },
     "source7": {
-      "path": "crates/oracle/src/bench.rs",
+      "path": "crates/oracle/examples/typescript.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "crates/oracle/src/group.rs",
+      "path": "crates/oracle/src/bench.rs",
       "role": "reference"
     },
     "source9": {
-      "path": "crates/oracle/src/lib.rs",
+      "path": "crates/oracle/src/group.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "crates/oracle/src/main.rs",
+      "path": "crates/oracle/src/lib.rs",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/oracle/src/report.rs",
+      "path": "crates/oracle/src/main.rs",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/oracle/src/wasm.rs",
+      "path": "crates/oracle/src/report.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/oracle/src/wire.rs",
+      "path": "crates/oracle/src/typescript.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/oracle/src/wire_observation.rs",
+      "path": "crates/oracle/src/wasm.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/oracle/tests/bytes.rs",
+      "path": "crates/oracle/src/wire.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/oracle/tests/json.rs",
+      "path": "crates/oracle/src/wire_observation.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "crates/oracle/tests/oracle.rs",
+      "path": "crates/oracle/tests/bytes.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "package.json",
+      "path": "crates/oracle/tests/json.rs",
       "role": "reference"
     },
     "source19": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/oracle/tests/oracle.rs",
       "role": "reference"
     },
     "source20": {
+      "path": "crates/oracle/tests/value.rs",
+      "role": "reference"
+    },
+    "source21": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source22": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source23": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -104,26 +116,29 @@
       "topic": "version付き観測batchをOracleGroupへ通すJSON境界、件数と入力size、CLIとWasm ABI",
       "mode": "semantic",
       "reference": {
-        "source": "source13"
+        "source": "source15"
       },
       "target": {
         "source": "source3"
       },
       "context": [
         {
-          "source": "source12"
-        },
-        {
-          "source": "source10"
-        },
-        {
           "source": "source14"
+        },
+        {
+          "source": "source11"
         },
         {
           "source": "source16"
         },
         {
-          "source": "source15"
+          "source": "source18"
+        },
+        {
+          "source": "source17"
+        },
+        {
+          "source": "source20"
         },
         {
           "source": "source4"
@@ -132,22 +147,35 @@
     },
     {
       "id": "oracle-implementation-1",
-      "topic": "typed observation比較とmatched/mismatch/invalid/unknown/error、集約の優先順位",
+      "topic": "開発用typescript featureのRust契約からのTS型生成、既定依存と実行時serde制約との分離",
       "mode": "semantic",
       "reference": {
-        "source": "source11"
+        "source": "source13"
       },
       "target": {
         "source": "source3"
       },
-      "context": []
+      "context": [
+        {
+          "source": "source1"
+        },
+        {
+          "source": "source7"
+        },
+        {
+          "source": "source12"
+        },
+        {
+          "source": "source15"
+        }
+      ]
     },
     {
       "id": "oracle-implementation-2",
-      "topic": "groupとcase登録、入力付きreport、保存oracleを呼ばないreplay、構造検査",
+      "topic": "typed observation比較とmatched/mismatch/invalid/unknown/error、集約の優先順位",
       "mode": "semantic",
       "reference": {
-        "source": "source8"
+        "source": "source12"
       },
       "target": {
         "source": "source3"
@@ -156,17 +184,29 @@
     },
     {
       "id": "oracle-implementation-3",
+      "topic": "groupとcase登録、入力付きreport、保存oracleを呼ばないreplay、構造検査",
+      "mode": "semantic",
+      "reference": {
+        "source": "source9"
+      },
+      "target": {
+        "source": "source3"
+      },
+      "context": []
+    },
+    {
+      "id": "oracle-implementation-4",
       "topic": "preflightと全呼出照合、予算、clock、順序、raw samplesと速度比、部分失敗",
       "mode": "semantic",
       "reference": {
-        "source": "source7"
+        "source": "source8"
       },
       "target": {
         "source": "source3"
       },
       "context": [
         {
-          "source": "source17"
+          "source": "source19"
         }
       ]
     }

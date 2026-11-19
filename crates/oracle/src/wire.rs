@@ -1,11 +1,13 @@
 use crate::wire_observation::WireObservation;
 use crate::{Case, CaseReport, CheckReport, Error, Observation, OracleGroup};
 use serde::{Deserialize, Serialize};
-use serde_json::{Value, json};
+use serde_json::Value;
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct Request {
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[cfg_attr(feature = "typescript", ts(rename = "OracleRequest"))]
+pub(crate) struct Request {
     version: u32,
     group: String,
     reference: String,
@@ -14,7 +16,9 @@ struct Request {
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct Input {
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[cfg_attr(feature = "typescript", ts(rename = "OracleInput"))]
+pub(crate) struct Input {
     id: String,
     input: Value,
     reference: WireObservation,
@@ -22,22 +26,32 @@ struct Input {
 }
 
 #[derive(Serialize)]
-struct Checked<'a> {
-    kind: &'static str,
-    report: CheckReport<&'a Value, &'a Value>,
+#[serde(tag = "kind", rename_all = "kebab-case")]
+#[cfg_attr(feature = "typescript", derive(ts_rs::TS))]
+#[cfg_attr(feature = "typescript", ts(rename = "OracleResponse"))]
+pub(crate) enum Response<'a> {
+    Checked {
+        report: CheckReport<&'a Value, &'a Value>,
+    },
+    Error {
+        message: String,
+    },
+}
+
+fn error_response(error: Error) -> Value {
+    serde_json::to_value(Response::Error {
+        message: error.to_string(),
+    })
+    .expect("serializable oracle error")
 }
 
 /// Evaluate an observed JSON batch with the same semantics as `OracleGroup::check`.
 /// Callbacks and clocks remain on the host; this boundary does not time implementations.
 pub fn dispatch(bytes: &[u8]) -> Value {
     execute(bytes, |report| {
-        serde_json::to_value(Checked {
-            kind: "checked",
-            report,
-        })
-        .expect("serializable oracle response")
+        serde_json::to_value(Response::Checked { report }).expect("serializable oracle response")
     })
-    .unwrap_or_else(|error| json!({"kind":"error","message":error.to_string()}))
+    .unwrap_or_else(error_response)
 }
 
 /// Encode the complete response for byte-oriented hosts without changing the JSON contract.
@@ -47,21 +61,82 @@ pub fn dispatch_json(bytes: &[u8]) -> Vec<u8> {
     output
 }
 
+fn valid_value_depth(input: &Value) -> bool {
+    let mut pending = vec![(input, 0)];
+    while let Some((value, depth)) = pending.pop() {
+        if matches!(value, Value::Array(_) | Value::Object(_)) && depth + 1 >= 128 {
+            return false;
+        }
+        match value {
+            Value::Array(values) => pending.extend(values.iter().map(|value| (value, depth + 1))),
+            Value::Object(values) => {
+                pending.extend(values.values().map(|value| (value, depth + 1)))
+            }
+            _ => {}
+        }
+    }
+    true
+}
+
+fn discard_value(input: Value) {
+    let mut pending = vec![input];
+    while let Some(value) = pending.pop() {
+        match value {
+            Value::Array(values) => pending.extend(values),
+            Value::Object(values) => pending.extend(values.into_values()),
+            _ => {}
+        }
+    }
+}
+
+/// Evaluate canonical JSON data without a JSON text roundtrip.
+/// The serialized size and container depth retain the byte API limits.
+pub fn dispatch_value(input: Value) -> Value {
+    if !valid_value_depth(&input) {
+        discard_value(input);
+        return error_response(Error("JSON batch exceeds parser depth".into()));
+    }
+    struct SizeLimit(usize);
+    impl std::io::Write for SizeLimit {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            if bytes.len() > (16 * 1024 * 1024usize).saturating_sub(self.0) {
+                return Err(std::io::Error::other("JSON batch exceeds 16 MiB"));
+            }
+            self.0 += bytes.len();
+            Ok(bytes.len())
+        }
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+    if serde_json::to_writer(SizeLimit(0), &input).is_err() {
+        return error_response(Error("JSON batch exceeds 16 MiB".into()));
+    }
+    serde_json::from_value(input)
+        .map_err(|error| Error(error.to_string()))
+        .and_then(|request| {
+            execute_request(request, |report| {
+                serde_json::to_value(Response::Checked { report })
+                    .expect("serializable oracle response")
+            })
+        })
+        .unwrap_or_else(error_response)
+}
+
 pub(crate) fn dispatch_into(bytes: &[u8], output: &mut Vec<u8>) {
     output.clear();
     if let Err(error) = execute(bytes, |report| {
-        serde_json::to_writer(
-            &mut *output,
-            &Checked {
-                kind: "checked",
-                report,
-            },
-        )
-        .expect("serialize oracle response");
+        serde_json::to_writer(&mut *output, &Response::Checked { report })
+            .expect("serialize oracle response");
     }) {
         output.clear();
-        serde_json::to_writer(output, &json!({"kind":"error","message":error.to_string()}))
-            .expect("serialize oracle error");
+        serde_json::to_writer(
+            output,
+            &Response::Error {
+                message: error.to_string(),
+            },
+        )
+        .expect("serialize oracle error");
     }
 }
 
@@ -92,6 +167,13 @@ fn execute<R>(
     }
     let request: Request =
         serde_json::from_slice(bytes).map_err(|error| Error(error.to_string()))?;
+    execute_request(request, emit)
+}
+
+fn execute_request<R>(
+    request: Request,
+    emit: impl FnOnce(CheckReport<&Value, &Value>) -> R,
+) -> Result<R, Error> {
     if request.version != 1
         || request.cases.len() > 4096
         || request.implementations.len() > 256

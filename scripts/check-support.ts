@@ -363,7 +363,19 @@ const scopes: readonly CrateScope[] = [
           "src/wire_observation.rs",
           "tests/json.rs",
           "tests/bytes.rs",
+          "tests/value.rs",
           "benches/wire.rs",
+        ],
+      },
+      {
+        path: "src/typescript.rs",
+        topic:
+          "開発用typescript featureのRust契約からのTS型生成、既定依存と実行時serde制約との分離",
+        context: [
+          "Cargo.toml",
+          "examples/typescript.rs",
+          "src/report.rs",
+          "src/wire.rs",
         ],
       },
       {

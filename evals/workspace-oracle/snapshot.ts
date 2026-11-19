@@ -1,15 +1,8 @@
-interface Snapshot {
-  readonly type: string;
-  readonly value?:
-    | string
-    | boolean
-    | readonly Snapshot[]
-    | Readonly<Record<string, Snapshot>>;
-}
+import type { JsonValue } from "../../src/generated/roracle.js";
 
-export const snapshot = (value: unknown): Snapshot => {
+export const snapshot = (value: unknown): JsonValue => {
   const ancestors = new Set<object>();
-  const visit = (input: unknown, depth: number): Snapshot => {
+  const visit = (input: unknown, depth: number): JsonValue => {
     if (depth > 48) throw new Error("Oracle snapshot nesting exceeds 48");
     if (input === null) return { type: "null" };
     switch (typeof input) {
@@ -55,7 +48,7 @@ export const snapshot = (value: unknown): Snapshot => {
     if (Object.getPrototypeOf(input) !== Object.prototype)
       throw new Error("Oracle snapshots require plain objects");
     const descriptors = Object.getOwnPropertyDescriptors(input);
-    const fields: Record<string, Snapshot> = {};
+    const fields: Record<string, JsonValue> = {};
     for (const key of Object.keys(descriptors)) {
       const descriptor = descriptors[key];
       if (!descriptor || !("value" in descriptor))

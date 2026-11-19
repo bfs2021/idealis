@@ -31,6 +31,30 @@ support-replay run:
   pnpm build
   node dist/evals/crate-checklists/run.js {{quote(run)}} --replay
 
+oracle-types:
+  pnpm oracle:types
+
+oracle-types-check:
+  pnpm oracle:types:check
+
+oracle-native-build:
+  pnpm oracle:native:build
+
+oracle-native-test: oracle-native-build oracle-wire-build
+  cargo fmt --manifest-path evals/roracle-native/rust/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path evals/roracle-native/rust/Cargo.toml -- -D warnings
+  pnpm oracle:native:test
+  IDEALIS_ORACLE_BACKEND=native-json node --test dist/evals/workspace-oracle/contract-test.js
+  IDEALIS_ORACLE_BACKEND=native-object node --test dist/evals/workspace-oracle/contract-test.js
+
+oracle-native-eval output:
+  pnpm build
+  node dist/evals/roracle-native/run.js {{quote(output)}}
+
+oracle-native-replay run output:
+  pnpm build
+  node dist/evals/roracle-native/replay.js {{quote(run)}} {{quote(output)}}
+
 oracle-wire-build:
   pnpm oracle:build
 

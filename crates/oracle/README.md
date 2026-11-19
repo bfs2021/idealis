@@ -76,6 +76,14 @@ nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`
 
 Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracle_output_ptr/len`とmemoryをexportする。inputへUTF-8 JSONを書き、dispatch後にoutputをコピーする。過大なresizeは0を返して前のinputを消す。bufferは次のresize/dispatchで無効になり、runtimeへの呼び出しは直列にする。JS bindingはworkspaceの[eval adapter](../../evals/workspace-oracle/README.md)へ置き、npm公開APIには追加していない。
 
+`dispatch_value(serde_json::Value)`も同じRequestとOracleGroupを使う。canonical serializationで16 MiBを検査し、深すぎる入れ子は再帰的にdropせず拒否する。文字列表現や重複fieldを保持する必要がある場合はbytes APIを使う。
+
+## RustからTS型を生成する
+
+開発用の`typescript` featureで`typescript::definitions()`を有効にする。`just oracle-types`はrequest/reportのTS宣言を生成し、`just oracle-types-check`は保存した宣言との一致を要求する。通常のbuildではts-rsを有効にしない。serdeの未知field拒否など、実行時の制約はRust側に残る。ts-rsが出す`deny_unknown_fields`未対応の警告は、TS型だけではこの制約を表せないことを示す。
+
+[napi-rsの実験binding](../../evals/roracle-native/README.md)も同じ生成型を参照する。bindingはこのcrateの依存に含めず、既存のWasm ABIを維持する。型生成の初回対象はroracleで、他crateの全DTOにはまだ広げていない。
+
 ## JSON境界のCriterionベンチ
 
 `just oracle-criterion`で単独・32 cases・入れ子256要素・unknownの4入力を測る。Valueとbytesの2出力を分け、入力の構築と出力の破棄は時計の外へ置く。parse・照合・全reportの生成は時計内に含む。Criterionは開発用依存で、配布libraryの実行時依存には含まない。
