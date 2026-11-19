@@ -567,10 +567,17 @@ export type SafetyStep<Version extends 1 | 2 = 1> =
       readonly domain: SafetyDomain<Version>;
     }
   | (Version extends 2
-      ? SafetyFrameFor<Version> & {
-          readonly kind: "frame";
-          readonly branches: readonly SafetyBranch<Version>[];
-        }
+      ?
+          | {
+              readonly kind: "call";
+              readonly definition: number;
+              readonly arguments: readonly SafetyExpressionFor<Version>[];
+              readonly captures: readonly SafetyExpressionFor<Version>[];
+            }
+          | (SafetyFrameFor<Version> & {
+              readonly kind: "frame";
+              readonly branches: readonly SafetyBranch<Version>[];
+            })
       : never);
 
 export interface SafetyBranch<Version extends 1 | 2 = 1> {
@@ -646,15 +653,27 @@ interface SafetyProgramFields<Version extends 1 | 2> {
   readonly fairness?: readonly TemporalFormula<Version>[];
 }
 
-export interface SafetyDefinition {
+interface SafetyDefinitionFields {
   readonly recursive?: boolean;
   readonly id: number;
   readonly parameterCount: number;
   readonly captureCount: number;
-  readonly bodyKind: "expression";
   readonly localScope: number;
+}
+
+export interface SafetyExpressionDefinition extends SafetyDefinitionFields {
+  readonly bodyKind: "expression";
   readonly body: SafetyExpressionV2;
 }
+
+export interface SafetyActionDefinition extends SafetyDefinitionFields {
+  readonly bodyKind: "action";
+  readonly body: readonly SafetyBranch<2>[];
+}
+
+export type SafetyDefinition =
+  | SafetyExpressionDefinition
+  | SafetyActionDefinition;
 
 export type SafetyProgramV1 = SafetyProgramFields<1>;
 

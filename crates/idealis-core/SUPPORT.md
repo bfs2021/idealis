@@ -43,3 +43,5 @@
 - [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。sourceのLET内の`@`はcompilerがlowerする。
 
 [追加対応と独立比較](../../evals/iterations/0070-tla-coverage.md)を参照。構文受理・有限実行・証明の検証を区別する。
+
+- [x] 明示v2の再帰action定義とStep callをnative/Wasmのcompile/check経路で扱う。Rust compilerとrtlcへ委譲し、入力拒否・boundedと違反を区別する。ブラウザでホストimportやcross-origin isolationなしに実行する。

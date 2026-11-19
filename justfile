@@ -574,6 +574,27 @@ compiler-test:
   cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
 
+recursive-actions-test: portable-build
+  pnpm build
+  cargo test --locked --manifest-path crates/rtlc/Cargo.toml --test recursive_actions
+  cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test recursive_actions
+  node --test dist/evals/recursive-actions/contract-test.js
+
+recursive-actions-oracle run java jar: safety-build
+  node dist/evals/recursive-actions/execute.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+recursive-actions-freeze directory:
+  pnpm build
+  node dist/evals/recursive-actions/bench.js freeze {{quote(directory)}}
+
+recursive-actions-bench snapshot run:
+  pnpm build
+  node dist/evals/recursive-actions/bench.js run {{quote(run)}} {{quote(snapshot)}}
+
+recursive-actions-profile snapshot run:
+  pnpm build
+  node dist/evals/recursive-actions/profile.js {{quote(run)}} {{quote(snapshot)}}
+
 coverage-test: safety-build
   node --test dist/evals/action-coverage/contract-test.js
 
@@ -702,7 +723,7 @@ quint-test: portable-build
 analysis-test: portable-build rtla-build
   cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
   pnpm build
-  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js dist/evals/tla-coverage/contract-test.js dist/evals/tla-coverage/normalize-test.js dist/evals/rtla-compatibility/contract-test.js
+  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js dist/evals/tla-coverage/contract-test.js dist/evals/tla-coverage/normalize-test.js dist/evals/rtla-compatibility/contract-test.js dist/evals/recursive-actions/contract-test.js
 
 prepared-test: portable-build
   pnpm build

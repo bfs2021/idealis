@@ -1,5 +1,5 @@
 use crate::CoreError;
-use crate::ir::{Binding, Branch, Domain, Expression, FoldOrder, Scalar, Step};
+use crate::ir::{Binding, Branch, DefinitionBody, Domain, Expression, FoldOrder, Scalar, Step};
 use crate::safety_values::Arena;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_values::ValueRemap;
@@ -34,11 +34,15 @@ struct Argument {
 }
 
 impl Argument {
-    fn new(expression: &Expression, context: EvalContext<'_>) -> Self {
+    fn new(
+        expression: &Expression,
+        context: EvalContext<'_>,
+        frame: Option<Arc<CallFrame>>,
+    ) -> Self {
         Self {
             expression: Arc::new(expression.clone()),
             locals: context.locals.to_vec(),
-            frame: context.frame.cloned().map(Arc::new),
+            frame,
             old: context.old,
         }
     }
@@ -68,14 +72,19 @@ impl CallFrame {
         captures: &[Expression],
         context: EvalContext<'_>,
     ) -> Self {
+        let parent = context
+            .frame
+            .filter(|_| !arguments.is_empty() || !captures.is_empty())
+            .cloned()
+            .map(Arc::new);
         Self {
             arguments: arguments
                 .iter()
-                .map(|value| Argument::new(value, context))
+                .map(|value| Argument::new(value, context, parent.clone()))
                 .collect(),
             captures: captures
                 .iter()
-                .map(|value| Argument::new(value, context))
+                .map(|value| Argument::new(value, context, parent.clone()))
                 .collect(),
         }
     }
@@ -165,6 +174,15 @@ pub(crate) fn register_branch_memberships<'a>(
                             visitor(expression);
                         }
                         pending.push(branches);
+                    }
+                    Step::Call {
+                        arguments,
+                        captures,
+                        ..
+                    } => {
+                        for expression in arguments.iter().chain(captures) {
+                            visitor(expression);
+                        }
                     }
                     Step::Guard { expression }
                     | Step::Assign {
@@ -303,7 +321,7 @@ pub(crate) fn validate_branches(
         };
         for step in &branch.steps {
             match step {
-                Step::Frame { .. } => {
+                Step::Frame { .. } | Step::Call { .. } => {
                     return Err(CoreError::protocol(
                         "Operator references require safety IR v2",
                     ));
@@ -830,8 +848,11 @@ impl Expression {
                     .get(*definition)
                     .ok_or_else(|| CoreError::protocol("Unknown safety definition"))?;
                 let frame = CallFrame::new(arguments, captures, ctx);
+                let DefinitionBody::Expression(body) = &definition.body else {
+                    return Err(CoreError::protocol("Invalid safety call body kind"));
+                };
                 evaluate(
-                    &definition.body,
+                    body,
                     EvalContext {
                         recursive: ctx.recursive || definition.recursive,
                         locals: &[],
@@ -1895,6 +1916,36 @@ pub(crate) fn visit_branch(
     };
     let context = EvalContext { next, ..ctx };
     match step {
+        Step::Call {
+            definition,
+            arguments,
+            captures,
+        } => {
+            arena.consume(1)?;
+            let definition = arena
+                .definitions
+                .get(*definition)
+                .ok_or_else(|| CoreError::protocol("Unknown safety definition"))?;
+            let DefinitionBody::Action(branches) = &definition.body else {
+                return Err(CoreError::protocol("Invalid safety call body kind"));
+            };
+            let frame = CallFrame::new(arguments, captures, context);
+            let inner = EvalContext {
+                recursive: ctx.recursive || definition.recursive,
+                locals: &[],
+                frame: Some(&frame),
+                old: None,
+                ..ctx
+            };
+            for inner_branch in branches {
+                if visit_branch(inner_branch, 0, inner, next, arena, &mut |next, arena| {
+                    visit_branch(branch, position + 1, ctx, next, arena, visitor)
+                })? {
+                    return Ok(true);
+                }
+            }
+            Ok(false)
+        }
         Step::Frame {
             arguments,
             captures,

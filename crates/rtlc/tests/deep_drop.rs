@@ -34,7 +34,7 @@ fn definition(
         capture_count,
         body_kind: BodyKind::Expression,
         local_scope: 0,
-        body,
+        body: body.into(),
     }
 }
 

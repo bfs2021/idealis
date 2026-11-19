@@ -119,6 +119,12 @@ const scopes: readonly CrateScope[] = [
           "SPECIFICATIONの分解、定数有限domain上の量化fairness、wrapperと対象外の区別",
       },
       {
+        path: "src/lib.rs",
+        contains: "fn shared_body_ir(",
+        topic:
+          "共有expression/action定義の登録、phase・用途・target signature・body kindの区別と遅延引数",
+      },
+      {
         path: "src/typed_expr.rs",
         topic:
           "明示v2の型付きexpression lowering、共有callとframe-localなbinder、SelectSeq/SortSeq/Assertと再帰callback",
@@ -126,7 +132,7 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/typed_lower.rs",
         topic:
-          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、module連結対応とaction template非共有",
+          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、module連結、非再帰actionのinlineと再帰actionの共有call",
       },
       {
         path: "src/elaborate.rs",
@@ -167,7 +173,8 @@ const scopes: readonly CrateScope[] = [
     evidence: [
       {
         path: "src/ir.rs",
-        topic: "IRの値と式・予算・結果のwire契約。準備済み所有型の実装は別比較",
+        topic:
+          "IRの値と式・action定義・Step call・予算・結果のwire契約。準備済み所有型の実装は別比較",
         context: ["src/lib.rs"],
         targetContains: "IRのwire構造は",
       },
@@ -232,13 +239,25 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/safety_definitions.rs",
         topic:
-          "v2の定義graph、ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
+          "v2の定義graph、expression/action kind・ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
       },
       {
         path: "src/safety_expressions.rs",
         contains: "fn eval_reference<T>(",
         topic:
           "call-by-nameの要求時評価、callerのlexical環境とphase、callと引数のwork課金。値のmemoizationとの区別",
+      },
+      {
+        path: "src/safety_expressions.rs",
+        contains: "pub(crate) fn visit_branch(",
+        topic:
+          "共有action呼出しの代入生成、分岐の巻き戻しとcaller継続、再帰フラグとwork境界",
+      },
+      {
+        path: "src/safety_expressions.rs",
+        contains: "impl CallFrame {",
+        topic:
+          "actual/capture間でのimmutableな親frameの共有、caller locals/oldと要求時評価、値cacheを持たないこと",
       },
       {
         path: "src/bounded_drop.rs",

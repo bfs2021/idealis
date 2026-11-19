@@ -29,7 +29,7 @@ fn definition(id: usize, body: Expression) -> Definition {
         capture_count: 0,
         body_kind: BodyKind::Expression,
         local_scope: 0,
-        body,
+        body: body.into(),
     }
 }
 
@@ -56,11 +56,15 @@ fn program(body: Expression) -> SafetyProgram {
 }
 
 fn first_body(input: &mut SafetyProgram) -> &mut Expression {
-    &mut input
+    let rtlc::ir::DefinitionBody::Expression(body) = &mut input
         .definitions
         .as_mut()
         .expect("the program has definitions")[0]
         .body
+    else {
+        panic!("the definition contains an expression")
+    };
+    body
 }
 
 fn not_chain(depth: usize) -> Expression {

@@ -36,6 +36,18 @@
     }
   },
   {
+    "space": "ir-definition",
+    "constructor": "definition",
+    "operatorClass": "",
+    "position": "body[*]",
+    "role": "definition-body",
+    "scope": "frame",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
     "space": "ir-domain",
     "constructor": "range",
     "operatorClass": "",
@@ -1602,6 +1614,42 @@
     "position": "domain",
     "role": "value",
     "scope": "caller",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
+    "space": "ir-step",
+    "constructor": "call",
+    "operatorClass": "",
+    "position": "arguments[*]",
+    "role": "call-actual",
+    "scope": "caller",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
+    "space": "ir-step",
+    "constructor": "call",
+    "operatorClass": "",
+    "position": "captures[*]",
+    "role": "call-capture",
+    "scope": "caller",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
+    "space": "ir-step",
+    "constructor": "call",
+    "operatorClass": "",
+    "position": "definition",
+    "role": "call-edge",
+    "scope": "definition",
     "forwarding": {
       "action": "stop",
       "membership": "stop"

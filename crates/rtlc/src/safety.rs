@@ -343,7 +343,15 @@ impl<'program, R: Recording> Search<'program, R> {
         };
         arena.metadata = metadata.clone();
         for definition in arena.definitions {
-            arena.register_memberships(&definition.body);
+            match &definition.body {
+                crate::ir::DefinitionBody::Expression(body) => arena.register_memberships(body),
+                crate::ir::DefinitionBody::Action(branches) => {
+                    crate::safety_expressions::register_branch_memberships(
+                        branches,
+                        &mut |expression| arena.register_memberships(expression),
+                    );
+                }
+            }
         }
         if self.options.partial_order {
             self.partial_order = Some(PartialOrder::prepare(program));

@@ -1604,7 +1604,10 @@ Safe == Can(x) /\ Can(y) /\ Can(<<x,y>>) /\ Can(<<y,x>>) /\ Can(<<x,<<y>>>>) /\ 
   assert.equal(program.version, 2);
   if (program.version !== 2) return;
   const specializations = program.definitions.filter(
-    (entry) => entry.parameterCount === 1 && entry.body.op === "if",
+    (entry) =>
+      entry.bodyKind === "expression" &&
+      entry.parameterCount === 1 &&
+      entry.body.op === "if",
   );
   assert.equal(specializations.length, 5);
   for (const entry of specializations) {

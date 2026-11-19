@@ -85,7 +85,7 @@ impl Symmetry {
                     Step::Bind { domain, .. } | Step::Choose { domain, .. } => {
                         domain_roots(domain, &names, &mut expressions)
                     }
-                    Step::Frame { .. } => {
+                    Step::Frame { .. } | Step::Call { .. } => {
                         return Err(CoreError::protocol("Unsupported symmetry: lexical frame"));
                     }
                 }

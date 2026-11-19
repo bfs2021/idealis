@@ -53,7 +53,8 @@ fn deep_action_frame_program() -> SafetyProgram {
             body: Expression::Enabled {
                 branches,
                 subscript: None,
-            },
+            }
+            .into(),
         }]),
     }
 }

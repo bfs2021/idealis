@@ -622,6 +622,19 @@ const branchDescriptor = {
   steps: each(edge("ir-step", "action-step", "caller", "inherit", "stop", 0)),
 } satisfies Descriptor<SafetyBranch<2>>;
 const stepDescriptors = {
+  call: {
+    kind: a,
+    definition: edge(
+      "ir-call-id",
+      "call-edge",
+      "definition",
+      "stop",
+      "stop",
+      0,
+    ),
+    arguments: each(expr("call-actual")),
+    captures: each(expr("call-capture")),
+  },
   bind: { kind: a, slot: a, domain: domain("value"), tupleSize: a },
   guard: { kind: a, expression: expr("value", "caller", "stop", "stop", 0) },
   assign: {
@@ -647,6 +660,10 @@ const definitionDescriptor = {
   bodyKind: a,
   localScope: a,
   body: expr("definition-body", "frame", "stop", "stop", 0),
+} satisfies Descriptor<SafetyDefinition>;
+const actionDefinitionDescriptor = {
+  ...definitionDescriptor,
+  body: each(branch("definition-body", "frame", "stop")),
 } satisfies Descriptor<SafetyDefinition>;
 const temporalDescriptors = {
   atom: { kind: a, expression: { ...expr(), depth: 0 } },
@@ -817,7 +834,9 @@ const descriptorFor = (
     case "ir-step":
       return stepDescriptors[node.value.kind];
     case "ir-definition":
-      return definitionDescriptor;
+      return node.value.bodyKind === "action"
+        ? actionDefinitionDescriptor
+        : definitionDescriptor;
     case "ir-temporal":
       return temporalDescriptors[node.value.kind];
     case "ir-program":
@@ -1142,6 +1161,7 @@ const makeRoles = (): readonly AnalysisRole[] => {
     ...tableRows("ir-binding", "binding", "", bindingDescriptor),
     ...tableRows("ir-branch", "branch", "", branchDescriptor),
     ...tableRows("ir-definition", "definition", "", definitionDescriptor),
+    ...tableRows("ir-definition", "definition", "", actionDefinitionDescriptor),
     ...tableRows("ir-program", "program", "", programDescriptor),
   );
   rows.push(

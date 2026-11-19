@@ -7,9 +7,9 @@ import {
 import type {
   SafetyBinding as SafetyBindingBase,
   SafetyBranch as SafetyBranchBase,
-  SafetyDefinition,
   SafetyDomain as SafetyDomainBase,
   SafetyExpressionV2 as SafetyExpression,
+  SafetyExpressionDefinition,
   SafetyPredicate as SafetyPredicateBase,
   SafetyProgram,
   SafetyStep as SafetyStepBase,
@@ -275,7 +275,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     readonly purpose: "value" | "membership-type";
     readonly signature: readonly StaticTarget[];
     captures: readonly number[];
-    definition: SafetyDefinition;
+    definition: SafetyExpressionDefinition;
     pending?: { readonly body: Expression; readonly context: Context };
   }[] = [];
   const bindingIds = new Map<string, number>();

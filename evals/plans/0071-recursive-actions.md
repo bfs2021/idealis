@@ -4,15 +4,15 @@
 
 ## 実装と比較
 
-- [ ] TLCのgetNextStates、getInitStates、operator contextと継続の処理を読む。
-- [ ] 共有definition表にaction本体とStepのcallを追加し、expressionとの区別・arity・capture・phase・SCCを検証する。
-- [ ] compilerは再帰actionを実行時の呼出しへlowerする。非再帰の既存inlineと省略時v1を維持する。
-- [ ] 自己・相互再帰、分岐、有限量化、LET/INSTANCE、高階特殊化、target、prime、EXCEPT oldとcaller/calleeの束縛を検査する。
-- [ ] 代入済みslotの照合、分岐間の巻き戻し、呼出し後の継続と未代入変数を検査する。
-- [ ] 非停止・work・評価深さの打ち切りをboundedとして返し、native/Wasm・TS decoder・browserで再現する。
-- [ ] TLCの独立実行と判定・状態数・生成数・強制反例を照合し、raw出力とhashを保存する。
-- [ ] Criterionの初期測定を固定し、profileで確認した費用を改善する。値のmemoizationで意味やwork課金を変えない。
-- [ ] 対応表・README・IR契約、Jev live/offline/staged、既存回帰と配布consumerを確認する。
+- [x] TLCのgetNextStates、getInitStates、operator contextと継続の処理を読む。
+- [x] 共有definition表にaction本体とStepのcallを追加し、expressionとの区別・arity・capture・phase・SCCを検証する。
+- [x] compilerは再帰actionを実行時の呼出しへlowerする。非再帰の既存inlineと省略時v1を維持する。
+- [x] 自己・相互再帰、分岐、有限量化、LET/INSTANCE、高階特殊化、target、prime、EXCEPT oldとcaller/calleeの束縛を検査する。
+- [x] 代入済みslotの照合、分岐間の巻き戻し、呼出し後の継続と未代入変数を検査する。
+- [x] 非停止・work・評価深さの打ち切りをboundedとして返し、native/Wasm・TS decoder・browserで再現する。
+- [x] TLCの独立実行と判定・状態数・生成数・強制反例を照合し、raw出力とhashを保存する。
+- [x] Criterionの初期測定を固定し、profileで確認した費用を改善する。値のmemoizationで意味やwork課金を変えない。
+- [x] 対応表・README・IR契約、Jev live/offline/staged、既存回帰と配布consumerを確認する。
 
 ## 測定条件
 

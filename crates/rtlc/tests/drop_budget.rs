@@ -430,7 +430,7 @@ fn definition(id: usize, body: Expression) -> Definition {
         capture_count: 0,
         body_kind: BodyKind::Expression,
         local_scope: 0,
-        body,
+        body: body.into(),
     }
 }
 

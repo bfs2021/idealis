@@ -848,7 +848,8 @@ fn public_program_deep_action_frames_are_checked_before_recursive_analysis() {
     input.definitions.as_mut().unwrap()[0].body = Expression::Enabled {
         branches,
         subscript: None,
-    };
+    }
+    .into();
     let error = crate::safety_definitions::validate_program(&input)
         .err()
         .unwrap();
@@ -1058,7 +1059,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1072,7 +1073,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1086,7 +1087,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1101,7 +1102,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1116,7 +1117,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1131,7 +1132,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1146,7 +1147,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1161,7 +1162,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1175,7 +1176,7 @@ analysis_parity_wire_direct!(
         } else {
             unreachable!();
         }
-        input.definitions.as_mut().unwrap()[0].body = node;
+        input.definitions.as_mut().unwrap()[0].body = node.into();
     },
     false
 );
@@ -1299,7 +1300,8 @@ analysis_parity_wire_direct!(
             body: Box::new(crate::ir::Expression::Literal {
                 value: crate::ir::Scalar::Bool(true),
             }),
-        };
+        }
+        .into();
     },
     false
 );
@@ -1318,7 +1320,8 @@ analysis_parity_wire_direct!(
             body: Box::new(crate::ir::Expression::Literal {
                 value: crate::ir::Scalar::Bool(true),
             }),
-        };
+        }
+        .into();
     },
     false
 );

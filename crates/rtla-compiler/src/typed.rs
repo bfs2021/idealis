@@ -45,7 +45,8 @@ pub(crate) fn level_summary(node: Node<'_>, cache: &HashMap<usize, LevelSummary>
                     }
                 }
             }
-            Node::Expression(I::Call { definition, .. }) => {
+            Node::Expression(I::Call { definition, .. })
+            | Node::Step(Step::Call { definition, .. }) => {
                 if let Some(body) = cache.get(definition) {
                     summary.base = summary.base.max(body.base);
                     for (slots, role) in [
@@ -138,6 +139,11 @@ pub(crate) fn remap_calls(node: NodeMut<'_>, mapping: &HashMap<usize, usize>) {
 pub(crate) fn trim_call_captures(node: NodeMut<'_>, mappings: &[HashMap<usize, usize>]) {
     walk_mut(node, false, &mut |node| {
         if let NodeMut::Expression(I::Call {
+            definition,
+            captures,
+            ..
+        })
+        | NodeMut::Step(Step::Call {
             definition,
             captures,
             ..

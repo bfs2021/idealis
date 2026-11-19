@@ -152,3 +152,5 @@ pnpm eval:replay evals/runs/my-run-confirmation
 [0059: prepared定数・型別命令・並列照合](iterations/0059-prepared-execution.md)は3案を順に試し、Data定数cacheを採用する。型別命令と並列照合の後退、最終9経路と14本の段階別比較、旧版への完全応答照合を残す。チャネルのWasmは改善後もtla-tsより遅い。
 
 [0060: 限定したSYMMETRY](iterations/0060-restricted-symmetry.md)は、scalar node関数の行で状態を同一視する。宣言の前提、nativeの起動込み・prepared比較、TLCと具体traceの照合、通常ringで残る変動、失敗した測定driverも保存した。
+
+- [0071: 再帰action生成と親frame共有](iterations/0071-recursive-actions.md): TLC・native/Wasm・ブラウザの照合とCriterionの測定。

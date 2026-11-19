@@ -35,13 +35,14 @@ pub(crate) struct PreparedProgram {
 impl PreparedProgram {
     pub fn new(program: &SafetyProgram) -> Self {
         let mut roots = Vec::new();
-        roots.extend(
-            program
-                .definitions
-                .iter()
-                .flatten()
-                .map(|definition| &definition.body),
-        );
+        for definition in program.definitions.iter().flatten() {
+            match &definition.body {
+                crate::ir::DefinitionBody::Expression(body) => roots.push(body),
+                crate::ir::DefinitionBody::Action(branches) => {
+                    register_branch_memberships(branches, &mut |expression| roots.push(expression))
+                }
+            }
+        }
         register_branch_memberships(&program.initial, &mut |expression| roots.push(expression));
         register_branch_memberships(&program.next, &mut |expression| roots.push(expression));
         roots.extend(

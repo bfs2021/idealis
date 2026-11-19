@@ -963,15 +963,12 @@ impl Compiler<'_> {
                             .collect(),
                         parent: frame,
                     });
-                    pending.push((
-                        self.shared[*definition]
-                            .definition
-                            .as_ref()
-                            .unwrap()
-                            .body
-                            .clone(),
-                        Some(next),
-                    ));
+                    let ir::DefinitionBody::Expression(body) =
+                        &self.shared[*definition].definition.as_ref().unwrap().body
+                    else {
+                        return unsupported("generative UNCHANGED requires state variables");
+                    };
+                    pending.push((body.clone(), Some(next)));
                 }
                 I::Frame { .. } => {
                     let next = frames.len();

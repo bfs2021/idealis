@@ -8,7 +8,7 @@ SYMMETRYはv1だけで扱う。v2 frontendは宣言を拒否し、手書きv2 IR
 
 ## Wire契約
 
-全count/indexは`WIRE_INDEX_MAX = 4294967295`以下の0以上の整数に統一する。対象はDefinitionのid/parameterCount/captureCount/localScope、expression・action・temporal frameのparameterCount/captureCount/localScope、call.definition、parameter/capture/bound/readのslot、Bindingとbind stepのslot/tupleSize、assign/choose stepのslot、fold.accumulatorの25フィールドである。配列長とindexにも同じ範囲を適用する。TS decoderとRustのwire deserialize・直接構築したIRの検証は同じ範囲を使い、Rustはusize変換前に検査する。nativeとWasmで別の上限を使わない。範囲内でも実在ID・arity・slot・localScopeの制約は別に検査する。未使用DefinitionのparameterCount/captureCountは上限値を受理し、上限+1をprotocolで拒否する。bounds/resultの既存uint32契約は維持する。
+全count/indexは`WIRE_INDEX_MAX = 4294967295`以下の0以上の整数に統一する。対象はDefinitionのid/parameterCount/captureCount/localScope、expression・action・temporal frameのparameterCount/captureCount/localScope、expression/Stepのcall.definition、parameter/capture/bound/readのslot、Bindingとbind stepのslot/tupleSize、assign/choose stepのslot、fold.accumulatorの26フィールドである。配列長とindexにも同じ範囲を適用する。TS decoderとRustのwire deserialize・直接構築したIRの検証は同じ範囲を使い、Rustはusize変換前に検査する。nativeとWasmで別の上限を使わない。範囲内でも実在ID・arity・slot・localScopeの制約は別に検査する。未使用DefinitionのparameterCount/captureCountは上限値を受理し、上限+1をprotocolで拒否する。bounds/resultの既存uint32契約は維持する。
 
 v2はv1のprogramフィールドに必須の`definitions`配列を追加する。v1ではこのフィールドと新しい式を拒否する。未知のフィールド・versionも拒否する。v2 decoderはENABLEDの省略可能な`subscript: null`を保存し、native/Wasmの完全応答を一致させる。TS/Rustの正規化構造比較では従来どおりこのnullを省略できる。
 
@@ -23,7 +23,7 @@ v2はv1のprogramフィールドに必須の`definitions`配列を追加する�
 }
 ```
 
-`id`は配列indexに一致する0始まりの連続整数。`parameterCount`と`captureCount`は各参照領域の大きさ、`localScope`は定義frame内のbinder slotの容量（0〜40）。binderは導入時のlocals数と同じslotを使い、calleeのlocalsは空から始める。parameter / captureはbinderと別領域である。bodyKindはexpressionだけを受理し、actionは従来どおりinlineする。
+`id`は配列indexに一致する0始まりの連続整数。`parameterCount`と`captureCount`は各参照領域の大きさ、`localScope`は定義frame内のbinder slotの容量（0〜40）。binderは導入時のlocals数と同じslotを使い、calleeのlocalsは空から始める。parameter / captureはbinderと別領域である。bodyKindはexpressionまたはaction。actionのbodyはBranch配列で、`{kind:"call", definition, arguments, captures}`のStepから呼ぶ。expression callとaction callのkindを交換できない。Rust frontendの再帰action生成は[呼出しと制限](recursive-actions.md)を参照。
 
 ```json
 {
@@ -44,7 +44,7 @@ v2はv1のprogramフィールドに必須の`definitions`配列を追加する�
 
 captureは自由なlexical bindingの集合を、束縛の宣言順へ並べる。外側のscopeから内側へ、同じscopeのformal parameterは宣言順、binderは導入順とする。shadowされた同名bindingを名前でまとめない。EXCEPTの外側`@`もそのscopeで導入されたbindingとして明示captureする。parameter thunkのcaptureは値へ強制せずに保持する。
 
-定義entryのkeyは宣言位置・phase・用途・解決済みtarget signatureとする。phaseは`constant` / `initial` / `state` / `action`、用途は`value` / `membership-type`の順に固定する。各宣言の到達するkeyだけをこの順に並べ、callは対応するentryのIDを参照する。initial内の変数読取りの表現と、state / actionでの読取りを同一bodyに混ぜない。membership-typeは列挙せずに型集合を検査する用途で、引数・captureも要求時に同じ用途で解釈できる。生成位置が要求するformal/captureを依存順で解析し、call siteのcaller/宣言環境をたどって変数slotまたはtupleへ解決する。signatureは要求bindingの初出順にdescriptorを並べ、slotをtupleより先、slot番号とtuple要素を数値・構造の辞書順で比較する。tupleの順序と入れ子は保持し、同じsignatureだけを共有する。keyをwireの追加フィールドにせず、definition IDの決定規則として両frontendへ適用する。TS/Rustは同じ規則でlowerし、operator-sharing cohortで正規化後の定義表・call・branch・step構造を比較する。
+定義entryのkeyは宣言位置・phase・用途・解決済みtarget signature・body kind（expression、actionの順）とする。phaseは`constant` / `initial` / `state` / `action`、用途は`value` / `membership-type`の順に固定する。各宣言の到達するkeyだけをこの順に並べ、callは対応するentryのIDを参照する。initial内の変数読取りの表現と、state / actionでの読取りを同一bodyに混ぜない。membership-typeは列挙せずに型集合を検査する用途で、引数・captureも要求時に同じ用途で解釈できる。生成位置が要求するformal/captureを依存順で解析し、call siteのcaller/宣言環境をたどって変数slotまたはtupleへ解決する。signatureは要求bindingの初出順にdescriptorを並べ、slotをtupleより先、slot番号とtuple要素を数値・構造の辞書順で比較する。tupleの順序と入れ子は保持し、同じsignatureだけを共有する。keyをwireの追加フィールドにせず、definition IDの決定規則として両frontendへ適用する。TS/Rustは同じ規則でlowerし、operator-sharing cohortで正規化後の定義表・call・branch・step構造を比較する。
 
 ## 評価と検証
 
@@ -72,12 +72,12 @@ CASEのarm列は従来どおりif/elseへlowerするため、浅いsourceでも�
 
 生成的外殻全体へのactual IR代入は行わない。式定義はtarget signatureごとに共有し、EXCEPTのcaller oldとcallee old、caller binderとcallee binderを分ける。membership位置へ達するformal/captureの要求も定義graphで伝播し、actualを両frontendでmembership用途へlowerする。IF/CASE/LETのmembership結果にも用途を保持する。
 
-action/temporal外殻はcall siteごとにASTを展開し、非共有anonymous frameで包む。生成targetだけをsourceと環境から解決し、通常actualはcaller lexical frame付きthunkとして渡す。binder・old・parameter・captureをcalleeのlocalsへ貼り付けない。action template共有と再帰する代入actionの生成は未対応。
+action/temporal外殻はcall siteごとにASTを展開し、非共有anonymous frameで包む。生成targetだけをsourceと環境から解決し、通常actualはcaller lexical frame付きthunkとして渡す。binder・old・parameter・captureをcalleeのlocalsへ貼り付けない。Rust frontendの明示v2は、再帰する生成actionだけを共有action定義とStep callへ変換する。
 foldのoperator呼出しはaccumulator/element用の明示actualと専用frameを持つため、通常のshared callを維持する。ENABLEDとbinderを持つfoldをv1/v2で照合する。
 
 ## 非共有anonymous frame
 
-明示v2だけで、expressionは`{op: "frame", arguments, captures, parameterCount, captureCount, localScope, body}`、action stepは`{kind: "frame", arguments, captures, parameterCount, captureCount, localScope, branches}`、temporal formulaは`{kind: "frame", arguments, captures, parameterCount, captureCount, localScope, formula}`を使う。いずれも全フィールド必須で未知フィールドを拒否する。countsは配列長に一致し、localScopeは40以下。definition tableへのaction登録やcall site間のbody共有は行わない。
+明示v2だけで、expressionは`{op: "frame", arguments, captures, parameterCount, captureCount, localScope, body}`、action stepは`{kind: "frame", arguments, captures, parameterCount, captureCount, localScope, branches}`、temporal formulaは`{kind: "frame", arguments, captures, parameterCount, captureCount, localScope, formula}`を使う。いずれも全フィールド必須で未知フィールドを拒否する。countsは配列長に一致し、localScopeは40以下。非再帰のanonymous frame自体はdefinition tableへ登録しない。再帰actionは別の共有定義を使う。
 
 arguments/capturesはcaller scopeで検証し、bodyは空のlocals・独立parameter/capture領域・oldなしで検証する。callerのbinder/formal/oldを参照する式は引数または明示captureとして保持する。未使用actualと未選択branchも検証し、評価は要求時だけ行う。frame内部のshared callもdefinition graphとphase依存解析へ含める。
 
@@ -107,6 +107,6 @@ action展開はbranch.stepsとaction frame.branchesのedgeだけを数え、actu
 
 Definitionのoptionalな`recursive: true`は自己・相互再帰を明示する。省略とfalseは従来どおり循環を拒否する。強連結成分の全定義にフラグを要求し、phase・parameter・captureの依存を固定点で検査する。未評価分岐でも不正なphaseやarityを許可しない。
 
-再帰経路の動的評価は128段までで、超過は`bounded / evaluation`となる。work枯渇は`bounded / work`。制限を超えた再帰をcompleteやemptyにしない。値のmemoizationと再帰するactionの生成は追加しない。
+再帰経路の動的評価は128段までで、超過は`bounded / evaluation`となる。work枯渇は`bounded / work`。制限を超えた再帰をcompleteやemptyにしない。値のmemoizationは行わない。Rust frontendは明示v2の再帰actionを生成する。
 
 引数なしLET定義の自由な`@`は宣言側の環境を保持し、引数あり定義の`@`は適用側の環境に従う。Rustのv2では、別のEXCEPTへ入る引数なし定義を明示した遅延引数へ変換する。この組合せはv1と旧TS frontendで理由を示して拒否する。

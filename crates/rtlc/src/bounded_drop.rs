@@ -200,6 +200,14 @@ fn detach_bindings(bounds: &mut Vec<Binding>, budget: usize, worklist: &mut Work
 
 fn detach_step(step: &mut Step, budget: usize, worklist: &mut Worklist) {
     match step {
+        Step::Call {
+            arguments,
+            captures,
+            ..
+        } => {
+            dispose_expressions(mem::take(arguments), budget, worklist);
+            dispose_expressions(mem::take(captures), budget, worklist);
+        }
         Step::Frame {
             arguments,
             captures,

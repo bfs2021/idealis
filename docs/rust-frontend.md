@@ -53,7 +53,7 @@ Rustでは`compile_tla_with_options`または`rtla_compiler::compile_with_option
 
 Rust frontendは有限モデルを検査IRへ変換する。高階operatorは名前・LAMBDAとarityを解決して静的に特殊化する。label引数と一般のsubexpression selectorも同じ字句scopeで解決する。labelの束縛やRECURSIVE宣言の位置・arityは未使用定義も検査するが、全SANYの意味・型・level検査ではない。proofはrtlaが構造を保持し、証明の検証は行わない。
 
-明示v2はRECURSIVEによる自己・相互再帰のexpressionを実行する。値、guard、temporal atomとcallbackで使える。暗黙の再帰関数は有限domainの直接key適用とDOMAINをlowerする。関数値全体の構築はeagerであり、任意のaliasを介した完全なlazy関数値には対応しない。再帰する代入actionの生成とaction template共有も未対応。
+明示v2はRECURSIVEによる自己・相互再帰のexpressionを実行する。値、guard、temporal atomとcallbackで使える。暗黙の再帰関数は有限domainの直接key適用とDOMAINをlowerする。関数値全体の構築はeagerであり、任意のaliasを介した完全なlazy関数値には対応しない。明示v2は再帰するInit/Nextの代入actionを共有定義へlowerする。[呼出しと制限](recursive-actions.md)を参照。
 
 再帰経路で動的評価128段に達した場合は`bounded / evaluation`、work枯渇は`bounded / work`になる。未確定の結果を成功として扱わない。式nesting・bound variable 40、checkerの式48・値64、TS decoder128を維持する。
 

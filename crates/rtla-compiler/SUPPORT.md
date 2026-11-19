@@ -51,7 +51,8 @@
 
 - [x] IR v2のSelectSeq / SortSeq / Assertのsource lowering。
 - [x] 明示v2のRECURSIVEによる自己・相互再帰、有限domainの暗黙再帰関数。scalar値・guard・temporal atom・callbackで実行する。
-- [ ] 再帰する代入actionの生成とaction template共有。非再帰の代入actionはinlineを維持する。
+- [x] 明示v2でRECURSIVEの自己・相互再帰するInit/Nextの代入actionを共有action定義とStep callへ変換する。LET捕捉、INSTANCE、高階特殊化、ENABLEDと継続を扱う。非再帰の代入actionはinlineを維持する。recursive自身のformalをprime/UNCHANGED対象にする入力はSANYに従って拒否する。
+- [ ] 非再帰actionの自動共有とtemporal templateの共有。一般のaction構文や完全なSANY level検査への対応は意味しない。
 - [x] v2でもmodule連結、設定operator置換・定数表・定義上書きをlowerする。
 
 - [x] 引数付きINSTANCE、LET内INSTANCE、nested moduleの宣言時scope、名前・LAMBDAによるWITH operator置換。

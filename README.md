@@ -59,7 +59,7 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 
 RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
 
-rtlaは固定SANYの全operator表とUnicode alias、LAMBDA/RECURSIVE、引数付き・LET内INSTANCE、nested module、一般selectorと構造付きproofを解析する。`syntaxVersion`で1.7.4/1.8.0の優先順位を選ぶ。Rust compilerは高階operatorを特殊化し、明示IR v2で再帰expressionを予算付きで実行する。[対応チェックリスト](crates/rtla/SUPPORT.md)、[独立SANY/TLC比較](evals/iterations/0070-tla-coverage.md)と[frontendの契約](docs/rust-frontend.md)を参照。構文受理と有限モデルの検査、THEOREMの証明は別の範囲である。
+rtlaは固定SANYの全operator表とUnicode alias、LAMBDA/RECURSIVE、引数付き・LET内INSTANCE、nested module、一般selectorと構造付きproofを解析する。`syntaxVersion`で1.7.4/1.8.0の優先順位を選ぶ。Rust compilerは高階operatorを特殊化し、明示IR v2で再帰expressionと代入actionを予算付きで実行する。[対応チェックリスト](crates/rtla/SUPPORT.md)、[独立SANY/TLC比較](evals/iterations/0070-tla-coverage.md)と[frontendの契約](docs/rust-frontend.md)を参照。構文受理と有限モデルの検査、THEOREMの証明は別の範囲である。
 
 [QuintがApalache経由で生成したTLA+の実行確認](docs/quint-generated.md)は、6モデル・12件の正常/違反設定をnative/WasmとTLCへ照合する。`:=`、fold、有限選択、VariantsとCASEを含む限定したfragmentで、Quint言語やQuint Connect API全体の互換実装ではない。
 
@@ -113,7 +113,7 @@ just browser
 
 `compileTlaSource(core, { source, config, irVersion: 2 })`またはTS frontendの`compileTlaSafety({ source, config, irVersion: 2 })`で、operatorの式定義を共有できる。既定はv1。引数はcallerの字句環境を保持し、要求時のcurrent/next/primeで評価する。未使用引数を先に実行せず、callと引数要求はworkへ課金する。
 
-Rustのv2はmodule連結と設定置換にも対応する。SYMMETRY、再帰する代入actionの生成とaction template共有は未対応。TS frontendとRust frontendの受理範囲も異なる。公開`TCommit`のRM=8はRustのv1/v2とTLCで6,816状態・53,513生成が一致し、Quintの6生成物・正常/故障12設定も検査する。これらは有限scopeでの照合で、THEOREMの証明ではない。[IR契約と制限](docs/safety-ir-v2.md)を参照。
+Rustのv2はmodule連結と設定置換にも対応する。SYMMETRYはv2では未対応。明示v2では再帰するInit/Nextの代入actionを共有定義へ変換する。TS frontendとRust frontendの受理範囲も異なる。公開`TCommit`のRM=8はRustのv1/v2とTLCで6,816状態・53,513生成が一致し、Quintの6生成物・正常/故障12設定も検査する。これらは有限scopeでの照合で、THEOREMの証明ではない。[IR契約と制限](docs/safety-ir-v2.md)を参照。
 
 | 固定したsharing chain  |                v1 | 明示v2 |
 | ---------------------- | ----------------: | -----: |
@@ -362,3 +362,5 @@ Z3 は `init()` の結果を `createSmtOracle(api)` に渡す。Node では利�
 - TLA+ アダプターは成功時に witness を捏造しない。lasso の反例は有限オラクルへ変換せず、元の検査結果を残す。型や整数意味論を Z3 と自動で一致させる変換は含まない。
 
 [設計](docs/architecture.md)、[テスト手法の調査](docs/testing-research.md)、[検証記録](docs/validation.md) を参照。
+
+再帰actionの呼出しは引数ごとに複製していた親frameを共有する。初期実装とのCriterion比較では、複数引数の準備済みcheckが1,036.8 µsから808.6 µsへ短縮した（約1.28倍）。捕捉変数の2ケースは約17〜19%短縮し、単一引数と分岐の準備済みcheckはほぼ同等だった。[対応範囲](docs/recursive-actions.md)と[測定条件・全結果](evals/iterations/0071-recursive-actions.md)を参照。TLCに対する速度比ではない。

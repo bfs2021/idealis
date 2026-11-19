@@ -24,7 +24,8 @@
 - [x] safety IR v1を維持し、明示v2のexpression定義表とcall / parameter / captureを検証・評価する。未指定の循環とID、arity、capture、frame内slot、phase違反を拒否する。明示recursiveの強連結成分はphase summaryの固定点で検証する。
 - [x] v2の引数はcallerのlexical frameを保持し、要求時のcurrent / next / primeで毎回評価する。値cacheを持たず、call entryと引数評価に各1 workを課金し、枯渇をbounded/workにする。
 - [x] recursiveフラグ付きv2の自己・相互再帰expression定義。
-- [ ] action template共有。ソースからのv2生成は両frontendが担当し、このcrateのIR検証・実行とは分離する。
+- [x] v2の共有action定義とStep call。expression/actionのkind、arity、capture、phaseと再帰SCCを検証し、代入・分岐の巻き戻しとcallerの継続を実行する。再帰評価の128段超過はbounded/evaluation、work枯渇はbounded/workにする。
+- [x] callのactual/captureは一つのimmutableな親frameを共有する。値や評価結果はcacheせず、要求時のworkとcurrent/next/primeを維持する。ソース生成の受理範囲とは区別する。
 - [x] nativeのcheck_parallelは1〜256 worker上限を受け取り、適したsafety frontierを並列展開する。
 - [x] 軽いscalar・狭いfrontier・action/temporal property・fairnessは逐次へfallbackする。Wasmは逐次check。
 - [x] Rust rlibとしてnative/Wasmへビルドでき、idealis-coreやparser、外部solverには依存しない。

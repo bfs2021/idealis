@@ -20,6 +20,7 @@ pub(crate) enum Node<'a> {
     Branch(&'a ir::Branch),
     Step(&'a ir::Step),
     Definition(&'a ir::Definition),
+    Body(&'a ir::DefinitionBody),
     Temporal(&'a ir::TemporalFormula),
     Program(&'a ir::SafetyProgram),
     Call(&'a usize),
@@ -309,6 +310,16 @@ fn descriptor(
             "ir-definition" => {
                 result.role = "definition-body";
                 result.scope = "frame";
+            }
+            "ir-step" if constructor == "call" => {
+                if p.starts_with("arguments") {
+                    result.role = "call-actual";
+                } else if p.starts_with("captures") {
+                    result.role = "call-capture";
+                } else {
+                    result.role = "call-edge";
+                    result.scope = "definition";
+                }
             }
             "ir-step" if constructor == "frame" => {
                 if p.starts_with("arguments") {
@@ -666,6 +677,38 @@ macro_rules! step_edges_body {
     ($value:ident, $node:ident, $edge:ident, $iter:ident) => {{
         let value = $value;
         match value {
+            ir::Step::Call {
+                definition,
+                arguments,
+                captures,
+            } => arguments
+                .$iter()
+                .map(|value| {
+                    $edge(
+                        $node::Expression(value),
+                        "ir-step",
+                        "call",
+                        "",
+                        "arguments[*]",
+                    )
+                })
+                .chain(captures.$iter().map(|value| {
+                    $edge(
+                        $node::Expression(value),
+                        "ir-step",
+                        "call",
+                        "",
+                        "captures[*]",
+                    )
+                }))
+                .chain([$edge(
+                    $node::Call(definition),
+                    "ir-step",
+                    "call",
+                    "",
+                    "definition",
+                )])
+                .collect(),
             ir::Step::Bind {
                 slot: _,
                 domain,
@@ -965,13 +1008,27 @@ macro_rules! ir_wrapper_edges {
             local_scope: _,
             body,
         } = $value;
-        vec![$edge(
-            $node::Expression(body),
-            "ir-definition",
-            "definition",
-            "",
-            "body",
-        )]
+        match body {
+            ir::DefinitionBody::Expression(body) => vec![$edge(
+                $node::Expression(body),
+                "ir-definition",
+                "definition",
+                "",
+                "body",
+            )],
+            ir::DefinitionBody::Action(branches) => branches
+                .$iter()
+                .map(|branch| {
+                    $edge(
+                        $node::Branch(branch),
+                        "ir-definition",
+                        "definition",
+                        "",
+                        "body[*]",
+                    )
+                })
+                .collect(),
+        }
     }};
     (Call, $value:ident, $node:ident, $edge:ident, $iter:ident) => {{
         let _ = $value;
@@ -1099,6 +1156,19 @@ pub(crate) fn analysis_children(node: Node<'_>) -> Vec<Edge<'_>> {
         Node::Binding(value) => ir_wrapper_edges!(Binding, value, Node, edge, iter),
         Node::Branch(value) => ir_wrapper_edges!(Branch, value, Node, edge, iter),
         Node::Step(value) => step_edges(value),
+        Node::Body(body) => match body {
+            ir::DefinitionBody::Expression(body) => vec![edge(
+                Node::Expression(body),
+                "ir-body",
+                "expression",
+                "",
+                "body",
+            )],
+            ir::DefinitionBody::Action(branches) => branches
+                .iter()
+                .map(|branch| edge(Node::Branch(branch), "ir-body", "action", "", "body[*]"))
+                .collect(),
+        },
         Node::Definition(value) => ir_wrapper_edges!(Definition, value, Node, edge, iter),
         Node::Temporal(value) => temporal_edges(value),
         Node::Program(value) => program_edges(value),
@@ -1650,9 +1720,19 @@ fn descriptors() -> Vec<Descriptor> {
         capture_count: 0,
         body_kind: ir::BodyKind::Expression,
         local_scope: 0,
-        body: I::Old,
+        body: I::Old.into(),
     };
     collect(Node::Definition(&definition));
+    let action_definition = ir::Definition {
+        recursive: false,
+        id: 0,
+        parameter_count: 0,
+        capture_count: 0,
+        body_kind: ir::BodyKind::Action,
+        local_scope: 0,
+        body: ir::DefinitionBody::Action(vec![branch.clone()]),
+    };
+    collect(Node::Definition(&action_definition));
     let temporal = temporal_samples(&binding);
     for value in &temporal {
         collect(Node::Temporal(value));
@@ -2266,6 +2346,11 @@ fn expression_samples() -> Vec<I> {
 
 fn step_samples(binding: &ir::Binding) -> Vec<ir::Step> {
     vec![
+        ir::Step::Call {
+            definition: 0,
+            arguments: vec![I::Old],
+            captures: vec![I::Old],
+        },
         ir::Step::Bind {
             slot: 0,
             domain: binding.domain.clone(),
@@ -2340,6 +2425,7 @@ pub(crate) enum NodeMut<'a> {
     Branch(&'a mut ir::Branch),
     Step(&'a mut ir::Step),
     Definition(&'a mut ir::Definition),
+    Body(&'a mut ir::DefinitionBody),
     Temporal(&'a mut ir::TemporalFormula),
     Program(&'a mut ir::SafetyProgram),
     Call(&'a mut usize),
@@ -2354,6 +2440,7 @@ impl NodeMut<'_> {
             Self::Branch(value) => Node::Branch(value),
             Self::Step(value) => Node::Step(value),
             Self::Definition(value) => Node::Definition(value),
+            Self::Body(value) => Node::Body(value),
             Self::Temporal(value) => Node::Temporal(value),
             Self::Program(value) => Node::Program(value),
             Self::Call(value) => Node::Call(value),
@@ -2367,6 +2454,7 @@ impl NodeMut<'_> {
             Self::Branch(value) => NodeMut::Branch(value),
             Self::Step(value) => NodeMut::Step(value),
             Self::Definition(value) => NodeMut::Definition(value),
+            Self::Body(value) => NodeMut::Body(value),
             Self::Temporal(value) => NodeMut::Temporal(value),
             Self::Program(value) => NodeMut::Program(value),
             Self::Call(value) => NodeMut::Call(value),
@@ -2399,6 +2487,19 @@ pub(crate) fn analysis_children_mut(node: NodeMut<'_>) -> Vec<EdgeMut<'_>> {
         NodeMut::Domain(value) => ir_wrapper_edges!(Domain, value, NodeMut, edge_mut, iter_mut),
         NodeMut::Binding(value) => ir_wrapper_edges!(Binding, value, NodeMut, edge_mut, iter_mut),
         NodeMut::Branch(value) => ir_wrapper_edges!(Branch, value, NodeMut, edge_mut, iter_mut),
+        NodeMut::Body(body) => match body {
+            ir::DefinitionBody::Expression(body) => vec![edge_mut(
+                NodeMut::Expression(body),
+                "ir-body",
+                "expression",
+                "",
+                "body",
+            )],
+            ir::DefinitionBody::Action(branches) => branches
+                .iter_mut()
+                .map(|branch| edge_mut(NodeMut::Branch(branch), "ir-body", "action", "", "body[*]"))
+                .collect(),
+        },
         NodeMut::Definition(value) => {
             ir_wrapper_edges!(Definition, value, NodeMut, edge_mut, iter_mut)
         }

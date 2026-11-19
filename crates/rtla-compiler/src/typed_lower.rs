@@ -336,6 +336,29 @@ impl Compiler<'_> {
                 vec![guard(self.shared_ir(name, args, context)?)],
             )]);
         }
+        if self.scopes[context.scope][name].definition.is_recursive {
+            let child = context.nested()?;
+            let arguments = args
+                .iter()
+                .map(|value| self.expression_ir(value, &child))
+                .collect::<Result<Vec<_>>>()?;
+            let targets = self.call_targets_purpose(name, args, context, true)?;
+            let mut call = self.shared_body_ir(name, arguments, context, false, targets, true)?;
+            let I::Call {
+                definition,
+                arguments,
+                captures,
+            } = &mut call
+            else {
+                unreachable!()
+            };
+            let step = Step::Call {
+                definition: *definition,
+                arguments: std::mem::take(arguments),
+                captures: std::mem::take(captures),
+            };
+            return Ok(vec![branch(name, vec![step])]);
+        }
         let (body, expanded) = self.call(name, args, context)?;
         let branches = self.action_ir(&body, &expanded, name)?;
         if let Some(frame) = &expanded.frame {
@@ -707,8 +730,12 @@ impl Compiler<'_> {
                 let name = name.ok_or_else(|| CompileError {
                     message: "INIT / NEXT".into(),
                 })?;
-                let (body, context) = self.operator(&name, phase)?;
-                let branches = self.action_ir(&body, &context, &name)?;
+                let branches = if self.scopes[0][&name].definition.is_recursive {
+                    self.action_call_ir(&name, &[], &self.root(phase))?
+                } else {
+                    let (body, context) = self.operator(&name, phase)?;
+                    self.action_ir(&body, &context, &name)?
+                };
                 if phase == Phase::Initial {
                     initial = Some(branches);
                 } else {

@@ -107,6 +107,20 @@ const branches = (input: unknown, depth: number, version: 1 | 2): void => {
       if (!isRecord(input))
         throw new PortableCoreError("protocol", "Invalid compiled step");
       switch (input.kind) {
+        case "call":
+          if (version !== 2)
+            throw new PortableCoreError(
+              "protocol",
+              "Action calls require safety IR v2",
+            );
+          fields(input, ["kind", "definition", "arguments", "captures"]);
+          count(input.definition);
+          for (const value of [
+            ...array(input.arguments),
+            ...array(input.captures),
+          ])
+            expression(value, depth + 1, version);
+          break;
         case "frame":
           frame(input, "kind", "branches", depth, version);
           branches(input.branches, depth + 1, version);
@@ -455,11 +469,14 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
         definition.id !== id ||
         (definition.recursive !== undefined &&
           typeof definition.recursive !== "boolean") ||
-        definition.bodyKind !== "expression" ||
+        (definition.bodyKind !== "expression" &&
+          definition.bodyKind !== "action") ||
         (definition.localScope as number) > 40
       )
         throw new PortableCoreError("protocol", "Invalid compiled definition");
-      expression(definition.body, 0, version);
+      if (definition.bodyKind === "action")
+        branches(definition.body, 0, version);
+      else expression(definition.body, 0, version);
     });
   text(value.name);
   if (value.symmetry !== undefined) {

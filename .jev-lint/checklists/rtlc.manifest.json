@@ -155,54 +155,58 @@
       "role": "reference"
     },
     "source38": {
-      "path": "crates/rtlc/tests/standalone.rs",
+      "path": "crates/rtlc/tests/recursive_actions.rs",
       "role": "reference"
     },
     "source39": {
-      "path": "crates/rtlc/tests/symmetry_parallel.rs",
+      "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
     "source40": {
-      "path": "crates/rtlc/tests/temporal_sets.rs",
+      "path": "crates/rtlc/tests/symmetry_parallel.rs",
       "role": "reference"
     },
     "source41": {
-      "path": "crates/rtlc/tests/value_normalize_errors.rs",
+      "path": "crates/rtlc/tests/temporal_sets.rs",
       "role": "reference"
     },
     "source42": {
-      "path": "docs/prepared-safety.md",
+      "path": "crates/rtlc/tests/value_normalize_errors.rs",
       "role": "reference"
     },
     "source43": {
-      "path": "docs/reductions.md",
+      "path": "docs/prepared-safety.md",
       "role": "reference"
     },
     "source44": {
-      "path": "docs/rust-safety.md",
+      "path": "docs/reductions.md",
       "role": "reference"
     },
     "source45": {
-      "path": "docs/safety-ir-v2.md",
+      "path": "docs/rust-safety.md",
       "role": "reference"
     },
     "source46": {
-      "path": "docs/symmetry.md",
+      "path": "docs/safety-ir-v2.md",
       "role": "reference"
     },
     "source47": {
-      "path": "evals/iterations/0070-tla-coverage.md",
+      "path": "docs/symmetry.md",
       "role": "reference"
     },
     "source48": {
-      "path": "package.json",
+      "path": "evals/iterations/0070-tla-coverage.md",
       "role": "reference"
     },
     "source49": {
-      "path": "pnpm-lock.yaml",
+      "path": "package.json",
       "role": "reference"
     },
     "source50": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source51": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -221,7 +225,7 @@
     },
     {
       "id": "rtlc-implementation-0",
-      "topic": "IRの値と式・予算・結果のwire契約。準備済み所有型の実装は別比較",
+      "topic": "IRの値と式・action定義・Step call・予算・結果のwire契約。準備済み所有型の実装は別比較",
       "mode": "semantic",
       "reference": {
         "source": "source10"
@@ -383,7 +387,7 @@
     },
     {
       "id": "rtlc-implementation-11",
-      "topic": "v2の定義graph、ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
+      "topic": "v2の定義graph、expression/action kind・ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
       "mode": "semantic",
       "reference": {
         "source": "source16"
@@ -408,6 +412,32 @@
     },
     {
       "id": "rtlc-implementation-13",
+      "topic": "共有action呼出しの代入生成、分岐の巻き戻しとcaller継続、再帰フラグとwork境界",
+      "mode": "semantic",
+      "reference": {
+        "source": "source17",
+        "contains": "pub(crate) fn visit_branch("
+      },
+      "target": {
+        "source": "source4"
+      },
+      "context": []
+    },
+    {
+      "id": "rtlc-implementation-14",
+      "topic": "actual/capture間でのimmutableな親frameの共有、caller locals/oldと要求時評価、値cacheを持たないこと",
+      "mode": "semantic",
+      "reference": {
+        "source": "source17",
+        "contains": "impl CallFrame {"
+      },
+      "target": {
+        "source": "source4"
+      },
+      "context": []
+    },
+    {
+      "id": "rtlc-implementation-15",
       "topic": "深いIR/Valueの破棄を32段の再帰とworklistで制限する。評価・compileの既存深さ上限とは区別する",
       "mode": "semantic",
       "reference": {

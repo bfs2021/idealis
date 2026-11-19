@@ -55,6 +55,9 @@ test.beforeAll(async () => {
   const completion = await readFile(
     "crates/rtla-compiler/tests/frontend-completion.json",
   );
+  const recursive = await readFile(
+    "crates/rtla-compiler/tests/recursive-actions.json",
+  );
   const operators = await readFile(
     "crates/rtla-compiler/tests/operators-support.json",
   );
@@ -86,7 +89,9 @@ test.beforeAll(async () => {
                     ? operators
                     : request.url === "/completion.json"
                       ? completion
-                      : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
+                      : request.url === "/recursive-actions.json"
+                        ? recursive
+                        : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));
@@ -201,6 +206,29 @@ test("executes the completed Rust frontend and recursion budget in Chromium", as
     rejected: 18,
     evaluation: "evaluation",
     unicode: "complete",
+    isolated: false,
+  });
+});
+
+test("generates recursive assignment actions and keeps budget exhaustion inconclusive in Chromium", async ({
+  page,
+}) => {
+  await page.goto(origin);
+  const result = await page.evaluate(async () => {
+    const api: unknown = Reflect.get(globalThis, "portableBrowser");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runRecursiveActions" in api) ||
+      typeof api.runRecursiveActions !== "function"
+    )
+      throw new Error("Missing recursive action browser API");
+    return api.runRecursiveActions();
+  });
+  expect(result).toEqual({
+    matched: 23,
+    rejected: 1,
+    bounded: 2,
     isolated: false,
   });
 });

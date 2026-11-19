@@ -135,7 +135,7 @@ enum Target {
 #[derive(Clone)]
 struct Shared {
     recursive: bool,
-    key: (usize, u8, bool, Vec<Target>),
+    key: (usize, u8, bool, Vec<Target>, bool),
     captures: Vec<usize>,
     definition: Option<ir::Definition>,
     parameter_count: usize,
@@ -736,6 +736,29 @@ impl Compiler<'_> {
         }
     }
     fn requirements(&mut self, name: &str, context: &Context, action: bool) -> Result<Vec<usize>> {
+        let position = self.scopes[context.scope][name].id;
+        if let Some(result) = self.target_requirements.get(&(position, action)) {
+            return Ok(result.clone());
+        }
+        let (mut result, recursive) = self.requirements_pass(name, context, action, false)?;
+        if recursive {
+            loop {
+                let before = self.target_requirements.clone();
+                result = self.requirements_pass(name, context, action, true)?.0;
+                if before == self.target_requirements {
+                    break;
+                }
+            }
+        }
+        Ok(result)
+    }
+    fn requirements_pass(
+        &mut self,
+        name: &str,
+        context: &Context,
+        action: bool,
+        refresh: bool,
+    ) -> Result<(Vec<usize>, bool)> {
         enum Task {
             Expression(Expression, Context, bool, (usize, bool)),
             Call(
@@ -762,6 +785,8 @@ impl Compiler<'_> {
         )];
         let mut working: HashMap<(usize, bool), Vec<usize>> = HashMap::new();
         let mut active = HashSet::new();
+        let mut visited = HashSet::new();
+        let mut recursive = false;
         let mut result = vec![];
         while let Some(task) = tasks.pop() {
             match task {
@@ -778,7 +803,11 @@ impl Compiler<'_> {
                         .ok_or_else(|| CompileError {
                             message: "lexical capture".into(),
                         })?;
-                    let requirements = self.target_requirements[&key].clone();
+                    let requirements = working
+                        .get(&key)
+                        .or_else(|| self.target_requirements.get(&key))
+                        .cloned()
+                        .unwrap_or_default();
                     let mut mapped = vec![];
                     for binding in requirements {
                         let parameter =
@@ -790,6 +819,11 @@ impl Compiler<'_> {
                                 None
                             };
                         if let Some(slot) = parameter {
+                            if key.1 && entry.definition.is_recursive {
+                                return unsupported(
+                                    "recursive operator parameters cannot be primed",
+                                );
+                            }
                             if let Some(actual) = args.get(slot) {
                                 let target = self.resolve_target(actual, &context)?;
                                 Self::target_bindings(&target, &mut mapped);
@@ -824,22 +858,37 @@ impl Compiler<'_> {
                                 message: format!("operator {name}"),
                             })?;
                     let key = (entry.id, action);
-                    if entry.definition.is_recursive {
+                    if entry.definition.is_recursive && !action {
                         self.target_requirements.entry(key).or_default();
                         tasks.push(Task::Compose(key, args, context.clone(), owner));
                         continue;
                     }
+                    recursive |= entry.definition.is_recursive;
                     if active.contains(&key) {
-                        return unsupported(
-                            "recursive operator definitions require RECURSIVE declarations",
-                        );
+                        if !entry.definition.is_recursive {
+                            return unsupported(
+                                "recursive operator definitions require RECURSIVE declarations",
+                            );
+                        }
+                        tasks.push(Task::Compose(key, args, context, owner));
+                        continue;
                     }
                     tasks.push(Task::Compose(key, args, context.clone(), owner));
-                    if self.target_requirements.contains_key(&key) {
+                    if refresh {
+                        if !visited.insert(key) {
+                            continue;
+                        }
+                    } else if self.target_requirements.contains_key(&key) {
                         continue;
                     }
                     active.insert(key);
-                    working.insert(key, vec![]);
+                    working.insert(
+                        key,
+                        self.target_requirements
+                            .get(&key)
+                            .cloned()
+                            .unwrap_or_default(),
+                    );
                     let mut inner = self.target_context(&entry);
                     inner.static_targets.clear();
                     inner.target_actuals.clear();
@@ -956,7 +1005,7 @@ impl Compiler<'_> {
                 }
             }
         }
-        Ok(result)
+        Ok((result, recursive))
     }
     fn membership_demands(
         &mut self,
@@ -1267,8 +1316,14 @@ impl Compiler<'_> {
             let mut changed = false;
             for id in order {
                 let body = &self.shared[*id].definition.as_ref().unwrap().body;
-                let summary =
-                    typed::level_summary(Node::Expression(body), &self.level_cache.borrow());
+                let mut summary =
+                    typed::level_summary(Node::Body(body), &self.level_cache.borrow());
+                if self.shared[*id].key.4 {
+                    summary.base =
+                        summary
+                            .base
+                            .max(if self.shared[*id].key.1 == 1 { 1 } else { 2 });
+                }
                 changed |= self.level_cache.borrow().get(id) != Some(&summary);
                 self.level_cache.borrow_mut().insert(*id, summary);
             }
@@ -1314,6 +1369,15 @@ impl Compiler<'_> {
         args: &[Expression],
         context: &Context,
     ) -> Result<BTreeMap<usize, Target>> {
+        self.call_targets_purpose(name, args, context, false)
+    }
+    fn call_targets_purpose(
+        &mut self,
+        name: &str,
+        args: &[Expression],
+        context: &Context,
+        action: bool,
+    ) -> Result<BTreeMap<usize, Target>> {
         let entry = self.scopes[context.scope]
             .get(name)
             .cloned()
@@ -1321,7 +1385,7 @@ impl Compiler<'_> {
                 message: format!("operator {name}"),
             })?;
         let position = entry.id;
-        let required = self.requirements(name, context, false)?;
+        let required = self.requirements(name, context, action)?;
         let mut targets = BTreeMap::new();
         for binding in required {
             let parameter = if let DefinitionKind::Operator { params } = &entry.definition.head {
@@ -1386,7 +1450,18 @@ impl Compiler<'_> {
         arguments: Vec<ir::Expression>,
         context: &Context,
         membership: bool,
+        targets: BTreeMap<usize, Target>,
+    ) -> Result<ir::Expression> {
+        self.shared_body_ir(name, arguments, context, membership, targets, false)
+    }
+    fn shared_body_ir(
+        &mut self,
+        name: &str,
+        arguments: Vec<ir::Expression>,
+        context: &Context,
+        membership: bool,
         mut targets: BTreeMap<usize, Target>,
+        action: bool,
     ) -> Result<ir::Expression> {
         let entry = self.scopes[context.scope]
             .get(name)
@@ -1432,7 +1507,7 @@ impl Compiler<'_> {
             Phase::State => 2,
             Phase::Next => 3,
         };
-        let required = self.requirements(name, context, false)?;
+        let required = self.requirements(name, context, action)?;
         for binding in &required {
             if !targets.contains_key(binding)
                 && let Some(target) = context
@@ -1451,7 +1526,7 @@ impl Compiler<'_> {
                 })
             })
             .collect::<Result<Vec<_>>>()?;
-        let key = (position, phase, membership, signature);
+        let key = (position, phase, membership, signature, action);
         let id = if let Some(id) = self.shared.iter().position(|shared| shared.key == key) {
             id
         } else {
@@ -1514,19 +1589,24 @@ impl Compiler<'_> {
     }
     fn lower_definition(&mut self, id: usize) -> Result<()> {
         if let Some((body, context, membership)) = self.shared[id].pending.take() {
-            let lowered = if membership {
-                self.membership_ir(&body, &context)?
+            let body = if self.shared[id].key.4 {
+                ir::DefinitionBody::Action(self.action_ir(&body, &context, "<action>")?)
+            } else if membership {
+                self.membership_ir(&body, &context)?.into()
             } else {
-                self.expression_ir(&body, &context)?
+                self.expression_ir(&body, &context)?.into()
             };
-            let body = lowered;
             self.shared[id].definition = Some(ir::Definition {
                 recursive: self.shared[id].recursive,
                 id,
                 parameter_count: self.shared[id].parameter_count,
                 capture_count: self.shared[id].captures.len(),
-                body_kind: ir::BodyKind::Expression,
-                local_scope: typed::local_scope(Node::Expression(&body)),
+                body_kind: if self.shared[id].key.4 {
+                    ir::BodyKind::Action
+                } else {
+                    ir::BodyKind::Expression
+                },
+                local_scope: typed::local_scope(Node::Body(&body)),
                 body,
             });
         }
@@ -1555,7 +1635,7 @@ impl Compiler<'_> {
         loop {
             let mut anonymous_changed = typed::compact_anonymous(NodeMut::Program(&mut program));
             for entry in &mut self.shared {
-                anonymous_changed |= typed::compact_anonymous(NodeMut::Expression(
+                anonymous_changed |= typed::compact_anonymous(NodeMut::Body(
                     &mut entry.definition.as_mut().unwrap().body,
                 ));
             }
@@ -1563,9 +1643,8 @@ impl Compiler<'_> {
                 .shared
                 .iter()
                 .map(|entry| {
-                    let used = typed::capture_slots(Node::Expression(
-                        &entry.definition.as_ref().unwrap().body,
-                    ));
+                    let used =
+                        typed::capture_slots(Node::Body(&entry.definition.as_ref().unwrap().body));
                     (0..entry.captures.len())
                         .filter(|slot| used.contains(slot))
                         .enumerate()
@@ -1590,16 +1669,16 @@ impl Compiler<'_> {
                     keep
                 });
                 let definition = entry.definition.as_mut().unwrap();
-                typed::remap_captures(NodeMut::Expression(&mut definition.body), &mappings[id]);
+                typed::remap_captures(NodeMut::Body(&mut definition.body), &mappings[id]);
                 definition.capture_count = entry.captures.len();
-                typed::trim_call_captures(NodeMut::Expression(&mut definition.body), &mappings);
+                typed::trim_call_captures(NodeMut::Body(&mut definition.body), &mappings);
             }
             typed::trim_call_captures(NodeMut::Program(&mut program), &mappings);
         }
         self.prepare_levels(&order);
         for entry in &self.shared {
             typed::check_primes(
-                Node::Expression(&entry.definition.as_ref().unwrap().body),
+                Node::Body(&entry.definition.as_ref().unwrap().body),
                 &self.level_cache.borrow(),
             )?;
         }
@@ -1633,7 +1712,7 @@ impl Compiler<'_> {
             .iter()
             .map(|entry| {
                 let mut calls = HashSet::new();
-                calls.extend(typed::call_ids(Node::Expression(
+                calls.extend(typed::call_ids(Node::Body(
                     &entry.definition.as_ref().unwrap().body,
                 )));
                 calls.into_iter().collect()

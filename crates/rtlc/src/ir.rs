@@ -320,6 +320,12 @@ pub enum Domain {
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Hash)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Step {
+    Call {
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        definition: usize,
+        arguments: Vec<Expression>,
+        captures: Vec<Expression>,
+    },
     Frame {
         arguments: Vec<Expression>,
         captures: Vec<Expression>,
@@ -414,7 +420,7 @@ impl Default for SafetyOptions {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(deny_unknown_fields, rename_all = "camelCase")]
+#[serde(from = "DefinitionWire", rename_all = "camelCase")]
 pub struct Definition {
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub recursive: bool,
@@ -427,13 +433,102 @@ pub struct Definition {
     pub body_kind: BodyKind,
     #[serde(deserialize_with = "deserialize_wire_index")]
     pub local_scope: usize,
-    pub body: Expression,
+    pub body: DefinitionBody,
 }
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize)]
+#[serde(untagged)]
+pub enum DefinitionBody {
+    Expression(Expression),
+    Action(Vec<Branch>),
+}
+
+impl From<Expression> for DefinitionBody {
+    fn from(value: Expression) -> Self {
+        Self::Expression(value)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub enum BodyKind {
     Expression,
+    Action,
+}
+
+#[derive(Deserialize)]
+#[serde(
+    tag = "bodyKind",
+    rename_all = "kebab-case",
+    rename_all_fields = "camelCase",
+    deny_unknown_fields
+)]
+enum DefinitionWire {
+    Expression {
+        #[serde(default)]
+        recursive: bool,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        id: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        parameter_count: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        capture_count: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        local_scope: usize,
+        body: Expression,
+    },
+    Action {
+        #[serde(default)]
+        recursive: bool,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        id: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        parameter_count: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        capture_count: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        local_scope: usize,
+        body: Vec<Branch>,
+    },
+}
+
+impl From<DefinitionWire> for Definition {
+    fn from(value: DefinitionWire) -> Self {
+        match value {
+            DefinitionWire::Expression {
+                recursive,
+                id,
+                parameter_count,
+                capture_count,
+                local_scope,
+                body,
+            } => Self {
+                recursive,
+                id,
+                parameter_count,
+                capture_count,
+                local_scope,
+                body_kind: BodyKind::Expression,
+                body: body.into(),
+            },
+            DefinitionWire::Action {
+                recursive,
+                id,
+                parameter_count,
+                capture_count,
+                local_scope,
+                body,
+            } => Self {
+                recursive,
+                id,
+                parameter_count,
+                capture_count,
+                local_scope,
+                body_kind: BodyKind::Action,
+                body: DefinitionBody::Action(body),
+            },
+        }
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -556,7 +651,7 @@ impl SafetyProgram {
             for branch in branches {
                 for step in &branch.steps {
                     match step {
-                        Step::Frame { .. } => return true,
+                        Step::Frame { .. } | Step::Call { .. } => return true,
                         Step::Guard { expression }
                         | Step::Assign {
                             value: expression, ..

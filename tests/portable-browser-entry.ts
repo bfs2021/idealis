@@ -503,3 +503,71 @@ export const runFrontendCompletion = async () => {
     isolated: globalThis.crossOriginIsolated,
   };
 };
+
+export const runRecursiveActions = async () => {
+  const core = await createPortableWasm(
+    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+  );
+  const inputs: (TlaSourceInput & {
+    name: string;
+    status: string;
+    states: number;
+    generated: number;
+  })[] = await (await fetch("/recursive-actions.json")).json();
+  const bounds = {
+    maxDepth: 1000,
+    maxStates: 2000,
+    maxWork: 1_000_000,
+    maxTemporalNodes: 10000,
+  };
+  let matched = 0;
+  let rejected = 0;
+  let bounded = 0;
+  for (const input of inputs) {
+    if (input.status === "error") {
+      try {
+        compileTlaSource(core, input);
+      } catch (error) {
+        if (!(error instanceof PortableCoreError)) throw error;
+        rejected++;
+        continue;
+      }
+      throw new Error(
+        `Browser accepted invalid recursive action ${input.name}`,
+      );
+    }
+    const program = compileTlaSource(core, input);
+    const checked = checkTlaSource(core, input, bounds);
+    if (
+      checked.status !== input.status ||
+      JSON.stringify(checked) !==
+        JSON.stringify(checkSafety(core, program, bounds))
+    )
+      throw new Error(`Browser recursive action differs: ${input.name}`);
+    if (input.status === "bounded") {
+      if (checked.reason !== "evaluation" || checked.violation !== null)
+        throw new Error(`Browser recursion cut became success: ${input.name}`);
+      bounded++;
+    } else {
+      if (
+        checked.states !== input.states ||
+        checked.generated !== input.generated
+      )
+        throw new Error(`Browser recursive counts differ: ${input.name}`);
+      matched++;
+    }
+    const partial = checkSafety(core, program, { ...bounds, maxWork: 1 });
+    if (
+      partial.status !== "bounded" ||
+      partial.reason !== "work" ||
+      partial.work !== 1
+    )
+      throw new Error(`Browser recursive work cut differs: ${input.name}`);
+  }
+  return {
+    matched,
+    rejected,
+    bounded,
+    isolated: globalThis.crossOriginIsolated,
+  };
+};

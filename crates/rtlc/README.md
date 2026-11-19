@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 `rtlc::ir`に`Expression`、`Branch`、`Step`、`Predicate`、`TemporalFormula`などの公開契約を置く。JSONを経由しない[型付きcounterの例](examples/counter.rs)もある。Arena、探索queue、worker、intern tableはprivate。`Expression`・`Branch`・`TemporalFormula`・`Value`は深さによらず有界なstackで破棄するため`Drop`を実装し、これらの値から非Copyのfieldをpatternでmoveできない。参照で照合し、`Vec`・`String`のfieldは`std::mem::take`、`Default`を持たない`Expression`・`TemporalFormula`・`Value`のfieldは`Expression::Old`・`Value::Null`などの葉との`std::mem::replace`で取り出す。
 
-既存の`modelt.safety-program` v1を既定の入力形式として維持する。v2ではexpression定義表とcall / parameter / captureを受理し、callerのlexical frameを持つ引数を要求時に毎回評価する。call entryと引数評価へ各1 workを課金する。明示recursiveのexpression定義は受理し、強連結成分の依存を固定点で検証する。action templateの共有は受理しない。定義ID・capture順とwire契約は[IR v2](../../docs/safety-ir-v2.md)を参照。両frontendは明示`irVersion: 2`でこのIRを生成する。型所属ではv2のidentity range map-setを列挙せず検査する。`complete`、`bounded`、`empty`、違反と評価エラーは区別する。`bounded`を安全性の証明として扱わない。`Value`と`CoreError`はidealisと共有するwire契約で、idealis-coreからも同じ型を再exportする。汎用Valueのvariantが存在することをTLA検査側の対応保証にはしない。
+既存の`modelt.safety-program` v1を既定の入力形式として維持する。v2ではexpression定義表とcall / parameter / captureを受理し、callerのlexical frameを持つ引数を要求時に毎回評価する。call entryと引数評価へ各1 workを課金する。明示recursiveのexpression定義は受理し、強連結成分の依存を固定点で検証する。v2はaction定義とStepのcallも受理し、Init/Nextのphase・call kind・arityを検査する。定義ID・capture順とwire契約は[IR v2](../../docs/safety-ir-v2.md)を参照。両frontendは明示`irVersion: 2`でこのIRを生成する。型所属ではv2のidentity range map-setを列挙せず検査する。`complete`、`bounded`、`empty`、違反と評価エラーは区別する。`bounded`を安全性の証明として扱わない。`Value`と`CoreError`はidealisと共有するwire契約で、idealis-coreからも同じ型を再exportする。汎用Valueのvariantが存在することをTLA検査側の対応保証にはしない。
 
 nativeの`check_parallel(bounds, workers)`は1〜256 workerの上限を受け取る。軽いscalarや狭いfrontierは逐次実行する。action/temporal propertyとfairnessを含む探索も逐次へfallbackする。Wasmは逐次の`check`を使う。
 
@@ -91,4 +91,4 @@ Data式はprogram内のアドレスからslotを作り、各Arenaで初めて評
 単一の2〜64個のuntyped model value集合とsafety検査に限定する。typed値・node参照やnested payload・temporal/fairness・constraints・initial/action property・coverageとIR v2は対象外。nativeではfrontierが64状態以上なら並列展開し、それ未満は逐次へ戻す。JSONのsymmetryはoptionalで、Rustのstruct literalにはsymmetry: Noneを追加する。[設定例と適用条件](../../docs/symmetry.md)を参照。
 v2のmembership descriptorはcall/parameter/captureと条件分岐を通って要求時ごとに解釈する。通常の値とv1の列挙は維持する。
 
-明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。sourceの対応範囲はcompilerが判断する。再帰expressionは明示v2で扱い、action template共有は未対応。
+明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。sourceの対応範囲はcompilerが判断する。再帰expressionとaction定義は明示v2で扱う。Rust frontendが生成する再帰actionの範囲は[呼出しと制限](../../docs/recursive-actions.md)を参照。

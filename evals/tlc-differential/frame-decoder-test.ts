@@ -191,6 +191,12 @@ const wireStep = (
   nativeMaxError,
 });
 const wireFixtures: readonly WireFixture[] = [
+  wireStep(
+    "Step.call.definition",
+    { kind: "call", definition: 0, arguments: [], captures: [] },
+    "definition",
+    "Unknown safety definition ID",
+  ),
   ...["parameterCount", "captureCount", "localScope"].map((field) =>
     wireExpression(
       `Expression.frame.${field}`,
@@ -389,9 +395,9 @@ const wireWasm = (value: unknown): unknown => {
   }
 };
 
-test("analysis parity wire field inventory has 25 distinct declarations", () => {
-  assert.equal(wireFixtures.length, 25);
-  assert.equal(new Set(wireFixtures.map((fixture) => fixture.name)).size, 25);
+test("analysis parity wire field inventory has 26 distinct declarations", () => {
+  assert.equal(wireFixtures.length, 26);
+  assert.equal(new Set(wireFixtures.map((fixture) => fixture.name)).size, 26);
 });
 for (const fixture of wireFixtures) {
   test(`analysis parity wire TS decoder max: ${fixture.name}`, () => {
