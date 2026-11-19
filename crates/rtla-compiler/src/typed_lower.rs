@@ -1,5 +1,6 @@
 use crate::{
-    AnonymousFrame, CompileError, Compiler, Context, E, Expression, Phase, Result, unsupported,
+    AnonymousFrame, CompileError, Compiler, Context, DefinitionKind, E, Expression, Phase, Result,
+    unsupported,
 };
 use crate::{
     analysis::{Node, NodeMut, analysis_children},
@@ -324,6 +325,101 @@ impl Compiler<'_> {
             )]),
         }
     }
+    fn template_expression<'a>(&'a self, mut formula: &'a T, mut always: bool) -> Option<I> {
+        let mut frames = vec![];
+        loop {
+            if frames.len() > 128 {
+                return None;
+            }
+            match formula {
+                T::Call {
+                    definition,
+                    arguments,
+                    captures,
+                } => {
+                    let definition = self.shared.get(*definition)?.definition.as_ref()?;
+                    let ir::DefinitionBody::Temporal(body) = &definition.body else {
+                        return None;
+                    };
+                    frames.push((
+                        arguments.clone(),
+                        captures.clone(),
+                        definition.parameter_count,
+                        definition.capture_count,
+                        definition.local_scope,
+                    ));
+                    formula = body;
+                }
+                T::Frame {
+                    arguments,
+                    captures,
+                    parameter_count,
+                    capture_count,
+                    local_scope,
+                    formula: body,
+                } => {
+                    frames.push((
+                        arguments.clone(),
+                        captures.clone(),
+                        *parameter_count,
+                        *capture_count,
+                        *local_scope,
+                    ));
+                    formula = body;
+                }
+                T::Always { formula: body } if always => {
+                    always = false;
+                    formula = body;
+                }
+                T::Atom { expression } if !always => {
+                    let mut expression = expression.clone();
+                    for (arguments, captures, parameter_count, capture_count, local_scope) in
+                        frames.into_iter().rev()
+                    {
+                        expression = I::Frame {
+                            arguments,
+                            captures,
+                            parameter_count,
+                            capture_count,
+                            local_scope,
+                            body: Box::new(expression),
+                        };
+                    }
+                    return Some(expression);
+                }
+                _ => return None,
+            }
+        }
+    }
+    fn template_frame(&self, name: &str, context: &Context) -> bool {
+        let entry = &self.scopes[context.scope][name];
+        context.bound > 0
+            || !entry.projection.is_empty()
+            || matches!(&entry.definition.head, DefinitionKind::Operator { params } if !params.is_empty())
+    }
+    fn template_call(
+        &mut self,
+        name: &str,
+        args: &[Expression],
+        context: &Context,
+        kind: ir::BodyKind,
+    ) -> Result<I> {
+        let child = context.nested()?;
+        let position = self.scopes[context.scope][name].id;
+        let demanded = self.membership_demands(name, context, false)?;
+        let mut arguments = vec![];
+        for (slot, value) in args.iter().enumerate() {
+            let binding = self.binding_id(position, 0, slot);
+            arguments.push(if demanded.contains(&binding) {
+                self.membership_ir(value, &child)?
+            } else {
+                self.expression_ir(value, &child)?
+            });
+        }
+        let targets =
+            self.call_targets_purpose(name, args, context, kind == ir::BodyKind::Action)?;
+        self.shared_body_ir(name, arguments, context, false, targets, kind)
+    }
     fn action_call_ir(
         &mut self,
         name: &str,
@@ -336,14 +432,10 @@ impl Compiler<'_> {
                 vec![guard(self.shared_ir(name, args, context)?)],
             )]);
         }
-        if self.scopes[context.scope][name].definition.is_recursive {
-            let child = context.nested()?;
-            let arguments = args
-                .iter()
-                .map(|value| self.expression_ir(value, &child))
-                .collect::<Result<Vec<_>>>()?;
-            let targets = self.call_targets_purpose(name, args, context, true)?;
-            let mut call = self.shared_body_ir(name, arguments, context, false, targets, true)?;
+        if self.scopes[context.scope][name].definition.is_recursive
+            || self.template_frame(name, context)
+        {
+            let mut call = self.template_call(name, args, context, ir::BodyKind::Action)?;
             let I::Call {
                 definition,
                 arguments,
@@ -523,6 +615,26 @@ impl Compiler<'_> {
     ) -> Result<T> {
         if self.scopes[context.scope][name].definition.is_recursive {
             return Ok(atom(self.shared_ir(name, args, context)?));
+        }
+        if self
+            .temporal_ids
+            .contains(&self.scopes[context.scope][name].id)
+            && self.template_frame(name, context)
+        {
+            let mut call = self.template_call(name, args, context, ir::BodyKind::Temporal)?;
+            let I::Call {
+                definition,
+                arguments,
+                captures,
+            } = &mut call
+            else {
+                unreachable!()
+            };
+            return Ok(T::Call {
+                definition: *definition,
+                arguments: std::mem::take(arguments),
+                captures: std::mem::take(captures),
+            });
         }
         let (body, expanded) = self.call(name, args, context)?;
         let formula = self.temporal_ir(&body, &expanded)?;
@@ -806,14 +918,19 @@ impl Compiler<'_> {
             let (body, context) = self.operator(&name, Phase::Next)?;
             let formula = self.temporal_ir(&body, &context)?;
             self.lower_pending()?;
-            let initial_expression = typed::atom_expression(&formula);
-            let always_expression = typed::always_expression(&formula);
+            let initial_expression = self.template_expression(&formula, false);
+            let always_expression = self.template_expression(&formula, true);
             typed::validate_temporal(
                 &formula,
                 &[],
                 always_expression.is_some(),
                 &[],
                 &self.level_cache.borrow(),
+                &self
+                    .shared
+                    .iter()
+                    .filter_map(|entry| entry.definition.as_ref())
+                    .collect::<Vec<_>>(),
             )?;
             if let Some(expression) = initial_expression {
                 if typed::level_summary(Node::Expression(&expression), &self.level_cache.borrow())

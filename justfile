@@ -595,6 +595,32 @@ recursive-actions-profile snapshot run:
   pnpm build
   node dist/evals/recursive-actions/profile.js {{quote(run)}} {{quote(snapshot)}}
 
+frontend-semantics-test: portable-build
+  pnpm build
+  cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test levels --test lazy_functions --test templates
+  cargo test --locked --manifest-path crates/rtlc/Cargo.toml --test temporal_calls
+  node --test dist/evals/frontend-semantics/contract-test.js
+
+frontend-semantics-runtime directory:
+  pnpm build
+  node dist/evals/frontend-semantics/runtime.js {{quote(directory)}}
+
+frontend-semantics-oracle snapshot run java jar:
+  pnpm build
+  IDEALIS_FRONTEND_SNAPSHOT={{quote(snapshot)}} node dist/evals/frontend-semantics/execute.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
+
+frontend-semantics-freeze directory:
+  pnpm build
+  node dist/evals/frontend-semantics/bench.js freeze {{quote(directory)}}
+
+frontend-semantics-bench snapshot run:
+  pnpm build
+  node dist/evals/frontend-semantics/bench.js run {{quote(run)}} {{quote(snapshot)}}
+
+frontend-semantics-profile snapshot run:
+  pnpm build
+  node dist/evals/frontend-semantics/profile.js {{quote(run)}} {{quote(snapshot)}}
+
 coverage-test: safety-build
   node --test dist/evals/action-coverage/contract-test.js
 
@@ -723,7 +749,7 @@ quint-test: portable-build
 analysis-test: portable-build rtla-build
   cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
   pnpm build
-  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js dist/evals/tla-coverage/contract-test.js dist/evals/tla-coverage/normalize-test.js dist/evals/rtla-compatibility/contract-test.js dist/evals/recursive-actions/contract-test.js
+  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js dist/evals/tla-coverage/contract-test.js dist/evals/tla-coverage/normalize-test.js dist/evals/rtla-compatibility/contract-test.js dist/evals/recursive-actions/contract-test.js dist/evals/frontend-semantics/contract-test.js
 
 prepared-test: portable-build
   pnpm build

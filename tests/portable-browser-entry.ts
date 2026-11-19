@@ -2,6 +2,7 @@ import {
   coverageBounds,
   coverageInputs,
 } from "../evals/action-coverage/cases.js";
+import type { FrontendCase } from "../evals/frontend-semantics/cases.js";
 import { sharing } from "../evals/p0-checker/inputs.js";
 import { monotone, nodeSets, recordNodes } from "../evals/symmetry/cases.js";
 import { counterModel } from "../examples/counter-model.js";
@@ -567,6 +568,76 @@ export const runRecursiveActions = async () => {
   return {
     matched,
     rejected,
+    bounded,
+    isolated: globalThis.crossOriginIsolated,
+  };
+};
+
+export const runFrontendSemantics = async () => {
+  const bytes = new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer());
+  const module = await WebAssembly.compile(bytes);
+  if (WebAssembly.Module.imports(module).length !== 0)
+    throw new Error("Frontend semantics requires host imports");
+  const core = await createPortableWasm(bytes);
+  const inputs: readonly FrontendCase[] = await (
+    await fetch("/frontend-semantics.json")
+  ).json();
+  const bounds = {
+    maxDepth: 1000,
+    maxStates: 2000,
+    maxWork: 1_000_000,
+    maxTemporalNodes: 10000,
+  };
+  let matched = 0;
+  let rejected = 0;
+  let modelErrors = 0;
+  let bounded = 0;
+  for (const input of inputs) {
+    if (input.expected === "input-error") {
+      try {
+        compileTlaSource(core, input);
+      } catch (error) {
+        if (!(error instanceof PortableCoreError)) throw error;
+        rejected++;
+        continue;
+      }
+      throw new Error(`Browser accepted invalid level: ${input.name}`);
+    }
+    const program = compileTlaSource(core, input);
+    if (input.expected === "evaluation-error") {
+      try {
+        checkSafety(core, program, bounds);
+      } catch (error) {
+        if (!(error instanceof PortableCoreError)) throw error;
+        modelErrors++;
+        continue;
+      }
+      throw new Error(`Browser suppressed model error: ${input.name}`);
+    }
+    const checked = checkSafety(core, program, bounds);
+    const expected =
+      input.expected === "temporal-violation"
+        ? "liveness-violation"
+        : input.expected;
+    if (checked.status !== expected)
+      throw new Error(`Browser frontend semantics differs: ${input.name}`);
+    if (input.expected === "bounded") {
+      if (checked.reason !== "evaluation" || checked.violation !== null)
+        throw new Error(`Browser recursion became success: ${input.name}`);
+      bounded++;
+    } else matched++;
+    const partial = checkSafety(core, program, { ...bounds, maxWork: 1 });
+    if (
+      partial.status !== "bounded" ||
+      partial.reason !== "work" ||
+      partial.work !== 1
+    )
+      throw new Error(`Browser work budget differs: ${input.name}`);
+  }
+  return {
+    matched,
+    rejected,
+    modelErrors,
     bounded,
     isolated: globalThis.crossOriginIsolated,
   };

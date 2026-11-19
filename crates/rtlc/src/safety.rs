@@ -344,6 +344,12 @@ impl<'program, R: Recording> Search<'program, R> {
         arena.metadata = metadata.clone();
         for definition in arena.definitions {
             match &definition.body {
+                crate::ir::DefinitionBody::Temporal(body) => {
+                    crate::safety_expressions::register_formula_memberships(
+                        body,
+                        &mut |expression| arena.register_memberships(expression),
+                    );
+                }
                 crate::ir::DefinitionBody::Expression(body) => arena.register_memberships(body),
                 crate::ir::DefinitionBody::Action(branches) => {
                     crate::safety_expressions::register_branch_memberships(

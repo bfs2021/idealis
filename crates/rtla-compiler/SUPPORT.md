@@ -51,8 +51,11 @@
 
 - [x] IR v2のSelectSeq / SortSeq / Assertのsource lowering。
 - [x] 明示v2のRECURSIVEによる自己・相互再帰、有限domainの暗黙再帰関数。scalar値・guard・temporal atom・callbackで実行する。
-- [x] 明示v2でRECURSIVEの自己・相互再帰するInit/Nextの代入actionを共有action定義とStep callへ変換する。LET捕捉、INSTANCE、高階特殊化、ENABLEDと継続を扱う。非再帰の代入actionはinlineを維持する。recursive自身のformalをprime/UNCHANGED対象にする入力はSANYに従って拒否する。
-- [ ] 非再帰actionの自動共有とtemporal templateの共有。一般のaction構文や完全なSANY level検査への対応は意味しない。
+- [x] 明示v2でRECURSIVEの自己・相互再帰するInit/Nextの代入actionを共有action定義とStep callへ変換する。LET捕捉、INSTANCE、高階特殊化、ENABLEDと継続を扱う。引数・capture・caller binderのためframeが必要な非再帰actionも共有する。零引数でframe不要の呼出しはinlineを維持する。recursive自身のformalをprime/UNCHANGED対象にする入力はSANYに従って拒否する。
+- [x] 明示v2でframeを必要とする非再帰actionとtemporal helperをbody kind別の共有定義へ変換する。PROPERTYのatom/always分類とcall入口・actual要求のworkを保つ。非再帰actionの仮想展開にも4096経路/256 stepsを適用する。
+- [x] source levelの制約を未使用定義も含め検査する。prime・UNCHANGED・ENABLED、temporal/action operands、formal/capture/LET・再帰の制約を固定点で伝播し、引数の受理上限と結果への依存を区別する。全SANYの名前・型・proof検査ではない。
+- [x] 明示v2で再帰関数をalias・operator actual経由で渡し、DOMAINと選択keyを遅延評価する。宣言時state・binder・oldのsnapshotはrtlcが保持する。等値・状態保存など完全な値を要する位置では有限domainを実体化する。
+- [ ] 一般のlazy関数値。EXCEPTのtarget、fold、membershipなど通常のScalar評価を使う観測位置の完全なTLC遅延評価互換。
 - [x] v2でもmodule連結、設定operator置換・定数表・定義上書きをlowerする。
 
 - [x] 引数付きINSTANCE、LET内INSTANCE、nested moduleの宣言時scope、名前・LAMBDAによるWITH operator置換。
@@ -61,7 +64,7 @@
 - [ ] operatorをstateへ格納する一般の値、任意の式への変数置換、全SANYの意味・level検査。
 - [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\AA / \EE）。
 - [ ] 無制限CHOOSE、他のApalache/Variants operator。
-- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。
+- [ ] 全モジュールのSANY検査、未使用定義の一般的な名前・型検査とproofの正しさの判断。
 - [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。
 
 ## 制約と根拠
@@ -79,7 +82,7 @@
 
 [operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。
 
-生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET内の自由な`@`はTLC対照に従って扱う。引数の`@`を呼出し先のEXCEPTへ渡す場合はv2を要求する。
+生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数は共有callまたはanonymous frameでcallerのlexical bindingを保持する。LET内の自由な`@`はTLC対照に従って扱う。引数の`@`を呼出し先のEXCEPTへ渡す場合はv2を要求する。
 
 - [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET内の自由な`@`はTLC対照に従って扱う。引数の`@`を呼出し先のEXCEPTへ渡す場合はv2を要求する。
 
@@ -88,3 +91,5 @@
 別のEXCEPTへ入る引数なしLETの自由な`@`は、宣言側の環境をv2の遅延引数で保持する。引数あり定義の適用側oldとは区別し、この組合せのv1は拒否する。
 
 [追加対応と独立比較](../../evals/iterations/0070-tla-coverage.md)を参照。構文受理・有限実行・証明の検証を区別する。
+
+[意味検査・遅延関数・共有templateの範囲](../../docs/frontend-semantics.md)、[level回帰](tests/levels.rs)、[lazy回帰](tests/lazy_functions.rs)と[共有回帰](tests/templates.rs)を参照。

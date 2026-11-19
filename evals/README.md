@@ -1,5 +1,7 @@
 # 評価しながら改善する
 
+[0072: source level・遅延関数・template共有](iterations/0072-frontend-semantics.md)は、SANY/TLCの拒否・正常/故障対照とnative/Wasm/Chromiumを照合する。共有化前後の完全応答・workとCriterionのcompile/fresh/preparedを分け、入力条件の修正と失敗も保存する。
+
 [0070: TLA+ frontendの追加対応](iterations/0070-tla-coverage.md)は二版のSANY構文木、native/Wasm/TLCの実行と反例、再帰の予算切れを比較する。高階・module・proofの構文保持と有限実行の範囲を区別する。
 
 [0064: 準備済みSafetyProgramとbatch](iterations/0064-prepared-safety.md)は同じIRへ予算を変えて問い合わせる費用を比較する。小さいqueryで採用し、探索主体のモデルでの効果の小ささ、cold/RSSと既存kernelの後退確認を残す。

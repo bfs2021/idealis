@@ -608,10 +608,17 @@ export type TemporalFormula<Version extends 1 | 2 = 1> =
       readonly right: TemporalFormula<Version>;
     }
   | (Version extends 2
-      ? SafetyFrameFor<Version> & {
-          readonly kind: "frame";
-          readonly formula: TemporalFormula<Version>;
-        }
+      ?
+          | {
+              readonly kind: "call";
+              readonly definition: number;
+              readonly arguments: readonly SafetyExpressionFor<Version>[];
+              readonly captures: readonly SafetyExpressionFor<Version>[];
+            }
+          | (SafetyFrameFor<Version> & {
+              readonly kind: "frame";
+              readonly formula: TemporalFormula<Version>;
+            })
       : never);
 
 export interface TemporalProperty<Version extends 1 | 2 = 1> {
@@ -671,9 +678,15 @@ export interface SafetyActionDefinition extends SafetyDefinitionFields {
   readonly body: readonly SafetyBranch<2>[];
 }
 
+export interface SafetyTemporalDefinition extends SafetyDefinitionFields {
+  readonly bodyKind: "temporal";
+  readonly body: TemporalFormula<2>;
+}
+
 export type SafetyDefinition =
   | SafetyExpressionDefinition
-  | SafetyActionDefinition;
+  | SafetyActionDefinition
+  | SafetyTemporalDefinition;
 
 export type SafetyProgramV1 = SafetyProgramFields<1>;
 

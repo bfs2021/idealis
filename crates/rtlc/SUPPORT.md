@@ -24,7 +24,7 @@
 - [x] safety IR v1を維持し、明示v2のexpression定義表とcall / parameter / captureを検証・評価する。未指定の循環とID、arity、capture、frame内slot、phase違反を拒否する。明示recursiveの強連結成分はphase summaryの固定点で検証する。
 - [x] v2の引数はcallerのlexical frameを保持し、要求時のcurrent / next / primeで毎回評価する。値cacheを持たず、call entryと引数評価に各1 workを課金し、枯渇をbounded/workにする。
 - [x] recursiveフラグ付きv2の自己・相互再帰expression定義。
-- [x] v2の共有action定義とStep call。expression/actionのkind、arity、capture、phaseと再帰SCCを検証し、代入・分岐の巻き戻しとcallerの継続を実行する。再帰評価の128段超過はbounded/evaluation、work枯渇はbounded/workにする。
+- [x] v2の共有action定義とStep call。expression/action/temporalのkind、arity、capture、phaseと再帰SCCを検証し、代入・分岐の巻き戻しとcallerの継続を実行する。再帰評価の128段超過はbounded/evaluation、work枯渇はbounded/workにする。
 - [x] callのactual/captureは一つのimmutableな親frameを共有する。値や評価結果はcacheせず、要求時のworkとcurrent/next/primeを維持する。ソース生成の受理範囲とは区別する。
 - [x] nativeのcheck_parallelは1〜256 worker上限を受け取り、適したsafety frontierを並列展開する。
 - [x] 軽いscalar・狭いfrontier・action/temporal property・fairnessは逐次へfallbackする。Wasmは逐次check。
@@ -91,3 +91,9 @@ v2のmembership descriptorは条件分岐の選択枝へ用途を保ち、未選
 - [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。sourceのLET内の`@`はcompilerがlowerする。
 
 [追加対応と独立比較](../../evals/iterations/0070-tla-coverage.md)を参照。構文受理・有限実行・証明の検証を区別する。
+
+- [x] v2のtemporal定義とTemporalFormula callを受理する。ID・arity・capture・body kind・Next phaseと到達する子を検証し、temporalの循環はrecursive指定でも拒否する。入口と要求のworkはanonymous frameと同じ。v1と既存envelopeは維持する。
+- [x] v2の関数選択とDOMAINはalias・actual・IF・record/tupleを通る遅延関数を扱う。所有するcurrent/next/locals/old/prime/frame snapshotから必要なkeyだけを評価し、完全な値が必要なら有限domainを実体化する。値cacheや永続的なlazy値tagを追加しない。
+- [ ] EXCEPT target、fold、membershipなど全観測位置での一般の遅延関数互換。通常のScalar経路は全値を評価する。
+
+[追加範囲とworkの区別](../../docs/frontend-semantics.md)、[temporal call検証](tests/temporal_calls.rs)を参照。

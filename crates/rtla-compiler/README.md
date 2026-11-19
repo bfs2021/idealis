@@ -8,9 +8,9 @@ rtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust front
 
 `compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。明示したユーザーモジュール集合と引数なしINSTANCEにも対応する。stateへ格納するoperator値とv1の再帰operator、無限集合の列挙、一般のsymmetry、VIEWは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。
 
-省略・明示v1はJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。明示v2は型付きIRを保持し、同じ木を解析・更新してSafetyProgramを返す。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。
+省略・明示v1はJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。明示v2は型付きIRを保持し、同じ木を解析・更新してSafetyProgramを返す。型付きIRへの移行自体を性能改善の根拠にはしない。既存TS frontendは独立した差分比較対象として残す。
 
-`compile_with_options(&module, &config, CompileOptions { irVersion: IrVersion::V1 })`は明示v1を選ぶ。`compile`の既定はv1のままで、通常のv1 loweringを維持する。別のEXCEPTへ渡す自由な`@`の既知の捕捉不一致は、v2を要求する拒否へ変更する。`CompileOptions { irVersion: IrVersion::V2 }`は[安全性IR v2](../../docs/safety-ir-v2.md)を明示選択する。到達するexpression定義を字句宣言順とphase / membership用途 / target signature順の定義表へ一度だけlowerし、call / parameter / capture参照を生成する。引数とcaptureはcallerのlexical frameを持つ遅延引数としてrtlcが要求時ごとに評価し、値をmemoizeしない。binder slotは定義frameごとに0から始め、非再帰の代入actionはinlineを維持する。明示v2はRECURSIVEの自己・相互再帰expressionを実行し、v1拒否からv2へ自動再試行しない。
+`compile_with_options(&module, &config, CompileOptions { irVersion: IrVersion::V1 })`は明示v1を選ぶ。`compile`の既定はv1のままで、通常のv1 loweringを維持する。別のEXCEPTへ渡す自由な`@`の既知の捕捉不一致は、v2を要求する拒否へ変更する。`CompileOptions { irVersion: IrVersion::V2 }`は[安全性IR v2](../../docs/safety-ir-v2.md)を明示選択する。到達するexpression定義を字句宣言順とphase / membership用途 / target signature順の定義表へ一度だけlowerし、call / parameter / capture参照を生成する。引数とcaptureはcallerのlexical frameを持つ遅延引数としてrtlcが要求時ごとに評価し、値をmemoizeしない。binder slotは定義frameごとに0から始め、引数・capture・caller binderのためframeを必要とする非再帰actionも共有し、frame不要の零引数呼出しはinlineを維持する。明示v2はRECURSIVEの自己・相互再帰expressionを実行し、v1拒否からv2へ自動再試行しない。
 
 frontendの式nestingとbound variableは40、checkerの定義内式深さは48、値深さは64、TS decoderは128のまま。定義間call経路長を定義内の式nestingへ加算せず、v2の動的な評価は別に入れ子128までとする。call entryと遅延引数・captureの要求はrtlcのwork予算へ各1課金し、枯渇はbounded / workになる。生成IRが既存のcompiled expression decoder深さ128を超える場合は両frontendが同じ型で拒否する。共有は評価仕事の指数増大の除去や、全TLA+との互換性を意味しない。
 
@@ -32,9 +32,9 @@ just compiler-criterion finite-compiler evals/runs/my-compiler-bench
 just tlc-finite-eval evals/runs/my-tlc-check /path/to/java /path/to/tla2tools.jar
 ```
 
-生成的UNCHANGEDのtargetだけをcallerの字句環境から変数/tupleへ静的解決し、解決済みtarget signatureごとに式定義を共有する。通常のactual/captureはcallerのlexical frameを保持し、membership用途も伝播する。action/temporal外殻もcall siteごとの非共有anonymous frameでbinder・old・parameter・captureへの遅延参照を保持する。LET内の自由な`@`はTLC対照に従う。詳細と検証範囲は[Safety IR v2](../../docs/safety-ir-v2.md)を参照。
+生成的UNCHANGEDのtargetだけをcallerの字句環境から変数/tupleへ静的解決し、解決済みtarget signatureごとに式定義を共有する。通常のactual/captureはcallerのlexical frameを保持し、membership用途も伝播する。action/temporal外殻も共有callまたはanonymous frameでbinder・old・parameter・captureへの遅延参照を保持する。LET内の自由な`@`はTLC対照に従う。詳細と検証範囲は[Safety IR v2](../../docs/safety-ir-v2.md)を参照。
 
-明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。LET内の自由な`@`はTLC対照に従う。Rust frontendの明示v2では再帰する代入actionを共有定義とcallへ変換する。非再帰actionとtemporal helperは従来のanonymous frameを使う。[呼出しと制限](../../docs/recursive-actions.md)を参照。
+明示v2のaction/temporal helperは共有callまたはanonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。LET内の自由な`@`はTLC対照に従う。Rust frontendの明示v2では再帰する代入actionを共有定義とcallへ変換する。引数・capture・caller binderのためframeが必要な非再帰actionとtemporal helperも共有する。零引数でframe不要の呼出しはinlineを維持する。[呼出しと制限](../../docs/recursive-actions.md)を参照。
 
 ## モジュールと設定置換
 
@@ -70,3 +70,5 @@ just module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/
 SYMMETRYはflat moduleのSymm == Permutations(Nodes)に限定してlowerする。TLC importと、直接割り当てた2〜64個の異なるuntyped model valueの集合を必要とする。rtlcの状態形状・safety限定の条件に従い、宣言のequivarianceは利用者の前提。[条件と制約](../../docs/symmetry.md)を参照。
 
 引数なしLET定義の自由な`@`は宣言側の環境を保持し、引数あり定義の`@`は適用側の環境に従う。Rustのv2では、別のEXCEPTへ入る引数なし定義を明示した遅延引数へ変換する。この組合せはv1と旧TS frontendで理由を示して拒否する。
+
+source level検査、遅延する有限関数とtemporal template共有の範囲は[frontendの意味検査](../../docs/frontend-semantics.md)を参照。全SANYの名前・型・proof検査とは区別する。

@@ -20,6 +20,7 @@ import { isRecord } from "../../src/trace.js";
 import { corpus } from "../rtla-parser/corpus.js";
 import { digest } from "../usable/provenance.js";
 import { operatorSharingCases } from "./corpus.js";
+import { expandTemporalTemplates } from "./expand-temporal.js";
 
 const directory = "evals/fixtures/tlc-operator-sharing";
 const bounds = { maxDepth: 64, maxStates: 10_000, maxWork: 1_000_000 };
@@ -164,7 +165,8 @@ const budget = (name: string) => ({
   ...bounds,
   maxWork: name === "sharing-work-60" ? 256 : bounds.maxWork,
 });
-const normalize = (value: unknown): unknown => {
+const normalize = (input: unknown): unknown => {
+  const value = expandTemporalTemplates(input);
   if (Array.isArray(value)) return value.map(normalize);
   if (!isRecord(value)) return value;
   return Object.fromEntries(
@@ -1798,7 +1800,7 @@ for (const form of ["head", "explicit"] as const) {
       "v",
       "0",
       "x = 0 /\\ F(x)",
-      13,
+      12,
     ],
     [
       "membership",
@@ -1806,7 +1808,7 @@ for (const form of ["head", "explicit"] as const) {
       "p",
       "1",
       "F(Nat)",
-      11,
+      10,
     ],
   ] as const)
     test(`operator sharing function definition domain metadata: ${form}, ${label}`, () => {
@@ -1856,6 +1858,22 @@ for (const form of ["head", "explicit"] as const) {
         assert.deepEqual(wasm, expected);
         assert.deepEqual(native(request), expected);
         assertOracle(fixture, wasm);
+        for (const maxWork of [work - 1, work]) {
+          const limited = {
+            ...request,
+            bounds: { ...reviewBounds, maxWork },
+          };
+          const result = core.request({ version: 1, request: limited });
+          assert.deepEqual(native(limited), result);
+          assert.ok(result.kind === "safety");
+          if (maxWork === work) assert.deepEqual(result, expected);
+          else {
+            assert.equal(result.result.status, "bounded");
+            assert.equal(result.result.reason, "work");
+            assert.equal(result.result.work, maxWork);
+            assert.equal(result.result.violation, null);
+          }
+        }
       }
       const request = {
         kind: "check-tla" as const,

@@ -37,6 +37,12 @@ impl PreparedProgram {
         let mut roots = Vec::new();
         for definition in program.definitions.iter().flatten() {
             match &definition.body {
+                crate::ir::DefinitionBody::Temporal(body) => {
+                    crate::safety_expressions::register_formula_memberships(
+                        body,
+                        &mut |expression| roots.push(expression),
+                    );
+                }
                 crate::ir::DefinitionBody::Expression(body) => roots.push(body),
                 crate::ir::DefinitionBody::Action(branches) => {
                     register_branch_memberships(branches, &mut |expression| roots.push(expression))
@@ -64,6 +70,11 @@ impl PreparedProgram {
             .collect::<Vec<_>>();
         while let Some(formula) = formulas.pop() {
             match formula {
+                TemporalFormula::Call {
+                    arguments,
+                    captures,
+                    ..
+                } => roots.extend(arguments.iter().chain(captures)),
                 TemporalFormula::Atom { expression } => roots.push(expression),
                 TemporalFormula::Not { formula }
                 | TemporalFormula::Always { formula }

@@ -1,11 +1,16 @@
 use crate::CoreError;
-use crate::ir::{Binding, Branch, DefinitionBody, Domain, Expression, FoldOrder, Scalar, Step};
+use crate::ir::{
+    Binding, Branch, DefinitionBody, Domain, Expression, FoldOrder, Scalar, Step, TemporalFormula,
+};
 use crate::safety_values::Arena;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_values::ValueRemap;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
+
+#[path = "safety_lazy.rs"]
+mod lazy;
 
 #[derive(Clone, Copy)]
 pub(crate) struct EvalContext<'a> {
@@ -104,7 +109,7 @@ impl<'a> EvalContext<'a> {
         }
     }
     #[inline]
-    fn descend(&mut self, arena: &Arena) -> Result<(), CoreError> {
+    pub(crate) fn descend(&mut self, arena: &Arena) -> Result<(), CoreError> {
         if arena.metadata.is_none() && arena.definitions.is_empty() && self.frame.is_none() {
             return Ok(());
         }
@@ -199,6 +204,53 @@ pub(crate) fn register_branch_memberships<'a>(
     }
 }
 
+pub(crate) fn register_formula_memberships<'a>(
+    formula: &'a TemporalFormula,
+    visitor: &mut impl FnMut(&'a Expression),
+) {
+    let mut pending = vec![formula];
+    while let Some(formula) = pending.pop() {
+        match formula {
+            TemporalFormula::Call {
+                arguments,
+                captures,
+                ..
+            } => {
+                for expression in arguments.iter().chain(captures) {
+                    visitor(expression);
+                }
+            }
+            TemporalFormula::Frame {
+                arguments,
+                captures,
+                formula,
+                ..
+            } => {
+                for expression in arguments.iter().chain(captures) {
+                    visitor(expression);
+                }
+                pending.push(formula);
+            }
+            TemporalFormula::Atom { expression } => visitor(expression),
+            TemporalFormula::Not { formula }
+            | TemporalFormula::Always { formula }
+            | TemporalFormula::Eventually { formula } => pending.push(formula),
+            TemporalFormula::And { left, right } | TemporalFormula::Or { left, right } => {
+                pending.extend([left.as_ref(), right.as_ref()]);
+            }
+            TemporalFormula::Forall { bounds, formula }
+            | TemporalFormula::Exists { bounds, formula } => {
+                for binding in bounds {
+                    for expression in binding.domain.children() {
+                        visitor(expression);
+                    }
+                }
+                pending.push(formula);
+            }
+        }
+    }
+}
+
 #[derive(Clone, Copy)]
 struct Validation {
     variables: usize,
@@ -216,6 +268,7 @@ impl Validation {
     }
 }
 
+#[derive(Clone)]
 pub(crate) enum Values {
     Range(std::ops::RangeInclusive<i32>),
     Items(std::vec::IntoIter<Scalar>),
@@ -1138,6 +1191,11 @@ impl Expression {
                 arena.function(result)?
             }
             Self::At { target, key } => {
+                if arena.metadata.is_some() {
+                    let target = target.eval_function(ctx, arena)?;
+                    let key = key.eval(ctx, arena)?;
+                    return target.at(key, arena);
+                }
                 let target = target.eval(ctx, arena)?;
                 let key = key.eval(ctx, arena)?;
                 arena.at(target, key)?
@@ -1340,6 +1398,9 @@ impl Expression {
                 arena.tuple(elements)?
             }
             Self::Domain { argument } => {
+                if arena.metadata.is_some() {
+                    return argument.eval_function(ctx, arena)?.domain(arena);
+                }
                 let value = argument.eval(ctx, arena)?;
                 arena.domain(value)?
             }

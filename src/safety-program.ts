@@ -378,6 +378,17 @@ const formula = (input: unknown, version: 1 | 2, depth = 0): void => {
       "Invalid compiled temporal formula",
     );
   switch (input.kind) {
+    case "call":
+      if (version !== 2)
+        throw new PortableCoreError(
+          "protocol",
+          "Temporal calls require safety IR v2",
+        );
+      fields(input, ["kind", "definition", "arguments", "captures"]);
+      count(input.definition);
+      for (const item of [...array(input.arguments), ...array(input.captures)])
+        expression(item, 0, version);
+      return;
     case "frame":
       frame(input, "kind", "formula", depth, version);
       formula(input.formula, version, depth + 1);
@@ -470,12 +481,15 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
         (definition.recursive !== undefined &&
           typeof definition.recursive !== "boolean") ||
         (definition.bodyKind !== "expression" &&
-          definition.bodyKind !== "action") ||
+          definition.bodyKind !== "action" &&
+          definition.bodyKind !== "temporal") ||
         (definition.localScope as number) > 40
       )
         throw new PortableCoreError("protocol", "Invalid compiled definition");
       if (definition.bodyKind === "action")
         branches(definition.body, 0, version);
+      else if (definition.bodyKind === "temporal")
+        formula(definition.body, version);
       else expression(definition.body, 0, version);
     });
   text(value.name);

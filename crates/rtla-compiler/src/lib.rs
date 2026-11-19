@@ -10,6 +10,7 @@ mod analysis;
 mod elaborate;
 mod functions;
 mod labels;
+mod levels;
 mod link;
 mod old;
 mod rewrite;
@@ -135,7 +136,7 @@ enum Target {
 #[derive(Clone)]
 struct Shared {
     recursive: bool,
-    key: (usize, u8, bool, Vec<Target>, bool),
+    key: (usize, u8, bool, Vec<Target>, ir::BodyKind),
     captures: Vec<usize>,
     definition: Option<ir::Definition>,
     parameter_count: usize,
@@ -149,6 +150,7 @@ struct LevelSummary {
 }
 struct Compiler<'a> {
     recursive_ids: HashSet<usize>,
+    temporal_ids: HashSet<usize>,
     declaration_ids: BTreeMap<(usize, String), usize>,
     module: &'a Module,
     config: &'a Config,
@@ -377,6 +379,7 @@ fn compile_flat(
     options: CompileOptions,
     _linking: bool,
 ) -> Result<rtlc::SafetyProgram> {
+    let source_levels = levels::validate(module)?;
     if options.irVersion == IrVersion::V2 && config.symmetry.is_some() {
         return unsupported("safety IR v2 does not support SYMMETRY");
     }
@@ -522,6 +525,11 @@ fn compile_flat(
         })
         .collect();
     let mut compiler = Compiler {
+        temporal_ids: source_levels
+            .iter()
+            .filter(|(_, level)| **level == 3)
+            .filter_map(|(key, _)| declaration_ids.get(key).copied())
+            .collect(),
         recursive_ids: recursive_declarations
             .iter()
             .map(|key| declaration_ids[key])
@@ -1318,11 +1326,14 @@ impl Compiler<'_> {
                 let body = &self.shared[*id].definition.as_ref().unwrap().body;
                 let mut summary =
                     typed::level_summary(Node::Body(body), &self.level_cache.borrow());
-                if self.shared[*id].key.4 {
+                if self.shared[*id].key.4 == ir::BodyKind::Action {
                     summary.base =
                         summary
                             .base
                             .max(if self.shared[*id].key.1 == 1 { 1 } else { 2 });
+                }
+                if self.shared[*id].key.4 == ir::BodyKind::Temporal {
+                    summary.base = 3;
                 }
                 changed |= self.level_cache.borrow().get(id) != Some(&summary);
                 self.level_cache.borrow_mut().insert(*id, summary);
@@ -1452,7 +1463,14 @@ impl Compiler<'_> {
         membership: bool,
         targets: BTreeMap<usize, Target>,
     ) -> Result<ir::Expression> {
-        self.shared_body_ir(name, arguments, context, membership, targets, false)
+        self.shared_body_ir(
+            name,
+            arguments,
+            context,
+            membership,
+            targets,
+            ir::BodyKind::Expression,
+        )
     }
     fn shared_body_ir(
         &mut self,
@@ -1461,7 +1479,7 @@ impl Compiler<'_> {
         context: &Context,
         membership: bool,
         mut targets: BTreeMap<usize, Target>,
-        action: bool,
+        kind: ir::BodyKind,
     ) -> Result<ir::Expression> {
         let entry = self.scopes[context.scope]
             .get(name)
@@ -1507,7 +1525,7 @@ impl Compiler<'_> {
             Phase::State => 2,
             Phase::Next => 3,
         };
-        let required = self.requirements(name, context, action)?;
+        let required = self.requirements(name, context, kind == ir::BodyKind::Action)?;
         for binding in &required {
             if !targets.contains_key(binding)
                 && let Some(target) = context
@@ -1526,7 +1544,7 @@ impl Compiler<'_> {
                 })
             })
             .collect::<Result<Vec<_>>>()?;
-        let key = (position, phase, membership, signature, action);
+        let key = (position, phase, membership, signature, kind);
         let id = if let Some(id) = self.shared.iter().position(|shared| shared.key == key) {
             id
         } else {
@@ -1589,7 +1607,9 @@ impl Compiler<'_> {
     }
     fn lower_definition(&mut self, id: usize) -> Result<()> {
         if let Some((body, context, membership)) = self.shared[id].pending.take() {
-            let body = if self.shared[id].key.4 {
+            let body = if self.shared[id].key.4 == ir::BodyKind::Temporal {
+                ir::DefinitionBody::Temporal(Box::new(self.temporal_ir(&body, &context)?))
+            } else if self.shared[id].key.4 == ir::BodyKind::Action {
                 ir::DefinitionBody::Action(self.action_ir(&body, &context, "<action>")?)
             } else if membership {
                 self.membership_ir(&body, &context)?.into()
@@ -1601,11 +1621,7 @@ impl Compiler<'_> {
                 id,
                 parameter_count: self.shared[id].parameter_count,
                 capture_count: self.shared[id].captures.len(),
-                body_kind: if self.shared[id].key.4 {
-                    ir::BodyKind::Action
-                } else {
-                    ir::BodyKind::Expression
-                },
+                body_kind: self.shared[id].key.4,
                 local_scope: typed::local_scope(Node::Body(&body)),
                 body,
             });
@@ -1683,7 +1699,29 @@ impl Compiler<'_> {
             )?;
         }
         typed::check_primes(Node::Program(&program), &self.level_cache.borrow())?;
-        let mut order: Vec<_> = (0..self.shared.len()).collect();
+        typed::check_shared_expansion(
+            &program,
+            &self
+                .shared
+                .iter()
+                .map(|entry| entry.definition.as_ref().unwrap())
+                .collect::<Vec<_>>(),
+            &order,
+        )?;
+        let mut reached = HashSet::new();
+        let mut pending: Vec<_> = typed::call_ids(Node::Program(&program))
+            .into_iter()
+            .collect();
+        while let Some(id) = pending.pop() {
+            if reached.insert(id) {
+                pending.extend(typed::call_ids(Node::Body(
+                    &self.shared[id].definition.as_ref().unwrap().body,
+                )));
+            }
+        }
+        let mut order: Vec<_> = (0..self.shared.len())
+            .filter(|id| self.shared[*id].key.4 != ir::BodyKind::Temporal || reached.contains(id))
+            .collect();
         order.sort_by(|left, right| self.shared[*left].key.cmp(&self.shared[*right].key));
         let mapping: HashMap<_, _> = order
             .iter()

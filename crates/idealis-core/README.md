@@ -22,4 +22,6 @@ The release is experimental. A matched finite history covers the supplied action
 
 `compile_tla_with_options(source, config, CompileOptions { irVersion: IrVersion::V1 })` selects v1. Omitted `irVersion` retains v1. Explicit v2 shares expression definitions and supports marked recursion, module linking and configuration overrides. Calls and argument demands consume work; values are not memoized. Recursive evaluation exhaustion returns bounded/evaluation. Marked recursive assignment actions use shared action definitions in explicit v2; nonrecursive action operators remain inlined. Native/Wasm requests also accept `syntaxVersion: "1.7.4" | "1.8.0"` for the Rust parser's precedence table. The request envelope and Wasm ABI remain at version 1.
 
-明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。sourceの対応範囲はcompilerが判断する。再帰expressionとaction定義は明示v2で扱う。Rust frontendが生成する再帰actionの範囲は[呼出しと制限](../../docs/recursive-actions.md)を参照。
+明示v2のaction/temporal helperは共有callまたはanonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。sourceの対応範囲はcompilerが判断する。再帰expressionとaction定義は明示v2で扱う。Rust frontendが生成する再帰actionの範囲は[呼出しと制限](../../docs/recursive-actions.md)を参照。
+
+明示IR v2のsource level検査・遅延関数観測・action/temporal共有はrtla-compilerとrtlcへ委譲する。[範囲と検査方法](../../docs/frontend-semantics.md)を参照。

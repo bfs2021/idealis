@@ -665,7 +665,12 @@ const actionDefinitionDescriptor = {
   ...definitionDescriptor,
   body: each(branch("definition-body", "frame", "stop")),
 } satisfies Descriptor<SafetyDefinition>;
+const temporalDefinitionDescriptor = {
+  ...definitionDescriptor,
+  body: { ...temporal("definition-body", "frame"), depth: 0 },
+} satisfies Descriptor<SafetyDefinition>;
 const temporalDescriptors = {
+  call: stepDescriptors.call,
   atom: { kind: a, expression: { ...expr(), depth: 0 } },
   forall: {
     kind: a,
@@ -836,7 +841,9 @@ const descriptorFor = (
     case "ir-definition":
       return node.value.bodyKind === "action"
         ? actionDefinitionDescriptor
-        : definitionDescriptor;
+        : node.value.bodyKind === "temporal"
+          ? temporalDefinitionDescriptor
+          : definitionDescriptor;
     case "ir-temporal":
       return temporalDescriptors[node.value.kind];
     case "ir-program":

@@ -282,7 +282,7 @@ const graph = (program: unknown) => {
         seen.add(current);
         result.push(current);
         pending.push(...Object.values(current));
-        if (current.op === "call") {
+        if (current.op === "call" || current.kind === "call") {
           const definition = byId.get(current.definition);
           assert.ok(definition, "call retains an existing definition ID");
           assert.equal(
@@ -550,17 +550,30 @@ const projection = (
   if (kind === "Let" || kind === "Label") return [node];
   return null;
 };
-const formulaBody = (value: unknown): Node => {
+const formulaBody = (value: unknown, view?: ReturnType<typeof graph>): Node => {
   let node = record(value, "temporal formula");
-  while (node.kind === "frame")
-    node = record(node.formula, "temporal frame body");
+  const visited = new Set<unknown>();
+  while (node.kind === "frame" || node.kind === "call") {
+    if (node.kind === "frame")
+      node = record(node.formula, "temporal frame body");
+    else {
+      const definition = view?.byId.get(node.definition);
+      assert.ok(definition && definition.bodyKind === "temporal");
+      assert.ok(
+        !visited.has(definition.id),
+        "acyclic temporal constructor projection",
+      );
+      visited.add(definition.id);
+      node = record(definition.body, "temporal call body");
+    }
+  }
   return node;
 };
 const assertLeadsTo = (
   entry: AnalysisCase,
   view: ReturnType<typeof graph>,
 ): void => {
-  const formula = formulaBody(view.body);
+  const formula = formulaBody(view.body, view);
   assert.equal(formula.kind, "always", "leads-to outer always");
   const implication = record(formula.formula, "leads-to implication");
   assert.equal(implication.kind, "or");
@@ -577,7 +590,7 @@ const assertLeadsTo = (
   const consequent = right.formula;
   const index = Number(entry.position.position.match(/\[(\d+)\]/)?.[1]);
   const selected = index === 0 ? antecedent : consequent;
-  const opposite = formulaBody(index === 0 ? consequent : antecedent);
+  const opposite = formulaBody(index === 0 ? consequent : antecedent, view);
   assert.equal(
     opposite.kind,
     "atom",

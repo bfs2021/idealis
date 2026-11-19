@@ -14,7 +14,7 @@ Safe == x \in 0..2
 ====
 ```
 
-この例は3状態を巡回する。再帰の深さごとに本体を展開せず、共有definitionを呼び出す。分岐、有限の存在量化、LETの捕捉、INSTANCE、高階operatorの特殊化、EXCEPT、ENABLEDの生成位置もStep callを使う。action propertyの値評価はexpression定義へ別にlowerする。通常の非再帰actionは従来のinlineを維持する。
+この例は3状態を巡回する。再帰の深さごとに本体を展開せず、共有definitionを呼び出す。分岐、有限の存在量化、LETの捕捉、INSTANCE、高階operatorの特殊化、EXCEPT、ENABLEDの生成位置もStep callを使う。action propertyの値評価はexpression定義へ別にlowerする。引数・capture・caller binderのためframeが必要な非再帰actionも共有する。零引数でframe不要の呼出しはinlineを維持する。[非再帰templateの共有](frontend-semantics.md)を参照。
 
 呼出し先の代入は、既に代入したslotなら値を照合する。矛盾する分岐を捨て、次の分岐へ戻るときはslotを元へ戻す。呼出し後の条件はcallerのbinderと引数環境で評価する。calleeが残した未代入変数を、完全な次状態として採用しない。
 

@@ -12,6 +12,7 @@ import { PortableCoreError } from "../../src/portable-value.js";
 import { createPortableWasm } from "../../src/portable-wasm.js";
 import { compileTlaSafety } from "../../src/tla-safety.js";
 import { isRecord } from "../../src/trace.js";
+import { expandTemporalTemplates } from "./expand-temporal.js";
 
 const bounds = { maxDepth: 8, maxStates: 100, maxWork: 10_000 };
 const fixtureRoot = "evals/fixtures/tlc-operator-sharing";
@@ -44,7 +45,8 @@ const native = (request: PortableCommand["request"]): unknown => {
   assert.equal(result.status, 0, result.stderr);
   return JSON.parse(result.stdout);
 };
-const normalize = (value: unknown): unknown => {
+const normalize = (input: unknown): unknown => {
+  const value = expandTemporalTemplates(input);
   if (Array.isArray(value)) return value.map(normalize);
   if (!isRecord(value)) return value;
   return Object.fromEntries(

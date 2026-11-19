@@ -411,6 +411,14 @@ fn detach_expression(node: &mut Expression, budget: usize, worklist: &mut Workli
 
 fn detach_formula(node: &mut TemporalFormula, budget: usize, worklist: &mut Worklist) {
     match node {
+        TemporalFormula::Call {
+            arguments,
+            captures,
+            ..
+        } => {
+            dispose_expressions(mem::take(arguments), budget, worklist);
+            dispose_expressions(mem::take(captures), budget, worklist);
+        }
         TemporalFormula::Frame {
             arguments,
             captures,

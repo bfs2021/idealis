@@ -121,8 +121,14 @@ fn definition_order(definitions: &[Definition]) -> Result<Vec<(Vec<usize>, bool)
         enum Node<'a> {
             Expression(&'a Expression, usize),
             Branch(&'a Branch, usize),
+            Formula(&'a TemporalFormula, usize),
         }
         let mut pending = match &definition.body {
+            DefinitionBody::Temporal(body)
+                if definition.body_kind == BodyKind::Temporal && !definition.recursive =>
+            {
+                vec![Node::Formula(body, 0)]
+            }
             DefinitionBody::Expression(body) if definition.body_kind == BodyKind::Expression => {
                 vec![Node::Expression(body, 0)]
             }
@@ -154,6 +160,66 @@ fn definition_order(definitions: &[Definition]) -> Result<Vec<(Vec<usize>, bool)
         };
         while let Some(node) = pending.pop() {
             match node {
+                Node::Formula(formula, depth) => {
+                    if depth > 40 {
+                        return Err(invalid("Temporal formula nesting exceeds 40"));
+                    }
+                    match formula {
+                        TemporalFormula::Call {
+                            definition,
+                            arguments,
+                            captures,
+                        } => {
+                            call(*definition, arguments, captures, BodyKind::Temporal)?;
+                            pending.extend(
+                                arguments
+                                    .iter()
+                                    .chain(captures)
+                                    .map(|expression| Node::Expression(expression, 0)),
+                            );
+                        }
+                        TemporalFormula::Frame {
+                            arguments,
+                            captures,
+                            formula,
+                            ..
+                        } => {
+                            pending.extend(
+                                arguments
+                                    .iter()
+                                    .chain(captures)
+                                    .map(|expression| Node::Expression(expression, 0)),
+                            );
+                            pending.push(Node::Formula(formula, depth + 1));
+                        }
+                        TemporalFormula::Atom { expression } => {
+                            pending.push(Node::Expression(expression, 0))
+                        }
+                        TemporalFormula::Not { formula }
+                        | TemporalFormula::Always { formula }
+                        | TemporalFormula::Eventually { formula } => {
+                            pending.push(Node::Formula(formula, depth + 1))
+                        }
+                        TemporalFormula::And { left, right }
+                        | TemporalFormula::Or { left, right } => pending.extend([
+                            Node::Formula(left, depth + 1),
+                            Node::Formula(right, depth + 1),
+                        ]),
+                        TemporalFormula::Forall { bounds, formula }
+                        | TemporalFormula::Exists { bounds, formula } => {
+                            for binding in bounds {
+                                pending.extend(
+                                    binding
+                                        .domain
+                                        .children()
+                                        .into_iter()
+                                        .map(|expression| Node::Expression(expression, 0)),
+                                );
+                            }
+                            pending.push(Node::Formula(formula, depth + 1));
+                        }
+                    }
+                }
                 Node::Expression(expression, depth) => {
                     if depth > 48 {
                         return Err(invalid("Safety expression nesting exceeds 48"));
@@ -815,6 +881,19 @@ impl Analyzer<'_> {
         }
         let mut summary = Summary::default();
         match formula {
+            TemporalFormula::Call {
+                definition,
+                arguments,
+                captures,
+            } => {
+                return self.call(
+                    *definition,
+                    arguments,
+                    captures,
+                    BodyKind::Temporal,
+                    context,
+                );
+            }
             TemporalFormula::Frame {
                 arguments,
                 captures,
@@ -958,6 +1037,12 @@ pub(crate) fn validate_program(program: &SafetyProgram) -> Result<Metadata, Core
                         ..Context::root(phase as u8)
                     };
                     let result = match &definition.body {
+                        DefinitionBody::Temporal(formula) if phase == 1 => {
+                            metadata.formula(formula, 0, context)
+                        }
+                        DefinitionBody::Temporal(_) => {
+                            Err(invalid("Invalid safety temporal definition phase"))
+                        }
                         DefinitionBody::Expression(body) => metadata.expression(body, context),
                         DefinitionBody::Action(branches) if phase <= 1 => {
                             metadata.branches(branches, context).map(|mut summary| {

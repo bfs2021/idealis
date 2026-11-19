@@ -45,3 +45,5 @@
 [追加対応と独立比較](../../evals/iterations/0070-tla-coverage.md)を参照。構文受理・有限実行・証明の検証を区別する。
 
 - [x] 明示v2の再帰action定義とStep callをnative/Wasmのcompile/check経路で扱う。Rust compilerとrtlcへ委譲し、入力拒否・boundedと違反を区別する。ブラウザでホストimportやcross-origin isolationなしに実行する。
+
+- [x] 明示v2のsource level検査、alias/actualを通る遅延関数観測、非再帰actionとtemporal templateの共有をRust compiler/rtlcへ委譲する。native/Wasmの完全応答、入力拒否・評価エラー・boundedを区別し、Chromiumでもホストimportとcross-origin isolationなしで実行する。

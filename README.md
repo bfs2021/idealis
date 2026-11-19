@@ -61,6 +61,17 @@ RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → 
 
 rtlaは固定SANYの全operator表とUnicode alias、LAMBDA/RECURSIVE、引数付き・LET内INSTANCE、nested module、一般selectorと構造付きproofを解析する。`syntaxVersion`で1.7.4/1.8.0の優先順位を選ぶ。Rust compilerは高階operatorを特殊化し、明示IR v2で再帰expressionと代入actionを予算付きで実行する。[対応チェックリスト](crates/rtla/SUPPORT.md)、[独立SANY/TLC比較](evals/iterations/0070-tla-coverage.md)と[frontendの契約](docs/rust-frontend.md)を参照。構文受理と有限モデルの検査、THEOREMの証明は別の範囲である。
 
+Rust frontendは未使用定義を含むsource level制約を検査する。明示IR v2では、alias/actual経由の有限関数を選択とDOMAINで遅延評価し、frameを必要とする非再帰actionとtemporal helperのbodyを共有する。TS frontendも非再帰actionを共有する。全SANYの名前・型・proof検査と全観測位置でのTLC遅延評価互換は対象外。[範囲と再現手順](docs/frontend-semantics.md)を参照。
+
+共有化の前後を同じ7入力・workで比較した。Apple M5上のCriterion、各4 runの平均の中央値。単位µs。
+
+| 反復するbody    |    compile 前 → 後 | compile倍率 | prepared check 前 → 後 | prepared倍率 |
+| --------------- | -----------------: | ----------: | ---------------------: | -----------: |
+| action、深さ6   | 3181.000 → 220.402 |      14.43× |       108.445 → 90.971 |        1.19× |
+| temporal、深さ5 | 2548.725 → 795.399 |       3.20× |      306.134 → 257.879 |        1.19× |
+
+起動・IPCとTLCの速度は含めない。反復bodyを持つ人工モデルの測定で、全モデルの高速化を保証しない。[全21項目・条件・profile](evals/iterations/0072-frontend-semantics.md)を参照。
+
 [QuintがApalache経由で生成したTLA+の実行確認](docs/quint-generated.md)は、6モデル・12件の正常/違反設定をnative/WasmとTLCへ照合する。`:=`、fold、有限選択、VariantsとCASEを含む限定したfragmentで、Quint言語やQuint Connect API全体の互換実装ではない。
 
 `idealis-smt`はこのTLA+探索経路から独立している。現在の公開SMT adapterはZ3 Wasmを使い、idealis-smtを公開backendへ組み込む作業は今後の対象。

@@ -311,7 +311,7 @@ fn descriptor(
                 result.role = "definition-body";
                 result.scope = "frame";
             }
-            "ir-step" if constructor == "call" => {
+            "ir-step" | "ir-temporal" if constructor == "call" => {
                 if p.starts_with("arguments") {
                     result.role = "call-actual";
                 } else if p.starts_with("captures") {
@@ -771,6 +771,38 @@ macro_rules! temporal_edges_body {
         let value = $value;
         use ir::TemporalFormula as T;
         match value {
+            T::Call {
+                definition,
+                arguments,
+                captures,
+            } => arguments
+                .$iter()
+                .map(|value| {
+                    $edge(
+                        $node::Expression(value),
+                        "ir-temporal",
+                        "call",
+                        "",
+                        "arguments[*]",
+                    )
+                })
+                .chain(captures.$iter().map(|value| {
+                    $edge(
+                        $node::Expression(value),
+                        "ir-temporal",
+                        "call",
+                        "",
+                        "captures[*]",
+                    )
+                }))
+                .chain([$edge(
+                    $node::Call(definition),
+                    "ir-temporal",
+                    "call",
+                    "",
+                    "definition",
+                )])
+                .collect(),
             T::Frame {
                 arguments,
                 captures,
@@ -1009,6 +1041,13 @@ macro_rules! ir_wrapper_edges {
             body,
         } = $value;
         match body {
+            ir::DefinitionBody::Temporal(body) => vec![$edge(
+                $node::Temporal(body),
+                "ir-definition",
+                "definition",
+                "",
+                "body",
+            )],
             ir::DefinitionBody::Expression(body) => vec![$edge(
                 $node::Expression(body),
                 "ir-definition",
@@ -1157,6 +1196,13 @@ pub(crate) fn analysis_children(node: Node<'_>) -> Vec<Edge<'_>> {
         Node::Branch(value) => ir_wrapper_edges!(Branch, value, Node, edge, iter),
         Node::Step(value) => step_edges(value),
         Node::Body(body) => match body {
+            ir::DefinitionBody::Temporal(body) => vec![edge(
+                Node::Temporal(body),
+                "ir-body",
+                "temporal",
+                "",
+                "body",
+            )],
             ir::DefinitionBody::Expression(body) => vec![edge(
                 Node::Expression(body),
                 "ir-body",
@@ -2383,6 +2429,11 @@ fn temporal_samples(binding: &ir::Binding) -> Vec<ir::TemporalFormula> {
     use ir::TemporalFormula as T;
     let one = || Box::new(T::Atom { expression: I::Old });
     vec![
+        T::Call {
+            definition: 0,
+            arguments: vec![I::Old],
+            captures: vec![I::Old],
+        },
         T::Atom { expression: I::Old },
         T::Forall {
             bounds: vec![binding.clone()],
@@ -2488,6 +2539,13 @@ pub(crate) fn analysis_children_mut(node: NodeMut<'_>) -> Vec<EdgeMut<'_>> {
         NodeMut::Binding(value) => ir_wrapper_edges!(Binding, value, NodeMut, edge_mut, iter_mut),
         NodeMut::Branch(value) => ir_wrapper_edges!(Branch, value, NodeMut, edge_mut, iter_mut),
         NodeMut::Body(body) => match body {
+            ir::DefinitionBody::Temporal(body) => vec![edge_mut(
+                NodeMut::Temporal(body),
+                "ir-body",
+                "temporal",
+                "",
+                "body",
+            )],
             ir::DefinitionBody::Expression(body) => vec![edge_mut(
                 NodeMut::Expression(body),
                 "ir-body",

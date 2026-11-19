@@ -58,6 +58,9 @@ test.beforeAll(async () => {
   const recursive = await readFile(
     "crates/rtla-compiler/tests/recursive-actions.json",
   );
+  const frontend = await readFile(
+    "crates/rtla-compiler/tests/frontend-semantics.json",
+  );
   const operators = await readFile(
     "crates/rtla-compiler/tests/operators-support.json",
   );
@@ -91,7 +94,9 @@ test.beforeAll(async () => {
                       ? completion
                       : request.url === "/recursive-actions.json"
                         ? recursive
-                        : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
+                        : request.url === "/frontend-semantics.json"
+                          ? frontend
+                          : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));
@@ -229,6 +234,30 @@ test("generates recursive assignment actions and keeps budget exhaustion inconcl
     matched: 23,
     rejected: 1,
     bounded: 2,
+    isolated: false,
+  });
+});
+
+test("checks levels, lazy functions and shared templates in Chromium", async ({
+  page,
+}) => {
+  await page.goto(origin);
+  const result = await page.evaluate(async () => {
+    const api: unknown = Reflect.get(globalThis, "portableBrowser");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runFrontendSemantics" in api) ||
+      typeof api.runFrontendSemantics !== "function"
+    )
+      throw new Error("Missing frontend semantics browser API");
+    return api.runFrontendSemantics();
+  });
+  expect(result).toEqual({
+    matched: 64,
+    rejected: 12,
+    modelErrors: 4,
+    bounded: 1,
     isolated: false,
   });
 });

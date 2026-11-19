@@ -46,7 +46,8 @@ pub(crate) fn level_summary(node: Node<'_>, cache: &HashMap<usize, LevelSummary>
                 }
             }
             Node::Expression(I::Call { definition, .. })
-            | Node::Step(Step::Call { definition, .. }) => {
+            | Node::Step(Step::Call { definition, .. })
+            | Node::Temporal(T::Call { definition, .. }) => {
                 if let Some(body) = cache.get(definition) {
                     summary.base = summary.base.max(body.base);
                     for (slots, role) in [
@@ -144,6 +145,11 @@ pub(crate) fn trim_call_captures(node: NodeMut<'_>, mappings: &[HashMap<usize, u
             ..
         })
         | NodeMut::Step(Step::Call {
+            definition,
+            captures,
+            ..
+        })
+        | NodeMut::Temporal(T::Call {
             definition,
             captures,
             ..
@@ -287,6 +293,12 @@ pub(crate) fn check_depth(node: Node<'_>) -> Result<()> {
 }
 
 pub(crate) fn action_dimensions(branches: &[ir::Branch]) -> (usize, usize) {
+    action_dimensions_shared(branches, &HashMap::new())
+}
+fn action_dimensions_shared(
+    branches: &[ir::Branch],
+    sizes: &HashMap<usize, (usize, usize)>,
+) -> (usize, usize) {
     let mut paths = 0usize;
     let mut longest = 0usize;
     for branch in branches {
@@ -302,6 +314,12 @@ pub(crate) fn action_dimensions(branches: &[ir::Branch]) -> (usize, usize) {
             };
             length += 1;
             let children = analysis_children(Node::Step(step));
+            if let Step::Call { definition, .. } = step
+                && let Some((count, maximum)) = sizes.get(definition)
+            {
+                branch_paths = branch_paths.saturating_mul(*count).min(4097);
+                length = length.saturating_add(*maximum).min(257);
+            }
             if matches!(step, Step::Frame { .. }) {
                 let mut count = 0usize;
                 let mut maximum = 0usize;
@@ -311,7 +329,7 @@ pub(crate) fn action_dimensions(branches: &[ir::Branch]) -> (usize, usize) {
                 {
                     if let Node::Branch(branch) = edge.node {
                         let (inner_count, inner_steps) =
-                            action_dimensions(std::slice::from_ref(branch));
+                            action_dimensions_shared(std::slice::from_ref(branch), sizes);
                         count = count.saturating_add(inner_count).min(4097);
                         maximum = maximum.max(inner_steps);
                     }
@@ -324,6 +342,44 @@ pub(crate) fn action_dimensions(branches: &[ir::Branch]) -> (usize, usize) {
         longest = longest.max(length);
     }
     (paths, longest)
+}
+pub(crate) fn check_shared_expansion(
+    program: &ir::SafetyProgram,
+    definitions: &[&ir::Definition],
+    order: &[usize],
+) -> Result<()> {
+    let mut sizes = HashMap::new();
+    let check = |size: (usize, usize)| -> Result<()> {
+        if size.0 > 4096 || size.1 > 256 {
+            return unsupported("action expansion exceeds 4096 branches or 256 steps");
+        }
+        Ok(())
+    };
+    for id in order {
+        let definition = definitions[*id];
+        if let ir::DefinitionBody::Action(branches) = &definition.body {
+            let size = action_dimensions_shared(branches, &sizes);
+            check(size)?;
+            if !definition.recursive {
+                sizes.insert(*id, size);
+            }
+        }
+    }
+    check(action_dimensions_shared(&program.initial, &sizes))?;
+    check(action_dimensions_shared(&program.next, &sizes))?;
+    let mut pending = vec![Node::Program(program)];
+    pending.extend(
+        definitions
+            .iter()
+            .map(|definition| Node::Body(&definition.body)),
+    );
+    while let Some(node) = pending.pop() {
+        if let Node::Expression(I::Enabled { branches, .. }) = node {
+            check(action_dimensions_shared(branches, &sizes))?;
+        }
+        pending.extend(analysis_children(node).into_iter().map(|edge| edge.node));
+    }
+    Ok(())
 }
 pub(crate) fn limited(branches: Vec<ir::Branch>) -> Result<Vec<ir::Branch>> {
     let (paths, longest) = action_dimensions(&branches);
@@ -377,36 +433,41 @@ pub(crate) fn atom_expression(formula: &T) -> Option<I> {
         _ => None,
     }
 }
-pub(crate) fn always_expression(formula: &T) -> Option<I> {
-    let children = analysis_children(Node::Temporal(formula));
-    match formula {
-        T::Always { .. } => children.into_iter().find_map(|edge| {
-            if let Node::Temporal(value) = edge.node {
-                atom_expression(value)
-            } else {
-                None
-            }
-        }),
-        T::Frame { .. } => children
-            .into_iter()
-            .filter(|edge| edge.descriptor.role == "frame-body")
-            .find_map(|edge| {
-                if let Node::Temporal(value) = edge.node {
-                    always_expression(value).map(|body| expression_frame(formula, body))
-                } else {
-                    None
-                }
-            }),
-        _ => None,
-    }
-}
 pub(crate) fn validate_temporal(
     formula: &T,
     path: &[String],
     direct: bool,
     frames: &[&T],
     cache: &HashMap<usize, LevelSummary>,
+    definitions: &[&ir::Definition],
 ) -> Result<()> {
+    if let T::Call {
+        definition,
+        arguments,
+        captures,
+    } = formula
+    {
+        if frames.len() >= 128 {
+            return unsupported("temporal call validation nesting exceeds 128");
+        }
+        let definition = definitions
+            .get(*definition)
+            .ok_or_else(|| crate::CompileError {
+                message: "temporal definition ID".into(),
+            })?;
+        let ir::DefinitionBody::Temporal(body) = &definition.body else {
+            return unsupported("temporal definition kind");
+        };
+        let frame = T::Frame {
+            arguments: arguments.clone(),
+            captures: captures.clone(),
+            parameter_count: definition.parameter_count,
+            capture_count: definition.capture_count,
+            local_scope: definition.local_scope,
+            formula: body.clone(),
+        };
+        return validate_temporal(&frame, path, direct, frames, cache, definitions);
+    }
     let children = analysis_children(Node::Temporal(formula));
     if let T::Atom { .. } = formula {
         for edge in children {
@@ -436,7 +497,7 @@ pub(crate) fn validate_temporal(
                 T::Eventually { .. } => path.push("eventually".into()),
                 _ => {}
             }
-            validate_temporal(value, &path, direct, &frames, cache)?;
+            validate_temporal(value, &path, direct, &frames, cache, definitions)?;
         }
     }
     Ok(())

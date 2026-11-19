@@ -527,9 +527,9 @@ fn v2_function_definition_domains_propagate_target_and_membership_requirements()
             "(IF ENABLED (UNCHANGED v) THEN {0} ELSE {})",
             "f[0] = 0",
             "x = 0 /\\ F(x)",
-            13,
+            12,
         ),
-        ("p", "{IF x \\in p THEN 1 ELSE 2}", "f[1] = 1", "F(Nat)", 11),
+        ("p", "{IF x \\in p THEN 1 ELSE 2}", "f[1] = 1", "F(Nat)", 10),
     ] {
         let mut previous = None;
         for definition in [

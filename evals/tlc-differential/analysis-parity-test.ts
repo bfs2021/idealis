@@ -16,6 +16,7 @@ import {
   sourceReach,
 } from "./analysis-parity-corpus.js";
 import { assertIrReach, assertSourceReach } from "./analysis-reach.js";
+import { expandTemporalTemplates } from "./expand-temporal.js";
 import "./analysis-supplement-test.js";
 
 const directory = "evals/fixtures/tlc-operator-sharing";
@@ -28,7 +29,8 @@ const inventory = JSON.parse(
 const generatedCorpus = createAnalysisCorpus(inventory.sharedApplyArityEntries);
 const analysisPositions = () => generatedCorpus.positions;
 const generateAnalysisCases = () => generatedCorpus.cases;
-const normalize = (value: unknown): unknown => {
+const normalize = (input: unknown): unknown => {
+  const value = expandTemporalTemplates(input);
   if (Array.isArray(value)) return value.map(normalize);
   if (!isRecord(value)) return value;
   return Object.fromEntries(

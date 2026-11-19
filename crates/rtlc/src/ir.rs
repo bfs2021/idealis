@@ -441,6 +441,7 @@ pub struct Definition {
 pub enum DefinitionBody {
     Expression(Expression),
     Action(Vec<Branch>),
+    Temporal(Box<TemporalFormula>),
 }
 
 impl From<Expression> for DefinitionBody {
@@ -449,11 +450,12 @@ impl From<Expression> for DefinitionBody {
     }
 }
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[serde(rename_all = "kebab-case")]
 pub enum BodyKind {
     Expression,
     Action,
+    Temporal,
 }
 
 #[derive(Deserialize)]
@@ -489,6 +491,19 @@ enum DefinitionWire {
         #[serde(deserialize_with = "deserialize_wire_index")]
         local_scope: usize,
         body: Vec<Branch>,
+    },
+    Temporal {
+        #[serde(default)]
+        recursive: bool,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        id: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        parameter_count: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        capture_count: usize,
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        local_scope: usize,
+        body: Box<TemporalFormula>,
     },
 }
 
@@ -526,6 +541,22 @@ impl From<DefinitionWire> for Definition {
                 local_scope,
                 body_kind: BodyKind::Action,
                 body: DefinitionBody::Action(body),
+            },
+            DefinitionWire::Temporal {
+                recursive,
+                id,
+                parameter_count,
+                capture_count,
+                local_scope,
+                body,
+            } => Self {
+                recursive,
+                id,
+                parameter_count,
+                capture_count,
+                local_scope,
+                body_kind: BodyKind::Temporal,
+                body: DefinitionBody::Temporal(body),
             },
         }
     }
@@ -687,7 +718,7 @@ impl SafetyProgram {
             .collect();
         while let Some(formula) = formulas.pop() {
             match formula {
-                TemporalFormula::Frame { .. } => return true,
+                TemporalFormula::Frame { .. } | TemporalFormula::Call { .. } => return true,
                 TemporalFormula::Atom { expression } => pending.push(expression),
                 TemporalFormula::Not { formula }
                 | TemporalFormula::Always { formula }
@@ -857,6 +888,12 @@ impl Scalar {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum TemporalFormula {
+    Call {
+        #[serde(deserialize_with = "deserialize_wire_index")]
+        definition: usize,
+        arguments: Vec<Expression>,
+        captures: Vec<Expression>,
+    },
     Frame {
         arguments: Vec<Expression>,
         captures: Vec<Expression>,

@@ -122,7 +122,7 @@ const scopes: readonly CrateScope[] = [
         path: "src/lib.rs",
         contains: "fn shared_body_ir(",
         topic:
-          "共有expression/action定義の登録、phase・用途・target signature・body kindの区別と遅延引数",
+          "共有expression/action/temporal定義の登録、phase・用途・target signature・body kindの区別と遅延引数",
       },
       {
         path: "src/typed_expr.rs",
@@ -132,7 +132,7 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/typed_lower.rs",
         topic:
-          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、module連結、非再帰actionのinlineと再帰actionの共有call",
+          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、module連結、frameが必要な非再帰action/temporalと再帰actionの共有call、零引数inlineと展開上限",
       },
       {
         path: "src/elaborate.rs",
@@ -142,6 +142,11 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/select.rs",
         topic: "label・binder引数と一般subexpression selectorの解決と対象外",
+      },
+      {
+        path: "src/levels.rs",
+        topic:
+          "未使用定義を含むsource level制約、formal/capture/LET/再帰への固定点伝播、引数の上限と結果の依存の区別。全SANY名前・型・proof検査は対象外",
       },
       {
         path: "src/functions.rs",
@@ -237,9 +242,14 @@ const scopes: readonly CrateScope[] = [
           "Int/Refの添字候補を完全key一致のときだけ使用し、疎なdomain・Ref順が異なる場合・欠落keyを線形検索へ戻す",
       },
       {
+        path: "src/safety_lazy.rs",
+        topic:
+          "v2の選択とDOMAINでalias/actual/record/tupleを通る有限関数の遅延観測、所有snapshotと要求key、完全観測の実体化。全観測位置のTLC lazy互換とmemoizationは対象外",
+      },
+      {
         path: "src/safety_definitions.rs",
         topic:
-          "v2の定義graph、expression/action kind・ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
+          "v2の定義graph、expression/action/temporal kind・ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
       },
       {
         path: "src/safety_expressions.rs",

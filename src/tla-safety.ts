@@ -5,6 +5,7 @@ import {
   parseModule,
 } from "tla-ts";
 import type {
+  SafetyActionDefinition,
   SafetyBinding as SafetyBindingBase,
   SafetyBranch as SafetyBranchBase,
   SafetyDomain as SafetyDomainBase,
@@ -275,7 +276,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     readonly purpose: "value" | "membership-type";
     readonly signature: readonly StaticTarget[];
     captures: readonly number[];
-    definition: SafetyExpressionDefinition;
+    definition: SafetyExpressionDefinition | SafetyActionDefinition;
     pending?: { readonly body: Expression; readonly context: Context };
   }[] = [];
   const bindingIds = new Map<string, number>();
@@ -301,6 +302,16 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       parameters: new Set(),
       captures: new Set(),
     };
+    if (Array.isArray(value)) {
+      const summaries = value.map(summary);
+      return {
+        base: Math.max(0, ...summaries.map((entry) => entry.base)),
+        parameters: new Set(
+          summaries.flatMap((entry) => [...entry.parameters]),
+        ),
+        captures: new Set(summaries.flatMap((entry) => [...entry.captures])),
+      };
+    }
     if (typeof value !== "object" || value === null) return empty;
     const node = analysisView(value);
     if (!node) return empty;
@@ -321,6 +332,22 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       );
       const actuals = children.filter((edge) => edge.role === "frame-actual");
       const captures = children.filter((edge) => edge.role === "frame-capture");
+      return combine([
+        { ...empty, base: body.base },
+        ...[...body.parameters].map((slot) =>
+          summary(actuals[slot]?.node.value),
+        ),
+        ...[...body.captures].map((slot) =>
+          summary(captures[slot]?.node.value),
+        ),
+      ]);
+    }
+    if ("kind" in value && value.kind === "call" && "definition" in value) {
+      const body =
+        levels.get(Number(value.definition)) ??
+        unsupported("operator metadata");
+      const actuals = children.filter((edge) => edge.role === "call-actual");
+      const captures = children.filter((edge) => edge.role === "call-capture");
       return combine([
         { ...empty, base: body.base },
         ...[...body.parameters].map((slot) =>
@@ -397,6 +424,8 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     value: unknown,
     transform: (value: Record<string, unknown>) => Record<string, unknown>,
   ): unknown => {
+    if (Array.isArray(value))
+      return value.map((entry) => visit(entry, transform));
     const node = analysisView(value);
     return node ? visitNode(node, transform, false) : value;
   };
@@ -404,6 +433,8 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     value: unknown,
     transform: (value: Record<string, unknown>) => Record<string, unknown>,
   ): unknown => {
+    if (Array.isArray(value))
+      return value.map((entry) => visitScope(entry, transform));
     const node = analysisView(value);
     return node ? visitNode(node, transform, true) : value;
   };
@@ -1078,6 +1109,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     context: Context,
     purpose: "value" | "membership-type" = "value",
     lowered?: readonly SafetyExpression[],
+    kind: "expression" | "action" = "expression",
   ): SafetyExpression => {
     const entry = context.scope.entries.get(name);
     if (!entry || entry.definition.isRecursive)
@@ -1089,7 +1121,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       params.some((param) => param.arity !== 0)
     )
       return unsupported(`operator ${name}`);
-    const required = targetRequirements(name, context);
+    const required = targetRequirements(name, context, kind === "action");
     const resolved = new Map<number, StaticTarget>();
     const signature = required.map((binding) => {
       const index = params.findIndex(
@@ -1110,7 +1142,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       resolved.set(binding, target);
       return target;
     });
-    const key = `${identity(declaration)}:${context.phase}:${purpose}:${JSON.stringify(signature)}`;
+    const key = `${identity(declaration)}:${context.phase}:${purpose}:${JSON.stringify(signature)}:${kind}`;
     const saved = definitionIds.get(key);
     let found = saved === undefined ? undefined : definitions[saved];
     if (!found) {
@@ -1152,14 +1184,24 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         purpose,
         signature,
         captures,
-        definition: {
-          id: definitions.length,
-          parameterCount: params.length,
-          captureCount: captures.length,
-          bodyKind: "expression",
-          localScope: 0,
-          body: bool(true),
-        },
+        definition:
+          kind === "action"
+            ? {
+                id: definitions.length,
+                parameterCount: params.length,
+                captureCount: captures.length,
+                bodyKind: "action",
+                localScope: 0,
+                body: [],
+              }
+            : {
+                id: definitions.length,
+                parameterCount: params.length,
+                captureCount: captures.length,
+                bodyKind: "expression",
+                localScope: 0,
+                body: bool(true),
+              },
         pending: { body: bodyOf(declaration), context: frame },
       };
       definitionIds.set(key, definitions.length);
@@ -1192,6 +1234,16 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     if (!entry.pending) return;
     const { body, context } = entry.pending;
     delete entry.pending;
+    if (entry.definition.bodyKind === "action") {
+      const body = action(bodyOf(entry.declaration), context, "<action>");
+      entry.definition = {
+        ...entry.definition,
+        body,
+        localScope: localScopeOf(body),
+      };
+      metadataReady = false;
+      return;
+    }
     const lowered =
       entry.purpose === "membership-type"
         ? membershipSet(body, context)
@@ -1220,7 +1272,8 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     const edges = definitions.map((entry) => {
       const calls = new Set<number>();
       visit(entry.definition.body, (value) => {
-        if (value.op === "call") calls.add(Number(value.definition));
+        if (value.op === "call" || value.kind === "call")
+          calls.add(Number(value.definition));
         return value;
       });
       return [...calls];
@@ -1247,7 +1300,16 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
           continue;
         }
         const entry = definitions[frame.id] ?? unsupported("operator metadata");
-        levels.set(frame.id, summary(entry.definition.body));
+        const value = summary(entry.definition.body);
+        levels.set(
+          frame.id,
+          entry.definition.bodyKind === "action"
+            ? {
+                ...value,
+                base: Math.max(value.base, entry.phase === "initial" ? 1 : 2),
+              }
+            : value,
+        );
         states[frame.id] = 2;
         stack.pop();
       }
@@ -1261,7 +1323,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         entry.definition = {
           ...entry.definition,
           body: compactAnonymous(entry.definition.body),
-        };
+        } as typeof entry.definition;
       const mappings = definitions.map((entry) => {
         const used = new Set<number>();
         visitScope(entry.definition.body, (value) => {
@@ -1282,7 +1344,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       )
         break;
       const trimCalls = (value: Record<string, unknown>) =>
-        value.op === "call"
+        value.op === "call" || value.kind === "call"
           ? {
               ...value,
               captures: (value.captures as readonly SafetyExpression[]).filter(
@@ -1302,8 +1364,8 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         entry.definition = {
           ...entry.definition,
           captureCount: entry.captures.length,
-          body: visit(body, trimCalls) as SafetyExpression,
-        };
+          body: visit(body, trimCalls),
+        } as typeof entry.definition;
       }
       result = compactAnonymous(visit(result, trimCalls) as Value);
     }
@@ -2286,6 +2348,10 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
   const limited = (
     branches: readonly SafetyBranch[],
   ): readonly SafetyBranch[] => {
+    const calls = new Map<
+      number,
+      { readonly branches: number; readonly steps: number }
+    >();
     const size = (
       branches: readonly SafetyBranch[],
     ): { readonly branches: number; readonly steps: number } => {
@@ -2314,6 +2380,18 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
             : step.kind === "frame"
               ? step.branches
               : [];
+          if (step.kind === "call") {
+            const definition = definitions[step.definition]?.definition;
+            if (definition?.bodyKind === "action") {
+              let inner = calls.get(step.definition);
+              if (!inner) {
+                inner = size(definition.body);
+                calls.set(step.definition, inner);
+              }
+              paths = Math.min(4097, paths * inner.branches);
+              steps = Math.min(257, steps + inner.steps);
+            }
+          }
           if (step.kind === "frame") {
             const inner = size(bodies);
             paths *= inner.branches;
@@ -2371,6 +2449,8 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         }
         const entry = definitions[value.definition] ?? unsupported(message);
         lowerDefinition(entry);
+        if (entry.definition.bodyKind !== "expression")
+          return unsupported(message);
         const body = entry.definition.body;
         const next = frames.length;
         frames.push({
@@ -2646,6 +2726,38 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
             ],
           },
         ];
+      const entry =
+        context.scope.entries.get(name) ?? unsupported(`operator ${name}`);
+      if (
+        shared &&
+        (context.bound > 0 ||
+          entry.projection.size > 0 ||
+          (entry.definition.kind === "Operator" &&
+            entry.definition.params.length > 0))
+      ) {
+        const call = sharedCall(
+          name,
+          value.kind === "Apply" ? value.args : [],
+          context,
+          "value",
+          undefined,
+          "action",
+        );
+        if (call.op !== "call") return unsupported("action call metadata");
+        return [
+          {
+            name,
+            steps: [
+              {
+                kind: "call",
+                definition: call.definition,
+                arguments: call.arguments,
+                captures: call.captures,
+              },
+            ],
+          },
+        ];
+      }
       const expanded = call(
         name,
         value.kind === "Apply" ? value.args : [],
@@ -3298,6 +3410,10 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
   if (!shared) return program as unknown as SafetyProgram;
   lowerPending();
   const compact = compactCaptures(program);
+  limited(compact.initial);
+  limited(compact.next);
+  for (const entry of definitions)
+    if (entry.definition.bodyKind === "action") limited(entry.definition.body);
   const phases = ["constant", "initial", "state", "next"];
   const ordered = [...definitions].sort(
     (left, right) =>
@@ -3320,7 +3436,9 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
           }
         }
         return left.signature.length - right.signature.length;
-      })(),
+      })() ||
+      Number(left.definition.bodyKind === "action") -
+        Number(right.definition.bodyKind === "action"),
   );
   const ids = new Map(ordered.map((entry, id) => [entry.definition.id, id]));
   const result = visit(
@@ -3329,7 +3447,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       definitions: ordered.map((entry, id) => ({ ...entry.definition, id })),
     },
     (value) =>
-      value.op === "call"
+      value.op === "call" || value.kind === "call"
         ? { ...value, definition: ids.get(Number(value.definition)) }
         : value,
   ) as SafetyProgram;

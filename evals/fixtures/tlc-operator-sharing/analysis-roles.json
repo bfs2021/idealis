@@ -1765,6 +1765,42 @@
   },
   {
     "space": "ir-temporal",
+    "constructor": "call",
+    "operatorClass": "",
+    "position": "arguments[*]",
+    "role": "call-actual",
+    "scope": "caller",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
+    "space": "ir-temporal",
+    "constructor": "call",
+    "operatorClass": "",
+    "position": "captures[*]",
+    "role": "call-capture",
+    "scope": "caller",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
+    "space": "ir-temporal",
+    "constructor": "call",
+    "operatorClass": "",
+    "position": "definition",
+    "role": "call-edge",
+    "scope": "definition",
+    "forwarding": {
+      "action": "stop",
+      "membership": "stop"
+    }
+  },
+  {
+    "space": "ir-temporal",
     "constructor": "eventually",
     "operatorClass": "",
     "position": "formula",
