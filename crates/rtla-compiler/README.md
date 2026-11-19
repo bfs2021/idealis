@@ -54,3 +54,5 @@ ASTの書き換え深さは64段まで。ModuleをRustから直接渡した場�
 just module-eval evals/runs/my-module-check /path/to/java /path/to/tla2tools.jar
 just module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/to/java /path/to/tla2tools.jar
 ```
+
+明示v2のtuple target解析と共有IRの変数読取り展開は、それぞれ524,288ノードまで。空tupleの複製も数え、超過はcompile時のprotocol拒否となる。既存のnesting 40とbranch 256 stepsは維持し、実行時のworkとは別に扱う。

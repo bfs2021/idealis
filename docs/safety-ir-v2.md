@@ -102,3 +102,7 @@ sourceのfree-old、target要求、membership要求、generative分類は、fron
 v2のIR解析・変換もfrontendごとの型付き子列挙を使う。levelは定義bodyが要求するactual/captureだけを合成し、capture収集とlocalScopeはnested frameのbody境界を越えない。DAG・call収集/再番号付け・prime/phase・compiled depthは未使用actualと全frame bodyも読む。Rustはpending定義のbodyを未確定のままdeserializeせず、lower完了後の定義・一時式・lexical環境・programを型付きIRで保持する。更新adapterと読み取りは同じ列挙から導出する。TSも同じdescriptorのpathでimmutableに更新する。v1は既存のloweringと走査を使う。
 
 action展開はbranch.stepsとaction frame.branchesのedgeだけを数え、actual/captureや値式内部のENABLEDは加えない。各stepとframe wrapperを1 stepとし、frame bodyの最大step数を加算する。各branchのframe bodyの経路数は乗算し、branch間は加算する。4096経路/256 stepsは受理し、超過は既存の診断で拒否する。PROPERTYのatom/always分類はtemporal frame.formulaのedgeを選び、frameを保持する。sourceとIRの検査成功を全programのparityや全TLA+互換の証明とは扱わない。
+
+## tuple展開のcompile上限
+
+v2のtarget解決と共有式からの変数読取りには、各524,288ノードの上限を適用する。深さが浅い場合や空tupleの複製も数え、超過は`target expansion exceeds 524288 nodes`で拒否する。実行時のworkや厳密なRSS上限とは別の制約。既存のdepth 40、action leaf 256と正常なtuple chain 16の対照を維持する。

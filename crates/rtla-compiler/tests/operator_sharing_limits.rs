@@ -244,3 +244,61 @@ fn v2_specification_tuple_chain_of_16_completes() {
         16,
     );
 }
+
+fn wide_source(empty: bool, depth: usize) -> String {
+    let mut definitions = format!("V0 == {}\n", if empty { "<<>>" } else { "x" });
+    for index in 0..depth {
+        definitions.push_str(&format!(
+            "V{} == <<{}>>\n",
+            index + 1,
+            vec![format!("V{index}"); 16].join(",")
+        ));
+    }
+    let next = if empty {
+        format!("UNCHANGED V{depth} /\\ UNCHANGED x")
+    } else {
+        "x'=x".to_owned()
+    };
+    let subscript = if empty {
+        "x".to_owned()
+    } else {
+        format!("V{depth}")
+    };
+    format!(
+        "---- MODULE Wide ----\nEXTENDS Naturals\nVARIABLE x\n{definitions}Init == x=0\nNext == {next}\nSpec == Init /\\ [][Next]_{subscript}\n===="
+    )
+}
+
+#[test]
+fn wide_tuple_controls_complete() {
+    for empty in [false, true] {
+        let result = check(
+            &wide_source(empty, 3),
+            "SPECIFICATION Spec\nCHECK_DEADLOCK FALSE",
+        )
+        .unwrap();
+        assert_eq!(result["status"], "complete");
+        assert_eq!(result["states"], 1);
+        assert_eq!(result["generated"], 2);
+        assert!(result["violation"].is_null());
+    }
+}
+
+#[test]
+fn wide_tuple_expansion_is_refused_before_resource_exhaustion() {
+    isolated(
+        "wide_tuple_expansion_is_refused_before_resource_exhaustion",
+        Duration::from_secs(10),
+        || {
+            for empty in [false, true] {
+                assert_eq!(
+                    check(
+                        &wide_source(empty, 6),
+                        "SPECIFICATION Spec\nCHECK_DEADLOCK FALSE"
+                    ),
+                    Err("target expansion exceeds 524288 nodes".to_owned())
+                );
+            }
+        },
+    );
+}

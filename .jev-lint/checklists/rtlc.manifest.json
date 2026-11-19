@@ -3,122 +3,134 @@
   "roots": ["crates/rtlc/SUPPORT.md"],
   "files": {
     "source0": {
-      "path": "crates/rtlc/Cargo.lock",
+      "path": "crates/rtla-compiler/tests/finite-support.json",
       "role": "reference"
     },
     "source1": {
-      "path": "crates/rtlc/Cargo.toml",
+      "path": "crates/rtlc/Cargo.lock",
       "role": "reference"
     },
     "source2": {
-      "path": "crates/rtlc/README.md",
+      "path": "crates/rtlc/Cargo.toml",
       "role": "reference"
     },
     "source3": {
+      "path": "crates/rtlc/README.md",
+      "role": "reference"
+    },
+    "source4": {
       "path": "crates/rtlc/SUPPORT.md",
       "role": "document"
     },
-    "source4": {
+    "source5": {
       "path": "crates/rtlc/examples/counter.rs",
       "role": "reference"
     },
-    "source5": {
+    "source6": {
       "path": "crates/rtlc/src/bench-fixtures.json",
       "role": "reference"
     },
-    "source6": {
+    "source7": {
       "path": "crates/rtlc/src/benchmarks.rs",
       "role": "reference"
     },
-    "source7": {
+    "source8": {
       "path": "crates/rtlc/src/bounded_drop.rs",
       "role": "reference"
     },
-    "source8": {
+    "source9": {
       "path": "crates/rtlc/src/ir.rs",
       "role": "reference"
     },
-    "source9": {
+    "source10": {
       "path": "crates/rtlc/src/lib.rs",
       "role": "reference"
     },
-    "source10": {
+    "source11": {
       "path": "crates/rtlc/src/safety.rs",
       "role": "reference"
     },
-    "source11": {
+    "source12": {
       "path": "crates/rtlc/src/safety_definition_tests.rs",
       "role": "reference"
     },
-    "source12": {
+    "source13": {
       "path": "crates/rtlc/src/safety_definitions.rs",
       "role": "reference"
     },
-    "source13": {
+    "source14": {
       "path": "crates/rtlc/src/safety_expressions.rs",
       "role": "reference"
     },
-    "source14": {
+    "source15": {
       "path": "crates/rtlc/src/safety_parallel.rs",
       "role": "reference"
     },
-    "source15": {
+    "source16": {
       "path": "crates/rtlc/src/safety_values.rs",
       "role": "reference"
     },
-    "source16": {
+    "source17": {
       "path": "crates/rtlc/src/safety_work.rs",
       "role": "reference"
     },
-    "source17": {
+    "source18": {
       "path": "crates/rtlc/src/temporal.rs",
       "role": "reference"
     },
-    "source18": {
+    "source19": {
       "path": "crates/rtlc/src/value.rs",
       "role": "reference"
     },
-    "source19": {
+    "source20": {
       "path": "crates/rtlc/tests/argument_forwarding_allocations.rs",
       "role": "reference"
     },
-    "source20": {
+    "source21": {
       "path": "crates/rtlc/tests/deep_drop.rs",
       "role": "reference"
     },
-    "source21": {
+    "source22": {
       "path": "crates/rtlc/tests/deep_drop_paths.rs",
       "role": "reference"
     },
-    "source22": {
+    "source23": {
       "path": "crates/rtlc/tests/drop_allocations.rs",
       "role": "reference"
     },
-    "source23": {
+    "source24": {
       "path": "crates/rtlc/tests/drop_budget.rs",
       "role": "reference"
     },
-    "source24": {
+    "source25": {
       "path": "crates/rtlc/tests/parallel_safety.rs",
       "role": "reference"
     },
-    "source25": {
+    "source26": {
       "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
-    "source26": {
+    "source27": {
       "path": "crates/rtlc/tests/value_normalize_errors.rs",
       "role": "reference"
     },
-    "source27": {
-      "path": "package.json",
-      "role": "reference"
-    },
     "source28": {
-      "path": "pnpm-lock.yaml",
+      "path": "docs/rust-safety.md",
       "role": "reference"
     },
     "source29": {
+      "path": "docs/safety-ir-v2.md",
+      "role": "reference"
+    },
+    "source30": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source31": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source32": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -129,10 +141,10 @@
       "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
       "mode": "semantic",
       "reference": {
-        "source": "source2"
+        "source": "source3"
       },
       "target": {
-        "source": "source3"
+        "source": "source4"
       }
     },
     {
@@ -140,17 +152,17 @@
       "topic": "IRの値と式・予算・結果の公開契約",
       "mode": "semantic",
       "reference": {
-        "source": "source8"
+        "source": "source9"
       },
       "target": {
-        "source": "source3"
+        "source": "source4"
       },
       "context": [
         {
-          "source": "source18"
+          "source": "source19"
         },
         {
-          "source": "source10"
+          "source": "source11"
         }
       ]
     },
@@ -159,10 +171,10 @@
       "topic": "有限BFS、invariantとdeadlock、結果と探索予算",
       "mode": "semantic",
       "reference": {
-        "source": "source10"
+        "source": "source11"
       },
       "target": {
-        "source": "source3"
+        "source": "source4"
       },
       "context": []
     },
@@ -171,10 +183,10 @@
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source17"
+        "source": "source18"
       },
       "target": {
-        "source": "source3"
+        "source": "source4"
       },
       "context": []
     },
@@ -183,10 +195,10 @@
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
-        "source": "source14"
+        "source": "source15"
       },
       "target": {
-        "source": "source3"
+        "source": "source4"
       },
       "context": []
     }

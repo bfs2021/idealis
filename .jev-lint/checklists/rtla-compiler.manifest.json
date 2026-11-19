@@ -99,14 +99,26 @@
       "role": "reference"
     },
     "source24": {
-      "path": "package.json",
+      "path": "docs/quint-generated.md",
       "role": "reference"
     },
     "source25": {
-      "path": "pnpm-lock.yaml",
+      "path": "evals/iterations/0029-rtla-compiler.md",
       "role": "reference"
     },
     "source26": {
+      "path": "evals/tlc-differential/operator-sharing-test.ts",
+      "role": "reference"
+    },
+    "source27": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source28": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source29": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -154,6 +166,58 @@
     },
     {
       "id": "rtla-compiler-implementation-2",
+      "topic": "tuple targetのcompile時node上限の実際の定数値とチェックリストの数値が一致する",
+      "mode": "semantic",
+      "reference": {
+        "source": "source8",
+        "contains": "const TARGET_EXPANSION_LIMIT:"
+      },
+      "target": {
+        "source": "source3",
+        "contains": "524,288ノード"
+      },
+      "context": []
+    },
+    {
+      "id": "rtla-compiler-implementation-3",
+      "topic": "v2のtuple target解決で共通node上限と既存のdepth/leaf制限を維持し、空tupleでも展開を有界にする",
+      "mode": "semantic",
+      "reference": {
+        "source": "source8",
+        "contains": "fn resolve_target_within("
+      },
+      "target": {
+        "source": "source3",
+        "contains": "v2のtuple target解決と共有IR"
+      },
+      "context": [
+        {
+          "source": "source8",
+          "contains": "const TARGET_EXPANSION_LIMIT:"
+        }
+      ]
+    },
+    {
+      "id": "rtla-compiler-implementation-4",
+      "topic": "共有IRの変数読取り展開で共通node上限を適用し、caller frame/actualと既存depthの意味を維持する",
+      "mode": "semantic",
+      "reference": {
+        "source": "source12",
+        "contains": "pub(super) fn variable_reads_ir("
+      },
+      "target": {
+        "source": "source3",
+        "contains": "v2のtuple target解決と共有IR"
+      },
+      "context": [
+        {
+          "source": "source8",
+          "contains": "const TARGET_EXPANSION_LIMIT:"
+        }
+      ]
+    },
+    {
+      "id": "rtla-compiler-implementation-5",
       "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
       "mode": "semantic",
       "reference": {

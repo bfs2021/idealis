@@ -6,6 +6,8 @@ use serde_json::{Value as Json, json};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::rc::Rc;
 
+const TARGET_EXPANSION_LIMIT: usize = 524_288;
+
 mod analysis;
 mod link;
 mod rewrite;
@@ -517,7 +519,14 @@ impl Compiler<'_> {
         )];
         let mut results = vec![];
         let mut leaves = 0usize;
+        let mut visited = 0;
         while let Some(task) = tasks.pop() {
+            if visited == TARGET_EXPANSION_LIMIT {
+                return unsupported(format!(
+                    "target expansion exceeds {TARGET_EXPANSION_LIMIT} nodes"
+                ));
+            }
+            visited += 1;
             match task {
                 Task::Tuple(count) => {
                     let elements = results.split_off(results.len() - count);

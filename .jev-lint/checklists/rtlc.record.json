@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "dd854432acbb7ad8845811b3f655c2eac42957e53f0180b3eacb801c738c300a",
+  "snapshotDigest": "ed5cbb1b97c28e6635223e7a0b53d5019fb8648116e1f76659324412ef8dd424",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -12,7 +12,7 @@
       "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
       "mode": "semantic",
       "reference": {
-        "source": "source2",
+        "source": "source3",
         "path": "crates/rtlc/README.md",
         "startLine": 1,
         "endLine": 55,
@@ -20,7 +20,7 @@
         "contentHash": "164a7cbe235aa72489fc3ce287796c901af5c429f5de2df5e218e9bfc3062bcd"
       },
       "target": {
-        "source": "source3",
+        "source": "source4",
         "path": "crates/rtlc/SUPPORT.md",
         "startLine": 1,
         "endLine": 55,
@@ -28,14 +28,14 @@
         "contentHash": "43ba98496b151a49a758366f7fc016eee85fc8975971bb96b9c853d7310ea3a4"
       },
       "context": [],
-      "candidateId": "4625dfcc5509675a8ad71b3dedef2e7ecd029bbae5741794abbebb76b2ea4f09",
-      "contextHash": "115e088727ac18454a7e94f1795faed1865e96617aea333fe4ed95979d32b204",
+      "candidateId": "6b1fcfb9f3f6fad9c183746810f070bbe05e75765ddc685a73f10ebaa74b43fe",
+      "contextHash": "ab4a1cdb5708dae9270fce0bd7a8daea85507d327934944dda848f98aca4e227",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.79,
+        "confidence": 0.8,
         "probabilities": {
-          "supports": 0.84,
-          "contradicts": 0.15,
+          "supports": 0.85,
+          "contradicts": 0.14,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -46,7 +46,7 @@
       "topic": "IRの値と式・予算・結果の公開契約",
       "mode": "semantic",
       "reference": {
-        "source": "source8",
+        "source": "source9",
         "path": "crates/rtlc/src/ir.rs",
         "startLine": 1,
         "endLine": 742,
@@ -54,7 +54,7 @@
         "contentHash": "7cf31940756c3404d08562dc77571a12ce1bc585ceec96f0053ba7847669bb04"
       },
       "target": {
-        "source": "source3",
+        "source": "source4",
         "path": "crates/rtlc/SUPPORT.md",
         "startLine": 1,
         "endLine": 55,
@@ -63,7 +63,7 @@
       },
       "context": [
         {
-          "source": "source18",
+          "source": "source19",
           "path": "crates/rtlc/src/value.rs",
           "startLine": 1,
           "endLine": 182,
@@ -71,7 +71,7 @@
           "contentHash": "91d2ab85bc2e504634708dc2a1e16efeb45cb729a945c46d968110350d2fcdc3"
         },
         {
-          "source": "source10",
+          "source": "source11",
           "path": "crates/rtlc/src/safety.rs",
           "startLine": 1,
           "endLine": 663,
@@ -79,16 +79,16 @@
           "contentHash": "5d6b29299a747767136fce189d16454e3a58330c2368699ba5ffcd418c9d7b89"
         }
       ],
-      "candidateId": "041f2abb403749823bed3cac8ec3fb059c95d0fdcf3127c5799ba9b5e5efb1f2",
-      "contextHash": "a61c987a93afab2adf70e44ec41e378354963d78c9a87342a2092c4d5b2bfdef",
+      "candidateId": "18ed0b93b395e5d2720a9b457fd645000572ba83acbe23087e56ddcdac9bb3ef",
+      "contextHash": "e0f24cc22cb2b27d4bea5f1041840d246a35fcd445b9524a084e3d628bd446be",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.47,
+        "confidence": 0.45,
         "probabilities": {
-          "supports": 0.6,
-          "contradicts": 0.08,
-          "unrelated": 0.08,
-          "insufficient_context": 0.24
+          "supports": 0.59,
+          "contradicts": 0.1,
+          "unrelated": 0.06,
+          "insufficient_context": 0.25
         }
       }
     },
@@ -97,7 +97,7 @@
       "topic": "有限BFS、invariantとdeadlock、結果と探索予算",
       "mode": "semantic",
       "reference": {
-        "source": "source10",
+        "source": "source11",
         "path": "crates/rtlc/src/safety.rs",
         "startLine": 1,
         "endLine": 663,
@@ -105,7 +105,7 @@
         "contentHash": "5d6b29299a747767136fce189d16454e3a58330c2368699ba5ffcd418c9d7b89"
       },
       "target": {
-        "source": "source3",
+        "source": "source4",
         "path": "crates/rtlc/SUPPORT.md",
         "startLine": 1,
         "endLine": 55,
@@ -113,16 +113,16 @@
         "contentHash": "43ba98496b151a49a758366f7fc016eee85fc8975971bb96b9c853d7310ea3a4"
       },
       "context": [],
-      "candidateId": "a26f4a8afecb5a21320e384f7fc580a6c60e5d1088076d86e4a35a5acf9bbbc6",
-      "contextHash": "394ed050233ebe94eae48e37099bc2f4f940a11151fd934320c1147d00b42e19",
+      "candidateId": "701f53176628027739928a01edb020c4266b8c74a99d89b6b7ce414db95cb5c2",
+      "contextHash": "1dae0fb371a15c06659cefca34fa7c0cbd7dbe68a3bc8198626b9ad9dfd956e9",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.89,
+        "confidence": 0.85,
         "probabilities": {
-          "supports": 0.92,
-          "contradicts": 0.07,
+          "supports": 0.89,
+          "contradicts": 0.09,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
@@ -131,7 +131,7 @@
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
-        "source": "source17",
+        "source": "source18",
         "path": "crates/rtlc/src/temporal.rs",
         "startLine": 1,
         "endLine": 621,
@@ -139,7 +139,7 @@
         "contentHash": "65f0befff4e9b839c23d4ca728d35795677d56b9886fff20a9816a08c95ca63e"
       },
       "target": {
-        "source": "source3",
+        "source": "source4",
         "path": "crates/rtlc/SUPPORT.md",
         "startLine": 1,
         "endLine": 55,
@@ -147,16 +147,16 @@
         "contentHash": "43ba98496b151a49a758366f7fc016eee85fc8975971bb96b9c853d7310ea3a4"
       },
       "context": [],
-      "candidateId": "f5a8aceabc1fcf5ec35949d57d4519b238598d9c6eb4abb7c2d17e73e1690bee",
-      "contextHash": "beb90c8866d6cd167898150d094ed61ef5ac78af86248f262758952d484b4959",
+      "candidateId": "9b093dc9c4ca7eb4e07cf91667bc554ec5b5e1873d0fe734d1430f7392768e5f",
+      "contextHash": "aa167e23083007e7e1a4968094be8a8abf58d47eee9b28dce25f214c9ae63b41",
       "judgment": {
         "choice": "supports",
         "confidence": 0.81,
         "probabilities": {
           "supports": 0.86,
-          "contradicts": 0.07,
+          "contradicts": 0.08,
           "unrelated": 0,
-          "insufficient_context": 0.07
+          "insufficient_context": 0.06
         }
       }
     },
@@ -165,7 +165,7 @@
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
-        "source": "source14",
+        "source": "source15",
         "path": "crates/rtlc/src/safety_parallel.rs",
         "startLine": 1,
         "endLine": 272,
@@ -173,7 +173,7 @@
         "contentHash": "a9f704440054a6ed438092ba4006b15fa94f6f25acf6237b2641a8f79aea5b0e"
       },
       "target": {
-        "source": "source3",
+        "source": "source4",
         "path": "crates/rtlc/SUPPORT.md",
         "startLine": 1,
         "endLine": 55,
@@ -181,16 +181,16 @@
         "contentHash": "43ba98496b151a49a758366f7fc016eee85fc8975971bb96b9c853d7310ea3a4"
       },
       "context": [],
-      "candidateId": "f781578d3b89e28199e560cb7678b368b6dee9edb8cab663aa74e12487c2a004",
-      "contextHash": "436b30f68c1146c7d1de5cd287efa6acc6fa66c67b35649196a4f23dbf8de46a",
+      "candidateId": "e9fc7cc31401caf77c4a909303b7283f40618c757ce33e5db8a6ff85df76e393",
+      "contextHash": "d97c30e0002f85a800c3077b39b5afb291a1b843bed077910fee4263b8eab0aa",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.72,
+        "confidence": 0.73,
         "probabilities": {
-          "supports": 0.79,
+          "supports": 0.8,
           "contradicts": 0.06,
           "unrelated": 0.01,
-          "insufficient_context": 0.14
+          "insufficient_context": 0.13
         }
       }
     }

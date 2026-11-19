@@ -55,7 +55,7 @@
 
 ## 制約と根拠
 
-- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、受理する集合を、「非対応・対象外」に記したUNCHANGEDの限界を除いてv1に一致させる。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。
+- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。
 - [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。
 - [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。
 - [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。
@@ -70,3 +70,5 @@
 生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。
 
 - [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。
+
+- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。

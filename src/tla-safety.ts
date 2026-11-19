@@ -24,6 +24,8 @@ import {
   mapAnalysisChildren,
 } from "./tla-safety-analysis.js";
 
+const targetExpansionLimit = 524_288;
+
 type SafetyBinding = SafetyBindingBase<2>;
 type SafetyBranch = SafetyBranchBase<2>;
 type SafetyDomain = SafetyDomainBase<2>;
@@ -517,7 +519,10 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       },
     ];
     const results: StaticTarget[] = [];
+    let visited = 0;
     while (tasks.length) {
+      if (visited++ === targetExpansionLimit)
+        unsupported(`target expansion exceeds ${targetExpansionLimit} nodes`);
       const task = tasks.pop();
       if (!task) return unsupported(targetMessage);
       if (task.kind === "tuple") {
@@ -2331,7 +2336,10 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       readonly depth: number;
     }[] = [{ value, depth }];
     const reads: SafetyExpression[] = [];
+    let visited = 0;
     while (pending.length) {
+      if (visited++ === targetExpansionLimit)
+        unsupported(`target expansion exceeds ${targetExpansionLimit} nodes`);
       const task = pending.pop();
       if (!task) return unsupported(message);
       const { value, frame, depth } = task;

@@ -27,6 +27,7 @@ interface Evidence {
   readonly contains?: string;
   readonly targetContains?: string;
   readonly context?: readonly string[];
+  readonly contextContains?: string;
 }
 interface CrateScope {
   readonly name: string;
@@ -64,6 +65,31 @@ const scopes: readonly CrateScope[] = [
         path: "src/lib.rs",
         contains: "pub fn compile(",
         topic: "受理するmodule/configと、実行しない・拒否する構文の境界",
+      },
+      {
+        path: "src/lib.rs",
+        contains: "const TARGET_EXPANSION_LIMIT:",
+        targetContains: "524,288ノード",
+        topic:
+          "tuple targetのcompile時node上限の実際の定数値とチェックリストの数値が一致する",
+      },
+      {
+        path: "src/lib.rs",
+        contains: "fn resolve_target_within(",
+        targetContains: "v2のtuple target解決と共有IR",
+        context: ["src/lib.rs"],
+        contextContains: "const TARGET_EXPANSION_LIMIT:",
+        topic:
+          "v2のtuple target解決で共通node上限と既存のdepth/leaf制限を維持し、空tupleでも展開を有界にする",
+      },
+      {
+        path: "src/typed_expr.rs",
+        contains: "pub(super) fn variable_reads_ir(",
+        targetContains: "v2のtuple target解決と共有IR",
+        context: ["src/lib.rs"],
+        contextContains: "const TARGET_EXPANSION_LIMIT:",
+        topic:
+          "共有IRの変数読取り展開で共通node上限を適用し、caller frame/actualと既存depthの意味を維持する",
       },
       {
         path: "src/lib.rs",
@@ -293,11 +319,22 @@ export const checkSupport = async (
   }
 };
 
-const manifestFor = (view: SourceView, scope: CrateScope): DocumentManifest => {
+const manifestFor = async (
+  view: SourceView,
+  scope: CrateScope,
+): Promise<DocumentManifest> => {
   const prefix = `crates/${scope.name}/`;
+  const support = (await view.read(`${prefix}SUPPORT.md`)).toString();
+  const linked = [...support.matchAll(/\]\(([^)]+)\)/g)].flatMap((match) => {
+    const target = match[1] ?? "";
+    return /^(?:https?:|#)/.test(target)
+      ? []
+      : [posix.normalize(posix.join(prefix, target.split("#")[0] ?? ""))];
+  });
   const paths = [
     ...new Set([
       ...shared,
+      ...linked,
       ...view.paths.filter(
         (path) =>
           path.startsWith(prefix) &&
@@ -345,6 +382,9 @@ const manifestFor = (view: SourceView, scope: CrateScope): DocumentManifest => {
         },
         context: (evidence.context ?? []).map((path) => ({
           source: idFor(prefix + path),
+          ...(evidence.contextContains
+            ? { contains: evidence.contextContains }
+            : {}),
         })),
       })),
     ],
@@ -432,7 +472,7 @@ const run = async () => {
   for (const scope of scopes) {
     const directory = await mkdtemp(join(tmpdir(), "idealis-support-"));
     try {
-      const manifest = manifestFor(view, scope);
+      const manifest = await manifestFor(view, scope);
       const input = await snapshot(view, manifest, directory);
       if (args.includes("--dry-run")) {
         console.log(
@@ -450,7 +490,7 @@ const run = async () => {
           clientOptions: { model: "jev-1.14.0" },
           snapshotCheck: async () => {
             const current = sourceView(root, staged);
-            assert.deepEqual(manifestFor(current, scope), manifest);
+            assert.deepEqual(await manifestFor(current, scope), manifest);
             for (const source of Object.values(manifest.files))
               assert.deepEqual(
                 await current.read(source.path),

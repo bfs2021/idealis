@@ -872,7 +872,15 @@ impl Compiler<'_> {
         let mut frames: Vec<Frame> = vec![];
         let mut pending: Vec<(I, Option<usize>, usize)> = vec![(value, None, depth)];
         let mut reads = vec![];
+        let mut visited = 0;
         while let Some((value, frame, depth)) = pending.pop() {
+            if visited == crate::TARGET_EXPANSION_LIMIT {
+                return unsupported(format!(
+                    "target expansion exceeds {} nodes",
+                    crate::TARGET_EXPANSION_LIMIT
+                ));
+            }
+            visited += 1;
             if depth >= 40 {
                 return unsupported("expression or operator nesting exceeds 40");
             }
