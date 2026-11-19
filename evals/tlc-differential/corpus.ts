@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+
 export interface Input {
   readonly name: string;
   readonly family: "value" | "graph" | "control";
@@ -6,7 +8,68 @@ export interface Input {
   readonly seed?: number;
   readonly expectedRejection?: true;
   readonly goldenFrontendParity?: true;
+  readonly irVersion?: 1 | 2;
 }
+export const operatorSharingNames = [
+  "sharing-chain-10",
+  "sharing-chain-20",
+  "sharing-chain-30",
+  "sharing-chain-60",
+  "sharing-work-60",
+  "sharing-lexical-capture",
+  "sharing-binder-quantifier",
+  "sharing-binder-function",
+  "sharing-binder-filter",
+  "sharing-binder-map-set",
+  "sharing-binder-fold-sequence",
+  "sharing-binder-fold-set",
+  "sharing-binder-tuple-pattern",
+  "sharing-unused-argument",
+  "sharing-used-argument",
+  "sharing-prime",
+  "sharing-enabled",
+  "sharing-unchanged-alias",
+  "sharing-unchanged-parameter",
+  "sharing-unchanged-nested",
+  "sharing-generative-except",
+  "sharing-generative-except-control",
+  "sharing-generative-binder",
+  "sharing-generative-binder-control",
+  "sharing-generative-membership",
+  "sharing-generative-membership-alias",
+  "sharing-generative-binder-exact",
+  "sharing-generative-binder-exact-control",
+  "sharing-action-frame-exists",
+  "sharing-action-frame-two-variables",
+  "sharing-action-frame-binder-actual",
+  "sharing-action-frame-except",
+  "sharing-action-frame-except-control",
+  "sharing-action-frame-shadow",
+  "sharing-action-frame-enabled",
+  "sharing-action-frame-enabled-value",
+  "sharing-action-frame-temporal",
+  "sharing-action-frame-prime",
+  "sharing-action-frame-generative",
+  "sharing-temporal-true-step3e-b",
+  "sharing-temporal-forall-step3e-b",
+] as const;
+export const operatorSharingCases = async (): Promise<readonly Input[]> =>
+  Promise.all(
+    operatorSharingNames.map(async (name) => ({
+      name,
+      family: "control" as const,
+      goldenFrontendParity: true as const,
+      irVersion: 2 as const,
+      source: await readFile(
+        `evals/fixtures/tlc-operator-sharing/${name}/Differential.tla`,
+        "utf8",
+      ),
+      config: await readFile(
+        `evals/fixtures/tlc-operator-sharing/${name}/Differential.cfg`,
+        "utf8",
+      ),
+    })),
+  );
 export const seeds = { development: 0x15a1, confirmation: 0x15c3 } as const;
 const value = (name: string, expression: string): Input => ({
   name,

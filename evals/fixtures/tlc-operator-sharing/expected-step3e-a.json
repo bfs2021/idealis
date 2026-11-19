@@ -1,0 +1,122 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "apalacheRelease": "0.56.1",
+  "apalacheModulePath": "tla2sany/StandardModules/Apalache.tla",
+  "apalacheModuleSha256": "a9115b404e72c58fd085f81bc59cc918f8adac49feabfb57f8e285bc7ab5cfac",
+  "environment": {
+    "java": "OpenJDK 21.0.11, Temurin-21.0.11+10-LTS",
+    "workers": 1,
+    "heap": "256m",
+    "timeoutSeconds": 60
+  },
+  "command": "timeout 60 java -Xmx256m -Djava.io.tmpdir=<tlc-tmp> -cp <tlc-jar> tlc2.TLC -workers 1 -nowarning Differential.tla",
+  "streams": "stdout and stderr merged in capture order",
+  "cases": [
+    {
+      "name": "sharing-action-frame-binder-actual",
+      "source": "sharing-action-frame-binder-actual/Differential.tla",
+      "config": "sharing-action-frame-binder-actual/Differential.cfg",
+      "sourceSha256": "4028ae0f71016b89f5b3754a8e46b6ec40fb6887e6987acf78ae0526dd6c8e4d",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-binder-actual.log",
+      "logSha256": "819f1a92ad8a0e694b3bcca4c8e418c1838d5868ed43fe75c0d5cb6854685bf8",
+      "exit": 0,
+      "status": "success",
+      "states": 2,
+      "generated": 3
+    },
+    {
+      "name": "sharing-action-frame-enabled",
+      "source": "sharing-action-frame-enabled/Differential.tla",
+      "config": "sharing-action-frame-enabled/Differential.cfg",
+      "sourceSha256": "de2b2e7996afc209e75a00c3ab233e8535de504ad92558eab2635916605850c3",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-enabled.log",
+      "logSha256": "e1bcac4df7f1c279bc250fc509adb07fb557753fa210164dab27184ed9415e79",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-action-frame-except",
+      "source": "sharing-action-frame-except/Differential.tla",
+      "config": "sharing-action-frame-except/Differential.cfg",
+      "sourceSha256": "61c63b88b420a32d13ffd4e41c109fb95c017e1dc221f14c49b756309c645bf3",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-except.log",
+      "logSha256": "dac8b0d34d35b5b32e439d7b304dba4cddec356e850e7831e1ceb3816ce0e2a3",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-action-frame-except-control",
+      "source": "sharing-action-frame-except-control/Differential.tla",
+      "config": "sharing-action-frame-except-control/Differential.cfg",
+      "sourceSha256": "8d54efcda7c5f0c448e50397eeb49b3975b48e7e2ba919516417c9b66c3db6df",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-except-control.log",
+      "logSha256": "2bcddb6540e3ef58965cec52b0fd8d47d2211b469df14d0076a84534928b373a",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-action-frame-exists",
+      "source": "sharing-action-frame-exists/Differential.tla",
+      "config": "sharing-action-frame-exists/Differential.cfg",
+      "sourceSha256": "ee0d1c66c53753489f44d9ad548b25e4a84b444b1fa8c87d8538f6b21eec5c9c",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-exists.log",
+      "logSha256": "b48112b90236b2e2889fa14d85749926d113345aacc7a1c2ff58761f27062ae9",
+      "exit": 0,
+      "status": "success",
+      "states": 3,
+      "generated": 7
+    },
+    {
+      "name": "sharing-action-frame-shadow",
+      "source": "sharing-action-frame-shadow/Differential.tla",
+      "config": "sharing-action-frame-shadow/Differential.cfg",
+      "sourceSha256": "b5c85481bf0f0ece69d4f423bfb4b18b824a1927e835b2db744d18a4726bcaf2",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-shadow.log",
+      "logSha256": "e06378fd5925405b22ecc4c302495d0cca784b86edeb5a4dcd2dbe38b9502130",
+      "exit": 0,
+      "status": "success",
+      "states": 3,
+      "generated": 7
+    },
+    {
+      "name": "sharing-action-frame-two-variables",
+      "source": "sharing-action-frame-two-variables/Differential.tla",
+      "config": "sharing-action-frame-two-variables/Differential.cfg",
+      "sourceSha256": "89372e83c1eda9458a41cdefba3b14e083e2f1b5a1720961ab85ed3e004d0f85",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-action-frame-two-variables.log",
+      "logSha256": "a10063f01598e01589334b94fb6018efa2edbd6e67b179000f391da6757448ba",
+      "exit": 0,
+      "status": "success",
+      "states": 3,
+      "generated": 7
+    }
+  ]
+}

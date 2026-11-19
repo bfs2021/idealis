@@ -1,0 +1,67 @@
+# PR 62のマージ前検証
+
+対象は`operator-sharing`の35f66b321c68ed348d6ed4fd89f337192fd78f8dと、base d147550c80d814e23f5d76f8ded25e30bf190da4。[先行計画](../plans/pr62-merge-validation.md)に従い、後続のfrontend-semanticsから分けたworktreeで検証した。
+
+## 修正
+
+最新コミットにRustのtarget生成物78,753件が混入していた。indexから除き、全targetをignoreする。CIは追跡されたtargetがあれば失敗する。履歴の書換えは行わない。
+
+既存の解析4,236テストをjustとCIへ接続した。レビュー修正で追加されたframed atom・展開上限のテストも、通常のsafety回帰から実行する。Jevの比較は大きすぎるexcerptを限定し、定数宣言のcontextとSUPPORTがリンクする根拠をsnapshotへ含める。これにより、リンク先を欠いた自己テストの失敗も解消する。
+
+## tuple展開
+
+深さ6・幅16のtuple別名を使い、SPECIFICATIONのsubscriptと空tupleのUNCHANGEDを検査した。修正前はTS・Rustとも、512 MiBの監視上限で停止した。小さい対照は終了した。停止を検査成功と数えない。
+
+target解決と共有IRからの変数読取りを、それぞれ524,288ノードで制限する。深さやleaf数に加えて数えるため、空tupleの複製でも展開を止める。caller frameとactualの意味は保ち、値や結果のmemoizationを追加しない。上限はcompile時のprotocol拒否で、実行時のworkや厳密なRSS上限ではない。
+
+最初の上限1,000,000では12ケース中11件が通り、TSのsubscriptだけが256 MiBの監視を超えた。そのログを残し、上限を524,288へ変更した。監視条件を緩めず、最終12件はnative/Wasm/TSで成功した。既存のtuple chain 16も受理する。
+
+## TLCとの照合
+
+ローカルのtlaplus/tlaplusにあるSpecProcessorのSubscriptCollectorとToolのUNCHANGED処理を読んだ。固定TLCで、stateに依存するtuple subscriptとinlineの空tupleについて、正常版・遷移後の意図したinvariant故障を比較した。4入力と3経路の12比較で、判定・状態数・生成数が一致した。人工故障を未知の実バグ発見とは数えない。
+
+最初のdriverは初期invariant違反にもTLCの計数があると仮定して失敗した。TLCが計数を出さないため、遷移後の故障を別runにした。次のdriverでは定数の空tuple別名をUNCHANGEDへ渡すと、TLCがidentifier undefinedのmodel errorを返した。これは一致と数えない。inlineの空tupleによる別の対照も保存する。大きすぎる入力のprotocol拒否もTLC一致には含めない。
+
+## ローカル検証
+
+| 対象                                   | 結果                                           |
+| -------------------------------------- | ---------------------------------------------- |
+| 追加した幅の広いtuple                  | 12件成功。修正前は6成功・6失敗                 |
+| safety回帰                             | 1,300件成功                                    |
+| 両frontendの解析                       | 4,236件成功                                    |
+| Rust fmt/clippy・全target・native/Wasm | portable-test成功。direct crateの追加2件も成功 |
+| Chromium                               | portable/parser 2件、通常browser 3件成功       |
+| mutation                               | 95.4%。未検出も元のreportに保持                |
+| 配布consumer                           | npm・Cargo・Wasm・CLIの検証成功                |
+| 評価と再生、改善ループと再生           | 成功                                           |
+| Jev                                    | live/offlineで全比較に回答。自己テスト8件成功  |
+
+target生成物の削除をcommitする前のunit検査では、git statusの大きすぎる出力でENOBUFSになった。削除後のunit検査は成功した。Jevでは定数宣言と対象行のcontextを追加する前に1 contradictionがあり、比較条件を明記した後の再検査は0となった。失敗ログを保持する。
+
+元PRのWasm性能測定にあるinconclusiveは変更しない。今回の資源上限テストを、一般的な高速化や非劣性の新しい証明には数えない。
+
+[入力・rawログ・判定の保存索引](../runs/pr62-merge-validation/evidence.json)を参照。GitHub上のCIと最終headは[PR 62のchecks](https://github.com/mizchi/idealis/pull/62/checks)で確認する。
+
+## 追加レビューの再検証
+
+最初のCI（head a2983f18f）は成功したが、追加レビューを確認してからマージする。anonymous frameの引数を深さ検査前にcloneすると、Wasmの深い入力で制御されたprotocol拒否にならないケースを再現した。frameの格納・clone前に、入口の1段を含めたdepthを検査する。action・入れ子action・temporalとnative/Wasmの追加対照はすべて成功した。
+
+「v1のcompiled depth検査を復元すべき」という指摘はbaseと照合すると誤りだった。base d147550c8のfrontendを別bundleで実行すると、130項の連言と129 armのCASEをv1でコンパイルできる。いったん追加した制限は既存CASEテスト2件を壊したため撤去した。既存テストを緩めず、省略/明示v1の受理を保つテストを加えた。v2だけがcompiled depth 128で拒否する。
+
+資源検証はサンプリングRSSを最大RSSと呼ばず、Linux/macOSの`/usr/bin/time`が子の終了時に返すOS最大RSSを使う。サンプリングは早期停止用に分け、OS値が欠落・ゼロなら成功にしない。欠測0を拒否するfixtureと、子が報告した`process.resourceUsage()`の最大値以上になる実プロセスの対照を加えた。追加2件は修正前に失敗し、修正後は成功した。OS測定はharnessだけの依存で、pureなWasmコアには加えない。
+
+追加後のsafety回帰は1,310件成功。最初の保存データと失敗ログを編集せず、追加分はreview-fixesの保存索引へ分ける。
+
+## 時間論理木の追加レビュー
+
+head 367cf2e6aへの追加指摘も独立に再現した。時間論理IRのAnd/Orは式のdepthへ加算されないため、長いflatな連言・選言が再帰的なframe整理へ到達する。修正前はnativeがSIGABRT、WasmとTSがRangeErrorになった。frame内だけでなくPROPERTYへ直接書いた対照でも再現した。
+
+両frontendでv2の時間論理木の構造深さを別に128まで数え、frame整理とPROPERTYの時間論理検証へ入る前に拒否する。式の深さ、v1のcompile時受理、実行時の時間論理制限は変えない。これはTLCとの意味論的一致を増やす変更ではなく、過大な入力を制御されたprotocol拒否にする変更である。
+
+入力はframe内/直接、連言/選言、native/Wasm/TSの12組。各組の8項対照がcompleteとなり、大きい入力（native 20,000項、Wasm/TS 5,000項）が10秒・256 MiBの既存監視内でprotocol拒否になることを検査する。修正前のframe用6件と直接記述用6件は失敗し、修正後のsafety回帰は1,322件成功した。
+
+解析inventoryはsource digestの変更と追加した診断文字列を検出して失敗した。変更した3ファイルのdigestとTS/Rustの文字列一覧へ新しい診断だけを追加する。他の再抽出結果が不変であることを比較し、分類、到達corpus、モデル検査の期待値は変えない。Jevはframe actualの比較で1 contradictionを返したため、frame_actualsの検査とclone順序を明記し、その関数を対象とする比較へ分けた。live/offlineの再検査は成功した。初期のテスト登録ミスを含む途中ログも保存し、実際に6件ずつ失敗したrunをRedの根拠とする。
+
+追加分のrawログは[temporal-reviewの保存索引](../runs/pr62-merge-validation/temporal-review.json)へ保存する。先行するevidence/review-fixes archiveは変更しない。
+
+最終ローカル検証はcheck、解析4,236件、portableのfmt/clippy・全target・native/Wasm、Chromium 2件と通常browser 3件、mutation 95.4%、評価と再生、npm/Cargo/Wasm/CLIの単独consumerが成功した。GitHub Actionsも直前head 367cf2e6aで成功しているが、マージは追加修正を含むheadのCI成功後に限る。

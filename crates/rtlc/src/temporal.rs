@@ -3,9 +3,12 @@ use crate::ir::{
     Expression, SafetyBounds, SafetyProgram, SafetyTraceStep, SafetyViolation, Scalar,
     TemporalFormula,
 };
-use crate::safety_expressions::{EvalContext, validate_constant_bindings, visit_bindings};
+use crate::safety_expressions::{
+    CallFrame, EvalContext, validate_constant_bindings, visit_bindings,
+};
 use crate::safety_values::Arena;
 use std::collections::{HashMap, HashSet, VecDeque};
+use std::sync::Arc;
 
 impl TemporalFormula {
     pub(crate) fn validate(&self, variables: usize, depth: usize) -> Result<(), CoreError> {
@@ -21,6 +24,11 @@ impl TemporalFormula {
             return Err(CoreError::protocol("Temporal formula nesting exceeds 40"));
         }
         match self {
+            Self::Frame { .. } => {
+                return Err(CoreError::protocol(
+                    "Operator references require safety IR v2",
+                ));
+            }
             Self::Atom { expression } => expression.validate_locals(variables, 1, locals)?,
             Self::Not { formula } | Self::Always { formula } | Self::Eventually { formula } => {
                 formula.validate_locals(variables, depth + 1, locals)?
@@ -43,10 +51,16 @@ pub(crate) struct GraphEdge {
     pub action: Option<usize>,
 }
 
+struct LexicalSnapshot {
+    locals: Vec<Scalar>,
+    frame: Option<Arc<CallFrame>>,
+    old: Option<Scalar>,
+}
+
 enum Formula<'a> {
     True,
     False,
-    Atom(&'a Expression, bool, Vec<Scalar>),
+    Atom(&'a Expression, bool, LexicalSnapshot),
     And(usize, usize),
     Or(usize, usize),
     Until(usize, usize),
@@ -55,6 +69,10 @@ enum Formula<'a> {
 struct Pool<'a> {
     formulas: Vec<Formula<'a>>,
     until: Vec<usize>,
+    frame_sequence: usize,
+    entries: Vec<Vec<usize>>,
+    active_entries: Vec<usize>,
+    lower_entered: HashSet<usize>,
 }
 impl<'a> Pool<'a> {
     fn add(&mut self, formula: Formula<'a>) -> usize {
@@ -63,24 +81,70 @@ impl<'a> Pool<'a> {
             self.until.push(index);
         }
         self.formulas.push(formula);
+        self.entries.push(self.active_entries.clone());
         index
     }
     fn lower(
         &mut self,
         formula: &'a TemporalFormula,
         negative: bool,
-        locals: &[Scalar],
+        context: EvalContext<'_>,
+        entries: &[usize],
+        arena: &mut Arena,
+    ) -> Result<usize, CoreError> {
+        let previous = std::mem::replace(&mut self.active_entries, entries.to_vec());
+        let result = self.lower_inner(formula, negative, context, entries, arena);
+        self.active_entries = previous;
+        result
+    }
+    fn lower_inner(
+        &mut self,
+        formula: &'a TemporalFormula,
+        negative: bool,
+        context: EvalContext<'_>,
+        entries: &[usize],
         arena: &mut Arena,
     ) -> Result<usize, CoreError> {
         arena.tick()?;
         Ok(match formula {
-            TemporalFormula::Atom { expression } => {
-                self.add(Formula::Atom(expression, negative, locals.to_vec()))
+            TemporalFormula::Frame {
+                arguments,
+                captures,
+                formula,
+                ..
+            } => {
+                let frame = CallFrame::new(arguments, captures, context);
+                let mut entries = entries.to_vec();
+                entries.push(self.frame_sequence);
+                self.frame_sequence += 1;
+                self.lower(
+                    formula,
+                    negative,
+                    EvalContext {
+                        locals: &[],
+                        frame: Some(&frame),
+                        old: None,
+                        ..context
+                    },
+                    &entries,
+                    arena,
+                )?
             }
-            TemporalFormula::Not { formula } => self.lower(formula, !negative, locals, arena)?,
+            TemporalFormula::Atom { expression } => self.add(Formula::Atom(
+                expression,
+                negative,
+                LexicalSnapshot {
+                    locals: context.locals.to_vec(),
+                    frame: context.frame.cloned().map(Arc::new),
+                    old: context.old,
+                },
+            )),
+            TemporalFormula::Not { formula } => {
+                self.lower(formula, !negative, context, entries, arena)?
+            }
             TemporalFormula::And { left, right } | TemporalFormula::Or { left, right } => {
-                let left = self.lower(left, negative, locals, arena)?;
-                let right = self.lower(right, negative, locals, arena)?;
+                let left = self.lower(left, negative, context, entries, arena)?;
+                let right = self.lower(right, negative, context, entries, arena)?;
                 if matches!(formula, TemporalFormula::And { .. }) != negative {
                     self.add(Formula::And(left, right))
                 } else {
@@ -89,7 +153,7 @@ impl<'a> Pool<'a> {
             }
             TemporalFormula::Always { formula: inner }
             | TemporalFormula::Eventually { formula: inner } => {
-                let child = self.lower(inner, negative, locals, arena)?;
+                let child = self.lower(inner, negative, context, entries, arena)?;
                 if matches!(formula, TemporalFormula::Eventually { .. }) != negative {
                     let truth = self.add(Formula::True);
                     self.add(Formula::Until(truth, child))
@@ -112,24 +176,20 @@ impl<'a> Pool<'a> {
                 } else {
                     Formula::False
                 });
-                visit_bindings(
-                    bounds,
-                    0,
-                    EvalContext {
-                        locals,
-                        ..EvalContext::new(&[], &[])
-                    },
-                    arena,
-                    &mut |ctx, arena| {
-                        let child = self.lower(inner, negative, ctx.locals, arena)?;
-                        result = self.add(if conjunction {
-                            Formula::And(result, child)
-                        } else {
-                            Formula::Or(result, child)
-                        });
-                        Ok(true)
-                    },
-                )?;
+                for entry in entries {
+                    if self.lower_entered.insert(*entry) {
+                        arena.consume(1)?;
+                    }
+                }
+                visit_bindings(bounds, 0, context, arena, &mut |ctx, arena| {
+                    let child = self.lower(inner, negative, ctx, entries, arena)?;
+                    result = self.add(if conjunction {
+                        Formula::And(result, child)
+                    } else {
+                        Formula::Or(result, child)
+                    });
+                    Ok(true)
+                })?;
                 result
             }
         })
@@ -139,6 +199,7 @@ impl<'a> Pool<'a> {
 struct Expansion {
     todo: Vec<usize>,
     seen: HashSet<usize>,
+    entered: HashSet<usize>,
     next: Vec<usize>,
     pending: Vec<usize>,
 }
@@ -155,6 +216,7 @@ fn expand(
     let mut stack = vec![Expansion {
         todo: required.to_vec(),
         seen: HashSet::new(),
+        entered: HashSet::new(),
         next: vec![],
         pending: vec![],
     }];
@@ -165,12 +227,25 @@ fn expand(
             if !state.seen.insert(id) {
                 continue;
             }
+            for entry in &pool.entries[id] {
+                if state.entered.insert(*entry) {
+                    arena.consume(1)?;
+                }
+            }
             match &pool.formulas[id] {
                 Formula::True => {}
                 Formula::False => continue 'alternative,
-                Formula::Atom(expression, negative, locals) => {
+                Formula::Atom(expression, negative, lexical) => {
                     if expression
-                        .eval(EvalContext { locals, ..ctx }, arena)?
+                        .eval(
+                            EvalContext {
+                                locals: &lexical.locals,
+                                frame: lexical.frame.as_deref(),
+                                old: lexical.old,
+                                ..ctx
+                            },
+                            arena,
+                        )?
                         .boolean()?
                         == *negative
                     {
@@ -425,10 +500,20 @@ pub(crate) fn check(
         let mut pool = Pool {
             formulas: vec![],
             until: vec![],
+            frame_sequence: 0,
+            entries: vec![],
+            active_entries: vec![],
+            lower_entered: HashSet::new(),
         };
-        let mut root = pool.lower(&property.formula, true, &[], arena)?;
+        let mut root = pool.lower(
+            &property.formula,
+            true,
+            EvalContext::new(&[], &[]),
+            &[],
+            arena,
+        )?;
         for fairness in &program.fairness {
-            let fairness = pool.lower(fairness, false, &[], arena)?;
+            let fairness = pool.lower(fairness, false, EvalContext::new(&[], &[]), &[], arena)?;
             root = pool.add(Formula::And(fairness, root));
         }
         if matches!(pool.formulas[root], Formula::False) {

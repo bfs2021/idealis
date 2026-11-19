@@ -15,6 +15,12 @@ import { traceInput } from "../collections-temporal/tlc.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
 import { boundaries, foldOrderControls, foldRejections } from "./corpus.js";
+import "./operator-sharing-test.js";
+import "./operator-sharing-framed-test.js";
+import "./operator-sharing-limits-test.js";
+import "./operator-sharing-wide-test.js";
+import "./operator-sharing-depth-test.js";
+import "./operator-sharing-resources-test.js";
 
 interface Golden {
   readonly cases: readonly ({

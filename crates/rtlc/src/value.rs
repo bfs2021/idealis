@@ -101,8 +101,8 @@ impl std::fmt::Display for CoreError {
 impl std::error::Error for CoreError {}
 
 impl Value {
-    pub fn normalize(self) -> Result<Self, CoreError> {
-        match self {
+    pub fn normalize(mut self) -> Result<Self, CoreError> {
+        match &mut self {
             Self::ModelValue(value) => {
                 if value.is_empty()
                     || !value.bytes().enumerate().all(|(index, byte)| {
@@ -113,10 +113,10 @@ impl Value {
                 {
                     return Err(CoreError::value("Invalid model value name"));
                 }
-                Ok(Self::ModelValue(value))
+                Ok(self)
             }
             Self::Int(value) => {
-                let digits = value.strip_prefix('-').unwrap_or(&value);
+                let digits = value.strip_prefix('-').unwrap_or(value);
                 if value != "0"
                     && (digits.is_empty()
                         || digits.starts_with('0')
@@ -124,7 +124,7 @@ impl Value {
                 {
                     return Err(CoreError::value("Noncanonical integer"));
                 }
-                Ok(Self::Int(value))
+                Ok(self)
             }
             Self::Bytes(value) => {
                 if !value.len().is_multiple_of(2)
@@ -134,46 +134,49 @@ impl Value {
                 {
                     return Err(CoreError::value("Invalid lowercase hex bytes"));
                 }
-                Ok(Self::Bytes(value))
+                Ok(self)
             }
-            Self::List(values) => Ok(Self::List(
-                values
-                    .into_iter()
-                    .map(Self::normalize)
-                    .collect::<Result<_, _>>()?,
-            )),
+            Self::List(values) => {
+                for value in values.iter_mut() {
+                    *value = std::mem::replace(value, Self::Null).normalize()?;
+                }
+                Ok(self)
+            }
             Self::Set(values) => {
                 let mut entries = BTreeMap::new();
-                for value in values {
+                for value in values.drain(..) {
                     let value = value.normalize()?;
                     entries.insert(
                         serde_json::to_string(&value).expect("serializable value"),
                         value,
                     );
                 }
-                Ok(Self::Set(entries.into_values().collect()))
+                values.extend(entries.into_values());
+                Ok(self)
             }
             Self::Record(fields) => {
                 let mut entries = BTreeMap::new();
-                for (name, value) in fields {
+                for (name, value) in fields.drain(..) {
                     if entries.insert(name, value.normalize()?).is_some() {
                         return Err(CoreError::value("Duplicate record field"));
                     }
                 }
-                Ok(Self::Record(entries.into_iter().collect()))
+                fields.extend(entries);
+                Ok(self)
             }
             Self::Map(values) => {
                 let mut entries = BTreeMap::new();
-                for (key, value) in values {
+                for (key, value) in values.drain(..) {
                     let key = key.normalize()?;
                     let encoded = serde_json::to_string(&key).expect("serializable value");
                     if entries.insert(encoded, (key, value.normalize()?)).is_some() {
                         return Err(CoreError::value("Duplicate map key"));
                     }
                 }
-                Ok(Self::Map(entries.into_values().collect()))
+                values.extend(entries.into_values());
+                Ok(self)
             }
-            value => Ok(value),
+            Self::Null | Self::Bool(_) | Self::String(_) => Ok(self),
         }
     }
 }

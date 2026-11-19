@@ -1,0 +1,116 @@
+{
+  "purpose": "Current v1 behavior, not the TLC oracle",
+  "cases": [
+    {
+      "name": "sharing-action-frame-exists",
+      "outcome": {
+        "kind": "safety",
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 7,
+          "depth": 1,
+          "work": 17,
+          "violation": null
+        }
+      }
+    },
+    {
+      "name": "sharing-action-frame-two-variables",
+      "outcome": {
+        "kind": "safety",
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 7,
+          "depth": 1,
+          "work": 24,
+          "violation": null
+        }
+      }
+    },
+    {
+      "name": "sharing-action-frame-binder-actual",
+      "outcome": {
+        "kind": "error",
+        "code": "protocol",
+        "message": "Invalid bound variable slot"
+      }
+    },
+    {
+      "name": "sharing-action-frame-except",
+      "outcome": {
+        "kind": "safety",
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 14,
+          "violation": null
+        }
+      }
+    },
+    {
+      "name": "sharing-action-frame-except-control",
+      "outcome": {
+        "kind": "safety",
+        "result": {
+          "status": "invariant-violation",
+          "reason": null,
+          "states": 1,
+          "generated": 1,
+          "depth": 0,
+          "work": 10,
+          "violation": {
+            "name": "Safe",
+            "trace": [
+              {
+                "action": null,
+                "values": [
+                  {
+                    "type": "int",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "sharing-action-frame-shadow",
+      "outcome": {
+        "kind": "safety",
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 3,
+          "generated": 7,
+          "depth": 1,
+          "work": 23,
+          "violation": null
+        }
+      }
+    },
+    {
+      "name": "sharing-action-frame-enabled",
+      "outcome": {
+        "kind": "safety",
+        "result": {
+          "status": "complete",
+          "reason": null,
+          "states": 1,
+          "generated": 2,
+          "depth": 0,
+          "work": 10,
+          "violation": null
+        }
+      }
+    }
+  ]
+}

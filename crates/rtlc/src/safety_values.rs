@@ -1,4 +1,4 @@
-use crate::ir::{Expression, Scalar};
+use crate::ir::{Definition, Expression, Scalar};
 use crate::safety_expressions::MembershipSet;
 #[cfg(not(target_arch = "wasm32"))]
 use crate::safety_work::WorkBudget;
@@ -65,6 +65,8 @@ type RegisteredMembership = HashMap<usize, Option<Option<Arc<MembershipSet>>>>;
 type MembershipCache = HashMap<(u64, Scalar), Vec<(Arc<MembershipSet>, bool)>>;
 
 pub(crate) struct Arena<'a> {
+    pub definitions: &'a [Definition],
+    pub metadata: Option<Arc<crate::safety_definitions::Metadata<'a>>>,
     base: Option<&'a Arena<'a>>,
     offset: usize,
     #[cfg(not(target_arch = "wasm32"))]
@@ -84,6 +86,8 @@ pub(crate) struct Arena<'a> {
 impl<'scope> Arena<'scope> {
     pub fn new(maximum: u32) -> Self {
         Self {
+            definitions: &[],
+            metadata: None,
             base: None,
             offset: 0,
             #[cfg(not(target_arch = "wasm32"))]
@@ -124,6 +128,8 @@ impl<'scope> Arena<'scope> {
     #[cfg(not(target_arch = "wasm32"))]
     pub fn fork<'a>(&'a self, budget: &'a WorkBudget, worker: usize) -> Arena<'a> {
         Arena {
+            definitions: self.definitions,
+            metadata: self.metadata.clone(),
             base: Some(self),
             offset: self.offset + self.cells.len(),
             budget: Some((budget, worker)),

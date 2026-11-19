@@ -1,0 +1,21 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 15 and seed 4417326113981702396 with 1 worker on <cores> cores with 256MB heap and 64MB offheap memory [pid: <pid>] (<host>, MSBDiskFPSet, DiskStateQueue).
+Parsing file <capture>/Differential.tla
+Semantic processing of module Differential
+Starting... (<time>)
+Implied-temporal checking--satisfiability problem has 1 branches.
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at <time>.
+Progress(1) at <time>: 2 states generated, 1 distinct states found, 0 states left on queue.
+Checking temporal properties for the complete state space with 1 total distinct states at (<time>)
+Error: Temporal properties were violated.
+
+Error: The following behavior constitutes a counter-example:
+
+State 1: <Initial predicate>
+x = 0
+
+State 2: Stuttering
+Finished checking temporal properties in 00s at <time>
+2 states generated, 1 distinct states found, 0 states left on queue.
+Finished in 00s at (<time>)

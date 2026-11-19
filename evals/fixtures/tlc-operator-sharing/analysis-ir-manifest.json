@@ -1,0 +1,3441 @@
+[
+  {
+    "id": "ir/definition/depth/48",
+    "routes": 3,
+    "classification": "depth",
+    "expected": "complete",
+    "positions": [
+      "ir-definition/definition/body",
+      "ir-expression/not/argument"
+    ]
+  },
+  {
+    "id": "ir/definition/depth/49",
+    "routes": 3,
+    "classification": "depth",
+    "expected": "Safety expression nesting exceeds 48",
+    "positions": [
+      "ir-definition/definition/body",
+      "ir-expression/not/argument"
+    ]
+  },
+  {
+    "id": "ir/definition/self-cycle",
+    "routes": 3,
+    "classification": "dag",
+    "expected": "Recursive safety definition graph",
+    "positions": [
+      "ir-definition/definition/body",
+      "ir-expression/call/definition"
+    ]
+  },
+  {
+    "id": "ir/expression/add/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "add",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/add/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "add",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/add/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "add",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/add/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "add",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/and/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "and",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/and/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "and",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/and/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "and",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/and/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "and",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/append/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "append",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/append/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "append",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/append/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "append",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/append/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "append",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/at/key/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "at",
+    "position": "key",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/at/key/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "at",
+    "position": "key",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/at/target/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "at",
+    "position": "target",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/at/target/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "at",
+    "position": "target",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/call/arguments/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "arguments[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/call/arguments/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "arguments[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/call/arguments/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "arguments[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/call/arguments/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "arguments[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/call/captures/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "captures[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/call/captures/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "captures[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/call/captures/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "captures[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/call/captures/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "call",
+    "position": "captures[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/cap/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cap",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/cap/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cap",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/cap/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cap",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/cap/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cap",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/cardinality/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cardinality",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/cardinality/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cardinality",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/choose/binding/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "choose",
+    "position": "binding.domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/choose/binding/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "choose",
+    "position": "binding.domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/choose/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "choose",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/choose/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "choose",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/concat/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "concat",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/concat/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "concat",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/concat/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "concat",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/concat/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "concat",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/cup/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cup",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/cup/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cup",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/cup/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cup",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/cup/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "cup",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/difference/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "difference",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/difference/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "difference",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/difference/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "difference",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/difference/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "difference",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/div/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "div",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/div/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "div",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/div/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "div",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/div/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "div",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/domain/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "domain",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/domain/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "domain",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/enabled/branches/0/steps/0/value/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "enabled",
+    "position": "branches[0].steps[0].value",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/enabled/branches/0/steps/0/value/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "enabled",
+    "position": "branches[0].steps[0].value",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/enabled/branches/1/steps/0/value/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "enabled",
+    "position": "branches[1].steps[0].value",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/enabled/branches/1/steps/0/value/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "enabled",
+    "position": "branches[1].steps[0].value",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/enabled/subscript/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "enabled",
+    "position": "subscript",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/enabled/subscript/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "enabled",
+    "position": "subscript",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/eq/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "eq",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/eq/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "eq",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/eq/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "eq",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/eq/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "eq",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/exists/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "exists",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/exists/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "exists",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/exists/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "exists",
+    "position": "bounds[0].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/exists/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "exists",
+    "position": "bounds[0].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/exists/bounds/1/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "exists",
+    "position": "bounds[1].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/exists/bounds/1/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "exists",
+    "position": "bounds[1].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/filter/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "filter",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/filter/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "filter",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/filter/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "filter",
+    "position": "bounds[0].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/filter/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "filter",
+    "position": "bounds[0].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/filter/bounds/1/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "filter",
+    "position": "bounds[1].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/filter/bounds/1/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "filter",
+    "position": "bounds[1].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/fold/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "fold",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/fold/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "fold",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/fold/collection/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "fold",
+    "position": "collection",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/fold/collection/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "fold",
+    "position": "collection",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/fold/initial/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "fold",
+    "position": "initial",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/fold/initial/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "fold",
+    "position": "initial",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/forall/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "forall",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/forall/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "forall",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/forall/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "forall",
+    "position": "bounds[0].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/forall/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "forall",
+    "position": "bounds[0].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/forall/bounds/1/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "forall",
+    "position": "bounds[1].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/forall/bounds/1/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "forall",
+    "position": "bounds[1].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/frame/arguments/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "arguments[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/frame/arguments/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "arguments[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/frame/arguments/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "arguments[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/frame/arguments/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "arguments[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/frame/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/frame/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/frame/captures/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "captures[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/frame/captures/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "captures[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/frame/captures/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "captures[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/frame/captures/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "frame",
+    "position": "captures[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function-in/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-in",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function-in/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-in",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function-in/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-in",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function-in/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-in",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function-set/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-set",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function-set/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-set",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function-set/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-set",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function-set/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function-set",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function",
+    "position": "bounds[0].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function",
+    "position": "bounds[0].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/function/bounds/1/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function",
+    "position": "bounds[1].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/function/bounds/1/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "function",
+    "position": "bounds[1].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/ge/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ge",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/ge/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ge",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/ge/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ge",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/ge/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ge",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/gt/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "gt",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/gt/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "gt",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/gt/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "gt",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/gt/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "gt",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/head/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "head",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/head/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "head",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/if/alternative/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "if",
+    "position": "alternative",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/if/alternative/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "if",
+    "position": "alternative",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/if/condition/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "if",
+    "position": "condition",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/if/condition/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "if",
+    "position": "condition",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/if/consequent/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "if",
+    "position": "consequent",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/if/consequent/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "if",
+    "position": "consequent",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/implies/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "implies",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/implies/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "implies",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/implies/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "implies",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/implies/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "implies",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/in/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "in",
+    "position": "domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/in/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "in",
+    "position": "domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/in/value/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "in",
+    "position": "value",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/in/value/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "in",
+    "position": "value",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/le/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "le",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/le/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "le",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/le/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "le",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/le/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "le",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/len/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "len",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/len/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "len",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/lt/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "lt",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/lt/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "lt",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/lt/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "lt",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/lt/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "lt",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/map-set/body/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "map-set",
+    "position": "body",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/map-set/body/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "map-set",
+    "position": "body",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/map-set/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "map-set",
+    "position": "bounds[0].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/map-set/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "map-set",
+    "position": "bounds[0].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/map-set/bounds/1/domain/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "map-set",
+    "position": "bounds[1].domain.values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/map-set/bounds/1/domain/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "map-set",
+    "position": "bounds[1].domain.values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/mod/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mod",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/mod/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mod",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/mod/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mod",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/mod/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mod",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/mul/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mul",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/mul/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mul",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/mul/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mul",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/mul/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "mul",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/ne/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ne",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/ne/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ne",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/ne/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ne",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/ne/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "ne",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/neg/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "neg",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/neg/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "neg",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/not/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "not",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/not/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "not",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/or/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "or",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/or/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "or",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/or/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "or",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/or/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "or",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/pow/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "pow",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/pow/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "pow",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/pow/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "pow",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/pow/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "pow",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/powerset/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "powerset",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/powerset/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "powerset",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/prime/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "prime",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/prime/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "prime",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/record-set/fields/0/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record-set",
+    "position": "fields[0][1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/record-set/fields/0/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record-set",
+    "position": "fields[0][1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/record-set/fields/1/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record-set",
+    "position": "fields[1][1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/record-set/fields/1/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record-set",
+    "position": "fields[1][1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/record/fields/0/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record",
+    "position": "fields[0][1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/record/fields/0/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record",
+    "position": "fields[0][1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/record/fields/1/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record",
+    "position": "fields[1][1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/record/fields/1/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "record",
+    "position": "fields[1][1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/sequence-in/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sequence-in",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/sequence-in/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sequence-in",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/sequence-in/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sequence-in",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/sequence-in/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sequence-in",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/sequence-set/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sequence-set",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/sequence-set/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sequence-set",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/set/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "set",
+    "position": "values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/set/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "set",
+    "position": "values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/set/values/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "set",
+    "position": "values[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/set/values/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "set",
+    "position": "values[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/sub/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sub",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/sub/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sub",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/sub/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sub",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/sub/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "sub",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/subseq/from/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subseq",
+    "position": "from",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/subseq/from/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subseq",
+    "position": "from",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/subseq/sequence/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subseq",
+    "position": "sequence",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/subseq/sequence/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subseq",
+    "position": "sequence",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/subseq/to/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subseq",
+    "position": "to",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/subseq/to/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subseq",
+    "position": "to",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/subset-eq/left/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subset-eq",
+    "position": "left",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/subset-eq/left/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subset-eq",
+    "position": "left",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/subset-eq/right/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subset-eq",
+    "position": "right",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/subset-eq/right/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "subset-eq",
+    "position": "right",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/tail/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "tail",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/tail/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "tail",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/tuple/values/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "tuple",
+    "position": "values[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/tuple/values/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "tuple",
+    "position": "values[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/tuple/values/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "tuple",
+    "position": "values[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/tuple/values/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "tuple",
+    "position": "values[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/union/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "union",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/union/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "union",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/target/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "target",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/target/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "target",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/updates/0/path/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[0].path[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/updates/0/path/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[0].path[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/updates/0/path/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[0].path[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/updates/0/path/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[0].path[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/updates/0/value/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[0].value",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/updates/0/value/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[0].value",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/updates/1/path/0/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[1].path[0]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/updates/1/path/0/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[1].path[0]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/updates/1/path/1/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[1].path[1]",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/updates/1/path/1/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[1].path[1]",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/update/updates/1/value/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[1].value",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/update/updates/1/value/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "update",
+    "position": "updates[1].value",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/expression/variant-tag/argument/invalid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "variant-tag",
+    "position": "argument",
+    "control": "invalid",
+    "classification": "structural",
+    "expected": "Invalid safety parameter reference"
+  },
+  {
+    "id": "ir/expression/variant-tag/argument/valid",
+    "routes": 3,
+    "space": "ir-expression",
+    "constructor": "variant-tag",
+    "position": "argument",
+    "control": "valid",
+    "classification": "structural",
+    "expected": "complete"
+  },
+  {
+    "id": "ir/leaf/bound/invalid",
+    "routes": 3,
+    "classification": "scope",
+    "control": "invalid",
+    "expected": "Unbound quantified variable",
+    "positions": [
+      "ir-expression/bound"
+    ]
+  },
+  {
+    "id": "ir/leaf/bound/valid",
+    "routes": 3,
+    "classification": "scope",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/bound"
+    ]
+  },
+  {
+    "id": "ir/leaf/data/sentinel",
+    "routes": 3,
+    "classification": "leaf",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/data"
+    ]
+  },
+  {
+    "id": "ir/leaf/literal/sentinel",
+    "routes": 3,
+    "classification": "leaf",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/literal"
+    ]
+  },
+  {
+    "id": "ir/leaf/old/invalid",
+    "routes": 3,
+    "classification": "scope",
+    "control": "invalid",
+    "expected": "Unbound EXCEPT @",
+    "positions": [
+      "ir-expression/old"
+    ]
+  },
+  {
+    "id": "ir/leaf/old/valid",
+    "routes": 3,
+    "classification": "scope",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/old"
+    ]
+  },
+  {
+    "id": "ir/leaf/read/invalid",
+    "routes": 3,
+    "classification": "scope",
+    "control": "invalid",
+    "expected": "Invalid safety variable read",
+    "positions": [
+      "ir-expression/read"
+    ]
+  },
+  {
+    "id": "ir/leaf/read/valid",
+    "routes": 3,
+    "classification": "scope",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/read"
+    ]
+  },
+  {
+    "id": "ir/semantic/action-frame-caller-actual",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-step/frame/arguments[*]",
+      "ir-step/frame/branches[*]",
+      "ir-step/assign/value"
+    ]
+  },
+  {
+    "id": "ir/semantic/action-frame-caller-capture",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-step/frame/captures[*]",
+      "ir-step/frame/branches[*]",
+      "ir-step/assign/value"
+    ]
+  },
+  {
+    "id": "ir/semantic/action-prime-read",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/prime/argument",
+      "ir-expression/read"
+    ]
+  },
+  {
+    "id": "ir/semantic/call-unused-actual-unknown-reference",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "Unknown safety definition ID",
+    "positions": [
+      "ir-expression/call/arguments[*]",
+      "ir-expression/call/definition"
+    ]
+  },
+  {
+    "id": "ir/semantic/expression-frame-caller-binder",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/frame/arguments[*]",
+      "ir-expression/frame/body",
+      "ir-expression/forall/body",
+      "ir-expression/bound",
+      "ir-expression/parameter"
+    ]
+  },
+  {
+    "id": "ir/semantic/expression-frame-caller-old",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/update/updates[*].value",
+      "ir-expression/frame/arguments[*]",
+      "ir-expression/frame/body",
+      "ir-expression/old"
+    ]
+  },
+  {
+    "id": "ir/semantic/expression-frame-capture",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/frame/captures[*]",
+      "ir-expression/frame/body",
+      "ir-expression/capture"
+    ]
+  },
+  {
+    "id": "ir/semantic/expression-frame-unbound-capture",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "Invalid safety capture reference",
+    "positions": [
+      "ir-expression/frame/body",
+      "ir-expression/capture"
+    ]
+  },
+  {
+    "id": "ir/semantic/frame-unused-actual-structurally-valid-lazy",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-expression/frame/arguments[*]",
+      "ir-expression/frame/body",
+      "ir-expression/head/argument"
+    ]
+  },
+  {
+    "id": "ir/semantic/frame-used-actual-error",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "Head of an empty sequence",
+    "positions": [
+      "ir-expression/frame/arguments[*]",
+      "ir-expression/frame/body",
+      "ir-expression/head/argument"
+    ]
+  },
+  {
+    "id": "ir/semantic/next-read-in-state",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "Invalid safety variable read",
+    "positions": [
+      "ir-expression/read"
+    ]
+  },
+  {
+    "id": "ir/semantic/prime-in-state",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "Prime requires an action context",
+    "positions": [
+      "ir-expression/prime/argument"
+    ]
+  },
+  {
+    "id": "ir/semantic/temporal-frame-formula-actual",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-temporal/frame/arguments[*]",
+      "ir-temporal/frame/formula",
+      "ir-temporal/always/formula",
+      "ir-temporal/atom/expression"
+    ]
+  },
+  {
+    "id": "ir/semantic/temporal-frame-formula-capture",
+    "routes": 3,
+    "classification": "semantic",
+    "expected": "complete",
+    "positions": [
+      "ir-temporal/frame/captures[*]",
+      "ir-temporal/frame/formula",
+      "ir-temporal/atom/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/range/lower/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/lower"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/range/lower/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/lower"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/range/upper/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/upper"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/range/upper/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/upper"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/set/values/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/set/values/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/set/values/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/values/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/set/values/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/values/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/value/value/values/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/value/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/domain/value/value/values/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "invariants/0/expression/body/alternative/bounds/0/domain/value/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/actionConstraints/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "actionConstraints/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/actionConstraints/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "actionConstraints/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/actionProperties/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "actionProperties/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/actionProperties/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "actionProperties/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/assumptions/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "assumptions/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/assumptions/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "assumptions/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/constraints/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "constraints/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/constraints/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "constraints/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/definitions/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "definitions/0/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/definitions/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "definitions/0/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/fairness/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "fairness/0/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/fairness/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "fairness/0/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/initialProperties/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "initialProperties/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/initialProperties/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "initialProperties/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/invariants/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "invariants/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/program/invariants/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "invariants/0/expression/body"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/assign/value/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/value"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/assign/value/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/value"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/bind/domain/values/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/bind/domain/values/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/bind/domain/values/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/bind/domain/values/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/choose/domain/values/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/choose/domain/values/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/choose/domain/values/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/choose/domain/values/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/domain/values/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/arguments/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/arguments/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/arguments/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/arguments/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/arguments/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/arguments/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/arguments/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/arguments/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/branches/0/steps/0/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/branches/0/steps/0/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/branches/0/steps/0/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/branches/0/steps/0/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/branches/1/steps/0/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/branches/1/steps/0/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/branches/1/steps/0/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/branches/1/steps/0/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/captures/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/captures/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/captures/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/captures/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/captures/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/captures/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/frame/captures/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/captures/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/guard/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/step/guard/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "next/0/steps/0/branches/0/steps/1/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/always/formula/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/always/formula/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/and/left/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/left/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/and/left/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/left/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/and/right/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/right/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/and/right/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/right/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/atom/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/atom/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/eventually/formula/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/eventually/formula/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/exists/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/bounds/0/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/exists/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/bounds/0/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/exists/formula/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/exists/formula/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/forall/bounds/0/domain/values/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/bounds/0/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/forall/bounds/0/domain/values/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/bounds/0/domain/values/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/forall/formula/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/forall/formula/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/arguments/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/arguments/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/arguments/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/arguments/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/arguments/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/arguments/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/arguments/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/arguments/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/captures/0/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/captures/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/captures/0/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/captures/0"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/captures/1/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/captures/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/captures/1/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/captures/1"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/formula/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/frame/formula/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/not/formula/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/not/formula/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/formula/formula/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/or/left/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/left/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/or/left/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/left/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/or/right/expression/invalid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "invalid",
+    "expected": "Invalid safety parameter reference",
+    "positions": [
+      "properties/0/formula/formula/right/expression"
+    ]
+  },
+  {
+    "id": "ir/wrapper/temporal/or/right/expression/valid",
+    "routes": 3,
+    "classification": "structural",
+    "control": "valid",
+    "expected": "complete",
+    "positions": [
+      "properties/0/formula/formula/right/expression"
+    ]
+  }
+]

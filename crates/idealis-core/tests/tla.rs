@@ -56,3 +56,75 @@ fn source_bundles_are_isolated_between_requests() {
         );
     }
 }
+
+#[test]
+fn source_ir_version_is_explicit_and_does_not_change_the_envelope() {
+    let source = "---- MODULE Options ----\nVARIABLE x\nInit == x = 0\nNext == UNCHANGED x\n====";
+    let config = "INIT Init\nNEXT Next";
+    let mut engine = Engine::default();
+    for kind in ["compile-tla", "check-tla"] {
+        let mut command =
+            json!({"version":1,"request":{"kind":kind,"source":source,"config":config}});
+        if kind == "check-tla" {
+            command["request"]["bounds"] =
+                json!({"maxDepth":64,"maxStates":10000,"maxWork":1000000});
+        }
+        let default =
+            serde_json::to_vec(&engine.dispatch(&serde_json::to_vec(&command).unwrap())).unwrap();
+        command["request"]["irVersion"] = json!(1);
+        let explicit =
+            serde_json::to_vec(&engine.dispatch(&serde_json::to_vec(&command).unwrap())).unwrap();
+        assert_eq!(default, explicit);
+        command["request"]["irVersion"] = json!(2);
+        let response =
+            serde_json::to_value(engine.dispatch(&serde_json::to_vec(&command).unwrap())).unwrap();
+        if kind == "compile-tla" {
+            assert_eq!(response["kind"], "compiled");
+            assert_eq!(response["program"]["version"], 2);
+            assert_eq!(response["program"]["definitions"], json!([]));
+        } else {
+            assert_eq!(response["kind"], "safety");
+            assert_eq!(response["result"]["status"], "complete");
+        }
+        for invalid in [
+            json!(0),
+            json!(3),
+            json!(-1),
+            json!(1.5),
+            json!("2"),
+            json!(null),
+        ] {
+            command["request"]["irVersion"] = invalid;
+            let response =
+                serde_json::to_value(engine.dispatch(&serde_json::to_vec(&command).unwrap()))
+                    .unwrap();
+            assert_eq!(response["kind"], "error");
+            assert_eq!(response["code"], "protocol");
+        }
+    }
+    let default = idealis_core::compile_tla(source, config).unwrap();
+    let explicit = idealis_core::compile_tla_with_options(
+        source,
+        config,
+        idealis_core::CompileOptions {
+            irVersion: idealis_core::IrVersion::V1,
+        },
+    )
+    .unwrap();
+    assert_eq!(
+        serde_json::to_vec(&default).unwrap(),
+        serde_json::to_vec(&explicit).unwrap()
+    );
+    assert_eq!(
+        idealis_core::compile_tla_with_options(
+            source,
+            config,
+            idealis_core::CompileOptions {
+                irVersion: idealis_core::IrVersion::V2
+            }
+        )
+        .unwrap()
+        .version,
+        2
+    );
+}
