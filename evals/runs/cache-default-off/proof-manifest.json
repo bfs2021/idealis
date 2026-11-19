@@ -1,0 +1,89 @@
+{
+  "plan": "cached-expansions",
+  "sourceVersion": "64b0fb4b05adbefc64c5d03a2a880fc9b79037a48e9793c686dbb99b501e8dff",
+  "sources": [
+    {
+      "path": "formal/cache/lean-toolchain",
+      "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c"
+    },
+    {
+      "path": "formal/cache/lakefile.toml",
+      "sha256": "b737c7bf0e3d07cae58484683e677114695c6210c112d36d812ee8c619b7cf33"
+    },
+    {
+      "path": "formal/cache/lake-manifest.json",
+      "sha256": "72368439532ed4fc255108641e985326c1aa1743b40e35abafb354f07b26e0ff"
+    },
+    {
+      "path": "formal/cache/Cache.lean",
+      "sha256": "80d64a6edd8d91ff6fd5f113da107f2ea5d01e4964b907e94bcc5660e3043ede"
+    },
+    {
+      "path": "formal/cache/Main.lean",
+      "sha256": "79718e08b62aeb78cc22d4c97459533103fe9d6c738a492673e4b3864b3808a8"
+    },
+    {
+      "path": "formal/cache/ReuseMain.lean",
+      "sha256": "7f3d3b2b2bf11d129f6fa6f2e051ee9225d29d45c46f8952415124e700f8905e"
+    },
+    {
+      "path": "crates/rtlc/src/expansions.rs",
+      "sha256": "6a04e3fd4a6811ab233dcd12a9565ef251ffd215e5ff3d92f409664a6daaa4c1"
+    },
+    {
+      "path": "crates/rtlc/src/safety.rs",
+      "sha256": "1268475aafdcbdf15ad979e8bd3441e100636460134a54f4fe0ef1edf8a36cb3"
+    },
+    {
+      "path": "crates/rtlc/Cargo.lock",
+      "sha256": "dd8ff36d4b7b9f554c56190dc4c04dd5f890f178c465dc40264b928ab558f953"
+    },
+    {
+      "path": "src/safety-expansions.ts",
+      "sha256": "b1a36bc72712b6c09bc5f64acd8931c677211899767487af05f0ad2ad2bad7f0"
+    },
+    {
+      "path": "src/check-cache-policy.ts",
+      "sha256": "ca10243077db12d65b4d01c74e4e6b641861e74858ed5da07c9527066f3dd77d"
+    },
+    {
+      "path": "src/check-cache.ts",
+      "sha256": "b96ce271081363a5eb42a41566acdebf6dac61106a8ef38a8381b84ba8d52b60"
+    },
+    {
+      "path": "src/check-cache-wire.ts",
+      "sha256": "d8df62b3d1e343457c97ccac0c1ceadae1706acd04d1a7d7497235e71d4d0e1d"
+    },
+    {
+      "path": "src/check-cache-node.ts",
+      "sha256": "86101b78262fb110cdf9f75907cc58088eeeef78cfa5fd7ae2002e980ef09e96"
+    },
+    {
+      "path": "src/check-cache-http.ts",
+      "sha256": "33566bdbf1ba11612ccde9b5f4d5a29e7c7bbd4072542b0c7d591ec39035b12e"
+    },
+    {
+      "path": "src/contracts.ts",
+      "sha256": "53d2338444a73cee37a87a0d0a2a4948dbce57f1d3ce292577ce6b7ca3cb32c6"
+    },
+    {
+      "path": "src/backend.ts",
+      "sha256": "da247fa77b8f94b381bb12e15351706d2c462426f9bb4d4282140f637243f2c3"
+    },
+    {
+      "path": "src/cached-scheduling.ts",
+      "sha256": "0928ec5a3f3a66851d57cacdb36b414c65beba5081744f1af6ddc3a7885722cb"
+    },
+    {
+      "path": "evals/verified-cache/formal.ts",
+      "sha256": "e83e404dc90dfec7e68a742cbc926389eb9b4098d5cebd92588e8ac1dd665058"
+    }
+  ],
+  "toolchain": "leanprover/lean4:v4.35.0",
+  "assumptions": [
+    "sound checker and complete dependency identity",
+    "linearizable CAS and retained fencing tombstones",
+    "TS safe integers; Lean mathematical naturals"
+  ],
+  "scope": "policy proof and finite TS/Lean conformance; not a whole-TS proof"
+}

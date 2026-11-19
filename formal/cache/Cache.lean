@@ -196,6 +196,7 @@ theorem cached_graph_safe {State : Type} (initial : State → Prop)
   exact checked state (closed_graph_covers initial next cached roots closed state reachable)
 
 structure ReuseProbe where
+  enabled : Bool := false
   sameBuild : Bool
   sameNext : Bool
   sameState : Bool
@@ -203,7 +204,10 @@ structure ReuseProbe where
   deriving Lean.FromJson, Lean.ToJson
 
 def reuseExpansion (probe : ReuseProbe) : Bool :=
-  probe.sameBuild && probe.sameState && probe.sameNext && probe.complete
+  probe.enabled && probe.sameBuild && probe.sameState && probe.sameNext && probe.complete
+
+theorem disabled_expansion_not_reused (probe : ReuseProbe) (disabled : probe.enabled = false) :
+    reuseExpansion probe = false := by simp [reuseExpansion, disabled]
 
 theorem changed_next_not_reused (probe : ReuseProbe) (changed : probe.sameNext = false) :
     reuseExpansion probe = false := by simp [reuseExpansion, changed]
@@ -218,7 +222,7 @@ theorem different_state_not_reused (probe : ReuseProbe) (changed : probe.sameSta
     reuseExpansion probe = false := by simp [reuseExpansion, changed]
 
 theorem complete_expansion_reused :
-    reuseExpansion ⟨true, true, true, true⟩ = true := by decide
+    reuseExpansion ⟨true, true, true, true, true⟩ = true := by decide
 
 def memoNext {State : Type} (current stored : State → State → Prop)
     (enabled : State → Bool) (source target : State) : Prop :=

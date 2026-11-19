@@ -109,6 +109,7 @@ export const checkSafetyIncremental = (
   program: SafetyProgram,
   bounds: SafetyBounds,
   options: {
+    readonly enabled?: boolean;
     readonly cache: SafetyExpansionCache;
     readonly buildDigest: string;
     readonly maxEntries: number;

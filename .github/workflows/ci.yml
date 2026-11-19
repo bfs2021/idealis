@@ -71,6 +71,8 @@ jobs:
       - run: pnpm exec vitest run --config cache-vitest.config.ts
       - run: node --test dist/evals/cached-expansions/contract-test.js
       - run: pnpm exec vitest run --config expansions-vitest.config.ts
+      - run: node dist/evals/cached-expansions/run.js .artifacts/cache-expansion-eval
+      - run: node dist/evals/cached-expansions/run.js .artifacts/cache-expansion-replay .artifacts/cache-expansion-eval
       - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
       - run: node --test dist/evals/quint-generated/contract-test.js
       - run: node --test dist/evals/frontier-safety/contract-test.js
@@ -152,6 +154,8 @@ jobs:
             .artifacts/frontier-safety
             .artifacts/readme-comparison
             .artifacts/rtla-compiler
+            .artifacts/cache-expansion-eval
+            .artifacts/cache-expansion-replay
           if-no-files-found: warn
 
   cache-proof:

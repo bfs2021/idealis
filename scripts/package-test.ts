@@ -157,7 +157,7 @@ const cacheJob={buildDigest:'c'.repeat(64),backend:cacheBackend.descriptor,reque
 assert.equal((await runCachedCheck(cache,cacheJob,cacheBackend,{owner:'consumer',runId:'cold',leaseMs:100,now:()=>0})).kind,'executed');
 assert.equal((await runCachedCheck(cache,cacheJob,cacheBackend,{owner:'consumer',runId:'warm',leaseMs:100,now:()=>1})).kind,'cached');
 import {createSafetyExpansionCache,checkSafetyIncremental,mergeSafetyExpansions} from '@mizchi/idealis/portable';
-const expansionOptions={buildDigest:'d'.repeat(64),maxEntries:100};
+const expansionOptions={enabled:true,buildDigest:'d'.repeat(64),maxEntries:100};
 const expanded=checkSafetyIncremental(core,cacheJob.request.input,{maxDepth:8,maxStates:100,maxWork:10000},{...expansionOptions,cache:createSafetyExpansionCache()});
 const reused=checkSafetyIncremental(core,cacheJob.request.input,{maxDepth:8,maxStates:100,maxWork:10000},{...expansionOptions,cache:JSON.parse(JSON.stringify(expanded.cache))});
 assert.equal(reused.result.status,'complete');assert.equal(reused.stats.hits,1);assert.equal(reused.stats.misses,0);

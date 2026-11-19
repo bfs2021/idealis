@@ -140,6 +140,11 @@ try {
     },
     { name: "complete", before: "!action.complete", after: "false" },
     {
+      name: "disabled",
+      before: "probe.enabled &&",
+      after: "true &&",
+    },
+    {
       name: "next",
       before: "probe.sameNext && probe.complete",
       after: "true && probe.complete",
@@ -255,16 +260,17 @@ try {
   const reuseFile = process.argv[3];
   const reuse = reuseFile
     ? JSON.parse(await readFile(reuseFile, "utf8"))
-    : [...Array(16).keys()].map((bits) => ({
+    : [...Array(32).keys()].map((bits) => ({
         probe: {
+          enabled: !!(bits & 16),
           sameBuild: !!(bits & 1),
           sameNext: !!(bits & 2),
           sameState: !!(bits & 4),
           complete: !!(bits & 8),
         },
-        reused: bits === 15,
+        reused: bits === 31,
       }));
-  assert.equal(reuse.length, 16);
+  assert.equal(reuse.length, 32);
   await save("reuse-probes.json", JSON.stringify(reuse));
   const reuseExpected = JSON.parse(
     await command(

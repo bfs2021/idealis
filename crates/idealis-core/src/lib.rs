@@ -1,8 +1,8 @@
 mod finite;
 pub use rtla_compiler::{CompileOptions, IrVersion};
 pub use rtlc::{
-    CoreError, ExpansionStats, SafetyBounds, SafetyExpansionCache, SafetyProgram, SafetyResult,
-    Value,
+    CoreError, ExpansionOptions, ExpansionStats, SafetyBounds, SafetyExpansionCache, SafetyProgram,
+    SafetyResult, Value,
 };
 mod history;
 pub use history::{ConcurrentHistory, ConcurrentResult, ConcurrentStatus, HistoryEvent};
@@ -193,6 +193,8 @@ pub enum Request {
     },
     #[serde(rename_all = "camelCase")]
     CheckSafetyIncremental {
+        #[serde(default)]
+        enabled: bool,
         program: SafetyProgram,
         bounds: SafetyBounds,
         cache: SafetyExpansionCache,
@@ -591,14 +593,22 @@ impl Engine {
                 result: program.check(bounds)?,
             }),
             Request::CheckSafetyIncremental {
+                enabled,
                 program,
                 bounds,
                 mut cache,
                 build_digest,
                 max_entries,
             } => {
-                let checked =
-                    program.check_incremental(bounds, &mut cache, &build_digest, max_entries)?;
+                let checked = program.check_incremental(
+                    bounds,
+                    &mut cache,
+                    ExpansionOptions {
+                        enabled,
+                        build_digest: &build_digest,
+                        max_entries,
+                    },
+                )?;
                 Ok(Message::IncrementalSafety {
                     result: checked.result,
                     stats: checked.stats,

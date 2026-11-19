@@ -80,7 +80,7 @@ for (const input of models)
       config: config("safety"),
       irVersion,
     });
-    const options = { buildDigest, maxEntries: 10000 };
+    const options = { enabled: true, buildDigest, maxEntries: 10000 };
     const cold = checkSafetyIncremental(core, program, bounds, {
       ...options,
       cache: createSafetyExpansionCache(),
@@ -112,8 +112,9 @@ await writeFile(
 const probes = [];
 const base =
   "---- MODULE Reuse ----\nEXTENDS Integers\nVARIABLE x\nInit == x=0\nNext == UNCHANGED x\nSafe == x>=0\n====";
-for (let bits = 0; bits < 16; bits++) {
+for (let bits = 0; bits < 32; bits++) {
   const probe = {
+    enabled: !!(bits & 16),
     sameBuild: !!(bits & 1),
     sameNext: !!(bits & 2),
     sameState: !!(bits & 4),
@@ -124,6 +125,7 @@ for (let bits = 0; bits < 16; bits++) {
     config: "INIT Init\nNEXT Next\nINVARIANT Safe",
   });
   const seeded = checkSafetyIncremental(core, seed, bounds, {
+    enabled: true,
     cache: createSafetyExpansionCache(),
     buildDigest,
     maxEntries: probe.complete ? 100 : 0,
@@ -139,13 +141,14 @@ for (let bits = 0; bits < 16; bits++) {
     config: "INIT Init\nNEXT Next\nINVARIANT Safe",
   });
   const result = checkSafetyIncremental(core, program, bounds, {
+    enabled: probe.enabled,
     cache: seeded.cache,
     buildDigest: probe.sameBuild ? buildDigest : "f".repeat(64),
     maxEntries: 100,
   });
   assert.equal(result.result.status, "complete");
   const reused = result.stats.hits === 1;
-  assert.equal(reused, bits === 15);
+  assert.equal(reused, bits === 31);
   probes.push({ probe, reused, stats: result.stats });
 }
 await writeFile(

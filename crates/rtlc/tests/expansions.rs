@@ -1,4 +1,4 @@
-use rtlc::{SafetyBounds, SafetyExpansionCache, SafetyProgram};
+use rtlc::{ExpansionOptions, SafetyBounds, SafetyExpansionCache, SafetyProgram};
 use serde_json::{Value, json};
 
 fn program() -> SafetyProgram {
@@ -20,18 +20,47 @@ fn bounds() -> SafetyBounds {
 }
 
 #[test]
+fn default_options_bypass_cache_without_reading_or_mutating_it() {
+    let program = program();
+    let mut cache = SafetyExpansionCache::default();
+    let before = serde_json::to_value(&cache).unwrap();
+    let checked = program
+        .check_incremental(bounds(), &mut cache, ExpansionOptions::default())
+        .unwrap();
+    assert_eq!(checked.result, program.check(bounds()).unwrap());
+    assert_eq!(checked.stats, rtlc::ExpansionStats::default());
+    assert_eq!(serde_json::to_value(&cache).unwrap(), before);
+}
+
+#[test]
 fn persisted_expansions_recheck_a_changed_invariant() {
     let program = program();
     let mut cache = SafetyExpansionCache::default();
     let cold = program
-        .check_incremental(bounds(), &mut cache, &"a".repeat(64), 100)
+        .check_incremental(
+            bounds(),
+            &mut cache,
+            ExpansionOptions {
+                enabled: true,
+                build_digest: &"a".repeat(64),
+                max_entries: 100,
+            },
+        )
         .unwrap();
     assert_eq!(cold.result.status, "complete");
     assert_eq!(cold.stats.hits, 0);
     assert_eq!(cold.stats.writes, 4);
     let mut cache = serde_json::from_slice(&serde_json::to_vec(&cache).unwrap()).unwrap();
     let warm = program
-        .check_incremental(bounds(), &mut cache, &"a".repeat(64), 100)
+        .check_incremental(
+            bounds(),
+            &mut cache,
+            ExpansionOptions {
+                enabled: true,
+                build_digest: &"a".repeat(64),
+                max_entries: 100,
+            },
+        )
         .unwrap();
     assert_eq!(warm.stats.hits, 4);
     assert_eq!(warm.stats.misses, 0);
@@ -40,7 +69,15 @@ fn persisted_expansions_recheck_a_changed_invariant() {
     changed["invariants"][0]["expression"]["right"]["value"]["value"] = json!("2");
     let changed: SafetyProgram = serde_json::from_value(changed).unwrap();
     let checked = changed
-        .check_incremental(bounds(), &mut cache, &"a".repeat(64), 100)
+        .check_incremental(
+            bounds(),
+            &mut cache,
+            ExpansionOptions {
+                enabled: true,
+                build_digest: &"a".repeat(64),
+                max_entries: 100,
+            },
+        )
         .unwrap();
     assert_eq!(checked.result.status, "invariant-violation");
     assert_eq!(checked.stats.hits, 2);
@@ -60,14 +97,25 @@ fn interrupted_expansions_are_not_saved_as_complete() {
                 ..bounds()
             },
             &mut cache,
-            &"a".repeat(64),
-            100,
+            ExpansionOptions {
+                enabled: true,
+                build_digest: &"a".repeat(64),
+                max_entries: 100,
+            },
         )
         .unwrap();
     assert_eq!(result.result.status, "bounded");
     assert_eq!(result.stats.writes, 0);
     let result = program
-        .check_incremental(bounds(), &mut cache, &"a".repeat(64), 100)
+        .check_incremental(
+            bounds(),
+            &mut cache,
+            ExpansionOptions {
+                enabled: true,
+                build_digest: &"a".repeat(64),
+                max_entries: 100,
+            },
+        )
         .unwrap();
     assert_eq!(result.stats.hits, 0);
     assert_eq!(result.result.status, "complete");

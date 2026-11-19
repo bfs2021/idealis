@@ -44,6 +44,13 @@ pub struct ExpansionStats {
     pub invalidated: bool,
 }
 
+#[derive(Clone, Copy, Debug, Default)]
+pub struct ExpansionOptions<'a> {
+    pub enabled: bool,
+    pub build_digest: &'a str,
+    pub max_entries: u32,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct IncrementalSafetyResult {

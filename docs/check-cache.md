@@ -51,7 +51,7 @@ Node adapterはNode.js 24+を使う。TSでは`@types/node`と`types: ["node"]`�
 
 ## 証明する範囲
 
-[`formal/cache/Cache.lean`](../formal/cache/Cache.lean)は、自然数に上限を置かず、状態遷移を定義する。task cacheの17定理には、identity不変、fence単調増加、古いfence・別owner・期限切れ・異なるreceipt・未完了結果の公開拒否、renew時の世代維持、任意長のtraceにわたる不変条件、正常なhitへの到達例がある。状態別Next再利用の9定理を加え、現在は合計26定理を監査する。
+[`formal/cache/Cache.lean`](../formal/cache/Cache.lean)は、自然数に上限を置かず、状態遷移を定義する。task cacheの17定理には、identity不変、fence単調増加、古いfence・別owner・期限切れ・異なるreceipt・未完了結果の公開拒否、renew時の世代維持、任意長のtraceにわたる不変条件、正常なhitへの到達例がある。状態別Next再利用の9定理を加え、有効化フラグの1定理と合わせ、現在は合計27定理を監査する。
 
 初期状態を包含し、現在のNextに対して閉じた集合を再検査すれば、そのpropertyが全到達状態で成立する定理も置いた。[同一Nextの状態別cache](safety-expansions.md)では、現在のInitから再探索し、propertyを再検査する。Nextの変更をまたぐ部分共有、既存visited setの流用とTLC checkpointの再開は未実装。この定理だけで既存visited setを再利用してよいとは判定できない。
 

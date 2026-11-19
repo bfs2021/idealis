@@ -1,0 +1,20 @@
+{
+  "status": "complete",
+  "default": "disabled",
+  "enable": "enabled: true / ExpansionOptions.enabled = true",
+  "proofs": 27,
+  "realReuseConditions": 32,
+  "negativeControls": 7,
+  "checks": {
+    "check": "check.log",
+    "browser": "browser.log",
+    "contract": "contract.log",
+    "rust": "rtlc-test.log",
+    "clippy": "clippy.log",
+    "package": "package.log",
+    "support": "support-offline-final.log",
+    "supportTests": "support-test.log",
+    "mutation": "mutation.log"
+  },
+  "scope": "policy model proofs and finite Rust/Wasm conformance; not whole-Rust verification"
+}

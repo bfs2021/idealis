@@ -165,6 +165,24 @@
     },
     {
       "id": "rtlc-implementation-0",
+      "topic": "enabledの既定falseと、無効時は通常checkへ委譲してcacheを参照・更新せず計数を0とする契約",
+      "mode": "semantic",
+      "reference": {
+        "source": "source10",
+        "contains": "pub struct ExpansionOptions"
+      },
+      "target": {
+        "source": "source4",
+        "contains": "ExpansionOptions.enabledは既定false"
+      },
+      "context": [
+        {
+          "source": "source13"
+        }
+      ]
+    },
+    {
+      "id": "rtlc-implementation-1",
       "topic": "同一build・全Next/definition・portable状態の完全展開だけを保持し、SHA-256、保持状態数上限とmerge競合拒否を扱う。property/constraintsの再検査と逐次探索の範囲を維持する",
       "mode": "semantic",
       "reference": {
@@ -182,7 +200,7 @@
       ]
     },
     {
-      "id": "rtlc-implementation-1",
+      "id": "rtlc-implementation-2",
       "topic": "IRの値と式・予算・結果の公開契約",
       "mode": "semantic",
       "reference": {
@@ -201,7 +219,7 @@
       ]
     },
     {
-      "id": "rtlc-implementation-2",
+      "id": "rtlc-implementation-3",
       "topic": "有限BFS、invariantとdeadlock、結果と探索予算",
       "mode": "semantic",
       "reference": {
@@ -213,7 +231,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-3",
+      "id": "rtlc-implementation-4",
       "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
       "mode": "semantic",
       "reference": {
@@ -225,7 +243,7 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-4",
+      "id": "rtlc-implementation-5",
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {

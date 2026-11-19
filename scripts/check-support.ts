@@ -130,6 +130,14 @@ const scopes: readonly CrateScope[] = [
     evidence: [
       {
         path: "src/expansions.rs",
+        contains: "pub struct ExpansionOptions",
+        targetContains: "ExpansionOptions.enabledは既定false",
+        context: ["src/safety.rs"],
+        topic:
+          "enabledの既定falseと、無効時は通常checkへ委譲してcacheを参照・更新せず計数を0とする契約",
+      },
+      {
+        path: "src/expansions.rs",
         contains: "impl SafetyExpansionCache",
         targetContains: "任意のcheck_incremental",
         context: ["src/safety.rs"],
@@ -158,6 +166,13 @@ const scopes: readonly CrateScope[] = [
   {
     name: "idealis-core",
     evidence: [
+      {
+        path: "src/lib.rs",
+        contains: "enabled: bool",
+        targetContains: "enabledは省略時false",
+        topic:
+          "check-safety-incrementalのenabledはserde defaultでfalseとなり、明示したflagをrtlcのExpansionOptionsへ渡す",
+      },
       {
         path: "src/lib.rs",
         contains: "Request::CheckSafetyIncremental",

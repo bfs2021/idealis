@@ -125,6 +125,20 @@
     },
     {
       "id": "idealis-core-implementation-0",
+      "topic": "check-safety-incrementalのenabledはserde defaultでfalseとなり、明示したflagをrtlcのExpansionOptionsへ渡す",
+      "mode": "semantic",
+      "reference": {
+        "source": "source8",
+        "contains": "enabled: bool"
+      },
+      "target": {
+        "source": "source3",
+        "contains": "enabledは省略時false"
+      },
+      "context": []
+    },
+    {
+      "id": "idealis-core-implementation-1",
       "topic": "rtlcの状態別Next cacheをnative JSONLとWasmで入出力し、同一namespaceのsnapshot mergeへ委譲する。分散BFSやqueue再開とは区別する",
       "mode": "semantic",
       "reference": {
@@ -138,7 +152,7 @@
       "context": []
     },
     {
-      "id": "idealis-core-implementation-1",
+      "id": "idealis-core-implementation-2",
       "topic": "Model/Driver effect、照合protocol、TLA検査への委譲",
       "mode": "semantic",
       "reference": {
@@ -150,7 +164,7 @@
       "context": []
     },
     {
-      "id": "idealis-core-implementation-2",
+      "id": "idealis-core-implementation-3",
       "topic": "並行履歴の確定・未確定イベントと有限探索予算",
       "mode": "semantic",
       "reference": {
@@ -162,7 +176,7 @@
       "context": []
     },
     {
-      "id": "idealis-core-implementation-3",
+      "id": "idealis-core-implementation-4",
       "topic": "明示した時計・通信・永続化とHostTapeでありOS障害ではないこと",
       "mode": "semantic",
       "reference": {

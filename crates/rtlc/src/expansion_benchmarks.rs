@@ -26,6 +26,11 @@ fn main() {
         max_temporal_nodes: None,
     };
     let digest = "a".repeat(64);
+    let options = ExpansionOptions {
+        enabled: true,
+        build_digest: &digest,
+        max_entries: 10000,
+    };
     for input in &inputs {
         let baseline = input.program.check(bounds).unwrap();
         assert_eq!(baseline.status, "complete");
@@ -34,12 +39,12 @@ fn main() {
         let mut cache = SafetyExpansionCache::default();
         let cold = input
             .program
-            .check_incremental(bounds, &mut cache, &digest, 10000)
+            .check_incremental(bounds, &mut cache, options)
             .unwrap();
         assert_eq!(cold.result.status, baseline.status);
         let warm = input
             .program
-            .check_incremental(bounds, &mut cache, &digest, 10000)
+            .check_incremental(bounds, &mut cache, options)
             .unwrap();
         assert_eq!(warm.stats.hits as usize, input.states);
         assert_eq!(warm.result.generated, baseline.generated);
@@ -55,7 +60,7 @@ fn main() {
                     black_box(
                         input
                             .program
-                            .check_incremental(bounds, &mut cache, &digest, 10000)
+                            .check_incremental(bounds, &mut cache, options)
                             .unwrap(),
                     );
                     cache
@@ -70,7 +75,7 @@ fn main() {
                     black_box(
                         input
                             .program
-                            .check_incremental(bounds, &mut cache, &digest, 10000)
+                            .check_incremental(bounds, &mut cache, options)
                             .unwrap(),
                     );
                     cache
@@ -84,7 +89,7 @@ fn main() {
                 black_box(
                     input
                         .program
-                        .check_incremental(bounds, &mut cache, &digest, 10000)
+                        .check_incremental(bounds, &mut cache, options)
                         .unwrap(),
                 );
                 black_box(serde_json::to_vec(&cache).unwrap())

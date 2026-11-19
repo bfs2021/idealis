@@ -41,6 +41,7 @@ const check = (
   maxEntries = 100,
 ) =>
   checkSafetyIncremental(core, program, limits, {
+    enabled: true,
     cache,
     buildDigest,
     maxEntries,
@@ -53,6 +54,35 @@ const sameResult = (
 export const registerExpansionContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,
 ): void => {
+  test("expansion caching defaults off and ignores stored entries without an enable flag", () => {
+    const program = compile();
+    const seeded = check(program);
+    const before = JSON.stringify(seeded.cache);
+    const disabled = checkSafetyIncremental(core, program, bounds, {
+      cache: seeded.cache,
+      buildDigest,
+      maxEntries: 100,
+    });
+    assert.deepEqual(disabled.result, checkSafety(core, program, bounds));
+    assert.deepEqual(disabled.stats, {
+      hits: 0,
+      misses: 0,
+      writes: 0,
+      invalidated: false,
+    });
+    assert.equal(JSON.stringify(disabled.cache), before);
+    const corrupt = JSON.parse(before);
+    const key = Object.keys(corrupt.entries)[0];
+    assert.ok(key);
+    corrupt.entries[key].digest = "0".repeat(64);
+    const bypassed = checkSafetyIncremental(core, program, bounds, {
+      cache: corrupt,
+      buildDigest,
+      maxEntries: 100,
+    });
+    assert.deepEqual(bypassed.result, checkSafety(core, program, bounds));
+    assert.equal(JSON.stringify(bypassed.cache), JSON.stringify(corrupt));
+  });
   test("reused edges rebuild temporal and fairness graphs for the current property", () => {
     for (const input of cases.filter((input) =>
       [
@@ -115,6 +145,7 @@ export const registerExpansionContract = (
           normal,
           bounds,
           {
+            enabled: true,
             cache: JSON.parse(JSON.stringify(cold.cache)),
             buildDigest,
             maxEntries: 100,
@@ -279,6 +310,7 @@ export const registerExpansionContract = (
     assert.equal(next.stats.hits, 0);
     sameResult(next.result, checkSafety(core, changed, bounds));
     const build = checkSafetyIncremental(core, compile(), bounds, {
+      enabled: true,
       cache: cold.cache,
       buildDigest: "b".repeat(64),
       maxEntries: 100,
@@ -370,6 +402,7 @@ export const registerExpansionContract = (
         version: 1,
         request: {
           kind: "check-safety-incremental",
+          enabled: true,
           program,
           bounds,
           cache: createSafetyExpansionCache(),
@@ -385,6 +418,7 @@ export const registerExpansionContract = (
         version: 1,
         request: {
           kind: "check-safety-incremental",
+          enabled: true,
           program,
           bounds,
           cache: decodeSafetyExpansionCache(cold.cache),

@@ -8,7 +8,10 @@ use crate::ir::{
 };
 use crate::safety_values::Arena;
 use crate::temporal::GraphEdge;
-use crate::{CoreError, IncrementalSafetyResult, SafetyExpansionCache, Value};
+use crate::{
+    CoreError, ExpansionOptions, ExpansionStats, IncrementalSafetyResult, SafetyExpansionCache,
+    Value,
+};
 use std::collections::{HashMap, HashSet};
 
 struct Node {
@@ -116,10 +119,15 @@ impl SafetyProgram {
         &self,
         bounds: SafetyBounds,
         cache: &mut SafetyExpansionCache,
-        build_digest: &str,
-        max_entries: u32,
+        options: ExpansionOptions<'_>,
     ) -> Result<IncrementalSafetyResult, CoreError> {
-        cache.prepare(build_digest, max_entries)?;
+        if !options.enabled {
+            return Ok(IncrementalSafetyResult {
+                result: self.check(bounds)?,
+                stats: ExpansionStats::default(),
+            });
+        }
+        cache.prepare(options.build_digest, options.max_entries)?;
         let result = self.check_with_workers(bounds, 1, Some(cache))?;
         Ok(IncrementalSafetyResult {
             result,

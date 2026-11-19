@@ -154,6 +154,7 @@ export interface PortableCommand {
       }
     | {
         readonly kind: "check-safety-incremental";
+        readonly enabled?: boolean;
         readonly program: SafetyProgram;
         readonly bounds: SafetyBounds;
         readonly cache: SafetyExpansionCache;

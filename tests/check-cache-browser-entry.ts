@@ -44,6 +44,7 @@ export const runExpansions = async (
       irVersion: 2,
     });
     const normal = checkSafetyIncremental(core, program, bounds, {
+      enabled: true,
       cache: snapshots[index] ?? createSafetyExpansionCache(),
       buildDigest,
       maxEntries: 10000,
@@ -56,7 +57,7 @@ export const runExpansions = async (
         irVersion: 2,
       }),
       bounds,
-      { cache: normal.cache, buildDigest, maxEntries: 10000 },
+      { enabled: true, cache: normal.cache, buildDigest, maxEntries: 10000 },
     );
     return { name: input.name, normal, changed };
   });
