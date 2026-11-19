@@ -314,6 +314,138 @@ export interface VerificationBackend<Input = unknown> {
   readonly check: (request: BackendRequest<Input>) => Promise<BackendResult>;
 }
 
+export interface CheckCacheJob {
+  readonly buildDigest: string;
+  readonly backend: BackendDescriptor;
+  readonly request: BackendRequest;
+}
+
+export interface CheckCacheArtifact {
+  readonly format: "idealis.check-cache-artifact";
+  readonly version: 1;
+  readonly identity: string;
+  readonly owner: string;
+  readonly runId: string;
+  readonly completedAt: number;
+  readonly result: BackendResult;
+  readonly digest: string;
+}
+
+export interface CheckCacheCell {
+  readonly version: 1;
+  readonly revision: number;
+  readonly identity: string;
+  readonly fence: number;
+  readonly phase: "idle" | "leased" | "ready";
+  readonly owner: string;
+  readonly expiresAt: number;
+  readonly artifact: CheckCacheArtifact | null;
+}
+
+export interface CheckCacheStore {
+  readonly read: (key: string) => Promise<CheckCacheCell | null>;
+  readonly compareExchange: (
+    key: string,
+    expectedRevision: number | null,
+    next: CheckCacheCell,
+  ) => Promise<boolean>;
+}
+
+export interface CheckCacheLease {
+  readonly key: string;
+  readonly identity: string;
+  readonly fence: number;
+  readonly owner: string;
+  readonly runId: string;
+}
+
+export interface CheckCacheReceipt {
+  readonly identity: string;
+  readonly result: BackendResult;
+}
+
+export type CheckCacheProbe =
+  | { readonly kind: "miss"; readonly key: string }
+  | { readonly kind: "busy"; readonly key: string; readonly expiresAt: number }
+  | {
+      readonly kind: "hit";
+      readonly key: string;
+      readonly artifact: CheckCacheArtifact;
+    };
+
+export type CheckCacheReservation =
+  | CheckCacheProbe
+  | { readonly kind: "lease"; readonly lease: CheckCacheLease };
+
+export interface CheckCache {
+  readonly probe: (job: CheckCacheJob, now: number) => Promise<CheckCacheProbe>;
+  readonly acquire: (
+    job: CheckCacheJob,
+    options: {
+      readonly owner: string;
+      readonly runId: string;
+      readonly now: number;
+      readonly leaseMs: number;
+    },
+  ) => Promise<CheckCacheReservation>;
+  readonly execute: <Input>(
+    lease: CheckCacheLease,
+    backend: VerificationBackend<Input>,
+  ) => Promise<CheckCacheReceipt>;
+  readonly publish: (
+    lease: CheckCacheLease,
+    receipt: CheckCacheReceipt,
+    now: number,
+  ) => Promise<"published" | "stale" | "uncacheable">;
+  readonly renew: (
+    lease: CheckCacheLease,
+    now: number,
+    leaseMs: number,
+  ) => Promise<boolean>;
+  readonly release: (lease: CheckCacheLease) => Promise<boolean>;
+  readonly evict: (job: CheckCacheJob) => Promise<boolean>;
+}
+
+export interface CachedCheckSchedulingJob extends SchedulingJob {
+  readonly check: CheckCacheJob;
+}
+
+export interface CachedCheckSchedule {
+  readonly plan: SchedulePlan;
+  readonly pending: readonly CachedCheckSchedulingJob[];
+  readonly cached: readonly {
+    readonly id: string;
+    readonly result: {
+      readonly backendResult: BackendResult;
+      readonly origin: {
+        readonly kind: "cache";
+        readonly key: string;
+        readonly producerRunId: string;
+        readonly artifactDigest: string;
+      };
+    };
+  }[];
+  readonly deferred: readonly {
+    readonly id: string;
+    readonly key: string;
+    readonly expiresAt: number;
+  }[];
+  readonly lookupMs: number;
+}
+
+export type CachedCheckExecution =
+  | { readonly kind: "cached"; readonly artifact: CheckCacheArtifact }
+  | {
+      readonly kind: "deferred";
+      readonly key: string;
+      readonly expiresAt: number;
+    }
+  | {
+      readonly kind: "executed";
+      readonly result: BackendResult;
+      readonly publication: "published" | "stale" | "uncacheable";
+    };
+
 export type SafetyScalar =
   | { readonly type: "int"; readonly value: string }
   | { readonly type: "bool"; readonly value: boolean };

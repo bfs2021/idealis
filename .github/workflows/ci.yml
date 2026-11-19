@@ -67,6 +67,8 @@ jobs:
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
+      - run: node --test dist/evals/verified-cache/contract-test.js
+      - run: pnpm exec vitest run --config cache-vitest.config.ts
       - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
       - run: node --test dist/evals/quint-generated/contract-test.js
       - run: node --test dist/evals/frontier-safety/contract-test.js
@@ -149,3 +151,23 @@ jobs:
             .artifacts/readme-comparison
             .artifacts/rtla-compiler
           if-no-files-found: warn
+
+  cache-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
+        with:
+          lake-package-directory: formal/cache
+          build: "true"
+          test: "false"
+          lint: "false"
+          use-mathlib-cache: "false"
+          leanchecker: "false"
+      - run: node dist/evals/verified-cache/formal.js .artifacts/cache-proof
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: cache-proof
+          path: .artifacts/cache-proof

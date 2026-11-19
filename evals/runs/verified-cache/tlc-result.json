@@ -1,0 +1,69 @@
+{
+  "sourceDigest": "43d23b98f5c17596b36dcdb3d0b80cee306dce056b041e48680bc8170b2f25b5",
+  "jarDigest": "7e53aa636dac8a3cb0533f343115c0548e03fc0ce5edc7739becf58d3d0fb84f",
+  "policyDigest": "ca10243077db12d65b4d01c74e4e6b641861e74858ed5da07c9527066f3dd77d",
+  "cases": [
+    {
+      "name": "correct",
+      "broken": 0,
+      "invariant": "Safe",
+      "violated": false,
+      "status": 0,
+      "generated": "626",
+      "distinct": "220",
+      "replay": null
+    },
+    {
+      "name": "reachable-hit",
+      "broken": 0,
+      "invariant": "NoReady",
+      "violated": true,
+      "status": 12,
+      "generated": "10",
+      "distinct": "8",
+      "replay": {
+        "steps": 2,
+        "lastCode": "published"
+      }
+    },
+    {
+      "name": "stale-fence",
+      "broken": 1,
+      "invariant": "Safe",
+      "violated": true,
+      "status": 12,
+      "generated": "98",
+      "distinct": "44",
+      "replay": {
+        "steps": 4,
+        "lastCode": "stale"
+      }
+    },
+    {
+      "name": "wrong-receipt",
+      "broken": 2,
+      "invariant": "Safe",
+      "violated": true,
+      "status": 12,
+      "generated": "14",
+      "distinct": "10",
+      "replay": {
+        "steps": 2,
+        "lastCode": "mismatch"
+      }
+    },
+    {
+      "name": "incomplete-result",
+      "broken": 3,
+      "invariant": "Safe",
+      "violated": true,
+      "status": 12,
+      "generated": "9",
+      "distinct": "7",
+      "replay": {
+        "steps": 2,
+        "lastCode": "uncacheable"
+      }
+    }
+  ]
+}

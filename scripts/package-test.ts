@@ -52,6 +52,7 @@ execFileSync(
   [
     "add",
     join(directory, tarball),
+    `@types/node@${JSON.parse(await readFile("node_modules/@types/node/package.json", "utf8")).version}`,
     "--offline",
     "--ignore-scripts",
     "--lockfile=false",
@@ -145,6 +146,18 @@ assert.equal(alloy.checkInstance(alloyInput,{signatures:{N:['a','b']},fields:{ed
 assert.equal(alloy.checkInstance({...alloyInput,maxWork:0},generated.instance).status,'unknown');
 assert.throws(()=>alloy.checkInstance(alloyInput,{signatures:{N:['a','b']},fields:{}}),AlloyError);
 const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/core.wasm'))));
+import {createCheckCache,createMemoryCheckCacheStore,runCachedCheck} from '@mizchi/idealis/check-cache';
+import {createHttpCheckCacheStore} from '@mizchi/idealis/check-cache/http';
+import {createSqliteCheckCacheStore,createCheckCacheHttpHandler} from '@mizchi/idealis/check-cache/node';
+void createMemoryCheckCacheStore;void createHttpCheckCacheStore;void createCheckCacheHttpHandler;
+const cacheStore=createSqliteCheckCacheStore(':memory:');
+const cache=createCheckCache(cacheStore);
+const cacheBackend=createRtlcBackend(core,{version:'consumer-cache'});
+const cacheJob={buildDigest:'c'.repeat(64),backend:cacheBackend.descriptor,request:{format:'modelt.backend-request',version:1,scope:{modelId:'consumer',propertyId:'Safe',semantics:'tlc-1.7.4-int32',assumptions:[]},query:{kind:'explicit',bounds:{maxDepth:8,maxStates:100,maxWork:10000}},input:compileTlaSource(core,{source:"---- MODULE CacheConsumer ----\\nVARIABLE x\\nInit == x=0\\nNext == UNCHANGED x\\nSafe == x=0\\n====",config:"INIT Init\\nNEXT Next\\nINVARIANT Safe"})}};
+assert.equal((await runCachedCheck(cache,cacheJob,cacheBackend,{owner:'consumer',runId:'cold',leaseMs:100,now:()=>0})).kind,'executed');
+assert.equal((await runCachedCheck(cache,cacheJob,cacheBackend,{owner:'consumer',runId:'warm',leaseMs:100,now:()=>1})).kind,'cached');
+cacheStore.close();
+
 const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/idealis/rtla.wasm'))));
 assert.deepEqual(WebAssembly.Module.imports(parserModule),[]);
 const parser=(await WebAssembly.instantiate(parserModule,{})).exports;
@@ -185,6 +198,12 @@ const node = execFileSync(process.execPath, [join(consumer, "consumer.mjs")], {
 await writeFile(
   join(consumer, "consumer.ts"),
   `import type {Model} from '@mizchi/idealis';
+import {createCheckCache,type CheckCacheJob,type CachedCheckSchedule} from '@mizchi/idealis/check-cache';
+import {createHttpCheckCacheStore} from '@mizchi/idealis/check-cache/http';
+import {createSqliteCheckCacheStore} from '@mizchi/idealis/check-cache/node';
+const cacheType:(input:CheckCacheJob)=>void=()=>{};const scheduleType:(input:CachedCheckSchedule)=>void=()=>{};
+void createCheckCache;void createHttpCheckCacheStore;void createSqliteCheckCacheStore;void cacheType;void scheduleType;
+
 import {createTestingWasm,type TestingCase,type TestingSchedule} from '@mizchi/idealis/testing';
 const schedule:TestingSchedule={id:'typecheck',version:'1',actors:[{id:'actor',operations:['step']}]};void schedule;
 const testingCase:TestingCase={format:'idealis.test-case',version:1,rng:'xorshift32-v1',generatorId:'g',generatorVersion:'1',seed:1,index:0,actions:[]};void testingCase;void createTestingWasm;
@@ -216,6 +235,8 @@ execFileSync(
     "ES2023",
     "--module",
     "NodeNext",
+    "--types",
+    "node",
     "consumer.ts",
   ],
   { cwd: consumer, stdio: "pipe" },

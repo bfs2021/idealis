@@ -1,0 +1,10 @@
+name = "idealis-cache-proof"
+version = "0.1.0"
+defaultTargets = ["Cache", "cache-oracle"]
+
+[[lean_lib]]
+name = "Cache"
+
+[[lean_exe]]
+name = "cache-oracle"
+root = "Main"
