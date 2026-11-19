@@ -94,11 +94,20 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/typed_lower.rs",
         contains: "fn frame_actuals(",
-        targetContains: "anonymous frameのactual/capture",
+        targetContains: "frame_actualsは",
         context: ["src/typed.rs"],
         contextContains: "pub(crate) fn check_depth_from(",
         topic:
-          "anonymous frameのactual/captureはclone前にframe入口の1段を含めcompiled depth 128を検査する",
+          "frame_actualsはargumentsとcapturesの各Expressionを初期depth 1でcheck_depth_fromに渡し、全件の検査後にVecをcloneする",
+      },
+      {
+        path: "src/typed.rs",
+        contains: "pub(crate) fn check_depth_from(",
+        targetContains: "時間論理IRの構造的な深さ",
+        context: ["src/typed_lower.rs"],
+        contextContains: "fn frame_formula(",
+        topic:
+          "v2は式深さと別に時間論理IRの全Temporal nodeを128段まで数え、frame compaction前にprotocol拒否する",
       },
       {
         path: "src/lib.rs",

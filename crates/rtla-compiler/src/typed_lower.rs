@@ -721,6 +721,7 @@ impl Compiler<'_> {
         for name in self.config.properties.clone() {
             let (body, context) = self.operator(&name, Phase::Next)?;
             let formula = self.temporal_ir(&body, &context)?;
+            typed::check_depth(Node::Temporal(&formula))?;
             self.lower_pending()?;
             let initial_expression = typed::atom_expression(&formula);
             let always_expression = typed::always_expression(&formula);

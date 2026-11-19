@@ -1202,11 +1202,13 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
   const checkDepth = (value: unknown): void => {
     const root = analysisView(value);
     if (!root) return;
-    const pending: (readonly [AnalysisNode, number])[] = [[root, 0]];
+    const pending: (readonly [AnalysisNode, number, number])[] = [[root, 0, 0]];
     while (pending.length) {
       const task = pending.pop();
       if (!task) break;
-      const [node, depth] = task;
+      const [node, depth, temporalDepth] = task;
+      if (node.space === "ir-temporal" && temporalDepth > 128)
+        unsupported("compiled temporal nesting exceeds 128");
       if (
         (node.space === "ir-expression" ||
           ((node.space === "ir-step" || node.space === "ir-temporal") &&
@@ -1215,7 +1217,11 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       )
         unsupported("compiled expression nesting exceeds 128");
       for (const edge of analysisChildren(node))
-        pending.push([edge.node, depth + edge.depth]);
+        pending.push([
+          edge.node,
+          depth + edge.depth,
+          temporalDepth + Number(node.space === "ir-temporal"),
+        ]);
     }
   };
   const lowerDefinition = (entry: (typeof definitions)[number]): void => {
@@ -2934,6 +2940,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         expanded.context,
         expanded.frame ? [...frames, expanded.frame] : frames,
       );
+      if (shared) checkDepth(formula);
       return expanded.frame
         ? compactAnonymous({
             kind: "frame",
@@ -3267,6 +3274,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
   for (const name of config.properties) {
     const predicate = operator(name, "next");
     const formula = temporal(predicate.body, predicate.context);
+    if (shared) checkDepth(formula);
     validateTemporalActions(formula);
     const stateExpression = formulaAtom(formula);
     const alwaysExpression = formulaAlways(formula);

@@ -109,4 +109,6 @@ v2のtarget解決と共有式からの変数読取りには、各524,288ノー�
 
 Rust frontendはanonymous frameのactual/captureを格納・cloneする前に、frame入口の1段を含むcompiled depth 128を検査する。TS frontendの省略/明示v1はbaseでの受理範囲を維持する。compiled depth 128の新たな拒否はv2だけへ適用する。
 
+両frontendはv2の時間論理IRの構造的な深さも128までに制限する。式の深さとは別に、連言・選言を含む全Temporal nodeを数える。frameのcapture整理前に超過を`compiled temporal nesting exceeds 128`で拒否し、v1のcompile時受理範囲は変えない。
+
 資源検証のRSSはLinux/macOSの`/usr/bin/time`が子プロセス終了時に返す最大RSSを使う。`ps`のサンプリングは早期停止用に分け、OS値が欠落・ゼロなら検査成功にしない。これは評価harnessの依存で、pureなWasmコアにOS APIを追加しない。

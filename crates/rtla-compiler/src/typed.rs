@@ -265,8 +265,11 @@ pub(crate) fn check_depth(node: Node<'_>) -> Result<()> {
     check_depth_from(node, 0)
 }
 pub(crate) fn check_depth_from(node: Node<'_>, depth: usize) -> Result<()> {
-    let mut pending = vec![(node, depth)];
-    while let Some((node, depth)) = pending.pop() {
+    let mut pending = vec![(node, depth, depth)];
+    while let Some((node, depth, temporal_depth)) = pending.pop() {
+        if matches!(node, Node::Temporal(_)) && temporal_depth > 128 {
+            return unsupported("compiled temporal nesting exceeds 128");
+        }
         if matches!(
             node,
             Node::Expression(_) | Node::Step(Step::Frame { .. }) | Node::Temporal(T::Frame { .. })
@@ -274,11 +277,13 @@ pub(crate) fn check_depth_from(node: Node<'_>, depth: usize) -> Result<()> {
         {
             return unsupported("compiled expression nesting exceeds 128");
         }
-        pending.extend(
-            analysis_children(node)
-                .into_iter()
-                .map(|edge| (edge.node, depth + edge.depth)),
-        );
+        pending.extend(analysis_children(node).into_iter().map(|edge| {
+            (
+                edge.node,
+                depth + edge.depth,
+                temporal_depth + usize::from(matches!(node, Node::Temporal(_))),
+            )
+        }));
     }
     Ok(())
 }

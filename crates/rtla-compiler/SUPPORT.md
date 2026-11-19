@@ -75,4 +75,8 @@
 
 - [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。
 
+- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。
+
 - [x] frameのbodyもcapture compaction前にcompiled depthを検査する。
+
+- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。

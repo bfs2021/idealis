@@ -51,3 +51,17 @@ target生成物の削除をcommitする前のunit検査では、git statusの大
 資源検証はサンプリングRSSを最大RSSと呼ばず、Linux/macOSの`/usr/bin/time`が子の終了時に返すOS最大RSSを使う。サンプリングは早期停止用に分け、OS値が欠落・ゼロなら成功にしない。欠測0を拒否するfixtureと、子が報告した`process.resourceUsage()`の最大値以上になる実プロセスの対照を加えた。追加2件は修正前に失敗し、修正後は成功した。OS測定はharnessだけの依存で、pureなWasmコアには加えない。
 
 追加後のsafety回帰は1,310件成功。最初の保存データと失敗ログを編集せず、追加分はreview-fixesの保存索引へ分ける。
+
+## 時間論理木の追加レビュー
+
+head 367cf2e6aへの追加指摘も独立に再現した。時間論理IRのAnd/Orは式のdepthへ加算されないため、長いflatな連言・選言が再帰的なframe整理へ到達する。修正前はnativeがSIGABRT、WasmとTSがRangeErrorになった。frame内だけでなくPROPERTYへ直接書いた対照でも再現した。
+
+両frontendでv2の時間論理木の構造深さを別に128まで数え、frame整理とPROPERTYの時間論理検証へ入る前に拒否する。式の深さ、v1のcompile時受理、実行時の時間論理制限は変えない。これはTLCとの意味論的一致を増やす変更ではなく、過大な入力を制御されたprotocol拒否にする変更である。
+
+入力はframe内/直接、連言/選言、native/Wasm/TSの12組。各組の8項対照がcompleteとなり、大きい入力（native 20,000項、Wasm/TS 5,000項）が10秒・256 MiBの既存監視内でprotocol拒否になることを検査する。修正前のframe用6件と直接記述用6件は失敗し、修正後のsafety回帰は1,322件成功した。
+
+解析inventoryはsource digestの変更と追加した診断文字列を検出して失敗した。変更した3ファイルのdigestとTS/Rustの文字列一覧へ新しい診断だけを追加する。他の再抽出結果が不変であることを比較し、分類、到達corpus、モデル検査の期待値は変えない。Jevはframe actualの比較で1 contradictionを返したため、frame_actualsの検査とclone順序を明記し、その関数を対象とする比較へ分けた。live/offlineの再検査は成功した。初期のテスト登録ミスを含む途中ログも保存し、実際に6件ずつ失敗したrunをRedの根拠とする。
+
+追加分のrawログは[temporal-reviewの保存索引](../runs/pr62-merge-validation/temporal-review.json)へ保存する。先行するevidence/review-fixes archiveは変更しない。
+
+最終ローカル検証はcheck、解析4,236件、portableのfmt/clippy・全target・native/Wasm、Chromium 2件と通常browser 3件、mutation 95.4%、評価と再生、npm/Cargo/Wasm/CLIの単独consumerが成功した。GitHub Actionsも直前head 367cf2e6aで成功しているが、マージは追加修正を含むheadのCI成功後に限る。

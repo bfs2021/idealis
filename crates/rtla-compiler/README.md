@@ -56,3 +56,5 @@ just module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/
 ```
 
 明示v2のtuple target解析と共有IRの変数読取り展開は、それぞれ524,288ノードまで。空tupleの複製も数え、超過はcompile時のprotocol拒否となる。既存のnesting 40とbranch 256 stepsは維持し、実行時のworkとは別に扱う。
+
+v2の時間論理IRは、式深さとは別に構造の深さを128までとする。flatな連言・選言から生成した木も、frameのcapture整理に入る前に検査する。超過は`compiled temporal nesting exceeds 128`で拒否する。
