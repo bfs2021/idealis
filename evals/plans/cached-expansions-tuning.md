@@ -1,0 +1,7 @@
+# 展開cacheの重複検証を取り除く
+
+最初の36区間のCriterionでは、小さいQuint生成物6件のwarmがuncachedの約2倍だった。初版はcache namespaceを作る前とSearch::runの両方でv2のIR metadataを検証していた。
+
+検証条件を維持し、既存のIR検証が通った直後にnamespaceを構築する。cacheのformat/build digest/保持上限の設定を先に行い、未検証の深いIRをserializeしない。Next展開の保存条件やpropertyの再検査は変えない。
+
+評価は同じ9入力・4区間・10 sample・warm-up 100 ms・measurement 300 msを使い、新しいbaseline名へ保存する。旧結果や旧sourceは変更しない。全区間を比較し、小さいモデルの固定費、重いNextの効果、JSONの費用を分ける。新しいRust/Wasm binaryで再度contract・差分・Lean参照機の照合を実行し、古いbinaryの観測を新sourceの証拠へ流用しない。

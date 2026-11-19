@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "3613f46c2d69d4b1e1c01e33a001827eb9f5b9bb7327da7ca509532cb46a5abf",
+  "snapshotDigest": "98a6a7847306aee4d0d0c98aacca1aecce4a468cab59d5e9ec81becd986c5abe",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -15,27 +15,27 @@
         "source": "source2",
         "path": "crates/rtla-compiler/README.md",
         "startLine": 1,
-        "endLine": 60,
-        "quote": "# rtla-compiler\n\n[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。\n\nrtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust frontend。parserとcheckerを別crateに保ち、両者の公開契約をつなぐ。Nodeやsolverには依存しない。\n\n`compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。明示したユーザーモジュール集合と引数なしINSTANCEにも対応する。一般の高階・再帰operator、無限集合の列挙、symmetry、VIEWは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。\n\n省略・明示v1はJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。明示v2は型付きIRを保持し、同じ木を解析・更新してSafetyProgramを返す。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。\n\n`compile_with_options(&module, &config, CompileOptions { irVersion: IrVersion::V1 })`は明示v1を選ぶ。従来の`compile`は既定v1のまま同じbytesを返す。`CompileOptions { irVersion: IrVersion::V2 }`は[安全性IR v2](../../docs/safety-ir-v2.md)を明示選択する。到達するexpression定義を字句宣言順とphase / membership用途 / target signature順の定義表へ一度だけlowerし、call / parameter / capture参照を生成する。引数とcaptureはcallerのlexical frameを持つ遅延引数としてrtlcが要求時ごとに評価し、値をmemoizeしない。binder slotは定義frameごとに0から始め、代入actionはinlineを維持する。self / mutual recursionは拒否し、v1拒否からv2へ自動再試行しない。\n\nfrontendの式nestingとbound variableは40、checkerの定義内式深さは48、値深さは64、TS decoderは128のまま。定義間call経路長を定義内の式nestingへ加算せず、v2の動的な評価は別に入れ子128までとする。call entryと遅延引数・captureの要求はrtlcのwork予算へ各1課金し、枯渇はbounded / workになる。生成IRが既存のcompiled expression decoder深さ128を超える場合は両frontendが同じ型で拒否する。共有は評価仕事の指数増大の除去や、全TLA+との互換性を意味しない。\n\nroot moduleの`EXTENDS Apalache`がある場合、`:=`を同モジュールの定義どおり等号として扱う。`EXTENDS Variants`ではApalache 0.63.0の`Variant`、`VariantTag`、`VariantGetUnsafe`を扱い、tag取得はdomainが一つの文字列keyである関数に限定する。他のVariants operatorと無制限CHOOSEは未対応。`EXTENDS TLC`は受理するが、TLCの全operatorを実装するものではない。\n\nCASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) と同様に評価時に未一致エラーとソース位置を返す。未評価の分岐内ではエラーにしない。\n\ndefining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。foldのframeでbound slotを2つ使い、v1では呼び出し位置でbodyを展開する。v2では同じslotをactualとして共有expression定義をcallする。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。\n\nsequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。\n\nRust経路はmodel value、有限CHOOSE、整数の\\div / % / ^、CONSTRAINT / ACTION_CONSTRAINT、PROPERTY内の定数有限domain上の時間論理量化にも対応する。制約は探索候補を捨てる前に境界のinvariant/propertyを検査する。無解のCHOOSE、ゼロ除算、0^0、overflow、typed model valueの不正比較は評価エラー。空domainの時間論理量化は比較元TLCのtautology診断も含めて検査する。\n\n[固定入力](tests/finite-support.json)をnative/Wasm/TLCへ渡す。既存TS frontendの対応範囲は別で、追加機能はcompileTlaSource / checkTlaSourceから呼ぶ。CriterionではASTからのcompileと、生成済みIRのcheckを別々に測る。parser、IPC、process起動は計測区間へ含めない。\n\n```sh\njust compiler-test\njust compiler-criterion finite-compiler evals/runs/my-compiler-bench\njust tlc-finite-eval evals/runs/my-tlc-check /path/to/java /path/to/tla2tools.jar\n```\n\n生成的UNCHANGEDのtargetだけをcallerの字句環境から変数/tupleへ静的解決し、解決済みtarget signatureごとに式定義を共有する。通常のactual/captureはcallerのlexical frameを保持し、membership用途も伝播する。action/temporal外殻もcall siteごとの非共有anonymous frameでbinder・old・parameter・captureへの遅延参照を保持する。LET定義内の自由な`@`は引き続き型付きprotocol拒否とする。詳細と検証範囲は[Safety IR v2](../../docs/safety-ir-v2.md)を参照。\n\n明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。LET本体の自由な`@`はtyped protocol拒否とし、action template共有・再帰・全TLA+互換を保証しない。\n\n## モジュールと設定置換\n\nRustでは`compile_modules(&root, &config, &modules)`へ解析済みModuleの集合を渡す。`compile`は単一module用の既存APIで、外部moduleを自動取得しない。TSの`compileTlaSource` / `checkTlaSource`とnativeの`compile-tla` / `check-tla`には、追加の`modules: { ModuleName: source }`を渡せる。キーとMODULE名が異なる場合は拒否する。modulesを省略した既存要求も受理する。\n\n非再帰EXTENDSと、top-levelの引数なしnamed/unnamed INSTANCEを解決する。WITH右辺は呼び出し側で解決し、束縛名を区別して展開する。変数の置換先は呼び出し側のstate variable名に限定する。LOCALは他moduleへ公開せず、内部の定義から参照できる。引数付きINSTANCE、LET内のINSTANCE、nested module、一般のoperator引数は拒否する。全moduleのSANY検査やlevel検査の代替ではない。\n\nTLC設定の`N <- Bound`、同arityの`Op <- Replacement`を扱う。module別の定義に対する`Op <- [Module] Replacement`、`Value = [Module] 2`、`Op(1) = [Module] 2`も扱う。設定の置換先はrootで解決する。operator宣言そのものへの引数付きテーブル設定は未対応。比較元TLCがoperator値をstateに含めてエラーにする対照を保存する。不正な設定の診断phaseと文言、存在しないmoduleへの値設定の無視まで同一にはしない。\n\n明示v2（`CompileOptions { irVersion: IrVersion::V2 }`）はこのモジュール連結と設定置換を対応しない。ユーザーmoduleのEXTENDS、INSTANCE、設定のoperator置換（`<-`）・定数表・定義の上書きのいずれかを要する入力は、`compile_with_options`と`compile_modules_with_options`のどちらでも、v1と同じ連結・設定・単一moduleの検査で先に拒否されない限り、loweringの前に`Unsupported TLA input: safety IR v2 does not support module linking or configuration operator substitution`で拒否する。拒否は入力が要する機能だけで決め、v1が受理する入力をv2が再帰operatorなど別の理由で拒否する形にはしない。v1と既定は同じ入力を従来どおり受理する。連結と設定上書きを要さない入力は、追加moduleを添えても（空の集合を含む）bundleの検証が通れば、v2で単体の`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。`compile_modules_with_options`は連結の検証だけv1と同じに行い、IR v2では連結後の別名ではなくrootのmoduleをそのまま変換する。\n\n追加moduleは256、importの深さは40、展開後のsymbolは4096まで。ファイルシステムやネットワークを使わず、欠落・循環・名前の衝突はエラーにする。[固定corpus](tests/modules-support.json)と[TLC比較の計画](../../evals/plans/0047-module-linking.md)で対応範囲を検査する。\n\n反例のaction名は公開名、instanceの修飾名、LETの元のoperator名へ戻す。内部の束縛識別子を実装との照合に使う必要はない。\n\nASTの書き換え深さは64段まで。ModuleをRustから直接渡した場合も、未使用の定義を含めて上限を検査する。\n\n```sh\njust module-eval evals/runs/my-module-check /path/to/java /path/to/tla2tools.jar\njust module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/to/java /path/to/tla2tools.jar\n```\n\n明示v2のtuple target解析と共有IRの変数読取り展開は、それぞれ524,288ノードまで。空tupleの複製も数え、超過はcompile時のprotocol拒否となる。既存のnesting 40とbranch 256 stepsは維持し、実行時のworkとは別に扱う。\n\nv2の時間論理IRは、式深さとは別に構造の深さを128までとする。flatな連言・選言から生成した木も、frameのcapture整理に入る前に検査する。超過は`compiled temporal nesting exceeds 128`で拒否する。",
-        "contentHash": "f389847095884c42315db73b721e05915e388e09f47a20736bf707e7221796e3"
+        "endLine": 62,
+        "quote": "# rtla-compiler\n\n[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。\n\nrtlaの型付きModule/Configを、rtlcのSafetyProgramへ変換するRust frontend。parserとcheckerを別crateに保ち、両者の公開契約をつなぐ。Nodeやsolverには依存しない。\n\n`compile(&module, &config)`は名前解決、定数とoperatorの展開、action列挙、temporal/fairnessを変換する。既存TS frontendの有限fragmentを基礎に、Rust経路では[Quint生成物](../../docs/quint-generated.md)の限定した構文も扱う。明示したユーザーモジュール集合と引数なしINSTANCEにも対応する。一般の高階・再帰operator、無限集合の列挙、symmetry、VIEWは扱わない。解析はrtla、実行時の型・IR検査と探索はrtlcが担当する。\n\n省略・明示v1はJSONのIR nodeを組み立て、公開境界で型付きSafetyProgramへ変換する。明示v2は型付きIRを保持し、同じ木を解析・更新してSafetyProgramを返す。frontendの性能改善を主張する実装ではない。既存TS frontendは独立した差分比較対象として残す。\n\n`compile_with_options(&module, &config, CompileOptions { irVersion: IrVersion::V1 })`は明示v1を選ぶ。従来の`compile`は既定v1のまま同じbytesを返す。`CompileOptions { irVersion: IrVersion::V2 }`は[安全性IR v2](../../docs/safety-ir-v2.md)を明示選択する。到達するexpression定義を字句宣言順とphase / membership用途 / target signature順の定義表へ一度だけlowerし、call / parameter / capture参照を生成する。引数とcaptureはcallerのlexical frameを持つ遅延引数としてrtlcが要求時ごとに評価し、値をmemoizeしない。binder slotは定義frameごとに0から始め、代入actionはinlineを維持する。self / mutual recursionは拒否し、v1拒否からv2へ自動再試行しない。\n\nfrontendの式nestingとbound variableは40、checkerの定義内式深さは48、値深さは64、TS decoderは128のまま。定義間call経路長を定義内の式nestingへ加算せず、v2の動的な評価は別に入れ子128までとする。call entryと遅延引数・captureの要求はrtlcのwork予算へ各1課金し、枯渇はbounded / workになる。生成IRが既存のcompiled expression decoder深さ128を超える場合は両frontendが同じ型で拒否する。共有は評価仕事の指数増大の除去や、全TLA+との互換性を意味しない。\n\nroot moduleの`EXTENDS Apalache`がある場合、`:=`を同モジュールの定義どおり等号として扱う。`EXTENDS Variants`ではApalache 0.63.0の`Variant`、`VariantTag`、`VariantGetUnsafe`を扱い、tag取得はdomainが一つの文字列keyである関数に限定する。他のVariants operatorと無制限CHOOSEは未対応。`EXTENDS TLC`は受理するが、TLCの全operatorを実装するものではない。\n\nCASEは式・actionともOTHERを省略でき、ソース順で最初の真のarmを選ぶ。OTHERがなく全条件が偽なら、TLC v1.7.4 (`5a47802`) と同様に評価時に未一致エラーとソース位置を返す。未評価の分岐内ではエラーにしない。\n\ndefining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。foldのframeでbound slotを2つ使い、v1では呼び出し位置でbodyを展開する。v2では同じslotをactualとして共有expression定義をcallする。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。\n\nsequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。\n\nRust経路はmodel value、有限CHOOSE、整数の\\div / % / ^、CONSTRAINT / ACTION_CONSTRAINT、PROPERTY内の定数有限domain上の時間論理量化にも対応する。制約は探索候補を捨てる前に境界のinvariant/propertyを検査する。無解のCHOOSE、ゼロ除算、0^0、overflow、typed model valueの不正比較は評価エラー。空domainの時間論理量化は比較元TLCのtautology診断も含めて検査する。\n\n[固定入力](tests/finite-support.json)をnative/Wasm/TLCへ渡す。既存TS frontendの対応範囲は別で、追加機能はcompileTlaSource / checkTlaSourceから呼ぶ。CriterionではASTからのcompileと、生成済みIRのcheckを別々に測る。parser、IPC、process起動は計測区間へ含めない。\n\n```sh\njust compiler-test\njust compiler-criterion finite-compiler evals/runs/my-compiler-bench\njust tlc-finite-eval evals/runs/my-tlc-check /path/to/java /path/to/tla2tools.jar\n```\n\n生成的UNCHANGEDのtargetだけをcallerの字句環境から変数/tupleへ静的解決し、解決済みtarget signatureごとに式定義を共有する。通常のactual/captureはcallerのlexical frameを保持し、membership用途も伝播する。action/temporal外殻もcall siteごとの非共有anonymous frameでbinder・old・parameter・captureへの遅延参照を保持する。LET定義内の自由な`@`は引き続き型付きprotocol拒否とする。詳細と検証範囲は[Safety IR v2](../../docs/safety-ir-v2.md)を参照。\n\n明示v2のaction/temporal helperはcall siteごとの非共有anonymous frameでcallerの遅延引数を保持する。binder・EXCEPT oldと要求時のprimeを分離し、入口と引数要求へ各1 workを課金する。LET本体の自由な`@`はtyped protocol拒否とし、action template共有・再帰・全TLA+互換を保証しない。\n\n## モジュールと設定置換\n\nRustでは`compile_modules(&root, &config, &modules)`へ解析済みModuleの集合を渡す。`compile`は単一module用の既存APIで、外部moduleを自動取得しない。TSの`compileTlaSource` / `checkTlaSource`とnativeの`compile-tla` / `check-tla`には、追加の`modules: { ModuleName: source }`を渡せる。キーとMODULE名が異なる場合は拒否する。modulesを省略した既存要求も受理する。\n\n非再帰EXTENDSと、top-levelの引数なしnamed/unnamed INSTANCEを解決する。WITH右辺は呼び出し側で解決し、束縛名を区別して展開する。変数の置換先は呼び出し側のstate variable名に限定する。LOCALは他moduleへ公開せず、内部の定義から参照できる。引数付きINSTANCE、LET内のINSTANCE、nested module、一般のoperator引数は拒否する。全moduleのSANY検査やlevel検査の代替ではない。\n\nTLC設定の`N <- Bound`、同arityの`Op <- Replacement`を扱う。module別の定義に対する`Op <- [Module] Replacement`、`Value = [Module] 2`、`Op(1) = [Module] 2`も扱う。設定の置換先はrootで解決する。operator宣言そのものへの引数付きテーブル設定は未対応。比較元TLCがoperator値をstateに含めてエラーにする対照を保存する。不正な設定の診断phaseと文言、存在しないmoduleへの値設定の無視まで同一にはしない。\n\n明示v2（`CompileOptions { irVersion: IrVersion::V2 }`）はこのモジュール連結と設定置換を対応しない。ユーザーmoduleのEXTENDS、INSTANCE、設定のoperator置換（`<-`）・定数表・定義の上書きのいずれかを要する入力は、`compile_with_options`と`compile_modules_with_options`のどちらでも、v1と同じ連結・設定・単一moduleの検査で先に拒否されない限り、loweringの前に`Unsupported TLA input: safety IR v2 does not support module linking or configuration operator substitution`で拒否する。拒否は入力が要する機能だけで決め、v1が受理する入力をv2が再帰operatorなど別の理由で拒否する形にはしない。v1と既定は同じ入力を従来どおり受理する。連結と設定上書きを要さない入力は、追加moduleを添えても（空の集合を含む）bundleの検証が通れば、v2で単体の`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。`compile_modules_with_options`は連結の検証だけv1と同じに行い、IR v2では連結後の別名ではなくrootのmoduleをそのまま変換する。\n\n追加moduleは256、importの深さは40、展開後のsymbolは4096まで。ファイルシステムやネットワークを使わず、欠落・循環・名前の衝突はエラーにする。[固定corpus](tests/modules-support.json)と[TLC比較の計画](../../evals/plans/0047-module-linking.md)で対応範囲を検査する。\n\n反例のaction名は公開名、instanceの修飾名、LETの元のoperator名へ戻す。内部の束縛識別子を実装との照合に使う必要はない。\n\nASTの書き換え深さは64段まで。ModuleをRustから直接渡した場合も、未使用の定義を含めて上限を検査する。\n\n```sh\njust module-eval evals/runs/my-module-check /path/to/java /path/to/tla2tools.jar\njust module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/to/java /path/to/tla2tools.jar\n```\n\n明示v2のtuple target解析と共有IRの変数読取り展開は、それぞれ524,288ノードまで。空tupleの複製も数え、超過はcompile時のprotocol拒否となる。既存のnesting 40とbranch 256 stepsは維持し、実行時のworkとは別に扱う。\n\nv2の時間論理IRは、式深さとは別に構造の深さを128までとする。flatな連言・選言から生成した木も、frameのcapture整理に入る前に検査する。超過は`compiled temporal nesting exceeds 128`で拒否する。\n\nQuintの実生成物6モデルは既定/v1/v2のnative/Wasm回帰へ接続する。`quint_generated` Criterion benchは同じ生成物で解析・compile・prepared check・全体を分ける。crate内の[bench入力](tests/quint-generated.json)は生成TLA+を変更せず保持し、リポジトリの回帰で原本とTLCオラクルへ照合する。[実行手順](../../docs/quint-generated.md)を参照。",
+        "contentHash": "8dbbbb9513f5460548766bd264b488b442dc95c6c742c3396352832cd65189ee"
       },
       "target": {
         "source": "source3",
         "path": "crates/rtla-compiler/SUPPORT.md",
         "startLine": 1,
-        "endLine": 82,
-        "quote": "# rtla-compilerの対応チェックリスト\n\nチェック済みはrtlaのASTをrtlcの有限検査IRへ変換する範囲。未チェックは未対応または対象外で、実装予定を約束しない。構文解析と探索は他crateが担当する。\n\n## 対応済み\n\n- [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。省略・明示v1のserialize結果を保持し、v1拒否から自動再試行しない。\n- [x] v2の定義IDを字句宣言順とphase / membership用途 / target signature順、captureをlexical bindingの宣言順で決める。frame-localなbinder slotとcall / parameter / capture参照を生成する。\n- [x] 定義graphの循環・level依存解析を明示stackで処理し、LETスコープで宣言ASTを参照共有する。5000定義のcompile-only対照を持ち、実行成功とは区別する。\n- [x] 生成的UNCHANGEDとSPECIFICATION subscriptの変数・tuple別名をparameter / capture経由も含め解決する。ENABLED内にも同じ対象解決を使う。v2では要求されるformal/capture targetをsource依存metadataで解析し、signature別に式定義を共有する。foldの専用frame付き呼出しも共有を維持する。\n- [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。\n\n- [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。\n- [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。\n- [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。\n- [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。\n- [x] signed 32-bit整数、Bool、文字列、有限集合・関数・record・sequenceの対応式とactionの変換。\n- [x] 有限量化、tuple pattern、EXCEPT、全変数の代入・選択・UNCHANGED、列挙できるENABLED。\n- [x] IFとCASE。最初の真のarmを選び、OTHERがなく未一致なら評価時エラーにする。未評価の分岐ではエラーにしない。\n- [x] INIT/NEXTまたは対応形のSPECIFICATION、定数、INVARIANT/PROPERTY、CHECK_DEADLOCK、定数ASSUME。\n- [x] 対応するstate/action/temporal propertyとWF/SFをIRへ変換する。\n- [x] 定義元moduleのEXTENDS ApalacheでApaFoldSet / ApaFoldSeqLeft。可視の非再帰2引数operatorに限定し、一般の高階引数とは区別する。\n- [x] 同じimport下の`:=`をApalache定義の等号として扱う。\n- [x] EXTENDS VariantsでApalache 0.63.0のVariant / VariantTag / VariantGetUnsafe。tag取得はsingletonの文字列domainに限定する。\n- [x] EXTENDS TLCのimport自体を受理する。任意のTLC operatorを受理する意味ではない。\n- [x] 展開・変数・分岐・step等の上限と未対応入力を拒否し、型付きSafetyProgramを返す。\n\n## TLC互換の追加対応\n\n- [x] CONSTANTで与えるmodel valueとtyped model valueを専用のdata値へ変換する。文字列とは区別する。\n- [x] 整数の\\div・%・^を専用IRへ変換する。評価時の意味論はrtlcが担当する。\n- [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。\n- [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。\n- [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。\n- [ ] SYMMETRY、VIEWの設定とlowering。\n- [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。\n- [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。\n- [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。\n- [ ] SequencesのSelectSeq。\n- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。\n- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。\n- [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。\n\n## 非対応・対象外\n\n- [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。\n- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。\n- [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。\n\n- [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。\n- [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\\AA / \\EE）。\n- [ ] 無制限CHOOSE、他のApalache/Variants operator。\n- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。\n- [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。\n\n## 制約と根拠\n\n- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。\n- [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。\n- [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。\n- [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。\n- [x] source bundleの追加moduleは256、importの深さは40、展開後のsymbolは4096まで。欠落・循環・衝突を拒否し、ファイルシステムやネットワークを読まない。\n- [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。\n- [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。\n\n[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[operator共有の回帰](tests/operator_sharing.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。\n\n[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。\n\n生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。\n\n- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。\n\n- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。\n\n- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。\n\n- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。",
-        "contentHash": "fa739308a73a4061914dbf42712359fe24fa59229b1dfe235f431efb319360a9"
+        "endLine": 85,
+        "quote": "# rtla-compilerの対応チェックリスト\n\nチェック済みはrtlaのASTをrtlcの有限検査IRへ変換する範囲。未チェックは未対応または対象外で、実装予定を約束しない。構文解析と探索は他crateが担当する。\n\n## 対応済み\n\n- [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。省略・明示v1のserialize結果を保持し、v1拒否から自動再試行しない。\n- [x] v2の定義IDを字句宣言順とphase / membership用途 / target signature順、captureをlexical bindingの宣言順で決める。frame-localなbinder slotとcall / parameter / capture参照を生成する。\n- [x] 定義graphの循環・level依存解析を明示stackで処理し、LETスコープで宣言ASTを参照共有する。5000定義のcompile-only対照を持ち、実行成功とは区別する。\n- [x] 生成的UNCHANGEDとSPECIFICATION subscriptの変数・tuple別名をparameter / capture経由も含め解決する。ENABLED内にも同じ対象解決を使う。v2では要求されるformal/capture targetをsource依存metadataで解析し、signature別に式定義を共有する。foldの専用frame付き呼出しも共有を維持する。\n- [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。\n\n- [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。\n- [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。\n- [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。\n- [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。\n- [x] signed 32-bit整数、Bool、文字列、有限集合・関数・record・sequenceの対応式とactionの変換。\n- [x] 有限量化、tuple pattern、EXCEPT、全変数の代入・選択・UNCHANGED、列挙できるENABLED。\n- [x] IFとCASE。最初の真のarmを選び、OTHERがなく未一致なら評価時エラーにする。未評価の分岐ではエラーにしない。\n- [x] INIT/NEXTまたは対応形のSPECIFICATION、定数、INVARIANT/PROPERTY、CHECK_DEADLOCK、定数ASSUME。\n- [x] 対応するstate/action/temporal propertyとWF/SFをIRへ変換する。\n- [x] 定義元moduleのEXTENDS ApalacheでApaFoldSet / ApaFoldSeqLeft。可視の非再帰2引数operatorに限定し、一般の高階引数とは区別する。\n- [x] 同じimport下の`:=`をApalache定義の等号として扱う。\n- [x] EXTENDS VariantsでApalache 0.63.0のVariant / VariantTag / VariantGetUnsafe。tag取得はsingletonの文字列domainに限定する。\n- [x] EXTENDS TLCのimport自体を受理する。任意のTLC operatorを受理する意味ではない。\n- [x] 展開・変数・分岐・step等の上限と未対応入力を拒否し、型付きSafetyProgramを返す。\n\n## TLC互換の追加対応\n\n- [x] CONSTANTで与えるmodel valueとtyped model valueを専用のdata値へ変換する。文字列とは区別する。\n- [x] 整数の\\div・%・^を専用IRへ変換する。評価時の意味論はrtlcが担当する。\n- [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。\n- [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。\n- [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。\n- [ ] SYMMETRY、VIEWの設定とlowering。\n- [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。\n- [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。\n- [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。\n- [ ] SequencesのSelectSeq。\n- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。\n- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。\n- [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。\n\n## 非対応・対象外\n\n- [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。\n- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。\n- [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。\n\n- [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。\n- [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\\AA / \\EE）。\n- [ ] 無制限CHOOSE、他のApalache/Variants operator。\n- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。\n- [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。\n\n## 制約と根拠\n\n- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。\n- [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。\n- [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。\n- [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。\n- [x] source bundleの追加moduleは256、importの深さは40、展開後のsymbolは4096まで。欠落・循環・衝突を拒否し、ファイルシステムやネットワークを読まない。\n- [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。\n- [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。\n\n[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[operator共有の回帰](tests/operator_sharing.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。\n\n[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。\n\n生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。\n\n- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。\n\n- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。\n\n- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。\n\n- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。\n\n- [x] 固定したQuint 0.33.1 / Apalache 0.63.0の6生成物・12設定を、省略v1・明示v1・明示v2でnative/Wasmに照合する。生成元・生成TLA+とTLCオラクルの一致を回帰で検査する。Quint全体への互換性ではない。\n- [x] 同じ6生成物の解析・v1/v2のcompile・prepared check・parse+compile+checkをCriterionで分離する。計42測定の各compile/check経路はTLCの正常判定・状態数・生成数を検査してから測定する。CIでは時間の閾値を設けずsmoke実行する。",
+        "contentHash": "5573597c4a185e3b49c5556d2695b84c170da93b57be362229e3179da69fecc7"
       },
       "context": [],
-      "candidateId": "aab8ab0a54e916078b67471e509e9842a2c6625cd7aa31dec368c21514b738a3",
-      "contextHash": "074e3333179a620e79d548496db1f075e799d3ef31b39f43602dbde491e9cc1a",
+      "candidateId": "d75b5d6d16d051a9e9994ef319eb2a4e8cddd34af3b08e006c149b6001cd6bf0",
+      "contextHash": "1a55a1f258e4900110d0a8443e9706eb6f2844fbe4865f768e843c70fdff7290",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.48,
+        "confidence": 0.45,
         "probabilities": {
-          "supports": 0.61,
-          "contradicts": 0.38,
+          "supports": 0.59,
+          "contradicts": 0.4,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -43,10 +43,44 @@
     },
     {
       "id": "rtla-compiler-implementation-0",
+      "topic": "固定した6つのQuint生成物で解析・v1/v2のcompile・prepared check・全体の42測定を分け、TLCの正常判定・状態数・生成数の検査後に測る",
+      "mode": "semantic",
+      "reference": {
+        "source": "source5",
+        "path": "crates/rtla-compiler/benches/quint_generated.rs",
+        "startLine": 20,
+        "endLine": 93,
+        "quote": "fn measurements(criterion: &mut Criterion) {\n    let cases: Vec<Value> =\n        serde_json::from_str(include_str!(\"../tests/quint-generated.json\")).unwrap();\n    let bounds = SafetyBounds {\n        max_depth: 64,\n        max_states: 10000,\n        max_work: 1000000,\n        max_temporal_nodes: None,\n    };\n    for case in cases {\n        let name = case[\"name\"].as_str().unwrap();\n        let source = case[\"source\"].as_str().unwrap();\n        let configuration = case[\"config\"].as_str().unwrap();\n        let module = rtla::parse_module(source).unwrap();\n        let config = rtla::parse_config(configuration).unwrap();\n        let programs: Vec<_> = [(1, IrVersion::V1), (2, IrVersion::V2)]\n            .into_iter()\n            .map(|(version, ir_version)| {\n                let options = CompileOptions {\n                    irVersion: ir_version,\n                };\n                let program = compile_with_options(&module, &config, options).unwrap();\n                assert_eq!(program.version, version);\n                let result = program.check(bounds).unwrap();\n                assert_eq!(result.status, case[\"expectedStatus\"]);\n                assert_eq!(result.states as u64, case[\"expectedStates\"]);\n                assert_eq!(result.generated as u64, case[\"expectedGenerated\"]);\n                assert!(result.states > 0);\n                assert!(result.reason.is_none());\n                println!(\n                    \"IDEALIS_QUINT_PROGRAM {}\",\n                    json!({\n                        \"name\": name,\n                        \"version\": version,\n                        \"irBytes\": serde_json::to_vec(&program).unwrap().len(),\n                        \"definitions\": program.definitions.as_ref().map_or(0, Vec::len),\n                        \"states\": result.states,\n                        \"generated\": result.generated,\n                        \"work\": result.work,\n                    })\n                );\n                (version, options, program)\n            })\n            .collect();\n        criterion.bench_function(&format!(\"quint-parse/{name}\"), |bencher| {\n            bencher.iter(|| {\n                (\n                    rtla::parse_module(black_box(source)).unwrap(),\n                    rtla::parse_config(black_box(configuration)).unwrap(),\n                )\n            });\n        });\n        for (version, options, program) in programs {\n            criterion.bench_function(&format!(\"quint-compile/{name}/v{version}\"), |bencher| {\n                bencher.iter(|| {\n                    compile_with_options(black_box(&module), black_box(&config), options).unwrap()\n                });\n            });\n            criterion.bench_function(&format!(\"quint-check/{name}/v{version}\"), |bencher| {\n                bencher.iter(|| black_box(&program).check(black_box(bounds)).unwrap());\n            });\n            criterion.bench_function(&format!(\"quint-end-to-end/{name}/v{version}\"), |bencher| {\n                bencher.iter(|| {\n                    let module = rtla::parse_module(black_box(source)).unwrap();\n                    let config = rtla::parse_config(black_box(configuration)).unwrap();\n                    compile_with_options(&module, &config, options)\n                        .unwrap()\n                        .check(black_box(bounds))\n                        .unwrap()\n                });\n            });\n        }\n    }\n}",
+        "contentHash": "0364fc5dddae5a5be6835b0722d558a2112e90ecc0161606d39c31c765e1b0d3"
+      },
+      "target": {
+        "source": "source3",
+        "path": "crates/rtla-compiler/SUPPORT.md",
+        "startLine": 84,
+        "endLine": 85,
+        "quote": "- [x] 固定したQuint 0.33.1 / Apalache 0.63.0の6生成物・12設定を、省略v1・明示v1・明示v2でnative/Wasmに照合する。生成元・生成TLA+とTLCオラクルの一致を回帰で検査する。Quint全体への互換性ではない。\n- [x] 同じ6生成物の解析・v1/v2のcompile・prepared check・parse+compile+checkをCriterionで分離する。計42測定の各compile/check経路はTLCの正常判定・状態数・生成数を検査してから測定する。CIでは時間の閾値を設けずsmoke実行する。",
+        "contentHash": "8f6e9a66ba071e1174cf46096693fca56bd684f011dd759a5c155bd51a85e71d"
+      },
+      "context": [],
+      "candidateId": "8c6a2b0f482d06ac61f48d510b80d27d028b14913f98d438adf34beb0a4a479b",
+      "contextHash": "2448cf7ab335ce3429ab8c6e18c67db959b37040f819b6ffe0a6c0cefe236e2e",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.73,
+        "probabilities": {
+          "supports": 0.8,
+          "contradicts": 0.1,
+          "unrelated": 0,
+          "insufficient_context": 0.1
+        }
+      }
+    },
+    {
+      "id": "rtla-compiler-implementation-1",
       "topic": "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
       "mode": "semantic",
       "reference": {
-        "source": "source9",
+        "source": "source10",
         "path": "crates/rtla-compiler/src/link.rs",
         "startLine": 1,
         "endLine": 649,
@@ -57,13 +91,13 @@
         "source": "source3",
         "path": "crates/rtla-compiler/SUPPORT.md",
         "startLine": 1,
-        "endLine": 82,
-        "quote": "# rtla-compilerの対応チェックリスト\n\nチェック済みはrtlaのASTをrtlcの有限検査IRへ変換する範囲。未チェックは未対応または対象外で、実装予定を約束しない。構文解析と探索は他crateが担当する。\n\n## 対応済み\n\n- [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。省略・明示v1のserialize結果を保持し、v1拒否から自動再試行しない。\n- [x] v2の定義IDを字句宣言順とphase / membership用途 / target signature順、captureをlexical bindingの宣言順で決める。frame-localなbinder slotとcall / parameter / capture参照を生成する。\n- [x] 定義graphの循環・level依存解析を明示stackで処理し、LETスコープで宣言ASTを参照共有する。5000定義のcompile-only対照を持ち、実行成功とは区別する。\n- [x] 生成的UNCHANGEDとSPECIFICATION subscriptの変数・tuple別名をparameter / capture経由も含め解決する。ENABLED内にも同じ対象解決を使う。v2では要求されるformal/capture targetをsource依存metadataで解析し、signature別に式定義を共有する。foldの専用frame付き呼出しも共有を維持する。\n- [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。\n\n- [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。\n- [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。\n- [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。\n- [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。\n- [x] signed 32-bit整数、Bool、文字列、有限集合・関数・record・sequenceの対応式とactionの変換。\n- [x] 有限量化、tuple pattern、EXCEPT、全変数の代入・選択・UNCHANGED、列挙できるENABLED。\n- [x] IFとCASE。最初の真のarmを選び、OTHERがなく未一致なら評価時エラーにする。未評価の分岐ではエラーにしない。\n- [x] INIT/NEXTまたは対応形のSPECIFICATION、定数、INVARIANT/PROPERTY、CHECK_DEADLOCK、定数ASSUME。\n- [x] 対応するstate/action/temporal propertyとWF/SFをIRへ変換する。\n- [x] 定義元moduleのEXTENDS ApalacheでApaFoldSet / ApaFoldSeqLeft。可視の非再帰2引数operatorに限定し、一般の高階引数とは区別する。\n- [x] 同じimport下の`:=`をApalache定義の等号として扱う。\n- [x] EXTENDS VariantsでApalache 0.63.0のVariant / VariantTag / VariantGetUnsafe。tag取得はsingletonの文字列domainに限定する。\n- [x] EXTENDS TLCのimport自体を受理する。任意のTLC operatorを受理する意味ではない。\n- [x] 展開・変数・分岐・step等の上限と未対応入力を拒否し、型付きSafetyProgramを返す。\n\n## TLC互換の追加対応\n\n- [x] CONSTANTで与えるmodel valueとtyped model valueを専用のdata値へ変換する。文字列とは区別する。\n- [x] 整数の\\div・%・^を専用IRへ変換する。評価時の意味論はrtlcが担当する。\n- [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。\n- [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。\n- [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。\n- [ ] SYMMETRY、VIEWの設定とlowering。\n- [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。\n- [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。\n- [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。\n- [ ] SequencesのSelectSeq。\n- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。\n- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。\n- [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。\n\n## 非対応・対象外\n\n- [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。\n- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。\n- [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。\n\n- [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。\n- [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\\AA / \\EE）。\n- [ ] 無制限CHOOSE、他のApalache/Variants operator。\n- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。\n- [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。\n\n## 制約と根拠\n\n- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。\n- [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。\n- [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。\n- [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。\n- [x] source bundleの追加moduleは256、importの深さは40、展開後のsymbolは4096まで。欠落・循環・衝突を拒否し、ファイルシステムやネットワークを読まない。\n- [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。\n- [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。\n\n[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[operator共有の回帰](tests/operator_sharing.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。\n\n[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。\n\n生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。\n\n- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。\n\n- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。\n\n- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。\n\n- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。",
-        "contentHash": "fa739308a73a4061914dbf42712359fe24fa59229b1dfe235f431efb319360a9"
+        "endLine": 85,
+        "quote": "# rtla-compilerの対応チェックリスト\n\nチェック済みはrtlaのASTをrtlcの有限検査IRへ変換する範囲。未チェックは未対応または対象外で、実装予定を約束しない。構文解析と探索は他crateが担当する。\n\n## 対応済み\n\n- [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。省略・明示v1のserialize結果を保持し、v1拒否から自動再試行しない。\n- [x] v2の定義IDを字句宣言順とphase / membership用途 / target signature順、captureをlexical bindingの宣言順で決める。frame-localなbinder slotとcall / parameter / capture参照を生成する。\n- [x] 定義graphの循環・level依存解析を明示stackで処理し、LETスコープで宣言ASTを参照共有する。5000定義のcompile-only対照を持ち、実行成功とは区別する。\n- [x] 生成的UNCHANGEDとSPECIFICATION subscriptの変数・tuple別名をparameter / capture経由も含め解決する。ENABLED内にも同じ対象解決を使う。v2では要求されるformal/capture targetをsource依存metadataで解析し、signature別に式定義を共有する。foldの専用frame付き呼出しも共有を維持する。\n- [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。\n\n- [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。\n- [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。\n- [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。\n- [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。\n- [x] signed 32-bit整数、Bool、文字列、有限集合・関数・record・sequenceの対応式とactionの変換。\n- [x] 有限量化、tuple pattern、EXCEPT、全変数の代入・選択・UNCHANGED、列挙できるENABLED。\n- [x] IFとCASE。最初の真のarmを選び、OTHERがなく未一致なら評価時エラーにする。未評価の分岐ではエラーにしない。\n- [x] INIT/NEXTまたは対応形のSPECIFICATION、定数、INVARIANT/PROPERTY、CHECK_DEADLOCK、定数ASSUME。\n- [x] 対応するstate/action/temporal propertyとWF/SFをIRへ変換する。\n- [x] 定義元moduleのEXTENDS ApalacheでApaFoldSet / ApaFoldSeqLeft。可視の非再帰2引数operatorに限定し、一般の高階引数とは区別する。\n- [x] 同じimport下の`:=`をApalache定義の等号として扱う。\n- [x] EXTENDS VariantsでApalache 0.63.0のVariant / VariantTag / VariantGetUnsafe。tag取得はsingletonの文字列domainに限定する。\n- [x] EXTENDS TLCのimport自体を受理する。任意のTLC operatorを受理する意味ではない。\n- [x] 展開・変数・分岐・step等の上限と未対応入力を拒否し、型付きSafetyProgramを返す。\n\n## TLC互換の追加対応\n\n- [x] CONSTANTで与えるmodel valueとtyped model valueを専用のdata値へ変換する。文字列とは区別する。\n- [x] 整数の\\div・%・^を専用IRへ変換する。評価時の意味論はrtlcが担当する。\n- [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。\n- [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。\n- [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。\n- [ ] SYMMETRY、VIEWの設定とlowering。\n- [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。\n- [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。\n- [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。\n- [ ] SequencesのSelectSeq。\n- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。\n- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。\n- [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。\n\n## 非対応・対象外\n\n- [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。\n- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。\n- [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。\n\n- [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。\n- [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\\AA / \\EE）。\n- [ ] 無制限CHOOSE、他のApalache/Variants operator。\n- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。\n- [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。\n\n## 制約と根拠\n\n- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。\n- [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。\n- [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。\n- [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。\n- [x] source bundleの追加moduleは256、importの深さは40、展開後のsymbolは4096まで。欠落・循環・衝突を拒否し、ファイルシステムやネットワークを読まない。\n- [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。\n- [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。\n\n[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[operator共有の回帰](tests/operator_sharing.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。\n\n[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。\n\n生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。\n\n- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。\n\n- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。\n\n- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。\n\n- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。\n\n- [x] 固定したQuint 0.33.1 / Apalache 0.63.0の6生成物・12設定を、省略v1・明示v1・明示v2でnative/Wasmに照合する。生成元・生成TLA+とTLCオラクルの一致を回帰で検査する。Quint全体への互換性ではない。\n- [x] 同じ6生成物の解析・v1/v2のcompile・prepared check・parse+compile+checkをCriterionで分離する。計42測定の各compile/check経路はTLCの正常判定・状態数・生成数を検査してから測定する。CIでは時間の閾値を設けずsmoke実行する。",
+        "contentHash": "5573597c4a185e3b49c5556d2695b84c170da93b57be362229e3179da69fecc7"
       },
       "context": [
         {
-          "source": "source10",
+          "source": "source11",
           "path": "crates/rtla-compiler/src/rewrite.rs",
           "startLine": 1,
           "endLine": 300,
@@ -71,25 +105,25 @@
           "contentHash": "21ef8dc2a3711b5a38ce3ed803ad06c74694b830ffce8a2c047a2408deeabb63"
         }
       ],
-      "candidateId": "f47480995777e3a9f0a5add2f1e93cf4528cd2392971fbe3574bbb8c2e90b2d5",
-      "contextHash": "d13fef589685a78c45b2701bebc6660d809ec3605e3f0db103c842749262e85d",
+      "candidateId": "21f90b35c58ea4a9923b889dae5777e96576ef692173a0b0f449ea6559c6422a",
+      "contextHash": "d3fe3fed58a3adfd65237d2e504af5eb20029059af224a6d4d1798c84a5c3b8c",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.61,
+        "confidence": 0.6,
         "probabilities": {
-          "supports": 0.71,
-          "contradicts": 0.24,
+          "supports": 0.7,
+          "contradicts": 0.22,
           "unrelated": 0,
-          "insufficient_context": 0.05
+          "insufficient_context": 0.08
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-1",
+      "id": "rtla-compiler-implementation-2",
       "topic": "受理するmodule/configと、実行しない・拒否する構文の境界",
       "mode": "semantic",
       "reference": {
-        "source": "source8",
+        "source": "source9",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 307,
         "endLine": 310,
@@ -100,30 +134,30 @@
         "source": "source3",
         "path": "crates/rtla-compiler/SUPPORT.md",
         "startLine": 1,
-        "endLine": 82,
-        "quote": "# rtla-compilerの対応チェックリスト\n\nチェック済みはrtlaのASTをrtlcの有限検査IRへ変換する範囲。未チェックは未対応または対象外で、実装予定を約束しない。構文解析と探索は他crateが担当する。\n\n## 対応済み\n\n- [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。省略・明示v1のserialize結果を保持し、v1拒否から自動再試行しない。\n- [x] v2の定義IDを字句宣言順とphase / membership用途 / target signature順、captureをlexical bindingの宣言順で決める。frame-localなbinder slotとcall / parameter / capture参照を生成する。\n- [x] 定義graphの循環・level依存解析を明示stackで処理し、LETスコープで宣言ASTを参照共有する。5000定義のcompile-only対照を持ち、実行成功とは区別する。\n- [x] 生成的UNCHANGEDとSPECIFICATION subscriptの変数・tuple別名をparameter / capture経由も含め解決する。ENABLED内にも同じ対象解決を使う。v2では要求されるformal/capture targetをsource依存metadataで解析し、signature別に式定義を共有する。foldの専用frame付き呼出しも共有を維持する。\n- [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。\n\n- [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。\n- [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。\n- [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。\n- [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。\n- [x] signed 32-bit整数、Bool、文字列、有限集合・関数・record・sequenceの対応式とactionの変換。\n- [x] 有限量化、tuple pattern、EXCEPT、全変数の代入・選択・UNCHANGED、列挙できるENABLED。\n- [x] IFとCASE。最初の真のarmを選び、OTHERがなく未一致なら評価時エラーにする。未評価の分岐ではエラーにしない。\n- [x] INIT/NEXTまたは対応形のSPECIFICATION、定数、INVARIANT/PROPERTY、CHECK_DEADLOCK、定数ASSUME。\n- [x] 対応するstate/action/temporal propertyとWF/SFをIRへ変換する。\n- [x] 定義元moduleのEXTENDS ApalacheでApaFoldSet / ApaFoldSeqLeft。可視の非再帰2引数operatorに限定し、一般の高階引数とは区別する。\n- [x] 同じimport下の`:=`をApalache定義の等号として扱う。\n- [x] EXTENDS VariantsでApalache 0.63.0のVariant / VariantTag / VariantGetUnsafe。tag取得はsingletonの文字列domainに限定する。\n- [x] EXTENDS TLCのimport自体を受理する。任意のTLC operatorを受理する意味ではない。\n- [x] 展開・変数・分岐・step等の上限と未対応入力を拒否し、型付きSafetyProgramを返す。\n\n## TLC互換の追加対応\n\n- [x] CONSTANTで与えるmodel valueとtyped model valueを専用のdata値へ変換する。文字列とは区別する。\n- [x] 整数の\\div・%・^を専用IRへ変換する。評価時の意味論はrtlcが担当する。\n- [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。\n- [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。\n- [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。\n- [ ] SYMMETRY、VIEWの設定とlowering。\n- [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。\n- [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。\n- [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。\n- [ ] SequencesのSelectSeq。\n- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。\n- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。\n- [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。\n\n## 非対応・対象外\n\n- [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。\n- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。\n- [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。\n\n- [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。\n- [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\\AA / \\EE）。\n- [ ] 無制限CHOOSE、他のApalache/Variants operator。\n- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。\n- [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。\n\n## 制約と根拠\n\n- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。\n- [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。\n- [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。\n- [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。\n- [x] source bundleの追加moduleは256、importの深さは40、展開後のsymbolは4096まで。欠落・循環・衝突を拒否し、ファイルシステムやネットワークを読まない。\n- [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。\n- [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。\n\n[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[operator共有の回帰](tests/operator_sharing.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。\n\n[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。\n\n生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。\n\n- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。\n\n- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。\n\n- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。\n\n- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。",
-        "contentHash": "fa739308a73a4061914dbf42712359fe24fa59229b1dfe235f431efb319360a9"
+        "endLine": 85,
+        "quote": "# rtla-compilerの対応チェックリスト\n\nチェック済みはrtlaのASTをrtlcの有限検査IRへ変換する範囲。未チェックは未対応または対象外で、実装予定を約束しない。構文解析と探索は他crateが担当する。\n\n## 対応済み\n\n- [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。省略・明示v1のserialize結果を保持し、v1拒否から自動再試行しない。\n- [x] v2の定義IDを字句宣言順とphase / membership用途 / target signature順、captureをlexical bindingの宣言順で決める。frame-localなbinder slotとcall / parameter / capture参照を生成する。\n- [x] 定義graphの循環・level依存解析を明示stackで処理し、LETスコープで宣言ASTを参照共有する。5000定義のcompile-only対照を持ち、実行成功とは区別する。\n- [x] 生成的UNCHANGEDとSPECIFICATION subscriptの変数・tuple別名をparameter / capture経由も含め解決する。ENABLED内にも同じ対象解決を使う。v2では要求されるformal/capture targetをsource依存metadataで解析し、signature別に式定義を共有する。foldの専用frame付き呼出しも共有を維持する。\n- [x] v2の引数・captureをcaller lexical frame付きの遅延引数としてrtlcへ渡す。値のmemoizationは行わず、call entryと要求時の課金・予算判定はrtlcが担当する。\n\n- [x] 名前解決、定数・非再帰operatorとLETの展開、lexical scopeの保持。\n- [x] 明示したModule集合のcompile_modulesで非再帰EXTENDSと引数なしnamed/unnamed INSTANCE、WITH、LOCALを解決する（IR v1。v2は拒否する）。diamond import、定義元のscope、独立したinstanceを保持する。\n- [x] v2で連結と設定上書きを要さない入力は、追加moduleを添えてもbundleの検証が通れば、`compile_modules_with_options`が`compile_with_options`と同じrootの変換を行い、変換に成功した場合は同じIRを返す。連結の検証による拒否はv1と同じmessageになる。\n- [x] 反例のaction名には公開名・instanceの修飾名・LETの元のoperator名を使い、内部の束縛識別子を出さない。\n- [x] signed 32-bit整数、Bool、文字列、有限集合・関数・record・sequenceの対応式とactionの変換。\n- [x] 有限量化、tuple pattern、EXCEPT、全変数の代入・選択・UNCHANGED、列挙できるENABLED。\n- [x] IFとCASE。最初の真のarmを選び、OTHERがなく未一致なら評価時エラーにする。未評価の分岐ではエラーにしない。\n- [x] INIT/NEXTまたは対応形のSPECIFICATION、定数、INVARIANT/PROPERTY、CHECK_DEADLOCK、定数ASSUME。\n- [x] 対応するstate/action/temporal propertyとWF/SFをIRへ変換する。\n- [x] 定義元moduleのEXTENDS ApalacheでApaFoldSet / ApaFoldSeqLeft。可視の非再帰2引数operatorに限定し、一般の高階引数とは区別する。\n- [x] 同じimport下の`:=`をApalache定義の等号として扱う。\n- [x] EXTENDS VariantsでApalache 0.63.0のVariant / VariantTag / VariantGetUnsafe。tag取得はsingletonの文字列domainに限定する。\n- [x] EXTENDS TLCのimport自体を受理する。任意のTLC operatorを受理する意味ではない。\n- [x] 展開・変数・分岐・step等の上限と未対応入力を拒否し、型付きSafetyProgramを返す。\n\n## TLC互換の追加対応\n\n- [x] CONSTANTで与えるmodel valueとtyped model valueを専用のdata値へ変換する。文字列とは区別する。\n- [x] 整数の\\div・%・^を専用IRへ変換する。評価時の意味論はrtlcが担当する。\n- [x] 有限domainに限定したCHOOSEとtuple pattern。無制限CHOOSEは拒否する。\n- [x] CONSTRAINT / ACTION_CONSTRAINTを名前付きpredicateへ変換する。\n- [x] PROPERTY内の時間論理forall/exists。domainは定数の有限集合に限定し、通常のstate量化と区別する。\n- [ ] SYMMETRY、VIEWの設定とlowering。\n- [ ] ALIASによる反例表示、POSTCONDITION、POSSIBLE、PERIODIC、RL_REWARD。\n- [x] CONSTANTのoperator置換（<-）と同arityのoperator宣言への置換。module別の定義への値・operator・引数付きテーブル設定。\n- [ ] operator宣言そのものへの引数付きテーブル設定。比較元TLCがoperator値をstateへ格納してエラーにする入力を未対応として拒否する。\n- [ ] SequencesのSelectSeq。\n- [ ] TLCのAssert、SortSeq、RandomElement、TLCGet、TLCSet。\n- [ ] SPECIFICATIONの量化されたfairness。直接のWF/SF連言は対応済み。\n- [ ] 最小整数リテラル-2147483648のTLC診断互換。Rust frontendの既存の例外受理と比較元TLCには差がある。計算式-2147483647 - 1は対応する。\n\n## 非対応・対象外\n\n- [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。\n- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。\n- [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。\n\n- [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。\n- [ ] 無限集合の列挙、stateに依存するdomainでの時間論理量化、temporal variable quantification（\\AA / \\EE）。\n- [ ] 無制限CHOOSE、他のApalache/Variants operator。\n- [ ] 全モジュールのSANY検査、未使用定義やproofの正しさの判断。\n- [ ] 一般のTLA+からSMTへの変換、Quint言語の直接解釈、Quint Connect APIやITFのimport。\n\n## 制約と根拠\n\n- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、node上限内の固定したtuple chainでv1の受理境界と照合し、「非対応・対象外」に記したUNCHANGEDの差を保持する。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。\n- [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。\n- [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。\n- [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。\n- [x] source bundleの追加moduleは256、importの深さは40、展開後のsymbolは4096まで。欠落・循環・衝突を拒否し、ファイルシステムやネットワークを読まない。\n- [x] Moduleを直接渡す場合もASTの書き換え深さは64段まで。未使用の定義でも過度に深いASTを拒否する。\n- [x] 不正な設定の拒否phase・診断や、存在しないmoduleへの値設定をTLCが無視する場合は同一診断を保証しない。未対応拒否とTLCの評価エラー・無視を比較記録で分ける。\n\n[実装](src/lib.rs)、[回帰](tests/compiler.rs)、[operator共有の回帰](tests/operator_sharing.rs)、[追加対応の回帰](tests/finite_support.rs)、[比較入力](tests/finite-support.json)、[Quint生成物の12設定](../../docs/quint-generated.md)、[既存frontendとの比較](../../evals/iterations/0029-rtla-compiler.md)を参照。\n\n[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。\n\n生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数はcall siteごとの非共有anonymous frameでcallerのlexical bindingを保持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。\n\n- [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。\n\n- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。\n\n- [x] frame_actualsはargumentsとcapturesの各Expressionを初期depth 1で検査し、全件通った後にVecをcloneする。128を超える式はprotocolで拒否する。\n\n- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。\n\n- [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。\n\n- [x] 固定したQuint 0.33.1 / Apalache 0.63.0の6生成物・12設定を、省略v1・明示v1・明示v2でnative/Wasmに照合する。生成元・生成TLA+とTLCオラクルの一致を回帰で検査する。Quint全体への互換性ではない。\n- [x] 同じ6生成物の解析・v1/v2のcompile・prepared check・parse+compile+checkをCriterionで分離する。計42測定の各compile/check経路はTLCの正常判定・状態数・生成数を検査してから測定する。CIでは時間の閾値を設けずsmoke実行する。",
+        "contentHash": "5573597c4a185e3b49c5556d2695b84c170da93b57be362229e3179da69fecc7"
       },
       "context": [],
-      "candidateId": "8bf458dd930d917e3b8a7e27e42159c1366fcca7d293b1476b99b36ee9216e7b",
-      "contextHash": "3f3fdfb696545154414a2c51d1f511bed3a2b2b5ceaf7fa5cb88928608b441dc",
+      "candidateId": "c3289758b11e21829b11660e24b332afc88e88655ead2d72834897366065977f",
+      "contextHash": "b54a0b504844efbdaa000ad2cc5a45a464b81407c226c57e81dea3db665bff54",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.64,
+        "confidence": 0.61,
         "probabilities": {
-          "supports": 0.73,
+          "supports": 0.71,
           "contradicts": 0.01,
           "unrelated": 0.05,
-          "insufficient_context": 0.21
+          "insufficient_context": 0.23
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-2",
+      "id": "rtla-compiler-implementation-3",
       "topic": "tuple targetのcompile時node上限の実際の定数値とチェックリストの数値が一致する",
       "mode": "semantic",
       "reference": {
-        "source": "source8",
+        "source": "source9",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 9,
         "endLine": 9,
@@ -139,25 +173,25 @@
         "contentHash": "f5be2313ffb6786b3590ffc6c0402a7f12647ae9f066c96e8a99a1592387caef"
       },
       "context": [],
-      "candidateId": "362623ff686a2ad19d8a0884e83be1d2e7bde5888c4466b23e52655b29c36b2a",
-      "contextHash": "1ecf6feb4877995b15fed433df0125200b60464e8c3bb16e44a61ab09800fcb6",
+      "candidateId": "035b25f69bf3cc6ff31cba678cadf1f293f231e21a99ed508230847cd34b3de6",
+      "contextHash": "bd8ff62ce5a79ceaa5da95f027707c73af8a819e12d1f17244550763349a389f",
       "judgment": {
         "choice": "supports",
         "confidence": 0.96,
         "probabilities": {
           "supports": 0.97,
-          "contradicts": 0.02,
+          "contradicts": 0.01,
           "unrelated": 0,
-          "insufficient_context": 0.01
+          "insufficient_context": 0.02
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-3",
+      "id": "rtla-compiler-implementation-4",
       "topic": "v2のtuple target解決で共通node上限と既存のdepth/leaf制限を維持し、空tupleでも展開を有界にする",
       "mode": "semantic",
       "reference": {
-        "source": "source8",
+        "source": "source9",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 490,
         "endLine": 1197,
@@ -174,7 +208,7 @@
       },
       "context": [
         {
-          "source": "source8",
+          "source": "source9",
           "path": "crates/rtla-compiler/src/lib.rs",
           "startLine": 9,
           "endLine": 9,
@@ -182,25 +216,25 @@
           "contentHash": "dd8920c124b21eb698b34124a9a95123e69d1ea379bccff198f5ec6a39d290a3"
         }
       ],
-      "candidateId": "7ddc16ef730080eb8dffb01f33f09baaba73ffaa3e8a7e4c1bb99954e91016e0",
-      "contextHash": "9cbe8ce8a03055ca3c8f2a692f659c2a71a8246438942de9742f865c700cbb7f",
+      "candidateId": "52ffec04e70cfc95c44b56bf130506f7c55ad3bf226e25a23e020a628bf70b19",
+      "contextHash": "5321f4f98eed9180c35462cf59c1bc12f9686f29bb7453928e7b651a5b4795b2",
       "judgment": {
         "choice": "supports",
         "confidence": 0.67,
         "probabilities": {
           "supports": 0.75,
-          "contradicts": 0.13,
-          "unrelated": 0,
-          "insufficient_context": 0.12
+          "contradicts": 0.11,
+          "unrelated": 0.01,
+          "insufficient_context": 0.13
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-4",
+      "id": "rtla-compiler-implementation-5",
       "topic": "共有IRの変数読取り展開で共通node上限を適用し、caller frame/actualと既存depthの意味を維持する",
       "mode": "semantic",
       "reference": {
-        "source": "source12",
+        "source": "source13",
         "path": "crates/rtla-compiler/src/typed_expr.rs",
         "startLine": 1,
         "endLine": 1006,
@@ -217,7 +251,7 @@
       },
       "context": [
         {
-          "source": "source8",
+          "source": "source9",
           "path": "crates/rtla-compiler/src/lib.rs",
           "startLine": 9,
           "endLine": 9,
@@ -225,25 +259,25 @@
           "contentHash": "dd8920c124b21eb698b34124a9a95123e69d1ea379bccff198f5ec6a39d290a3"
         }
       ],
-      "candidateId": "f8bc81f1df2a6d09166a0449cd7a9c78296d9ba58c929da93c400580dc99e1f8",
-      "contextHash": "b00a873199045fd3df307863fe268c590047d84ccdb3390e203238adf90bf8fd",
+      "candidateId": "6e7c84ea576df7ca5ba42a4966214f8cf264203d8ed8ab9db16f9873b82fc384",
+      "contextHash": "c80337fa48e5b8ca476962c87123636ae5bff82f3149963d21960432a55a9b0d",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.67,
+        "confidence": 0.53,
         "probabilities": {
-          "supports": 0.75,
-          "contradicts": 0.07,
+          "supports": 0.65,
+          "contradicts": 0.08,
           "unrelated": 0.01,
-          "insufficient_context": 0.17
+          "insufficient_context": 0.26
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-5",
+      "id": "rtla-compiler-implementation-6",
       "topic": "frame_actualsはargumentsとcapturesの各Expressionを初期depth 1でcheck_depth_fromに渡し、全件の検査後にVecをcloneする",
       "mode": "semantic",
       "reference": {
-        "source": "source13",
+        "source": "source14",
         "path": "crates/rtla-compiler/src/typed_lower.rs",
         "startLine": 11,
         "endLine": 527,
@@ -260,7 +294,7 @@
       },
       "context": [
         {
-          "source": "source11",
+          "source": "source12",
           "path": "crates/rtla-compiler/src/typed.rs",
           "startLine": 6,
           "endLine": 289,
@@ -268,25 +302,25 @@
           "contentHash": "ee747fd846ce05f66660b9c3a712538d239031f04f31ca801953b0d739884536"
         }
       ],
-      "candidateId": "58077b5485d766bcff08fdfdeaf88c68bf3f09a7dd601d7f92d64d6e6c4da1f3",
-      "contextHash": "5d3cf424a41e3e32a922feb86cd7de4526126503555140af433b791c66c3c056",
+      "candidateId": "4fb0d30986d425eb6d71c59558369fe730acfc748e5d3c5340ee7ef2cf262139",
+      "contextHash": "b99991dcfc414a3fdd5b5b0e62cc9faffe4af7e41981d3f0c2233f43de88fd41",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.77,
+        "confidence": 0.83,
         "probabilities": {
-          "supports": 0.83,
-          "contradicts": 0.07,
+          "supports": 0.87,
+          "contradicts": 0.08,
           "unrelated": 0,
-          "insufficient_context": 0.1
+          "insufficient_context": 0.05
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-6",
+      "id": "rtla-compiler-implementation-7",
       "topic": "v2は式深さと別に時間論理IRの全Temporal nodeを128段まで数え、frame compaction前にprotocol拒否する",
       "mode": "semantic",
       "reference": {
-        "source": "source11",
+        "source": "source12",
         "path": "crates/rtla-compiler/src/typed.rs",
         "startLine": 6,
         "endLine": 289,
@@ -303,7 +337,7 @@
       },
       "context": [
         {
-          "source": "source13",
+          "source": "source14",
           "path": "crates/rtla-compiler/src/typed_lower.rs",
           "startLine": 11,
           "endLine": 527,
@@ -311,25 +345,25 @@
           "contentHash": "468618aa263d1795a482addfa6729a5a3814752887d17bd297ad063767917968"
         }
       ],
-      "candidateId": "02f89a77dc743988247bac8e2d8bc3d03781693f2e54a048c4beea0d243a6149",
-      "contextHash": "59bfe9407524a60738042ec290a1bd6214d90baf995f51f7f573e708bbd20e5c",
+      "candidateId": "fdf8fa0fce9aa5dba7e6e9304137c0ecd39f24bf747a5f429b4e6b879f05c56c",
+      "contextHash": "ef1316ee244be98c9f01bc594505f5e023ee364197b81c235c9658c5a7116a77",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.4,
+        "confidence": 0.48,
         "probabilities": {
-          "supports": 0.55,
-          "contradicts": 0.38,
+          "supports": 0.61,
+          "contradicts": 0.33,
           "unrelated": 0,
-          "insufficient_context": 0.07
+          "insufficient_context": 0.06
         }
       }
     },
     {
-      "id": "rtla-compiler-implementation-7",
+      "id": "rtla-compiler-implementation-8",
       "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
       "mode": "semantic",
       "reference": {
-        "source": "source8",
+        "source": "source9",
         "path": "crates/rtla-compiler/src/lib.rs",
         "startLine": 1199,
         "endLine": 2544,
@@ -345,24 +379,24 @@
         "contentHash": "ef783c523c0146ac8471e1923fc2f57e0aad462c2125bd8f83eebf6b26b2b62a"
       },
       "context": [],
-      "candidateId": "aadbe6dc5da4102cfb0c2085e05d03e1f2108d10a0f5184aa700287b0f132745",
-      "contextHash": "3c912686b12b869cfa6dde5124303eee8fd435fae542ef9d7ae4abcdebd1b5d2",
+      "candidateId": "2f5c1b295784b07a0f5422b12d52829f9feffc279a3eedfa4535704c2dc7612c",
+      "contextHash": "70bca1591720b07fa757108fa7b45022dc48b1eb5602a6c1796d0d2bed3ce943",
       "judgment": {
         "choice": "supports",
         "confidence": 0.69,
         "probabilities": {
           "supports": 0.77,
-          "contradicts": 0.06,
+          "contradicts": 0.05,
           "unrelated": 0.01,
-          "insufficient_context": 0.16
+          "insufficient_context": 0.17
         }
       }
     }
   ],
   "coverage": {
-    "expected": 9,
-    "selected": 9,
-    "answered": 9,
+    "expected": 10,
+    "selected": 10,
+    "answered": 10,
     "missing": 0,
     "contradictions": 0,
     "unassessed": 0,
@@ -371,9 +405,9 @@
     "unboundDocuments": 0
   },
   "usage": {
-    "requests": 9,
-    "inputTokens": 69855,
-    "usd": 0.00293391
+    "requests": 10,
+    "inputTokens": 72550,
+    "usd": 0.0030471000000000005
   },
   "errors": []
 }

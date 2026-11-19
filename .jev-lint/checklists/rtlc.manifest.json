@@ -39,98 +39,114 @@
       "role": "reference"
     },
     "source9": {
-      "path": "crates/rtlc/src/ir.rs",
+      "path": "crates/rtlc/src/expansion_benchmarks.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "crates/rtlc/src/lib.rs",
+      "path": "crates/rtlc/src/expansions.rs",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/rtlc/src/safety.rs",
+      "path": "crates/rtlc/src/ir.rs",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/rtlc/src/safety_definition_tests.rs",
+      "path": "crates/rtlc/src/lib.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/rtlc/src/safety_definitions.rs",
+      "path": "crates/rtlc/src/safety.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/rtlc/src/safety_expressions.rs",
+      "path": "crates/rtlc/src/safety_definition_tests.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/rtlc/src/safety_parallel.rs",
+      "path": "crates/rtlc/src/safety_definitions.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/rtlc/src/safety_values.rs",
+      "path": "crates/rtlc/src/safety_expressions.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "crates/rtlc/src/safety_work.rs",
+      "path": "crates/rtlc/src/safety_parallel.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "crates/rtlc/src/temporal.rs",
+      "path": "crates/rtlc/src/safety_values.rs",
       "role": "reference"
     },
     "source19": {
-      "path": "crates/rtlc/src/value.rs",
+      "path": "crates/rtlc/src/safety_work.rs",
       "role": "reference"
     },
     "source20": {
-      "path": "crates/rtlc/tests/argument_forwarding_allocations.rs",
+      "path": "crates/rtlc/src/temporal.rs",
       "role": "reference"
     },
     "source21": {
-      "path": "crates/rtlc/tests/deep_drop.rs",
+      "path": "crates/rtlc/src/value.rs",
       "role": "reference"
     },
     "source22": {
-      "path": "crates/rtlc/tests/deep_drop_paths.rs",
+      "path": "crates/rtlc/tests/argument_forwarding_allocations.rs",
       "role": "reference"
     },
     "source23": {
-      "path": "crates/rtlc/tests/drop_allocations.rs",
+      "path": "crates/rtlc/tests/deep_drop.rs",
       "role": "reference"
     },
     "source24": {
-      "path": "crates/rtlc/tests/drop_budget.rs",
+      "path": "crates/rtlc/tests/deep_drop_paths.rs",
       "role": "reference"
     },
     "source25": {
-      "path": "crates/rtlc/tests/parallel_safety.rs",
+      "path": "crates/rtlc/tests/drop_allocations.rs",
       "role": "reference"
     },
     "source26": {
-      "path": "crates/rtlc/tests/standalone.rs",
+      "path": "crates/rtlc/tests/drop_budget.rs",
       "role": "reference"
     },
     "source27": {
-      "path": "crates/rtlc/tests/value_normalize_errors.rs",
+      "path": "crates/rtlc/tests/expansions-fixtures.json",
       "role": "reference"
     },
     "source28": {
-      "path": "docs/rust-safety.md",
+      "path": "crates/rtlc/tests/expansions.rs",
       "role": "reference"
     },
     "source29": {
-      "path": "docs/safety-ir-v2.md",
+      "path": "crates/rtlc/tests/parallel_safety.rs",
       "role": "reference"
     },
     "source30": {
-      "path": "package.json",
+      "path": "crates/rtlc/tests/standalone.rs",
       "role": "reference"
     },
     "source31": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/rtlc/tests/value_normalize_errors.rs",
       "role": "reference"
     },
     "source32": {
+      "path": "docs/rust-safety.md",
+      "role": "reference"
+    },
+    "source33": {
+      "path": "docs/safety-ir-v2.md",
+      "role": "reference"
+    },
+    "source34": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source35": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source36": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -149,26 +165,62 @@
     },
     {
       "id": "rtlc-implementation-0",
-      "topic": "IRの値と式・予算・結果の公開契約",
+      "topic": "cache保存時の1展開64 KiBの保守的な変換予算、共有値の複製前のサイズ計算、超過時と保存容量不足時のstreaming fallbackと不完全な展開の保存拒否",
       "mode": "semantic",
       "reference": {
-        "source": "source9"
+        "source": "source18",
+        "contains": "pub fn portable_bounded("
       },
       "target": {
-        "source": "source4"
+        "source": "source4",
+        "contains": "状態keyとsuccessor列のportable変換は1展開64 KiB"
       },
       "context": [
         {
-          "source": "source19"
-        },
-        {
-          "source": "source11"
+          "source": "source13",
+          "contains": "fn expand_cached("
         }
       ]
     },
     {
       "id": "rtlc-implementation-1",
-      "topic": "有限BFS、invariantとdeadlock、結果と探索予算",
+      "topic": "enabledの既定falseと、無効時は通常checkへ委譲してcacheを参照・更新せず計数を0とする契約",
+      "mode": "semantic",
+      "reference": {
+        "source": "source10",
+        "contains": "pub struct ExpansionOptions"
+      },
+      "target": {
+        "source": "source4",
+        "contains": "ExpansionOptions.enabledは既定false"
+      },
+      "context": [
+        {
+          "source": "source13"
+        }
+      ]
+    },
+    {
+      "id": "rtlc-implementation-2",
+      "topic": "同一build・全Next/definition・portable状態の完全展開だけを保持し、SHA-256、保持状態数上限とmerge競合拒否を扱う。property/constraintsの再検査と逐次探索の範囲を維持する",
+      "mode": "semantic",
+      "reference": {
+        "source": "source10",
+        "contains": "impl SafetyExpansionCache"
+      },
+      "target": {
+        "source": "source4",
+        "contains": "任意のcheck_incremental"
+      },
+      "context": [
+        {
+          "source": "source13"
+        }
+      ]
+    },
+    {
+      "id": "rtlc-implementation-3",
+      "topic": "IRの値と式・予算・結果の公開契約",
       "mode": "semantic",
       "reference": {
         "source": "source11"
@@ -176,14 +228,21 @@
       "target": {
         "source": "source4"
       },
-      "context": []
+      "context": [
+        {
+          "source": "source21"
+        },
+        {
+          "source": "source13"
+        }
+      ]
     },
     {
-      "id": "rtlc-implementation-2",
-      "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
+      "id": "rtlc-implementation-4",
+      "topic": "有限BFS、invariantとdeadlock、結果と探索予算",
       "mode": "semantic",
       "reference": {
-        "source": "source18"
+        "source": "source13"
       },
       "target": {
         "source": "source4"
@@ -191,11 +250,23 @@
       "context": []
     },
     {
-      "id": "rtlc-implementation-3",
+      "id": "rtlc-implementation-5",
+      "topic": "temporal/fairnessの検査とlasso、保証範囲の区別",
+      "mode": "semantic",
+      "reference": {
+        "source": "source20"
+      },
+      "target": {
+        "source": "source4"
+      },
+      "context": []
+    },
+    {
+      "id": "rtlc-implementation-6",
       "topic": "native内部並列化の対象、逐次fallback、workerとworkの契約",
       "mode": "semantic",
       "reference": {
-        "source": "source15"
+        "source": "source17"
       },
       "target": {
         "source": "source4"

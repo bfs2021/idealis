@@ -1,0 +1,15 @@
+# Rustの状態展開を再利用する
+
+基点はverified-cacheのd329d47aa。今回はrtlcの逐次探索に、状態ごとのNext展開cacheを任意で加える。初期状態・visited・property判定は再利用しない。毎回現在のInitからBFSし、現在のinvariant、action property、constraints、deadlock、時間論理を既存のaccept経路で再検査する。
+
+namespaceは実際のbackend build digest、IR version、変数の順序、全definition、Next全体。Initやpropertyは除く。constantsやmoduleの影響はコンパイルされたNext/definitionに含める。v2のdefinition集合の変化は保守的に全missとする。異なるNext間の意味的同値や部分依存解析は行わない。
+
+保存するのは全branchの評価が正常に終了した生のsuccessor列とaction index。constraintsによる除外前の候補を順序・重複込みで保持する。途中のwork/state予算切れ、反例、評価エラーで中断した展開をcompleteとして保存しない。空のsuccessor列はdeadlock検査を省く根拠にしない。状態/値はportableなcanonical JSONで保存し、process内のScalar::Refやfingerprintを永続IDに使わない。SHA-256とidentity全文で破損・別namespaceを検査する。cache生成器の正しさと、悪意ある改変からの保護は別の前提として明記する。
+
+保持する状態数には明示的な上限を設ける。各runのhit/miss/writeと現在のworkを別に返し、過去のworkは足さない。nativeではcache objectを再利用し、Wasm/JSONLはsnapshotを入出力する。同じnamespaceのsnapshotをmergeでき、同じ状態の異なる展開を拒否する。共有ホストのCASと所有権は前段のcache層の契約に従う。
+
+Leanでcache置換後もNextが同じである条件、任意の現在Initからの到達関係の保存、property再検査の健全性を証明する。モデルとRustの状態遷移は別に実装する。故障対照は、古いproperty判定の流用、Next変更の無視、未完了展開の保存、空展開のdeadlock無視を対象にする。生成物やcache snapshotを変更した反例は実実装へ再生する。
+
+TDDでRust APIのRedを保存してから実装する。正常/違反/空/深さ・状態・work予算、property/Init/constraint/Next/build変更、v1/v2、複合値の別process再利用、破損・merge競合、保持上限を検査する。保存Quint 6生成物とTLCの正常/違反オラクルを使い、native/Wasm/Chromiumの一致も要求する。
+
+Criterionはuncached、cold、warmを分け、正しい判定・計数・反例を確認してから測る。小さい生成物でcacheの固定費が上回る場合も保存する。raw snapshotの入出力・コンパイル・探索の費用を分け、改善しなければ既定経路へ採用しない。新規runへsource/toolchain/binary digest、raw出力、失敗、証明監査と測定を保存する。終了前にcheck/browser/mutation、Rust fmt/clippy/tests、portable/runtimeと配布consumer、support同期を確認する。

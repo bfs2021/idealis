@@ -80,3 +80,6 @@
 - [x] frameのbodyもcapture compaction前にcompiled depthを検査する。
 
 - [x] v2は時間論理IRの構造的な深さを式深さと別に128で制限する。flatな連言・選言からできる木もframeのcapture compaction前に検査し、超過を`compiled temporal nesting exceeds 128`で拒否する。v1のcompile時受理は変えない。
+
+- [x] 固定したQuint 0.33.1 / Apalache 0.63.0の6生成物・12設定を、省略v1・明示v1・明示v2でnative/Wasmに照合する。生成元・生成TLA+とTLCオラクルの一致を回帰で検査する。Quint全体への互換性ではない。
+- [x] 同じ6生成物の解析・v1/v2のcompile・prepared check・parse+compile+checkをCriterionで分離する。計42測定の各compile/check経路はTLCの正常判定・状態数・生成数を検査してから測定する。CIでは時間の閾値を設けずsmoke実行する。

@@ -1,0 +1,2058 @@
+[
+  {
+    "name": "Counter",
+    "source": "-------------------------------- MODULE Counter --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  count\n\n(*\n  @type: (() => Bool);\n*)\nstep == count' := (IF count < 3 THEN count + 1 ELSE 0)\n\n(*\n  @type: (() => Bool);\n*)\nsafety == count >= 0 /\\ count <= 3\n\n(*\n  @type: (() => Bool);\n*)\nbroken == count < 2\n\n(*\n  @type: (() => Bool);\n*)\ninit == count = 0\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "unchanged Quint 0.33.1 output",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "Counter",
+      "variables": ["count"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "if",
+                "condition": {
+                  "op": "lt",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "3"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "add",
+                  "left": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "1"
+                    }
+                  }
+                },
+                "alternative": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 0,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "and",
+            "left": {
+              "op": "ge",
+              "left": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              },
+              "right": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            },
+            "right": {
+              "op": "le",
+              "left": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              },
+              "right": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "3"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 4,
+    "generated": 5
+  },
+  {
+    "name": "SetFold",
+    "source": "-------------------------------- MODULE SetFold --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_13, element_13) == acc_13 + element_13\n    IN\n    ApaFoldSet(__QUINT_LAMBDA0, 0, { 3, 1, 2 }))\n\n(*\n  @type: (() => Bool);\n*)\nstep == total' := total\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total = 6\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 5\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "unchanged Quint 0.33.1 output",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "SetFold",
+      "variables": ["total"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "fold",
+                "accumulator": 0,
+                "initial": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                },
+                "collection": {
+                  "op": "set",
+                  "values": [
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "3"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "2"
+                      }
+                    }
+                  ]
+                },
+                "order": "set-members",
+                "body": {
+                  "op": "call",
+                  "definition": 0,
+                  "arguments": [
+                    {
+                      "op": "bound",
+                      "slot": 0
+                    },
+                    {
+                      "op": "bound",
+                      "slot": 1
+                    }
+                  ],
+                  "captures": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 1,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "6"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 1,
+    "generated": 2
+  },
+  {
+    "name": "SequenceFold",
+    "source": "----------------------------- MODULE SequenceFold -----------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_15, element_15) == acc_15 * 10 + element_15\n    IN\n    ApaFoldSeqLeft(__QUINT_LAMBDA0, 0, <<3, 1, 2>>))\n\n(*\n  @type: (() => Bool);\n*)\nstep == total' := total\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total = 312\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 123\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "unchanged Quint 0.33.1 output",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "SequenceFold",
+      "variables": ["total"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "fold",
+                "accumulator": 0,
+                "initial": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                },
+                "collection": {
+                  "op": "tuple",
+                  "values": [
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "3"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "2"
+                      }
+                    }
+                  ]
+                },
+                "order": "sequence-left",
+                "body": {
+                  "op": "call",
+                  "definition": 0,
+                  "arguments": [
+                    {
+                      "op": "bound",
+                      "slot": 0
+                    },
+                    {
+                      "op": "bound",
+                      "slot": 1
+                    }
+                  ],
+                  "captures": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 1,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "mul",
+              "left": {
+                "op": "parameter",
+                "slot": 0
+              },
+              "right": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "10"
+                }
+              }
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "312"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 1,
+    "generated": 2
+  },
+  {
+    "name": "Choice",
+    "source": "-------------------------------- MODULE Choice --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  value\n\n(*\n  @type: (() => Bool);\n*)\nstep == \\E selected \\in { 0, 1, 2 }: value' := selected\n\n(*\n  @type: (() => Bool);\n*)\nsafety == value >= 0 /\\ value <= 2\n\n(*\n  @type: (() => Bool);\n*)\nbroken == value < 2\n\n(*\n  @type: (() => Bool);\n*)\ninit == value = 0\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "unchanged Quint 0.33.1 output",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "Choice",
+      "variables": ["value"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "bind",
+              "slot": 0,
+              "domain": {
+                "kind": "set",
+                "values": [
+                  {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "0"
+                    }
+                  },
+                  {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "1"
+                    }
+                  },
+                  {
+                    "op": "literal",
+                    "value": {
+                      "type": "int",
+                      "value": "2"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "bound",
+                "slot": 0
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 0,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "and",
+            "left": {
+              "op": "ge",
+              "left": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              },
+              "right": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              }
+            },
+            "right": {
+              "op": "le",
+              "left": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              },
+              "right": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "2"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 3,
+    "generated": 10
+  },
+  {
+    "name": "Match",
+    "source": "--------------------------------- MODULE Match ---------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\n(*\n  @type: (() => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n*)\nBusy == Variant(\"Busy\", [tag |-> \"UNIT\"])\n\n(*\n  @type: (() => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n*)\nDone == Variant(\"Done\", [tag |-> \"UNIT\"])\n\nVARIABLE\n  (*\n    @type: Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str });\n  *)\n  phase\n\n(*\n  @type: (() => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n*)\nIdle == Variant(\"Idle\", [tag |-> \"UNIT\"])\n\n(*\n  @type: (() => Bool);\n*)\ninit == phase = Idle\n\n(*\n  @type: (() => Bool);\n*)\nstep ==\n  phase'\n    := (CASE VariantTag(phase) = \"Idle\"\n        -> LET (*\n          @type: (({ tag: Str }) => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n        *)\n        __QUINT_LAMBDA0(id__30) == Busy\n        IN\n        __QUINT_LAMBDA0((VariantGetUnsafe(\"Idle\", phase)))\n      [] VariantTag(phase) = \"Busy\"\n        -> LET (*\n          @type: (({ tag: Str }) => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n        *)\n        __QUINT_LAMBDA1(id__33) == Done\n        IN\n        __QUINT_LAMBDA1((VariantGetUnsafe(\"Busy\", phase)))\n      [] VariantTag(phase) = \"Done\"\n        -> LET (*\n          @type: (({ tag: Str }) => Busy({ tag: Str }) | Done({ tag: Str }) | Idle({ tag: Str }));\n        *)\n        __QUINT_LAMBDA2(id__36) == Idle\n        IN\n        __QUINT_LAMBDA2((VariantGetUnsafe(\"Done\", phase))))\n\n(*\n  @type: (() => Bool);\n*)\nsafety ==\n  CASE VariantTag(phase) = \"Idle\"\n      -> LET (*\n        @type: (({ tag: Str }) => Bool);\n      *)\n      __QUINT_LAMBDA3(id__47) == TRUE\n      IN\n      __QUINT_LAMBDA3((VariantGetUnsafe(\"Idle\", phase)))\n    [] VariantTag(phase) = \"Busy\"\n      -> LET (*\n        @type: (({ tag: Str }) => Bool);\n      *)\n      __QUINT_LAMBDA4(id__50) == TRUE\n      IN\n      __QUINT_LAMBDA4((VariantGetUnsafe(\"Busy\", phase)))\n    [] VariantTag(phase) = \"Done\"\n      -> LET (*\n        @type: (({ tag: Str }) => Bool);\n      *)\n      __QUINT_LAMBDA5(id__53) == TRUE\n      IN\n      __QUINT_LAMBDA5((VariantGetUnsafe(\"Done\", phase)))\n\n(*\n  @type: (() => Bool);\n*)\nbroken == phase /= Done\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "unchanged Quint 0.33.1 output",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "Match",
+      "variables": ["phase"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "call",
+                "definition": 2,
+                "arguments": [],
+                "captures": []
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "if",
+                "condition": {
+                  "op": "eq",
+                  "left": {
+                    "op": "variant-tag",
+                    "argument": {
+                      "op": "read",
+                      "slot": 0,
+                      "next": false
+                    }
+                  },
+                  "right": {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "Idle"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "call",
+                  "definition": 4,
+                  "arguments": [
+                    {
+                      "op": "at",
+                      "target": {
+                        "op": "read",
+                        "slot": 0,
+                        "next": false
+                      },
+                      "key": {
+                        "op": "data",
+                        "value": {
+                          "type": "string",
+                          "value": "Idle"
+                        }
+                      }
+                    }
+                  ],
+                  "captures": []
+                },
+                "alternative": {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "op": "variant-tag",
+                      "argument": {
+                        "op": "read",
+                        "slot": 0,
+                        "next": false
+                      }
+                    },
+                    "right": {
+                      "op": "data",
+                      "value": {
+                        "type": "string",
+                        "value": "Busy"
+                      }
+                    }
+                  },
+                  "consequent": {
+                    "op": "call",
+                    "definition": 5,
+                    "arguments": [
+                      {
+                        "op": "at",
+                        "target": {
+                          "op": "read",
+                          "slot": 0,
+                          "next": false
+                        },
+                        "key": {
+                          "op": "data",
+                          "value": {
+                            "type": "string",
+                            "value": "Busy"
+                          }
+                        }
+                      }
+                    ],
+                    "captures": []
+                  },
+                  "alternative": {
+                    "op": "if",
+                    "condition": {
+                      "op": "eq",
+                      "left": {
+                        "op": "variant-tag",
+                        "argument": {
+                          "op": "read",
+                          "slot": 0,
+                          "next": false
+                        }
+                      },
+                      "right": {
+                        "op": "data",
+                        "value": {
+                          "type": "string",
+                          "value": "Done"
+                        }
+                      }
+                    },
+                    "consequent": {
+                      "op": "call",
+                      "definition": 6,
+                      "arguments": [
+                        {
+                          "op": "at",
+                          "target": {
+                            "op": "read",
+                            "slot": 0,
+                            "next": false
+                          },
+                          "key": {
+                            "op": "data",
+                            "value": {
+                              "type": "string",
+                              "value": "Done"
+                            }
+                          }
+                        }
+                      ],
+                      "captures": []
+                    },
+                    "alternative": {
+                      "op": "unmatched-case",
+                      "location": "line 36, column 9"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 7,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 1,
+          "body": {
+            "op": "function",
+            "bounds": [
+              {
+                "slot": 0,
+                "domain": {
+                  "kind": "set",
+                  "values": [
+                    {
+                      "op": "data",
+                      "value": {
+                        "type": "string",
+                        "value": "Busy"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "body": {
+              "op": "record",
+              "fields": [
+                [
+                  "tag",
+                  {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "UNIT"
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 1,
+          "body": {
+            "op": "function",
+            "bounds": [
+              {
+                "slot": 0,
+                "domain": {
+                  "kind": "set",
+                  "values": [
+                    {
+                      "op": "data",
+                      "value": {
+                        "type": "string",
+                        "value": "Done"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "body": {
+              "op": "record",
+              "fields": [
+                [
+                  "tag",
+                  {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "UNIT"
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": 2,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 1,
+          "body": {
+            "op": "function",
+            "bounds": [
+              {
+                "slot": 0,
+                "domain": {
+                  "kind": "set",
+                  "values": [
+                    {
+                      "op": "data",
+                      "value": {
+                        "type": "string",
+                        "value": "Idle"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "body": {
+              "op": "record",
+              "fields": [
+                [
+                  "tag",
+                  {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "UNIT"
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": 3,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 1,
+          "body": {
+            "op": "function",
+            "bounds": [
+              {
+                "slot": 0,
+                "domain": {
+                  "kind": "set",
+                  "values": [
+                    {
+                      "op": "data",
+                      "value": {
+                        "type": "string",
+                        "value": "Idle"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "body": {
+              "op": "record",
+              "fields": [
+                [
+                  "tag",
+                  {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "UNIT"
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": 4,
+          "parameterCount": 1,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "call",
+            "definition": 0,
+            "arguments": [],
+            "captures": []
+          }
+        },
+        {
+          "id": 5,
+          "parameterCount": 1,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "call",
+            "definition": 1,
+            "arguments": [],
+            "captures": []
+          }
+        },
+        {
+          "id": 6,
+          "parameterCount": 1,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "call",
+            "definition": 3,
+            "arguments": [],
+            "captures": []
+          }
+        },
+        {
+          "id": 7,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "if",
+            "condition": {
+              "op": "eq",
+              "left": {
+                "op": "variant-tag",
+                "argument": {
+                  "op": "read",
+                  "slot": 0,
+                  "next": false
+                }
+              },
+              "right": {
+                "op": "data",
+                "value": {
+                  "type": "string",
+                  "value": "Idle"
+                }
+              }
+            },
+            "consequent": {
+              "op": "call",
+              "definition": 8,
+              "arguments": [
+                {
+                  "op": "at",
+                  "target": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  },
+                  "key": {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "Idle"
+                    }
+                  }
+                }
+              ],
+              "captures": []
+            },
+            "alternative": {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "op": "variant-tag",
+                  "argument": {
+                    "op": "read",
+                    "slot": 0,
+                    "next": false
+                  }
+                },
+                "right": {
+                  "op": "data",
+                  "value": {
+                    "type": "string",
+                    "value": "Busy"
+                  }
+                }
+              },
+              "consequent": {
+                "op": "call",
+                "definition": 9,
+                "arguments": [
+                  {
+                    "op": "at",
+                    "target": {
+                      "op": "read",
+                      "slot": 0,
+                      "next": false
+                    },
+                    "key": {
+                      "op": "data",
+                      "value": {
+                        "type": "string",
+                        "value": "Busy"
+                      }
+                    }
+                  }
+                ],
+                "captures": []
+              },
+              "alternative": {
+                "op": "if",
+                "condition": {
+                  "op": "eq",
+                  "left": {
+                    "op": "variant-tag",
+                    "argument": {
+                      "op": "read",
+                      "slot": 0,
+                      "next": false
+                    }
+                  },
+                  "right": {
+                    "op": "data",
+                    "value": {
+                      "type": "string",
+                      "value": "Done"
+                    }
+                  }
+                },
+                "consequent": {
+                  "op": "call",
+                  "definition": 10,
+                  "arguments": [
+                    {
+                      "op": "at",
+                      "target": {
+                        "op": "read",
+                        "slot": 0,
+                        "next": false
+                      },
+                      "key": {
+                        "op": "data",
+                        "value": {
+                          "type": "string",
+                          "value": "Done"
+                        }
+                      }
+                    }
+                  ],
+                  "captures": []
+                },
+                "alternative": {
+                  "op": "unmatched-case",
+                  "location": "line 62, column 3"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 8,
+          "parameterCount": 1,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "literal",
+            "value": {
+              "type": "bool",
+              "value": true
+            }
+          }
+        },
+        {
+          "id": 9,
+          "parameterCount": 1,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "literal",
+            "value": {
+              "type": "bool",
+              "value": true
+            }
+          }
+        },
+        {
+          "id": 10,
+          "parameterCount": 1,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "literal",
+            "value": {
+              "type": "bool",
+              "value": true
+            }
+          }
+        }
+      ]
+    },
+    "states": 3,
+    "generated": 4
+  },
+  {
+    "name": "NestedFold",
+    "source": "------------------------------ MODULE NestedFold ------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA1(acc_24, outer_24) ==\n      acc_24\n        + (LET (*\n          @type: ((Int, Int) => Int);\n        *)\n        __QUINT_LAMBDA0(inner_21, element_21) == inner_21 + element_21\n        IN\n        ApaFoldSet(__QUINT_LAMBDA0, 0, { outer_24, (outer_24 + 1) }))\n    IN\n    ApaFoldSeqLeft(__QUINT_LAMBDA1, 0, <<1, 2>>))\n\n(*\n  @type: (() => Bool);\n*)\nstep == total' := total\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total = 8\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 6\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "unchanged Quint 0.33.1 output",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "NestedFold",
+      "variables": ["total"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "fold",
+                "accumulator": 0,
+                "initial": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                },
+                "collection": {
+                  "op": "tuple",
+                  "values": [
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "2"
+                      }
+                    }
+                  ]
+                },
+                "order": "sequence-left",
+                "body": {
+                  "op": "call",
+                  "definition": 0,
+                  "arguments": [
+                    {
+                      "op": "bound",
+                      "slot": 0
+                    },
+                    {
+                      "op": "bound",
+                      "slot": 1
+                    }
+                  ],
+                  "captures": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "read",
+                "slot": 0,
+                "next": false
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 2,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 2,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "fold",
+              "accumulator": 0,
+              "initial": {
+                "op": "literal",
+                "value": {
+                  "type": "int",
+                  "value": "0"
+                }
+              },
+              "collection": {
+                "op": "set",
+                "values": [
+                  {
+                    "op": "parameter",
+                    "slot": 1
+                  },
+                  {
+                    "op": "add",
+                    "left": {
+                      "op": "parameter",
+                      "slot": 1
+                    },
+                    "right": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    }
+                  }
+                ]
+              },
+              "order": "set-members",
+              "body": {
+                "op": "call",
+                "definition": 1,
+                "arguments": [
+                  {
+                    "op": "bound",
+                    "slot": 0
+                  },
+                  {
+                    "op": "bound",
+                    "slot": 1
+                  }
+                ],
+                "captures": []
+              }
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 2,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "eq",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "8"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 1,
+    "generated": 2
+  },
+  {
+    "name": "derived-fold-16",
+    "source": "-------------------------------- MODULE SetFold --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_13, element_13) == acc_13 + element_13\n    IN\n    ApaFoldSet(__QUINT_LAMBDA0, 0, { 3, 1, 2 }))\n\n(*\n  @type: (() => Bool);\n*)\nHeavy == LET Add(acc, element) == acc + element IN ApaFoldSet(Add, 0, 1..16)\n\nstep == total' := Heavy\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total >= 0\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 5\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "derived from SetFold: Next recomputes ApaFoldSet over 1..16; current invariant total>=0",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "SetFold",
+      "variables": ["total"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "fold",
+                "accumulator": 0,
+                "initial": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                },
+                "collection": {
+                  "op": "set",
+                  "values": [
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "3"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "2"
+                      }
+                    }
+                  ]
+                },
+                "order": "set-members",
+                "body": {
+                  "op": "call",
+                  "definition": 0,
+                  "arguments": [
+                    {
+                      "op": "bound",
+                      "slot": 0
+                    },
+                    {
+                      "op": "bound",
+                      "slot": 1
+                    }
+                  ],
+                  "captures": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "call",
+                "definition": 1,
+                "arguments": [],
+                "captures": []
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 3,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 2,
+          "body": {
+            "op": "fold",
+            "accumulator": 0,
+            "initial": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            },
+            "collection": {
+              "op": "map-set",
+              "bounds": [
+                {
+                  "slot": 0,
+                  "domain": {
+                    "kind": "range",
+                    "lower": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    "upper": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "16"
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "op": "bound",
+                "slot": 0
+              }
+            },
+            "order": "set-members",
+            "body": {
+              "op": "call",
+              "definition": 2,
+              "arguments": [
+                {
+                  "op": "bound",
+                  "slot": 0
+                },
+                {
+                  "op": "bound",
+                  "slot": 1
+                }
+              ],
+              "captures": []
+            }
+          }
+        },
+        {
+          "id": 2,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 3,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "ge",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 2,
+    "generated": 3
+  },
+  {
+    "name": "derived-fold-256",
+    "source": "-------------------------------- MODULE SetFold --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_13, element_13) == acc_13 + element_13\n    IN\n    ApaFoldSet(__QUINT_LAMBDA0, 0, { 3, 1, 2 }))\n\n(*\n  @type: (() => Bool);\n*)\nHeavy == LET Add(acc, element) == acc + element IN ApaFoldSet(Add, 0, 1..256)\n\nstep == total' := Heavy\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total >= 0\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 5\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "derived from SetFold: Next recomputes ApaFoldSet over 1..256; current invariant total>=0",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "SetFold",
+      "variables": ["total"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "fold",
+                "accumulator": 0,
+                "initial": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                },
+                "collection": {
+                  "op": "set",
+                  "values": [
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "3"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "2"
+                      }
+                    }
+                  ]
+                },
+                "order": "set-members",
+                "body": {
+                  "op": "call",
+                  "definition": 0,
+                  "arguments": [
+                    {
+                      "op": "bound",
+                      "slot": 0
+                    },
+                    {
+                      "op": "bound",
+                      "slot": 1
+                    }
+                  ],
+                  "captures": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "call",
+                "definition": 1,
+                "arguments": [],
+                "captures": []
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 3,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 2,
+          "body": {
+            "op": "fold",
+            "accumulator": 0,
+            "initial": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            },
+            "collection": {
+              "op": "map-set",
+              "bounds": [
+                {
+                  "slot": 0,
+                  "domain": {
+                    "kind": "range",
+                    "lower": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    "upper": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "256"
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "op": "bound",
+                "slot": 0
+              }
+            },
+            "order": "set-members",
+            "body": {
+              "op": "call",
+              "definition": 2,
+              "arguments": [
+                {
+                  "op": "bound",
+                  "slot": 0
+                },
+                {
+                  "op": "bound",
+                  "slot": 1
+                }
+              ],
+              "captures": []
+            }
+          }
+        },
+        {
+          "id": 2,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 3,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "ge",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 2,
+    "generated": 3
+  },
+  {
+    "name": "derived-fold-4096",
+    "source": "-------------------------------- MODULE SetFold --------------------------------\n\nEXTENDS Integers, Sequences, FiniteSets, TLC, Apalache, Variants\n\nVARIABLE\n  (*\n    @type: Int;\n  *)\n  total\n\n(*\n  @type: (() => Bool);\n*)\ninit ==\n  total\n    = (LET (*\n      @type: ((Int, Int) => Int);\n    *)\n    __QUINT_LAMBDA0(acc_13, element_13) == acc_13 + element_13\n    IN\n    ApaFoldSet(__QUINT_LAMBDA0, 0, { 3, 1, 2 }))\n\n(*\n  @type: (() => Bool);\n*)\nHeavy == LET Add(acc, element) == acc + element IN ApaFoldSet(Add, 0, 1..4096)\n\nstep == total' := Heavy\n\n(*\n  @type: (() => Bool);\n*)\nsafety == total >= 0\n\n(*\n  @type: (() => Bool);\n*)\nbroken == total = 5\n\n(*\n  @type: (() => Bool);\n*)\nq_init == init\n\n(*\n  @type: (() => Bool);\n*)\nq_step == step\n\n(*\n  @type: (() => Bool);\n*)\nq_inv == safety /\\ broken\n\n================================================================================\n",
+    "config": "INIT q_init\nNEXT q_step\nINVARIANT safety\n",
+    "provenance": "derived from SetFold: Next recomputes ApaFoldSet over 1..4096; current invariant total>=0",
+    "program": {
+      "format": "modelt.safety-program",
+      "version": 2,
+      "name": "SetFold",
+      "variables": ["total"],
+      "initial": [
+        {
+          "name": "init",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "fold",
+                "accumulator": 0,
+                "initial": {
+                  "op": "literal",
+                  "value": {
+                    "type": "int",
+                    "value": "0"
+                  }
+                },
+                "collection": {
+                  "op": "set",
+                  "values": [
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "3"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "2"
+                      }
+                    }
+                  ]
+                },
+                "order": "set-members",
+                "body": {
+                  "op": "call",
+                  "definition": 0,
+                  "arguments": [
+                    {
+                      "op": "bound",
+                      "slot": 0
+                    },
+                    {
+                      "op": "bound",
+                      "slot": 1
+                    }
+                  ],
+                  "captures": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "next": [
+        {
+          "name": "step",
+          "steps": [
+            {
+              "kind": "assign",
+              "slot": 0,
+              "value": {
+                "op": "call",
+                "definition": 1,
+                "arguments": [],
+                "captures": []
+              }
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        {
+          "name": "safety",
+          "expression": {
+            "op": "call",
+            "definition": 3,
+            "arguments": [],
+            "captures": []
+          }
+        }
+      ],
+      "assumptions": [],
+      "checkDeadlock": true,
+      "definitions": [
+        {
+          "id": 0,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 1,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 2,
+          "body": {
+            "op": "fold",
+            "accumulator": 0,
+            "initial": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            },
+            "collection": {
+              "op": "map-set",
+              "bounds": [
+                {
+                  "slot": 0,
+                  "domain": {
+                    "kind": "range",
+                    "lower": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "1"
+                      }
+                    },
+                    "upper": {
+                      "op": "literal",
+                      "value": {
+                        "type": "int",
+                        "value": "4096"
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "op": "bound",
+                "slot": 0
+              }
+            },
+            "order": "set-members",
+            "body": {
+              "op": "call",
+              "definition": 2,
+              "arguments": [
+                {
+                  "op": "bound",
+                  "slot": 0
+                },
+                {
+                  "op": "bound",
+                  "slot": 1
+                }
+              ],
+              "captures": []
+            }
+          }
+        },
+        {
+          "id": 2,
+          "parameterCount": 2,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "add",
+            "left": {
+              "op": "parameter",
+              "slot": 0
+            },
+            "right": {
+              "op": "parameter",
+              "slot": 1
+            }
+          }
+        },
+        {
+          "id": 3,
+          "parameterCount": 0,
+          "captureCount": 0,
+          "bodyKind": "expression",
+          "localScope": 0,
+          "body": {
+            "op": "ge",
+            "left": {
+              "op": "read",
+              "slot": 0,
+              "next": false
+            },
+            "right": {
+              "op": "literal",
+              "value": {
+                "type": "int",
+                "value": "0"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "states": 2,
+    "generated": 3
+  }
+]

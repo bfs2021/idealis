@@ -1,0 +1,435 @@
+{
+  "sourceVersion": "db4c037fa32d0171b627fcd2f677671b1ee5f3d81f54cfa9a74a25478bd40d36",
+  "commit": "d275e560fda79916bf9bdde5b722ca55255859e8",
+  "environment": {
+    "node": "v24.22.2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M5",
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+    "binary": {
+      "path": "/Users/mz/ghq/github.com/mizchi/idealis/.artifacts/pr62-worktree/crates/rtla-compiler/target/release/deps/quint_generated-46e645c130706421",
+      "sha256": "e4976c34e75f47b8cbbcf052e704dbf8477dcb9152984122cfe71780ca2cdcac",
+      "profile": {
+        "opt_level": "3",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": true
+      }
+    }
+  },
+  "criterion": {
+    "samples": 20,
+    "warmUpMs": 500,
+    "measurementMs": 1000,
+    "confidence": 0.95
+  },
+  "unit": "nanoseconds",
+  "benchmarks": [
+    {
+      "id": "quint-check/Choice/v1",
+      "medianNs": 1196.1870759264377,
+      "lowerNs": 1193.509034110098,
+      "upperNs": 1198.696898972355,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/Choice/v2",
+      "medianNs": 3747.4507585839765,
+      "lowerNs": 3721.245098039216,
+      "upperNs": 3783.874980392157,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/Counter/v1",
+      "medianNs": 1033.8617108724243,
+      "lowerNs": 1030.6939822575237,
+      "upperNs": 1042.484789052061,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/Counter/v2",
+      "medianNs": 3905.508976460698,
+      "lowerNs": 3888.3289919097297,
+      "upperNs": 3945.461919398907,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/Match/v1",
+      "medianNs": 3948.317471590909,
+      "lowerNs": 3933.945203234266,
+      "upperNs": 4420.822786690434,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/Match/v2",
+      "medianNs": 24198.972999509082,
+      "lowerNs": 24092.720946579193,
+      "upperNs": 24281.634020618556,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/NestedFold/v1",
+      "medianNs": 1235.645658688837,
+      "lowerNs": 1228.3272544389051,
+      "upperNs": 1244.040904778769,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/NestedFold/v2",
+      "medianNs": 12085.71456185567,
+      "lowerNs": 12075.7606314433,
+      "upperNs": 12125.325665807559,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/SequenceFold/v1",
+      "medianNs": 787.431710611333,
+      "lowerNs": 784.3337233471123,
+      "upperNs": 793.1811209198409,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/SequenceFold/v2",
+      "medianNs": 5887.622568153655,
+      "lowerNs": 5876.110600909802,
+      "upperNs": 6041.755045140733,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/SetFold/v1",
+      "medianNs": 723.2563981762918,
+      "lowerNs": 717.2497392235425,
+      "upperNs": 732.2341263346582,
+      "samples": 20
+    },
+    {
+      "id": "quint-check/SetFold/v2",
+      "medianNs": 4703.906362116145,
+      "lowerNs": 4683.395423666008,
+      "upperNs": 4757.015524490429,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/Choice/v1",
+      "medianNs": 26310.661118293472,
+      "lowerNs": 25871.38614163614,
+      "upperNs": 26956.06653954598,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/Choice/v2",
+      "medianNs": 25696.30635567633,
+      "lowerNs": 25594.104104907776,
+      "upperNs": 25740.721586575135,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/Counter/v1",
+      "medianNs": 26170.763693916873,
+      "lowerNs": 25689.571098265893,
+      "upperNs": 26868.920520231215,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/Counter/v2",
+      "medianNs": 25039.39351503759,
+      "lowerNs": 24962.047478070177,
+      "upperNs": 25097.80197683203,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/Match/v1",
+      "medianNs": 101659.79609929078,
+      "lowerNs": 99601.36838905775,
+      "upperNs": 101897.3865248227,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/Match/v2",
+      "medianNs": 144573.42656227347,
+      "lowerNs": 144263.33814333816,
+      "upperNs": 146529.11898395722,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/NestedFold/v1",
+      "medianNs": 35110.63619402985,
+      "lowerNs": 34961.275986140725,
+      "upperNs": 35279.40472636816,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/NestedFold/v2",
+      "medianNs": 71470.56076923077,
+      "lowerNs": 70081.60205128204,
+      "upperNs": 72347.21464634436,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/SequenceFold/v1",
+      "medianNs": 24821.80828373016,
+      "lowerNs": 24582.018006350267,
+      "upperNs": 25342.11328125,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/SequenceFold/v2",
+      "medianNs": 36112.49812030075,
+      "lowerNs": 35990.843107769426,
+      "upperNs": 36286.13591671486,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/SetFold/v1",
+      "medianNs": 21139.1049845679,
+      "lowerNs": 21009.988055555557,
+      "upperNs": 21388.789682539682,
+      "samples": 20
+    },
+    {
+      "id": "quint-compile/SetFold/v2",
+      "medianNs": 31593.752500000002,
+      "lowerNs": 31533.73933333333,
+      "upperNs": 31697.73177777778,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/Choice/v1",
+      "medianNs": 46801.95536744109,
+      "lowerNs": 46404.388616557735,
+      "upperNs": 47289.165441176476,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/Choice/v2",
+      "medianNs": 49444.965104166666,
+      "lowerNs": 48951.415021929824,
+      "upperNs": 49593.8974609375,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/Counter/v1",
+      "medianNs": 45357.16089466089,
+      "lowerNs": 44923.371579743005,
+      "upperNs": 45755.982142857145,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/Counter/v2",
+      "medianNs": 48182.80579605579,
+      "lowerNs": 47855.893939393936,
+      "upperNs": 48496.57996632997,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/Match/v1",
+      "medianNs": 180250.1697530864,
+      "lowerNs": 175192.6866255144,
+      "upperNs": 184602.8796296296,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/Match/v2",
+      "medianNs": 241034.68351648352,
+      "lowerNs": 240013.54210526316,
+      "upperNs": 242760.6109375,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/NestedFold/v1",
+      "medianNs": 68792.35144198526,
+      "lowerNs": 68305.57746478873,
+      "upperNs": 69217.41304773084,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/NestedFold/v2",
+      "medianNs": 115191.27310654685,
+      "lowerNs": 114609.44679579147,
+      "upperNs": 116326.87010347376,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/SequenceFold/v1",
+      "medianNs": 48868.57879818594,
+      "lowerNs": 48649.107142857145,
+      "upperNs": 49297.363338192416,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/SequenceFold/v2",
+      "medianNs": 66079.10642781876,
+      "lowerNs": 66045.94682440846,
+      "upperNs": 66167.50244618395,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/SetFold/v1",
+      "medianNs": 44345.13809523809,
+      "lowerNs": 44060.04188248399,
+      "upperNs": 45292.67597883598,
+      "samples": 20
+    },
+    {
+      "id": "quint-end-to-end/SetFold/v2",
+      "medianNs": 60242.46624472574,
+      "lowerNs": 59250.50452079566,
+      "upperNs": 61371.879746835446,
+      "samples": 20
+    },
+    {
+      "id": "quint-parse/Choice",
+      "medianNs": 18402.59180447471,
+      "lowerNs": 18134.31760700389,
+      "upperNs": 18646.384000370577,
+      "samples": 20
+    },
+    {
+      "id": "quint-parse/Counter",
+      "medianNs": 17744.77658371041,
+      "lowerNs": 17568.026923076923,
+      "upperNs": 17927.512393162393,
+      "samples": 20
+    },
+    {
+      "id": "quint-parse/Match",
+      "medianNs": 70445.0650735294,
+      "lowerNs": 70099.92104341736,
+      "upperNs": 70731.64722042663,
+      "samples": 20
+    },
+    {
+      "id": "quint-parse/NestedFold",
+      "medianNs": 30221.355450733754,
+      "lowerNs": 29946.104122990917,
+      "upperNs": 30583.27147911051,
+      "samples": 20
+    },
+    {
+      "id": "quint-parse/SequenceFold",
+      "medianNs": 22088.688196184907,
+      "lowerNs": 21919.859654234657,
+      "upperNs": 22378.70548941799,
+      "samples": 20
+    },
+    {
+      "id": "quint-parse/SetFold",
+      "medianNs": 21467.182593067122,
+      "lowerNs": 21329.433295964125,
+      "upperNs": 21609.168535127057,
+      "samples": 20
+    }
+  ],
+  "programs": [
+    {
+      "definitions": 0,
+      "generated": 5,
+      "irBytes": 1038,
+      "name": "Counter",
+      "states": 4,
+      "version": 1,
+      "work": 10
+    },
+    {
+      "definitions": 1,
+      "generated": 5,
+      "irBytes": 1121,
+      "name": "Counter",
+      "states": 4,
+      "version": 2,
+      "work": 14
+    },
+    {
+      "definitions": 0,
+      "generated": 2,
+      "irBytes": 853,
+      "name": "SetFold",
+      "states": 1,
+      "version": 1,
+      "work": 11
+    },
+    {
+      "definitions": 2,
+      "generated": 2,
+      "irBytes": 1222,
+      "name": "SetFold",
+      "states": 1,
+      "version": 2,
+      "work": 21
+    },
+    {
+      "definitions": 0,
+      "generated": 2,
+      "irBytes": 945,
+      "name": "SequenceFold",
+      "states": 1,
+      "version": 1,
+      "work": 11
+    },
+    {
+      "definitions": 2,
+      "generated": 2,
+      "irBytes": 1314,
+      "name": "SequenceFold",
+      "states": 1,
+      "version": 2,
+      "work": 21
+    },
+    {
+      "definitions": 0,
+      "generated": 10,
+      "irBytes": 943,
+      "name": "Choice",
+      "states": 3,
+      "version": 1,
+      "work": 23
+    },
+    {
+      "definitions": 1,
+      "generated": 10,
+      "irBytes": 1026,
+      "name": "Choice",
+      "states": 3,
+      "version": 2,
+      "work": 26
+    },
+    {
+      "definitions": 0,
+      "generated": 4,
+      "irBytes": 2696,
+      "name": "Match",
+      "states": 3,
+      "version": 1,
+      "work": 25
+    },
+    {
+      "definitions": 11,
+      "generated": 4,
+      "irBytes": 5055,
+      "name": "Match",
+      "states": 3,
+      "version": 2,
+      "work": 38
+    },
+    {
+      "definitions": 0,
+      "generated": 2,
+      "irBytes": 1146,
+      "name": "NestedFold",
+      "states": 1,
+      "version": 1,
+      "work": 19
+    },
+    {
+      "definitions": 3,
+      "generated": 2,
+      "irBytes": 1723,
+      "name": "NestedFold",
+      "states": 1,
+      "version": 2,
+      "work": 40
+    }
+  ]
+}

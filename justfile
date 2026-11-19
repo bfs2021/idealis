@@ -1,6 +1,15 @@
 default:
   @just --list
 
+cache-proof output=".artifacts/cache-proof":
+  pnpm build
+  node dist/evals/verified-cache/formal.js {{quote(output)}}
+
+cache-test: portable-build
+  pnpm build
+  node --test dist/evals/verified-cache/contract-test.js
+  pnpm exec vitest run --config cache-vitest.config.ts
+
 support-check:
   node --experimental-strip-types scripts/check-support.ts
 
@@ -542,6 +551,14 @@ quint-test: portable-build
   pnpm build
   node --test dist/evals/quint-generated/contract-test.js
 
+quint-bench run:
+  pnpm build
+  node dist/evals/quint-generated/bench.js {{quote(run)}}
+
+quint-bench-replay run:
+  pnpm build
+  node dist/evals/quint-generated/bench.js {{quote(run)}} --replay
+
 quint-generate output endpoint apalache_jar:
   pnpm build
   node dist/evals/quint-generated/generate.js {{quote(output)}} {{quote(endpoint)}} {{quote(apalache_jar)}}
@@ -605,3 +622,40 @@ smt-tuning-eval phase run baseline parent="": smt-build
 smt-tuning-replay run:
   pnpm build
   node dist/evals/smt-tuning/replay.js {{quote(run)}}
+
+cache-tlc java jar output:
+  pnpm build
+  node dist/evals/verified-cache/tlc.js {{quote(java)}} {{quote(jar)}} {{quote(output)}}
+
+cache-eval output: portable-build
+  pnpm build
+  node dist/evals/verified-cache/run.js {{quote(output)}}
+
+cache-replay saved output: portable-build
+  pnpm build
+  node dist/evals/verified-cache/run.js {{quote(output)}} {{quote(saved)}}
+
+expansion-test: portable-build
+  pnpm build
+  node --test dist/evals/cached-expansions/contract-test.js
+  pnpm exec vitest run --config expansions-vitest.config.ts
+
+expansion-eval output: portable-build
+  pnpm build
+  node dist/evals/cached-expansions/run.js {{quote(output)}}
+
+expansion-replay saved output: portable-build
+  pnpm build
+  node dist/evals/cached-expansions/run.js {{quote(output)}} {{quote(saved)}}
+
+expansion-proof output probes:
+  pnpm build
+  node dist/evals/verified-cache/formal.js {{quote(output)}} {{quote(probes)}}
+
+expansion-bench output baseline:
+  pnpm build
+  node dist/evals/cached-expansions/benchmark.js {{quote(output)}} {{quote(baseline)}}
+
+expansion-bench-replay output:
+  pnpm build
+  node dist/evals/cached-expansions/benchmark-replay.js {{quote(output)}}

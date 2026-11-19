@@ -99,7 +99,7 @@ pub(super) fn is_expensive(program: &SafetyProgram) -> bool {
             .any(|predicate| !predicate.expression.is_scalar_cost())
 }
 
-impl Search<'_> {
+impl Search<'_, '_> {
     pub(super) fn parallel_frontier(
         &mut self,
         frontier: Range<usize>,

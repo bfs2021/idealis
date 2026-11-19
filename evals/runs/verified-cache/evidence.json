@@ -1,0 +1,53 @@
+{
+  "format": "idealis.verified-cache-evidence",
+  "version": 1,
+  "plan": "evals/plans/verified-cache.md",
+  "base": "7edd4d778",
+  "proofSourceVersion": "0d5ec430de4ce80bbdde4c321c8a9669777d0b216b40e89b9bbd015209a30a19",
+  "scope": "nonempty explicit-complete task reuse; Lean policy proofs plus finite TS conformance and real-store integration",
+  "archive": {
+    "path": "evidence.tar.gz",
+    "sha256": "add7ff0e1200b3481a12f7871879c6e4318f9a1ca227a782206d9131fd8d2e79",
+    "bytes": 389230,
+    "extract": "tar -xzf evidence.tar.gz",
+    "root": "verified-cache/",
+    "includes": [
+      "all formal runs and sources",
+      "TLC model, commands, logs and traces",
+      "Quint inputs, SQLite stores, cold/warm observations and replay",
+      "Red and failed intermediate logs",
+      "check, browser, mutation, package and support logs"
+    ]
+  },
+  "records": [
+    {
+      "path": "proof-manifest.json",
+      "sha256": "50d1d254e3e588b07ac9671fabbb93f0bfebf61b06a5a3d9bab5f83446c9bc79"
+    },
+    {
+      "path": "proof-result.json",
+      "sha256": "6b8ecea3abf557b6dda48450339f0f9085cc66f265148adea709d792dee24f7f"
+    },
+    {
+      "path": "tlc-result.json",
+      "sha256": "c6d1555ee8bc34afd2d8ba356c63e5b957f52bea35de6e1a361dcab1313ebaed"
+    },
+    {
+      "path": "quint-result.json",
+      "sha256": "cc05daaa07359b1cb110af82f649aea537d4ffe1c7ed89ab0523ce1534ea47e3"
+    },
+    {
+      "path": "quint-replay-result.json",
+      "sha256": "e4d5d5a7dfa887cd129b8cda5cd49b6a3643de2991cd072850bf4c8c862adcc6"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "78b9705838b660f35e7da446f97a2dcaf4be56959a4aee888f758e28d7020bd1"
+    },
+    {
+      "path": "consumer-result.json",
+      "sha256": "bdb141561108cff77e6f79821f09ec5821a55e2fc2e2a302a3a904ded2faf8ac"
+    }
+  ],
+  "remoteCI": "not run for this local branch"
+}

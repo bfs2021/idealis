@@ -1,6 +1,9 @@
 mod finite;
 pub use rtla_compiler::{CompileOptions, IrVersion};
-pub use rtlc::{CoreError, SafetyBounds, SafetyProgram, SafetyResult, Value};
+pub use rtlc::{
+    CoreError, ExpansionOptions, ExpansionStats, SafetyBounds, SafetyExpansionCache, SafetyProgram,
+    SafetyResult, Value,
+};
 mod history;
 pub use history::{ConcurrentHistory, ConcurrentResult, ConcurrentStatus, HistoryEvent};
 mod host;
@@ -188,6 +191,22 @@ pub enum Request {
         program: SafetyProgram,
         bounds: SafetyBounds,
     },
+    #[serde(rename_all = "camelCase")]
+    CheckSafetyIncremental {
+        #[serde(default)]
+        enabled: bool,
+        program: SafetyProgram,
+        bounds: SafetyBounds,
+        cache: SafetyExpansionCache,
+        build_digest: String,
+        max_entries: u32,
+    },
+    #[serde(rename_all = "camelCase")]
+    MergeSafetyExpansions {
+        left: SafetyExpansionCache,
+        right: SafetyExpansionCache,
+        max_entries: u32,
+    },
     LoadModel {
         model: FiniteModel,
     },
@@ -249,18 +268,47 @@ pub struct Command {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "kebab-case", deny_unknown_fields)]
 pub enum Message {
-    Compiled { program: SafetyProgram },
-    Safety { result: SafetyResult },
-    Loaded { handle: u32 },
+    Compiled {
+        program: SafetyProgram,
+    },
+    Safety {
+        result: SafetyResult,
+    },
+    IncrementalSafety {
+        result: SafetyResult,
+        cache: SafetyExpansionCache,
+        stats: ExpansionStats,
+    },
+    SafetyExpansions {
+        cache: SafetyExpansionCache,
+    },
+    Loaded {
+        handle: u32,
+    },
     Released,
-    History { result: ConcurrentResult },
-    Host { snapshot: Value },
-    Results { results: Vec<ConformanceResult> },
-    Candidates { ranges: Vec<DeletionRange> },
-    Value { value: Value },
-    Effect { effect: Effect },
+    History {
+        result: ConcurrentResult,
+    },
+    Host {
+        snapshot: Value,
+    },
+    Results {
+        results: Vec<ConformanceResult>,
+    },
+    Candidates {
+        ranges: Vec<DeletionRange>,
+    },
+    Value {
+        value: Value,
+    },
+    Effect {
+        effect: Effect,
+    },
     Cancelled,
-    Error { code: String, message: String },
+    Error {
+        code: String,
+        message: String,
+    },
 }
 
 #[derive(Clone)]
@@ -544,6 +592,37 @@ impl Engine {
             Request::CheckSafety { program, bounds } => Ok(Message::Safety {
                 result: program.check(bounds)?,
             }),
+            Request::CheckSafetyIncremental {
+                enabled,
+                program,
+                bounds,
+                mut cache,
+                build_digest,
+                max_entries,
+            } => {
+                let checked = program.check_incremental(
+                    bounds,
+                    &mut cache,
+                    ExpansionOptions {
+                        enabled,
+                        build_digest: &build_digest,
+                        max_entries,
+                    },
+                )?;
+                Ok(Message::IncrementalSafety {
+                    result: checked.result,
+                    stats: checked.stats,
+                    cache,
+                })
+            }
+            Request::MergeSafetyExpansions {
+                mut left,
+                right,
+                max_entries,
+            } => {
+                left.merge(right, max_entries)?;
+                Ok(Message::SafetyExpansions { cache: left })
+            }
             Request::LoadModel { model } => {
                 let model = Arc::new(model.prepare()?);
                 let next = self

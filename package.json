@@ -72,7 +72,19 @@
       "types": "./dist/src/testing.d.ts",
       "default": "./dist/src/testing.js"
     },
-    "./testing.wasm": "./assets/idealis-testing.wasm"
+    "./testing.wasm": "./assets/idealis-testing.wasm",
+    "./check-cache": {
+      "types": "./dist/src/check-cache.d.ts",
+      "default": "./dist/src/check-cache.js"
+    },
+    "./check-cache/http": {
+      "types": "./dist/src/check-cache-http.d.ts",
+      "default": "./dist/src/check-cache-http.js"
+    },
+    "./check-cache/node": {
+      "types": "./dist/src/check-cache-node.d.ts",
+      "default": "./dist/src/check-cache-node.js"
+    }
   },
   "scripts": {
     "rtla:build": "cargo build --release --locked --manifest-path crates/rtla/Cargo.toml && cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml",

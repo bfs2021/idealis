@@ -5,6 +5,7 @@ import {
   counterModel,
   createCounter,
 } from "../examples/durable-counter.js";
+import type { TlaSourceInput } from "../src/contracts.js";
 import { checkConformance, checkModel, checkTrace } from "../src/index.js";
 import {
   checkSafety,
@@ -16,19 +17,25 @@ import { createSmtOracle } from "../src/smt.js";
 import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
 import { checkTlaSource } from "../src/tla-source.js";
 
-export const runGenerated = async (
-  inputs: readonly { readonly source: string; readonly config: string }[],
-) => {
+export const runGenerated = async (inputs: readonly TlaSourceInput[]) => {
   const core = await createPortableWasm(
     new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
   );
-  return inputs.map((input) =>
-    checkTlaSource(core, input, {
+  return inputs.map((input) => {
+    const bounds = {
       maxDepth: 64,
       maxStates: 10000,
       maxWork: 1000000,
-    }),
-  );
+    };
+    const program = compileTlaSource(core, input);
+    const result = checkSafety(core, program, bounds);
+    if (
+      JSON.stringify(checkTlaSource(core, input, bounds)) !==
+      JSON.stringify(result)
+    )
+      throw new Error("Browser generated source and compiled IR differ");
+    return { version: program.version, ...result };
+  });
 };
 
 export const run = async (): Promise<Record<string, unknown>> => {

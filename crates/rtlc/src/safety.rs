@@ -2,12 +2,16 @@ use crate::safety_expressions::{EvalContext, validate_branches, visit_branch};
 #[cfg(not(target_arch = "wasm32"))]
 #[path = "safety_parallel.rs"]
 mod parallel;
+use crate::expansions::Successor;
 use crate::ir::{
     Branch, SafetyBounds, SafetyProgram, SafetyResult, SafetyTraceStep, SafetyViolation, Scalar,
 };
 use crate::safety_values::Arena;
 use crate::temporal::GraphEdge;
-use crate::{CoreError, Value};
+use crate::{
+    CoreError, ExpansionOptions, ExpansionStats, IncrementalSafetyResult, SafetyExpansionCache,
+    Value,
+};
 use std::collections::{HashMap, HashSet};
 
 struct Node {
@@ -83,7 +87,8 @@ fn get_hash(values: &[Option<Scalar>]) -> Result<u64, CoreError> {
         })
 }
 
-struct Search<'a> {
+struct Search<'a, 'cache> {
+    cache: Option<&'cache mut SafetyExpansionCache>,
     program: &'a SafetyProgram,
     bounds: SafetyBounds,
     nodes: Vec<Node>,
@@ -95,7 +100,7 @@ struct Search<'a> {
 
 impl SafetyProgram {
     pub fn check(&self, bounds: SafetyBounds) -> Result<SafetyResult, CoreError> {
-        self.check_with_workers(bounds, 1)
+        self.check_with_workers(bounds, 1, None)
     }
     #[cfg(not(target_arch = "wasm32"))]
     pub fn check_parallel(
@@ -108,12 +113,32 @@ impl SafetyProgram {
                 "Safety workers must be between 1 and 256",
             ));
         }
-        self.check_with_workers(bounds, workers)
+        self.check_with_workers(bounds, workers, None)
+    }
+    pub fn check_incremental(
+        &self,
+        bounds: SafetyBounds,
+        cache: &mut SafetyExpansionCache,
+        options: ExpansionOptions<'_>,
+    ) -> Result<IncrementalSafetyResult, CoreError> {
+        if !options.enabled {
+            return Ok(IncrementalSafetyResult {
+                result: self.check(bounds)?,
+                stats: ExpansionStats::default(),
+            });
+        }
+        cache.prepare(options.build_digest, options.max_entries)?;
+        let result = self.check_with_workers(bounds, 1, Some(cache))?;
+        Ok(IncrementalSafetyResult {
+            result,
+            stats: cache.stats,
+        })
     }
     fn check_with_workers(
         &self,
         bounds: SafetyBounds,
         workers: usize,
+        cache: Option<&mut SafetyExpansionCache>,
     ) -> Result<SafetyResult, CoreError> {
         if self.format != "modelt.safety-program"
             || !matches!(self.version, 1 | 2)
@@ -130,6 +155,7 @@ impl SafetyProgram {
         let mut arena = Arena::new(bounds.max_work);
         arena.definitions = self.definitions.as_deref().unwrap_or_default();
         let mut search = Search {
+            cache,
             program: self,
             bounds,
             nodes: vec![],
@@ -166,7 +192,7 @@ impl SafetyProgram {
     }
 }
 
-impl<'program> Search<'program> {
+impl<'program> Search<'program, '_> {
     fn run(&mut self, arena: &mut Arena<'program>, workers: usize) -> Result<(), CoreError> {
         let program = self.program;
         let metadata = if program.version == 2 {
@@ -182,6 +208,9 @@ impl<'program> Search<'program> {
             None
         };
         arena.metadata = metadata.clone();
+        if let Some(cache) = self.cache.as_mut() {
+            cache.bind_validated(program)?;
+        }
         for definition in arena.definitions {
             arena.register_memberships(&definition.body);
         }
@@ -357,6 +386,11 @@ impl<'program> Search<'program> {
         current: &mut [Scalar],
         next: &mut [Option<Scalar>],
     ) -> Result<(), CoreError> {
+        if let Some(cache) = self.cache.take() {
+            let result = self.expand_cached(index, arena, cache, current, next);
+            self.cache = Some(cache);
+            return result;
+        }
         let program = self.program;
         current.copy_from_slice(self.store.state(index));
         let mut enabled = false;
@@ -378,6 +412,103 @@ impl<'program> Search<'program> {
             }
         }
         if !enabled && program.check_deadlock {
+            self.deadlock(index, arena)?;
+        }
+        Ok(())
+    }
+    fn expand_cached(
+        &mut self,
+        index: usize,
+        arena: &mut Arena,
+        cache: &mut SafetyExpansionCache,
+        current_buffer: &mut [Scalar],
+        next_buffer: &mut [Option<Scalar>],
+    ) -> Result<(), CoreError> {
+        arena.tick()?;
+        let mut remaining = 64 * 1024usize;
+        let mut state = Vec::with_capacity(self.store.width);
+        for value in self.store.state(index) {
+            let Some(value) = arena.portable_bounded(*value, &mut remaining)? else {
+                return self.expand(index, arena, current_buffer, next_buffer);
+            };
+            state.push(value);
+        }
+        let key = SafetyExpansionCache::key(&state)?;
+        if let Some(successors) = cache.lookup(&key, self.store.width, self.program.next.len())? {
+            for successor in successors {
+                let values = successor
+                    .values
+                    .iter()
+                    .map(|value| arena.data(value).map(Some))
+                    .collect::<Result<Vec<_>, _>>()?;
+                self.accept(&values, Some(index), successor.action as usize, arena)?;
+                if self.stopped() {
+                    return Ok(());
+                }
+            }
+            if successors.is_empty() && self.program.check_deadlock {
+                self.deadlock(index, arena)?;
+            }
+            return Ok(());
+        }
+        if !cache.can_insert() {
+            return self.expand(index, arena, current_buffer, next_buffer);
+        }
+        let current = self.store.state(index).to_vec();
+        let mut next = vec![None; self.store.width];
+        let mut successors = Some(vec![]);
+        let mut enabled = false;
+        for (action, branch) in self.program.next.iter().enumerate() {
+            visit_branch(
+                branch,
+                0,
+                EvalContext::new(&current, &[]),
+                &mut next,
+                arena,
+                &mut |values, arena| {
+                    enabled = true;
+                    if let Some(stored) = &mut successors {
+                        let mut portable = vec![];
+                        let mut fits = remaining >= 128;
+                        remaining = remaining.saturating_sub(128);
+                        for value in values.iter() {
+                            if !fits {
+                                break;
+                            }
+                            match arena.portable_bounded(
+                                value.ok_or_else(|| {
+                                    CoreError::protocol("Incomplete cached state")
+                                })?,
+                                &mut remaining,
+                            )? {
+                                Some(value) => portable.push(value),
+                                None => fits = false,
+                            }
+                        }
+                        if fits {
+                            stored.push(Successor {
+                                action: u32::try_from(action).map_err(|_| {
+                                    CoreError::protocol("Invalid cached action index")
+                                })?,
+                                values: portable,
+                            });
+                        } else {
+                            successors = None;
+                        }
+                    }
+                    self.accept(values, Some(index), action, arena)?;
+                    Ok(self.stopped())
+                },
+            )?;
+            if self.stopped() {
+                return Ok(());
+            }
+        }
+        let deadlock = !enabled && self.program.check_deadlock;
+        if let Some(successors) = successors {
+            cache.insert(key, successors)?;
+        }
+        if deadlock {
             self.deadlock(index, arena)?;
         }
         Ok(())

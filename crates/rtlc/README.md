@@ -37,6 +37,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 nativeの`check_parallel(bounds, workers)`は1〜256 workerの上限を受け取る。軽いscalarや狭いfrontierは逐次実行する。action/temporal propertyとfairnessを含む探索も逐次へfallbackする。Wasmは逐次の`check`を使う。
 
+`check_incremental(bounds, &mut cache, options)`は、`ExpansionOptions { enabled: true, build_digest, max_entries }`で状態ごとの完了したNext評価を再利用する。optionsの既定値は無効で、通常の`check`へ委譲しcacheを参照・更新しない。Init・property・constraintsは毎回検査し、visitedやpropertyの合否を引き継がない。portable値、全Next/definitionのidentityとSHA-256を持つsnapshotを保存・mergeできる。状態keyとsuccessor列には1展開64 KiBの保守的な変換予算を設け、超過時は保存せず通常のstreaming探索を続ける。この経路は逐次探索。[契約と証明範囲](../../docs/safety-expansions.md)を参照。
+
 ## 検証と配布
 
 ```sh

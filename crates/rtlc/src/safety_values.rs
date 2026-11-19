@@ -810,6 +810,59 @@ impl<'scope> Arena<'scope> {
         }
         Ok(Some(function))
     }
+    pub fn portable_bounded(
+        &self,
+        value: Scalar,
+        remaining: &mut usize,
+    ) -> Result<Option<Value>, CoreError> {
+        fn size(
+            arena: &Arena<'_>,
+            value: Scalar,
+            maximum: usize,
+            memo: &mut HashMap<Scalar, usize>,
+        ) -> Result<usize, CoreError> {
+            if matches!(value, Scalar::Int(_) | Scalar::Bool(_)) {
+                return Ok(64);
+            }
+            if let Some(size) = memo.get(&value) {
+                return Ok(*size);
+            }
+            let mut total = 64usize;
+            match value {
+                Scalar::Int(_) | Scalar::Bool(_) => {}
+                _ => match arena.cell(value)? {
+                    Cell::String(text) | Cell::ModelValue(text) => {
+                        total = total.saturating_add(text.len().saturating_mul(6))
+                    }
+                    Cell::Set(values) => {
+                        for child in values {
+                            total = total.saturating_add(size(arena, *child, maximum, memo)?);
+                            if total > maximum {
+                                break;
+                            }
+                        }
+                    }
+                    Cell::Function(values) => {
+                        for (key, child) in values {
+                            total = total.saturating_add(size(arena, *key, maximum, memo)?);
+                            total = total.saturating_add(size(arena, *child, maximum, memo)?);
+                            if total > maximum {
+                                break;
+                            }
+                        }
+                    }
+                },
+            }
+            memo.insert(value, total);
+            Ok(total)
+        }
+        let cost = size(self, value, *remaining, &mut HashMap::new())?;
+        if cost > *remaining {
+            return Ok(None);
+        }
+        *remaining -= cost;
+        self.portable(value).map(Some)
+    }
     pub fn portable(&self, value: Scalar) -> Result<Value, CoreError> {
         Ok(match value {
             Scalar::Int(value) => Value::Int(value.to_string()),

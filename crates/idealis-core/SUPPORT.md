@@ -18,6 +18,8 @@
 - [x] model-value tagを含むportable値の正規化とnative/Wasmへの輸送。JSのfromPortableValueはmodel valueをtag付きobjectで返し、文字列へ変換しない。
 - [x] rtlcのSafetyProgram / SafetyResult / Value / CoreError等の再export。
 - [x] version 1のnative JSONLとホストimport不要のWasm境界。
+- [x] check-safety-incremental / incremental-safetyでrtlcの状態別Next cacheを入出力し、merge-safety-expansionsで同一namespaceのsnapshotを統合する。Init・property・constraintsの再検査、保持状態数上限とhit/miss/writeを引き継ぐ。分散BFSやqueueのcheckpoint再開は行わない。
+- [x] check-safety-incrementalのenabledは省略時false。無効ならcacheを更新せず通常探索の結果と0のcache計数を返す。有効化にはenabled: trueを明示する。
 
 - [x] safety IR v2の定義共有・caller lexical frame付き遅延引数をrtlcで検証・実行する。request envelopeとWasm ABIはversion 1のままで、v2へ自動再試行しない。
 

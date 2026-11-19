@@ -1,0 +1,99 @@
+{
+  "runId": "run-1795100661793-confirmation",
+  "split": "confirmation",
+  "status": "complete",
+  "assessment": "improved",
+  "controlFailures": [],
+  "comparisons": [
+    {
+      "fault": "deduplication",
+      "baselineDetected": 20,
+      "candidateDetected": 20,
+      "candidateOnly": [],
+      "baselineOnly": [],
+      "baselineMedianFirstFailureOperations": 17,
+      "candidateMedianFirstFailureOperations": 17,
+      "baselineMedianFailureLength": 4,
+      "candidateMedianFailureLength": 5.5
+    },
+    {
+      "fault": "drop-ignored",
+      "baselineDetected": 11,
+      "candidateDetected": 17,
+      "candidateOnly": [
+        42,
+        52,
+        56,
+        57,
+        58,
+        60
+      ],
+      "baselineOnly": [],
+      "baselineMedianFirstFailureOperations": 63,
+      "candidateMedianFirstFailureOperations": 77,
+      "baselineMedianFailureLength": 7,
+      "candidateMedianFailureLength": 9
+    },
+    {
+      "fault": "fifo-only",
+      "baselineDetected": 12,
+      "candidateDetected": 14,
+      "candidateOnly": [
+        45,
+        54,
+        57
+      ],
+      "baselineOnly": [
+        55
+      ],
+      "baselineMedianFirstFailureOperations": 173,
+      "candidateMedianFirstFailureOperations": 165.5,
+      "baselineMedianFailureLength": 5.5,
+      "candidateMedianFailureLength": 7
+    },
+    {
+      "fault": "late-retry",
+      "baselineDetected": 20,
+      "candidateDetected": 20,
+      "candidateOnly": [],
+      "baselineOnly": [],
+      "baselineMedianFirstFailureOperations": 65.5,
+      "candidateMedianFirstFailureOperations": 44,
+      "baselineMedianFailureLength": 6,
+      "candidateMedianFailureLength": 6.5
+    },
+    {
+      "fault": "persistence",
+      "baselineDetected": 20,
+      "candidateDetected": 20,
+      "candidateOnly": [],
+      "baselineOnly": [],
+      "baselineMedianFirstFailureOperations": 65,
+      "candidateMedianFirstFailureOperations": 38.5,
+      "baselineMedianFailureLength": 7,
+      "candidateMedianFailureLength": 10
+    }
+  ],
+  "controls": [
+    {
+      "method": "uniform-8",
+      "trials": 20,
+      "medianOperations": 512,
+      "medianResets": 57,
+      "medianElapsedMs": 0.6628334999999765
+    },
+    {
+      "method": "alternating-8-16",
+      "trials": 20,
+      "medianOperations": 512,
+      "medianResets": 40,
+      "medianElapsedMs": 0.6444590000000403
+    }
+  ],
+  "assessmentBasis": "detection counts by fault; costs require separate review; no automatic adoption",
+  "finishedAt": "2026-11-19T15:04:22.662Z",
+  "manifestDigest": "cbe653d142eb53c956773a6a14684d796696d851b18c03499970b96060587e8a",
+  "trialsDigest": "88ed04e589d81fba07894fad63764ce686d08dfc5133609dd4d8746508b72de3",
+  "corporaDigest": "3be1e969dba5f70386b31dddbbc2f1c5d2096d0faf8085e3fae0e001fe4b0b56",
+  "witnessesDigest": "dbfb44f1d47ec41453251aef056796bfe15d661342785d01fcc945711d25c604"
+}

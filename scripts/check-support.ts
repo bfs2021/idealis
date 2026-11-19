@@ -56,6 +56,13 @@ const scopes: readonly CrateScope[] = [
     name: "rtla-compiler",
     evidence: [
       {
+        path: "benches/quint_generated.rs",
+        contains: "fn measurements(",
+        targetContains: "同じ6生成物の解析",
+        topic:
+          "固定した6つのQuint生成物で解析・v1/v2のcompile・prepared check・全体の42測定を分け、TLCの正常判定・状態数・生成数の検査後に測る",
+      },
+      {
         path: "src/link.rs",
         topic:
           "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
@@ -122,6 +129,31 @@ const scopes: readonly CrateScope[] = [
     name: "rtlc",
     evidence: [
       {
+        path: "src/safety_values.rs",
+        contains: "pub fn portable_bounded(",
+        targetContains: "状態keyとsuccessor列のportable変換は1展開64 KiB",
+        context: ["src/safety.rs"],
+        contextContains: "fn expand_cached(",
+        topic:
+          "cache保存時の1展開64 KiBの保守的な変換予算、共有値の複製前のサイズ計算、超過時と保存容量不足時のstreaming fallbackと不完全な展開の保存拒否",
+      },
+      {
+        path: "src/expansions.rs",
+        contains: "pub struct ExpansionOptions",
+        targetContains: "ExpansionOptions.enabledは既定false",
+        context: ["src/safety.rs"],
+        topic:
+          "enabledの既定falseと、無効時は通常checkへ委譲してcacheを参照・更新せず計数を0とする契約",
+      },
+      {
+        path: "src/expansions.rs",
+        contains: "impl SafetyExpansionCache",
+        targetContains: "任意のcheck_incremental",
+        context: ["src/safety.rs"],
+        topic:
+          "同一build・全Next/definition・portable状態の完全展開だけを保持し、SHA-256、保持状態数上限とmerge競合拒否を扱う。property/constraintsの再検査と逐次探索の範囲を維持する",
+      },
+      {
         path: "src/ir.rs",
         topic: "IRの値と式・予算・結果の公開契約",
         context: ["src/value.rs", "src/safety.rs"],
@@ -143,6 +175,20 @@ const scopes: readonly CrateScope[] = [
   {
     name: "idealis-core",
     evidence: [
+      {
+        path: "src/lib.rs",
+        contains: "enabled: bool",
+        targetContains: "enabledは省略時false",
+        topic:
+          "check-safety-incrementalのenabledはserde defaultでfalseとなり、明示したflagをrtlcのExpansionOptionsへ渡す",
+      },
+      {
+        path: "src/lib.rs",
+        contains: "Request::CheckSafetyIncremental",
+        targetContains: "check-safety-incremental / incremental-safety",
+        topic:
+          "rtlcの状態別Next cacheをnative JSONLとWasmで入出力し、同一namespaceのsnapshot mergeへ委譲する。分散BFSやqueue再開とは区別する",
+      },
       {
         path: "src/lib.rs",
         topic: "Model/Driver effect、照合protocol、TLA検査への委譲",

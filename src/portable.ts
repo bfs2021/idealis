@@ -2,10 +2,12 @@ export type {
   ConcurrentHistory,
   ConcurrentResult,
   DeletionRange,
+  ExpansionStats,
   FiniteModel,
   HistoryEvent,
   HistoryRecorder,
   HostTape,
+  IncrementalSafetyResult,
   LoadedFiniteModel,
   PortableCommand,
   PortableCore,
@@ -17,6 +19,7 @@ export type {
   PortableTrace,
   PortableValue,
   SafetyBounds,
+  SafetyExpansionCache,
   SafetyProgram,
   SafetyResult,
   ShrinkResult,
@@ -54,5 +57,11 @@ export {
   verifyHostTape,
 } from "./portable-wasm.js";
 export { checkSafety } from "./safety.js";
+export {
+  checkSafetyIncremental,
+  createSafetyExpansionCache,
+  decodeSafetyExpansionCache,
+  mergeSafetyExpansions,
+} from "./safety-expansions.js";
 export { deletionCandidates, shrinkCounterexample } from "./shrink.js";
 export { checkTlaSource, compileTlaSource } from "./tla-source.js";

@@ -1,8 +1,17 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
+import {
+  cp,
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  realpath,
+  writeFile,
+} from "node:fs/promises";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { compileTlaSafety } from "../src/tla-safety.js";
 
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
@@ -53,12 +62,25 @@ execFileSync(
     "add",
     join(directory, tarball),
     "--offline",
+    "--store-dir",
+    join(consumer, ".pnpm-store"),
     "--ignore-scripts",
     "--lockfile=false",
     "--config.auto-install-peers=false",
     "--config.node-linker=hoisted",
   ],
-  { cwd: consumer, stdio: "pipe" },
+  { cwd: consumer, stdio: "pipe", encoding: "utf8" },
+);
+const nodeTypes = await realpath("node_modules/@types/node");
+const nodeRequire = createRequire(join(nodeTypes, "package.json"));
+await mkdir(join(consumer, "node_modules/@types"), { recursive: true });
+await cp(nodeTypes, join(consumer, "node_modules/@types/node"), {
+  recursive: true,
+});
+await cp(
+  dirname(nodeRequire.resolve("undici-types/package.json")),
+  join(consumer, "node_modules/undici-types"),
+  { recursive: true },
 );
 const artifact = {
   format: "modelt.finite-model",
@@ -145,6 +167,24 @@ assert.equal(alloy.checkInstance(alloyInput,{signatures:{N:['a','b']},fields:{ed
 assert.equal(alloy.checkInstance({...alloyInput,maxWork:0},generated.instance).status,'unknown');
 assert.throws(()=>alloy.checkInstance(alloyInput,{signatures:{N:['a','b']},fields:{}}),AlloyError);
 const core=await createPortableWasm(await readFile(new URL(import.meta.resolve('@mizchi/idealis/core.wasm'))));
+import {createCheckCache,createMemoryCheckCacheStore,runCachedCheck} from '@mizchi/idealis/check-cache';
+import {createHttpCheckCacheStore} from '@mizchi/idealis/check-cache/http';
+import {createSqliteCheckCacheStore,createCheckCacheHttpHandler} from '@mizchi/idealis/check-cache/node';
+void createMemoryCheckCacheStore;void createHttpCheckCacheStore;void createCheckCacheHttpHandler;
+const cacheStore=createSqliteCheckCacheStore(':memory:');
+const cache=createCheckCache(cacheStore);
+const cacheBackend=createRtlcBackend(core,{version:'consumer-cache'});
+const cacheJob={buildDigest:'c'.repeat(64),backend:cacheBackend.descriptor,request:{format:'modelt.backend-request',version:1,scope:{modelId:'consumer',propertyId:'Safe',semantics:'tlc-1.7.4-int32',assumptions:[]},query:{kind:'explicit',bounds:{maxDepth:8,maxStates:100,maxWork:10000}},input:compileTlaSource(core,{source:"---- MODULE CacheConsumer ----\\nVARIABLE x\\nInit == x=0\\nNext == UNCHANGED x\\nSafe == x=0\\n====",config:"INIT Init\\nNEXT Next\\nINVARIANT Safe"})}};
+assert.equal((await runCachedCheck(cache,cacheJob,cacheBackend,{owner:'consumer',runId:'cold',leaseMs:100,now:()=>0})).kind,'executed');
+assert.equal((await runCachedCheck(cache,cacheJob,cacheBackend,{owner:'consumer',runId:'warm',leaseMs:100,now:()=>1})).kind,'cached');
+import {createSafetyExpansionCache,checkSafetyIncremental,mergeSafetyExpansions} from '@mizchi/idealis/portable';
+const expansionOptions={enabled:true,buildDigest:'d'.repeat(64),maxEntries:100};
+const expanded=checkSafetyIncremental(core,cacheJob.request.input,{maxDepth:8,maxStates:100,maxWork:10000},{...expansionOptions,cache:createSafetyExpansionCache()});
+const reused=checkSafetyIncremental(core,cacheJob.request.input,{maxDepth:8,maxStates:100,maxWork:10000},{...expansionOptions,cache:JSON.parse(JSON.stringify(expanded.cache))});
+assert.equal(reused.result.status,'complete');assert.equal(reused.stats.hits,1);assert.equal(reused.stats.misses,0);
+assert.equal(Object.keys(mergeSafetyExpansions(core,expanded.cache,reused.cache,100).entries).length,1);
+cacheStore.close();
+
 const parserModule=await WebAssembly.compile(await readFile(new URL(import.meta.resolve('@mizchi/idealis/rtla.wasm'))));
 assert.deepEqual(WebAssembly.Module.imports(parserModule),[]);
 const parser=(await WebAssembly.instantiate(parserModule,{})).exports;
@@ -185,6 +225,12 @@ const node = execFileSync(process.execPath, [join(consumer, "consumer.mjs")], {
 await writeFile(
   join(consumer, "consumer.ts"),
   `import type {Model} from '@mizchi/idealis';
+import {createCheckCache,type CheckCacheJob,type CachedCheckSchedule} from '@mizchi/idealis/check-cache';
+import {createHttpCheckCacheStore} from '@mizchi/idealis/check-cache/http';
+import {createSqliteCheckCacheStore} from '@mizchi/idealis/check-cache/node';
+const cacheType:(input:CheckCacheJob)=>void=()=>{};const scheduleType:(input:CachedCheckSchedule)=>void=()=>{};
+void createCheckCache;void createHttpCheckCacheStore;void createSqliteCheckCacheStore;void cacheType;void scheduleType;
+
 import {createTestingWasm,type TestingCase,type TestingSchedule} from '@mizchi/idealis/testing';
 const schedule:TestingSchedule={id:'typecheck',version:'1',actors:[{id:'actor',operations:['step']}]};void schedule;
 const testingCase:TestingCase={format:'idealis.test-case',version:1,rng:'xorshift32-v1',generatorId:'g',generatorVersion:'1',seed:1,index:0,actions:[]};void testingCase;void createTestingWasm;
@@ -193,6 +239,8 @@ const observed:AlloyInstance={signatures:{N:[]},fields:{edge:[]}};void observed;
 import {compileFiniteModel,createFiniteModel} from '@mizchi/idealis/finite';
 import {createSimulationHost} from '@mizchi/idealis/host';
 import {createPortableWasm,compileTlaSource,checkTlaSource} from '@mizchi/idealis/portable';
+import {createSafetyExpansionCache,checkSafetyIncremental,mergeSafetyExpansions,type SafetyExpansionCache} from '@mizchi/idealis/portable';
+const expansionTypes:SafetyExpansionCache=createSafetyExpansionCache();void expansionTypes;void checkSafetyIncremental;void mergeSafetyExpansions;
 import {planSchedule} from '@mizchi/idealis/scheduling';
 import {createHistoryRecorder,checkConcurrentHistory} from '@mizchi/idealis/history';
 import {createRtlcBackend,runBackend,parseBackendResult,type BackendResult} from '@mizchi/idealis/backend';
@@ -216,6 +264,8 @@ execFileSync(
     "ES2023",
     "--module",
     "NodeNext",
+    "--types",
+    "node",
     "consumer.ts",
   ],
   { cwd: consumer, stdio: "pipe" },

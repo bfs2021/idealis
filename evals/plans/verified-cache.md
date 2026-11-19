@@ -1,0 +1,15 @@
+# 完了したモデル検査の再利用とfencing
+
+基点はquint-regressionの7edd4d778。最初の実装は、同一のbackend build・依存入力・scope・property・探索条件について、完了した検査結果をtask単位で再利用する。plannerはhitを除いたtaskだけを配布する。細粒度のNext cacheとTLC checkpointの再開は別段階とし、実装済みとは扱わない。
+
+契約を先に固定する。identityはcanonicalなbackend descriptor、build digest、BackendRequest全体。hashは検索用で、保存したidentityの完全一致も確認する。全体のsourceVersionと実行ごとのmanifestは別に保持する。今回cacheできるのはinitializationがnonemptyのexplicit-completeだけ。bounded、inconclusive、empty、error、反例を成功結果へ読み替えず、実行結果として返す。
+
+共有storeは単一keyに対してlinearizableなcompare-and-swapを提供する。revisionとleaseのfenceを分ける。新しい取得ではfenceを増やし、renewは同じfenceを保つ。解放・evictionでもtombstoneを残し、fenceを巻き戻さない。publishはidentity、現在のowner/fence、期限、実行receiptのidentityを検査する。永続化とworker間共有のadapterはportable coreから分離する。
+
+Lean 4.35.0 / Stdだけで、無制限の自然数を使ったfencing・publish条件・traceの不変条件と、到達グラフの閉包からinvariantが従う定理を証明する。sorry、追加axiom、native_decideは使わない。graphの完全性、backendの意味論、依存identityの網羅、storeのCASは明記した前提であり、TS全体や任意backendの正しさを証明したとは言わない。
+
+Leanの実行可能な参照機にTS実装の有限traceを照合する。TLA+/固定TLCでも2 workerの取得・期限切れ・再取得・renew・publish・evictionを検査する。fence、identity、complete条件を壊した3 variantを反例対照にし、同じ順序をTS実装へ再生する。正常なpublishとhitに到達できるsanity caseも要求する。
+
+実装はTDDで進め、異なるproperty/Next/constants/bounds/backend build、入力や結果の変異、同時取得、期限切れworkerの遅着、renew後のpublish、eviction後のABA、clock/整数境界、破損artifact、非完了結果を検査する。実WasmのQuint生成物、SQLite永続化・別client、HTTP経由・実Chromiumを使って接続を検証する。
+
+新しいrunへ入力、toolchain/binary/source digest、stdout/stderr、機械判定、途中の失敗を保存する。cache有無の判定一致、hitで実行しなかった回数、cold/warmの費用を分ける。cache経由の時間を既存Criterionの速度と混ぜない。check/browser/mutation、packageの単独consumer、評価と再生、support同期とformal checkをjust recipeへ接続する。CIはLean証明と参照機の照合も実行する。

@@ -490,13 +490,26 @@ export const completeInduction = (
   });
 };
 
+export const parseBackendRequest = <Input>(
+  input: BackendRequest<Input>,
+): BackendRequest<Input> => {
+  const raw = fields(input, ["format", "version", "scope", "query", "input"]);
+  if (raw.format !== "modelt.backend-request" || raw.version !== 1)
+    throw new BackendContractError("Unsupported backend request version");
+  return Object.freeze({
+    format: "modelt.backend-request",
+    version: 1,
+    scope: scope(raw.scope),
+    query: query(raw.query),
+    input: structuredClone(input.input),
+  });
+};
+
 export const runBackend = async <Input>(
   backend: VerificationBackend<Input>,
   input: BackendRequest<Input>,
 ): Promise<BackendResult> => {
-  const raw = fields(input, ["format", "version", "scope", "query", "input"]);
-  if (raw.format !== "modelt.backend-request" || raw.version !== 1)
-    throw new BackendContractError("Unsupported backend request version");
+  const request = parseBackendRequest(input);
   const descriptor = fields(backend.descriptor, [
     "id",
     "version",
@@ -516,13 +529,6 @@ export const runBackend = async <Input>(
   const semantics = strings(descriptor.semantics);
   if (!semantics.length)
     throw new BackendContractError("Empty backend semantic profiles");
-  const request: BackendRequest<Input> = Object.freeze({
-    format: "modelt.backend-request",
-    version: 1,
-    scope: scope(raw.scope),
-    query: query(raw.query),
-    input: structuredClone(input.input),
-  });
   if (
     !queries.includes(request.query.kind) ||
     !semantics.includes(request.scope.semantics)

@@ -58,3 +58,5 @@ just module-replay evals/runs/my-module-check evals/runs/my-module-replay /path/
 明示v2のtuple target解析と共有IRの変数読取り展開は、それぞれ524,288ノードまで。空tupleの複製も数え、超過はcompile時のprotocol拒否となる。既存のnesting 40とbranch 256 stepsは維持し、実行時のworkとは別に扱う。
 
 v2の時間論理IRは、式深さとは別に構造の深さを128までとする。flatな連言・選言から生成した木も、frameのcapture整理に入る前に検査する。超過は`compiled temporal nesting exceeds 128`で拒否する。
+
+Quintの実生成物6モデルは既定/v1/v2のnative/Wasm回帰へ接続する。`quint_generated` Criterion benchは同じ生成物で解析・compile・prepared check・全体を分ける。crate内の[bench入力](tests/quint-generated.json)は生成TLA+を変更せず保持し、リポジトリの回帰で原本とTLCオラクルへ照合する。[実行手順](../../docs/quint-generated.md)を参照。

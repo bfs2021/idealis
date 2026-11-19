@@ -16,9 +16,15 @@ name = "safety"
 path = "src/benchmarks.rs"
 harness = false
 
+[[bench]]
+name = "expansions"
+path = "src/expansion_benchmarks.rs"
+harness = false
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+sha2 = "0.10.9"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 rayon = "1.11"

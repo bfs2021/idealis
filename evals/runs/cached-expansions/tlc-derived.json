@@ -1,0 +1,44 @@
+{
+  "rows": [
+    {
+      "name": "derived-fold-16",
+      "expectedValues": [
+        "136",
+        "6"
+      ],
+      "sourceDigest": "4c8f16c18cf830ff754a14771e055328c3e65fedbcfb611033a1d9d015e71834",
+      "checkSourceDigest": "641b53ede520a9ef88dd884878749bde569bc3e924bda5a257921403a45678cf",
+      "tlcExit": 0,
+      "states": 2,
+      "generated": 3
+    },
+    {
+      "name": "derived-fold-256",
+      "expectedValues": [
+        "32896",
+        "6"
+      ],
+      "sourceDigest": "0e0ebd3402ba092ad34482eca8fee91d21218de55f1e2ebe2a29c77b85e5fb7d",
+      "checkSourceDigest": "5b1cfa83c8967c42bfc11dc8303febe1ad958d380b73c09d7bc366df6597d994",
+      "tlcExit": 0,
+      "states": 2,
+      "generated": 3
+    },
+    {
+      "name": "derived-fold-4096",
+      "expectedValues": [
+        "6",
+        "8390656"
+      ],
+      "sourceDigest": "f84697cde478c06f52312e411d876460cc712408c76773c3dd25f4f625af7c89",
+      "checkSourceDigest": "aee35c59466174ae4a3e7e4ed276bcf1cd226e6dd4c29bf8902f6b9ddf8a2dba",
+      "tlcExit": 0,
+      "states": 2,
+      "generated": 3
+    }
+  ],
+  "buildDigest": "4a46fb8b5892ff0e0e3ebdc6e76fd2d03492b199d3c935c65fe1d46ccb0b004a",
+  "tlcDigest": "7e53aa636dac8a3cb0533f343115c0548e03fc0ce5edc7739becf58d3d0fb84f",
+  "apalacheDigest": "f2d43f2e279a657be50b2ecec3a013ba2915266008a2562b38412c3269347dc9",
+  "scope": "TLC adds only Expected invariant; Next unchanged; explicit Java stack 64 MiB, heap 256 MiB; cache states also checked against arithmetic sum"
+}

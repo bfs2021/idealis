@@ -63,7 +63,7 @@ plannerは各候補のbatchをworkerへ配置し、全件完了時間を推定�
 - Nodeはworker_threadsごとにWasm instance、または常駐Rust native子プロセスを持つ。nativeのworker数はRust thread数ではなく、子プロセス数を表す。
 - ブラウザはWeb Workerごとに独立Wasm instanceを持ち、message passingで通信する。SharedArrayBufferとcross-origin isolationは不要。
 - 親でsourceを一度コンパイルし、IRとtaskをworkerのTS層へ初期登録する。親からはtask IDを送る。Rust ABIのprogram handleは追加していないため、各checkではIRのserialize / deserialize費用が残る。
-- 結果はキャッシュしない。各taskでモデルを探索する。taskのresultは逐次実行と、判定・計数・反例を含めて比較する。
+- このadapter単体では各taskでモデルを探索する。taskのresultは逐次実行と、判定・計数・反例を含めて比較する。[任意の共有キャッシュ層](check-cache.md)を使う場合は、`planCachedChecks`でhitと所有中のtaskを分け、missを配布する。
 
 ```sh
 just parallel-safety-test
