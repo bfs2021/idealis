@@ -72,3 +72,7 @@
 - [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。
 
 - [x] v2のtuple target解決と共有IRの変数読取り展開は、それぞれ524,288ノードを上限とする。空tupleを繰り返す場合も数え、超過を`target expansion exceeds 524288 nodes`で拒否する。既存のnesting 40・leaf 256と別のcompile時上限で、実行時のworkやメモリの厳密な上限ではない。
+
+- [x] anonymous frameのactual/captureは、格納とcloneの前にframeの1段を含むcompiled depth 128を検査する。過度に深い入力はprotocolで拒否する。
+
+- [x] frameのbodyもcapture compaction前にcompiled depthを検査する。

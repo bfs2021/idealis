@@ -262,7 +262,10 @@ pub(crate) fn check_primes(node: Node<'_>, cache: &HashMap<usize, LevelSummary>)
     Ok(())
 }
 pub(crate) fn check_depth(node: Node<'_>) -> Result<()> {
-    let mut pending = vec![(node, 0)];
+    check_depth_from(node, 0)
+}
+pub(crate) fn check_depth_from(node: Node<'_>, depth: usize) -> Result<()> {
+    let mut pending = vec![(node, depth)];
     while let Some((node, depth)) = pending.pop() {
         if matches!(
             node,

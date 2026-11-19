@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import type { PortableCommand } from "../../src/contracts.js";
 import { PortableCoreError } from "../../src/portable-value.js";
 import { createPortableWasm } from "../../src/portable-wasm.js";
@@ -66,68 +68,132 @@ export interface BoundedRun {
   readonly exit: number | null;
   readonly signal: NodeJS.Signals | null;
   readonly elapsedMs: number;
-  readonly peakRssBytes: number;
+  readonly peakRssBytes: number | null;
+  readonly sampledRssBytes?: number | null;
   readonly stopped: "time" | "memory" | undefined;
 }
 export const mebibytes = (count: number) => count * 1024 * 1024;
 
-export const runBounded = (
+export const runBounded = async (
   command: string,
   args: readonly string[],
   input: string,
   limits: Limits,
   env: NodeJS.ProcessEnv = process.env,
-): Promise<BoundedRun> =>
-  new Promise((resolve, reject) => {
-    const child = spawn(command, args, {
-      env,
-      stdio: ["pipe", "pipe", "pipe"],
-    });
-    const started = performance.now();
-    let stdout = "";
-    let stderr = "";
-    let peakRssBytes = 0;
-    let stopped: BoundedRun["stopped"];
-    child.stdout.setEncoding("utf8");
-    child.stderr.setEncoding("utf8");
-    child.stdout.on("data", (chunk: string) => {
-      stdout += chunk;
-    });
-    child.stderr.on("data", (chunk: string) => {
-      stderr += chunk;
-    });
-    child.stdin.on("error", () => undefined);
-    child.stdin.end(input);
-    const sample = setInterval(() => {
-      if (child.pid === undefined || stopped !== undefined) return;
-      const reading = spawnSync("ps", ["-o", "rss=", "-p", String(child.pid)], {
-        encoding: "utf8",
+): Promise<BoundedRun> => {
+  assert.ok(process.platform === "darwin" || process.platform === "linux");
+  const directory = await mkdtemp(join(tmpdir(), "idealis-resources-"));
+  const metrics = join(directory, "rusage.txt");
+  try {
+    const run = await new Promise<BoundedRun>((resolve, reject) => {
+      const child = spawn(
+        "/usr/bin/time",
+        [
+          ...(process.platform === "darwin" ? ["-l"] : ["-f", "%M"]),
+          "-o",
+          metrics,
+          command,
+          ...args,
+        ],
+        { env, detached: true, stdio: ["pipe", "pipe", "pipe"] },
+      );
+      const started = performance.now();
+      let stdout = "";
+      let stderr = "";
+      let sampledRssBytes: number | null = null;
+      let sampledPid: number | undefined;
+      let stopped: BoundedRun["stopped"];
+      child.stdout.setEncoding("utf8");
+      child.stderr.setEncoding("utf8");
+      child.stdout.on("data", (chunk: string) => {
+        stdout += chunk;
       });
-      const kilobytes = Number.parseInt(reading.stdout.trim(), 10);
-      if (Number.isFinite(kilobytes))
-        peakRssBytes = Math.max(peakRssBytes, kilobytes * 1024);
-      if (peakRssBytes > limits.bytes) stopped = "memory";
-      else if (performance.now() - started > limits.milliseconds)
-        stopped = "time";
-      if (stopped !== undefined) child.kill("SIGKILL");
-    }, 10);
-    child.once("error", (error) => {
-      clearInterval(sample);
-      reject(error);
-    });
-    child.once("close", (exit, signal) => {
-      clearInterval(sample);
-      resolve({
-        stdout,
-        stderr,
-        exit,
-        signal,
-        elapsedMs: performance.now() - started,
-        peakRssBytes,
-        stopped,
+      child.stderr.on("data", (chunk: string) => {
+        stderr += chunk;
+      });
+      child.stdin.on("error", () => undefined);
+      child.stdin.end(input);
+      const sample = setInterval(() => {
+        if (child.pid === undefined || stopped !== undefined) return;
+        if (sampledPid === undefined) {
+          const descendants = spawnSync("pgrep", ["-P", String(child.pid)], {
+            encoding: "utf8",
+          });
+          const candidate = Number.parseInt(descendants.stdout.trim(), 10);
+          if (Number.isSafeInteger(candidate) && candidate > 0)
+            sampledPid = candidate;
+        }
+        if (sampledPid !== undefined) {
+          const reading = spawnSync(
+            "ps",
+            ["-o", "rss=", "-p", String(sampledPid)],
+            { encoding: "utf8" },
+          );
+          const kilobytes = Number.parseInt(reading.stdout.trim(), 10);
+          if (Number.isFinite(kilobytes))
+            sampledRssBytes = Math.max(sampledRssBytes ?? 0, kilobytes * 1024);
+        }
+        if (sampledRssBytes !== null && sampledRssBytes > limits.bytes)
+          stopped = "memory";
+        else if (performance.now() - started > limits.milliseconds)
+          stopped = "time";
+        if (stopped !== undefined) {
+          try {
+            process.kill(-child.pid, "SIGKILL");
+          } catch (error) {
+            if (
+              !(
+                error instanceof Error &&
+                "code" in error &&
+                error.code === "ESRCH"
+              )
+            ) {
+              clearInterval(sample);
+              reject(error);
+            }
+          }
+        }
+      }, 10);
+      child.once("error", (error) => {
+        clearInterval(sample);
+        reject(error);
+      });
+      child.once("close", (exit, signal) => {
+        clearInterval(sample);
+        resolve({
+          stdout,
+          stderr,
+          exit,
+          signal,
+          elapsedMs: performance.now() - started,
+          peakRssBytes: null,
+          sampledRssBytes,
+          stopped,
+        });
       });
     });
-  });
+    const usage = await readFile(metrics, "utf8").catch(
+      (error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return "";
+        throw error;
+      },
+    );
+    const matched =
+      process.platform === "darwin"
+        ? /(?:^|\n)\s*(\d+)\s+maximum resident set size/m.exec(usage)
+        : /^\s*(\d+)\s*$/m.exec(usage);
+    const peak = matched?.[1];
+    return {
+      ...run,
+      peakRssBytes:
+        peak === undefined
+          ? null
+          : Number(peak) * (process.platform === "darwin" ? 1 : 1024),
+    };
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+};
 
 export type Outcome =
   | { readonly kind: "safety"; readonly result: Record<string, unknown> }
@@ -136,7 +202,7 @@ export type Outcome =
 export interface Measured {
   readonly outcome: unknown;
   readonly elapsedMs: number;
-  readonly run: BoundedRun;
+  readonly run: BoundedRun & { readonly peakRssBytes: number };
 }
 
 export const runNative = async (
@@ -149,7 +215,7 @@ export const runNative = async (
     `${JSON.stringify({ version: 1, request })}\n`,
     limits,
   );
-  assertAlive(run);
+  assertAlive(run, limits);
   return { outcome: JSON.parse(run.stdout), elapsedMs: run.elapsedMs, run };
 };
 
@@ -194,7 +260,7 @@ const runChild = async (job: unknown, limits: Limits): Promise<Measured> => {
       IDEALIS_FRONTEND_MODULE: frontendModule,
     },
   );
-  assertAlive(run);
+  assertAlive(run, limits);
   const reply = JSON.parse(run.stdout);
   assert.ok(isRecord(reply));
   assert.equal(typeof reply.elapsedMs, "number");
@@ -216,16 +282,30 @@ export const runTypeScript = (
   limits: Limits,
 ): Promise<Measured> => runChild({ frontend: "ts", input, bounds }, limits);
 
-export function assertAlive(run: BoundedRun): void {
+export function assertAlive(
+  run: BoundedRun,
+  limits?: Limits,
+): asserts run is BoundedRun & { readonly peakRssBytes: number } {
   assert.equal(
     run.stopped,
     undefined,
-    `stopped on ${run.stopped}: peak ${Math.round(run.peakRssBytes / 1048576)} MiB after ${Math.round(run.elapsedMs)} ms`,
+    `stopped on ${run.stopped}: sampled RSS ${run.sampledRssBytes ?? "unavailable"} after ${Math.round(run.elapsedMs)} ms`,
   );
   assert.equal(
     run.signal,
     null,
-    `terminated by ${run.signal} at peak ${Math.round(run.peakRssBytes / 1048576)} MiB: ${run.stderr.slice(0, 200)}`,
+    `terminated by ${run.signal}: ${run.stderr.slice(0, 200)}`,
   );
   assert.equal(run.exit, 0, run.stderr.slice(0, 300));
+  assert.ok(
+    run.peakRssBytes !== null &&
+      Number.isSafeInteger(run.peakRssBytes) &&
+      run.peakRssBytes > 0,
+    "OS maximum RSS measurement is missing",
+  );
+  if (limits)
+    assert.ok(
+      run.peakRssBytes <= limits.bytes,
+      `OS maximum RSS ${run.peakRssBytes} exceeds ${limits.bytes} bytes`,
+    );
 }

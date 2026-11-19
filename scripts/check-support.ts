@@ -92,6 +92,15 @@ const scopes: readonly CrateScope[] = [
           "共有IRの変数読取り展開で共通node上限を適用し、caller frame/actualと既存depthの意味を維持する",
       },
       {
+        path: "src/typed_lower.rs",
+        contains: "fn frame_actuals(",
+        targetContains: "anonymous frameのactual/capture",
+        context: ["src/typed.rs"],
+        contextContains: "pub(crate) fn check_depth_from(",
+        topic:
+          "anonymous frameのactual/captureはclone前にframe入口の1段を含めcompiled depth 128を検査する",
+      },
+      {
         path: "src/lib.rs",
         contains: "fn apply(",
         targetContains: "signed 32-bit整数",

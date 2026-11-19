@@ -1753,6 +1753,9 @@ impl Compiler<'_> {
                 }
             };
             if !arguments.is_empty() || !captures.is_empty() || context.bound > 0 {
+                for value in arguments.iter().chain(&captures) {
+                    typed::check_depth_from(Node::Expression(value), 1)?;
+                }
                 inner.frame = Some(AnonymousFrame {
                     arguments,
                     captures,

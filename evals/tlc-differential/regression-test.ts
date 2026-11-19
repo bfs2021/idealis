@@ -19,6 +19,8 @@ import "./operator-sharing-test.js";
 import "./operator-sharing-framed-test.js";
 import "./operator-sharing-limits-test.js";
 import "./operator-sharing-wide-test.js";
+import "./operator-sharing-depth-test.js";
+import "./operator-sharing-resources-test.js";
 
 interface Golden {
   readonly cases: readonly ({

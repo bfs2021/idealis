@@ -106,3 +106,7 @@ action展開はbranch.stepsとaction frame.branchesのedgeだけを数え、actu
 ## tuple展開のcompile上限
 
 v2のtarget解決と共有式からの変数読取りには、各524,288ノードの上限を適用する。深さが浅い場合や空tupleの複製も数え、超過は`target expansion exceeds 524288 nodes`で拒否する。実行時のworkや厳密なRSS上限とは別の制約。既存のdepth 40、action leaf 256と正常なtuple chain 16の対照を維持する。
+
+Rust frontendはanonymous frameのactual/captureを格納・cloneする前に、frame入口の1段を含むcompiled depth 128を検査する。TS frontendの省略/明示v1はbaseでの受理範囲を維持する。compiled depth 128の新たな拒否はv2だけへ適用する。
+
+資源検証のRSSはLinux/macOSの`/usr/bin/time`が子プロセス終了時に返す最大RSSを使う。`ps`のサンプリングは早期停止用に分け、OS値が欠落・ゼロなら検査成功にしない。これは評価harnessの依存で、pureなWasmコアにOS APIを追加しない。

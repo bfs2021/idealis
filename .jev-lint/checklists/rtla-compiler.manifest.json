@@ -218,6 +218,25 @@
     },
     {
       "id": "rtla-compiler-implementation-5",
+      "topic": "anonymous frameのactual/captureはclone前にframe入口の1段を含めcompiled depth 128を検査する",
+      "mode": "semantic",
+      "reference": {
+        "source": "source13",
+        "contains": "fn frame_actuals("
+      },
+      "target": {
+        "source": "source3",
+        "contains": "anonymous frameのactual/capture"
+      },
+      "context": [
+        {
+          "source": "source11",
+          "contains": "pub(crate) fn check_depth_from("
+        }
+      ]
+    },
+    {
+      "id": "rtla-compiler-implementation-6",
       "topic": "有限式、action、CASE、Apalache foldsと限定したVariantsのlowering",
       "mode": "semantic",
       "reference": {

@@ -41,3 +41,13 @@ target生成物の削除をcommitする前のunit検査では、git statusの大
 元PRのWasm性能測定にあるinconclusiveは変更しない。今回の資源上限テストを、一般的な高速化や非劣性の新しい証明には数えない。
 
 [入力・rawログ・判定の保存索引](../runs/pr62-merge-validation/evidence.json)を参照。GitHub上のCIと最終headは[PR 62のchecks](https://github.com/mizchi/idealis/pull/62/checks)で確認する。
+
+## 追加レビューの再検証
+
+最初のCI（head a2983f18f）は成功したが、追加レビューを確認してからマージする。anonymous frameの引数を深さ検査前にcloneすると、Wasmの深い入力で制御されたprotocol拒否にならないケースを再現した。frameの格納・clone前に、入口の1段を含めたdepthを検査する。action・入れ子action・temporalとnative/Wasmの追加対照はすべて成功した。
+
+「v1のcompiled depth検査を復元すべき」という指摘はbaseと照合すると誤りだった。base d147550c8のfrontendを別bundleで実行すると、130項の連言と129 armのCASEをv1でコンパイルできる。いったん追加した制限は既存CASEテスト2件を壊したため撤去した。既存テストを緩めず、省略/明示v1の受理を保つテストを加えた。v2だけがcompiled depth 128で拒否する。
+
+資源検証はサンプリングRSSを最大RSSと呼ばず、Linux/macOSの`/usr/bin/time`が子の終了時に返すOS最大RSSを使う。サンプリングは早期停止用に分け、OS値が欠落・ゼロなら成功にしない。欠測0を拒否するfixtureと、子が報告した`process.resourceUsage()`の最大値以上になる実プロセスの対照を加えた。追加2件は修正前に失敗し、修正後は成功した。OS測定はharnessだけの依存で、pureなWasmコアには加えない。
+
+追加後のsafety回帰は1,310件成功。最初の保存データと失敗ログを編集せず、追加分はreview-fixesの保存索引へ分ける。

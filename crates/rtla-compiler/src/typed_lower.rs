@@ -75,11 +75,17 @@ fn combine(and: bool, left: T, right: T) -> T {
         None => structural(and, left, right),
     }
 }
-fn frame_actuals(frame: &AnonymousFrame) -> (Vec<I>, Vec<I>) {
-    (frame.arguments.clone(), frame.captures.clone())
+fn frame_actuals(frame: &AnonymousFrame) -> Result<(Vec<I>, Vec<I>)> {
+    for value in frame.arguments.iter().chain(&frame.captures) {
+        typed::check_depth_from(Node::Expression(value), 1)?;
+    }
+    Ok((frame.arguments.clone(), frame.captures.clone()))
 }
 fn frame_step(frame: &AnonymousFrame, branches: Vec<ir::Branch>) -> Result<Step> {
-    let (arguments, captures) = frame_actuals(frame);
+    for branch in &branches {
+        typed::check_depth_from(Node::Branch(branch), 1)?;
+    }
+    let (arguments, captures) = frame_actuals(frame)?;
     let mut step = Step::Frame {
         parameter_count: arguments.len(),
         capture_count: captures.len(),
@@ -92,7 +98,8 @@ fn frame_step(frame: &AnonymousFrame, branches: Vec<ir::Branch>) -> Result<Step>
     Ok(step)
 }
 fn frame_expression(frame: &AnonymousFrame, body: I) -> Result<I> {
-    let (arguments, captures) = frame_actuals(frame);
+    typed::check_depth_from(Node::Expression(&body), 1)?;
+    let (arguments, captures) = frame_actuals(frame)?;
     let mut expression = I::Frame {
         parameter_count: arguments.len(),
         capture_count: captures.len(),
@@ -105,7 +112,8 @@ fn frame_expression(frame: &AnonymousFrame, body: I) -> Result<I> {
     Ok(expression)
 }
 fn frame_formula(frame: &AnonymousFrame, formula: T) -> Result<T> {
-    let (arguments, captures) = frame_actuals(frame);
+    typed::check_depth_from(Node::Temporal(&formula), 1)?;
+    let (arguments, captures) = frame_actuals(frame)?;
     let mut formula = T::Frame {
         parameter_count: arguments.len(),
         capture_count: captures.len(),
