@@ -129,6 +129,15 @@ const scopes: readonly CrateScope[] = [
     name: "rtlc",
     evidence: [
       {
+        path: "src/safety_values.rs",
+        contains: "pub fn portable_bounded(",
+        targetContains: "状態keyとsuccessor列のportable変換は1展開64 KiB",
+        context: ["src/safety.rs"],
+        contextContains: "fn expand_cached(",
+        topic:
+          "cache保存時の1展開64 KiBの保守的な変換予算、共有値の複製前のサイズ計算、超過時と保存容量不足時のstreaming fallbackと不完全な展開の保存拒否",
+      },
+      {
         path: "src/expansions.rs",
         contains: "pub struct ExpansionOptions",
         targetContains: "ExpansionOptions.enabledは既定false",

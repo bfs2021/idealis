@@ -387,7 +387,7 @@ impl<'program> Search<'program, '_> {
         next: &mut [Option<Scalar>],
     ) -> Result<(), CoreError> {
         if let Some(cache) = self.cache.take() {
-            let result = self.expand_cached(index, arena, cache);
+            let result = self.expand_cached(index, arena, cache, current, next);
             self.cache = Some(cache);
             return result;
         }
@@ -421,9 +421,19 @@ impl<'program> Search<'program, '_> {
         index: usize,
         arena: &mut Arena,
         cache: &mut SafetyExpansionCache,
+        current_buffer: &mut [Scalar],
+        next_buffer: &mut [Option<Scalar>],
     ) -> Result<(), CoreError> {
         arena.tick()?;
-        let key = SafetyExpansionCache::key(&self.portable(index, arena)?)?;
+        let mut remaining = 64 * 1024usize;
+        let mut state = Vec::with_capacity(self.store.width);
+        for value in self.store.state(index) {
+            let Some(value) = arena.portable_bounded(*value, &mut remaining)? else {
+                return self.expand(index, arena, current_buffer, next_buffer);
+            };
+            state.push(value);
+        }
+        let key = SafetyExpansionCache::key(&state)?;
         if let Some(successors) = cache.lookup(&key, self.store.width, self.program.next.len())? {
             for successor in successors {
                 let values = successor
@@ -441,9 +451,13 @@ impl<'program> Search<'program, '_> {
             }
             return Ok(());
         }
+        if !cache.can_insert() {
+            return self.expand(index, arena, current_buffer, next_buffer);
+        }
         let current = self.store.state(index).to_vec();
         let mut next = vec![None; self.store.width];
-        let mut successors = vec![];
+        let mut successors = Some(vec![]);
+        let mut enabled = false;
         for (action, branch) in self.program.next.iter().enumerate() {
             visit_branch(
                 branch,
@@ -452,18 +466,36 @@ impl<'program> Search<'program, '_> {
                 &mut next,
                 arena,
                 &mut |values, arena| {
-                    successors.push(Successor {
-                        action: u32::try_from(action)
-                            .map_err(|_| CoreError::protocol("Invalid cached action index"))?,
-                        values: values
-                            .iter()
-                            .map(|value| {
-                                arena.portable(value.ok_or_else(|| {
+                    enabled = true;
+                    if let Some(stored) = &mut successors {
+                        let mut portable = vec![];
+                        let mut fits = remaining >= 128;
+                        remaining = remaining.saturating_sub(128);
+                        for value in values.iter() {
+                            if !fits {
+                                break;
+                            }
+                            match arena.portable_bounded(
+                                value.ok_or_else(|| {
                                     CoreError::protocol("Incomplete cached state")
-                                })?)
-                            })
-                            .collect::<Result<_, _>>()?,
-                    });
+                                })?,
+                                &mut remaining,
+                            )? {
+                                Some(value) => portable.push(value),
+                                None => fits = false,
+                            }
+                        }
+                        if fits {
+                            stored.push(Successor {
+                                action: u32::try_from(action).map_err(|_| {
+                                    CoreError::protocol("Invalid cached action index")
+                                })?,
+                                values: portable,
+                            });
+                        } else {
+                            successors = None;
+                        }
+                    }
                     self.accept(values, Some(index), action, arena)?;
                     Ok(self.stopped())
                 },
@@ -472,8 +504,10 @@ impl<'program> Search<'program, '_> {
                 return Ok(());
             }
         }
-        let deadlock = successors.is_empty() && self.program.check_deadlock;
-        cache.insert(key, successors)?;
+        let deadlock = !enabled && self.program.check_deadlock;
+        if let Some(successors) = successors {
+            cache.insert(key, successors)?;
+        }
         if deadlock {
             self.deadlock(index, arena)?;
         }

@@ -124,9 +124,10 @@ export const runCachedCheck = async <Input>(
     case "miss":
       throw new CheckCacheError("Acquire returned an unclaimed miss");
     case "lease": {
+      let executed: Extract<CachedCheckExecution, { kind: "executed" }>;
       try {
         const receipt = await cache.execute(reservation.lease, backend);
-        return {
+        executed = {
           kind: "executed",
           result: receipt.result,
           publication: await cache.publish(
@@ -135,9 +136,25 @@ export const runCachedCheck = async <Input>(
             options.now(),
           ),
         };
-      } finally {
-        await cache.release(reservation.lease);
+      } catch (error) {
+        try {
+          await cache.release(reservation.lease);
+        } catch (cleanupError) {
+          throw new AggregateError(
+            [error, cleanupError],
+            "Check and lease cleanup failed",
+            { cause: error },
+          );
+        }
+        throw error;
       }
+      if (executed.publication !== "stale") return executed;
+      try {
+        await cache.release(reservation.lease);
+      } catch (cleanupError) {
+        return { ...executed, cleanupError };
+      }
+      return executed;
     }
   }
 };

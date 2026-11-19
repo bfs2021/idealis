@@ -163,7 +163,25 @@ export const createPortableWasm = async (
   const memory = exports.memory;
   return {
     request: (command) => {
-      const input = new TextEncoder().encode(JSON.stringify(command));
+      const bypass =
+        command.request.kind === "check-safety-incremental" &&
+        command.request.enabled !== true
+          ? command.request
+          : undefined;
+      const input = new TextEncoder().encode(
+        JSON.stringify(
+          bypass
+            ? {
+                version: 1,
+                request: {
+                  kind: "check-safety",
+                  program: bypass.program,
+                  bounds: bypass.bounds,
+                },
+              }
+            : command,
+        ),
+      );
       const pointer = unsigned("input_resize", input.length);
       new Uint8Array(memory.buffer, pointer, input.length).set(input);
       call("dispatch");
@@ -193,7 +211,15 @@ export const createPortableWasm = async (
       }
       if (output.kind === "safety") {
         fields(output, ["kind", "result"]);
-        return { kind: "safety", result: decodeSafetyResult(output.result) };
+        const result = decodeSafetyResult(output.result);
+        return bypass
+          ? {
+              kind: "incremental-safety",
+              result,
+              cache: bypass.cache,
+              stats: { hits: 0, misses: 0, writes: 0, invalidated: false },
+            }
+          : { kind: "safety", result };
       }
       if (output.kind === "incremental-safety") {
         fields(output, ["kind", "result", "stats", "cache"]);

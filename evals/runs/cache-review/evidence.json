@@ -1,0 +1,42 @@
+{
+  "status": "complete",
+  "scope": "cache boundary regressions and local verification; CI merge gate remains separate",
+  "plan": "evals/plans/cache-review.md",
+  "checks": {
+    "baseTests": 77,
+    "cacheContracts": 27,
+    "rustAllTargets": "passed",
+    "browser": 7,
+    "portable": "passed",
+    "packageConsumer": "passed",
+    "theorems": 27,
+    "policyTransitions": 23606,
+    "reuseCases": 32,
+    "negativeProofControls": 7,
+    "criterionMeasurements": 36,
+    "mutationScore": 95.4,
+    "jevComparisons": 40
+  },
+  "files": [
+    {
+      "path": "evidence.tar.gz",
+      "sha256": "417e890704625c4645b3d8b6436dec291f9991f7cb00c4c287675dc50202731d"
+    },
+    {
+      "path": "evaluation.json",
+      "sha256": "5a40325520c88dd596199611fb21bef73b87332f02d9cbc3ef2c8ff75636712e"
+    },
+    {
+      "path": "replay.json",
+      "sha256": "5a40325520c88dd596199611fb21bef73b87332f02d9cbc3ef2c8ff75636712e"
+    },
+    {
+      "path": "benchmark.json",
+      "sha256": "f24459fd1e91da8254f6b47be3084cd5911438bae9f6b236b90e6e31cbe13204"
+    },
+    {
+      "path": "proof.json",
+      "sha256": "9dd4c4491b40c9eb9630974b49010723b2c7d52b2e11fb0bdd2e7335508d1feb"
+    }
+  ]
+}

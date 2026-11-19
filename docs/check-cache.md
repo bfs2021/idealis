@@ -8,7 +8,7 @@
 
 identityは、`buildDigest`、backend descriptor、`BackendRequest`全体をcanonical JSONにしたもの。入力IR、scope、property、assumptions、探索上限も含む。SHA-256を検索keyに使い、取得後はidentity全文とartifactのdigest、結果のbackend/scope/queryを検査する。
 
-呼び出し側は`buildDigest`に実際のエンジンと、その意味に影響する依存を網羅したdigestを渡す。評価例では実際のWasm bytesのSHA-256を使う。外部関数や環境に依存するbackendでは、その依存も固定する必要がある。バージョン文字列だけでは同一実装を保証できない。
+呼び出し側は`buildDigest`に実際のエンジンと、その意味に影響する依存を網羅したdigestを渡す。評価例では実際のWasm bytesのSHA-256を使う。外部関数や環境に依存するbackendでは、その依存も固定する必要がある。バージョン文字列だけでは同一実装を保証できない。JSONで符号を保持できない`-0`はlease取得前に拒否する。`+0`は使える。
 
 ```mermaid
 stateDiagram-v2
@@ -20,7 +20,7 @@ stateDiagram-v2
   ready --> idle: evict
 ```
 
-storeはkeyごとにlinearizableなCASを提供する。`revision`は更新ごと、`fence`は新しい取得ごとに増える。renewはfenceを変えない。publishは現在のowner/fence、渡された時刻、receiptのidentityを確認する。解放・evictionでも行を消さず、世代を保持する。行を削除して同じkeyを初期化するとABA防止の前提が崩れる。
+storeはkeyごとにlinearizableなCASを提供する。`revision`は更新ごと、`fence`は新しい取得ごとに増える。renewはfenceを変えない。publishは現在のowner/fence、渡された時刻、receiptのidentityに加え、実行時のowner/fence/runIdを確認する。別leaseのreceiptは公開できない。解放・evictionでも行を消さず、世代を保持する。digestが壊れたartifactもevictでき、再取得時は世代が進む。行を削除して同じkeyを初期化するとABA防止の前提が崩れる。
 
 時刻は呼び出し側が渡す非負のsafe integer。期限切れは`now >= expiresAt`。ホスト間で同じ時間基準を使い、必要なら明示的にrenewする。自動heartbeatやretry、実時間での終了保証は提供しない。通信切断やCAS失敗時は再読取りし、store障害は例外として返す。HTTP handlerの認証・配置はホスト側が担当する。
 
@@ -39,7 +39,7 @@ const result = await runCachedCheck(cache, job, backend, {
 });
 ```
 
-`job`は`CheckCacheJob`、`backend`は既存の`VerificationBackend`。結果は`executed`、`cached`、他workerが所有中の`deferred`に分かれる。`executed.publication`が`stale`でも実行した結果は残る。期限を過ぎた計算を共有storeの成功として公開しない。
+`job`は`CheckCacheJob`、`backend`は既存の`VerificationBackend`。結果は`executed`、`cached`、他workerが所有中の`deferred`に分かれる。`executed.publication`が`stale`でも実行した結果は残る。期限を過ぎた計算を共有storeの成功として公開しない。publishが所有権を解放した後はreleaseしない。staleの後のreleaseが失敗した場合は`executed.cleanupError`へ返す。実行例外とrelease例外が重なった場合は、元の例外を`cause`と`errors[0]`に持つ`AggregateError`を投げる。
 
 Nodeでは`createSqliteCheckCacheStore(path)`、同一process内では`createMemoryCheckCacheStore()`を使える。SQLiteはWALとrevision条件付き更新を使い、別connection・別processから共有できる。`createCheckCacheHttpHandler(store)`で同じCAS契約をHTTPへ公開する。SQLite adapterだけがNode APIに依存する。
 

@@ -39,7 +39,8 @@ const command = async (
   await save(`${name}.stderr`, output.stderr ?? "");
   if (output.error) throw output.error;
   if (expectedFailure) {
-    assert.notEqual(output.status, 0);
+    assert.equal(output.signal, null);
+    assert.ok(typeof output.status === "number" && output.status > 0);
     assert.match(
       output.stdout + output.stderr,
       /unsolved goals|Tactic.*failed|Application type mismatch/i,
@@ -58,6 +59,7 @@ try {
     "formal/cache/ReuseMain.lean",
     "crates/rtlc/src/expansions.rs",
     "crates/rtlc/src/safety.rs",
+    "crates/rtlc/src/safety_values.rs",
     "crates/rtlc/Cargo.lock",
     "src/safety-expansions.ts",
     "src/check-cache-policy.ts",
@@ -162,7 +164,35 @@ try {
     await save(`mutant-${mutant.name}.lean`, broken);
     const path = `.lake/VerifiedCacheMutant-${mutant.name}.lean`;
     await writeFile(join(project, path), broken);
-    await command(`mutant-${mutant.name}`, "lake", ["env", "lean", path], true);
+    const diagnostic = await command(
+      `mutant-${mutant.name}`,
+      "lake",
+      ["env", "lean", path],
+      true,
+    );
+    const expected: Record<string, string> = {
+      fence: "stale_fence_publish",
+      identity: "step_valid",
+      complete: "incomplete_not_published",
+      disabled: "disabled_expansion_not_reused",
+      next: "changed_next_not_reused",
+      partial: "partial_expansion_not_reused",
+      memo: "memo_next_exact",
+    };
+    assert.ok(
+      [
+        ...diagnostic.matchAll(
+          /:(\d+):\d+: error: (?:unsolved goals|Tactic.*failed|Application type mismatch)/g,
+        ),
+      ].some((match) => {
+        const before = broken.split("\n").slice(0, Number(match[1])).join("\n");
+        return (
+          [...before.matchAll(/^theorem (\w+)/gm)].at(-1)?.[1] ===
+          expected[mutant.name]
+        );
+      }),
+      mutant.name,
+    );
   }
   const actions: CachePolicyAction[] = [];
   const add = (
@@ -271,6 +301,23 @@ try {
         reused: bits === 31,
       }));
   assert.equal(reuse.length, 32);
+  for (const entry of reuse) {
+    assert.deepEqual(Object.keys(entry.probe).sort(), [
+      "complete",
+      "enabled",
+      "sameBuild",
+      "sameNext",
+      "sameState",
+    ]);
+    for (const value of Object.values(entry.probe))
+      assert.equal(typeof value, "boolean");
+    assert.equal(typeof entry.reused, "boolean");
+  }
+  assert.equal(
+    new Set(reuse.map((entry: { probe: unknown }) => valueKey(entry.probe)))
+      .size,
+    32,
+  );
   await save("reuse-probes.json", JSON.stringify(reuse));
   const reuseExpected = JSON.parse(
     await command(

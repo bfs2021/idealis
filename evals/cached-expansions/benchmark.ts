@@ -28,6 +28,7 @@ const digest = (body: string | Uint8Array) =>
 const sourcePaths = [
   "crates/rtlc/src/expansions.rs",
   "crates/rtlc/src/safety.rs",
+  "crates/rtlc/src/safety_values.rs",
   "crates/rtlc/src/safety_parallel.rs",
   "crates/rtlc/Cargo.toml",
   "crates/rtlc/Cargo.lock",

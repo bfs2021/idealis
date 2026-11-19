@@ -118,6 +118,7 @@ export const createCheckCache = (store: CheckCacheStore): CheckCache => {
   const read = async (
     key: string,
     identity: string,
+    verifyDigest = true,
   ): Promise<CheckCacheCell | null> => {
     const raw = await store.read(key);
     if (raw === null) return null;
@@ -125,6 +126,7 @@ export const createCheckCache = (store: CheckCacheStore): CheckCache => {
     if (cell.identity !== identity)
       throw new CheckCacheError("Cache key collision or identity mismatch");
     if (
+      verifyDigest &&
       cell.artifact &&
       (await cacheDigest(artifactBody(cell.artifact))) !== cell.artifact.digest
     )
@@ -222,6 +224,9 @@ export const createCheckCache = (store: CheckCacheStore): CheckCache => {
         );
       return Object.freeze({
         identity: lease.identity,
+        fence: lease.fence,
+        owner: lease.owner,
+        runId: lease.runId,
         result: await runBackend(backend, job.request as BackendRequest<Input>),
       });
     },
@@ -232,6 +237,12 @@ export const createCheckCache = (store: CheckCacheStore): CheckCache => {
       const job = await checkLease(lease);
       if (receipt.identity !== lease.identity)
         throw new CheckCacheError("Receipt belongs to a different request");
+      if (
+        receipt.fence !== lease.fence ||
+        receipt.owner !== lease.owner ||
+        receipt.runId !== lease.runId
+      )
+        throw new CheckCacheError("Receipt belongs to a different lease");
       const result = await validateCachedResult(job, receipt.result);
       const complete = reusableResult(result);
       const body = {
@@ -307,7 +318,7 @@ export const createCheckCache = (store: CheckCacheStore): CheckCache => {
     evict: async (job) => {
       const key = await jobKey(job);
       for (;;) {
-        const previous = await read(key.key, key.identity);
+        const previous = await read(key.key, key.identity, false);
         if (!previous) return false;
         const next = advanceCachePolicy(
           policyState(previous),

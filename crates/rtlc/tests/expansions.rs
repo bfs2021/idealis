@@ -122,3 +122,71 @@ fn interrupted_expansions_are_not_saved_as_complete() {
     let json: Value = serde_json::to_value(&cache).unwrap();
     assert_eq!(json["entries"].as_object().unwrap().len(), 4);
 }
+
+#[test]
+fn shared_values_skip_oversized_expansions_and_keep_streaming() {
+    let mut value = serde_json::to_value(program()).unwrap();
+    value["invariants"] = json!([]);
+    value["next"][0]["steps"][0]["value"] = json!({
+        "op": "tuple", "values": [
+            {"op": "read", "slot": 0, "next": false},
+            {"op": "read", "slot": 0, "next": false}
+        ]
+    });
+    let program: SafetyProgram = serde_json::from_value(value).unwrap();
+    let limits = SafetyBounds {
+        max_depth: 14,
+        ..bounds()
+    };
+    let mut cache = SafetyExpansionCache::default();
+    let checked = program
+        .check_incremental(
+            limits,
+            &mut cache,
+            ExpansionOptions {
+                enabled: true,
+                build_digest: &"a".repeat(64),
+                max_entries: 100,
+            },
+        )
+        .unwrap();
+    assert_eq!(checked.result.status, "bounded");
+    assert!(checked.stats.writes > 0);
+    assert!(checked.stats.writes < limits.max_depth);
+    let mut expected = program.check(limits).unwrap();
+    expected.work = checked.result.work;
+    assert_eq!(checked.result, expected);
+}
+
+#[test]
+fn deep_shared_values_stay_bounded_without_materializing_a_tree() {
+    let mut value = serde_json::to_value(program()).unwrap();
+    value["invariants"] = json!([]);
+    value["next"][0]["steps"][0]["value"] = json!({"op":"tuple", "values":[
+        {"op":"read", "slot":0, "next":false}, {"op":"read", "slot":0, "next":false}
+    ]});
+    let program: SafetyProgram = serde_json::from_value(value).unwrap();
+    let limits = SafetyBounds {
+        max_depth: 40,
+        ..bounds()
+    };
+    for capacity in [0, 1, 100] {
+        let mut cache = SafetyExpansionCache::default();
+        let checked = program
+            .check_incremental(
+                limits,
+                &mut cache,
+                ExpansionOptions {
+                    enabled: true,
+                    build_digest: &"a".repeat(64),
+                    max_entries: capacity,
+                },
+            )
+            .unwrap();
+        let mut expected = program.check(limits).unwrap();
+        expected.work = checked.result.work;
+        assert_eq!(checked.result, expected);
+        assert!(checked.stats.writes <= capacity);
+        assert!(checked.stats.writes < limits.max_depth);
+    }
+}

@@ -7,12 +7,14 @@ import type {
   SafetyProgram,
 } from "./contracts.js";
 import { normalizePortableValue, PortableCoreError } from "./portable-value.js";
-import { isRecord } from "./trace.js";
+import { checkSafety } from "./safety.js";
+import { isRecord, valueKey } from "./trace.js";
 
 const fields = (value: unknown, names: readonly string[]) => {
   if (
     !isRecord(value) ||
-    Object.keys(value).sort().join() !== [...names].sort().join()
+    Object.keys(value).length !== names.length ||
+    names.some((name) => !Object.hasOwn(value, name))
   )
     throw new PortableCoreError("protocol", "Invalid expansion fields");
   return value;
@@ -72,7 +74,7 @@ export const decodeSafetyExpansionCache = (
           key,
           {
             digest: entry.digest,
-            successors: entry.successors.map((raw: unknown) => {
+            successors: Array.from(entry.successors, (raw: unknown) => {
               const successor = fields(raw, ["action", "values"]);
               if (!Array.isArray(successor.values))
                 throw new PortableCoreError(
@@ -81,9 +83,15 @@ export const decodeSafetyExpansionCache = (
                 );
               return {
                 action: count(successor.action),
-                values: successor.values.map((value: unknown) =>
-                  normalizePortableValue(value),
-                ),
+                values: Array.from(successor.values, (value: unknown) => {
+                  const normalized = normalizePortableValue(value);
+                  if (valueKey(value) !== valueKey(normalized))
+                    throw new PortableCoreError(
+                      "protocol",
+                      "Noncanonical expansion value",
+                    );
+                  return normalized;
+                }),
               };
             }),
           },
@@ -115,9 +123,23 @@ export const checkSafetyIncremental = (
     readonly maxEntries: number;
   },
 ): IncrementalSafetyResult => {
+  if (options.enabled !== true)
+    return {
+      result: checkSafety(core, program, bounds),
+      cache: options.cache,
+      stats: { hits: 0, misses: 0, writes: 0, invalidated: false },
+    };
   const output = core.request({
     version: 1,
-    request: { kind: "check-safety-incremental", program, bounds, ...options },
+    request: {
+      kind: "check-safety-incremental",
+      program,
+      bounds,
+      enabled: true,
+      cache: options.cache,
+      buildDigest: options.buildDigest,
+      maxEntries: options.maxEntries,
+    },
   });
   if (output.kind !== "incremental-safety")
     throw new PortableCoreError(

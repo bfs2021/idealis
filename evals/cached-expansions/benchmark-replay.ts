@@ -60,6 +60,14 @@ for (const row of result.rows) {
   assert.equal(sample.iters.length, 10);
   assert.equal(sample.times.length, 10);
   assert.equal(row.medianUs, estimate.median.point_estimate / 1000);
+  assert.equal(
+    row.lowerUs,
+    estimate.median.confidence_interval.lower_bound / 1000,
+  );
+  assert.equal(
+    row.upperUs,
+    estimate.median.confidence_interval.upper_bound / 1000,
+  );
 }
 console.log(
   "Replayed 36 Criterion measurements and their source/sample digests",

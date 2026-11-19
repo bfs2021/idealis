@@ -62,6 +62,94 @@ const lease = (reservation: CheckCacheReservation) => {
 export const registerCheckCacheContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,
 ): void => {
+  test("signed zero is rejected before leasing but positive zero remains JSON input", async () => {
+    const store = createMemoryCheckCacheStore();
+    const cache = createCheckCache(store);
+    for (const input of [-0, { nested: [-0] }]) {
+      await assert.rejects(
+        cache.acquire(
+          { ...job, request: { ...job.request, input } },
+          {
+            owner: "a",
+            runId: "zero",
+            now: 0,
+            leaseMs: 10,
+          },
+        ),
+        CheckCacheError,
+      );
+    }
+    assert.equal(
+      (
+        await cache.acquire(
+          { ...job, request: { ...job.request, input: 0 } },
+          {
+            owner: "a",
+            runId: "zero",
+            now: 0,
+            leaseMs: 10,
+          },
+        )
+      ).kind,
+      "lease",
+    );
+  });
+  test("cleanup does not replace completed publication or the primary error", async () => {
+    const cache = createCheckCache(createMemoryCheckCacheStore());
+    const cleanupError = new Error("release unavailable");
+    const release = async () => {
+      throw cleanupError;
+    };
+    const options = { owner: "a", runId: "cleanup", now: () => 0, leaseMs: 10 };
+    const completed = await runCachedCheck(
+      { ...cache, release },
+      job,
+      backend,
+      options,
+    );
+    assert.equal(completed.kind, "executed");
+    const primary = new Error("backend unavailable");
+    await assert.rejects(
+      runCachedCheck(
+        { ...createCheckCache(createMemoryCheckCacheStore()), release },
+        job,
+        {
+          descriptor: backend.descriptor,
+          check: async () => {
+            throw primary;
+          },
+        },
+        options,
+      ),
+      (error: unknown) =>
+        error instanceof AggregateError &&
+        error.cause === primary &&
+        error.errors[1] === cleanupError,
+    );
+    const uncacheable = await runCachedCheck(
+      { ...createCheckCache(createMemoryCheckCacheStore()), release },
+      {
+        ...job,
+        request: {
+          ...job.request,
+          query: {
+            kind: "explicit",
+            bounds: { maxDepth: 0, maxStates: 100, maxWork: 10000 },
+          },
+        },
+      },
+      backend,
+      {
+        ...options,
+        now: (() => {
+          let now = -11;
+          return () => (now += 11);
+        })(),
+      },
+    );
+    assert.equal(uncacheable.kind, "executed");
+    assert.equal(Reflect.get(uncacheable, "cleanupError"), cleanupError);
+  });
   test("a killed SQLite producer cannot publish after another process takes its lease", async () => {
     const directory = await mkdtemp(join(tmpdir(), "idealis-cache-crash-"));
     const path = join(directory, "cache.db");
@@ -98,7 +186,11 @@ export const registerCheckCacheContract = (
       assert.ok(current.fence > old.fence);
       const receipt = await cache.execute(old, backend);
       assert.equal(await cache.publish(old, receipt, 3), "stale");
-      assert.equal(await cache.publish(current, receipt, 3), "published");
+      await assert.rejects(cache.publish(current, receipt, 3), CheckCacheError);
+      assert.equal(
+        await cache.publish(current, await cache.execute(current, backend), 3),
+        "published",
+      );
       assert.equal((await cache.probe(job, 3)).kind, "hit");
     } finally {
       child.kill("SIGKILL");
@@ -306,6 +398,17 @@ export const registerCheckCacheContract = (
       true,
     );
     await assert.rejects(cache.probe(job, 1), CheckCacheError);
+    assert.equal(await cache.evict(job), true);
+    assert.equal((await cache.probe(job, 1)).kind, "miss");
+    const renewed = lease(
+      await cache.acquire(job, {
+        owner: "a",
+        runId: "after-corrupt",
+        now: 1,
+        leaseMs: 10,
+      }),
+    );
+    assert.ok(renewed.fence > token.fence);
     await assert.rejects(
       cache.acquire(job, {
         owner: "a",
@@ -555,6 +658,15 @@ export const registerCheckCacheContract = (
       }),
     );
     const receipt = await cache.execute(token, backend);
+    for (const changed of [
+      { owner: "other" },
+      { runId: "other" },
+      { fence: token.fence + 1 },
+    ])
+      await assert.rejects(
+        cache.publish({ ...token, ...changed }, receipt, 1),
+        CheckCacheError,
+      );
     await cache.publish(token, receipt, 1);
     for (const changed of [
       { ...job, buildDigest: "b".repeat(64) },

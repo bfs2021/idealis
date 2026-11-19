@@ -31,7 +31,8 @@ export const cacheText = (input: unknown): string => {
 export const cacheFields = (input: unknown, names: readonly string[]) => {
   if (
     !isRecord(input) ||
-    Object.keys(input).sort().join() !== [...names].sort().join()
+    Object.keys(input).length !== names.length ||
+    names.some((name) => !Object.hasOwn(input, name))
   )
     throw new CheckCacheError("Invalid cache fields");
   return input;
@@ -97,6 +98,8 @@ export const normalizeCacheJob = (input: CheckCacheJob): CheckCacheJob => {
   const seen = new Set<object>();
   while (pending.length) {
     const value = pending.pop();
+    if (Object.is(value, -0))
+      throw new CheckCacheError("Signed zero is not a JSON cache input");
     if (typeof value !== "object" || value === null || seen.has(value))
       continue;
     seen.add(value);
@@ -173,7 +176,9 @@ export const decodeCacheCell = (input: unknown): CheckCacheCell => {
   ]);
   if (
     cell.version !== 1 ||
-    !["idle", "leased", "ready"].includes(String(cell.phase)) ||
+    (cell.phase !== "idle" &&
+      cell.phase !== "leased" &&
+      cell.phase !== "ready") ||
     typeof cell.owner !== "string"
   )
     throw new CheckCacheError("Invalid cache cell");

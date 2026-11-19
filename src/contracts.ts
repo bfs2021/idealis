@@ -413,6 +413,9 @@ export interface CheckCacheLease {
 
 export interface CheckCacheReceipt {
   readonly identity: string;
+  readonly fence: number;
+  readonly owner: string;
+  readonly runId: string;
   readonly result: BackendResult;
 }
 
@@ -496,6 +499,7 @@ export type CachedCheckExecution =
       readonly kind: "executed";
       readonly result: BackendResult;
       readonly publication: "published" | "stale" | "uncacheable";
+      readonly cleanupError?: unknown;
     };
 
 export type SafetyScalar =

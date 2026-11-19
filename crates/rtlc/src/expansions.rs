@@ -174,6 +174,10 @@ impl SafetyExpansionCache {
         }
     }
 
+    pub(crate) fn can_insert(&self) -> bool {
+        self.entries.len() < self.capacity
+    }
+
     pub(crate) fn insert(
         &mut self,
         key: String,

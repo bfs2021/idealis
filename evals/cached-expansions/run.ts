@@ -18,6 +18,8 @@ await createRunDirectory(output);
 const paths = [
   "crates/rtlc/src/expansions.rs",
   "crates/rtlc/src/safety.rs",
+  "crates/rtlc/src/safety_values.rs",
+  "evals/quint-generated/cases.ts",
   "crates/rtlc/src/safety_parallel.rs",
   "crates/rtlc/Cargo.lock",
   "crates/idealis-core/src/lib.rs",
@@ -100,6 +102,7 @@ for (const input of models)
       ...options,
       cache: warm.cache,
     });
+    assert.equal(changed.result.status, "invariant-violation");
     const baseline = checkSafety(core, broken, bounds);
     assert.deepEqual({ ...changed.result, work: 0 }, { ...baseline, work: 0 });
     assert.equal(warm.result.status, "complete");

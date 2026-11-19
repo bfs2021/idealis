@@ -57,6 +57,96 @@ const sameResult = (
 export const registerExpansionContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,
 ): void => {
+  test("options cannot replace the positional unsafe program or bounds", () => {
+    const unsafe = compile(source.replace("Safe == x<4", "Safe == x<2"));
+    const options = {
+      enabled: true,
+      cache: createSafetyExpansionCache(),
+      buildDigest,
+      maxEntries: 100,
+      program: compile(),
+      bounds: { ...bounds, maxDepth: 0 },
+    };
+    const result = checkSafetyIncremental(core, unsafe, bounds, options);
+    assert.equal(result.result.status, "invariant-violation");
+    sameResult(result.result, checkSafety(core, unsafe, bounds));
+  });
+  test("disabled checks leave opaque cache objects untouched", () => {
+    const cache = createSafetyExpansionCache();
+    Reflect.set(cache, "entries", cache);
+    for (const options of [{}, { enabled: false }]) {
+      const result = checkSafetyIncremental(core, compile(), bounds, {
+        ...options,
+        cache,
+        buildDigest: "",
+        maxEntries: 0,
+      });
+      assert.deepEqual(result.result, checkSafety(core, compile(), bounds));
+      assert.equal(result.cache, cache);
+      const raw = core.request({
+        version: 1,
+        request: {
+          kind: "check-safety-incremental",
+          program: compile(),
+          bounds,
+          ...options,
+          cache,
+          buildDigest: "",
+          maxEntries: 0,
+        },
+      });
+      assert.equal(raw.kind, "incremental-safety");
+      if (raw.kind !== "incremental-safety")
+        throw new Error("Expected incremental result");
+      assert.equal(raw.cache, cache);
+      assert.deepEqual(raw.result, result.result);
+      assert.deepEqual(result.stats, {
+        hits: 0,
+        misses: 0,
+        writes: 0,
+        invalidated: false,
+      });
+    }
+  });
+  test("snapshot decoding rejects sparse, noncanonical and misleading fields", () => {
+    const snapshot = check().cache;
+    const key = Object.keys(snapshot.entries)[0];
+    assert.ok(key);
+    for (const damage of [
+      (cache: SafetyExpansionCache) =>
+        Reflect.set(cache.entries[key]?.successors ?? {}, "length", 3),
+      (cache: SafetyExpansionCache) =>
+        Reflect.set(
+          cache.entries[key]?.successors[0]?.values ?? {},
+          "length",
+          3,
+        ),
+      (cache: SafetyExpansionCache) =>
+        Reflect.set(
+          cache.entries[key]?.successors[0]?.values[0] ?? {},
+          "value",
+          "01",
+        ),
+      (cache: SafetyExpansionCache) =>
+        Reflect.set(cache.entries[key]?.successors[0]?.values ?? {}, "0", {
+          type: "set",
+          value: [
+            { type: "int", value: "2" },
+            { type: "int", value: "1" },
+          ],
+        }),
+      (cache: SafetyExpansionCache) => {
+        Reflect.deleteProperty(cache, "format");
+        Reflect.deleteProperty(cache, "entries");
+        Reflect.set(cache, "entries,format", {});
+      },
+    ]) {
+      const broken = structuredClone(snapshot);
+      damage(broken);
+      assert.throws(() => decodeSafetyExpansionCache(broken));
+    }
+    assert.deepEqual(decodeSafetyExpansionCache(snapshot), snapshot);
+  });
   test("evaluation creates missing parents and refuses to overwrite a saved run", async () => {
     const directory = await mkdtemp(join(tmpdir(), "idealis-expansion-eval-"));
     const output = join(directory, "fresh", "parent", "run");
@@ -118,17 +208,17 @@ export const registerExpansionContract = (
     assert.equal(JSON.stringify(bypassed.cache), JSON.stringify(corrupt));
   });
   test("reused edges rebuild temporal and fairness graphs for the current property", () => {
-    for (const input of cases.filter((input) =>
-      [
-        "eventually-stuttering",
-        "eventually-WF",
-        "always-eventually-WF",
-        "eventually-always-WF",
-        "WF-intermittent",
-        "SF-intermittent",
-        "multiple-initial-temporal",
-      ].includes(input.name),
-    )) {
+    for (const name of [
+      "eventually-stuttering",
+      "eventually-WF",
+      "always-eventually-WF",
+      "eventually-always-WF",
+      "WF-intermittent",
+      "SF-intermittent",
+      "multiple-initial-temporal",
+    ]) {
+      const input = cases.find((input) => input.name === name);
+      assert.ok(input, name);
       const program = compileTlaSource(core, {
         source: input.source,
         config: input.config,
@@ -446,6 +536,7 @@ export const registerExpansionContract = (
       })
       .finally(() => first.close());
     assert.ok(isRecord(cold) && cold.kind === "incremental-safety");
+    const snapshot = decodeSafetyExpansionCache(cold.cache);
     const second = startNative();
     const warm = await second
       .request({
@@ -455,7 +546,7 @@ export const registerExpansionContract = (
           enabled: true,
           program,
           bounds,
-          cache: decodeSafetyExpansionCache(cold.cache),
+          cache: snapshot,
           buildDigest: nativeDigest,
           maxEntries: 100,
         },

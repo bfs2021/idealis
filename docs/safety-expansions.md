@@ -41,7 +41,7 @@ namespaceにはIR version、変数の順序、Next全体、全definitionとbuild
 
 successorが空のentryも完全な評価結果として保存する。現在の`checkDeadlock`を毎回適用するため、以前deadlock検査を無効にしていても新しいrunでは違反を検出する。
 
-`maxEntries`は保持する状態数の上限。0では保存しない。満杯では新しいentryを書かず、小さい上限へ変更するとkey順の末尾から落とす。successor数・byte数・RSSの厳密な上限ではない。今回の`work`には実行した処理だけを計上し、過去のNext評価のworkは足さない。hitでも値の復元とproperty検査の費用は残る。
+`maxEntries`は保持する状態数の上限。0では保存しない。満杯では新しいentryを書かず、小さい上限へ変更するとkey順の末尾から落とす。保存時は、1展開の状態keyとsuccessor列に対して64 KiBの保守的な変換予算を使う。共有された値はサイズを先に計算し、木全体を複製する前に超過を判定する。超過時や容量不足時は通常のstreaming探索を続け、その展開を保存しない。これはcache全体のbyte数・RSSの厳密な上限ではない。今回の`work`には実行した処理だけを計上し、過去のNext評価のworkは足さない。hitでも値の復元とproperty検査の費用は残る。
 
 ## shardのsnapshotをまとめる
 
