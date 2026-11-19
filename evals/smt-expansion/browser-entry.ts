@@ -1,9 +1,11 @@
 import { createWasm } from "../smt-subset/wasm.js";
 import { solution } from "../smt-subset/wire.js";
 import { controls, generated, handCases } from "./corpus.js";
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const core = await createWasm(
-    new Uint8Array(await (await fetch("/subset.wasm")).arrayBuffer()),
+    new Uint8Array(
+      await (await fetch(`${assetBase}/subset.wasm`)).arrayBuffer(),
+    ),
   );
   let checked = 0;
   for (const input of [...handCases(), ...generated(0x4001, 24)]) {
@@ -82,6 +84,6 @@ export const run = async () => {
     afterError: afterError.values.x,
     unknown: unknown.status,
     restored: restored.values.x,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

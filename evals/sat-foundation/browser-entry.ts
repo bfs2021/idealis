@@ -2,8 +2,10 @@ import { createCorpus } from "./corpus.js";
 import { enumerate, validate } from "./oracle.js";
 import { createWasm } from "./wasm.js";
 
-export const run = async () => {
-  const bytes = new Uint8Array(await (await fetch("/sat.wasm")).arrayBuffer());
+export const run = async (assetBase = "") => {
+  const bytes = new Uint8Array(
+    await (await fetch(`${assetBase}/sat.wasm`)).arrayBuffer(),
+  );
   const wasm = await createWasm(bytes);
   const records = createCorpus(0x3701, 32).map((input) => {
     const reply = wasm.request(input);
@@ -18,7 +20,7 @@ export const run = async () => {
     records,
     imports: wasm.imports,
     bytes: bytes.length,
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
     budget: wasm.request({
       variables: 1,
       clauses: [],

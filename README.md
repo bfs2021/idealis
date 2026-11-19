@@ -100,19 +100,18 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 観測付きの有限モデルを TS / Rust で共有する方法、反例の縮小、時計・通信・永続化の注入は [利用ガイド](docs/using-models.md) を参照。`just package` で solver を必須にしない npm/Cargo/Wasm archive と CLI を作り、別 consumer で検証できる。[公開手順と CI の分割](docs/releasing.md) は別途記載している。
 
-Node.js 24+、pnpm、just を使う。リポジトリで Rust backend とブラウザの開発検査を実行する場合は Rust と `wasm32-unknown-unknown` target も必要。配布 Wasm の利用側で Rust をビルドする必要はない。npm には未公開。
+Node.js 24+、pnpm、just を使う。リポジトリで Rust backend とWasmの開発検査を実行する場合は Rust と `wasm32-unknown-unknown` target も必要。配布 Wasm の利用側で Rust をビルドする必要はない。npm には未公開。
 
 ```sh
 pnpm install --frozen-lockfile
 just check
 just demo
 just mutation
-pnpm exec playwright install chromium
 rustup target add wasm32-unknown-unknown
-just browser
+just wasm-test
 ```
 
-`just check` は lint、型検査、Vitest、`node:test` を実行する。共通の挙動テストを両ランナーに登録している。`just mutation` は `@mizchi/mutator` で TS ソースを変異させ、Vitest で検査する。
+`just check` は lint、型検査、Vitest、`node:test` を実行する。`just wasm-test` は実Wasmの判定・ABI・反例再生・エラー復旧とnativeとの照合をNodeで実行する。ブラウザやDOMの起動は必要ない。共通の挙動テストを両ランナーに登録している。`just mutation` は `@mizchi/mutator` で TS ソースを変異させ、Vitest で検査する。
 
 評価と改善のループは `just eval-loop`、保存した故障の再現は `just replay-loop`。[evals/](evals/README.md) に仮説・条件・run・判断・次の仮説を残す。初回の幅広い比較は `just evaluate` / `just replay-evaluation` で再実行できる。実験用の探索器・履歴 checker は public API に含めない。
 
@@ -358,7 +357,7 @@ assert.equal(diff.status, "matched");
 | `src/tla.ts`      | 実際の TLA+ 検査結果と有限反例の変換                   | tla-ts                         |
 | `src/smt.ts`      | SMT-LIB の SAT/UNSAT/UNKNOWN と整数解の取り出し        | 呼び出し側で初期化した Z3 Wasm |
 
-コアを import してもソルバーは読み込まれない。Chromium の E2E は4つの経路を実行する。Z3 のブラウザ実行には `z3-built.js` / `.wasm` の配信、SharedArrayBuffer、COOP/COEP ヘッダーが必要。
+コアを import してもソルバーは読み込まれない。通常CIはNodeのWebAssemblyで23件の共有契約をNode test runnerとVitestから実行し、ブラウザ向けbundleも検査する。Web Worker輸送やcross-origin isolationなどの実ブラウザ互換性は、手動の[Browser compatibility workflow](.github/workflows/browser.yml)と`just browser`で確認する。Z3 のブラウザ実行には `z3-built.js` / `.wasm` の配信、SharedArrayBuffer、COOP/COEP ヘッダーが必要。
 
 `tla-ts@0.0.10` は Node/Bun 向け参照を含むため、ブラウザで通常の import をそのままバンドルすると失敗する。この試作では esbuild の `alias: { "node:zlib": "fflate" }`、`external: ["bun:jsc"]`、`define: { global: "globalThis" }` を使う。Bun 専用の動的 import はブラウザでは到達しない。TLA+ は既定の単一ワーカーで検査する。具体的な配信とビルドは [ブラウザテスト](tests/browser.spec.ts) を参照。
 

@@ -1,8 +1,10 @@
 import { createWasm } from "./wasm.js";
 import { solution } from "./wire.js";
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const core = await createWasm(
-    new Uint8Array(await (await fetch("/subset.wasm")).arrayBuffer()),
+    new Uint8Array(
+      await (await fetch(`${assetBase}/subset.wasm`)).arrayBuffer(),
+    ),
   );
   const source =
     "(declare-const amount Int)(declare-const other Int)(assert (and (= other 3)(= (+ amount other) 10)))";
@@ -31,6 +33,6 @@ export const run = async () => {
     unknown: unknown.status,
     error: error.kind,
     repeated: repeated.values.amount,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

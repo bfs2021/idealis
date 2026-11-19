@@ -7,10 +7,12 @@ import {
   partitionTasks,
 } from "../src/sharding.js";
 
-export const run = async (): Promise<Record<string, unknown>> => {
+export const run = async (assetBase = ""): Promise<Record<string, unknown>> => {
   const table = compileCounterTable();
   const wasm = await createWasmKernel(
-    new Uint8Array(await (await fetch("/runtime.wasm")).arrayBuffer()),
+    new Uint8Array(
+      await (await fetch(`${assetBase}/runtime.wasm`)).arrayBuffer(),
+    ),
     table,
   );
   const options = {

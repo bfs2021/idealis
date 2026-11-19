@@ -2,9 +2,9 @@ import { createTestingWasm } from "../../src/testing.js";
 import { evaluate } from "./driver.js";
 import { plan, schedule } from "./fixture.js";
 
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const bytes = new Uint8Array(
-    await (await fetch("/testing.wasm")).arrayBuffer(),
+    await (await fetch(`${assetBase}/testing.wasm`)).arrayBuffer(),
   );
   const module = await WebAssembly.compile(bytes);
   const runtime = await createTestingWasm(module);
@@ -43,6 +43,6 @@ export const run = async () => {
     called,
     imports: WebAssembly.Module.imports(module),
     bytes: bytes.length,
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

@@ -18,9 +18,10 @@ import { checkTlaSource } from "../src/tla-source.js";
 
 export const runGenerated = async (
   inputs: readonly { readonly source: string; readonly config: string }[],
+  assetBase = "",
 ) => {
   const core = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   return inputs.map((input) =>
     checkTlaSource(core, input, {
@@ -31,7 +32,10 @@ export const runGenerated = async (
   );
 };
 
-export const run = async (): Promise<Record<string, unknown>> => {
+export const run = async (
+  assetBase = "",
+  z3Api?: Awaited<ReturnType<typeof init>>,
+): Promise<Record<string, unknown>> => {
   const model = checkModel(counterModel, { maxDepth: 2, maxStates: 100 });
   const trace = model.traces.at(-1);
   if (!trace) throw new Error("No browser oracle trace");
@@ -61,9 +65,10 @@ export const run = async (): Promise<Record<string, unknown>> => {
       action: () => "increment",
     },
   );
-  const api = await init({ locateFile: (path) => `/${path}` });
+  const api =
+    z3Api ?? (await init({ locateFile: (path) => `${assetBase}/${path}` }));
   const rust = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   const safety = checkSafety(
     rust,
@@ -163,6 +168,6 @@ export const run = async (): Promise<Record<string, unknown>> => {
     tlaSteps: tla.trace?.steps.length,
     smt,
     conformance: conformance.status,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

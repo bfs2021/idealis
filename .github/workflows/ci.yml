@@ -127,18 +127,7 @@ jobs:
       - run: pnpm usable:test
       - run: pnpm runtime:build
       - run: pnpm runtime:test
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm exec playwright test --config oracle-playwright.config.ts
-      - run: pnpm test:browser
-      - run: pnpm exec playwright test --config sat-playwright.config.ts
-      - run: pnpm exec playwright test --config testing-playwright.config.ts
-      - run: pnpm exec playwright test --config schedules-playwright.config.ts
-      - run: pnpm exec playwright test --config fuzz-playwright.config.ts
-      - run: pnpm exec playwright test --config smt-playwright.config.ts
-      - run: pnpm exec playwright test --config alloy-playwright.config.ts
-      - run: pnpm exec playwright test --config alloy-instance-playwright.config.ts
-      - run: pnpm portable:browser
-      - run: pnpm runtime:browser
+      - run: pnpm wasm:test
       - run: pnpm test:mutation
       - run: pnpm evaluate
       - run: pnpm evaluate:replay

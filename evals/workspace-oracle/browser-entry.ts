@@ -1,9 +1,9 @@
 import { snapshot } from "./snapshot.js";
 import { createOracle } from "./wasm.js";
 
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const core = createOracle(
-    new Uint8Array(await (await fetch("/wire.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/wire.wasm`)).arrayBuffer()),
   );
   const check = (actual: unknown, expected: unknown) =>
     core.request({
@@ -34,6 +34,6 @@ export const run = async () => {
       },
     ),
     mismatch: check(-0, 0),
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

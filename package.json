@@ -91,6 +91,8 @@
     "test:vitest": "vitest run",
     "test:node": "pnpm build && node --test dist/tests/node.test.js",
     "test:browser": "playwright test",
+    "wasm:build": "node dist/scripts/build-wasm-tests.js",
+    "wasm:test": "pnpm build && node --test dist/evals/wasm-host/contract-test.js && vitest run --config wasm-vitest.config.ts",
     "test:mutation": "mutator --runner vitest --config vitest.mutation.config.ts --reporter text --reporter json",
     "example": "pnpm build && node dist/examples/demo.js",
     "evaluate": "pnpm build && node dist/evals/harness/evaluate.js",

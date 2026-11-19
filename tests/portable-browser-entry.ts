@@ -36,9 +36,9 @@ import {
 import { PortableCoreError } from "../src/portable-value.js";
 import { checkTlaSource, compileTlaSource } from "../src/tla-source.js";
 
-export const run = async (): Promise<Record<string, unknown>> => {
+export const run = async (assetBase = ""): Promise<Record<string, unknown>> => {
   const core = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   for (const input of coverageInputs) {
     const program = compileTlaSource(core, input);
@@ -114,7 +114,7 @@ export const run = async (): Promise<Record<string, unknown>> => {
     source: string;
     config: string;
     expected: string;
-  }[] = await (await fetch("/finite.json")).json();
+  }[] = await (await fetch(`${assetBase}/finite.json`)).json();
   for (const input of finiteInputs) {
     const program = compileTlaSource(core, input);
     const bounds = {
@@ -143,8 +143,8 @@ export const run = async (): Promise<Record<string, unknown>> => {
     states?: number;
     action?: string;
   })[] = [
-    ...(await (await fetch("/modules.json")).json()),
-    ...(await (await fetch("/operators.json")).json()),
+    ...(await (await fetch(`${assetBase}/modules.json`)).json()),
+    ...(await (await fetch(`${assetBase}/operators.json`)).json()),
   ];
   for (const input of moduleInputs) {
     const bounds = {
@@ -189,7 +189,9 @@ export const run = async (): Promise<Record<string, unknown>> => {
     { type: "crash" },
     { type: "restart" },
   ] as const;
-  const program: SafetyProgram = await (await fetch("/safety.json")).json();
+  const program: SafetyProgram = await (
+    await fetch(`${assetBase}/safety.json`)
+  ).json();
   const safety = checkSafety(core, program, {
     maxDepth: 4,
     maxStates: 5,
@@ -227,7 +229,7 @@ export const run = async (): Promise<Record<string, unknown>> => {
     program: SafetyProgram;
     bounds?: SafetyBounds;
     expected: SafetyResult["status"];
-  }[] = await (await fetch("/complex.json")).json();
+  }[] = await (await fetch(`${assetBase}/complex.json`)).json();
   for (const input of complex) {
     const result = checkSafety(
       core,
@@ -339,14 +341,14 @@ export const run = async (): Promise<Record<string, unknown>> => {
     broken: broken.status,
     replay: replay.status,
     steps: broken.checkedSteps,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
     coverageCases: coverageInputs.length,
   };
 };
 
-export const runSymmetry = async () => {
+export const runSymmetry = async (assetBase = "") => {
   const core = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   const input = {
     source:
@@ -397,13 +399,13 @@ export const runSymmetry = async () => {
     },
     originalStates: original.states,
     por: { status: por.status, states: por.states, generated: por.generated },
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };
 
-export const runSharedIr = async () => {
+export const runSharedIr = async (assetBase = "") => {
   const core = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   const bounds = { maxDepth: 64, maxStates: 10000, maxWork: 1000000 };
   const program = compileTlaSource(core, { ...sharing(60), irVersion: 2 });
@@ -423,20 +425,20 @@ export const runSharedIr = async () => {
       reason: bounded.reason,
       work: bounded.work,
     },
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };
 
-export const runFrontendCompletion = async () => {
+export const runFrontendCompletion = async (assetBase = "") => {
   const core = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   const inputs: (TlaSourceInput & {
     name: string;
     versions: readonly (1 | 2)[];
     status: string;
     states: number | null;
-  })[] = await (await fetch("/completion.json")).json();
+  })[] = await (await fetch(`${assetBase}/completion.json`)).json();
   const bounds = {
     maxDepth: 100,
     maxStates: 1000,
@@ -501,20 +503,20 @@ export const runFrontendCompletion = async () => {
     rejected,
     evaluation: nontermination.reason,
     unicode: unicode.status,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };
 
-export const runRecursiveActions = async () => {
+export const runRecursiveActions = async (assetBase = "") => {
   const core = await createPortableWasm(
-    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer()),
   );
   const inputs: (TlaSourceInput & {
     name: string;
     status: string;
     states: number;
     generated: number;
-  })[] = await (await fetch("/recursive-actions.json")).json();
+  })[] = await (await fetch(`${assetBase}/recursive-actions.json`)).json();
   const bounds = {
     maxDepth: 1000,
     maxStates: 2000,
@@ -569,18 +571,20 @@ export const runRecursiveActions = async () => {
     matched,
     rejected,
     bounded,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };
 
-export const runFrontendSemantics = async () => {
-  const bytes = new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer());
+export const runFrontendSemantics = async (assetBase = "") => {
+  const bytes = new Uint8Array(
+    await (await fetch(`${assetBase}/core.wasm`)).arrayBuffer(),
+  );
   const module = await WebAssembly.compile(bytes);
   if (WebAssembly.Module.imports(module).length !== 0)
     throw new Error("Frontend semantics requires host imports");
   const core = await createPortableWasm(bytes);
   const inputs: readonly FrontendCase[] = await (
-    await fetch("/frontend-semantics.json")
+    await fetch(`${assetBase}/frontend-semantics.json`)
   ).json();
   const bounds = {
     maxDepth: 1000,
@@ -639,6 +643,6 @@ export const runFrontendSemantics = async () => {
     rejected,
     modelErrors,
     bounded,
-    isolated: globalThis.crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

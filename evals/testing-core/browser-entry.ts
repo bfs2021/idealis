@@ -2,9 +2,11 @@ import { createTestingWasm } from "../../src/testing.js";
 import { actions, evaluate } from "./driver.js";
 import { plan } from "./fixture.js";
 
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const runtime = await createTestingWasm(
-    new Uint8Array(await (await fetch("/testing.wasm")).arrayBuffer()),
+    new Uint8Array(
+      await (await fetch(`${assetBase}/testing.wasm`)).arrayBuffer(),
+    ),
   );
   const input = plan(0x36a1);
   const normal = await runtime.property(input, (testCase) =>
@@ -35,6 +37,6 @@ export const run = async () => {
         evaluate(testCase, false),
       )
     ).status,
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

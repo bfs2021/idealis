@@ -7,7 +7,7 @@
 - 状態と観測は immutable なスナップショット。`Model.key` は遷移に必要な状態を省略しない。
 - `complete` / `bounded` / `empty`、`matched` / `mismatch` / `invalid` を区別する。探索や生成が成立していない場合に合格させない。
 - TLA+ の意味論は tla-ts / TLC のソースと突き合わせる。互換性や証明範囲を推測で広げない。
-- タスクは `justfile`。終了前に `just check` と `just browser`。mutation 対象や共有テストを変えたら `just mutation`。
+- タスクは `justfile`。終了前に `just check` と `just wasm-test`。実ブラウザの互換性検査は任意の `just browser` / 手動browser workflowへ分ける。mutation 対象や共有テストを変えたら `just mutation`。
 - `@mizchi/mutator` は Vitest で TS ソースを変異させる。node:test は共通の挙動テストを実行する。
 - ブラウザ対応を変更したら Playwright の実ブラウザテストで確認する。
 - 手法の採用は既存手法に対する追加検出、正常版の対照、実装での反例再現、実行・診断コストで判断する。試作への実装と採用決定を区別し、人工故障の検出を実プロジェクトの未知バグ発見に数えない。

@@ -1,8 +1,10 @@
 import { createAlloyWasm } from "../../src/alloy.js";
 
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const runtime = await createAlloyWasm(
-    new Uint8Array(await (await fetch("/ralloy.wasm")).arrayBuffer()),
+    new Uint8Array(
+      await (await fetch(`${assetBase}/ralloy.wasm`)).arrayBuffer(),
+    ),
   );
   const input = {
     source:
@@ -25,6 +27,6 @@ export const run = async () => {
       signatures: { N: ["a", "b"] },
       fields: { edge: [["a", "a"]] },
     }).status,
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };

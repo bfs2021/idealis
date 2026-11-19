@@ -8,11 +8,15 @@ interface Record {
     }[];
   };
 }
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const wasm = await createWasm(
-    new Uint8Array(await (await fetch("/testing.wasm")).arrayBuffer()),
+    new Uint8Array(
+      await (await fetch(`${assetBase}/testing.wasm`)).arrayBuffer(),
+    ),
   );
-  const records: readonly Record[] = await (await fetch("/cases.json")).json();
+  const records: readonly Record[] = await (
+    await fetch(`${assetBase}/cases.json`)
+  ).json();
   let requests = 0;
   const replies = records.map((record) => {
     wasm.request(
@@ -30,7 +34,7 @@ export const run = async () => {
     records: records.length,
     requests,
     imports: wasm.imports,
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
     replies,
   };
 };

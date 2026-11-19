@@ -98,7 +98,7 @@ oracle-test: oracle-build workspace-oracle-test
   cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
   cargo run --example comparison --locked --manifest-path crates/oracle/Cargo.toml
-  pnpm exec playwright test --config oracle-playwright.config.ts
+  node --test --test-name-pattern="roracle|typed oracle" dist/evals/wasm-host/contract-test.js
 
 # Build and run other checks before this recipe; measurements run alone.
 oracle-eval run java jar:
@@ -298,6 +298,14 @@ test:
 mutation:
   pnpm test:mutation
 
+wasm-build:
+  pnpm build
+  pnpm wasm:build
+
+wasm-test: wasm-build
+  pnpm wasm:test
+
+# Optional compatibility checks for browser workers and isolation.
 browser: portable-build
   pnpm test:browser
 
@@ -321,7 +329,7 @@ runtime-build:
 
 runtime-test:
   pnpm runtime:test
-  pnpm runtime:browser
+  node --test --test-name-pattern="runtime Wasm" dist/evals/wasm-host/contract-test.js
 
 runtime-eval:
   pnpm runtime:eval
@@ -331,7 +339,7 @@ portable-build: oracle-wire-build
 
 portable-test:
   pnpm portable:test
-  pnpm portable:browser
+  node --test --test-name-pattern="portable Wasm|Quint generated|parser Wasm" dist/evals/wasm-host/contract-test.js
 
 portable-eval:
   pnpm portable:eval

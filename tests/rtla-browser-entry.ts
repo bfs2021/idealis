@@ -1,11 +1,11 @@
 import { createParserWasm } from "../evals/rtla-parser/wasm.js";
 import { isRecord } from "../src/trace.js";
 
-export const run = async () => {
+export const run = async (assetBase = "") => {
   const parser = await createParserWasm(
-    new Uint8Array(await (await fetch("/rtla.wasm")).arrayBuffer()),
+    new Uint8Array(await (await fetch(`${assetBase}/rtla.wasm`)).arrayBuffer()),
   );
-  const source = await (await fetch("/module.tla")).text();
+  const source = await (await fetch(`${assetBase}/module.tla`)).text();
   const module = parser.request({ kind: "module", source });
   const unicode = parser.request({
     kind: "expression",
@@ -69,6 +69,6 @@ export const run = async () => {
     limit: limit.error.kind,
     config: config.kind,
     repeat: JSON.stringify(module) === JSON.stringify(repeated),
-    isolated: crossOriginIsolated,
+    isolated: globalThis.crossOriginIsolated ?? false,
   };
 };
