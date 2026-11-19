@@ -4,14 +4,14 @@ use std::sync::atomic::{AtomicU64, Ordering};
 static NEXT: AtomicU64 = AtomicU64::new(0);
 fn run(kind: &str, mode: &str) -> (bool, serde_json::Value) {
     let root = std::env::temp_dir().join(format!(
-        "idealis-oracle-{}-{}",
+        "roracle-{}-{}",
         std::process::id(),
         NEXT.fetch_add(1, Ordering::Relaxed)
     ));
     std::fs::create_dir(&root).unwrap();
     let binary = env!("CARGO_BIN_EXE_workspace-oracle");
     let candidate = if kind == "missing" {
-        "/nonexistent/idealis-oracle"
+        "/nonexistent/roracle"
     } else {
         binary
     };
@@ -76,7 +76,7 @@ fn missing_program_is_an_execution_error() {
 
 #[test]
 fn invalid_manifest_is_rejected_before_spawning_an_implementation() {
-    let root = std::env::temp_dir().join(format!("idealis-oracle-invalid-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("roracle-invalid-{}", std::process::id()));
     std::fs::create_dir(&root).unwrap();
     let input = json!({"version":2,"name":"invalid","mode":"reused","baseline":{"path":"/missing","args":[]},"candidate":{"path":"/missing","args":[]},"cases":[],"config":{"baseline":"baseline","scope":"test","samples":1,"warmup":0,"iterations":1,"max_evaluations":10}});
     std::fs::write(root.join("input.json"), serde_json::to_vec(&input).unwrap()).unwrap();

@@ -73,7 +73,7 @@ await save("manifest.json", {
   inputs,
   bounds,
   scope:
-    "Native/Wasm compile and check envelopes. Independent TLC verdict/counts/forced witnesses via idealis-oracle. Input errors, model errors and bounded recursion are separate. Generated faults are deliberate.",
+    "Native/Wasm compile and check envelopes. Independent TLC verdict/counts/forced witnesses via roracle. Input errors, model errors and bounded recursion are separate. Generated faults are deliberate.",
 });
 const wasm = await createPortableWasm(
   await readFile(

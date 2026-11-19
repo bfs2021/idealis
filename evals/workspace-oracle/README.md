@@ -1,6 +1,6 @@
 # workspaceの差分検査とチューニング
 
-既存evalの差分assertionを、idealis-oracleのRust照合器へ通す。Node adapterはWasmを1 instanceだけ遅延ロードする。[移行一覧](migrations.json)には23ファイル・99箇所を記録した。parserの正規化、Z3のSAT witness検証、TLCの分類と強制trace検証は各adapterに残している。TS/Rust/Goの共通SUTと非同期履歴も同じassertionを使う。metadataの検査や単独の期待値テスト、過去のraw artifactは一括変換していない。
+既存evalの差分assertionを、roracleのRust照合器へ通す。Node adapterはWasmを1 instanceだけ遅延ロードする。[移行一覧](migrations.json)には23ファイル・99箇所を記録した。parserの正規化、Z3のSAT witness検証、TLCの分類と強制trace検証は各adapterに残している。TS/Rust/Goの共通SUTと非同期履歴も同じassertionを使う。metadataの検査や単独の期待値テスト、過去のraw artifactは一括変換していない。
 
 ## 差分テストに使う
 

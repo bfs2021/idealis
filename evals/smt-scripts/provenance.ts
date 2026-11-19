@@ -45,7 +45,7 @@ export const fingerprint = async () => {
     [
       ...new Set([
         ...paths,
-        "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
+        "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
       ]),
     ]
       .sort()

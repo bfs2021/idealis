@@ -13,7 +13,7 @@ SUPPORT.mdはRustのcrate archiveにも同梱する。配布検査では8つのa
 | idealis-smt     | [SMT-LIBと求解](../crates/idealis-smt/SUPPORT.md)                             |
 | ralloy          | [静的Alloyと固定instance](../crates/ralloy/SUPPORT.md)                        |
 | idealis-testing | [生成・縮小・再生・差分比較](../crates/idealis-testing/SUPPORT.md)            |
-| idealis-oracle  | [実装登録・差分検査・保存oracle再生・比較ベンチ](../crates/oracle/SUPPORT.md) |
+| roracle         | [実装登録・差分検査・保存oracle再生・比較ベンチ](../crates/oracle/SUPPORT.md) |
 
 jev-lint 0.8.0のdocuments APIで、各READMEとチェックリスト、選択した実装境界の記述を比較する。比較箇所と全Rust source/test/bench・同梱JSON/TLA/CFG fixture・Cargo manifest/lock等の内容digestは`.jev-lint/checklists/*.manifest.json`と`*.record.json`へ保存する。モデルはjev-1.14.0に固定する。
 

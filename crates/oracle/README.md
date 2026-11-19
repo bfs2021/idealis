@@ -1,14 +1,16 @@
-# idealis-oracle
+# roracle
+
+Cargoの依存名とRustのimportは`roracle`。リポジトリ内の配置は`crates/oracle`。
 
 Rustの`#[test]`から複数実装を同じオラクルへ照合し、同じ登録で速度を比較する試作ライブラリ。任意の入力型と`PartialEq`の観測型を使える。TLA+やSMTの検査器、テストランナー、外部プロセスの実行機能は内蔵しない。
 
 ## テストへの組み込み
 
 ```rust
-use idealis_oracle::{Observation, OracleGroup};
+use roracle::{Observation, OracleGroup};
 
 #[test]
-fn sum_matches_formula() -> Result<(), idealis_oracle::Error> {
+fn sum_matches_formula() -> Result<(), roracle::Error> {
     let mut group = OracleGroup::new("sum");
     group
         .case("ten", 10_u64)
@@ -42,7 +44,7 @@ group.replay(&recorded)?.assert_matched();
 ## 比較ベンチマーク
 
 ```rust,ignore
-use idealis_oracle::BenchConfig;
+use roracle::BenchConfig;
 
 let report = group.bench(BenchConfig {
     baseline: "iterator".into(),
@@ -68,7 +70,7 @@ nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`
 
 ## 観測batchのJSON境界
 
-`dispatch(&[u8])`はJSON Valueを、`dispatch_json(&[u8])`はUTF-8のJSON bytesを返す。bytes APIは中間Valueを作らずに全reportをserializeする。JSONの内容は同じで、objectのkey順は保証しない。native JSONL executable `idealis-oracle`は、ホストが収集済みの観測を同じOracleGroupへ通す。version 1の入力例は[observations.rs](examples/observations.rs)を参照。`group`・`reference`・`implementations`、caseごとの`id`・`input`・`reference`・実装順の`actual`を渡す。出力は`{kind:"checked", report}`または`{kind:"error", message}`。不正な入力をmatchedのreportにしない。
+`dispatch(&[u8])`はJSON Valueを、`dispatch_json(&[u8])`はUTF-8のJSON bytesを返す。bytes APIは中間Valueを作らずに全reportをserializeする。JSONの内容は同じで、objectのkey順は保証しない。native JSONL executable `roracle`は、ホストが収集済みの観測を同じOracleGroupへ通す。version 1の入力例は[observations.rs](examples/observations.rs)を参照。`group`・`reference`・`implementations`、caseごとの`id`・`input`・`reference`・実装順の`actual`を渡す。出力は`{kind:"checked", report}`または`{kind:"error", message}`。不正な入力をmatchedのreportにしない。
 
 入力は16 MiB、4096 cases、256 implementationsまで。caseと実装は空にできず、IDの重複と観測数のずれを拒否する。JSONの構文と入れ子の制限もserde_jsonに従う。観測は`kind`とvariantに必要なfieldだけを受理する。公開Observationのserdeと同じ`[kind, payload]`形式も受理する。wire専用visitorでpayloadを一度だけ読み、公開ObservationのDeserialize実装は変えない。不正なvariantに対するmessageの詳細は旧版と変わる場合がある。この境界は収集済み観測の照合であり、実装関数の実行や計測は行わない。
 

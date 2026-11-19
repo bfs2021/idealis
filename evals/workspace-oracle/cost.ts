@@ -12,8 +12,7 @@ const runner = resolve(
   "evals/workspace-oracle/rust/target/release/workspace-oracle",
 );
 const worker = resolve("dist/evals/workspace-oracle/cost-worker.js");
-const wasm =
-  "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm";
+const wasm = "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm";
 const digest = (bytes: Uint8Array) =>
   createHash("sha256").update(bytes).digest("hex");
 const save = async (name: string, value: unknown) =>

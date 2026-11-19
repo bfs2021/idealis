@@ -33,7 +33,7 @@ const testingCrate = files.find(
   (file) => file.startsWith("idealis-testing-") && file.endsWith(".crate"),
 );
 const oracleCrate = files.find(
-  (file) => file.startsWith("idealis-oracle-") && file.endsWith(".crate"),
+  (file) => file.startsWith("roracle-") && file.endsWith(".crate"),
 );
 assert.ok(
   tarball &&
@@ -588,9 +588,7 @@ assert.deepEqual(
   ),
   [],
 );
-const oracleConsumer = await mkdtemp(
-  join(tmpdir(), "idealis-oracle-consumer-"),
-);
+const oracleConsumer = await mkdtemp(join(tmpdir(), "roracle-consumer-"));
 execFileSync("tar", [
   "-xzf",
   join(directory, oracleCrate),
@@ -599,17 +597,12 @@ execFileSync("tar", [
 ]);
 await writeFile(
   join(oracleConsumer, "Cargo.toml"),
-  `[package]\nname="oracle-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-oracle={path="idealis-oracle-${version}"}\nserde_json="1.0"\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+  `[package]\nname="oracle-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nroracle={path="roracle-${version}"}\nserde_json="1.0"\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
 );
 await writeFile(
   join(oracleConsumer, "main.rs"),
   await readFile(
-    join(
-      oracleConsumer,
-      `idealis-oracle-${version}`,
-      "examples",
-      "comparison.rs",
-    ),
+    join(oracleConsumer, `roracle-${version}`, "examples", "comparison.rs"),
   ),
 );
 const oracle = execFileSync("cargo", ["run", "--offline", "--quiet"], {
@@ -618,16 +611,11 @@ const oracle = execFileSync("cargo", ["run", "--offline", "--quiet"], {
 })
   .toString()
   .trim();
-assert.equal(oracle, "standalone idealis-oracle consumer checked");
+assert.equal(oracle, "standalone roracle consumer checked");
 await writeFile(
   join(oracleConsumer, "main.rs"),
   await readFile(
-    join(
-      oracleConsumer,
-      `idealis-oracle-${version}`,
-      "examples",
-      "observations.rs",
-    ),
+    join(oracleConsumer, `roracle-${version}`, "examples", "observations.rs"),
   ),
 );
 const oracleJson = execFileSync("cargo", ["run", "--offline", "--quiet"], {

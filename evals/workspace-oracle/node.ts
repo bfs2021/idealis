@@ -12,7 +12,7 @@ export const compareOracle = (
 ) => {
   oracle ??= createOracle(
     readFileSync(
-      "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
+      "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
     ),
   );
   return oracle.request({
@@ -44,7 +44,7 @@ export const assertOracle = (
       new AssertionError({
         actual,
         expected,
-        operator: "idealis-oracle",
+        operator: "roracle",
         message: message instanceof Error ? message.message : message,
       }),
       { report: checked.report },

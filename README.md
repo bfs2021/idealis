@@ -53,7 +53,7 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 | [`idealis-smt`](crates/idealis-smt)（旧rsmt） | 対応するSMT-LIB式                              | 任意精度Intの差分制約とBool式。SATモデル、UNSAT、work切れのunknownを返す独立した試作。     |
 | [`ralloy`](crates/ralloy)                     | 静的なAlloyソースと有限scope                   | sig・二項関係・fact・assertの解析と、有限構造の列挙・instanceや反例の生成。                |
 | [`idealis-testing`](crates/idealis-testing)   | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
-| [`idealis-oracle`](crates/oracle)             | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
+| [`roracle`](crates/oracle)                    | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
 | [`@mizchi/idealis`](src)                      | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
 | [Go adapter](adapters/go)                     | 共通コアのWasmとGoのモデル・実装・履歴         | CGOなしでRustコアへ接続し、同じ値・オラクル・観測で照合と再生を行う。                      |
 
@@ -90,7 +90,7 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 [`idealis-testing`](crates/idealis-testing)は、有限状態機械のPBT・縮小・差分比較・保存caseの再生を行う独立crate。TSは`@mizchi/idealis/testing`から同じWasmを使い、Vitest・node:test・ブラウザでDriverを動かす。[明示したactor列からのスケジュール生成](docs/testing.md#actorの操作順を制御する)も扱う。既存fast-check経路のStrategy/seed互換、任意threadの自動計装、全実行の証明は含めない。
 
-[`idealis-oracle`](crates/oracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
+[`roracle`](crates/oracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
 
 開発用の[構造付きfuzzing](evals/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
 
@@ -225,7 +225,7 @@ nativeの8-worker要求は同じrunのTLC 8 workers比でcounter 2.67倍、funct
 
 ## 同じ登録による差分検査と比較ベンチ
 
-新しい`idealis-oracle`で、TLC・tla-ts・idealisへ同じ小さいモデルを渡した。下表は起動込みのcold source-to-result中央値、7 sample・1 warmup、すべて1 worker。process起動・輸送・解析・raw log書き込みを含む。
+新しい`roracle`で、TLC・tla-ts・idealisへ同じ小さいモデルを渡した。下表は起動込みのcold source-to-result中央値、7 sample・1 warmup、すべて1 worker。process起動・輸送・解析・raw log書き込みを含む。
 
 | モデル        | idealis native (ms) | tla-ts (ms) | TLC (ms) |
 | ------------- | ------------------: | ----------: | -------: |

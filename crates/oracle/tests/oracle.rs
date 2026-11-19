@@ -1,4 +1,4 @@
-use idealis_oracle::{BenchConfig, Observation, OracleGroup, Status};
+use roracle::{BenchConfig, Observation, OracleGroup, Status};
 use std::cell::Cell;
 
 fn config() -> BenchConfig {

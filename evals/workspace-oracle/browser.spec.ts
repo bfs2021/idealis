@@ -16,7 +16,7 @@ test("workspace snapshots use the actual oracle JSON ABI in Chromium", async ({
   const javascript = bundle.outputFiles[0];
   if (!javascript) throw new Error("Missing oracle bundle");
   const bytes = await readFile(
-    "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
+    "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
   );
   expect(WebAssembly.Module.imports(await WebAssembly.compile(bytes))).toEqual(
     [],

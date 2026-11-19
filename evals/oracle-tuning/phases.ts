@@ -9,6 +9,7 @@ import { summarizeCpu } from "../profile-tuning/hotspots.js";
 import type { compareOracle } from "../workspace-oracle/node.js";
 import type { snapshot } from "../workspace-oracle/snapshot.js";
 import type { createOracle } from "../workspace-oracle/wasm.js";
+import { readOracleWasm } from "./wasm.js";
 
 interface Phase {
   readonly name: string;
@@ -47,12 +48,7 @@ const wasm: { createOracle: typeof createOracle } = await import(
 const node: { compareOracle: typeof compareOracle } = await import(
   pathToFileURL(join(frozen, "dist/evals/workspace-oracle/node.js")).href
 );
-const binary = await readFile(
-  join(
-    frozen,
-    "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
-  ),
-);
+const binary = await readOracleWasm(frozen);
 const core = wasm.createOracle(binary);
 process.chdir(frozen);
 const cases: readonly {

@@ -1,4 +1,4 @@
-# idealis-oracleの対応範囲
+# roracleの対応範囲
 
 ## 対応
 

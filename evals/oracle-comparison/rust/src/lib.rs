@@ -1,4 +1,4 @@
-use idealis_oracle::{BenchConfig, Observation, OracleGroup, Status};
+use roracle::{BenchConfig, Observation, OracleGroup, Status};
 
 #[unsafe(no_mangle)]
 pub extern "C" fn oracle_probe() -> u32 {

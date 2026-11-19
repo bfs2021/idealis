@@ -1,4 +1,4 @@
-use idealis_oracle::{dispatch, dispatch_json};
+use roracle::{dispatch, dispatch_json};
 use serde_json::{Value, json};
 
 #[test]

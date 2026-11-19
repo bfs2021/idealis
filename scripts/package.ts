@@ -117,7 +117,7 @@ for (const name of [
   "idealis-smt",
   "ralloy",
   "idealis-testing",
-  "idealis-oracle",
+  "roracle",
 ]) {
   const crate = `${name}-${pkg.version}.crate`;
   await copyFile(
@@ -157,5 +157,5 @@ await copyFile(
   resolve(target, "idealis-testing-manifest.json"),
 );
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing/idealis-oracle Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing/roracle Cargo and Wasm artifacts: ${target}`,
 );

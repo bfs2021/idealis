@@ -40,7 +40,7 @@ jobs:
       - run: cargo fmt --manifest-path evals/workspace-oracle/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
       - run: cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
-      - run: node --test dist/evals/workspace-oracle/contract-test.js
+      - run: node --test dist/evals/workspace-oracle/contract-test.js dist/evals/oracle-tuning/wasm-test.js
       - run: cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
       - run: cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml

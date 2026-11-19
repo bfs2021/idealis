@@ -150,8 +150,8 @@ export const catalog = (): readonly Suite[] => {
       })),
     },
     {
-      id: "idealis-oracle",
-      binary: "crates/oracle/target/release/idealis-oracle",
+      id: "roracle",
+      binary: "crates/oracle/target/release/roracle",
       cases: [1, 32].map((count) => ({
         id: `batch-${count}`,
         request: {

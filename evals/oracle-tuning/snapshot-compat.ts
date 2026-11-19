@@ -5,6 +5,7 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { snapshot } from "../workspace-oracle/snapshot.js";
 import type { createOracle } from "../workspace-oracle/wasm.js";
+import { readOracleWasm } from "./wasm.js";
 
 const before = process.argv[2];
 const after = process.argv[3];
@@ -20,12 +21,7 @@ const engines = await Promise.all(
     const wasm: { createOracle: typeof createOracle } = await import(
       pathToFileURL(join(root, "dist/evals/workspace-oracle/wasm.js")).href
     );
-    const binary = await readFile(
-      join(
-        root,
-        "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
-      ),
-    );
+    const binary = await readOracleWasm(root);
     return {
       snapshot: module.snapshot,
       core: wasm.createOracle(binary),

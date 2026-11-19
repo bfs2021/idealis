@@ -37,7 +37,7 @@ if (command === "freeze") {
       "dist/evals/workspace-oracle/wasm.js",
       "dist/evals/workspace-oracle/cost-worker.js",
       "dist/src/trace.js",
-      "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
+      "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
     ].map(async (path) => {
       const bytes = await readFile(path);
       await mkdir(dirname(join(first, path)), { recursive: true });
@@ -47,7 +47,7 @@ if (command === "freeze") {
   );
   for (const [path, target] of [
     ["evals/workspace-oracle/rust/target/release/workspace-oracle", "runner"],
-    ["crates/oracle/target/release/idealis-oracle", "oracle"],
+    ["crates/oracle/target/release/roracle", "oracle"],
   ]) {
     assert.ok(path && target);
     const bytes = await readFile(path);

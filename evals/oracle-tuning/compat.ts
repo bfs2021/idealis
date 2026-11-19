@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { readOracleWasm } from "./wasm.js";
 
 const before = process.argv[2];
 const after = process.argv[3];
@@ -62,12 +63,7 @@ const paths = [];
 const replies: unknown[][] = [];
 for (const root of [before, after]) {
   const native = resolve(root, "oracle");
-  const bytes = await readFile(
-    resolve(
-      root,
-      "crates/oracle/target/wasm32-unknown-unknown/release/idealis_oracle.wasm",
-    ),
-  );
+  const bytes = await readOracleWasm(root);
   const instance = new WebAssembly.Instance(new WebAssembly.Module(bytes), {});
   const memory = instance.exports.memory;
   const resize = instance.exports.oracle_input_resize;

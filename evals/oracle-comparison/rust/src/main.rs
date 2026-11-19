@@ -1,4 +1,4 @@
-use idealis_oracle::{BenchConfig, CheckReport, Observation, OracleGroup, Status};
+use roracle::{BenchConfig, CheckReport, Observation, OracleGroup, Status};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::cell::Cell;

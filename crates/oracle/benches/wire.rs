@@ -15,26 +15,26 @@ fn measurements(criterion: &mut Criterion) {
         ("unknown", 1, 8, true),
     ] {
         let input = payload(count, width, failure);
-        let expected = idealis_oracle::dispatch(&input);
+        let expected = roracle::dispatch(&input);
         assert_eq!(
             expected["report"]["status"],
             if failure { "unknown" } else { "matched" }
         );
         assert_eq!(
-            serde_json::from_slice::<Value>(&idealis_oracle::dispatch_json(&input)).unwrap(),
+            serde_json::from_slice::<Value>(&roracle::dispatch_json(&input)).unwrap(),
             expected
         );
         criterion.bench_function(&format!("wire-value/{name}"), |bencher| {
             bencher.iter_batched(
                 || (),
-                |_| idealis_oracle::dispatch(black_box(&input)),
+                |_| roracle::dispatch(black_box(&input)),
                 BatchSize::SmallInput,
             )
         });
         criterion.bench_function(&format!("wire-bytes/{name}"), |bencher| {
             bencher.iter_batched(
                 || (),
-                |_| idealis_oracle::dispatch_json(black_box(&input)),
+                |_| roracle::dispatch_json(black_box(&input)),
                 BatchSize::SmallInput,
             )
         });

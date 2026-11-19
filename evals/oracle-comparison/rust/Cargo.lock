@@ -34,14 +34,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e9c71c2167ca323c882b99918929403426e2373ea17242ff5653e0d5e1058be"
 
 [[package]]
-name = "idealis-oracle"
-version = "0.1.0-alpha.0"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "itoa"
 version = "1.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -57,7 +49,7 @@ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 name = "oracle-comparison"
 version = "0.0.0"
 dependencies = [
- "idealis-oracle",
+ "roracle",
  "rtla",
  "rtla-compiler",
  "rtlc",
@@ -101,6 +93,14 @@ checksum = "22e18b0f0062d30d4230b2e85ff77fdfe4326feb054b9783a3460d8435c8ab91"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
+]
+
+[[package]]
+name = "roracle"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

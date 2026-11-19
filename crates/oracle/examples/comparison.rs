@@ -1,4 +1,4 @@
-use idealis_oracle::{BenchConfig, Observation, OracleGroup};
+use roracle::{BenchConfig, Observation, OracleGroup};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut group = OracleGroup::new("sum");
@@ -37,6 +37,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             },
         )?
         .assert_matched();
-    println!("standalone idealis-oracle consumer checked");
+    println!("standalone roracle consumer checked");
     Ok(())
 }

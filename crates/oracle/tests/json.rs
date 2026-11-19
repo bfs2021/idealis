@@ -1,4 +1,4 @@
-use idealis_oracle::dispatch;
+use roracle::dispatch;
 use serde_json::{Value, json};
 fn request() -> Value {
     json!({"version":1,"group":"wire","reference":"oracle","implementations":["native","wasm"],"cases":[
@@ -139,7 +139,7 @@ fn wire_observation_acceptance_matches_the_public_serde_contract() {
         }
     }
     for observation in observations {
-        let expected = serde_json::from_slice::<idealis_oracle::Observation<Value>>(
+        let expected = serde_json::from_slice::<roracle::Observation<Value>>(
             &serde_json::to_vec(&observation).unwrap(),
         )
         .ok()

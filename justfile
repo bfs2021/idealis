@@ -42,7 +42,7 @@ workspace-oracle-test: workspace-oracle-build portable-build testing-build rallo
   cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
   pnpm build
-  node --test dist/evals/workspace-oracle/contract-test.js dist/evals/workspace-oracle/catalog-test.js
+  node --test dist/evals/workspace-oracle/contract-test.js dist/evals/oracle-tuning/wasm-test.js dist/evals/workspace-oracle/catalog-test.js
 
 # Run builds and tests first; snapshots freeze their executables and sources.
 workspace-snapshot directory:

@@ -18,7 +18,7 @@
 
 [0052: workspaceのoracle統合](iterations/0052-workspace-oracle.md)は23ファイル・99比較をRust/Wasmへ通し、3言語と保存反例を再検査した。source/binary snapshotからのbefore/after比較と再生、JSON bridgeの追加費用、当時のTLCの24不一致も記録する（0053で解消）。
 
-[0051: idealis-oracle](iterations/0051-oracle-library.md)は、固定入力・実装登録を差分検査・保存oracle再生・比較ベンチで共有する独立crateを追加した。TLC/tla-ts/idealisのcold比較とprepared Rustを分け、人工故障・測定中drift・clock分解能による最初の失敗も記録した。
+[0051: roracle](iterations/0051-oracle-library.md)は、固定入力・実装登録を差分検査・保存oracle再生・比較ベンチで共有する独立crateを追加した。TLC/tla-ts/idealisのcold比較とprepared Rustを分け、人工故障・測定中drift・clock分解能による最初の失敗も記録した。
 
 [0050: アクション単位のcoverage](iterations/0050-action-coverage.md)は、Rust/TS/native/Wasmへopt-inのbranch計数とwork内訳を追加した。162入力と840回のon/off照合、TLCの14仕様、3反例の再生、旧APIとの完全応答比較を記録した。式・source location・並列のcoverageは未対応。
 

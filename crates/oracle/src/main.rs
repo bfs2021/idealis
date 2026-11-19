@@ -5,7 +5,7 @@ fn main() {
     for input in io::stdin().lock().lines() {
         let input = input.expect("read oracle request");
         output
-            .write_all(&idealis_oracle::dispatch_json(input.as_bytes()))
+            .write_all(&roracle::dispatch_json(input.as_bytes()))
             .expect("write oracle response");
         output.write_all(b"\n").expect("write newline");
         output.flush().expect("flush oracle response");
