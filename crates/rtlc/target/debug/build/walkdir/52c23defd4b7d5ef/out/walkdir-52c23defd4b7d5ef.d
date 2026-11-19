@@ -1,0 +1,10 @@
+/Users/ushironoko/.claude/jobs/7b133109/tmp/idealis-pr3/crates/rtlc/target/debug/build/walkdir/52c23defd4b7d5ef/out/walkdir-52c23defd4b7d5ef.d: /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/lib.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/dent.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/error.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/util.rs
+
+/Users/ushironoko/.claude/jobs/7b133109/tmp/idealis-pr3/crates/rtlc/target/debug/build/walkdir/52c23defd4b7d5ef/out/libwalkdir-52c23defd4b7d5ef.rlib: /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/lib.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/dent.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/error.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/util.rs
+
+/Users/ushironoko/.claude/jobs/7b133109/tmp/idealis-pr3/crates/rtlc/target/debug/build/walkdir/52c23defd4b7d5ef/out/libwalkdir-52c23defd4b7d5ef.rmeta: /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/lib.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/dent.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/error.rs /Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/util.rs
+
+/Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/lib.rs:
+/Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/dent.rs:
+/Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/error.rs:
+/Users/ushironoko/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/walkdir-2.5.0/src/util.rs:

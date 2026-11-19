@@ -1,0 +1,347 @@
+{
+  "tlcTag": "v1.7.4",
+  "tlcRevision": "5a47802b5c391f59ecdd44117981f4ff8c0656ba",
+  "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "environment": {
+    "java": "OpenJDK 21.0.11, Temurin-21.0.11+10-LTS",
+    "workers": 1,
+    "heap": "256m",
+    "timeoutSeconds": 60
+  },
+  "command": "timeout 60 java -Xmx256m -Djava.io.tmpdir=<tlc-tmp> -cp <tlc-jar> tlc2.TLC -workers 1 -nowarning Differential.tla",
+  "streams": "stdout and stderr merged in capture order",
+  "cases": [
+    {
+      "name": "sharing-framed-negation-step3f-b20",
+      "source": "sharing-framed-negation-step3f-b20/Differential.tla",
+      "config": "sharing-framed-negation-step3f-b20/Differential.cfg",
+      "sourceSha256": "66504f6b4d7be6a68ec43e3a2f9cb126d2cc2bacce91d4c99a08c73e67338b91",
+      "configSha256": "c1d30a029c2a6fe21084516800ba5fcdcec870e1e6100009718d97c691f218f0",
+      "log": "sharing-framed-negation-step3f-b20.log",
+      "logSha256": "06ef86b24eabc4453d537e0b2cec8e5b01714bef3a4bd2d8f089b8c7588b70c9",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 1,
+      "states": 2,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-framed-negation-constraint-step3f-b20",
+      "source": "sharing-framed-negation-constraint-step3f-b20/Differential.tla",
+      "config": "sharing-framed-negation-constraint-step3f-b20/Differential.cfg",
+      "sourceSha256": "4de2455197f496cc89f62494eaf2e34e866fbbcc91f7163c17418aaa9e02049b",
+      "configSha256": "f5a35095e3c0cfc483a2a5b4e904d8285e30e76a9e994cd77f3cf63e1b0d9548",
+      "log": "sharing-framed-negation-constraint-step3f-b20.log",
+      "logSha256": "fa18005805fdad3ab6762b99da00ddeae55f5db3c236cc1744b0a73566c6b5cb",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 0,
+      "states": 1,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-framed-conjunction-step3f-b20",
+      "source": "sharing-framed-conjunction-step3f-b20/Differential.tla",
+      "config": "sharing-framed-conjunction-step3f-b20/Differential.cfg",
+      "sourceSha256": "e095bd58cfefdd90eddf6a8a5c55a3a74788c350ed80ddec89ac46c74e1528b4",
+      "configSha256": "c1d30a029c2a6fe21084516800ba5fcdcec870e1e6100009718d97c691f218f0",
+      "log": "sharing-framed-conjunction-step3f-b20.log",
+      "logSha256": "ef3f596a4df76218604f92ba06c5e2d9061a1bdf13a3e1b5ac4f6540572dcc88",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 1,
+      "states": 2,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-framed-conjunction-constraint-step3f-b20",
+      "source": "sharing-framed-conjunction-constraint-step3f-b20/Differential.tla",
+      "config": "sharing-framed-conjunction-constraint-step3f-b20/Differential.cfg",
+      "sourceSha256": "040175236befdfb315dd9b8c22d54c24b68692a043931af44af920a0b73050d4",
+      "configSha256": "f5a35095e3c0cfc483a2a5b4e904d8285e30e76a9e994cd77f3cf63e1b0d9548",
+      "log": "sharing-framed-conjunction-constraint-step3f-b20.log",
+      "logSha256": "e34128dcf2a99294b8ba8bced2f16356b1d4fbd114a482cd93c79a9f2d6d98f5",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 0,
+      "states": 1,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-unframed-negation-constraint-step3f-b20",
+      "source": "sharing-unframed-negation-constraint-step3f-b20/Differential.tla",
+      "config": "sharing-unframed-negation-constraint-step3f-b20/Differential.cfg",
+      "sourceSha256": "6fdb14cbf67f410aec049f818c3824e1d4ea59112304febe31ddfbbbad06b283",
+      "configSha256": "f5a35095e3c0cfc483a2a5b4e904d8285e30e76a9e994cd77f3cf63e1b0d9548",
+      "log": "sharing-unframed-negation-constraint-step3f-b20.log",
+      "logSha256": "d3e3234e94c16d22cc1f579a7b9d5c4422ad976212e2d98b0d9f05f42639cb48",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 0,
+      "states": 1,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-unframed-conjunction-constraint-step3f-b20",
+      "source": "sharing-unframed-conjunction-constraint-step3f-b20/Differential.tla",
+      "config": "sharing-unframed-conjunction-constraint-step3f-b20/Differential.cfg",
+      "sourceSha256": "62fb8dd0f194133e035ce35f06564ac3eb1cbd8035096f6b4d21f32b468a52d5",
+      "configSha256": "f5a35095e3c0cfc483a2a5b4e904d8285e30e76a9e994cd77f3cf63e1b0d9548",
+      "log": "sharing-unframed-conjunction-constraint-step3f-b20.log",
+      "logSha256": "2e83dbba0d54640b51ccc8e732762b44d5aacbc75911365d76380c37ed912836",
+      "exit": 12,
+      "status": "invariant-violation",
+      "message": "Invariant Safe is violated.",
+      "depth": 0,
+      "states": 1,
+      "generated": 2,
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "action": "Step",
+            "values": [
+              {
+                "type": "int",
+                "value": "1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-framed-forall-step3f-b20",
+      "source": "sharing-framed-forall-step3f-b20/Differential.tla",
+      "config": "sharing-framed-forall-step3f-b20/Differential.cfg",
+      "sourceSha256": "80a6b221279669c42d16da117ebf13343e57b44efa951f74ab8504d336ea24a6",
+      "configSha256": "c1d30a029c2a6fe21084516800ba5fcdcec870e1e6100009718d97c691f218f0",
+      "log": "sharing-framed-forall-step3f-b20.log",
+      "logSha256": "9d6ee0175c6280d650ee2e041974f3e0efb7c1478b3d623f8d691265c9e28ace",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-framed-forall-negated-step3f-b20",
+      "source": "sharing-framed-forall-negated-step3f-b20/Differential.tla",
+      "config": "sharing-framed-forall-negated-step3f-b20/Differential.cfg",
+      "sourceSha256": "2370660502a6238620b17d0dc75df953bb895418b5f3851b0f485be96940667a",
+      "configSha256": "c1d30a029c2a6fe21084516800ba5fcdcec870e1e6100009718d97c691f218f0",
+      "log": "sharing-framed-forall-negated-step3f-b20.log",
+      "logSha256": "07daf6ec795c6bc28ec79d6e0f3a40cfc9e43a8816622fc7d128a79efd42e8de",
+      "exit": 13,
+      "status": "property-violation",
+      "message": "Property Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-framed-exists-negated-step3f-b20",
+      "source": "sharing-framed-exists-negated-step3f-b20/Differential.tla",
+      "config": "sharing-framed-exists-negated-step3f-b20/Differential.cfg",
+      "sourceSha256": "e0d88a15a4e9ec3895d68643fead73c77429b794e47d5461a7441e2e92b1f5b4",
+      "configSha256": "c1d30a029c2a6fe21084516800ba5fcdcec870e1e6100009718d97c691f218f0",
+      "log": "sharing-framed-exists-negated-step3f-b20.log",
+      "logSha256": "6cedf4daa51515ec6f028182e623d046fb474a9e7d5f2b7cfd52b21692443693",
+      "exit": 13,
+      "status": "property-violation",
+      "message": "Property Safe is violated by the initial state:",
+      "violation": {
+        "name": "Safe",
+        "trace": [
+          {
+            "action": null,
+            "values": [
+              {
+                "type": "int",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharing-tuple-unchanged-6-step3f-b20",
+      "source": "sharing-tuple-unchanged-6-step3f-b20/Differential.tla",
+      "config": "sharing-tuple-unchanged-6-step3f-b20/Differential.cfg",
+      "sourceSha256": "22624fcf8b577788e6f7e2d26e59e574d0c72f33fa0a5fb3f80116f402439c15",
+      "configSha256": "04266cbe92a2a1002f227c5bda3c0ebbd2eeac9d43211aa9bb8f1d82f7c111ea",
+      "log": "sharing-tuple-unchanged-6-step3f-b20.log",
+      "logSha256": "ab07074a3ea9f79f774b79a08ca6b7c1df0c1630e2be004ddb2fbe742dfdeef2",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-tuple-specification-6-step3f-b20",
+      "source": "sharing-tuple-specification-6-step3f-b20/Differential.tla",
+      "config": "sharing-tuple-specification-6-step3f-b20/Differential.cfg",
+      "sourceSha256": "963b8000d8aea72e9028237e63d7de7fa3e5ad2321029aa809b5c8156d959263",
+      "configSha256": "3e4e51e99c891c54361bee1c69ac95e08e12cc9694713e5749aa4cabca6691c7",
+      "log": "sharing-tuple-specification-6-step3f-b20.log",
+      "logSha256": "1d7722f9a3d4090611cb2c862fb92127c9c7784c8b42007db120f1ef4fba8676",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    },
+    {
+      "name": "sharing-tuple-specification-16-step3f-b20",
+      "source": "sharing-tuple-specification-16-step3f-b20/Differential.tla",
+      "config": "sharing-tuple-specification-16-step3f-b20/Differential.cfg",
+      "sourceSha256": "999bc78f0d199957095a857bd62fa1c55b1cb645fbfd6239692e52ded1f9313a",
+      "configSha256": "3e4e51e99c891c54361bee1c69ac95e08e12cc9694713e5749aa4cabca6691c7",
+      "log": "sharing-tuple-specification-16-step3f-b20.log",
+      "logSha256": "5915e165749139881720903be8d1639728ee617c4e7101d7fed2999e1d04cfdb",
+      "exit": 0,
+      "status": "success",
+      "states": 1,
+      "generated": 2
+    }
+  ]
+}

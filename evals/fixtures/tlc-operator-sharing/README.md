@@ -101,3 +101,26 @@ step 3e-bでは、前提レビューの値依存ENABLED・prime・temporalと、
 比較だけを0・0・4・4へ変えた4対照は、採取前の初期Safe違反という予測と異なり、全て`The invariant of Safe is equal to FALSE`で拒否された。TLCはこれらの反例・状態数・生成数を出していないため補わない。原入力・ログを保持し、初期反例やsuccessへ置き換えない。
 
 0046のchoose-order、choose-equivalent、choose-tuple、choose-nested、choose-capture、choose-no-witness、choose-empty、choose-lazy、choose-predicate-error、choose-tuple-errorは保存runを読取のみで再利用する。各source/config/logとreports.json/manifest.jsonのdigestを新goldenのreusedChoose/reusedRunFilesへ固定した。既存expected・ログ・v1 baseline・乖離記録は変更していない。
+
+## step 3f-b20: レビュー指摘の先行TLC対照
+
+[expected-step3f-b20.json](expected-step3f-b20.json)に12本を追加した。固定TLC・jar digest・capture手順は上と同じで、一件ずつ1 worker、256 MiB、60秒のtimeoutで取得した。期待値はTLCログだけから作り、idealisの出力から補わない。既存のexpected・ログ・v1 baseline・乖離記録は変更していない。
+
+| 入力 | TLC結果 | 状態数 / 生成数 |
+| --- | --- | --- |
+| sharing-framed-negation-step3f-b20 | Safe違反、x=0からx=1 | 2 / 2 |
+| sharing-framed-negation-constraint-step3f-b20 | Safe違反、x=0からx=1 | 1 / 2 |
+| sharing-framed-conjunction-step3f-b20 | Safe違反、x=0からx=1 | 2 / 2 |
+| sharing-framed-conjunction-constraint-step3f-b20 | Safe違反、x=0からx=1 | 1 / 2 |
+| sharing-unframed-negation-constraint-step3f-b20 | Safe違反、x=0からx=1 | 1 / 2 |
+| sharing-unframed-conjunction-constraint-step3f-b20 | Safe違反、x=0からx=1 | 1 / 2 |
+| sharing-framed-forall-step3f-b20 | success | 1 / 2 |
+| sharing-framed-forall-negated-step3f-b20 | 初期状態でProperty Safe違反 | 集計なし |
+| sharing-framed-exists-negated-step3f-b20 | 初期状態でProperty Safe違反 | 集計なし |
+| sharing-tuple-unchanged-6-step3f-b20 | success | 1 / 2 |
+| sharing-tuple-specification-6-step3f-b20 | success | 1 / 2 |
+| sharing-tuple-specification-16-step3f-b20 | success | 1 / 2 |
+
+framedの4入力は`Id(p) == p`を介した状態述語で、CONSTRAINTあり・なしの両方を取った。CONSTRAINTありでは、制約の外へ出る後続状態にもTLCはinvariantを検査して違反を報告する。深さはidealisの規約（TLCの報告値−1）でgoldenに記録した。unframedの2入力は、枠を介さない同じ式の対照である。TLCは初期状態のProperty違反に集計を出さないので、goldenへ補わない。
+
+tupleの3入力は`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`の連鎖で、TLCはどれも受理する。n >= 19のtuple連鎖をidealisが拒否する上限はTLCの意味論ではなく、v1が従来から課す入れ子の上限であり、goldenには入れない。

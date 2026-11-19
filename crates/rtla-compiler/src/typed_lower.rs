@@ -25,45 +25,54 @@ fn not(argument: I) -> I {
 fn atom(expression: I) -> T {
     T::Atom { expression }
 }
-fn negate(mut formula: T) -> T {
+fn atom_parts(mut formula: T) -> std::result::Result<I, T> {
     if let T::Atom { expression } = &mut formula {
-        atom(not(std::mem::replace(expression, I::Old)))
+        Ok(std::mem::replace(expression, I::Old))
     } else {
-        T::Not {
+        typed::atom_expression(&formula).ok_or(formula)
+    }
+}
+fn negate(formula: T) -> T {
+    match atom_parts(formula) {
+        Ok(expression) => atom(not(expression)),
+        Err(formula) => T::Not {
             formula: Box::new(formula),
+        },
+    }
+}
+fn connective(and: bool, left: I, right: I) -> I {
+    if and {
+        I::And {
+            left: Box::new(left),
+            right: Box::new(right),
+        }
+    } else {
+        I::Or {
+            left: Box::new(left),
+            right: Box::new(right),
         }
     }
 }
-fn combine(and: bool, mut left: T, mut right: T) -> T {
-    match (&mut left, &mut right) {
-        (T::Atom { expression: left }, T::Atom { expression: right }) => {
-            let left = std::mem::replace(left, I::Old);
-            let right = std::mem::replace(right, I::Old);
-            atom(if and {
-                I::And {
-                    left: Box::new(left),
-                    right: Box::new(right),
-                }
-            } else {
-                I::Or {
-                    left: Box::new(left),
-                    right: Box::new(right),
-                }
-            })
+fn structural(and: bool, left: T, right: T) -> T {
+    if and {
+        T::And {
+            left: Box::new(left),
+            right: Box::new(right),
         }
-        _ => {
-            if and {
-                T::And {
-                    left: Box::new(left),
-                    right: Box::new(right),
-                }
-            } else {
-                T::Or {
-                    left: Box::new(left),
-                    right: Box::new(right),
-                }
-            }
+    } else {
+        T::Or {
+            left: Box::new(left),
+            right: Box::new(right),
         }
+    }
+}
+fn combine(and: bool, left: T, right: T) -> T {
+    match typed::atom_expression(&right) {
+        Some(right_expression) => match atom_parts(left) {
+            Ok(left_expression) => atom(connective(and, left_expression, right_expression)),
+            Err(left) => structural(and, left, right),
+        },
+        None => structural(and, left, right),
     }
 }
 fn frame_actuals(frame: &AnonymousFrame) -> (Vec<I>, Vec<I>) {
@@ -123,8 +132,8 @@ fn unchanged(value: I) -> Result<Vec<Step>> {
 }
 impl Compiler<'_> {
     fn target_reads_ir(&mut self, value: &Expression, context: &Context) -> Result<Vec<I>> {
-        let target = Self::target_ir(&self.resolve_target(value, context)?)?;
-        self.variable_reads_ir(target, "generative UNCHANGED requires state variables")
+        let target = Self::target_ir(&self.resolve_target_within(value, context, 256)?)?;
+        self.variable_reads_ir(target, "generative UNCHANGED requires state variables", 0)
     }
     pub(super) fn action_ir(
         &mut self,
@@ -144,6 +153,7 @@ impl Compiler<'_> {
                     for read in self.variable_reads_ir(
                         target,
                         "generative UNCHANGED requires state variables",
+                        0,
                     )? {
                         steps.extend(unchanged(read)?);
                     }
@@ -350,7 +360,7 @@ impl Compiler<'_> {
             E::Forall { bounds, body } | E::Exists { bounds, body } => {
                 let (bindings, bound) = self.bind_ir(bounds, &child)?;
                 let formula = self.temporal_ir(body, &bound)?;
-                if matches!(formula, T::Atom { .. }) {
+                if typed::atom_expression(&formula).is_some() {
                     return Ok(atom(self.expression_ir(value, &child)?));
                 }
                 self.lower_pending()?;
@@ -575,6 +585,7 @@ impl Compiler<'_> {
                 for value in self.variable_reads_ir(
                     subscript,
                     "SPECIFICATION subscript must list state variables",
+                    context.depth,
                 )? {
                     read_slots(&value, &mut reads)?;
                 }

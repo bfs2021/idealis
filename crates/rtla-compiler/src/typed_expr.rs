@@ -851,7 +851,12 @@ impl Compiler<'_> {
             }
         })
     }
-    pub(super) fn variable_reads_ir(&mut self, value: I, message: &str) -> Result<Vec<I>> {
+    pub(super) fn variable_reads_ir(
+        &mut self,
+        value: I,
+        message: &str,
+        depth: usize,
+    ) -> Result<Vec<I>> {
         if self.target_nesting >= 40 {
             return unsupported("expression or operator nesting exceeds 40");
         }
@@ -862,16 +867,20 @@ impl Compiler<'_> {
             arguments: Vec<I>,
             captures: Vec<I>,
             parent: Option<usize>,
+            depth: usize,
         }
         let mut frames: Vec<Frame> = vec![];
-        let mut pending: Vec<(I, Option<usize>)> = vec![(value, None)];
+        let mut pending: Vec<(I, Option<usize>, usize)> = vec![(value, None, depth)];
         let mut reads = vec![];
-        while let Some((value, frame)) = pending.pop() {
+        while let Some((value, frame, depth)) = pending.pop() {
+            if depth >= 40 {
+                return unsupported("expression or operator nesting exceeds 40");
+            }
             let children = analysis_children(Node::Expression(&value));
             match &value {
                 I::Tuple { .. } => pending.extend(children.into_iter().rev().filter_map(|edge| {
                     if let Node::Expression(value) = edge.node {
-                        Some((value.clone(), frame))
+                        Some((value.clone(), frame, depth + 1))
                     } else {
                         None
                     }
@@ -912,6 +921,7 @@ impl Compiler<'_> {
                             })
                             .collect(),
                         parent: frame,
+                        depth,
                     });
                     pending.push((
                         self.shared[*definition]
@@ -921,6 +931,7 @@ impl Compiler<'_> {
                             .body
                             .clone(),
                         Some(next),
+                        depth + 1,
                     ));
                 }
                 I::Frame { .. } => {
@@ -950,13 +961,14 @@ impl Compiler<'_> {
                             })
                             .collect(),
                         parent: frame,
+                        depth,
                     });
                     for edge in children
                         .into_iter()
                         .filter(|edge| edge.descriptor.role == "frame-body")
                     {
                         if let Node::Expression(value) = edge.node {
-                            pending.push((value.clone(), Some(next)));
+                            pending.push((value.clone(), Some(next), depth + 1));
                         }
                     }
                 }
@@ -975,7 +987,7 @@ impl Compiler<'_> {
                     let actual = actuals.get(*slot).ok_or_else(|| CompileError {
                         message: message.into(),
                     })?;
-                    pending.push((actual.clone(), frame.parent));
+                    pending.push((actual.clone(), frame.parent, frame.depth + 1));
                 }
                 _ => return unsupported(message),
             }

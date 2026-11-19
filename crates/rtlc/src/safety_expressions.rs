@@ -33,11 +33,15 @@ struct Argument {
 }
 
 impl Argument {
-    fn new(expression: &Expression, context: EvalContext<'_>) -> Self {
+    fn new(
+        expression: &Expression,
+        context: EvalContext<'_>,
+        caller: &Option<Arc<CallFrame>>,
+    ) -> Self {
         Self {
             expression: Arc::new(expression.clone()),
             locals: context.locals.to_vec(),
-            frame: context.frame.cloned().map(Arc::new),
+            frame: caller.clone(),
             old: context.old,
         }
     }
@@ -67,14 +71,15 @@ impl CallFrame {
         captures: &[Expression],
         context: EvalContext<'_>,
     ) -> Self {
+        let caller = context.frame.cloned().map(Arc::new);
         Self {
             arguments: arguments
                 .iter()
-                .map(|value| Argument::new(value, context))
+                .map(|value| Argument::new(value, context, &caller))
                 .collect(),
             captures: captures
                 .iter()
-                .map(|value| Argument::new(value, context))
+                .map(|value| Argument::new(value, context, &caller))
                 .collect(),
         }
     }

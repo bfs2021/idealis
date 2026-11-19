@@ -2108,3 +2108,199 @@ placeboはbeforeと確保回数が一致し、命令数の差は+0.18%・+0.18%�
 
 - 4ファイルへの`biome check`と`git diff --check d147550c`は通った。
 - 作業木の変更・未追跡のファイルに、作業用の絶対path、利用者名、sessionの作業directory名を探す検索は一致しなかった。
+
+## step 3f-b20: CodeRabbit findings, test stage
+
+2026-11-18。draft PR #62に自動レビューが残した12件のうち、読取だけの切り分けで再現した8件を、先にRedのテストにした。本番コードは変えていない。レビューの文面は信頼しないデータとして扱い、期待値はTLC 2.19の実行か仕様から取った。再現した8件はいずれもv2だけの欠陥で、基準の`d147550c`とv1は同じ入力で正しい。以下の`<scratch>`は、作業木の外にあるsessionの作業directoryである。番号は12件を投稿順に1から数えたもの。
+
+| #       | 指摘                                                                                   | 扱い                     |
+| ------- | -------------------------------------------------------------------------------------- | ------------------------ |
+| 3, 4    | Rust v2の`negate`・`combine`が、枠付きの状態atomを失う                                 | テスト                   |
+| 5       | Rust v2が枠付きatomの量化を時相量化と見て拒否する                                      | テスト                   |
+| 6       | 5万個の連言でnative v2がstack overflow、Wasm v2は5千個でRangeError                     | テスト                   |
+| 8       | 引数と捕捉ごとに呼び出しframeを複製し、メモリが引数の2乗で増える                       | テスト                   |
+| 2, 11   | `UNCHANGED Vn`の別名展開が2^nで、Rust `resolve_target`・TS `resolveTarget`に上限がない | テスト                   |
+| 12      | `[][Next]_Vn`の`variableReads`（TS）・`variable_reads_ir`（Rust）に同じ展開            | テスト                   |
+| 10      | Wasmだけを選ぶ実行が、先行するnativeの行なしで失敗する                                 | テストファイルの修正     |
+| 1, 7, 9 | Jevの検査対象マニフェスト                                                              | 工程項目、この段の範囲外 |
+
+### 追加したテストと赤の証拠
+
+TLCの期待値は12入力ぶんを[expected-step3f-b20.json](../fixtures/tlc-operator-sharing/expected-step3f-b20.json)に保存した。取得の手順・jar digest・置換規則は既存のgoldenと同じで、ログはfixtureの`*-step3f-b20.log`、説明は同じfixtureのREADMEの末尾にある。新しいテストは全部で132件、赤は52件、緑は80件である。緑の内訳は、TLCログの検査12件、v1の対照、枠なしの対照、n=6とn=16の受理などである。
+
+#### 3・4・5: 枠付き状態atom
+
+- TS: `evals/tlc-differential/operator-sharing-framed-test.ts`。共通の補助は`operator-sharing-support.ts`。
+  - 各入力について、Rust frontend（Wasm）`:137`、native/Wasm `check-tla`の一致`:146`、TS frontend `:154`、TSプログラムのnative/Wasm `check-safety`の一致`:163`、frontend構造の一致`:176`を、v1とv2で検査する。CONSTRAINTを持つ入力は、TS frontendが従来どおり`constrained configuration`を型付きで拒否するので、Rust frontendの2行だけを走らせる。
+  - 結果: 73件中21件が失敗、52件が成功。失敗は全部v2で、想定した断言で落ちる。
+    - CONSTRAINTなしの否定・連言: `'liveness-violation' !== 'invariant-violation'`（states 2、generated 3、work 70と89、Stepを2回踏む反例）。TLCとv1は`invariant-violation`で、states 2、generated 2、depth 1。Rust frontendのnative・Wasmの4行と、TS frontendの4行が失敗する。
+    - CONSTRAINTありの否定・連言: `'complete' !== 'invariant-violation'`（states 1、generated 2、work 22と29）。TLCとv1は`invariant-violation`で、states 1、generated 2、depth 0。
+    - 量化3入力: `'error' !== 'safety'`。メッセージは`temporal quantification requires constant finite domains`。Rust frontendのnative・Wasmの6行と、TSは受理するのでfrontend構造の一致3行が失敗する。
+  - 成功する行は、12件のTLCログ検査、v1の全9入力、枠なしの2入力のv2、量化3入力のTS v2（`:154`と`:163`）である。
+- Rust: `crates/rtla-compiler/tests/operator_sharing_framed_atoms.rs`。`framed!`の9つの呼び出し（`:108`〜`:148`）が、v1とv2の1組ずつ計18件を生成する。TLCのgoldenを`include_str!`で読む。7件が失敗し（v2の枠付き7入力）、11件が成功する。失敗の文面は上と同じ。
+- 追加の観察。TS frontendも、CONSTRAINTなしの否定・連言で同じ誤分類をする。切り分けの試作は`typed_lower.rs`だけを直しているので、実装段ではTS側（`src/tla-safety.ts`）の分類も扱う必要がある。
+
+#### 6: 連言の深さの確認が再帰より後
+
+- `crates/rtla-compiler/tests/operator_sharing_limits.rs:112`。Rustで20,000個の連言を1 MiBのstackのthreadでコンパイルし、`compiled expression nesting exceeds 128`の`Err`を要求する。overflowは欠陥そのものなので、テストは自分自身を子processとして起動し、その終了を断言する（`isolated`）。赤: `status=signal: 6 (SIGABRT)`、`thread '<unknown>' has overflowed its stack`。parseは256 MiBのthreadで先に済ませ、コンパイルだけを1 MiBで走らせる。
+- `evals/tlc-differential/operator-sharing-limits-test.ts`: native 50,000個`:67`（赤: `terminated by SIGABRT`、`thread 'main' has overflowed its stack`）、Wasm 5,000個`:75`（赤: `RangeError`、`Maximum call stack size exceeded`。期待は`protocol`の拒否）。RangeErrorのあとインスタンスは信頼できないので、この行だけ新しいインスタンスを使う。
+- 同じ段で、TS frontendの5,000個`:88`も足した。TSのv2も5,000個でRangeErrorになる（1,000個は制御された拒否）。切り分けには無かった観察で、同じ種類の欠陥なので同じ期待値にした。
+
+#### 8: 呼び出しframeの複製
+
+- `crates/rtlc/tests/argument_forwarding_allocations.rs:110`。引数4,096個を3段で転送するv2プログラムを`check`し、complete、states 1、generated 2、depth 0、work 12、violation nullを要求し（切り分けで測った値）、確認の間の生きたheapの最大が256 MiB以下であることを要求する。測り方は、`crates/rtlc/tests/drop_allocations.rs`と同じ計数付きglobal allocatorで、現在のbytesの最大を持たせた。赤: 結果の断言は通り、`peak live heap during the check was 1538 MiB`で落ちる。
+- `operator-sharing-limits-test.ts:328`（native）、`:332`（Wasm）。同じプログラムをprocessで走らせ、`ps`の`rss`を10 msごとに読み、256 MiBを超えたら殺す（`evals/parallel-safety/evaluate.ts`と同じ読み方）。赤: native `stopped on memory: peak 269 MiB after 40 ms`、Wasm `peak 264 MiB after 221 ms`。リポジトリには計数付きallocator（Rust）とpsによるRSS読み（TS）の両方があるので、新しい仕組みは作っていない。
+
+#### 2・11・12: tupleの別名展開
+
+- 同じ連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対し、`UNCHANGED Vn`と`SPECIFICATION`の`[][Next]_Vn`を、それぞれn=6、16、20、30で走らせる。TS: `operator-sharing-limits-test.ts:194`以降の24行（native、Wasm、TS frontendの3つずつ）と、ソースがTLCのfixtureと一致する確認3行`:154`。Rust: `operator_sharing_limits.rs:184`〜`:203`の拒否4件と、`:229`〜`:240`の受理3件。
+- 期待値。n=6の2形とSPECIFICATIONのn=16は、TLCどおりcomplete、states 1、generated 2。UNCHANGEDのn=20・30とSPECIFICATIONのn=20・30は、`Unsupported TLA input: expression or operator nesting exceeds 40`で、1秒以内かつ256 MiB以内。UNCHANGEDのn=16は拒否（`Safety branch exceeds 256 steps`または入れ子の拒否）で、同じ上限内。native・Wasm・TSは子processで走らせ、`ps`のrssが256 MiBを超えるか5秒を超えたら殺す。TSとWasmは子の中で測った経過時間を1秒と比べる。
+- 赤（TS側の行。Rustは最後に添える）:
+  - UNCHANGED 16: TSだけ失敗（`stopped on memory: peak 270 MiB after 342 ms`）。nativeとWasmは成功。
+  - UNCHANGED 20: native 303 MiB・594 ms、Wasm 258 MiB・1334 ms、TS 281 MiB・770 ms、Rust 258 MiB・3.8 s、すべてmemoryで停止。
+  - UNCHANGED 30: native 256 MiB・3.2 s、TS 280 MiB・0.9 sでmemory停止。Wasmは5 s、Rustは10 sのtimeout停止（欠陥そのもの）。
+  - SPECIFICATION 20: native・Wasm・Rustは`complete`を返す（v1は入れ子の拒否）。TSはmemory停止（270 MiB・351 ms）。
+  - SPECIFICATION 30: native 263 MiB、Wasm 285 MiB、TS 277 MiB、Rustは256 MiBで停止（7.7 s）。
+  - 成功するのは、n=6の2形とSPECIFICATION 16（3 frontend＋Rust）、UNCHANGED 16のnativeとWasm、ソース一致3件である。
+
+#### 10: Wasmだけを選ぶ実行
+
+テストファイルの修正で、本番は変えていない。`evals/tlc-differential/analysis-parity-controls.ts:105`の`pairedChecker`は、Wasmの行でnativeの対（IRと検査結果）が先にあることを断言していた。直前のnativeの行が無い（`--test-name-pattern`で選んだ）ときは、そのWasmのIRを`check`して返すように変えた。nativeの対があるときの正確なIR一致の比較は残してある。差は1か所である（挿入1行、削除5行）。
+
+- 変更前（`node --test --test-name-pattern='analysis parity controls CASE condition is a value position: Wasm' dist/evals/tlc-differential/analysis-parity-controls.js`）: 1件中1件が失敗、`native compiled IR and checker pair must precede duplicate Wasm IR`。
+- 変更後: 同じ選択で1/1成功。`CASE condition is a value position`の3行（TS・native・Wasm）は3/3成功。補助の全件（`analysis-supplement-test.js`）は1064件すべて成功し、固定したソースのdigest検査も通った。
+- `analysis-parity-controls.ts`のsha256が変わるため、`analysis-corpus-manifest.json`の`supplementalSources`に固定してある同ファイルのdigestを書き換えた（`9723fa6f…`から`62422309…`）。このdigestを参照するのは、この1か所だけである。
+
+### 設計の選択: 展開の上限
+
+切り分けの試作は「訪問数4096」で、SPECIFICATIONのn=16も拒否する。v1が受理するものと同じものをv2が受理し、かつ時間とメモリを抑えられるなら、その上限を選ぶ、という方針で、n=16とn=20を分離した環境で測った。数字は`/usr/bin/time -l`の最大RSS（nodeを含む。nodeの下限は約48 MiB）と、経過時間である。
+
+| n・形             | v1                                                                             | v2（現在）                                                                                               | 訪問数4096の試作                                    |
+| ----------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| 16・SPECIFICATION | native 334 ms・190 MiB、TS 104 ms                                              | native 24 ms・48 MiB、Wasm 50 ms・89 MiB、TS 149 ms・178 MiB。complete                                   | 拒否（入れ子40）。native 3 ms、Wasm 14 ms、TS 52 ms |
+| 20・SPECIFICATION | 入れ子40の拒否、3 ms                                                           | complete。native 332 ms・246 MiB、Wasm 553 ms・240 MiB、TS 1626 ms・539 MiB                              | 拒否（入れ子40）。native 4 ms、Wasm 15 ms、TS 55 ms |
+| 16・UNCHANGED     | native 651 ms・298 MiB、TS 142 ms（どちらも`Safety branch exceeds 256 steps`） | native 84 ms・67 MiB、Wasm 138 ms・96 MiB、TS 40 s超で打ち切り                                           | 拒否（入れ子40）。native 4 ms、Wasm 15 ms、TS 49 ms |
+| 20・UNCHANGED     | 入れ子40の拒否、3 ms                                                           | `Safety branch exceeds 256 steps`。native 1407 ms・1034 MiB、Wasm 2597 ms・338 MiB、TS 2 GiB超で打ち切り | 拒否（入れ子40）。native 4 ms、Wasm 13 ms、TS 52 ms |
+
+v1の受理範囲の端は、SPECIFICATIONがn=18（native 1676 ms・750 MiB、TS 245 ms）で、n=19から入れ子40の拒否である。UNCHANGEDは入れ子40の拒否がn=19から、その手前は`Safety branch exceeds 256 steps`であり、v1が受理するのはn=8（256個のleaf）まで。v2の現在値で、深さの上限をv1に合わせた場合の最悪の受理はn=18で、SPECIFICATIONはnative 87 ms・66 MiB、Wasm 146 ms・118 MiB、TS 431 ms・302 MiB、UNCHANGEDはnative 337 ms・262 MiB、TSはn=14ですでに4.3 s・285 MiBである。試作の訪問数4096はSPECIFICATIONをn=8まで受理し、n=12から拒否する。
+
+**選択（実装段の前に固定する）**: v1と同じ入れ子の数え方を別名展開にも適用し、SPECIFICATIONのn=16を受理して、n=19以上は`expression or operator nesting exceeds 40`で即座に拒否する。ただし、深さの上限だけではTS frontendのUNCHANGEDの時間が抑えられない（n=14で4.3 s、n=16で40 s超。v1は142 ms）ので、UNCHANGED・ENABLEDの対象展開にだけ、後段の枝の上限（256手順）に等しいleaf数の上限を足す。v1がそれ以上を受理することはないので、受理の集合は変わらず、拒否の文面だけが変わる。訪問数4096は採らない。v1のSPECIFICATIONの受理範囲（n=9〜18）を狭めるのに対し、得られる利点（nativeで3〜4 ms）は、深さの上限とUNCHANGEDのleaf上限でも得られるからである。
+
+テストはこの選択を固定する形で書いた。SPECIFICATIONのn=16の受理（`operator_sharing_limits.rs:240`と、TSの`:194`以降の該当3行）、n=20・30の拒否、UNCHANGEDのn=16の拒否である。n=17〜19の境目の位置は固定していない。この選択を変える場合は、実装段で理由を記録する。
+
+### 切り分け外の観察（テストにしていない）
+
+- v2は`UNCHANGED V7`（128個のleaf）から`Safety evaluation nesting exceeds 128`で拒否する。v1はn=7（work 131）とn=8（work 259）をcompleteで受理し、n=6は両方が受理する。v2が受理するUNCHANGEDの範囲はv1より狭い。この段のテストはn=6までしか使っていないので、実装段の対象にするか別項目にするかは判断が要る。
+- TS frontendの`UNCHANGED V14`は4.3 s・285 MiB（v1のn=16は142 ms）。UNCHANGEDのleaf上限を足せば隠れるが、遅さの原因が別にあるかは実装段で確かめる。
+
+### 凍結リスト
+
+`<scratch>/step3f-b18/frozen-tests.sha256`の72件を、`<scratch>/step3f-b20/frozen-tests.sha256`の115件へ更新した。変更前に72件のうち70件が一致し、2件が許可された変更で変わった。43件を追加した。
+
+- 変更: `evals/tlc-differential/analysis-parity-controls.ts`（`9723fa6f…`から`62422309…`）と、`evals/fixtures/tlc-operator-sharing/analysis-corpus-manifest.json`（`6a8f00fc…`から`3dfec2a5…`）。
+- 追加: テスト`crates/rtla-compiler/tests/operator_sharing_framed_atoms.rs`、`crates/rtla-compiler/tests/operator_sharing_limits.rs`、`crates/rtlc/tests/argument_forwarding_allocations.rs`、`evals/tlc-differential/operator-sharing-framed-test.ts`、`operator-sharing-limits-test.ts`、`operator-sharing-support.ts`、golden`expected-step3f-b20.json`、12入力のログ・source・config（各3ファイル）。
+
+### 実行
+
+すべて1つずつ順に、memoryの上限とdisk残量の監視を付けて走らせた。作業木のbuild出力（`dist`と各crateの`target`）だけを使い、新しい`target`は作っていない。ログは`<scratch>/step3f-b20/logs/`。
+
+- `tsc -p tsconfig.build.json`は通った。新しいTSの3ファイルに`biome format`と`biome lint`を当て、`analysis-parity-controls.ts`に`biome check`を当てた。
+- 追加したRustの3ファイルとcrateの`cargo fmt --check`、rtla-compilerとrtlcの`cargo clippy --all-targets -D warnings`が通った。
+- 追加のTSとRustのテストを、現在の木に対して1回ずつ走らせた。結果は上記のとおり（TS 73件中21件赤、TS 32件中18件赤、Rust 18件中7件赤、Rust 8件中5件赤、Rust 1件中1件赤）。本番コードの変更はない。
+- この段では実装段の検証（既存テスト全体の再実行、`just check`）は走らせていない。
+
+## step 3f-b21: CodeRabbit findings, implementation
+
+2026-11-18。3f-b20のテスト132件（Rust 27、TS 105）を、本番コードだけの変更で緑にした。テスト、golden、凍結ファイルは変えていない。commit・stage・stash・reset・checkoutは行っていない。以下の`<scratch>`は、作業木の外にあるsessionの作業directoryである。
+
+### 凍結リスト
+
+`<scratch>/step3f-b20/frozen-tests.sha256`の115件を、開始時に`shasum -a 256 -c`で確かめて115/115一致、終了時にも115/115一致した。凍結ファイルへの変更は無い。ただし下の「`just check`」の項に書くとおり、凍結ファイル1件のimport順がbiomeの`organizeImports`に違反しており、直すには凍結ファイルを変える必要があるので、直していない。
+
+### 修正
+
+番号は3f-b20の表（CodeRabbitの12件を投稿順に数えたもの）。行番号は修正後のもの。
+
+- 3・4・5（枠付き状態atomを失う）
+  - Rust `crates/rtla-compiler/src/typed_lower.rs`: `atom_parts`（`:28`）、`negate`（`:35`）、`combine`（`:69`）、補助の`connective`（`:43`）と`structural`（`:56`）。`negate`と`combine`は`typed::atom_expression`を通して枠付きatomを受け取り、atomへ畳む。素のatomは従来どおり式を移し、複製しない。複製を避けるのは、連言を1つずつ畳む蓄積側のatomが大きくなるためである。`TemporalFormula`は`Drop`を実装しているので、式の取り出しは`mem::replace`で行う。右の枝を先に調べ、右がatomでないときは左を消費しない。
+  - Rust 量化の判定（`typed_lower.rs:363`）: `matches!(formula, T::Atom { .. })`を`typed::atom_expression(&formula).is_some()`へ変えた。
+  - TS `src/tla-safety.ts`: `negate`（`:2859`）、`combine`（`:2865`）を`formulaAtom`経由にした。TSには時間論理量化の拒否が無く、量化3入力の失敗はRustの拒否だけが原因だったので、TS側に量化の変更は無い。
+- 6（連言の深さの確認が再帰より後）
+  - Rust `crates/rtla-compiler/src/lib.rs:1483`〜`:1487`: `finish_shared`で、`lower_pending`の直後、再帰の前に、programと共有定義すべての本体へ反復の`typed::check_depth`を行う。
+  - TS `src/tla-safety.ts`: 同じ反復の検査を`checkDepth`（`:1197`）にして、`lowerDefinition`でlocalScopeを再帰で数える前（`:1224`）と、`compactCaptures`の前（`:3295`）で呼ぶ。最後の検査（`:3333`）は同じ関数を使う。TSのRangeErrorは`localScopeOf`と`prepareLevels`の再帰が起こしていたので、`finish_shared`と同じ位置（`lowerPending`の後）では遅い。定義の本体は`lowerDefinition`の中で確かめる。
+- 8（呼び出しframeの複製）
+  - `crates/rtlc/src/safety_expressions.rs`: `CallFrame::new`（`:69`）が呼び出し元のframeを1回だけ`Arc`へ複製し（`:74`）、`Argument::new`（`:36`）はその`Arc`を共有する。
+- 2・11・12（tupleの別名展開の上限）
+  - 数え方。展開の各段で、v1の`expression`と同じ数え方で入れ子を数える。式1つにつき+1、別名のoperator呼び出しで+1（1段で+2）。LETは足さない。深さが40以上の式を処理しようとしたら`expression or operator nesting exceeds 40`で拒否する。
+  - Rust `lib.rs`: `Context::check_nesting`（`:95`）、`resolve_target_within`（`:503`、上限なしの`resolve_target`は`:500`）。式ごとの検査（`:527`）、tupleとlabelの子は深さ+1、operatorの呼び出しは`inner.depth = context.depth + 1`（`:644`）。
+  - Rust `typed_expr.rs`: `variable_reads_ir`（`:854`）は開始の深さを受け取る。式ごとの検査（`:876`）、callとframeの本体は+1、parameterとcaptureの実引数は呼び出しの深さ+1（`:990`）。`typed_lower.rs:588`のSPECIFICATION subscriptは`context.depth`から数える。ほかの2か所は具体的なtargetなので0から数える。
+  - TS `src/tla-safety.ts`: `resolveTarget`（`:482`）の式ごとの検査（`:532`）、tupleとlabelの子（`:536`）、operator呼び出し（`:645`）。`variableReads`（`:2311`）の検査（`:2338`）と実引数の深さ（`:2407`）。SPECIFICATION subscriptの呼び出しは`context.depth`（`:3192`）から数える。
+  - UNCHANGEDとENABLEDの対象展開のleaf上限は256個。上限を超えるとき`Safety branch exceeds 256 steps`で拒否する（compile時に`Unsupported TLA input: `が付く）。Rustは`target_reads_ir`（`typed_lower.rs:135`）と、要求の走査の`UNCHANGED`だけ（`lib.rs:881`）。TSは`UNCHANGED`の本体（`:2782`）と要求の走査（`:814`）。leafの数えは、素のslotとbindingの各1個と、`static_targets`から複製するtargetのleaf数の合計である。BoxActionとAngleActionのsubscript、`call_targets`の実引数には上限を付けていない（3f-b20で決めたとおり、UNCHANGEDとENABLEDにだけ付ける）。
+  - 要求の走査にも上限を付けたのは、`UNCHANGED V16`のTSが、`UNCHANGED`の本体に着く前に走査で2^16個のleafを展開していたからである。訪問数4096は使っていない。
+- 10: テスト段で修正済み。変更なし。
+- 未変更の到達不能なコード。`lib.rs`のJSONを組み立てる`variable_reads`・`action`・`parts`のv2の枝は、`program()`が`program_ir`へ先に分岐するので、v2では到達しない。変えていない。
+
+### 受理する集合とv1の比較
+
+native（`idealis-core`のrelease）で、`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`の連鎖を、`UNCHANGED Vn`（`Next`）と`[][Next]_Vn`（SPECIFICATION）で、v1と明示v2に走らせた。TS frontendはcompileだけを同じnで走らせた。
+
+| n・形                | v1（native）                                | v2（native）                                                          | v2（TS compile）  |
+| -------------------- | ------------------------------------------- | --------------------------------------------------------------------- | ----------------- |
+| SPECIFICATION 14〜18 | complete                                    | complete                                                              | 受理              |
+| SPECIFICATION 19〜22 | 入れ子40の拒否                              | 入れ子40の拒否                                                        | 入れ子40の拒否    |
+| UNCHANGED 5〜6       | complete                                    | complete                                                              | 受理              |
+| UNCHANGED 7〜8       | complete                                    | `Safety evaluation nesting exceeds 128`                               | 受理              |
+| UNCHANGED 9〜18      | `Safety branch exceeds 256 steps`（検査時） | `Unsupported TLA input: Safety branch exceeds 256 steps`（compile時） | 同じ（compile時） |
+| UNCHANGED 19〜22     | 入れ子40の拒否                              | 入れ子40の拒否                                                        | 入れ子40の拒否    |
+
+SPECIFICATIONの受理はn≤18、拒否はn≥19で、v1と一致する。UNCHANGEDは、v1が受理する範囲（n≤8）のうち、v2が受理するのはn≤6である。n=7と8のv2の拒否は、この修正の前から同じで、下の「後続項目」に記録する。n=9〜18の拒否の文面は、v1が検査時の`Safety branch exceeds 256 steps`、v2がcompile時にこの文面へ`Unsupported TLA input: `を付けたものになる。拒否の時刻は、TSのUNCHANGED 16〜18がcompileで1〜2 ms、nativeとWasmの子processがテストの1 s以内に収まる。
+
+### 結果
+
+すべて1つずつ順に、memoryの上限とdisk残量の監視を付けて走らせた。ログは`<scratch>/step3f-b21/logs/`。作業木のbuild出力（`dist`と各crateの`target`）だけを使い、新しい`target`は作っていない。
+
+- 新しい132件。
+  - Rust 27件。rtla-compilerの`operator_sharing_framed_atoms` 18/18、`operator_sharing_limits` 8/8、rtlcの`argument_forwarding_allocations` 1/1。
+  - TS 105件。`operator-sharing-framed-test` 73/73、`operator-sharing-limits-test` 32/32。
+  - 3f-b20の赤は52件で、すべて緑になった。
+- rtlc: `cargo test --all-targets --locked --no-fail-fast`、229件（これまで228件に新規1件）。
+- rtla-compiler: 同じ形で137件（これまで111件に新規26件）。
+- idealis-core: 同じ形で44件。
+- rtla: 12件。
+- 3 crateのfmt `--check`とclippy `--all-targets -D warnings`: すべて通った。
+- analysis parity: 4236/4236。修正の前は、本番ファイルのdigestが変わったので4235/4236（`analysis inventory source digest changed`の1件）だった。3f-b16と同じく`extractAnalysisInventory()`だけで`analysis-inventory.json`の`extracted`を再生成した。変わったのは`/extracted`の下の次の7箇所で、`extracted`以外の10 top-level fieldsは不変だった: `sourceSha256`の4つ（`lib.rs`、`typed_expr.rs`、`typed_lower.rs`、`src/tla-safety.ts`）、`lowerEvidence/Rust`（267件から268件）、`lowerEvidence/TS`（269件から270件）、`lowerEvidence/rustFunctions`（114件から120件）。再実行で4236/4236。凍結のmanifestとテストは変えていない。
+- analysis supplement: 1064/1064。
+- operator-sharing cohort: 970/970。frame decoder: 153/153。v1 byte identityとbaseline: 257/257。
+- `just safety-test`: 1183/1183（TLC regressionを含む）。
+- `just portable-build`: 成功。
+- `just portable-test`: 成功。Rust（rtlc 229、rtla 12、rtla-compiler 137、idealis-core 44）、rtlaのparser contract 3、portable contract 7、実Chromium 2。
+- `just check`: **biome checkが失敗する**（下の項）。typecheckは成功、Vitest 77/77、node:test 77/77。
+- `git diff --check d147550c`: 通った。
+- 作業木の変更・未追跡のファイルに、作業用の絶対path、利用者名、sessionの作業directory名を探す検索の一致は無い。
+
+#### `just check`: 凍結ファイルのimport順
+
+`pnpm check`（`biome check .`）は、次の2件のerrorで失敗した。
+
+- `evals/iterations/0048-operator-sharing.md`の整形。3f-b20の節の表が整形されていなかった。このノートは凍結ではないので、この節を足したあと`biome format --write`で整形した。
+- `evals/tlc-differential/operator-sharing-limits-test.ts:14`の`assist/source/organizeImports`。`./operator-sharing-support.js`から取り込む名前の並びが、biomeの要求と違う。直す変更は、`mebibytes`と`type Measured`の2行を入れ替える1箇所だけだが、このファイルは凍結リストの1件なので、変えていない。`biome lint`と`biome format`にはこの指摘が出ないので、3f-b20は気付かなかった。凍結リストの更新（このファイルのsha256の取り直し）を許可する判断が要る。
+
+警告3件・情報2件は、この段で触れていない既存のファイル（`evals/alloy-subset/run.ts`、`evals/smt-subset/benchmark.ts`、`src/backend.ts`）と、既存の行（`src/tla-safety.ts`の`!body || body.node.space !== "ir-expression"`）のもので、前の段と同じである。
+
+### 計測: TS frontendの`UNCHANGED V14`
+
+`/usr/bin/time -l`の下で、TS frontendの明示v2の`compileTlaSafety`だけをnodeで走らせた。修正の前は4.3 s・285 MiB（3f-b20の測定）だった。修正の後は、`Safety branch exceeds 256 steps`の拒否まで、関数の中で5 ms、processの実時間0.06 s、最大RSS 79 MiB（nodeの下限を含む）である。V16も同じ（5 ms、0.06 s、80 MiB）。遅さの原因は、`resolveTarget`が2^nのleafを展開していたことで、上限で解消した。後続項目には載せない。
+
+### 記録する限界と後続項目
+
+このノートには後続項目の一覧が無かったので、ここに置く。
+
+- v2は、`UNCHANGED V7`（展開後のleafが128個）以上を、検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=7とn=8（256個）を受理する。この修正の範囲外で、現在のv2の限界である。原因は調べていない。`crates/rtla-compiler/SUPPORT.md`の「非対応・対象外」と`docs/safety-ir-v2.md`の「検証範囲」に、そのとおり書いた。
+- Jevの検査対象マニフェスト（CodeRabbitの1・7・9）は、3f-b20の表のとおり工程項目で、`support-sync`が要る。この段でも`support-sync`と`support-check`は実行していない。
+- `operator-sharing-limits-test.ts`のimport順（上の項）。凍結リストの更新の判断が要る。
+
+### 変更したファイル
+
+- 本番: `crates/rtla-compiler/src/lib.rs`、`crates/rtla-compiler/src/typed_expr.rs`、`crates/rtla-compiler/src/typed_lower.rs`、`crates/rtlc/src/safety_expressions.rs`、`src/tla-safety.ts`。
+- 文書: `crates/rtla-compiler/SUPPORT.md`、`docs/safety-ir-v2.md`、このノート。
+- 生成: `evals/fixtures/tlc-operator-sharing/analysis-inventory.json`（`extracted`のみ）。

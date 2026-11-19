@@ -92,10 +92,14 @@ struct Context {
     temporal_frames: Vec<AnonymousFrame>,
 }
 impl Context {
-    fn nested(&self) -> Result<Self> {
+    fn check_nesting(&self) -> Result<()> {
         if self.depth >= 40 {
             return unsupported("expression or operator nesting exceeds 40");
         }
+        Ok(())
+    }
+    fn nested(&self) -> Result<Self> {
+        self.check_nesting()?;
         Ok(Self {
             depth: self.depth + 1,
             ..self.clone()
@@ -123,6 +127,15 @@ enum Target {
     Slot(usize),
     Tuple(Vec<Target>),
     Binding(usize),
+}
+fn target_leaves(target: &Target) -> usize {
+    match target {
+        Target::Tuple(elements) => elements
+            .iter()
+            .map(target_leaves)
+            .fold(0, usize::saturating_add),
+        Target::Slot(_) | Target::Binding(_) => 1,
+    }
 }
 #[derive(Clone)]
 struct Shared {
@@ -485,6 +498,14 @@ impl Compiler<'_> {
         context
     }
     fn resolve_target(&mut self, value: &Expression, context: &Context) -> Result<Target> {
+        self.resolve_target_within(value, context, usize::MAX)
+    }
+    fn resolve_target_within(
+        &mut self,
+        value: &Expression,
+        context: &Context,
+        leaf_limit: usize,
+    ) -> Result<Target> {
         enum Task {
             Expression(Expression, Box<Context>, HashSet<usize>),
             Tuple(usize),
@@ -495,6 +516,7 @@ impl Compiler<'_> {
             HashSet::new(),
         )];
         let mut results = vec![];
+        let mut leaves = 0usize;
         while let Some(task) = tasks.pop() {
             match task {
                 Task::Tuple(count) => {
@@ -502,12 +524,15 @@ impl Compiler<'_> {
                     results.push(Target::Tuple(elements));
                 }
                 Task::Expression(value, context, active) => {
+                    context.check_nesting()?;
                     let (name, args) = match &value.node {
                         E::Tuple { elements: _ } => {
                             let elements = source_children(&value);
+                            let mut child = context.clone();
+                            child.depth += 1;
                             tasks.push(Task::Tuple(elements.len()));
                             tasks.extend(elements.into_iter().rev().map(|value| {
-                                Task::Expression(value, context.clone(), active.clone())
+                                Task::Expression(value, child.clone(), active.clone())
                             }));
                             continue;
                         }
@@ -520,7 +545,9 @@ impl Compiler<'_> {
                                 source_children(&value).pop().ok_or_else(|| CompileError {
                                     message: "generative UNCHANGED requires state variables".into(),
                                 })?;
-                            tasks.push(Task::Expression(body, context, active));
+                            let mut child = context;
+                            child.depth += 1;
+                            tasks.push(Task::Expression(body, child, active));
                             continue;
                         }
                         E::Let {
@@ -546,6 +573,10 @@ impl Compiler<'_> {
                                         ancestors.clone(),
                                     ));
                                 } else if let Some(target) = context.static_targets.get(binding) {
+                                    leaves = leaves.saturating_add(target_leaves(target));
+                                    if leaves > leaf_limit {
+                                        return unsupported("Safety branch exceeds 256 steps");
+                                    }
                                     results.push(target.clone());
                                 } else if context.locals.get(name).is_some_and(|value| {
                                     matches!(
@@ -554,6 +585,10 @@ impl Compiler<'_> {
                                             | ir::Expression::Capture { .. }
                                     )
                                 }) {
+                                    leaves = leaves.saturating_add(1);
+                                    if leaves > leaf_limit {
+                                        return unsupported("Safety branch exceeds 256 steps");
+                                    }
                                     results.push(Target::Binding(*binding));
                                 } else {
                                     return unsupported(
@@ -563,6 +598,10 @@ impl Compiler<'_> {
                                 continue;
                             }
                             if let Some(slot) = self.slots.get(name) {
+                                leaves = leaves.saturating_add(1);
+                                if leaves > leaf_limit {
+                                    return unsupported("Safety branch exceeds 256 steps");
+                                }
                                 results.push(Target::Slot(*slot));
                                 continue;
                             }
@@ -602,6 +641,7 @@ impl Compiler<'_> {
                         return unsupported(format!("operator {name}"));
                     }
                     let mut inner = self.target_context(&entry);
+                    inner.depth = context.depth + 1;
                     for (binding, target) in &context.static_targets {
                         if entry.projection.contains_key(binding) {
                             inner.static_targets.insert(*binding, target.clone());
@@ -838,7 +878,14 @@ impl Compiler<'_> {
                                 };
                                 match edge.descriptor.role {
                                     "generative-target" | "subscript" => {
-                                        let target = self.resolve_target(child, &context)?;
+                                        let leaf_limit =
+                                            if matches!(value.node, E::Unchanged { .. }) {
+                                                256
+                                            } else {
+                                                usize::MAX
+                                            };
+                                        let target = self
+                                            .resolve_target_within(child, &context, leaf_limit)?;
                                         Self::target_bindings(
                                             &target,
                                             working.get_mut(&owner).unwrap(),
@@ -1433,6 +1480,12 @@ impl Compiler<'_> {
     }
     fn finish_shared(&mut self, mut program: ir::SafetyProgram) -> Result<ir::SafetyProgram> {
         self.lower_pending()?;
+        typed::check_depth(Node::Program(&program))?;
+        for entry in &self.shared {
+            if let Some(definition) = &entry.definition {
+                typed::check_depth(Node::Expression(&definition.body))?;
+            }
+        }
         let order = self.definition_order()?;
         self.prepare_levels(&order);
         loop {

@@ -469,10 +469,26 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     }
     return left.kind === "slot" ? -1 : 1;
   };
+  const targetLeaves = (target: StaticTarget): number => {
+    let count = 0;
+    const pending = [target];
+    while (pending.length) {
+      const value = pending.pop();
+      if (value?.kind === "tuple") pending.push(...value.values);
+      else count++;
+    }
+    return count;
+  };
   const resolveTarget = (
     source: Expression,
     context: Context,
+    leafLimit = Number.POSITIVE_INFINITY,
   ): StaticTarget => {
+    let leaves = 0;
+    const leaf = (target: StaticTarget): void => {
+      leaves += targetLeaves(target);
+      if (leaves > leafLimit) unsupported("Safety branch exceeds 256 steps");
+    };
     type Env = {
       readonly context: Context;
       readonly actuals: ReadonlyMap<
@@ -513,15 +529,26 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       }
       const { value, env, active } = task;
       const context = env.context;
+      if (context.depth >= 40)
+        return unsupported("expression or operator nesting exceeds 40");
+      const deeper = (): Env => ({
+        ...env,
+        context: { ...context, depth: context.depth + 1 },
+      });
       if (value.kind === "Tuple") {
         const children = sourceEdges(value);
+        const child = deeper();
         tasks.push({ kind: "tuple", count: children.length });
         for (const edge of children.reverse())
-          tasks.push({ ...task, value: edge.value });
+          tasks.push({ ...task, value: edge.value, env: child });
         continue;
       }
       if (value.kind === "Label") {
-        tasks.push({ ...task, value: sourceChild(value, "result") });
+        tasks.push({
+          ...task,
+          value: sourceChild(value, "result"),
+          env: deeper(),
+        });
         continue;
       }
       if (value.kind === "Let") {
@@ -558,17 +585,21 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
           continue;
         }
         const mapped = context.staticTargets.get(binding);
-        if (mapped) results.push(mapped);
-        else {
+        if (mapped) {
+          leaf(mapped);
+          results.push(mapped);
+        } else {
           const local = context.locals.get(name);
           if (local?.op !== "parameter" && local?.op !== "capture")
             return unsupported(targetMessage);
+          leaf({ kind: "binding", binding });
           results.push({ kind: "binding", binding });
         }
         continue;
       }
       const slot = value.kind === "Identifier" ? slots.get(name) : undefined;
       if (slot !== undefined) {
+        leaf({ kind: "slot", slot });
         results.push({ kind: "slot", slot });
         continue;
       }
@@ -611,6 +642,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
             staticTargets: entry.staticTargets,
             targetActuals: entry.targetActuals,
             scope: entry.scope,
+            depth: context.depth + 1,
           },
           actuals,
         },
@@ -779,7 +811,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       }
       if (value.kind === "Unchanged" && action) {
         add(
-          resolveTarget(sourceChild(value, "generative-target"), context),
+          resolveTarget(sourceChild(value, "generative-target"), context, 256),
           required,
         );
         continue;
@@ -1162,6 +1194,25 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       ),
     };
   };
+  const checkDepth = (value: unknown): void => {
+    const root = analysisView(value);
+    if (!root) return;
+    const pending: (readonly [AnalysisNode, number])[] = [[root, 0]];
+    while (pending.length) {
+      const task = pending.pop();
+      if (!task) break;
+      const [node, depth] = task;
+      if (
+        (node.space === "ir-expression" ||
+          ((node.space === "ir-step" || node.space === "ir-temporal") &&
+            node.value.kind === "frame")) &&
+        depth > 128
+      )
+        unsupported("compiled expression nesting exceeds 128");
+      for (const edge of analysisChildren(node))
+        pending.push([edge.node, depth + edge.depth]);
+    }
+  };
   const lowerDefinition = (entry: (typeof definitions)[number]): void => {
     if (!entry.pending) return;
     const { body, context } = entry.pending;
@@ -1170,6 +1221,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       entry.purpose === "membership-type"
         ? membershipSet(body, context)
         : expression(body, context);
+    checkDepth(lowered);
     entry.definition = {
       ...entry.definition,
       body: lowered,
@@ -2259,6 +2311,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
   const variableReads = (
     value: SafetyExpression,
     message: string,
+    depth = 0,
   ): readonly SafetyExpression[] => {
     if (!shared) return [value];
     if (targetNesting >= 40)
@@ -2270,21 +2323,25 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       readonly arguments: readonly SafetyExpression[];
       readonly captures: readonly SafetyExpression[];
       readonly parent?: number | undefined;
+      readonly depth: number;
     }[] = [];
     const pending: {
       readonly value: SafetyExpression;
       readonly frame?: number | undefined;
-    }[] = [{ value }];
+      readonly depth: number;
+    }[] = [{ value, depth }];
     const reads: SafetyExpression[] = [];
     while (pending.length) {
       const task = pending.pop();
       if (!task) return unsupported(message);
-      const { value, frame } = task;
+      const { value, frame, depth } = task;
+      if (depth >= 40)
+        return unsupported("expression or operator nesting exceeds 40");
       const children = analysisChildren({ space: "ir-expression", value });
       if (value.op === "tuple") {
         for (const edge of [...children].reverse())
           if (edge.node.space === "ir-expression")
-            pending.push({ value: edge.node.value, frame });
+            pending.push({ value: edge.node.value, frame, depth: depth + 1 });
       } else if (value.op === "read" && !value.next) reads.push(value);
       else if (value.op === "call") {
         let ancestor = frame;
@@ -2311,8 +2368,9 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
               : [],
           ),
           parent: frame,
+          depth,
         });
-        pending.push({ value: body, frame: next });
+        pending.push({ value: body, frame: next, depth: depth + 1 });
       } else if (value.op === "frame") {
         const next = frames.length;
         frames.push({
@@ -2327,6 +2385,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
               : [],
           ),
           parent: frame,
+          depth,
         });
         const body = children.find(
           (edge) =>
@@ -2334,7 +2393,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         );
         if (!body || body.node.space !== "ir-expression")
           return unsupported(message);
-        pending.push({ value: body.node.value, frame: next });
+        pending.push({ value: body.node.value, frame: next, depth: depth + 1 });
       } else if (value.op === "parameter" || value.op === "capture") {
         const caller = frame === undefined ? undefined : frames[frame];
         const actual =
@@ -2342,7 +2401,11 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
             value.slot
           ];
         if (!actual) return unsupported(message);
-        pending.push({ value: actual, frame: caller?.parent });
+        pending.push({
+          value: actual,
+          frame: caller?.parent,
+          depth: (caller?.depth ?? depth) + 1,
+        });
       } else return unsupported(message);
     }
     targetNesting--;
@@ -2716,7 +2779,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
           name,
           steps: shared
             ? unchangedSteps(
-                targetExpression(resolveTarget(value.expression, child)),
+                targetExpression(resolveTarget(value.expression, child, 256)),
               )
             : variableReads(
                 expression(value.expression, child),
@@ -2793,18 +2856,23 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     kind: "atom",
     expression,
   });
-  const negate = (formula: TemporalFormula): TemporalFormula =>
-    formula.kind === "atom"
-      ? atom({ op: "not", argument: formula.expression })
-      : { kind: "not", formula };
+  const negate = (formula: TemporalFormula): TemporalFormula => {
+    const body = formulaAtom(formula);
+    return body === undefined
+      ? { kind: "not", formula }
+      : atom({ op: "not", argument: body });
+  };
   const combine = (
     kind: "and" | "or",
     left: TemporalFormula,
     right: TemporalFormula,
-  ): TemporalFormula =>
-    left.kind === "atom" && right.kind === "atom"
-      ? atom({ op: kind, left: left.expression, right: right.expression })
+  ): TemporalFormula => {
+    const leftBody = formulaAtom(left);
+    const rightBody = leftBody === undefined ? undefined : formulaAtom(right);
+    return leftBody !== undefined && rightBody !== undefined
+      ? atom({ op: kind, left: leftBody, right: rightBody })
       : { kind, left, right };
+  };
   const isBoxedAction = (value: Expression, context: Context): boolean => {
     if (
       shared &&
@@ -3121,6 +3189,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
             variableReads(
               subscript,
               "SPECIFICATION subscript must list state variables",
+              context.depth,
             ).flatMap(reads),
           ).size !== variables.length
         )
@@ -3223,6 +3292,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
   };
   if (!shared) return program as unknown as SafetyProgram;
   lowerPending();
+  checkDepth(program);
   const compact = compactCaptures(program);
   const phases = ["constant", "initial", "state", "next"];
   const ordered = [...definitions].sort(
@@ -3259,22 +3329,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         ? { ...value, definition: ids.get(Number(value.definition)) }
         : value,
   ) as SafetyProgram;
-  const rootNode =
-    analysisView(result) ?? unsupported("compiled program metadata");
-  const pending: (readonly [AnalysisNode, number])[] = [[rootNode, 0]];
-  while (pending.length) {
-    const task = pending.pop();
-    if (!task) break;
-    const [node, depth] = task;
-    if (
-      (node.space === "ir-expression" ||
-        ((node.space === "ir-step" || node.space === "ir-temporal") &&
-          node.value.kind === "frame")) &&
-      depth > 128
-    )
-      return unsupported("compiled expression nesting exceeds 128");
-    for (const edge of analysisChildren(node))
-      pending.push([edge.node, depth + edge.depth]);
-  }
+  if (!analysisView(result)) unsupported("compiled program metadata");
+  checkDepth(result);
   return result;
 };

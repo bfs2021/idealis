@@ -44,6 +44,7 @@
 ## 非対応・対象外
 
 - [ ] v2の代入action template共有、self / mutual recursion。代入actionはinlineを維持する。
+- [ ] v2は、tuple別名の連鎖`V0 == x`、`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否する。v1はn=8（leafが256個）まで受理する。測定した現在の限界で、原因は調べていない。
 - [ ] v2のモジュール連結（ユーザーmoduleのEXTENDS・INSTANCE）と設定の上書き（operator置換・定数表・定義の上書き）。要する入力は、v1と共通の連結と検査が通った場合、v1が受理するときも、loweringの前に`safety IR v2 does not support module linking or configuration operator substitution`で拒否する。v1と既定は従来どおり受理する。
 
 - [ ] 引数付きINSTANCE、LET内のINSTANCE、nested module、WITHの一般のoperator引数・変数名以外への変数置換、一般の高階・再帰operator、LAMBDA。
@@ -54,6 +55,7 @@
 
 ## 制約と根拠
 
+- [x] v2のUNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を`expression or operator nesting exceeds 40`で拒否し、受理する集合を、「非対応・対象外」に記したUNCHANGEDの限界を除いてv1に一致させる。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力を`Safety branch exceeds 256 steps`で拒否する。
 - [x] frontendの式nesting / bound variable 40、checkerの定義内式48 / 値64、TS decoder128とv2の動的な評価入れ子128を緩めない。call経路長と定義内式のnestingを区別する。
 - [x] 集合foldの値種と順序の制約を守る。文字列・recordや一部の関数を拒否する範囲は[README](README.md)に従う。
 - [x] 未対応・型エラー・予算切れを検査成功へ読み替えない。探索予算と結果はrtlcの契約。

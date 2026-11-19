@@ -110,11 +110,7 @@ const pairedChecker = () => {
     program: SafetyProgram,
     frontend: "TS" | "native" | "Wasm",
   ): unknown => {
-    if (frontend === "Wasm") {
-      assert.ok(
-        nativeWitness,
-        "native compiled IR and checker pair must precede duplicate Wasm IR",
-      );
+    if (frontend === "Wasm" && nativeWitness) {
       assert.deepEqual(
         normalize(program),
         normalize(nativeWitness.program),

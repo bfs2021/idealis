@@ -58,6 +58,8 @@ call entryと引数・captureの要求時にそれぞれ`Arena::consume(1)`へ�
 
 rtlc unit testsは不正IR、frame-local slot、直接評価のwork境界を検査する。operator-sharing cohortではTS/Rustが生成するv2を保存済みTLCログと照合し、chain、binder、lexical capture、未使用 / 使用引数、prime、ENABLEDを検査する。両frontendの正規化後構造、native / Wasmの完全応答、定義数・call edge数・serialized bytesの線形増加も検査する。両枝を評価するchainは小さいwork予算でbounded / workになることを要求し、指数的な評価仕事の除去とは数えない。
 
+UNCHANGED・ENABLED・SPECIFICATION subscriptのtuple別名展開は、v1と同じ入れ子の数え方で40を超える入力を拒否し、受理する集合を、次に述べるUNCHANGEDの限界を除いてv1に一致させる。UNCHANGED・ENABLEDの展開はleafが後段の枝の上限と同じ256個を超える入力も拒否する。v2はtuple別名の連鎖`Vn == <<V(n-1), V(n-1)>>`に対する`UNCHANGED Vn`を、n=7（展開後のleafが128個）以上で検査時に`Safety evaluation nesting exceeds 128`で拒否し、v1はn=8（leafが256個）まで受理する。これは測定した現在のv2の限界で、原因は調べていない。
+
 v1の深いinlineとbinder混線は型付き拒否として別に保持し、既存239入力は省略・明示v1のserialize digestで凍結確認する。手書きv2 IRの対照はfrontend生成の照合と区別する。これらは固定した有限fragmentと入力での証拠であり、全TLA+互換、全モデルの受理、一般的な速度改善を意味しない。
 
 ## 深い定義と対象位置
