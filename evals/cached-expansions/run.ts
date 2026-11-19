@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { createPortableWasm } from "../../src/portable-wasm.js";
 import { checkSafety } from "../../src/safety.js";
@@ -10,10 +10,11 @@ import {
 } from "../../src/safety-expansions.js";
 import { compileTlaSource } from "../../src/tla-source.js";
 import { bounds, config, names } from "../quint-generated/cases.js";
+import { createRunDirectory } from "./directory.js";
 
 const [output, saved] = process.argv.slice(2);
 assert.ok(output);
-await mkdir(output);
+await createRunDirectory(output);
 const paths = [
   "crates/rtlc/src/expansions.rs",
   "crates/rtlc/src/safety.rs",
@@ -26,6 +27,7 @@ const paths = [
   "formal/cache/Cache.lean",
   "formal/cache/ReuseMain.lean",
   "evals/cached-expansions/run.ts",
+  "evals/cached-expansions/directory.ts",
 ];
 const digest = (body: string | Uint8Array) =>
   createHash("sha256").update(body).digest("hex");

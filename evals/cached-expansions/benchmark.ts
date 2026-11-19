@@ -11,10 +11,11 @@ import {
 } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { names } from "../quint-generated/cases.js";
+import { createRunDirectory } from "./directory.js";
 
 const [output, baseline] = process.argv.slice(2);
 assert.ok(output && baseline && /^[a-z0-9-]+$/.test(baseline));
-await mkdir(output);
+await createRunDirectory(output);
 const expectedNames = [
   ...names,
   "derived-fold-16",
@@ -33,6 +34,7 @@ const sourcePaths = [
   "crates/rtlc/src/expansion_benchmarks.rs",
   "crates/rtlc/tests/expansions-fixtures.json",
   "evals/cached-expansions/benchmark.ts",
+  "evals/cached-expansions/directory.ts",
 ];
 const sources = [];
 for (const path of sourcePaths) {

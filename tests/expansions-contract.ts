@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { cases } from "../evals/collections-temporal/cases.js";
 import { config, names } from "../evals/quint-generated/cases.js";
 import { startNative } from "../evals/usable/native.js";
@@ -54,6 +57,37 @@ const sameResult = (
 export const registerExpansionContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,
 ): void => {
+  test("evaluation creates missing parents and refuses to overwrite a saved run", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "idealis-expansion-eval-"));
+    const output = join(directory, "fresh", "parent", "run");
+    try {
+      const first = spawnSync(
+        process.execPath,
+        ["dist/evals/cached-expansions/run.js", output],
+        { encoding: "utf8" },
+      );
+      assert.equal(first.status, 0, first.stdout + first.stderr);
+      const manifest = await readFile(join(output, "manifest.json"), "utf8");
+      const result = JSON.parse(
+        await readFile(join(output, "result.json"), "utf8"),
+      );
+      assert.equal(result.status, "complete");
+      assert.equal(result.guardCases, 32);
+      const duplicate = spawnSync(
+        process.execPath,
+        ["dist/evals/cached-expansions/run.js", output],
+        { encoding: "utf8" },
+      );
+      assert.notEqual(duplicate.status, 0);
+      assert.match(duplicate.stderr, /EEXIST/);
+      assert.equal(
+        await readFile(join(output, "manifest.json"), "utf8"),
+        manifest,
+      );
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
   test("expansion caching defaults off and ignores stored entries without an enable flag", () => {
     const program = compile();
     const seeded = check(program);
