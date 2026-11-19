@@ -28,6 +28,7 @@ fn definition(
     body: Expression,
 ) -> Definition {
     Definition {
+        recursive: false,
         id,
         parameter_count,
         capture_count,

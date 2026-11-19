@@ -52,6 +52,9 @@ test.beforeAll(async () => {
   const modules = await readFile(
     "crates/rtla-compiler/tests/modules-support.json",
   );
+  const completion = await readFile(
+    "crates/rtla-compiler/tests/frontend-completion.json",
+  );
   const operators = await readFile(
     "crates/rtla-compiler/tests/operators-support.json",
   );
@@ -81,7 +84,9 @@ test.beforeAll(async () => {
                   ? modules
                   : request.url === "/operators.json"
                     ? operators
-                    : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
+                    : request.url === "/completion.json"
+                      ? completion
+                      : '<!doctype html><title>idealis portable core</title><script src="/bundle.js"></script>',
     );
   });
   await new Promise<void>((resolve) => server?.listen(0, "127.0.0.1", resolve));
@@ -172,6 +177,30 @@ test("executes shared operator IR and bounds exponential work in Chromium", asyn
     states: 1,
     generated: 2,
     bounded: { status: "bounded", reason: "work", work: 256 },
+    isolated: false,
+  });
+});
+
+test("executes the completed Rust frontend and recursion budget in Chromium", async ({
+  page,
+}) => {
+  await page.goto(origin);
+  const result = await page.evaluate(async () => {
+    const api: unknown = Reflect.get(globalThis, "portableBrowser");
+    if (
+      typeof api !== "object" ||
+      api === null ||
+      !("runFrontendCompletion" in api) ||
+      typeof api.runFrontendCompletion !== "function"
+    )
+      throw new Error("Missing frontend browser API");
+    return api.runFrontendCompletion();
+  });
+  expect(result).toEqual({
+    matched: 78,
+    rejected: 18,
+    evaluation: "evaluation",
+    unicode: "complete",
     isolated: false,
   });
 });

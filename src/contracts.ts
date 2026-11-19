@@ -117,6 +117,7 @@ export interface TlaSourceOptions {
   readonly source: string;
   readonly config: string;
   readonly irVersion?: 1 | 2;
+  readonly syntaxVersion?: "1.7.4" | "1.8.0";
 }
 
 export interface TlaSourceInput extends TlaSourceOptions {
@@ -132,6 +133,7 @@ export interface PortableCommand {
         readonly config: string;
         readonly modules?: Readonly<Record<string, string>>;
         readonly irVersion?: 1 | 2;
+        readonly syntaxVersion?: "1.7.4" | "1.8.0";
       }
     | {
         readonly kind: "check-tla";
@@ -139,6 +141,7 @@ export interface PortableCommand {
         readonly config: string;
         readonly modules?: Readonly<Record<string, string>>;
         readonly irVersion?: 1 | 2;
+        readonly syntaxVersion?: "1.7.4" | "1.8.0";
         readonly bounds: SafetyBounds;
       }
     | {
@@ -332,6 +335,7 @@ export type BackendOutcome =
         | "cancelled"
         | "unsupported"
         | "initialization-unknown"
+        | "evaluation"
         | "obligations";
       readonly obligations?: readonly BackendResult[];
     }
@@ -643,6 +647,7 @@ interface SafetyProgramFields<Version extends 1 | 2> {
 }
 
 export interface SafetyDefinition {
+  readonly recursive?: boolean;
   readonly id: number;
   readonly parameterCount: number;
   readonly captureCount: number;
@@ -676,7 +681,13 @@ export interface SafetyResult {
     | "liveness-violation"
     | "deadlock"
     | "assumption-violation";
-  readonly reason: "depth" | "states" | "work" | "temporal" | null;
+  readonly reason:
+    | "depth"
+    | "states"
+    | "work"
+    | "temporal"
+    | "evaluation"
+    | null;
   readonly states: number;
   readonly generated: number;
   readonly depth: number;

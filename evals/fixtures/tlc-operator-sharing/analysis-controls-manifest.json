@@ -149,15 +149,19 @@
   },
   {
     "id": "controls/call-actual/free-old-unused-free/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/call-actual/free-old-unused-free/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/call-actual/free-old-unused-free/Wasm",
     "routes": 1
+  },
+  {
+    "id": "controls/call-actual/free-old-unused-free/normalized-v2-ir",
+    "routes": 7
   },
   {
     "id": "controls/call-actual/free-old-unused-bound/TS",
@@ -177,15 +181,19 @@
   },
   {
     "id": "controls/call-actual/free-old-demanded-free/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/call-actual/free-old-demanded-free/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/call-actual/free-old-demanded-free/Wasm",
     "routes": 1
+  },
+  {
+    "id": "controls/call-actual/free-old-demanded-free/normalized-v2-ir",
+    "routes": 7
   },
   {
     "id": "controls/call-actual/free-old-demanded-bound/TS",
@@ -269,67 +277,67 @@
   },
   {
     "id": "controls/choose-free-old/0/false/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/0/false/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/0/false/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/0/true/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/0/true/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/0/true/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/1/false/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/1/false/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/1/false/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/1/true/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/1/true/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old/1/true/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/function-domain/free-old/head/0",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/free-old/head/1",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/free-old/head/2",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/free-old/head/3",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/head/target",
@@ -341,19 +349,19 @@
   },
   {
     "id": "controls/function-domain/free-old/explicit/0",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/free-old/explicit/1",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/free-old/explicit/2",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/free-old/explicit/3",
-    "routes": 3
+    "routes": 7
   },
   {
     "id": "controls/function-domain/explicit/target",
@@ -797,75 +805,75 @@
   },
   {
     "id": "controls/choose-free-old-shape/scalar/domain/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/scalar/domain/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/scalar/domain/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/scalar/predicate/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/scalar/predicate/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/scalar/predicate/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/tuple/domain/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/tuple/domain/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/tuple/domain/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/tuple/predicate/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/tuple/predicate/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/tuple/predicate/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/nested/domain/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/nested/domain/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/nested/domain/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/nested/predicate/TS",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/nested/predicate/native",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/choose-free-old-shape/nested/predicate/Wasm",
-    "routes": 1
+    "routes": 3
   },
   {
     "id": "controls/action/4096 paths",

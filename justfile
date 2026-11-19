@@ -702,7 +702,7 @@ quint-test: portable-build
 analysis-test: portable-build rtla-build
   cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
   pnpm build
-  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js
+  node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js dist/evals/prepared-safety/contract-test.js dist/evals/tla-coverage/contract-test.js dist/evals/tla-coverage/normalize-test.js dist/evals/rtla-compatibility/contract-test.js
 
 prepared-test: portable-build
   pnpm build

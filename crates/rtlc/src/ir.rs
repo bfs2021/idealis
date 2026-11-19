@@ -416,6 +416,8 @@ impl Default for SafetyOptions {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Definition {
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub recursive: bool,
     #[serde(deserialize_with = "deserialize_wire_index")]
     pub id: usize,
     #[serde(deserialize_with = "deserialize_wire_index")]

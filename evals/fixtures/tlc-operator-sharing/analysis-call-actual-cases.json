@@ -391,12 +391,25 @@
         "irVersion": 2
       },
       "expected": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "Unsupported TLA input: LET definitions with free EXCEPT @"
+        "kind": "compiled"
       },
       "assertions": [],
-      "contains": [],
+      "contains": [
+        {
+          "op": "update",
+          "updates": [
+            {
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "bool",
+                  "value": true
+                }
+              }
+            }
+          ]
+        }
+      ],
       "absent": []
     },
     {
@@ -435,12 +448,25 @@
         "irVersion": 2
       },
       "expected": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "Unsupported TLA input: LET definitions with free EXCEPT @"
+        "kind": "compiled"
       },
       "assertions": [],
-      "contains": [],
+      "contains": [
+        {
+          "op": "update",
+          "updates": [
+            {
+              "value": {
+                "op": "literal",
+                "value": {
+                  "type": "bool",
+                  "value": true
+                }
+              }
+            }
+          ]
+        }
+      ],
       "absent": []
     },
     {

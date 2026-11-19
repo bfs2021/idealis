@@ -91,4 +91,9 @@ fn symbolic_references_do_not_confuse_strings_and_prefix_operands() {
     assert!(parse_expression("~").is_err());
     assert!(parse_expression("- value == value").is_err());
     assert!(parse_expression("F(\\X)").is_err());
+    assert!(parse_expression("F( \\X )").is_err());
+    assert!(parse_expression("F( \\times )").is_err());
+    assert!(
+        matches!(parse_expression("F(×)").unwrap().node, ExpressionKind::Apply { args, .. } if matches!(&args[0].node, ExpressionKind::Identifier { name } if name == "\\X"))
+    );
 }

@@ -4,18 +4,18 @@
 
 ## 進行表
 
-- [ ] ASCII operator語彙・alias・優先順位を固定1.7.4の全表へ合わせる。
-- [ ] Unicode operator/bullet/CASE/関数/量化aliasを固定1.8.0の表へ合わせる。
-- [ ] 1.7.4/1.8.0のsyntax選択を明示し、従来APIのdefaultを維持する。
-- [ ] 記号WITH左辺、label引数、一般のsubexpression selectorをASTへ保持し、参照を解決する。
-- [ ] 引数付きINSTANCE、LET内INSTANCE、nested moduleを解析・連結する。
-- [ ] LAMBDA・RECURSIVE宣言を解析する。
-- [ ] 一般の高階operator・再帰を予算付きで実行し、非停止を成功にしない。
-- [ ] proof構文とASSUME/PROVE等を解析して構造を保持する。
-- [ ] IR v2でモジュール連結・設定置換を実行する。
-- [ ] IR v2でSelectSeq/SortSeq/Assertのsourceをlowerする。
-- [ ] unsupported/syntax診断を対象構文別に整理する。
-- [ ] 公式corpusで受理だけでなくAST構造を正規化比較する。
+- [x] ASCII operator語彙・alias・優先順位を固定1.7.4の全表へ合わせる。
+- [x] Unicode operator/bullet/CASE/関数/量化aliasを固定1.8.0の表へ合わせる。
+- [x] 1.7.4/1.8.0のsyntax選択を明示し、従来APIのdefaultを維持する。
+- [x] 記号WITH左辺、label引数、一般のsubexpression selectorをASTへ保持し、参照を解決する。
+- [x] 引数付きINSTANCE、LET内INSTANCE、nested moduleを解析・連結する。
+- [x] LAMBDA・RECURSIVE宣言を解析する。
+- [x] 一般の高階operator・再帰を予算付きで実行し、非停止を成功にしない。
+- [x] proof構文とASSUME/PROVE等を解析して構造を保持する。
+- [x] IR v2でモジュール連結・設定置換を実行する。
+- [x] IR v2でSelectSeq/SortSeq/Assertのsourceをlowerする。
+- [x] unsupported/syntax診断を対象構文別に整理する。
+- [x] 公式corpusで受理だけでなくAST構造を正規化比較する。
 
 ## 評価
 
@@ -24,3 +24,5 @@
 実行対応は少なくとも正常/違反モデルをIR v1/v2とTLCへ照合し、状態数・判定・反例を再生する。再帰・高階はcaller/calleeのbinder、capture、prime、old、work、depthの境界を検査する。sourceの深さ制限やwork上限を黙って緩めず、非停止や予算切れは未確定として返す。
 
 段階ごとにRed/Greenとsourceの変更を記録する。最後にSUPPORT/README、Jev live/offline/staged、check/browser、rtla/portable/compiler/safety/analysis、runtime build/test、evaluate/replay、配布consumerを確認する。進行中の段階と未達項目を残し、全体完了と個別段階の完了を区別する。
+
+実装と独立比較の結果は[0070の記録](../iterations/0070-tla-coverage.md)へ保存する。終了時の全チェックは別のverification runで記録する。

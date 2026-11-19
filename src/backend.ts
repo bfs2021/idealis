@@ -77,6 +77,7 @@ const reason = (value: unknown) => {
     case "cancelled":
     case "unsupported":
     case "initialization-unknown":
+    case "evaluation":
     case "obligations":
       return value;
     default:
@@ -466,11 +467,7 @@ export const completeInduction = (
 ): BackendResult => {
   const obligations = input.map(parseBackendResult);
   const first = obligations[0];
-  if (
-    !first ||
-    first.query.kind !== "induction" ||
-    first.query.obligation === "all"
-  )
+  if (first?.query.kind !== "induction" || first.query.obligation === "all")
     throw new BackendContractError("Expected induction obligations");
   const ready = inductionReady(first, obligations);
   const base = obligations.find(

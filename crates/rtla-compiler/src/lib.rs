@@ -7,8 +7,14 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 use std::rc::Rc;
 
 mod analysis;
+mod elaborate;
+mod functions;
+mod labels;
 mod link;
+mod old;
 mod rewrite;
+mod select;
+mod source;
 mod symbols;
 mod symmetry;
 mod typed;
@@ -50,8 +56,6 @@ pub struct CompileOptions {
     pub irVersion: IrVersion,
 }
 type Result<T> = std::result::Result<T, CompileError>;
-const V2_LINKING: &str =
-    "safety IR v2 does not support module linking or configuration operator substitution";
 fn unsupported<T>(message: impl Into<String>) -> Result<T> {
     Err(CompileError {
         message: message.into(),
@@ -78,6 +82,7 @@ enum Phase {
 }
 #[derive(Clone)]
 struct Context {
+    origin: usize,
     phase: Phase,
     locals: BTreeMap<String, ir::Expression>,
     calls: Vec<String>,
@@ -111,6 +116,7 @@ struct AnonymousFrame {
 }
 #[derive(Clone)]
 struct Entry {
+    id: usize,
     definition: Rc<Definition>,
     locals: BTreeMap<String, ir::Expression>,
     scope: usize,
@@ -128,19 +134,22 @@ enum Target {
 }
 #[derive(Clone)]
 struct Shared {
+    recursive: bool,
     key: (usize, u8, bool, Vec<Target>),
     captures: Vec<usize>,
     definition: Option<ir::Definition>,
     parameter_count: usize,
     pending: Option<(Expression, Context, bool)>,
 }
-#[derive(Clone, Default)]
+#[derive(Clone, Default, PartialEq, Eq)]
 struct LevelSummary {
     base: u8,
     parameters: HashSet<usize>,
     captures: HashSet<usize>,
 }
 struct Compiler<'a> {
+    recursive_ids: HashSet<usize>,
+    declaration_ids: BTreeMap<(usize, String), usize>,
     module: &'a Module,
     config: &'a Config,
     slots: BTreeMap<String, usize>,
@@ -153,7 +162,7 @@ struct Compiler<'a> {
     target_requirements: HashMap<(usize, bool), Vec<usize>>,
     membership_requirements: HashMap<(usize, bool), Vec<usize>>,
     next_binding: usize,
-    binding_keys: HashMap<(usize, u8, usize), usize>,
+    binding_keys: HashMap<(usize, usize, u8, usize, String), usize>,
     generative_cache: HashMap<(usize, u8), bool>,
     level_cache: std::cell::RefCell<HashMap<usize, LevelSummary>>,
 }
@@ -301,7 +310,7 @@ pub fn compile_with_options(
     config: &Config,
     options: CompileOptions,
 ) -> Result<rtlc::SafetyProgram> {
-    if link::declares_instances_or_overrides(module, config) {
+    if link::declares_instances_or_overrides(module, config) || elaborate::needed(module) {
         return compile_modules_with_options(module, config, &[], options);
     }
     symbols::validate(module)?;
@@ -341,11 +350,19 @@ pub fn compile_modules_with_options(
         return compile_flat(module, config, options, false);
     }
     let linking = link::needs_linking(module, config);
-    let (linked_module, linked_config, action_names) = link::resolve(module, config, modules)?;
-    if options.irVersion == IrVersion::V2 && !linking {
+    let (linked_module, linked_config, mut action_names) = link::resolve(module, config, modules)?;
+    if options.irVersion == IrVersion::V2 && !linking && !elaborate::needed(module) {
         return compile_flat(module, config, options, false);
     }
-    let mut program = compile_flat(&linked_module, &linked_config, options, linking)?;
+    let expanded = elaborate::needed(&linked_module)
+        .then(|| elaborate::module(&linked_module, &mut action_names))
+        .transpose()?;
+    let mut program = compile_flat(
+        expanded.as_ref().unwrap_or(&linked_module),
+        &linked_config,
+        options,
+        linking,
+    )?;
     for branch in program.initial.iter_mut().chain(program.next.iter_mut()) {
         if let Some(name) = action_names.get(&branch.name) {
             branch.name = name.clone();
@@ -358,7 +375,7 @@ fn compile_flat(
     module: &Module,
     config: &Config,
     options: CompileOptions,
-    linking: bool,
+    _linking: bool,
 ) -> Result<rtlc::SafetyProgram> {
     if options.irVersion == IrVersion::V2 && config.symmetry.is_some() {
         return unsupported("safety IR v2 does not support SYMMETRY");
@@ -447,9 +464,43 @@ fn compile_flat(
     {
         return unsupported("missing or extra constants");
     }
-    if linking && options.irVersion == IrVersion::V2 {
-        return unsupported(V2_LINKING);
+    let mut declarations = std::collections::BTreeSet::new();
+    let mut recursive_declarations = HashSet::new();
+    let mut pending: Vec<_> = module
+        .definitions
+        .iter()
+        .map(Node::SourceDefinition)
+        .chain(
+            module
+                .assumptions
+                .iter()
+                .map(|value| Node::Source(&value.expression)),
+        )
+        .chain(
+            module
+                .theorems
+                .iter()
+                .map(|value| Node::Source(&value.statement)),
+        )
+        .collect();
+    while let Some(node) = pending.pop() {
+        if let Node::SourceDefinition(definition) = node {
+            declarations.insert((definition.location.start, definition.name.clone()));
+            if definition.is_recursive {
+                recursive_declarations.insert((definition.location.start, definition.name.clone()));
+            }
+        }
+        pending.extend(
+            analysis::analysis_children(node)
+                .into_iter()
+                .map(|edge| edge.node),
+        );
     }
+    let declaration_ids: BTreeMap<_, _> = declarations
+        .into_iter()
+        .enumerate()
+        .map(|(index, key)| (key, index + 1))
+        .collect();
     let entries = module
         .definitions
         .iter()
@@ -457,6 +508,7 @@ fn compile_flat(
             (
                 definition.name.clone(),
                 Rc::new(Entry {
+                    id: declaration_ids[&(definition.location.start, definition.name.clone())],
                     definition: Rc::new(definition.clone()),
                     locals: BTreeMap::new(),
                     scope: 0,
@@ -470,6 +522,11 @@ fn compile_flat(
         })
         .collect();
     let mut compiler = Compiler {
+        recursive_ids: recursive_declarations
+            .iter()
+            .map(|key| declaration_ids[key])
+            .collect(),
+        declaration_ids,
         module,
         config,
         constants,
@@ -497,6 +554,7 @@ fn compile_flat(
 impl Compiler<'_> {
     fn target_context(&mut self, entry: &Entry) -> Context {
         let mut context = self.root(Phase::Next);
+        context.origin = entry.id;
         context.scope = entry.scope;
         context.locals = entry.locals.clone();
         context.order = entry.order.clone();
@@ -611,7 +669,7 @@ impl Compiler<'_> {
                             .ok_or_else(|| CompileError {
                                 message: "generative UNCHANGED requires state variables".into(),
                             })?;
-                    let position = entry.definition.location.start;
+                    let position = entry.id;
                     if entry.definition.is_recursive || active.contains(&position) {
                         return unsupported("recursive operator definitions");
                     }
@@ -715,7 +773,7 @@ impl Compiler<'_> {
                 Task::Compose(key, args, context, owner) => {
                     let entry = self.scopes[context.scope]
                         .values()
-                        .find(|entry| entry.definition.location.start == key.0)
+                        .find(|entry| entry.id == key.0)
                         .cloned()
                         .ok_or_else(|| CompileError {
                             message: "lexical capture".into(),
@@ -765,9 +823,16 @@ impl Compiler<'_> {
                             .ok_or_else(|| CompileError {
                                 message: format!("operator {name}"),
                             })?;
-                    let key = (entry.definition.location.start, action);
-                    if entry.definition.is_recursive || active.contains(&key) {
-                        return unsupported("recursive operator definitions");
+                    let key = (entry.id, action);
+                    if entry.definition.is_recursive {
+                        self.target_requirements.entry(key).or_default();
+                        tasks.push(Task::Compose(key, args, context.clone(), owner));
+                        continue;
+                    }
+                    if active.contains(&key) {
+                        return unsupported(
+                            "recursive operator definitions require RECURSIVE declarations",
+                        );
                     }
                     tasks.push(Task::Compose(key, args, context.clone(), owner));
                     if self.target_requirements.contains_key(&key) {
@@ -938,7 +1003,7 @@ impl Compiler<'_> {
                     if let Some(owner) = owner {
                         let entry = self.scopes[context.scope]
                             .values()
-                            .find(|entry| entry.definition.location.start == key.0)
+                            .find(|entry| entry.id == key.0)
                             .cloned()
                             .ok_or_else(|| CompileError {
                                 message: "lexical capture".into(),
@@ -988,9 +1053,16 @@ impl Compiler<'_> {
                             .ok_or_else(|| CompileError {
                                 message: format!("operator {name}"),
                             })?;
-                    let key = (entry.definition.location.start, purpose);
-                    if entry.definition.is_recursive || active.contains(&key) {
-                        return unsupported("recursive operator definitions");
+                    let key = (entry.id, purpose);
+                    if entry.definition.is_recursive {
+                        self.membership_requirements.entry(key).or_default();
+                        tasks.push(Task::Compose(key, args, context, owner));
+                        continue;
+                    }
+                    if active.contains(&key) {
+                        return unsupported(
+                            "recursive operator definitions require RECURSIVE declarations",
+                        );
                     }
                     tasks.push(Task::Compose(key, args, context, owner));
                     if self.membership_requirements.contains_key(&key) {
@@ -1152,7 +1224,8 @@ impl Compiler<'_> {
                 Pattern::Tuple { names } => names.iter().collect(),
             };
             for (slot, name) in names.iter().enumerate() {
-                let binding = self.binding_id(bound.set.location.start, 1, slot);
+                let binding =
+                    self.named_binding_at(context.origin, bound.set.location.start, 1, slot, name);
                 inner.binding_ids.insert((*name).clone(), binding);
                 inner
                     .locals
@@ -1163,7 +1236,20 @@ impl Compiler<'_> {
     }
 
     fn binding_id(&mut self, position: usize, kind: u8, slot: usize) -> usize {
-        let key = (position, kind, slot);
+        self.binding_at(0, position, kind, slot)
+    }
+    fn binding_at(&mut self, origin: usize, position: usize, kind: u8, slot: usize) -> usize {
+        self.named_binding_at(origin, position, kind, slot, "")
+    }
+    fn named_binding_at(
+        &mut self,
+        origin: usize,
+        position: usize,
+        kind: u8,
+        slot: usize,
+        name: &str,
+    ) -> usize {
+        let key = (origin, position, kind, slot, name.into());
         if let Some(id) = self.binding_keys.get(&key) {
             return *id;
         }
@@ -1177,12 +1263,21 @@ impl Compiler<'_> {
     }
     fn prepare_levels(&self, order: &[usize]) {
         self.level_cache.borrow_mut().clear();
-        for id in order {
-            let body = &self.shared[*id].definition.as_ref().unwrap().body;
-            let summary = typed::level_summary(Node::Expression(body), &self.level_cache.borrow());
-            self.level_cache.borrow_mut().insert(*id, summary);
+        loop {
+            let mut changed = false;
+            for id in order {
+                let body = &self.shared[*id].definition.as_ref().unwrap().body;
+                let summary =
+                    typed::level_summary(Node::Expression(body), &self.level_cache.borrow());
+                changed |= self.level_cache.borrow().get(id) != Some(&summary);
+                self.level_cache.borrow_mut().insert(*id, summary);
+            }
+            if !changed || !self.shared.iter().any(|entry| entry.recursive) {
+                break;
+            }
         }
     }
+
     fn prime(&mut self, value: Json) -> Result<Json> {
         prime(value)
     }
@@ -1198,7 +1293,7 @@ impl Compiler<'_> {
     ) -> Result<Json> {
         let child = context.nested()?;
         let demanded = self.membership_demands(name, context, membership)?;
-        let position = self.scopes[context.scope][name].definition.location.start;
+        let position = self.scopes[context.scope][name].id;
         let arguments = args
             .iter()
             .enumerate()
@@ -1225,7 +1320,7 @@ impl Compiler<'_> {
             .ok_or_else(|| CompileError {
                 message: format!("operator {name}"),
             })?;
-        let position = entry.definition.location.start;
+        let position = entry.id;
         let required = self.requirements(name, context, false)?;
         let mut targets = BTreeMap::new();
         for binding in required {
@@ -1299,10 +1394,7 @@ impl Compiler<'_> {
             .ok_or_else(|| CompileError {
                 message: format!("operator {name}"),
             })?;
-        let position = entry.definition.location.start;
-        if entry.definition.is_recursive {
-            return unsupported(format!("operator {name}"));
-        }
+        let position = entry.id;
         let (body, params) = match &entry.definition.head {
             DefinitionKind::Operator { params } => {
                 if params.len() != arguments.len()
@@ -1366,6 +1458,7 @@ impl Compiler<'_> {
             let id = self.shared.len();
             let candidates: Vec<_> = entry.projection.keys().copied().collect();
             let mut inner = self.root(context.phase);
+            inner.origin = entry.id;
             inner.scope = entry.scope;
             inner.static_targets = targets;
             for (slot, binding) in candidates.iter().enumerate() {
@@ -1391,6 +1484,7 @@ impl Compiler<'_> {
                 inner.projection.insert(binding, value);
             }
             self.shared.push(Shared {
+                recursive: entry.definition.is_recursive,
                 key,
                 captures: candidates.clone(),
                 definition: None,
@@ -1427,6 +1521,7 @@ impl Compiler<'_> {
             };
             let body = lowered;
             self.shared[id].definition = Some(ir::Definition {
+                recursive: self.shared[id].recursive,
                 id,
                 parameter_count: self.shared[id].parameter_count,
                 capture_count: self.shared[id].captures.len(),
@@ -1560,7 +1655,17 @@ impl Compiler<'_> {
                             states[callee] = 1;
                             pending.push((callee, 0));
                         }
-                        1 => return unsupported("recursive operator definitions"),
+                        1 => {
+                            let start = pending.iter().position(|(id, _)| *id == callee).unwrap();
+                            if pending[start..]
+                                .iter()
+                                .any(|(id, _)| !self.shared[*id].recursive)
+                            {
+                                return unsupported(
+                                    "recursive operator definitions require RECURSIVE declarations",
+                                );
+                            }
+                        }
                         _ => {}
                     }
                 } else {
@@ -1574,6 +1679,7 @@ impl Compiler<'_> {
     }
     fn root(&self, phase: Phase) -> Context {
         Context {
+            origin: 0,
             phase,
             locals: BTreeMap::new(),
             calls: vec![],
@@ -1613,16 +1719,19 @@ impl Compiler<'_> {
             .ok_or_else(|| CompileError {
                 message: format!("operator {name}"),
             })?;
+        if self.version == IrVersion::V1 && args.iter().any(free_old) && self.rebinds_old(&entry) {
+            return unsupported("EXCEPT @ arguments across a nested EXCEPT require safety IR v2");
+        }
         if entry.definition.is_recursive
             || if self.version == IrVersion::V1 {
                 context.calls.iter().any(|item| item == name)
             } else {
-                context.call_ids.contains(&entry.definition.location.start)
+                context.call_ids.contains(&entry.id)
             }
         {
             return unsupported(format!("operator {name}"));
         }
-        let position = entry.definition.location.start;
+        let position = entry.id;
         if self.version == IrVersion::V2 {
             let mut inner = self.target_context(&entry);
             inner.phase = context.phase;
@@ -1775,6 +1884,7 @@ impl Compiler<'_> {
             }
         };
         let mut child = context.nested()?;
+        child.origin = entry.id;
         child.locals = locals;
         child.order = order;
         child.binding_ids = binding_ids;
@@ -1783,6 +1893,36 @@ impl Compiler<'_> {
         child.calls.push(name.into());
         child.call_ids.push(position);
         Ok((body, child))
+    }
+    fn rebinds_old(&self, entry: &Entry) -> bool {
+        let mut visited = HashSet::new();
+        let mut pending = vec![(Node::SourceDefinition(&entry.definition), entry.scope)];
+        while let Some((node, scope)) = pending.pop() {
+            if matches!(
+                node,
+                Node::Source(Expression {
+                    node: E::Except { .. },
+                    ..
+                })
+            ) {
+                return true;
+            }
+            if let Node::Source(Expression {
+                node: E::Identifier { name } | E::Apply { operator: name, .. },
+                ..
+            }) = node
+                && let Some(callee) = self.scopes[scope].get(name)
+                && visited.insert(callee.id)
+            {
+                pending.push((Node::SourceDefinition(&callee.definition), callee.scope));
+            }
+            pending.extend(
+                analysis::analysis_children(node)
+                    .into_iter()
+                    .map(|edge| (edge.node, scope)),
+            );
+        }
+        false
     }
     fn let_context(&mut self, definitions: &[Definition], context: &Context) -> Result<Context> {
         for definition in definitions {
@@ -1804,19 +1944,13 @@ impl Compiler<'_> {
         {
             return unsupported("duplicate LET definitions");
         }
-        if self.version == IrVersion::V2
-            && definitions
-                .iter()
-                .any(|definition| free_old(&definition_body(definition)))
-        {
-            return unsupported("LET definitions with free EXCEPT @");
-        }
         let scope = self.scopes.len();
         let mut entries = self.scopes[context.scope].clone();
         for definition in definitions {
             entries.insert(
                 definition.name.clone(),
                 Rc::new(Entry {
+                    id: self.declaration_ids[&(definition.location.start, definition.name.clone())],
                     definition: Rc::new(definition.clone()),
                     locals: context.locals.clone(),
                     scope,
@@ -1847,7 +1981,8 @@ impl Compiler<'_> {
                 Pattern::Name { name } => {
                     child.order.retain(|item| item != name);
                     child.order.push(name.clone());
-                    let binding_id = self.binding_id(bound.set.location.start, 1, 0);
+                    let binding_id =
+                        self.named_binding_at(context.origin, bound.set.location.start, 1, 0, name);
                     child.binding_ids.insert(name.clone(), binding_id);
                     child
                         .projection
@@ -1861,7 +1996,13 @@ impl Compiler<'_> {
                     for (index, name) in names.iter().enumerate() {
                         child.order.retain(|item| item != name);
                         child.order.push(name.clone());
-                        let binding_id = self.binding_id(bound.set.location.start, 1, index);
+                        let binding_id = self.named_binding_at(
+                            context.origin,
+                            bound.set.location.start,
+                            1,
+                            index,
+                            name,
+                        );
                         child.binding_ids.insert(name.clone(), binding_id);
                         child.projection.insert(
                             binding_id,
@@ -2119,7 +2260,8 @@ impl Compiler<'_> {
                         old.locals.insert("@".into(), ir::Expression::Old);
                         old.order.retain(|name| name != "@");
                         old.order.push("@".into());
-                        let binding = self.binding_id(update.value.location.start, 2, 0);
+                        let binding =
+                            self.binding_at(context.origin, update.value.location.start, 2, 0);
                         old.binding_ids.insert("@".into(), binding);
                         old.projection.insert(binding, ir::Expression::Old);
                     }
@@ -2256,7 +2398,7 @@ impl Compiler<'_> {
             || if self.version == IrVersion::V1 {
                 context.calls.iter().any(|item| item == name)
             } else {
-                context.call_ids.contains(&entry.definition.location.start)
+                context.call_ids.contains(&entry.id)
             }
         {
             return unsupported(format!("operator {name}"));
@@ -2281,6 +2423,7 @@ impl Compiler<'_> {
             );
         }
         let mut inner = child.nested()?;
+        inner.origin = entry.id;
         inner.locals = locals;
         inner.scope = entry.scope;
         inner.calls.push(name.clone());
@@ -2647,7 +2790,9 @@ impl Compiler<'_> {
                     let result = results.drain(results.len() - count..).any(|value| value);
                     if let Some((position, phase)) = key {
                         active.remove(&position);
-                        self.generative_cache.insert((position, phase), result);
+                        if result || !self.recursive_ids.contains(&position) {
+                            self.generative_cache.insert((position, phase), result);
+                        }
                     }
                     results.push(result);
                 }
@@ -2659,14 +2804,18 @@ impl Compiler<'_> {
                             .ok_or_else(|| CompileError {
                                 message: format!("operator {name}"),
                             })?;
-                    let position = entry.definition.location.start;
+                    let position = entry.id;
                     let phase = match context.phase {
                         Phase::Constant => 0,
                         Phase::Initial => 1,
                         Phase::State => 2,
                         Phase::Next => 3,
                     };
-                    if entry.definition.is_recursive || active.contains(&position) {
+                    if active.contains(&position) {
+                        if entry.definition.is_recursive {
+                            results.push(false);
+                            continue;
+                        }
                         return unsupported(format!("operator {name}"));
                     }
                     if let Some(result) = self.generative_cache.get(&(position, phase)) {

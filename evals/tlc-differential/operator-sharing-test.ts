@@ -601,42 +601,28 @@ const assertVersionedOracle = (
   irVersion: 1 | 2,
   outcome: unknown,
 ) => {
+  if (
+    irVersion === 1 &&
+    [
+      "sharing-generative-except",
+      "sharing-generative-except-control",
+      "sharing-action-frame-except",
+      "sharing-action-frame-except-control",
+    ].includes(fixture.name)
+  ) {
+    assert.deepEqual(outcome, {
+      kind: "error",
+      code: "protocol",
+      message:
+        "Unsupported TLA input: EXCEPT @ arguments across a nested EXCEPT require safety IR v2",
+    });
+    return;
+  }
   const current = actionFrameV1.cases.find(
     (entry) => entry.name === fixture.name,
   );
   if (irVersion === 1 && current !== undefined) {
     assert.deepEqual(outcome, current.outcome);
-    return;
-  }
-  if (irVersion === 1 && fixture.name === "sharing-generative-except") {
-    assert.ok(isRecord(outcome) && isRecord(outcome.result));
-    assert.equal(outcome.kind, "safety");
-    assert.deepEqual(outcome.result, {
-      status: "complete",
-      reason: null,
-      states: 1,
-      generated: 2,
-      depth: 0,
-      work: 12,
-      violation: null,
-    });
-    return;
-  }
-  if (irVersion === 1 && fixture.name === "sharing-generative-except-control") {
-    assert.ok(isRecord(outcome) && isRecord(outcome.result));
-    assert.equal(outcome.kind, "safety");
-    assert.deepEqual(outcome.result, {
-      status: "invariant-violation",
-      reason: null,
-      states: 1,
-      generated: 1,
-      depth: 0,
-      work: 10,
-      violation: {
-        name: "Safe",
-        trace: [{ action: null, values: [{ type: "int", value: "0" }] }],
-      },
-    });
     return;
   }
   const refusal = irVersion === 1 ? v1Refusals.get(fixture.name) : undefined;
@@ -985,7 +971,18 @@ for (const [name, definitions, safe] of [
         irVersion,
       };
       assert.throws(() => compileTlaSafety(input), PortableCoreError);
-      assert.throws(() => compileTlaSource(core, input), PortableCoreError);
+      if (name === "self-cycle" && irVersion === 2) {
+        const program = compileTlaSource(core, input);
+        const result = checkSafety(core, program, bounds);
+        assert.equal(result.status, "bounded");
+        assert.equal(result.reason, "evaluation");
+        assert.ok(result.work > 0);
+        assert.deepEqual(native({ kind: "check-tla", ...input, bounds }), {
+          kind: "safety",
+          result,
+        });
+      } else
+        assert.throws(() => compileTlaSource(core, input), PortableCoreError);
     });
 
 const truth: SafetyExpressionV2 = {
@@ -1423,7 +1420,12 @@ test("operator sharing compile-only 5000-definition cycle is a typed refusal", {
     code: "protocol",
     message: "Unsupported TLA input: recursive operator definitions",
   });
-  assert.deepEqual(rust, ts);
+  assert.deepEqual(rust, {
+    kind: "error",
+    code: "protocol",
+    message:
+      "Unsupported TLA input: recursive operator definitions require RECURSIVE declarations",
+  });
   assert.deepEqual(native({ kind: "compile-tla", ...input }), rust);
 });
 
@@ -1685,7 +1687,7 @@ for (const [label, declaration, application] of [
   ["parameterized", String.raw`Step(a) == @ = 9 /\ x' = a`, "Step(x)"],
   ["zero arity", String.raw`Step == @ = 9 /\ x' = x`, "Step"],
 ] as const)
-  test(`operator sharing LET free EXCEPT old refusal: ${label}`, () => {
+  test(`operator sharing LET free EXCEPT old semantics: ${label}`, () => {
     const input: TlaSourceOptions = {
       source: String.raw`---- MODULE Differential ----
 EXTENDS Naturals, Sequences
@@ -1700,28 +1702,39 @@ Safe == x = 0 /\
       config: "INIT Init\nNEXT Next\nINVARIANT Safe",
       irVersion: 2,
     };
-    const expected = {
-      kind: "error",
-      code: "protocol",
-      message: "Unsupported TLA input: LET definitions with free EXCEPT @",
-    };
-    assert.deepEqual(
-      capture(() => compileTlaSafety(input)),
-      expected,
-    );
-    assert.deepEqual(
-      capture(() => compileTlaSource(core, input)),
-      expected,
-    );
-    for (const kind of ["compile-tla", "check-tla"] as const) {
-      const request =
-        kind === "compile-tla"
-          ? { kind, ...input }
-          : { kind, ...input, bounds };
-      const wasm = capture(() => core.request({ version: 1, request }));
-      assert.deepEqual(wasm, expected);
-      assert.deepEqual(native(request), expected);
+    if (label === "zero arity")
+      assert.deepEqual(
+        capture(() => compileTlaSafety(input)),
+        {
+          kind: "error",
+          code: "protocol",
+          message:
+            "Unsupported TLA input: zero-arity LET @ across a nested EXCEPT requires the Rust frontend",
+        },
+      );
+    else {
+      const result = checkSafety(core, compileTlaSafety(input), bounds);
+      assert.equal(result.status, "invariant-violation");
+      assert.equal(result.violation?.name, "Safe");
     }
+    const program = compileTlaSource(core, input);
+    const result = checkSafety(core, program, bounds);
+    assert.equal(
+      result.status,
+      label === "zero arity" ? "complete" : "invariant-violation",
+    );
+    assert.equal(result.states, 1);
+    assert.equal(result.generated, label === "zero arity" ? 2 : 1);
+    assert.deepEqual(native({ kind: "compile-tla", ...input }), {
+      kind: "compiled",
+      program,
+    });
+    const request = { kind: "check-tla" as const, ...input, bounds };
+    assert.deepEqual(core.request({ version: 1, request }), {
+      kind: "safety",
+      result,
+    });
+    assert.deepEqual(native(request), { kind: "safety", result });
   });
 
 for (const form of ["head", "explicit"] as const) {
@@ -1740,40 +1753,39 @@ for (const form of ["head", "explicit"] as const) {
     ["ENABLED", `LET ${binding} IN ENABLED (x' = f[9])`],
     ["body control", `LET ${bodyBinding} IN f[9] = {9}`],
   ] as const)
-    test(`operator sharing function definition domain free old refusal: ${form}, ${label}`, () => {
+    test(`operator sharing function definition domain free old semantics: ${form}, ${label}`, () => {
       const input = sourceControl(
         "",
         `x = 0 /\\ [<<{9}>> EXCEPT ![1] = ${expression}][1]`,
       );
       const reviewBounds = { maxDepth: 8, maxStates: 100, maxWork: 10_000 };
-      const expected = {
-        kind: "error",
-        code: "protocol",
-        message: "Unsupported TLA input: LET definitions with free EXCEPT @",
-      };
-      assert.deepEqual(
-        capture(() => compileTlaSafety(input)),
-        expected,
-      );
-      assert.deepEqual(
-        capture(() => checkSafety(core, compileTlaSafety(input), reviewBounds)),
-        expected,
-      );
-      assert.deepEqual(
-        capture(() => compileTlaSource(core, input)),
-        expected,
-      );
-      for (const kind of ["compile-tla", "check-tla"] as const) {
-        const request =
-          kind === "compile-tla"
-            ? { kind, ...input }
-            : { kind, ...input, bounds: reviewBounds };
+      for (const program of [
+        compileTlaSafety(input),
+        compileTlaSource(core, input),
+      ]) {
+        const result = checkSafety(core, program, reviewBounds);
+        assert.equal(result.status, "complete");
+        assert.equal(result.states, 1);
+        assert.equal(result.generated, 2);
         assert.deepEqual(
-          capture(() => core.request({ version: 1, request })),
-          expected,
+          native({ kind: "check-safety", program, bounds: reviewBounds }),
+          {
+            kind: "safety",
+            result,
+          },
         );
-        assert.deepEqual(native(request), expected);
       }
+      const request = {
+        kind: "check-tla" as const,
+        ...input,
+        bounds: reviewBounds,
+      };
+      const response = core.request({ version: 1, request });
+      assert.deepEqual(native(request), response);
+      assert.ok(response.kind === "safety");
+      assert.equal(response.result.status, "complete");
+      assert.equal(response.result.states, 1);
+      assert.equal(response.result.generated, 2);
     });
 
   for (const [label, domain, formal, element, safe, work] of [
@@ -1958,11 +1970,16 @@ test("operator sharing target alias cycles keep typed diagnostic parity", () => 
     capture(() => compileTlaSafety(input)),
     expected,
   );
+  const rustExpected = {
+    ...expected,
+    message:
+      "Unsupported TLA input: recursive operator definitions require RECURSIVE declarations",
+  };
   assert.deepEqual(
     capture(() => compileTlaSource(core, input)),
-    expected,
+    rustExpected,
   );
-  assert.deepEqual(native({ kind: "compile-tla", ...input }), expected);
+  assert.deepEqual(native({ kind: "compile-tla", ...input }), rustExpected);
 });
 
 test("operator sharing unused action actuals still require valid syntax", () => {

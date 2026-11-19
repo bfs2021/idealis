@@ -44,6 +44,7 @@ fn deep_action_frame_program() -> SafetyProgram {
         constraints: vec![],
         action_constraints: vec![],
         definitions: Some(vec![Definition {
+            recursive: false,
             id: 0,
             parameter_count: 0,
             capture_count: 0,

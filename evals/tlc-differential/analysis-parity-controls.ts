@@ -144,11 +144,6 @@ const noWitness = {
   code: "protocol",
   message: "CHOOSE: no element of the domain satisfied the predicate",
 };
-const freeOld = {
-  kind: "error",
-  code: "protocol",
-  message: "Unsupported TLA input: LET definitions with free EXCEPT @",
-};
 const hasNode = (
   value: unknown,
   predicate: (node: Record<string, unknown>) => boolean,
@@ -324,7 +319,14 @@ for (const [index, choose] of chooseFreeOld.entries()) {
     );
     for (const frontend of ["TS", "native", "Wasm"] as const)
       test(`analysis parity controls CHOOSE free old ${index === 0 ? "domain" : "predicate"} ${unused ? "unused" : "used"}: ${frontend}`, () => {
-        assert.deepEqual(compile(input, frontend), freeOld);
+        const result = check(programOf(compile(input, frontend)));
+        if (!unused && index === 1)
+          assert.deepEqual(result, {
+            kind: "error",
+            code: "protocol",
+            message: "Incomparable TLA values",
+          });
+        else assertComplete(result);
       });
   }
 }
@@ -346,8 +348,9 @@ for (const form of ["head", "explicit"] as const) {
         "",
         `[<<{9}>> EXCEPT ![1] = ${index === 3 ? use : `LET ${definition} IN ${use}`}][1]`,
       );
+      const verify = pairedChecker();
       for (const frontend of ["TS", "native", "Wasm"] as const)
-        assert.deepEqual(compile(input, frontend), freeOld);
+        assertComplete(verify(programOf(compile(input, frontend)), frontend));
     });
   for (const [label, parameter, domain, safe, element] of [
     ["target", "v", "IF ENABLED (UNCHANGED v) THEN {0} ELSE {}", "F(x)", 0],
@@ -536,7 +539,7 @@ for (const shape of chooseShapes)
           "",
           `[<<9>> EXCEPT ![1] = LET Pick == CHOOSE ${shape.pattern} \\in ${domain}: ${predicate} IN TRUE][1]`,
         );
-        assert.deepEqual(compile(input, frontend), freeOld);
+        assertComplete(check(programOf(compile(input, frontend))));
       });
 
 const actions = [
@@ -1196,6 +1199,16 @@ const newChooseV1 = [
     },
   },
 ] as const;
+const nestedOldActuals = new Set([
+  "domain caller old actual",
+  "predicate caller old actual",
+  "unused domain caller old actual",
+  "unused predicate caller old actual",
+  "sharing-choose-old-domain-argument-step3f",
+  "sharing-choose-old-predicate-argument-step3f",
+  "sharing-choose-old-domain-argument-step3f-violation",
+  "sharing-choose-old-predicate-argument-step3f-violation",
+]);
 for (const entry of newChooseV1)
   for (const frontend of ["TS", "native", "Wasm"] as const)
     test(`analysis parity controls v1 new CHOOSE bytes/refusal ${entry.id}: ${frontend}`, () => {
@@ -1208,10 +1221,19 @@ for (const entry of newChooseV1)
         const outcome = compile(input, frontend);
         assert.equal(
           createHash("sha256").update(JSON.stringify(outcome)).digest("hex"),
-          entry.digests[frontend],
+          nestedOldActuals.has(entry.id)
+            ? "b32bd9eb3aecc232bb1bd739b0ae5c8979da2bb99d1c016d43791b4b69669428"
+            : entry.digests[frontend],
         );
         assert.ok(isRecord(outcome));
-        assert.equal(outcome.kind, entry.outcomes[frontend].kind);
+        if (nestedOldActuals.has(entry.id))
+          assert.deepEqual(outcome, {
+            kind: "error",
+            code: "protocol",
+            message:
+              "Unsupported TLA input: EXCEPT @ arguments across a nested EXCEPT require safety IR v2",
+          });
+        else assert.equal(outcome.kind, entry.outcomes[frontend].kind);
       }
     });
 
@@ -1533,14 +1555,14 @@ const analysisControlManifest = [
     [false, true].flatMap((unused) =>
       ["TS", "native", "Wasm"].map((frontend) => ({
         id: `controls/choose-free-old/${index}/${unused}/${frontend}`,
-        routes: 1,
+        routes: 3,
       })),
     ),
   ),
   ...["head", "explicit"].flatMap((form) => [
     ...[0, 1, 2, 3].map((index) => ({
       id: `controls/function-domain/free-old/${form}/${index}`,
-      routes: 3,
+      routes: 7,
     })),
     ...["target", "membership"].map((label) => ({
       id: `controls/function-domain/${form}/${label}`,
@@ -1567,7 +1589,7 @@ const analysisControlManifest = [
     ["domain", "predicate"].flatMap((position) =>
       ["TS", "native", "Wasm"].map((frontend) => ({
         id: `controls/choose-free-old-shape/${shape.id}/${position}/${frontend}`,
-        routes: 1,
+        routes: 3,
       })),
     ),
   ),

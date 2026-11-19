@@ -28,7 +28,13 @@ pub fn compile_tla_with_options(
     config: &str,
     options: CompileOptions,
 ) -> Result<SafetyProgram, CoreError> {
-    compile_tla_bundle(source, config, &BTreeMap::new(), options)
+    compile_tla_bundle(
+        source,
+        config,
+        &BTreeMap::new(),
+        options,
+        rtla::SyntaxVersion::default(),
+    )
 }
 
 fn compile_tla_bundle(
@@ -36,17 +42,18 @@ fn compile_tla_bundle(
     config: &str,
     sources: &BTreeMap<String, String>,
     options: CompileOptions,
+    syntax: rtla::SyntaxVersion,
 ) -> Result<SafetyProgram, CoreError> {
     if sources.len() > 256 {
         return Err(CoreError::protocol("source bundle exceeds 256 modules"));
     }
-    let module = rtla::parse_module(source)
+    let module = rtla::parse_module_with_version(source, syntax)
         .map_err(|error| CoreError::protocol(&format!("TLA parsing: {error}")))?;
     let config = rtla::parse_config(config)
         .map_err(|error| CoreError::protocol(&format!("TLC configuration: {error}")))?;
     let mut modules = vec![];
     for (name, source) in sources {
-        let module = rtla::parse_module(source)
+        let module = rtla::parse_module_with_version(source, syntax)
             .map_err(|error| CoreError::protocol(&format!("TLA module {name}: {error}")))?;
         if module.name != *name {
             return Err(CoreError::protocol(&format!(
@@ -186,6 +193,8 @@ pub enum Request {
         modules: BTreeMap<String, String>,
         #[serde(default = "default_ir_version")]
         irVersion: u8,
+        #[serde(default)]
+        syntaxVersion: rtla::SyntaxVersion,
     },
     CheckTla {
         source: String,
@@ -194,6 +203,8 @@ pub enum Request {
         modules: BTreeMap<String, String>,
         #[serde(default = "default_ir_version")]
         irVersion: u8,
+        #[serde(default)]
+        syntaxVersion: rtla::SyntaxVersion,
         bounds: SafetyBounds,
     },
     #[cfg(not(target_arch = "wasm32"))]
@@ -549,6 +560,7 @@ impl Engine {
                 config,
                 modules,
                 irVersion,
+                syntaxVersion,
             } => Ok(Message::Compiled {
                 program: compile_tla_bundle(
                     &source,
@@ -558,6 +570,7 @@ impl Engine {
                         irVersion: IrVersion::try_from(irVersion)
                             .map_err(|error| CoreError::protocol(&error.to_string()))?,
                     },
+                    syntaxVersion,
                 )?,
             }),
             Request::CheckTla {
@@ -565,6 +578,7 @@ impl Engine {
                 config,
                 modules,
                 irVersion,
+                syntaxVersion,
                 bounds,
             } => Ok(Message::Safety {
                 result: compile_tla_bundle(
@@ -575,6 +589,7 @@ impl Engine {
                         irVersion: IrVersion::try_from(irVersion)
                             .map_err(|error| CoreError::protocol(&error.to_string()))?,
                     },
+                    syntaxVersion,
                 )?
                 .check(bounds)?,
             }),

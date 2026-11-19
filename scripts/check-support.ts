@@ -47,7 +47,32 @@ const scopes: readonly CrateScope[] = [
       },
       {
         path: "src/parser.rs",
-        topic: "対応する構文と未対応構文、infixとCASEの解析",
+        contains: "fn expression(",
+        topic: "infixとprefixの結合、CASEとselectorの構文、資源上限の分類",
+      },
+      {
+        path: "src/parser.rs",
+        contains: "fn module_inner(",
+        topic: "nested module、RECURSIVE、宣言とproofの構造保持",
+      },
+      {
+        path: "src/parser.rs",
+        contains: "fn instance(",
+        topic: "引数付きINSTANCE、記号WITHとLET内INSTANCEの構文",
+        context: ["tests/modules.rs", "tests/instances.rs"],
+      },
+      {
+        path: "src/parser/proof.rs",
+        topic: "ASSUME/PROVE、proof step階層と参照の保持、証明検証との区別",
+      },
+      {
+        path: "src/lexer.rs",
+        topic: "ASCIIとUnicodeのoperator・構造alias、字句処理と位置",
+      },
+      {
+        path: "tests/versions.rs",
+        topic:
+          "1.7.4/1.8.0の優先順位選択、既定と共通文法、廃止文法や旧版の不具合との区別",
       },
     ],
   },
@@ -63,7 +88,18 @@ const scopes: readonly CrateScope[] = [
         path: "src/link.rs",
         topic:
           "明示したmodule集合のEXTENDS/INSTANCE、LOCALとscope、設定置換の対応範囲・拒否と展開上限",
-        context: ["src/rewrite.rs"],
+        contains: "fn instantiate(",
+      },
+      {
+        path: "src/rewrite.rs",
+        topic:
+          "字句名とoperator引数のhygienicな置換、selectorとmodule引数の解決",
+      },
+      {
+        path: "src/link.rs",
+        contains: "pub(crate) fn resolve(",
+        topic:
+          "moduleと設定の上書き、値とoperatorのarity、欠落・衝突・上限の検証",
       },
       {
         path: "src/lib.rs",
@@ -85,12 +121,44 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/typed_expr.rs",
         topic:
-          "明示v2の型付きexpression lowering、共有callとframe-localなbinder、v1だけのsource演算との区別",
+          "明示v2の型付きexpression lowering、共有callとframe-localなbinder、SelectSeq/SortSeq/Assertと再帰callback",
       },
       {
         path: "src/typed_lower.rs",
         topic:
-          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、action template非共有と未対応module連結",
+          "明示v2のprogramとaction/temporal frame、caller環境とtarget解決、module連結対応とaction template非共有",
+      },
+      {
+        path: "src/elaborate.rs",
+        topic:
+          "高階operator・LAMBDAの静的特殊化、上限と公開action名、stateへ格納するoperator値との区別",
+      },
+      {
+        path: "src/select.rs",
+        topic: "label・binder引数と一般subexpression selectorの解決と対象外",
+      },
+      {
+        path: "src/functions.rs",
+        topic:
+          "有限domainの暗黙再帰関数、直接keyとDOMAINのlowering、eagerな関数値との区別",
+      },
+      {
+        path: "src/old.rs",
+        topic:
+          "引数なしLETの自由なEXCEPT @を宣言側へ保持し、引数あり定義の適用側oldと区別する",
+      },
+      {
+        path: "src/labels.rs",
+        topic:
+          "labelのbound parameter・重複・EXCEPT境界の検査と、完全なSANY意味解析との区別",
+      },
+      {
+        path: "src/link/local.rs",
+        topic: "LET内の引数付きINSTANCEと字句scopeの保持",
+      },
+      {
+        path: "src/link/nested.rs",
+        topic: "nested moduleの宣言位置のscope、外側の宣言と内側WITH対象の区別",
       },
     ],
   },
@@ -164,7 +232,7 @@ const scopes: readonly CrateScope[] = [
       {
         path: "src/safety_definitions.rs",
         topic:
-          "v2の定義graph、ID/arity/capture/phaseとframe-local slotの検証、metadataと再帰の拒否",
+          "v2の定義graph、ID/arity/capture/phaseとframe-local slot、明示recursiveの強連結成分と固定点によるmetadata検証",
       },
       {
         path: "src/safety_expressions.rs",

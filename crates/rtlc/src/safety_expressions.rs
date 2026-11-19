@@ -16,6 +16,7 @@ pub(crate) struct EvalContext<'a> {
     pub prime: bool,
     pub(crate) frame: Option<&'a CallFrame>,
     pub(crate) evaluation_depth: u8,
+    pub(crate) recursive: bool,
 }
 
 #[derive(Clone)]
@@ -90,6 +91,7 @@ impl<'a> EvalContext<'a> {
             prime: false,
             frame: None,
             evaluation_depth: 0,
+            recursive: false,
         }
     }
     #[inline]
@@ -98,6 +100,12 @@ impl<'a> EvalContext<'a> {
             return Ok(());
         }
         if self.evaluation_depth >= 128 {
+            if self.recursive {
+                return Err(CoreError {
+                    code: "evaluation-budget",
+                    message: "Recursive safety evaluation nesting exceeds 128".into(),
+                });
+            }
             return Err(CoreError::protocol("Safety evaluation nesting exceeds 128"));
         }
         self.evaluation_depth += 1;
@@ -825,6 +833,7 @@ impl Expression {
                 evaluate(
                     &definition.body,
                     EvalContext {
+                        recursive: ctx.recursive || definition.recursive,
                         locals: &[],
                         frame: Some(&frame),
                         old: None,
@@ -996,6 +1005,7 @@ impl Expression {
                             prime: false,
                             frame: ctx.frame,
                             evaluation_depth: ctx.evaluation_depth,
+                            recursive: ctx.recursive,
                         },
                         &mut next,
                         arena,
@@ -2339,6 +2349,7 @@ mod tests {
             prime: false,
             frame: None,
             evaluation_depth: 0,
+            recursive: false,
         };
         let mut arena = Arena::new(0);
         for (expression, expected) in [

@@ -640,6 +640,7 @@ const stepDescriptors = {
   },
 } satisfies { readonly [K in SafetyStep<2>["kind"]]: Descriptor<StepOf<K>> };
 const definitionDescriptor = {
+  recursive: a,
   id: a,
   parameterCount: a,
   captureCount: a,

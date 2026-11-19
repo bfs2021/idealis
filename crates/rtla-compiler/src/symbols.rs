@@ -1,8 +1,62 @@
 use crate::analysis::{Node, analysis_children};
 use crate::{Result, unsupported};
-use rtla::ast::{DefinitionKind, Module};
+use rtla::ast::{Declaration, Definition, DefinitionKind, ExpressionKind as E, Module};
+
+fn recursive(declarations: &[Declaration], definitions: &[Definition]) -> Result<()> {
+    let mut names = std::collections::BTreeSet::new();
+    for declaration in declarations {
+        if !names.insert(&declaration.name) {
+            return unsupported("duplicate RECURSIVE declaration");
+        }
+        let Some(definition) = definitions
+            .iter()
+            .find(|definition| definition.name == declaration.name)
+        else {
+            return unsupported(format!(
+                "RECURSIVE operator {} has no definition in the same scope",
+                declaration.name
+            ));
+        };
+        let arity = match &definition.head {
+            DefinitionKind::Operator { params } => params.len(),
+            DefinitionKind::Function { .. } => 0,
+        };
+        if arity != declaration.arity || declaration.location.start >= definition.location.start {
+            return unsupported(format!(
+                "RECURSIVE declaration for {} must precede its definition and have matching arity",
+                declaration.name
+            ));
+        }
+    }
+    Ok(())
+}
+
+pub(crate) fn standard_arity(name: &str) -> Option<usize> {
+    Some(match name {
+        "+" | "-" | "*" | "/" | "\\div" | "%" | "^" | "=" | "#" | "<" | ">" | "<=" | ">="
+        | ".." | "\\in" | "\\notin" | "\\subseteq" | "\\cup" | "\\cap" | "\\" | "\\o" | "=>"
+        | "<=>" | "/\\" | "\\/" | "Append" | "SelectSeq" | "SortSeq" | "Assert" => 2,
+        "~" | "-." | "DOMAIN" | "SUBSET" | "UNION" | "Len" | "Head" | "Tail" | "Cardinality"
+        | "ENABLED" | "UNCHANGED" | "[]" | "<>" => 1,
+        "SubSeq" | "ApaFoldSet" | "ApaFoldSeqLeft" => 3,
+        _ => return None,
+    })
+}
 
 pub(crate) fn validate(module: &Module) -> Result<()> {
+    let mut pending = vec![(module, 0)];
+    while let Some((module, depth)) = pending.pop() {
+        if depth > 40 {
+            return unsupported("module nesting exceeds 40");
+        }
+        validate_module(module)?;
+        pending.extend(module.modules.iter().map(|module| (module, depth + 1)));
+    }
+    Ok(())
+}
+
+fn validate_module(module: &Module) -> Result<()> {
+    recursive(&module.recursive, &module.definitions)?;
     let conflict = |name: &str| {
         let builtin = matches!(
             name,
@@ -56,6 +110,12 @@ pub(crate) fn validate(module: &Module) -> Result<()> {
     for declaration in module.constants.iter().chain(&module.variables) {
         conflict(&declaration.name)?;
     }
+    for instance in &module.instances {
+        for param in &instance.params {
+            conflict(&param.name)?;
+        }
+    }
+    let mut has_labels = false;
     let mut pending: Vec<_> = module
         .definitions
         .iter()
@@ -72,6 +132,12 @@ pub(crate) fn validate(module: &Module) -> Result<()> {
                 .iter()
                 .map(|theorem| Node::Source(&theorem.statement)),
         )
+        .chain(module.instances.iter().flat_map(|instance| {
+            instance
+                .substitutions
+                .iter()
+                .map(|substitution| Node::Source(&substitution.expression))
+        }))
         .collect();
     while let Some(node) = pending.pop() {
         if let Node::SourceDefinition(definition) = node {
@@ -82,7 +148,34 @@ pub(crate) fn validate(module: &Module) -> Result<()> {
                 }
             }
         }
+        if let Node::Source(value) = node {
+            match &value.node {
+                E::Lambda { params, .. } => {
+                    for param in params {
+                        conflict(&param.name)?;
+                    }
+                }
+                E::LetModule {
+                    recursive: declarations,
+                    definitions,
+                    instances,
+                    ..
+                } => {
+                    recursive(declarations, definitions)?;
+                    for instance in instances {
+                        for param in &instance.params {
+                            conflict(&param.name)?;
+                        }
+                    }
+                }
+                E::Label { .. } => has_labels = true,
+                _ => {}
+            }
+        }
         pending.extend(analysis_children(node).into_iter().map(|edge| edge.node));
+    }
+    if has_labels {
+        crate::labels::validate(module)?;
     }
     Ok(())
 }

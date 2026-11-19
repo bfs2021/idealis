@@ -53,9 +53,9 @@ export const syntaxCases = [
   { name: "missing-comma", expression: "{1 2}", expected: "syntax" },
   { name: "offside-body", expression: "/\\\nTRUE", expected: "syntax" },
   {
-    name: "lambda-outside-fragment",
+    name: "lambda-argument",
     expression: "Map(LAMBDA a: a, S)",
-    expected: "unsupported",
+    expected: "module",
   },
 ].map((entry) => ({
   name: entry.name,

@@ -5,7 +5,7 @@
 ## 対応済み
 
 - [x] SafetyProgramのprepare/check/batch/releaseをnative/Wasmで扱う。batchは1〜256 jobの独立したbounds/optionsと結果・errorを指定順に返し、未知・解放済みhandleや不正requestを拒否する。[再利用の契約](../../docs/prepared-safety.md)を参照。
-- [x] source APIとnative/Wasmのcompile-tla / check-tlaで`irVersion`を明示指定できる。省略・明示1はv1、明示2はexpression定義を共有するv2を生成・実行する。明示2でモジュール連結や設定の上書きを要する入力は、v1と共通の連結と検査が通った場合にprotocol拒否にする。
+- [x] source APIとnative/Wasmのcompile-tla / check-tlaで`irVersion`を明示指定できる。省略・明示1はv1、明示2はexpression定義を共有するv2を生成・実行する。明示2でもmodule連結・設定置換を扱う。syntaxVersionでRust parserの優先順位表を選ぶ。
 
 - [x] Sessionのeffect/responseでModelとDriverを呼び出し、観測がモデルの許す候補に含まれるか照合する。
 - [x] 保存Traceの再生と、matched / mismatch / invalidの区別。effect IDの不一致を拒否する。
@@ -27,7 +27,6 @@
 
 ## 非対応・対象外
 
-- [ ] irVersion 2でのmodulesの連結と設定の上書き（ユーザーmoduleのEXTENDS・INSTANCE、operator置換・定数表・定義の上書き）。v1と省略は従来どおり受理する。
 - [ ] すべてのTLA+構文、独自のSMT求解、TLA+/SMTの汎用相互変換。
 - [ ] OS/process/networkへの自動障害注入、実thread/awaitの自動計装、weak memoryのモデル化。
 - [ ] Rust内での任意SUTのI/Oや各テストランナーの所有。
@@ -41,4 +40,6 @@
 
 [README](README.md)、[protocolとSession](src/lib.rs)、[有限モデル](src/finite.rs)、[履歴](src/history.rs)、[ホスト](src/host.rs)、[回帰](tests/rtlc.rs)、[共有オラクル](../../docs/shared-oracle.md)を参照。
 
-- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。LET本体の自由な`@`は型付きprotocol拒否とする。
+- [x] 明示v2の非共有anonymous expression/action/temporal frameを扱い、callerのbinder・old・引数を遅延参照する。入口と引数要求へ各1 workを課金し、v1・既存上限を維持する。sourceのLET内の`@`はcompilerがlowerする。
+
+[追加対応と独立比較](../../evals/iterations/0070-tla-coverage.md)を参照。構文受理・有限実行・証明の検証を区別する。

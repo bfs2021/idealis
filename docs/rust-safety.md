@@ -6,7 +6,7 @@
 
 `compileTlaSafety` は tla-ts の parser が返す構文木から、有限モデル用 IR を作る。Rust コアが式を評価し、Init / Next の状態生成、BFS、重複排除、不変条件・deadlock の検査、反例復元を実行する。temporal property がある場合は、有限グラフと否定した性質の generalized Büchi automaton の積から、受理する SCC を探す。全状態グラフを TS で先に列挙する必要はなく、探索中に JS へ戻らない。
 
-source APIの`irVersion?: 1 | 2`は省略・明示1で既存のsafety IR v1を返す。明示2では両frontendが式定義を共有するv2を生成し、rtlcが定義表とcallerのlexical frameを持つ遅延引数を検証・評価する。callと引数の要求へ各1 workを課金し、値はmemoizationしない。actionはinlineを維持し、再帰とv1拒否からの自動再試行は行わない。wire契約と定義順は[IR v2](safety-ir-v2.md)を参照。request envelopeやWasm ABIのversionとは別の指定である。
+source APIの`irVersion?: 1 | 2`は省略・明示1で既存のsafety IR v1を返す。明示2では両frontendが式定義を共有するv2を生成し、rtlcが定義表とcallerのlexical frameを持つ遅延引数を検証・評価する。callと引数の要求へ各1 workを課金し、値はmemoizationしない。actionはinlineを維持し、明示v2は再帰expressionを扱う。v1拒否からの自動再試行は行わない。wire契約と定義順は[IR v2](safety-ir-v2.md)を参照。request envelopeやWasm ABIのversionとは別の指定である。
 
 ```ts
 import { compileTlaSafety } from "@mizchi/idealis/tla";
@@ -76,7 +76,7 @@ Rustの`check_with_coverage`と、portableの`checkSafetyCoverage(core, program,
 - sequence の Len / Head / Tail / Append / SubSeq / 連結、有限集合を要素にする Seq への所属。
 - 変数全体への代入、有限領域からの選択、UNCHANGED、存在量化による action の列挙。
 
-defining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視の top-level / LET 定義の非再帰 operator 名で、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。foldの専用frameでbound slotを2つ使い、v1では呼び出し位置でbodyを展開する。v2では同じslotをactualとして共有expression定義をcallする。一般の高階 operator は未対応のままで、この2つの fold の operator 名だけが例外。LAMBDA、operator parameter、再帰、他の Apalache operator は拒否する。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
+defining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視のtop-level / LET定義のoperator名またはLAMBDAで、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。foldの専用frameでbound slotを2つ使い、v1では呼び出し位置でbodyを展開する。v2では同じslotをactualとして共有expression定義をcallする。Rust frontendはLAMBDAとoperator parameterを静的に特殊化し、再帰callbackはv2を要求する。他のApalache operatorはチェックリストの範囲に従う。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
 
 sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
@@ -84,11 +84,11 @@ primed variable は、同じ分岐で代入した後に読み取る。部分的�
 
 設定は INIT / NEXT または SPECIFICATION に、INVARIANT / PROPERTY / CONSTANT / CHECK_DEADLOCK を組み合わせる。SPECIFICATION は初期述語、全 state variable を列挙した subscript の `[][Next]_vars`、WF / SF の連言を扱う。PROPERTY は state / action predicate、論理結合、always / eventually / leads-to を扱う。action を含む一般の temporal property は `[]<>A` / `<>[]A` の範囲に限る。定数の ASSUME も確認する。
 
-selected operator と依存を lower する compiler であり、全モジュールの SANY 検査や証明の処理ではない。未使用の定義・proof の正しさは判断しない。引数付きINSTANCE・nested module、一般の高階・再帰 operator、無限集合の列挙、stateに依存するdomainでの時間論理量化、一般のsymmetry、VIEW は未対応。[node関数に限定したSYMMETRY](symmetry.md)はRust frontendで扱う。未対応の構文・設定は拒否する。全 tla-ts / TLC 互換を表す API ではない。
+Rust compilerはselected operatorと依存をlowerする。全SANYの意味・型・level検査やproofの検証は行わない。無限集合の列挙、state依存の時間論理domain、一般のsymmetryとVIEWは未対応。Rust固有の追加構文・高階・再帰の範囲は[frontendの契約](rust-frontend.md)に従う。
 
-Rustのsource経路は定数有限domain上のSPECIFICATIONの量化fairnessと、SelectSeq / SortSeq / Assertを追加で扱う。callbackは可視の非再帰operator名に限定する。SortSeqはTLCの挿入順・比較順を保持し、反復・比較でworkを消費する。Assertはmessageも評価する。[追加の契約](../crates/rtla-compiler/README.md#標準演算と量化された公平性)を参照。既存のcompileTlaSafetyへ同じソース対応を追加した意味ではない。
+Rustのsource経路は定数有限domain上のSPECIFICATIONの量化fairnessと、SelectSeq / SortSeq / Assertを追加で扱う。callbackは名前またはLAMBDAを使う。再帰callbackはv2を要求する。SortSeqはTLCの挿入順・比較順を保持し、反復・比較でworkを消費する。Assertはmessageも評価する。[追加の契約](../crates/rtla-compiler/README.md#標準演算と量化された公平性)を参照。既存のcompileTlaSafetyへ同じソース対応を追加した意味ではない。
 
-Rustのsource経路は`modules: { ModuleName: source }`を受け取り、非再帰EXTENDSと引数なしINSTANCEを解決する。LOCAL、WITH、定数・operatorの設定置換は[compilerの契約](../crates/rtla-compiler/README.md#モジュールと設定置換)を参照。自動のファイル読み込みや全SANY互換は提供しない。明示`irVersion: 2`はモジュール連結と設定置換を対応せず、ユーザーmoduleのEXTENDS・INSTANCE、設定のoperator置換・定数表・定義の上書きを要する要求は、v1と共通の連結と検査が通った場合に、変換の前に`Unsupported TLA input: safety IR v2 does not support module linking or configuration operator substitution`で拒否する。これらを要さない要求はv2でも通常どおり変換し、v1と省略は従来どおり受理する。
+Rustのsource経路はmodulesを受け、IR v1/v2でEXTENDS・引数付きINSTANCE・LET内INSTANCE・nested module・LOCAL・WITH・設定置換を解決する。ファイルとネットワークは読まない。[frontendの契約](rust-frontend.md)を参照。
 
 frontend の上限は、変数256、分岐4096、分岐あたり256 step、展開深さ40、bound variable 40。実行側も IR のフィールド・参照・式を検証する。複合値の深さは64で、それを超える state の生成はエラー。探索中は状態と親 index を保存し、temporal property がある場合だけ遷移グラフも保存する。
 

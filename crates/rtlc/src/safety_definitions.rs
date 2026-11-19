@@ -5,7 +5,7 @@ use crate::ir::{
 };
 use std::collections::{BTreeMap, HashMap};
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, PartialEq, Eq)]
 struct Summary {
     parameters: BTreeMap<usize, u8>,
     captures: BTreeMap<usize, u8>,
@@ -146,7 +146,7 @@ fn children(expression: &Expression) -> Vec<&Expression> {
     }
 }
 
-fn definition_order(definitions: &[Definition]) -> Result<Vec<usize>, CoreError> {
+fn definition_order(definitions: &[Definition]) -> Result<Vec<(Vec<usize>, bool)>, CoreError> {
     let mut edges = vec![vec![]; definitions.len()];
     for (index, definition) in definitions.iter().enumerate() {
         for count in [
@@ -204,7 +204,7 @@ fn definition_order(definitions: &[Definition]) -> Result<Vec<usize>, CoreError>
                         colors[callee] = 1;
                         pending.push((callee, 0));
                     }
-                    1 => return Err(invalid("Recursive safety definition graph")),
+                    1 => {}
                     _ => {}
                 }
             } else {
@@ -214,7 +214,38 @@ fn definition_order(definitions: &[Definition]) -> Result<Vec<usize>, CoreError>
             }
         }
     }
-    Ok(order)
+    let mut reverse = vec![vec![]; definitions.len()];
+    for (caller, callees) in edges.iter().enumerate() {
+        for callee in callees {
+            reverse[*callee].push(caller);
+        }
+    }
+    let mut assigned = vec![false; definitions.len()];
+    let mut components = vec![];
+    for root in order.into_iter().rev() {
+        if assigned[root] {
+            continue;
+        }
+        assigned[root] = true;
+        let mut ids = vec![];
+        let mut pending = vec![root];
+        while let Some(id) = pending.pop() {
+            ids.push(id);
+            for caller in &reverse[id] {
+                if !assigned[*caller] {
+                    assigned[*caller] = true;
+                    pending.push(*caller);
+                }
+            }
+        }
+        let recursive = ids.len() > 1 || edges[ids[0]].contains(&ids[0]);
+        if recursive && ids.iter().any(|id| !definitions[*id].recursive) {
+            return Err(invalid("Recursive safety definition graph"));
+        }
+        components.push((ids, recursive));
+    }
+    components.reverse();
+    Ok(components)
 }
 
 type CachedAnalysis = Result<Summary, (&'static str, String)>;
@@ -831,27 +862,48 @@ pub(crate) fn validate_program(program: &SafetyProgram) -> Result<Metadata, Core
             .collect(),
         variables: program.variables.len(),
     };
-    for id in order {
-        let definition = &definitions[id];
-        let mut first_error = None;
-        for phase in 0..4 {
-            let context = Context {
-                parameters: definition.parameter_count,
-                captures: definition.capture_count,
-                capacity: definition.local_scope,
-                ..Context::root(phase)
-            };
-            match metadata.expression(&definition.body, context) {
-                Ok(summary) => metadata.summaries[id][context.mode()] = Some(summary),
-                Err(error) => {
-                    if first_error.is_none() {
-                        first_error = Some(error);
-                    }
-                }
+    for (ids, recursive) in order {
+        if recursive {
+            for id in &ids {
+                metadata.summaries[*id] = std::array::from_fn(|_| Some(Summary::default()));
             }
         }
-        if metadata.summaries[id].iter().all(Option::is_none) {
-            return Err(first_error.unwrap_or_else(|| invalid("Invalid safety definition")));
+        let mut errors = HashMap::new();
+        loop {
+            let mut changed = false;
+            for id in &ids {
+                let definition = &definitions[*id];
+                let mut summaries = std::array::from_fn(|_| None);
+                for (phase, target) in summaries.iter_mut().enumerate() {
+                    if recursive && metadata.summaries[*id][phase].is_none() {
+                        continue;
+                    }
+                    let context = Context {
+                        parameters: definition.parameter_count,
+                        captures: definition.capture_count,
+                        capacity: definition.local_scope,
+                        ..Context::root(phase as u8)
+                    };
+                    match metadata.expression(&definition.body, context) {
+                        Ok(summary) => *target = Some(summary),
+                        Err(error) => {
+                            errors.entry(*id).or_insert(error);
+                        }
+                    }
+                }
+                changed |= metadata.summaries[*id] != summaries;
+                metadata.summaries[*id] = summaries;
+            }
+            if !recursive || !changed {
+                break;
+            }
+        }
+        for id in ids {
+            if metadata.summaries[id].iter().all(Option::is_none) {
+                return Err(errors
+                    .remove(&id)
+                    .unwrap_or_else(|| invalid("Invalid safety definition")));
+            }
         }
     }
     metadata.branches(&program.initial, Context::root(0))?;

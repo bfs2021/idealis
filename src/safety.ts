@@ -49,7 +49,8 @@ export const decodeSafetyResult = (input: unknown): SafetyResult => {
       value.reason !== "depth" &&
       value.reason !== "states" &&
       value.reason !== "work" &&
-      value.reason !== "temporal") ||
+      value.reason !== "temporal" &&
+      value.reason !== "evaluation") ||
     (value.status === "bounded") !== (value.reason !== null)
   )
     throw new PortableCoreError("protocol", "Invalid safety status");

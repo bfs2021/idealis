@@ -601,13 +601,17 @@ export const assertIrReach = (entry: AnalysisCase, program: unknown): void => {
   if (
     entry.probe === "old" &&
     entry.refusal === null &&
-    entry.control &&
     !(
       entry.position.constructor === "Except" &&
       entry.position.position.endsWith(".value")
     )
-  )
+  ) {
+    assert.ok(
+      !nodes.some((node) => node.op === "old"),
+      "unused LET body must not introduce an old read into the reachable IR",
+    );
     return;
+  }
   if (entry.position.spelling === "~>") {
     assertLeadsTo(entry, view);
   } else if (entry.position.constructor === "Always") {

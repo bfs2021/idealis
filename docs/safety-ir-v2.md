@@ -2,9 +2,9 @@
 
 `modelt.safety-program`は省略・明示`irVersion: 1`でv1を生成する。明示`irVersion: 2`ではTS/Rustの両frontendが到達するexpression定義を共有するv2を生成し、checkerが検証・実行する。v1拒否から自動再試行しない。request envelopeとWasm ABIのversionは1のまま。
 
-v2はモジュール連結と設定置換を対応しない。ユーザーmoduleのEXTENDS・INSTANCE、設定のoperator置換・定数表・定義の上書きを要するRust frontendの要求は、v1と同じ連結と検査で先に拒否されない限り、変換の前に`Unsupported TLA input: safety IR v2 does not support module linking or configuration operator substitution`で拒否する。これらを要さない要求は、追加moduleを伴ってもv2で通常どおり変換する。v1と省略は従来どおり受理する。
+Rust frontendのv2はmodule連結と設定置換に対応する。引数付きINSTANCE、LET内INSTANCE、nested moduleも有限fragmentへlowerする。TS frontendの受理範囲は独立しており、自動でRustへ切り替えない。
 
-SYMMETRYはv1だけで扱う。v2 frontendは宣言を拒否し、手書きv2 IRのsymmetryも実行器が拒否する。限定PORはv2のframe/callを独立と推測せず、解析できない操作を通常探索へ戻す。既存v1のSelectSeq / SortSeq / Assertのsource loweringは、v2では未対応。対応IRの直接実行とは区別する。
+SYMMETRYはv1だけで扱う。v2 frontendは宣言を拒否し、手書きv2 IRのsymmetryも実行器が拒否する。限定PORはv2のframe/callを独立と推測せず、解析できない操作を通常探索へ戻す。Rust frontendはSelectSeq / SortSeq / Assertをv1/v2へlowerする。
 
 ## Wire契約
 
@@ -36,7 +36,7 @@ v2はv1のprogramフィールドに必須の`definitions`配列を追加する�
 }
 ```
 
-`arguments`と`captures`は必須で、定義の各countと一致する。`parameter`と`capture`はそれぞれ`slot`だけを持つ式。全定義・全actualを未選択の分岐や未使用引数も含めて検証し、評価エラーになる式を検証中に実行しない。未知ID、self / mutual cycle、参照・arity・slot・phaseの不整合はprotocolエラーになる。
+`arguments`と`captures`は必須で、定義の各countと一致する。`parameter`と`capture`はそれぞれ`slot`だけを持つ式。全定義・全actualを未選択の分岐や未使用引数も含めて検証し、評価エラーになる式を検証中に実行しない。未知ID、recursive未指定の循環、参照・arity・slot・phaseの不整合はprotocolエラーになる。
 
 ## 両frontendの決定順
 
@@ -54,13 +54,13 @@ v2のmembership descriptorでは、単一のrange bindingとそのslotだけを�
 
 call entryと引数・captureの要求時にそれぞれ`Arena::consume(1)`へ課金する。直接評価`Id(Id(TRUE))`は4 workで、maxWork 3 / 4 / 5は枯渇 / 成功 / 成功となる。探索の既存費用は別に加算する。枯渇はbounded / reason:workで、上限を超えない。membership descriptorもcallを毎回通し、cacheでこの課金を省略しない。
 
-定義DAGを先に検証し、phase別の受理条件・formalへの依存とconstant / context-free metadataをactualとcaptureへ合成する。callを葉として判定しない。frontend nesting 40、checkerの定義内expression深さ48、値深さ64、TS decoder深さ128は変更しない。call graphの経路長を定義内の式深さとして加算しない。v2の動的な式・membership・branch・binder評価は別に入れ子128までとし、それ以上はprotocolエラーで制御してstack overflowを避ける。値やcall結果のcacheではなく、検証contextごとのmetadata解析結果だけを再利用する。
+定義graphを先に検証し、明示再帰の強連結成分を固定点で解析する。phase別の受理条件・formalへの依存とconstant / context-free metadataをactualとcaptureへ合成する。callを葉として判定しない。frontend nesting 40、checkerの定義内expression深さ48、値深さ64、TS decoder深さ128は変更しない。call graphの経路長を定義内の式深さとして加算しない。v2の動的な式・membership・branch・binder評価は別に入れ子128までとし、再帰経路の超過はbounded/evaluation、通常の不正な深さはprotocolエラーにする。値やcall結果のcacheではなく、検証contextごとのmetadata解析結果だけを再利用する。
 
 ## 検証範囲
 
 rtlc unit testsは不正IR、frame-local slot、直接評価のwork境界を検査する。operator-sharing cohortではTS/Rustが生成するv2を保存済みTLCログと照合し、chain、binder、lexical capture、未使用 / 使用引数、prime、ENABLEDを検査する。両frontendの正規化後構造、native / Wasmの完全応答、定義数・call edge数・serialized bytesの線形増加も検査する。両枝を評価するchainは小さいwork予算でbounded / workになることを要求し、指数的な評価仕事の除去とは数えない。
 
-v1の深いinlineとbinder混線は型付き拒否として別に保持し、既存239入力は省略・明示v1のserialize digestで凍結確認する。手書きv2 IRの対照はfrontend生成の照合と区別する。これらは固定した有限fragmentと入力での証拠であり、全TLA+互換、全モデルの受理、一般的な速度改善を意味しない。
+v1の深いinlineとbinder混線は型付き拒否として別に保持し、既存239入力は省略・明示v1のserialize digestで確認する。0070では追加のCHOOSE対照8件と生成actionの旧対照について、別のEXCEPTへ渡す自由な`@`をv2要求の拒否へ変更する。既存239入力のdigestは保持する。手書きv2 IRの対照はfrontend生成の照合と区別する。これらは固定した有限fragmentと入力での証拠であり、全TLA+互換、全モデルの受理、一般的な速度改善を意味しない。
 
 ## 深い定義と対象位置
 
@@ -72,7 +72,7 @@ CASEのarm列は従来どおりif/elseへlowerするため、浅いsourceでも�
 
 生成的外殻全体へのactual IR代入は行わない。式定義はtarget signatureごとに共有し、EXCEPTのcaller oldとcallee old、caller binderとcallee binderを分ける。membership位置へ達するformal/captureの要求も定義graphで伝播し、actualを両frontendでmembership用途へlowerする。IF/CASE/LETのmembership結果にも用途を保持する。
 
-action/temporal外殻はcall siteごとにASTを展開し、非共有anonymous frameで包む。生成targetだけをsourceと環境から解決し、通常actualはcaller lexical frame付きthunkとして渡す。binder・old・parameter・captureをcalleeのlocalsへ貼り付けない。action template共有や再帰には対応しない。
+action/temporal外殻はcall siteごとにASTを展開し、非共有anonymous frameで包む。生成targetだけをsourceと環境から解決し、通常actualはcaller lexical frame付きthunkとして渡す。binder・old・parameter・captureをcalleeのlocalsへ貼り付けない。action template共有と再帰する代入actionの生成は未対応。
 foldのoperator呼出しはaccumulator/element用の明示actualと専用frameを持つため、通常のshared callを維持する。ENABLEDとbinderを持つfoldをv1/v2で照合する。
 
 ## 非共有anonymous frame
@@ -85,7 +85,7 @@ action frameの内側branchが終わると、内側のnext候補を維持し、c
 
 frame入口とparameter/captureの要求へ各1 workを課金し、既存step・探索・列挙の費用も維持する。値や結果はmemoizeしない。anonymous expressionの`Id(Id(TRUE))`も入口・要求の合計4 workで、maxWork 3/4/5は枯渇/成功/成功となる。frameの埋込みbodyも深さとbranch/stepの上限へ集計し、既存制限を迂回しない。
 
-LET定義本体に、その本体内のEXCEPTで束縛されない自由な`@`がある場合は、v2でtyped protocol拒否とする。固定TLCでは引数なしLETと引数ありLETでcontextの扱いが異なるため、宣言時old・適用時oldのどちらかへ一律captureする対応は行わない。actual自身の`@`をcaller frameに保持する規則は維持する。
+Rust frontendはLET内の自由な`@`をTLCとの実行対照で検査する。actual自身の`@`はcaller frameへ保持する。異なるEXCEPTへ渡すactualの`@`はIR v2を要求する。
 
 v2の値依存ENABLED対照で使うBoolean等価`<=>`は、両辺の否定を等号で比較する形へlowerする。両辺を左から一度ずつ評価し、Boolean型を要求する。v1の受理範囲・serialize結果は変更しない。
 
@@ -102,3 +102,11 @@ sourceのfree-old、target要求、membership要求、generative分類は、fron
 v2のIR解析・変換もfrontendごとの型付き子列挙を使う。levelは定義bodyが要求するactual/captureだけを合成し、capture収集とlocalScopeはnested frameのbody境界を越えない。DAG・call収集/再番号付け・prime/phase・compiled depthは未使用actualと全frame bodyも読む。Rustはpending定義のbodyを未確定のままdeserializeせず、lower完了後の定義・一時式・lexical環境・programを型付きIRで保持する。更新adapterと読み取りは同じ列挙から導出する。TSも同じdescriptorのpathでimmutableに更新する。v1は既存のloweringと走査を使う。
 
 action展開はbranch.stepsとaction frame.branchesのedgeだけを数え、actual/captureや値式内部のENABLEDは加えない。各stepとframe wrapperを1 stepとし、frame bodyの最大step数を加算する。各branchのframe bodyの経路数は乗算し、branch間は加算する。4096経路/256 stepsは受理し、超過は既存の診断で拒否する。PROPERTYのatom/always分類はtemporal frame.formulaのedgeを選び、frameを保持する。sourceとIRの検査成功を全programのparityや全TLA+互換の証明とは扱わない。
+
+## 再帰expression
+
+Definitionのoptionalな`recursive: true`は自己・相互再帰を明示する。省略とfalseは従来どおり循環を拒否する。強連結成分の全定義にフラグを要求し、phase・parameter・captureの依存を固定点で検査する。未評価分岐でも不正なphaseやarityを許可しない。
+
+再帰経路の動的評価は128段までで、超過は`bounded / evaluation`となる。work枯渇は`bounded / work`。制限を超えた再帰をcompleteやemptyにしない。値のmemoizationと再帰するactionの生成は追加しない。
+
+引数なしLET定義の自由な`@`は宣言側の環境を保持し、引数あり定義の`@`は適用側の環境に従う。Rustのv2では、別のEXCEPTへ入る引数なし定義を明示した遅延引数へ変換する。この組合せはv1と旧TS frontendで理由を示して拒否する。

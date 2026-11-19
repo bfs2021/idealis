@@ -498,6 +498,9 @@ impl Compiler<'_> {
         args: &[Expression],
         context: &Context,
     ) -> Result<T> {
+        if self.scopes[context.scope][name].definition.is_recursive {
+            return Ok(atom(self.shared_ir(name, args, context)?));
+        }
         let (body, expanded) = self.call(name, args, context)?;
         let formula = self.temporal_ir(&body, &expanded)?;
         if let Some(frame) = &expanded.frame {
@@ -517,10 +520,82 @@ impl Compiler<'_> {
         next: &mut Option<Vec<ir::Branch>>,
         fairness: &mut Vec<T>,
     ) -> Result<()> {
+        if matches!(value.node, E::Forall { .. } | E::Exists { .. }) {
+            let formula = self.temporal_ir(value, context)?;
+            if !matches!(formula, T::Atom { .. }) {
+                fairness.push(formula);
+                return Ok(());
+            }
+        }
         match &value.node {
             E::Identifier { name } if self.has(context, name) => {
                 let (body, expanded) = self.call(name, &[], context)?;
                 self.parts_ir(&body, &expanded, initial, next, fairness)
+            }
+            E::Apply { operator, args } if self.has(context, operator) => {
+                for argument in args {
+                    let mut expression = self.expression_ir(argument, context)?;
+                    for frame in context.temporal_frames.iter().rev() {
+                        expression = frame_expression(frame, expression)?;
+                    }
+                    self.lower_pending()?;
+                    if typed::level_summary(
+                        Node::Expression(&expression),
+                        &self.level_cache.borrow(),
+                    )
+                    .base
+                        > 0
+                    {
+                        return unsupported("SPECIFICATION operator arguments must be constant");
+                    }
+                }
+                let (body, expanded) = self.call(operator, args, context)?;
+                let mut local_initial = None;
+                let mut local_next = None;
+                let mut local_fairness = vec![];
+                self.parts_ir(
+                    &body,
+                    &expanded,
+                    &mut local_initial,
+                    &mut local_next,
+                    &mut local_fairness,
+                )?;
+                if let Some(frame) = &expanded.frame {
+                    if let Some(branches) = local_initial.take() {
+                        local_initial =
+                            Some(vec![branch("Init", vec![frame_step(frame, branches)?])]);
+                    }
+                    if let Some(branches) = local_next.take() {
+                        local_next = Some(vec![branch("Next", vec![frame_step(frame, branches)?])]);
+                    }
+                    local_fairness = local_fairness
+                        .into_iter()
+                        .map(|formula| frame_formula(frame, formula))
+                        .collect::<Result<_>>()?;
+                }
+                if let Some(branches) = local_initial {
+                    *initial = Some(if let Some(previous) = initial.take() {
+                        let mut joined = vec![];
+                        for before in &previous {
+                            for after in &branches {
+                                let mut branch = after.clone();
+                                branch.steps.splice(0..0, before.steps.clone());
+                                joined.push(branch);
+                            }
+                        }
+                        typed::limited(joined)?
+                    } else {
+                        branches
+                    });
+                }
+                if let Some(branches) = local_next {
+                    if next.is_some() {
+                        return unsupported("multiple NEXT conjuncts");
+                    }
+                    *next = Some(branches);
+                }
+                fairness.extend(local_fairness);
+                Ok(())
             }
             E::And { .. } => {
                 for edge in analysis_children(Node::Source(value))

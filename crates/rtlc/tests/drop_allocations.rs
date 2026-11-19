@@ -456,6 +456,7 @@ fn not_chain(depth: usize) -> Expression {
 
 fn definition(id: usize, body: Expression) -> Definition {
     Definition {
+        recursive: false,
         id,
         parameter_count: 0,
         capture_count: 0,

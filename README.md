@@ -59,7 +59,7 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 
 RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
 
-rtlaの[構文互換性監査](evals/iterations/0068-rtla-compatibility.md)では、公式corpus 355件とprefix対照13件をSANY 1.7.4/1.8.0 prereleaseへ比較した。prefixの既定は1.7.4に合わせている。[記号operatorの定義・宣言・nonfix参照](evals/iterations/0069-symbolic-operators.md)は既存語彙で対応し、custom記号の有限モデルをIR v1/v2とTLCへ照合した。全operator語彙、Unicode構文、LAMBDAやproofには未対応が残る。[対応チェックリスト](crates/rtla/SUPPORT.md)を参照。構文の受理は名前解決・level検査・モデル検査の成功を意味しない。
+rtlaは固定SANYの全operator表とUnicode alias、LAMBDA/RECURSIVE、引数付き・LET内INSTANCE、nested module、一般selectorと構造付きproofを解析する。`syntaxVersion`で1.7.4/1.8.0の優先順位を選ぶ。Rust compilerは高階operatorを特殊化し、明示IR v2で再帰expressionを予算付きで実行する。[対応チェックリスト](crates/rtla/SUPPORT.md)、[独立SANY/TLC比較](evals/iterations/0070-tla-coverage.md)と[frontendの契約](docs/rust-frontend.md)を参照。構文受理と有限モデルの検査、THEOREMの証明は別の範囲である。
 
 [QuintがApalache経由で生成したTLA+の実行確認](docs/quint-generated.md)は、6モデル・12件の正常/違反設定をnative/WasmとTLCへ照合する。`:=`、fold、有限選択、VariantsとCASEを含む限定したfragmentで、Quint言語やQuint Connect API全体の互換実装ではない。
 
@@ -113,7 +113,7 @@ just browser
 
 `compileTlaSource(core, { source, config, irVersion: 2 })`またはTS frontendの`compileTlaSafety({ source, config, irVersion: 2 })`で、operatorの式定義を共有できる。既定はv1。引数はcallerの字句環境を保持し、要求時のcurrent/next/primeで評価する。未使用引数を先に実行せず、callと引数要求はworkへ課金する。
 
-v2のmodule連結・設定置換・SYMMETRY、action templateの共有は未対応。TS frontendとRust frontendの受理範囲も異なる。公開`TCommit`のRM=8はRustのv1/v2とTLCで6,816状態・53,513生成が一致し、Quintの6生成物・正常/故障12設定も検査する。これらは有限scopeでの照合で、THEOREMの証明ではない。[IR契約と制限](docs/safety-ir-v2.md)を参照。
+Rustのv2はmodule連結と設定置換にも対応する。SYMMETRY、再帰する代入actionの生成とaction template共有は未対応。TS frontendとRust frontendの受理範囲も異なる。公開`TCommit`のRM=8はRustのv1/v2とTLCで6,816状態・53,513生成が一致し、Quintの6生成物・正常/故障12設定も検査する。これらは有限scopeでの照合で、THEOREMの証明ではない。[IR契約と制限](docs/safety-ir-v2.md)を参照。
 
 | 固定したsharing chain  |                v1 | 明示v2 |
 | ---------------------- | ----------------: | -----: |

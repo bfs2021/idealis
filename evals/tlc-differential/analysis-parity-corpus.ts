@@ -514,8 +514,8 @@ export const createAnalysisCorpus = (
                 sourcePath,
                 expectedOp: "always",
                 refusal:
-                  probe === "old" && !control
-                    ? "Unsupported TLA input: LET definitions with free EXCEPT @"
+                  position.constructor === "Label" && probe === "old"
+                    ? "Unsupported TLA input: labels inside EXCEPT replacements are not supported by TLC"
                     : null,
               };
             }
@@ -605,8 +605,8 @@ export const createAnalysisCorpus = (
                 position.position.replaceAll(".Index", ""),
               expectedOp: recipe.expectedOp,
               refusal:
-                unused && !control
-                  ? "Unsupported TLA input: LET definitions with free EXCEPT @"
+                position.constructor === "Label" && probe === "old"
+                  ? "Unsupported TLA input: labels inside EXCEPT replacements are not supported by TLC"
                   : null,
             };
           }),

@@ -57,7 +57,7 @@ test("analysis parity production TS role table equals independent roles", () => 
     "production TS descriptor table must enumerate the independent roles",
   );
 });
-test("analysis parity production Rust role table equals independent roles", () => {
+test("analysis parity production Rust role table equals independent roles", async () => {
   const result = spawnSync(
     "crates/rtla-compiler/target/debug/examples/analysis_roles",
     [],
@@ -66,12 +66,26 @@ test("analysis parity production Rust role table equals independent roles", () =
   assert.ifError(result.error);
   assert.equal(result.status, 0, result.stderr);
   const rust = JSON.parse(result.stdout);
+  const additions: typeof analysisRoles = JSON.parse(
+    await readFile(`${directory}/analysis-rust-roles.json`, "utf8"),
+  );
+  const key = (row: (typeof analysisRoles)[number]) =>
+    [row.space, row.constructor, row.operatorClass, row.position].join("\0");
+  const expected = [...roles, ...additions].sort((left, right) =>
+    key(left) < key(right) ? -1 : key(left) > key(right) ? 1 : 0,
+  );
   assert.deepEqual(
     rust,
-    roles,
-    "production Rust descriptor table must enumerate the independent roles",
+    expected,
+    "Rust extensions and shared descriptors have independent expectations",
   );
-  assert.deepEqual(rust, analysisRoles);
+  assert.deepEqual(
+    rust.filter(
+      (row: (typeof analysisRoles)[number]) =>
+        !additions.some((addition) => key(addition) === key(row)),
+    ),
+    analysisRoles,
+  );
 });
 test("analysis parity independent source inventory and two-way position difference", async () => {
   await verifyAnalysisInventory(analysisPositions());
@@ -228,6 +242,7 @@ test("analysis parity generated four-probe corpus and reached ledger", {
     semanticReached: boolean;
     refusalReached: boolean;
     controlReached?: boolean;
+    unusedDefinitionReached?: boolean;
     assertion?: string;
   }[] = [];
   let deadline = false;
@@ -452,6 +467,11 @@ test("analysis parity generated four-probe corpus and reached ledger", {
             refusalReached,
             controlReached:
               entry.probe === "old" && entry.control && !semanticReached,
+            unusedDefinitionReached:
+              entry.probe === "old" &&
+              !entry.control &&
+              !semanticReached &&
+              !refusalReached,
           });
         } catch (error) {
           const message =

@@ -425,3 +425,81 @@ export const runSharedIr = async () => {
     isolated: globalThis.crossOriginIsolated,
   };
 };
+
+export const runFrontendCompletion = async () => {
+  const core = await createPortableWasm(
+    new Uint8Array(await (await fetch("/core.wasm")).arrayBuffer()),
+  );
+  const inputs: (TlaSourceInput & {
+    name: string;
+    versions: readonly (1 | 2)[];
+    status: string;
+    states: number | null;
+  })[] = await (await fetch("/completion.json")).json();
+  const bounds = {
+    maxDepth: 100,
+    maxStates: 1000,
+    maxWork: 1000000,
+    maxTemporalNodes: 10000,
+  };
+  let matched = 0;
+  let rejected = 0;
+  for (const input of inputs)
+    for (const irVersion of input.versions) {
+      const source = { ...input, irVersion };
+      if (input.status === "error") {
+        try {
+          compileTlaSource(core, source);
+        } catch (error) {
+          if (!(error instanceof PortableCoreError)) throw error;
+          rejected++;
+          continue;
+        }
+        throw new Error(
+          `Browser accepted invalid TLA declaration ${input.name}`,
+        );
+      }
+      const program = compileTlaSource(core, source);
+      const checked = checkTlaSource(core, source, bounds);
+      if (
+        checked.status !== input.status ||
+        checked.states !== input.states ||
+        JSON.stringify(checked) !==
+          JSON.stringify(checkSafety(core, program, bounds))
+      )
+        throw new Error(`Browser frontend differs: ${input.name}/${irVersion}`);
+      matched++;
+    }
+  const loop = {
+    source:
+      "---- MODULE Test ----\nVARIABLE x\nRECURSIVE Loop(_)\nLoop(value) == Loop(value)\nInit == x=Loop(0)\nNext == UNCHANGED x\n====",
+    config: "INIT Init\nNEXT Next\nCHECK_DEADLOCK FALSE",
+    irVersion: 2 as const,
+    syntaxVersion: "1.8.0" as const,
+  };
+  const nontermination = checkTlaSource(core, loop, bounds);
+  if (
+    nontermination.status !== "bounded" ||
+    nontermination.reason !== "evaluation"
+  )
+    throw new Error("Recursive evaluation exhaustion became a browser success");
+  const unicode = checkTlaSource(
+    core,
+    {
+      source:
+        "---- MODULE Test ----\nVARIABLE x\nInit ≜ x=1\nNext ≜ UNCHANGED x\nSafe ≜ ∀ value ∈ {1}: value=x\n====",
+      config: "INIT Init\nNEXT Next\nINVARIANT Safe\nCHECK_DEADLOCK FALSE",
+      syntaxVersion: "1.8.0",
+    },
+    bounds,
+  );
+  if (unicode.status !== "complete")
+    throw new Error("Modern Unicode source failed in browser");
+  return {
+    matched,
+    rejected,
+    evaluation: nontermination.reason,
+    unicode: unicode.status,
+    isolated: globalThis.crossOriginIsolated,
+  };
+};

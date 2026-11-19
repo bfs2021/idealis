@@ -287,13 +287,18 @@ impl SafetyProgram {
         };
         let outcome = search.run(&mut arena, options.workers);
         if let Err(error) = outcome {
-            if error.code != "budget" && error.code != "temporal-budget" {
+            if error.code != "budget"
+                && error.code != "temporal-budget"
+                && error.code != "evaluation-budget"
+            {
                 return Err(error);
             }
             search.result.status = "bounded".into();
             search.result.reason = Some(
                 if error.code == "temporal-budget" {
                     "temporal"
+                } else if error.code == "evaluation-budget" {
+                    "evaluation"
                 } else {
                     "work"
                 }

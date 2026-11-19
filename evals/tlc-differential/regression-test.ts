@@ -180,6 +180,34 @@ for (const input of foldRejections())
       ),
     );
     assert.throws(() => compileTlaSafety(input));
+    if (
+      ["fold-reject-lambda", "fold-reject-operator-parameter"].includes(
+        input.name,
+      )
+    ) {
+      assert.equal(fixture.status, "invariant-violation");
+      const native = startNative();
+      try {
+        for (const irVersion of [1, 2] as const) {
+          const program = compileTlaSource(core, { ...input, irVersion });
+          const result = checkSafety(core, program, bounds);
+          assert.equal(result.status, "invariant-violation");
+          assert.equal(result.states, 1);
+          assert.equal(result.violation?.name, "Prop");
+          assert.deepEqual(result.violation?.trace[0]?.values, [
+            { type: "int", value: "1" },
+          ]);
+          const response = await native.request({
+            version: 1,
+            request: { kind: "check-safety", program, bounds },
+          });
+          assert.deepEqual(response, { kind: "safety", result });
+        }
+      } finally {
+        await native.close();
+      }
+      return;
+    }
     assert.throws(() => compileTlaSource(core, input), PortableCoreError);
     const native = startNative();
     try {

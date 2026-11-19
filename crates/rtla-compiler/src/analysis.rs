@@ -188,6 +188,10 @@ fn descriptor(
         }
     } else {
         match space {
+            "source-elaboration" => {
+                result.role = "elaboration-input";
+                result.scope = "lexical";
+            }
             "parser-only" => {
                 result.role = if constructor == "Fairness" {
                     "annotation"
@@ -953,6 +957,7 @@ macro_rules! ir_wrapper_edges {
     }};
     (Definition, $value:ident, $node:ident, $edge:ident, $iter:ident) => {{
         let ir::Definition {
+            recursive: _,
             id: _,
             parameter_count: _,
             capture_count: _,
@@ -1109,6 +1114,7 @@ fn source_edges(value: &ast::Expression, call: bool) -> Vec<Edge<'_>> {
     };
     match node {
         S::Number { value: _ }
+        | S::Integer { text: _ }
         | S::Decimal { text: _ }
         | S::String { value: _ }
         | S::Identifier { name: _ }
@@ -1125,6 +1131,100 @@ fn source_edges(value: &ast::Expression, call: bool) -> Vec<Edge<'_>> {
             };
             for (i, v) in args.iter().enumerate() {
                 add("Apply", &class, format!("args[{i}]"), Node::Source(v));
+            }
+        }
+        S::Lambda { params: _, body } => out.push(edge(
+            Node::Source(body),
+            "source-elaboration",
+            "Lambda",
+            "",
+            "body",
+        )),
+        S::AssumeProve {
+            assumptions, prove, ..
+        } => {
+            for (index, assumption) in assumptions.iter().enumerate() {
+                let expression = match assumption {
+                    ast::ProofAssumption::Expression { expression } => Some(expression),
+                    ast::ProofAssumption::New { set, .. } => set.as_deref(),
+                };
+                if let Some(expression) = expression {
+                    out.push(edge(
+                        Node::Source(expression),
+                        "parser-only",
+                        "AssumeProve",
+                        "",
+                        format!("assumptions[{index}]"),
+                    ));
+                }
+            }
+            out.push(edge(
+                Node::Source(prove),
+                "parser-only",
+                "AssumeProve",
+                "",
+                "prove",
+            ));
+        }
+        S::LetModule {
+            definitions,
+            instances,
+            recursive: _,
+            body,
+        } => {
+            for (index, definition) in definitions.iter().enumerate() {
+                out.push(edge(
+                    Node::SourceDefinition(definition),
+                    "source-elaboration",
+                    "LetModule",
+                    "",
+                    format!("definitions[{index}]"),
+                ));
+            }
+            for (index, instance) in instances.iter().enumerate() {
+                for (argument, entry) in instance.substitutions.iter().enumerate() {
+                    out.push(edge(
+                        Node::Source(&entry.expression),
+                        "source-elaboration",
+                        "LetModule",
+                        "",
+                        format!("instances[{index}].substitutions[{argument}]"),
+                    ));
+                }
+            }
+            out.push(edge(
+                Node::Source(body),
+                "source-elaboration",
+                "LetModule",
+                "",
+                "body",
+            ));
+        }
+        S::Selection {
+            expression,
+            selectors,
+        } => {
+            out.push(edge(
+                Node::Source(expression),
+                "source-elaboration",
+                "Selection",
+                "",
+                "expression",
+            ));
+            for (index, selector) in selectors.iter().enumerate() {
+                if let ast::Selector::Name { args, .. } | ast::Selector::Arguments { args } =
+                    selector
+                {
+                    for (argument, value) in args.iter().enumerate() {
+                        out.push(edge(
+                            Node::Source(value),
+                            "source-elaboration",
+                            "Selection",
+                            "",
+                            format!("selectors[{index}].args[{argument}]"),
+                        ));
+                    }
+                }
             }
         }
         S::And {
@@ -1544,6 +1644,7 @@ fn descriptors() -> Vec<Descriptor> {
     };
     collect(Node::Branch(&branch));
     let definition = ir::Definition {
+        recursive: false,
         id: 0,
         parameter_count: 0,
         capture_count: 0,
@@ -1642,6 +1743,7 @@ fn descriptors() -> Vec<Descriptor> {
         ("source", "Identifier"),
         ("source", "ExceptAt"),
         ("parser-only", "Decimal"),
+        ("parser-only", "Integer"),
         ("parser-only", "OperatorReference"),
         ("source-wrapper", "ExceptPath.Field"),
         ("ir-expression", "data"),
@@ -1757,6 +1859,45 @@ fn source_samples() -> Vec<ast::Expression> {
     };
     let mut nodes = vec![
         S::Number { value: 0 },
+        S::Integer {
+            text: "9007199254740992".into(),
+        },
+        S::LetModule {
+            definitions: vec![definition(), definition()],
+            instances: vec![ast::Instance {
+                name: None,
+                params: vec![],
+                module: String::new(),
+                substitutions: vec![ast::InstanceSubstitution {
+                    name: String::new(),
+                    expression: leaf.clone(),
+                }],
+                is_local: false,
+                location: leaf.location,
+            }],
+            recursive: vec![],
+            body: one(),
+        },
+        S::AssumeProve {
+            assumptions: vec![
+                ast::ProofAssumption::Expression {
+                    expression: leaf.clone(),
+                },
+                ast::ProofAssumption::New {
+                    declaration: ast::Declaration {
+                        name: String::new(),
+                        arity: 0,
+                        location: leaf.location,
+                    },
+                    level: ast::DeclarationLevel::Constant,
+                    is_new: true,
+                    set: Some(one()),
+                },
+            ],
+            prove: one(),
+            is_boxed_assume: false,
+            is_boxed_prove: false,
+        },
         S::String {
             value: String::new(),
         },
@@ -1870,6 +2011,20 @@ fn source_samples() -> Vec<ast::Expression> {
             name: String::new(),
             params: vec![],
             body: one(),
+        },
+        S::Lambda {
+            params: vec![],
+            body: one(),
+        },
+        S::Selection {
+            expression: one(),
+            selectors: vec![
+                ast::Selector::Name {
+                    name: String::new(),
+                    args: many(),
+                },
+                ast::Selector::Arguments { args: many() },
+            ],
         },
     ];
     nodes.extend(

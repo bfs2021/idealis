@@ -5,16 +5,9 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { isRecord } from "../../src/trace.js";
 import { createParserWasm } from "../rtla-parser/wasm.js";
+import { readArchive } from "../tla-coverage/archive.js";
+import { normalizeRtla, normalizeSany } from "../tla-coverage/normalize.js";
 
-interface Saved {
-  readonly records: readonly {
-    readonly name: string;
-    readonly packet: string;
-  }[];
-}
-interface Observation {
-  readonly actual: unknown;
-}
 interface AuditResult {
   readonly status: string;
   readonly compatibility: string;
@@ -26,14 +19,6 @@ interface LabelReference {
       readonly version: string;
       readonly kind: string;
     }[];
-  }[];
-}
-interface CorpusReference {
-  readonly records: readonly {
-    readonly name: string;
-    readonly sany: string;
-    readonly family: string;
-    readonly rtla: string;
   }[];
 }
 
@@ -76,71 +61,61 @@ test("native/Wasm label junctions match both saved SANY references", async () =>
   }
 });
 
-test("rtla replays the revised corpus and new symbolic acceptances have a SANY reference", async () => {
-  const root = "evals/runs/0069-stable-audit";
-  const before = "evals/runs/0068-stable-fixed";
-  const inputs: readonly { readonly source: string }[] = JSON.parse(
-    await readFile(join(root, "inputs.json"), "utf8"),
+test("rtla replays the expanded corpus with exact native/Wasm ASTs and independent SANY structure", async () => {
+  const archive = await readArchive("0070-syntax-audit-2.zip");
+  const inputs: readonly { source: string; name: string }[] = JSON.parse(
+    archive.text("inputs.json"),
   );
-  const saved: Saved = JSON.parse(
-    await readFile(join(root, "result.json"), "utf8"),
-  );
-  assert.equal(inputs.length, 368);
-  const native = execFileSync("crates/rtla/target/release/rtla", [], {
-    input: `${inputs.map((input) => JSON.stringify({ kind: "module", source: input.source })).join("\n")}\n`,
-    maxBuffer: 64 * 1024 * 1024,
-  })
-    .toString()
-    .trim()
-    .split("\n")
-    .map((line): unknown => JSON.parse(line));
-  assert.equal(native.length, inputs.length);
+  assert.equal(inputs.length, 1558);
   const wasm = await createParserWasm(
     await readFile(
       "crates/rtla/target/wasm32-unknown-unknown/release/rtla.wasm",
     ),
   );
-  const changes = [];
-  for (const [index, record] of saved.records.entries()) {
-    const expected: Observation = JSON.parse(
-      await readFile(join(root, record.packet, "observation.json"), "utf8"),
-    );
-    const old: Observation = JSON.parse(
-      await readFile(join(before, record.packet, "observation.json"), "utf8"),
-    );
-    assert.deepEqual(native[index], expected.actual, record.name);
-    assert.deepEqual(
-      wasm.request({ kind: "module", source: inputs[index]?.source }),
-      expected.actual,
-      record.name,
-    );
-    if (
-      isRecord(old.actual) &&
-      old.actual.kind === "error" &&
-      isRecord(expected.actual) &&
-      expected.actual.kind === "module"
+  let structural = 0;
+  for (const syntaxVersion of ["1.7.4", "1.8.0"] as const) {
+    const native: unknown[] = execFileSync(
+      "crates/rtla/target/release/rtla",
+      [],
+      {
+        input: `${inputs.map((input) => JSON.stringify({ kind: "module", source: input.source, syntaxVersion })).join("\n")}\n`,
+        maxBuffer: 128 * 1024 * 1024,
+      },
     )
-      changes.push(record.name);
+      .toString()
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line));
+    assert.equal(native.length, inputs.length);
+    for (const [index, input] of inputs.entries()) {
+      const expected: unknown = JSON.parse(
+        archive.text(`cases/${index}/rtla-${syntaxVersion}.json`),
+      );
+      const reference: unknown = JSON.parse(
+        archive.text(`cases/${index}/sany-${syntaxVersion}-forward.json`),
+      );
+      assert.deepEqual(
+        native[index],
+        expected,
+        `${syntaxVersion} ${input.name}`,
+      );
+      assert.deepEqual(
+        wasm.request({ kind: "module", source: input.source, syntaxVersion }),
+        expected,
+        `${syntaxVersion} ${input.name}`,
+      );
+      assert.ok(isRecord(expected) && isRecord(reference));
+      if (expected.kind === "module" && reference.kind === "accepted") {
+        assert.deepEqual(
+          normalizeRtla(expected.module),
+          normalizeSany(reference.tree),
+          `${syntaxVersion} ${input.name}`,
+        );
+        structural++;
+      }
+    }
   }
-  assert.equal(changes.length, 17);
-  const preview: CorpusReference = JSON.parse(
-    await readFile("evals/runs/0069-preview-audit/result.json", "utf8"),
-  );
-  for (const name of changes)
-    assert.equal(
-      preview.records.find((record) => record.name === name)?.sany,
-      "accepted",
-      name,
-    );
-  assert.deepEqual(
-    preview.records.filter(
-      (record) =>
-        record.family !== "prefix-focus" &&
-        record.sany === "syntax" &&
-        record.rtla === "accepted",
-    ),
-    [],
-  );
+  assert.equal(structural, 2521);
 });
 
 test("stable prefix binding is retained and reference exceptions are not syntax matches", async () => {

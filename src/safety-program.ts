@@ -435,20 +435,26 @@ export const decodeSafetyProgram = (input: unknown): SafetyProgram => {
     throw new PortableCoreError("protocol", "Invalid compiled program version");
   if (version === 2)
     array(value.definitions).forEach((input, id) => {
-      const definition = fields(input, [
-        "id",
-        "parameterCount",
-        "captureCount",
-        "bodyKind",
-        "localScope",
-        "body",
-      ]);
+      const definition = fields(
+        input,
+        [
+          "id",
+          "parameterCount",
+          "captureCount",
+          "bodyKind",
+          "localScope",
+          "body",
+        ],
+        ["recursive"],
+      );
       count(definition.id);
       count(definition.parameterCount);
       count(definition.captureCount);
       count(definition.localScope);
       if (
         definition.id !== id ||
+        (definition.recursive !== undefined &&
+          typeof definition.recursive !== "boolean") ||
         definition.bodyKind !== "expression" ||
         (definition.localScope as number) > 40
       )

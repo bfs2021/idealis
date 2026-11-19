@@ -63,7 +63,7 @@ const metadata = new Set([
 export const normalize = (value: unknown): unknown => {
   if (Array.isArray(value)) return value.map(normalize);
   if (!isRecord(value)) return value;
-  return Object.fromEntries(
+  const result = Object.fromEntries(
     Object.entries(value)
       .filter(
         ([key, inner]) =>
@@ -73,6 +73,11 @@ export const normalize = (value: unknown): unknown => {
       )
       .map(([key, inner]) => [key, normalize(inner)]),
   );
+  if (value.kind === "Lambda" && Array.isArray(value.params))
+    result.params = value.params.map((param) =>
+      typeof param === "string" ? { name: param, arity: 0 } : normalize(param),
+    );
+  return result;
 };
 export const moduleFields = (value: unknown): unknown => {
   assert.ok(isRecord(value));

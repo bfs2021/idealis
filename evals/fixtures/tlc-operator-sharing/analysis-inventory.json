@@ -6,14 +6,14 @@
       "node_modules/tla-ts/src/lexer.ts": "b5e734bbb86e5ee2da6c20b421bac60595918d2789ec92c2a1377edfeeb39277",
       "node_modules/tla-ts/src/parser.ts": "57794c837ea7313274563e879334c9bb54784bdca28d946f780dbd070b3e0d62",
       "node_modules/tla-ts/src/ast.ts": "8e522aa040267c2727cb38c51d93d01b4c72ed4f59fdc7ed6ab97fdfa92bd459",
-      "src/tla-safety.ts": "809956226ddd0ed1356f28848da91237ed2cef55f64941dc756e8b3b9287dd6e",
-      "crates/rtla/src/lexer.rs": "cb47b4f5a6ffcf93fcfd931fd0a745da509e1f072933c6939b4c3f6c08fe6cd5",
-      "crates/rtla/src/parser.rs": "c7c7fe29ef904ea39d97e56278659ac6b60056f05d54cd1d4bf58e9ae0ad5a37",
-      "crates/rtla/src/ast.rs": "d8929e28558bef691b8e84376e22f7ca23726fdb4650ca79d6007da0e1aa33af",
-      "crates/rtla-compiler/src/lib.rs": "1ef5df019b79c1a8379a34b01867698596fdafa78fd46a0b88e3e72acc32048d",
+      "src/tla-safety.ts": "b175870199c3cf7d91e173aaeb3d7c8f733552955d25e3c118a5e0b072cc775e",
+      "crates/rtla/src/lexer.rs": "0a08b858d36ca049f1cb865e6bb32ba66ce1e8944030a386fb6204a57dad26f6",
+      "crates/rtla/src/parser.rs": "ee355466340fb65d4c92eae30725b772e01433c4e935ac5dd9aad4b78af7d50b",
+      "crates/rtla/src/ast.rs": "b6fc788201f5d646dc05910bece31966dd2cad3a1f16ffd6aee799e9da84cf6d",
+      "crates/rtla-compiler/src/lib.rs": "9bfa6de5862c3a69f0605bc84be1257a82b3eda9539998ba55a9d8beb6c496e7",
       "crates/rtla-compiler/src/typed.rs": "787b2c12dcbdb34e4d79aa2a854225c2f11a9ecc3517334331f2fcba6947fd95",
-      "crates/rtla-compiler/src/typed_lower.rs": "76fc992f2524eba4aa09026180eaf7d300ba4a13968f30b9a43fad9954a8effc",
-      "crates/rtla-compiler/src/typed_expr.rs": "672ca09772d95a93d44c585415724b23789b1819350042ab71ab7ebaeb40adca"
+      "crates/rtla-compiler/src/typed_lower.rs": "58810115aff8f92b95563782c6833cc16567872aa50dd29a0bd4594baef5b2e0",
+      "crates/rtla-compiler/src/typed_expr.rs": "2471cd41a18540b5457f3f7c17709e260030a49e4e92d972c1b7dfb74036ec7b"
     },
     "parser": {
       "tsInfix": [
@@ -774,7 +774,11 @@
         "~>"
       ],
       "rustInfix": [
+        "!!",
         "#",
+        "##",
+        "$",
+        "$$",
         "%",
         "%%",
         "&",
@@ -786,11 +790,13 @@
         "-",
         "-+->",
         "--",
+        "-|",
         "..",
         "...",
         "/",
         "//",
         "/\\",
+        "::=",
         ":=",
         ":>",
         "<",
@@ -799,23 +805,59 @@
         "<=>",
         "=",
         "=>",
+        "=|",
         ">",
         ">=",
+        "??",
         "@@",
         "\\",
         "\\/",
         "\\X",
+        "\\approx",
+        "\\asymp",
+        "\\bigcirc",
+        "\\bullet",
         "\\cap",
         "\\cdot",
+        "\\cong",
         "\\cup",
         "\\div",
+        "\\doteq",
+        "\\gg",
         "\\in",
+        "\\ll",
         "\\notin",
         "\\o",
+        "\\odot",
+        "\\ominus",
+        "\\oplus",
+        "\\oslash",
+        "\\otimes",
+        "\\prec",
+        "\\preceq",
+        "\\propto",
+        "\\sim",
+        "\\simeq",
+        "\\sqcap",
+        "\\sqcup",
+        "\\sqsubset",
+        "\\sqsubseteq",
+        "\\sqsupset",
+        "\\sqsupseteq",
+        "\\star",
+        "\\subset",
         "\\subseteq",
+        "\\succ",
+        "\\succeq",
+        "\\supset",
+        "\\supseteq",
+        "\\uplus",
+        "\\wr",
         "^",
         "^^",
         "|",
+        "|-",
+        "|=",
         "||",
         "~>"
       ],
@@ -840,40 +882,152 @@
       ],
       "rustAliases": [
         [
-          "\\in",
-          "\\in"
+          "\\lnot",
+          "~"
         ],
         [
-          "\\notin",
-          "\\notin"
+          "~",
+          "~"
         ],
         [
-          "\\subseteq",
-          "\\subseteq"
+          "\\neg",
+          "~"
         ],
         [
-          "\\cup",
-          "\\cup"
+          "¬",
+          "~"
         ],
         [
-          "\\union",
-          "\\cup"
+          "[]",
+          "[]"
         ],
         [
-          "\\cap",
-          "\\cap"
+          "□",
+          "[]"
         ],
         [
-          "\\intersect",
-          "\\cap"
+          "<>",
+          "<>"
+        ],
+        [
+          "◇",
+          "<>"
+        ],
+        [
+          "\\land",
+          "/\\"
+        ],
+        [
+          "/\\",
+          "/\\"
+        ],
+        [
+          "∧",
+          "/\\"
+        ],
+        [
+          "\\lor",
+          "\\/"
+        ],
+        [
+          "\\/",
+          "\\/"
+        ],
+        [
+          "∨",
+          "\\/"
+        ],
+        [
+          "\\equiv",
+          "<=>"
+        ],
+        [
+          "<=>",
+          "<=>"
+        ],
+        [
+          "≡",
+          "<=>"
+        ],
+        [
+          "⇔",
+          "<=>"
+        ],
+        [
+          "/=",
+          "#"
+        ],
+        [
+          "#",
+          "#"
+        ],
+        [
+          "≠",
+          "#"
+        ],
+        [
+          "\\leq",
+          "<="
+        ],
+        [
+          "<=",
+          "<="
+        ],
+        [
+          "=<",
+          "<="
+        ],
+        [
+          "≤",
+          "<="
+        ],
+        [
+          "\\geq",
+          ">="
+        ],
+        [
+          ">=",
+          ">="
+        ],
+        [
+          "≥",
+          ">="
+        ],
+        [
+          "\\times",
+          "\\X"
         ],
         [
           "\\X",
           "\\X"
         ],
         [
-          "\\times",
+          "×",
           "\\X"
+        ],
+        [
+          "\\intersect",
+          "\\cap"
+        ],
+        [
+          "\\cap",
+          "\\cap"
+        ],
+        [
+          "∩",
+          "\\cap"
+        ],
+        [
+          "\\union",
+          "\\cup"
+        ],
+        [
+          "\\cup",
+          "\\cup"
+        ],
+        [
+          "∪",
+          "\\cup"
         ],
         [
           "\\o",
@@ -884,84 +1038,568 @@
           "\\o"
         ],
         [
-          "\\div",
-          "\\div"
+          "∘",
+          "\\o"
         ],
         [
-          "\\land",
-          "/\\"
+          "\\oplus",
+          "\\oplus"
         ],
         [
-          "\\lor",
-          "\\/"
+          "(+)",
+          "\\oplus"
         ],
         [
-          "\\lnot",
-          "~"
+          "⊕",
+          "\\oplus"
         ],
         [
-          "\\neg",
-          "~"
+          "\\ominus",
+          "\\ominus"
         ],
         [
-          "\\equiv",
-          "<=>"
+          "(-)",
+          "\\ominus"
         ],
         [
-          "\\leq",
-          "<="
+          "⊖",
+          "\\ominus"
         ],
         [
-          "\\geq",
-          ">="
+          "\\odot",
+          "\\odot"
         ],
         [
-          "\\A",
-          "\\A"
+          "(.)",
+          "\\odot"
         ],
         [
-          "\\forall",
-          "\\A"
+          "⊙",
+          "\\odot"
         ],
         [
-          "\\E",
-          "\\E"
+          "\\oslash",
+          "\\oslash"
         ],
         [
-          "\\exists",
-          "\\E"
+          "(/)",
+          "\\oslash"
         ],
         [
-          "\\AA",
-          "\\AA"
+          "⊘",
+          "\\oslash"
         ],
         [
-          "\\EE",
-          "\\EE"
+          "\\otimes",
+          "\\otimes"
+        ],
+        [
+          "(\\X)",
+          "\\otimes"
+        ],
+        [
+          "⊗",
+          "\\otimes"
+        ],
+        [
+          "\\approx",
+          "\\approx"
+        ],
+        [
+          "≈",
+          "\\approx"
+        ],
+        [
+          ":=",
+          ":="
+        ],
+        [
+          "≔",
+          ":="
+        ],
+        [
+          "\\asymp",
+          "\\asymp"
+        ],
+        [
+          "≍",
+          "\\asymp"
+        ],
+        [
+          "\\bigcirc",
+          "\\bigcirc"
+        ],
+        [
+          "◯",
+          "\\bigcirc"
+        ],
+        [
+          "::=",
+          "::="
+        ],
+        [
+          "⩴",
+          "::="
+        ],
+        [
+          "\\bullet",
+          "\\bullet"
+        ],
+        [
+          "●",
+          "\\bullet"
         ],
         [
           "\\cdot",
           "\\cdot"
         ],
         [
+          "⋅",
+          "\\cdot"
+        ],
+        [
+          "\\cong",
+          "\\cong"
+        ],
+        [
+          "≅",
+          "\\cong"
+        ],
+        [
+          "\\div",
+          "\\div"
+        ],
+        [
+          "÷",
+          "\\div"
+        ],
+        [
+          "\\doteq",
+          "\\doteq"
+        ],
+        [
+          "≐",
+          "\\doteq"
+        ],
+        [
+          "..",
+          ".."
+        ],
+        [
+          "‥",
+          ".."
+        ],
+        [
+          "...",
+          "..."
+        ],
+        [
+          "…",
+          "..."
+        ],
+        [
+          "!!",
+          "!!"
+        ],
+        [
+          "‼",
+          "!!"
+        ],
+        [
+          "\\gg",
+          "\\gg"
+        ],
+        [
+          "≫",
+          "\\gg"
+        ],
+        [
+          "=>",
+          "=>"
+        ],
+        [
+          "⇒",
+          "=>"
+        ],
+        [
+          "\\in",
+          "\\in"
+        ],
+        [
           "∈",
           "\\in"
+        ],
+        [
+          "=|",
+          "=|"
+        ],
+        [
+          "⫤",
+          "=|"
+        ],
+        [
+          "~>",
+          "~>"
+        ],
+        [
+          "↝",
+          "~>"
+        ],
+        [
+          "\\ll",
+          "\\ll"
+        ],
+        [
+          "≪",
+          "\\ll"
+        ],
+        [
+          "-|",
+          "-|"
+        ],
+        [
+          "⊣",
+          "-|"
+        ],
+        [
+          "\\notin",
+          "\\notin"
         ],
         [
           "∉",
           "\\notin"
         ],
         [
+          "-+->",
+          "-+->"
+        ],
+        [
+          "⇸",
+          "-+->"
+        ],
+        [
+          "\\prec",
+          "\\prec"
+        ],
+        [
+          "≺",
+          "\\prec"
+        ],
+        [
+          "\\preceq",
+          "\\preceq"
+        ],
+        [
+          "⪯",
+          "\\preceq"
+        ],
+        [
+          "\\propto",
+          "\\propto"
+        ],
+        [
+          "∝",
+          "\\propto"
+        ],
+        [
+          "??",
+          "??"
+        ],
+        [
+          "⁇",
+          "??"
+        ],
+        [
+          "|=",
+          "|="
+        ],
+        [
+          "⊨",
+          "|="
+        ],
+        [
+          "|-",
+          "|-"
+        ],
+        [
+          "⊢",
+          "|-"
+        ],
+        [
+          "\\sim",
+          "\\sim"
+        ],
+        [
+          "∼",
+          "\\sim"
+        ],
+        [
+          "\\simeq",
+          "\\simeq"
+        ],
+        [
+          "≃",
+          "\\simeq"
+        ],
+        [
+          "\\sqcap",
+          "\\sqcap"
+        ],
+        [
+          "⊓",
+          "\\sqcap"
+        ],
+        [
+          "\\sqcup",
+          "\\sqcup"
+        ],
+        [
+          "⊔",
+          "\\sqcup"
+        ],
+        [
+          "\\sqsubset",
+          "\\sqsubset"
+        ],
+        [
+          "⊏",
+          "\\sqsubset"
+        ],
+        [
+          "\\sqsubseteq",
+          "\\sqsubseteq"
+        ],
+        [
+          "⊑",
+          "\\sqsubseteq"
+        ],
+        [
+          "\\sqsupset",
+          "\\sqsupset"
+        ],
+        [
+          "⊐",
+          "\\sqsupset"
+        ],
+        [
+          "\\sqsupseteq",
+          "\\sqsupseteq"
+        ],
+        [
+          "⊒",
+          "\\sqsupseteq"
+        ],
+        [
+          "\\star",
+          "\\star"
+        ],
+        [
+          "⋆",
+          "\\star"
+        ],
+        [
+          "\\subset",
+          "\\subset"
+        ],
+        [
+          "⊂",
+          "\\subset"
+        ],
+        [
+          "\\subseteq",
+          "\\subseteq"
+        ],
+        [
           "⊆",
           "\\subseteq"
         ],
         [
-          "∪",
-          "\\cup"
+          "\\succ",
+          "\\succ"
         ],
         [
-          "∩",
-          "\\cap"
+          "≻",
+          "\\succ"
+        ],
+        [
+          "\\succeq",
+          "\\succeq"
+        ],
+        [
+          "⪰",
+          "\\succeq"
+        ],
+        [
+          "\\supset",
+          "\\supset"
+        ],
+        [
+          "⊃",
+          "\\supset"
+        ],
+        [
+          "\\supseteq",
+          "\\supseteq"
+        ],
+        [
+          "⊇",
+          "\\supseteq"
+        ],
+        [
+          "\\uplus",
+          "\\uplus"
+        ],
+        [
+          "⊎",
+          "\\uplus"
+        ],
+        [
+          "||",
+          "||"
+        ],
+        [
+          "‖",
+          "||"
+        ],
+        [
+          "\\wr",
+          "\\wr"
+        ],
+        [
+          "≀",
+          "\\wr"
+        ],
+        [
+          "^+",
+          "^+"
+        ],
+        [
+          "⁺",
+          "^+"
+        ],
+        [
+          "'",
+          "'"
+        ],
+        [
+          "^",
+          "^"
+        ],
+        [
+          "/",
+          "/"
+        ],
+        [
+          "*",
+          "*"
+        ],
+        [
+          "-",
+          "-"
+        ],
+        [
+          "-.",
+          "-."
+        ],
+        [
+          "+",
+          "+"
+        ],
+        [
+          "=",
+          "="
+        ],
+        [
+          "^*",
+          "^*"
+        ],
+        [
+          "^#",
+          "^#"
+        ],
+        [
+          "<",
+          "<"
+        ],
+        [
+          ">",
+          ">"
+        ],
+        [
+          "\\",
+          "\\"
+        ],
+        [
+          "|",
+          "|"
+        ],
+        [
+          "&&",
+          "&&"
+        ],
+        [
+          "&",
+          "&"
+        ],
+        [
+          "$$",
+          "$$"
+        ],
+        [
+          "$",
+          "$"
+        ],
+        [
+          "%%",
+          "%%"
+        ],
+        [
+          "%",
+          "%"
+        ],
+        [
+          "##",
+          "##"
+        ],
+        [
+          "++",
+          "++"
+        ],
+        [
+          "--",
+          "--"
+        ],
+        [
+          "**",
+          "**"
+        ],
+        [
+          "//",
+          "//"
+        ],
+        [
+          "^^",
+          "^^"
+        ],
+        [
+          "@@",
+          "@@"
+        ],
+        [
+          "<:",
+          "<:"
+        ],
+        [
+          ":>",
+          ":>"
+        ],
+        [
+          "\\forall",
+          "\\A"
+        ],
+        [
+          "\\exists",
+          "\\E"
         ],
         [
           "∀",
@@ -972,60 +1610,64 @@
           "\\E"
         ],
         [
-          "∧",
-          "/\\"
-        ],
-        [
-          "∨",
-          "\\/"
-        ],
-        [
-          "¬",
-          "~"
-        ],
-        [
-          "≤",
-          "<="
-        ],
-        [
-          "≥",
-          ">="
-        ],
-        [
-          "≠",
-          "#"
-        ],
-        [
-          "⇒",
-          "=>"
-        ],
-        [
-          "⇔",
-          "<=>"
-        ],
-        [
-          "□",
-          "[]"
-        ],
-        [
-          "◇",
-          "<>"
-        ],
-        [
-          "×",
-          "\\X"
-        ],
-        [
           "⟨",
           "<<"
+        ],
+        [
+          "⟩_",
+          ">>_"
         ],
         [
           "⟩",
           ">>"
         ],
         [
-          "#",
-          "#"
+          "∷",
+          "::"
+        ],
+        [
+          "≜",
+          "=="
+        ],
+        [
+          "→",
+          "->"
+        ],
+        [
+          "←",
+          "<-"
+        ],
+        [
+          "↦",
+          "|->"
+        ],
+        [
+          "ℕ",
+          "Nat"
+        ],
+        [
+          "ℤ",
+          "Int"
+        ],
+        [
+          "ℝ",
+          "Real"
+        ],
+        [
+          "\\A",
+          "\\A"
+        ],
+        [
+          "\\E",
+          "\\E"
+        ],
+        [
+          "\\AA",
+          "\\AA"
+        ],
+        [
+          "\\EE",
+          "\\EE"
         ],
         [
           "/=",
@@ -1160,6 +1802,7 @@
         "And",
         "AngleAction",
         "Apply",
+        "AssumeProve",
         "BoxAction",
         "Bracket",
         "Case",
@@ -1177,14 +1820,18 @@
         "FunctionSet",
         "Identifier",
         "If",
+        "Integer",
         "Label",
+        "Lambda",
         "Let",
+        "LetModule",
         "Number",
         "Or",
         "Prime",
         "Product",
         "Record",
         "RecordSet",
+        "Selection",
         "SetEnumeration",
         "SetFilter",
         "SetMap",
@@ -2571,7 +3218,8 @@
       "rustDeclarations": {
         "Location": "pub start: usize, pub end: usize, pub line: usize, pub column: usize,",
         "Expression": "#[serde(flatten)] pub node: ExpressionKind, pub location: Location,",
-        "ExpressionKind": "Number { value: u64, }, Decimal { text: String, }, String { value: String, }, Identifier { name: String, }, Apply { operator: String, args: Vec<Expression>, }, And { operands: Vec<Expression>, #[serde( rename = \"isBulleted\", default, skip_serializing_if = \"std::ops::Not::not\" )] is_bulleted: bool, }, Or { operands: Vec<Expression>, #[serde( rename = \"isBulleted\", default, skip_serializing_if = \"std::ops::Not::not\" )] is_bulleted: bool, }, Prime { expression: Box<Expression>, }, Unchanged { expression: Box<Expression>, }, Enabled { expression: Box<Expression>, }, Always { expression: Box<Expression>, }, Eventually { expression: Box<Expression>, }, If { condition: Box<Expression>, consequent: Box<Expression>, alternative: Box<Expression>, }, Case { arms: Vec<CaseArm>, #[serde(skip_serializing_if = \"Option::is_none\")] other: Option<Box<Expression>>, }, Let { definitions: Vec<Definition>, body: Box<Expression>, }, Forall { bounds: Vec<Bound>, body: Box<Expression>, }, Exists { bounds: Vec<Bound>, body: Box<Expression>, }, UnboundedQuantifier { quantifier: String, names: Vec<String>, #[serde(rename = \"isTemporal\")] is_temporal: bool, body: Box<Expression>, }, Choose { pattern: Pattern, #[serde(skip_serializing_if = \"Option::is_none\")] set: Option<Box<Expression>>, body: Box<Expression>, }, SetEnumeration { elements: Vec<Expression>, }, SetFilter { bound: Box<Bound>, predicate: Box<Expression>, }, SetMap { expression: Box<Expression>, bounds: Vec<Bound>, }, Tuple { elements: Vec<Expression>, }, FunctionConstruction { bounds: Vec<Bound>, body: Box<Expression>, }, FunctionSet { domain: Box<Expression>, range: Box<Expression>, }, Record { fields: Vec<RecordField>, }, RecordSet { fields: Vec<RecordField>, }, Except { function: Box<Expression>, updates: Vec<ExceptUpdate>, }, ExceptAt, FunctionApplication { function: Box<Expression>, args: Vec<Expression>, }, Bracket { args: Vec<Expression>, }, FieldAccess { record: Box<Expression>, field: String, }, Product { factors: Vec<Expression>, }, BoxAction { action: Box<Expression>, subscript: Box<Expression>, }, AngleAction { action: Box<Expression>, subscript: Box<Expression>, }, WeakFairness { subscript: Box<Expression>, action: Box<Expression>, }, StrongFairness { subscript: Box<Expression>, action: Box<Expression>, }, Label { name: String, params: Vec<String>, body: Box<Expression>, },",
+        "ExpressionKind": "Number { value: u64, }, Integer { text: String, }, Decimal { text: String, }, String { value: String, }, Identifier { name: String, }, Apply { operator: String, args: Vec<Expression>, }, Lambda { params: Vec<Declaration>, body: Box<Expression>, }, Selection { expression: Box<Expression>, selectors: Vec<Selector>, }, AssumeProve { assumptions: Vec<ProofAssumption>, prove: Box<Expression>, #[serde(rename = \"isBoxedAssume\")] is_boxed_assume: bool, #[serde(rename = \"isBoxedProve\")] is_boxed_prove: bool, }, And { operands: Vec<Expression>, #[serde( rename = \"isBulleted\", default, skip_serializing_if = \"std::ops::Not::not\" )] is_bulleted: bool, }, Or { operands: Vec<Expression>, #[serde( rename = \"isBulleted\", default, skip_serializing_if = \"std::ops::Not::not\" )] is_bulleted: bool, }, Prime { expression: Box<Expression>, }, Unchanged { expression: Box<Expression>, }, Enabled { expression: Box<Expression>, }, Always { expression: Box<Expression>, }, Eventually { expression: Box<Expression>, }, If { condition: Box<Expression>, consequent: Box<Expression>, alternative: Box<Expression>, }, Case { arms: Vec<CaseArm>, #[serde(skip_serializing_if = \"Option::is_none\")] other: Option<Box<Expression>>, }, Let { definitions: Vec<Definition>, body: Box<Expression>, }, LetModule { definitions: Vec<Definition>, instances: Vec<Instance>, recursive: Vec<Declaration>, body: Box<Expression>, }, Forall { bounds: Vec<Bound>, body: Box<Expression>, }, Exists { bounds: Vec<Bound>, body: Box<Expression>, }, UnboundedQuantifier { quantifier: String, names: Vec<String>, #[serde(rename = \"isTemporal\")] is_temporal: bool, body: Box<Expression>, }, Choose { pattern: Pattern, #[serde(skip_serializing_if = \"Option::is_none\")] set: Option<Box<Expression>>, body: Box<Expression>, }, SetEnumeration { elements: Vec<Expression>, }, SetFilter { bound: Box<Bound>, predicate: Box<Expression>, }, SetMap { expression: Box<Expression>, bounds: Vec<Bound>, }, Tuple { elements: Vec<Expression>, }, FunctionConstruction { bounds: Vec<Bound>, body: Box<Expression>, }, FunctionSet { domain: Box<Expression>, range: Box<Expression>, }, Record { fields: Vec<RecordField>, }, RecordSet { fields: Vec<RecordField>, }, Except { function: Box<Expression>, updates: Vec<ExceptUpdate>, }, ExceptAt, FunctionApplication { function: Box<Expression>, args: Vec<Expression>, }, Bracket { args: Vec<Expression>, }, FieldAccess { record: Box<Expression>, field: String, }, Product { factors: Vec<Expression>, }, BoxAction { action: Box<Expression>, subscript: Box<Expression>, }, AngleAction { action: Box<Expression>, subscript: Box<Expression>, }, WeakFairness { subscript: Box<Expression>, action: Box<Expression>, }, StrongFairness { subscript: Box<Expression>, action: Box<Expression>, }, Label { name: String, params: Vec<String>, body: Box<Expression>, },",
+        "Selector": "Name { name: String, args: Vec<Expression> }, Index { index: u64 }, Left, Right, Arguments { args: Vec<Expression> }, Body, Bound,",
         "Bound": "pub pattern: Pattern, pub set: Expression,",
         "Pattern": "Name { name: String }, Tuple { names: Vec<String> },",
         "CaseArm": "pub condition: Expression, pub body: Expression,",
@@ -2582,10 +3230,19 @@
         "Definition": "pub name: String, #[serde(flatten)] pub head: DefinitionKind, pub body: Expression, #[serde(rename = \"isLocal\")] pub is_local: bool, #[serde(rename = \"isRecursive\")] pub is_recursive: bool, pub location: Location,",
         "DefinitionKind": "Operator { params: Vec<Declaration> }, Function { bounds: Vec<Bound> },",
         "Assumption": "#[serde(skip_serializing_if = \"Option::is_none\")] pub name: Option<String>, pub expression: Expression, #[serde(rename = \"isAxiom\")] pub is_axiom: bool, pub location: Location,",
-        "Theorem": "#[serde(skip_serializing_if = \"Option::is_none\")] pub name: Option<String>, pub statement: Expression, pub location: Location,",
-        "Module": "pub name: String, pub extends: Vec<String>, pub constants: Vec<Declaration>, pub variables: Vec<Declaration>, pub definitions: Vec<Definition>, #[serde(default, skip_serializing_if = \"Vec::is_empty\")] pub instances: Vec<Instance>, pub assumptions: Vec<Assumption>, pub theorems: Vec<Theorem>, pub location: Location,",
-        "Instance": "#[serde(skip_serializing_if = \"Option::is_none\")] pub name: Option<String>, pub module: String, pub substitutions: Vec<InstanceSubstitution>, #[serde(rename = \"isLocal\")] pub is_local: bool, pub location: Location,",
+        "Theorem": "#[serde(skip_serializing_if = \"Option::is_none\")] pub name: Option<String>, pub statement: Expression, #[serde(default, skip_serializing_if = \"Option::is_none\")] pub proof: Option<Proof>, pub location: Location,",
+        "Module": "pub name: String, pub extends: Vec<String>, pub constants: Vec<Declaration>, pub variables: Vec<Declaration>, pub definitions: Vec<Definition>, #[serde(default, skip_serializing_if = \"Vec::is_empty\")] pub instances: Vec<Instance>, #[serde(default, skip_serializing_if = \"Vec::is_empty\")] pub recursive: Vec<Declaration>, #[serde(default, skip_serializing_if = \"Vec::is_empty\")] pub modules: Vec<Module>, #[serde(default, skip_serializing_if = \"Vec::is_empty\")] pub directives: Vec<ProofDirective>, pub assumptions: Vec<Assumption>, pub theorems: Vec<Theorem>, pub location: Location,",
+        "Instance": "#[serde(skip_serializing_if = \"Option::is_none\")] pub name: Option<String>, #[serde(default, skip_serializing_if = \"Vec::is_empty\")] pub params: Vec<Declaration>, pub module: String, pub substitutions: Vec<InstanceSubstitution>, #[serde(rename = \"isLocal\")] pub is_local: bool, pub location: Location,",
         "InstanceSubstitution": "pub name: String, pub expression: Expression,",
+        "ProofAssumption": "Expression { expression: Expression, }, New { declaration: Declaration, level: DeclarationLevel, #[serde(rename = \"isNew\")] is_new: bool, #[serde(skip_serializing_if = \"Option::is_none\")] set: Option<Box<Expression>>, },",
+        "DeclarationLevel": "Constant, Variable, State, Action, Temporal,",
+        "ProofReference": "Module { name: String }, Expression { expression: Expression },",
+        "UseBody": "pub only: bool, pub facts: Vec<ProofReference>, pub definitions: Vec<ProofReference>,",
+        "ProofDirective": "#[serde(rename = \"isHide\")] pub is_hide: bool, pub usage: UseBody, pub location: Location,",
+        "Proof": "By { #[serde(flatten)] usage: UseBody, location: Location, }, Obvious { location: Location, }, Omitted { location: Location, }, Steps { steps: Vec<ProofStep>, location: Location, },",
+        "ProofStep": "pub number: String, pub level: usize, pub body: ProofStepKind, #[serde(skip_serializing_if = \"Option::is_none\")] pub proof: Option<Box<Proof>>, pub location: Location,",
+        "ProofStepKind": "Define { definitions: Vec<Definition>, instances: Vec<Instance>, }, Use { usage: UseBody, }, Hide { usage: UseBody, }, Instance { instance: Instance, }, Have { expression: Expression, }, Take { bindings: ProofBindings, }, Witness { expressions: Vec<Expression>, }, Pick { bindings: ProofBindings, expression: Expression, }, Case { expression: Expression, }, Assert { statement: Expression, suffices: bool, }, Qed,",
+        "ProofBindings": "Bounded { bounds: Vec<Bound> }, Unbounded { names: Vec<String> },",
         "ConfigValue": "Number { value: i64 }, String { value: String }, Boolean { value: bool }, ModelValue { name: String }, Set { elements: Vec<Self> },",
         "ConstantAssignment": "pub name: String, pub value: ConfigValue, #[serde(skip_serializing_if = \"Option::is_none\")] pub args: Option<Vec<ConfigValue>>, #[serde(skip_serializing_if = \"Option::is_none\")] pub module: Option<String>,",
         "Substitution": "pub name: String, pub target: String, #[serde(skip_serializing_if = \"Option::is_none\")] pub module: Option<String>,",
@@ -3645,8 +4302,28 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "!!",
+        "canonical": "!!"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "#",
         "canonical": "#"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "##",
+        "canonical": "##"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "$",
+        "canonical": "$"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "$$",
+        "canonical": "$$"
       },
       {
         "frontend": "Rust",
@@ -3672,6 +4349,31 @@
         "frontend": "Rust",
         "spelling": "'",
         "canonical": "'"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "(+)",
+        "canonical": "\\oplus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "(-)",
+        "canonical": "\\ominus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "(.)",
+        "canonical": "\\odot"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "(/)",
+        "canonical": "\\oslash"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "(\\X)",
+        "canonical": "\\otimes"
       },
       {
         "frontend": "Rust",
@@ -3710,6 +4412,16 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "-.",
+        "canonical": "-."
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "-|",
+        "canonical": "-|"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "..",
         "canonical": ".."
       },
@@ -3737,6 +4449,11 @@
         "frontend": "Rust",
         "spelling": "/\\",
         "canonical": "/\\"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "::=",
+        "canonical": "::="
       },
       {
         "frontend": "Rust",
@@ -3790,6 +4507,11 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "=|",
+        "canonical": "=|"
+      },
+      {
+        "frontend": "Rust",
         "spelling": ">",
         "canonical": ">"
       },
@@ -3797,6 +4519,11 @@
         "frontend": "Rust",
         "spelling": ">=",
         "canonical": ">="
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "??",
+        "canonical": "??"
       },
       {
         "frontend": "Rust",
@@ -3930,6 +4657,26 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "\\approx",
+        "canonical": "\\approx"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\asymp",
+        "canonical": "\\asymp"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\bigcirc",
+        "canonical": "\\bigcirc"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\bullet",
+        "canonical": "\\bullet"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "\\cap",
         "canonical": "\\cap"
       },
@@ -3945,6 +4692,11 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "\\cong",
+        "canonical": "\\cong"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "\\cup",
         "canonical": "\\cup"
       },
@@ -3952,6 +4704,11 @@
         "frontend": "Rust",
         "spelling": "\\div",
         "canonical": "\\div"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\doteq",
+        "canonical": "\\doteq"
       },
       {
         "frontend": "Rust",
@@ -3975,6 +4732,11 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "\\gg",
+        "canonical": "\\gg"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "\\in",
         "canonical": "\\in"
       },
@@ -3992,6 +4754,11 @@
         "frontend": "Rust",
         "spelling": "\\leq",
         "canonical": "<="
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\ll",
+        "canonical": "\\ll"
       },
       {
         "frontend": "Rust",
@@ -4020,8 +4787,118 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "\\odot",
+        "canonical": "\\odot"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\ominus",
+        "canonical": "\\ominus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\oplus",
+        "canonical": "\\oplus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\oslash",
+        "canonical": "\\oslash"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\otimes",
+        "canonical": "\\otimes"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\prec",
+        "canonical": "\\prec"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\preceq",
+        "canonical": "\\preceq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\propto",
+        "canonical": "\\propto"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sim",
+        "canonical": "\\sim"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\simeq",
+        "canonical": "\\simeq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sqcap",
+        "canonical": "\\sqcap"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sqcup",
+        "canonical": "\\sqcup"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sqsubset",
+        "canonical": "\\sqsubset"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sqsubseteq",
+        "canonical": "\\sqsubseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sqsupset",
+        "canonical": "\\sqsupset"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\sqsupseteq",
+        "canonical": "\\sqsupseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\star",
+        "canonical": "\\star"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\subset",
+        "canonical": "\\subset"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "\\subseteq",
         "canonical": "\\subseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\succ",
+        "canonical": "\\succ"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\succeq",
+        "canonical": "\\succeq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\supset",
+        "canonical": "\\supset"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\supseteq",
+        "canonical": "\\supseteq"
       },
       {
         "frontend": "Rust",
@@ -4032,6 +4909,16 @@
         "frontend": "Rust",
         "spelling": "\\union",
         "canonical": "\\cup"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\uplus",
+        "canonical": "\\uplus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "\\wr",
+        "canonical": "\\wr"
       },
       {
         "frontend": "Rust",
@@ -4065,6 +4952,16 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "|-",
+        "canonical": "|-"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "|=",
+        "canonical": "|="
+      },
+      {
+        "frontend": "Rust",
         "spelling": "||",
         "canonical": "||"
       },
@@ -4090,6 +4987,76 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "÷",
+        "canonical": "\\div"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "‖",
+        "canonical": "||"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "‥",
+        "canonical": ".."
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "…",
+        "canonical": "..."
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "‼",
+        "canonical": "!!"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⁇",
+        "canonical": "??"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⁺",
+        "canonical": "^+"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "ℕ",
+        "canonical": "Nat"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "ℝ",
+        "canonical": "Real"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "ℤ",
+        "canonical": "Int"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "←",
+        "canonical": "<-"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "→",
+        "canonical": "->"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "↝",
+        "canonical": "~>"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "↦",
+        "canonical": "|->"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "⇒",
         "canonical": "=>"
       },
@@ -4097,6 +5064,11 @@
         "frontend": "Rust",
         "spelling": "⇔",
         "canonical": "<=>"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⇸",
+        "canonical": "-+->"
       },
       {
         "frontend": "Rust",
@@ -4120,6 +5092,16 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "∘",
+        "canonical": "\\o"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "∝",
+        "canonical": "\\propto"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "∧",
         "canonical": "/\\"
       },
@@ -4140,8 +5122,63 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "∷",
+        "canonical": "::"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "∼",
+        "canonical": "\\sim"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≀",
+        "canonical": "\\wr"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≃",
+        "canonical": "\\simeq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≅",
+        "canonical": "\\cong"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≈",
+        "canonical": "\\approx"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≍",
+        "canonical": "\\asymp"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≐",
+        "canonical": "\\doteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≔",
+        "canonical": ":="
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≜",
+        "canonical": "=="
+      },
+      {
+        "frontend": "Rust",
         "spelling": "≠",
         "canonical": "#"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≡",
+        "canonical": "<=>"
       },
       {
         "frontend": "Rust",
@@ -4155,8 +5192,128 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "≪",
+        "canonical": "\\ll"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≫",
+        "canonical": "\\gg"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≺",
+        "canonical": "\\prec"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "≻",
+        "canonical": "\\succ"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊂",
+        "canonical": "\\subset"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊃",
+        "canonical": "\\supset"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "⊆",
         "canonical": "\\subseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊇",
+        "canonical": "\\supseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊎",
+        "canonical": "\\uplus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊏",
+        "canonical": "\\sqsubset"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊐",
+        "canonical": "\\sqsupset"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊑",
+        "canonical": "\\sqsubseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊒",
+        "canonical": "\\sqsupseteq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊓",
+        "canonical": "\\sqcap"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊔",
+        "canonical": "\\sqcup"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊕",
+        "canonical": "\\oplus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊖",
+        "canonical": "\\ominus"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊗",
+        "canonical": "\\otimes"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊘",
+        "canonical": "\\oslash"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊙",
+        "canonical": "\\odot"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊢",
+        "canonical": "|-"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊣",
+        "canonical": "-|"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⊨",
+        "canonical": "|="
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⋅",
+        "canonical": "\\cdot"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⋆",
+        "canonical": "\\star"
       },
       {
         "frontend": "Rust",
@@ -4170,6 +5327,16 @@
       },
       {
         "frontend": "Rust",
+        "spelling": "●",
+        "canonical": "\\bullet"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "◯",
+        "canonical": "\\bigcirc"
+      },
+      {
+        "frontend": "Rust",
         "spelling": "⟨",
         "canonical": "<<"
       },
@@ -4177,6 +5344,31 @@
         "frontend": "Rust",
         "spelling": "⟩",
         "canonical": ">>"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⟩_",
+        "canonical": ">>_"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⩴",
+        "canonical": "::="
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⪯",
+        "canonical": "\\preceq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⪰",
+        "canonical": "\\succeq"
+      },
+      {
+        "frontend": "Rust",
+        "spelling": "⫤",
+        "canonical": "=|"
       }
     ],
     "lowerEvidence": {
@@ -4193,6 +5385,7 @@
         "./portable-value.js",
         "./tla-safety-analysis.js",
         "/=",
+        "1.7.4",
         ":=",
         "<",
         "<=",
@@ -4220,6 +5413,7 @@
         "Choose",
         "DOMAIN",
         "ENABLED",
+        "EXCEPT @ arguments across a nested EXCEPT require safety IR v2",
         "Enabled",
         "Eventually",
         "Except",
@@ -4230,6 +5424,7 @@
         "FieldAccess",
         "FiniteSets",
         "Forall",
+        "Function",
         "FunctionApplication",
         "FunctionConstruction",
         "FunctionSet",
@@ -4241,7 +5436,6 @@
         "Int",
         "Integers",
         "LET INSTANCE",
-        "LET definitions with free EXCEPT @",
         "Label",
         "Len",
         "Let",
@@ -4276,6 +5470,7 @@
         "UNION",
         "Unchanged",
         "Unsupported safety IR version",
+        "Use the Rust frontend for syntaxVersion 1.8.0",
         "WeakFairness",
         "[] action must have the form [A]_v",
         "\\",
@@ -4378,6 +5573,7 @@
         "ir-step",
         "ir-temporal",
         "kind",
+        "labels inside EXCEPT replacements are not supported by TLC",
         "le",
         "len",
         "literal",
@@ -4428,6 +5624,7 @@
         "set-members",
         "slot",
         "source",
+        "source-definition",
         "start",
         "state",
         "state variables",
@@ -4448,10 +5645,12 @@
         "use SPECIFICATION or INIT / NEXT",
         "value",
         "variable in constant expression",
+        "zero-arity LET @ across a nested EXCEPT requires the Rust frontend",
         "~",
         "~>"
       ],
       "Rust": [
+        "",
         "#",
         "%",
         "*",
@@ -4480,6 +5679,7 @@
         "Cardinality requires FiniteSets",
         "DOMAIN",
         "ENABLED",
+        "EXCEPT @ arguments across a nested EXCEPT require safety IR v2",
         "EXTENDS",
         "FALSE",
         "FiniteSets",
@@ -4488,7 +5688,6 @@
         "Init",
         "Int",
         "Integers",
-        "LET definitions with free EXCEPT @",
         "Len",
         "NEXT cannot be constant",
         "NEXT required",
@@ -4686,9 +5885,9 @@
         "record",
         "record-set",
         "recursive operator definitions",
+        "recursive operator definitions require RECURSIVE declarations",
         "right",
         "safety IR v2 does not support SYMMETRY",
-        "safety IR v2 does not support module linking or configuration operator substitution",
         "safety IR version must be 1 or 2",
         "select-seq",
         "sequence",
@@ -4784,6 +5983,7 @@
         "atom_expression",
         "bind",
         "bind_ir",
+        "binding_at",
         "binding_id",
         "boolean",
         "boxed_action",
@@ -4843,6 +6043,7 @@
         "membership_set",
         "membership_test_ir",
         "merge",
+        "named_binding_at",
         "negate",
         "nested",
         "not",
@@ -4855,6 +6056,7 @@
         "program",
         "program_ir",
         "read_slots",
+        "rebinds_old",
         "remap_calls",
         "remap_captures",
         "requirement_bind",
@@ -8165,6 +9367,566 @@
       "id": "lexical/Rust/-.",
       "classification": "annotation",
       "context": "lexer token for negative operator declaration/reference; prefix expression - keeps its existing -. AST name"
+    },
+    {
+      "id": "spelling/Rust/!!",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/##",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/$",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/$$",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/(+)",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/(-)",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/(.)",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/(/)",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/(\\X)",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/-.",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/-|",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/::=",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/=|",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/??",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\approx",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\asymp",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\bigcirc",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\bullet",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\cong",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\doteq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\gg",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\ll",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\odot",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\ominus",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\oplus",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\oslash",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\otimes",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\prec",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\preceq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\propto",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sim",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\simeq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sqcap",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sqcup",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sqsubset",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sqsubseteq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sqsupset",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\sqsupseteq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\star",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\subset",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\succ",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\succeq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\supset",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\supseteq",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\uplus",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/\\wr",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/|-",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/|=",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/÷",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/‖",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/‥",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/…",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/‼",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⁇",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⁺",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/ℕ",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/ℝ",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/ℤ",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/←",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/→",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/↝",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/↦",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⇸",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/∘",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/∝",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/∷",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/∼",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≀",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≃",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≅",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≈",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≍",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≐",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≔",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≜",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≡",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≪",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≫",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≺",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/≻",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊂",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊃",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊇",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊎",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊏",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊐",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊑",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊒",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊓",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊔",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊕",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊖",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊗",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊘",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊙",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊢",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊣",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⊨",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⋅",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⋆",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/●",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/◯",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⟩_",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⩴",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⪯",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⪰",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "spelling/Rust/⫤",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "constructor/Rust/AssumeProve",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "constructor/Rust/Integer",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "constructor/Rust/Lambda",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "constructor/Rust/LetModule",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
+    },
+    {
+      "id": "constructor/Rust/Selection",
+      "classification": "named nonshared",
+      "context": "0070 Rust grammar/elaboration extension; independent SANY AST controls and frontend-completion models. Excluded from the unchanged legacy TS shared-position corpus."
     }
   ],
   "reviewedSpellings": [

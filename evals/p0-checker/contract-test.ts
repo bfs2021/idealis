@@ -128,7 +128,7 @@ test("v2 lexical frames make POR fall back to the complete graph", () => {
   );
 });
 
-test("v2 IR retains callback and Assert support separately from source lowering", async () => {
+test("v2 IR and source lowering execute callbacks and Assert", async () => {
   const input = {
     source: `---- MODULE CallbackIR ----
 EXTENDS Naturals, Integers, Sequences, TLC
@@ -157,8 +157,15 @@ Safe == SelectSeq(<<-1,1,0,2>>, Positive) = <<1,2>> /\\ SortSeq(<<2,1>>, Before)
   });
   assert.ok(isRecord(response) && response.kind === "safety");
   assert.deepEqual(decodeSafetyResult(response.result), result);
-  assert.throws(
-    () => compileTlaSource(core, { ...input, irVersion: 2 }),
-    /Unsupported TLA input: operator SelectSeq/,
-  );
+  const sourceProgram = compileTlaSource(core, { ...input, irVersion: 2 });
+  assert.equal(sourceProgram.version, 2);
+  const sourceResult = checkSafety(core, sourceProgram, bounds);
+  assert.equal(sourceResult.status, "complete");
+  assert.equal(sourceResult.states, result.states);
+  assert.equal(sourceResult.generated, result.generated);
+  const sourceResponse = await native.request({
+    version: 1,
+    request: { kind: "check-safety", program: sourceProgram, bounds },
+  });
+  assert.deepEqual(sourceResponse, { kind: "safety", result: sourceResult });
 });

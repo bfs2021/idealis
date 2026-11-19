@@ -99,6 +99,11 @@ const getLevel = (value: unknown): number => {
 };
 
 export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
+  if (options.syntaxVersion !== undefined && options.syntaxVersion !== "1.7.4")
+    throw new PortableCoreError(
+      "protocol",
+      "Use the Rust frontend for syntaxVersion 1.8.0",
+    );
   if (options.irVersion !== undefined && ![1, 2].includes(options.irVersion))
     throw new PortableCoreError("protocol", "Unsupported safety IR version");
   const shared = options.irVersion === 2;
@@ -110,6 +115,27 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       `Unsupported TLA input: ${message}`,
     );
   };
+  const labeling: { node: AnalysisNode; old: boolean }[] =
+    module.definitions.map((definition) => ({
+      node: { space: "source-definition", value: definition },
+      old: false,
+    }));
+  while (labeling.length) {
+    const task = labeling.pop();
+    if (!task) break;
+    if (
+      task.old &&
+      task.node.space === "source" &&
+      task.node.value.kind === "Label"
+    )
+      unsupported("labels inside EXCEPT replacements are not supported by TLC");
+    labeling.push(
+      ...analysisChildren(task.node).map((edge) => ({
+        node: edge.node,
+        old: task.old || edge.scope === "old",
+      })),
+    );
+  }
   const sourceChild = (value: Expression, role: string): Expression =>
     sourceEdges(value).find((edge) => edge.role === role)?.value ??
     unsupported(`source position ${role}`);
@@ -1308,6 +1334,14 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
       context.calls.includes(active(definition, name))
     )
       return unsupported(`operator ${name}`);
+    if (
+      !shared &&
+      args.some(hasFreeOld) &&
+      rebindsOld(bodyOf(definition), entry.scope)
+    )
+      return unsupported(
+        "EXCEPT @ arguments across a nested EXCEPT require safety IR v2",
+      );
     if (shared) {
       const params = definition.kind === "Operator" ? definition.params : [];
       if (
@@ -1502,16 +1536,46 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
     }
     return false;
   };
+  const rebindsOld = (body: Expression, scope: Scope): boolean => {
+    const visited = new Set<Definition>();
+    const pending: { node: AnalysisNode; scope: Scope }[] = [
+      { node: { space: "source", value: body }, scope },
+    ];
+    while (pending.length) {
+      const task = pending.pop();
+      if (!task) break;
+      if (task.node.space === "source") {
+        const value = task.node.value;
+        if (value.kind === "Except") return true;
+        const name =
+          value.kind === "Identifier"
+            ? value.name
+            : value.kind === "Apply"
+              ? value.operator
+              : undefined;
+        const callee = name ? task.scope.entries.get(name) : undefined;
+        if (callee && !visited.has(callee.definition)) {
+          visited.add(callee.definition);
+          pending.push({
+            node: { space: "source", value: bodyOf(callee.definition) },
+            scope: callee.scope,
+          });
+        }
+      }
+      pending.push(
+        ...analysisChildren(task.node).map((edge) => ({
+          node: edge.node,
+          scope: task.scope,
+        })),
+      );
+    }
+    return false;
+  };
   const letContext = (
     value: Extract<Expression, { kind: "Let" }>,
     context: Context,
   ): Context => {
     if (value.instances?.length) return unsupported("LET INSTANCE");
-    if (
-      shared &&
-      value.definitions.some((definition) => hasFreeOld(bodyOf(definition)))
-    )
-      return unsupported("LET definitions with free EXCEPT @");
     const childScope: Scope = { entries: new Map(context.scope.entries) };
     if (
       new Set(value.definitions.map((definition) => definition.name)).size !==
@@ -1528,6 +1592,17 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
         projection: context.projection,
         scope: childScope,
       });
+    if (
+      value.definitions.some(
+        (definition) =>
+          (definition.kind === "Function" || definition.params.length === 0) &&
+          hasFreeOld(bodyOf(definition)),
+      ) &&
+      rebindsOld(value.body, childScope)
+    )
+      return unsupported(
+        "zero-arity LET @ across a nested EXCEPT requires the Rust frontend",
+      );
     return { ...nested(context), scope: childScope };
   };
   const bind = (bounds: readonly Bound[], context: Context) => {
@@ -2332,8 +2407,7 @@ export const compileTlaSafety = (options: TlaSourceOptions): SafetyProgram => {
           (edge) =>
             edge.role === "frame-body" && edge.node.space === "ir-expression",
         );
-        if (!body || body.node.space !== "ir-expression")
-          return unsupported(message);
+        if (body?.node.space !== "ir-expression") return unsupported(message);
         pending.push({ value: body.node.value, frame: next });
       } else if (value.op === "parameter" || value.op === "capture") {
         const caller = frame === undefined ? undefined : frames[frame];

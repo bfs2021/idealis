@@ -400,7 +400,7 @@
     "source": "---- MODULE Differential ----\nEXTENDS Integers, Sequences\nVARIABLE x\nKeep(v) == v > 1\nFilter(op(_)) == SelectSeq(<<1,2>>, op)\nInit == x = Filter(Keep)\nNext == UNCHANGED x\nSafe == x = <<2>>\n====",
     "config": "INIT Init\nNEXT Next\nINVARIANT Safe\nCHECK_DEADLOCK FALSE",
     "modules": {},
-    "expected": "unsupported",
+    "expected": "complete",
     "tlc": "complete"
   },
   {

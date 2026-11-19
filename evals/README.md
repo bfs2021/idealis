@@ -1,5 +1,7 @@
 # 評価しながら改善する
 
+[0070: TLA+ frontendの追加対応](iterations/0070-tla-coverage.md)は二版のSANY構文木、native/Wasm/TLCの実行と反例、再帰の予算切れを比較する。高階・module・proofの構文保持と有限実行の範囲を区別する。
+
 [0064: 準備済みSafetyProgramとbatch](iterations/0064-prepared-safety.md)は同じIRへ予算を変えて問い合わせる費用を比較する。小さいqueryで採用し、探索主体のモデルでの効果の小ささ、cold/RSSと既存kernelの後退確認を残す。
 
 モデル検査・テスト手法の採用判断を記録する場所。仮説、条件、実行、判断、次の仮説を1つの iteration として残す。比較器の `improved` は故障ごとの検出数の増加を表し、費用や外的妥当性を含む採用決定ではない。

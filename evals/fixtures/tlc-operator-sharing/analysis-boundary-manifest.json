@@ -233,7 +233,9 @@
         "message": "Unsupported TLA input: expression Apply !!"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "!!",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -260,8 +262,9 @@
         "message": "Unsupported TLA input: expression Apply ##"
       },
       "rustParser": {
-        "error": "Unexpected token after expression",
-        "errorKind": "syntax"
+        "kind": "Apply",
+        "operator": "##",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -288,7 +291,9 @@
         "message": "Unsupported TLA input: expression Apply $"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "$",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -315,7 +320,9 @@
         "message": "Unsupported TLA input: expression Apply $$"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "$$",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -342,7 +349,9 @@
         "message": "Unsupported TLA input: expression Apply \\oplus"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\oplus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -369,7 +378,9 @@
         "message": "Unsupported TLA input: expression Apply \\ominus"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\ominus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -396,7 +407,9 @@
         "message": "Unsupported TLA input: expression Apply \\odot"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\odot",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -423,7 +436,9 @@
         "message": "Unsupported TLA input: expression Apply \\oslash"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\oslash",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -450,7 +465,9 @@
         "message": "Unsupported TLA input: expression Apply \\otimes"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\otimes",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -477,8 +494,9 @@
         "message": "Unsupported TLA input: expression Apply -|"
       },
       "rustParser": {
-        "error": "Unexpected token after expression",
-        "errorKind": "syntax"
+        "kind": "Apply",
+        "operator": "-|",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -505,7 +523,9 @@
         "message": "Unsupported TLA input: expression Apply ::="
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "::=",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -532,8 +552,9 @@
         "message": "Unsupported TLA input: expression Apply =|"
       },
       "rustParser": {
-        "error": "Unexpected token after expression",
-        "errorKind": "syntax"
+        "kind": "Apply",
+        "operator": "=|",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -560,7 +581,9 @@
         "message": "Unsupported TLA input: expression Apply ??"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "??",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -587,7 +610,9 @@
         "message": "Unsupported TLA input: expression Apply \\approx"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\approx",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -614,7 +639,9 @@
         "message": "Unsupported TLA input: expression Apply \\asymp"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\asymp",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -641,7 +668,9 @@
         "message": "Unsupported TLA input: expression Apply \\bigcirc"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\bigcirc",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -668,7 +697,9 @@
         "message": "Unsupported TLA input: expression Apply \\bullet"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\bullet",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -695,7 +726,9 @@
         "message": "Unsupported TLA input: expression Apply \\cong"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\cong",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -722,7 +755,9 @@
         "message": "Unsupported TLA input: expression Apply \\doteq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\doteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -749,7 +784,9 @@
         "message": "Unsupported TLA input: expression Apply \\gg"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\gg",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -776,7 +813,9 @@
         "message": "Unsupported TLA input: expression Apply \\ll"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\ll",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -803,7 +842,9 @@
         "message": "Unsupported TLA input: expression Apply \\odot"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\odot",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -830,7 +871,9 @@
         "message": "Unsupported TLA input: expression Apply \\ominus"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\ominus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -857,7 +900,9 @@
         "message": "Unsupported TLA input: expression Apply \\oplus"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\oplus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -884,7 +929,9 @@
         "message": "Unsupported TLA input: expression Apply \\oslash"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\oslash",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -911,7 +958,9 @@
         "message": "Unsupported TLA input: expression Apply \\otimes"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\otimes",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -938,7 +987,9 @@
         "message": "Unsupported TLA input: expression Apply \\prec"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\prec",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -965,7 +1016,9 @@
         "message": "Unsupported TLA input: expression Apply \\preceq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\preceq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -992,7 +1045,9 @@
         "message": "Unsupported TLA input: expression Apply \\propto"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\propto",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1019,7 +1074,9 @@
         "message": "Unsupported TLA input: expression Apply \\sim"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sim",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1046,7 +1103,9 @@
         "message": "Unsupported TLA input: expression Apply \\simeq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\simeq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1073,7 +1132,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqcap"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sqcap",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1100,7 +1161,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqcup"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sqcup",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1127,7 +1190,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsubset"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sqsubset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1154,7 +1219,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsubseteq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sqsubseteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1181,7 +1248,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsupset"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sqsupset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1208,7 +1277,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsupseteq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\sqsupseteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1235,7 +1306,9 @@
         "message": "Unsupported TLA input: expression Apply \\star"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\star",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1262,7 +1335,9 @@
         "message": "Unsupported TLA input: expression Apply \\subset"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\subset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1289,7 +1364,9 @@
         "message": "Unsupported TLA input: expression Apply \\succ"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\succ",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1316,7 +1393,9 @@
         "message": "Unsupported TLA input: expression Apply \\succeq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\succeq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1343,7 +1422,9 @@
         "message": "Unsupported TLA input: expression Apply \\supset"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\supset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1370,7 +1451,9 @@
         "message": "Unsupported TLA input: expression Apply \\supseteq"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\supseteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1397,7 +1480,9 @@
         "message": "Unsupported TLA input: expression Apply \\uplus"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\uplus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1424,7 +1509,9 @@
         "message": "Unsupported TLA input: expression Apply \\wr"
       },
       "rustParser": {
-        "error": "Unexpected token after expression"
+        "kind": "Apply",
+        "operator": "\\wr",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1452,8 +1539,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "|",
-        "operandUnary": "-."
+        "operator": "|-",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1480,8 +1567,9 @@
         "message": "Unsupported TLA input: expression Apply |="
       },
       "rustParser": {
-        "error": "Unexpected token after expression",
-        "errorKind": "syntax"
+        "kind": "Apply",
+        "operator": "|=",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1508,7 +1596,9 @@
         "message": "Unsupported TLA input: expression Apply ^+"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "^+",
+        "args": 1
       },
       "irVersion": 2,
       "routes": [
@@ -1535,7 +1625,9 @@
         "message": "Unsupported TLA input: expression Apply \\approx"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\approx",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1562,7 +1654,9 @@
         "message": "Unsupported TLA input: expression Apply :="
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": ":=",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1589,7 +1683,9 @@
         "message": "Unsupported TLA input: expression Apply \\asymp"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\asymp",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1616,7 +1712,9 @@
         "message": "Unsupported TLA input: expression Apply \\bigcirc"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\bigcirc",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1643,7 +1741,9 @@
         "message": "Unsupported TLA input: expression Apply ::="
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "::=",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1670,7 +1770,9 @@
         "message": "Unsupported TLA input: expression Apply \\bullet"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\bullet",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1697,7 +1799,9 @@
         "message": "Unsupported TLA input: expression Apply \\cdot"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\cdot",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1724,7 +1828,9 @@
         "message": "Unsupported TLA input: expression Apply \\cong"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\cong",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1751,7 +1857,9 @@
         "message": "Unsupported TLA input: expression Apply \\div"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\div",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1778,7 +1886,9 @@
         "message": "Unsupported TLA input: expression Apply \\doteq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\doteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1805,7 +1915,9 @@
         "message": "Unsupported TLA input: expression Apply ..."
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "...",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1832,7 +1944,9 @@
         "message": "Unsupported TLA input: expression Apply !!"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "!!",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1859,7 +1973,9 @@
         "message": "Unsupported TLA input: expression Apply \\gg"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\gg",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1886,7 +2002,9 @@
         "message": "Unsupported TLA input: expression Apply =|"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "=|",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1913,7 +2031,9 @@
         "message": "Unsupported TLA input: expression Apply \\ll"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\ll",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1940,7 +2060,9 @@
         "message": "Unsupported TLA input: expression Apply -|"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "-|",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1967,7 +2089,9 @@
         "message": "Unsupported TLA input: expression Apply \\odot"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\odot",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -1994,7 +2118,9 @@
         "message": "Unsupported TLA input: expression Apply \\ominus"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\ominus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2021,7 +2147,9 @@
         "message": "Unsupported TLA input: expression Apply \\oplus"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\oplus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2048,7 +2176,9 @@
         "message": "Unsupported TLA input: expression Apply \\oslash"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\oslash",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2075,7 +2205,9 @@
         "message": "Unsupported TLA input: expression Apply \\otimes"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\otimes",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2102,7 +2234,9 @@
         "message": "Unsupported TLA input: expression Apply -+->"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "-+->",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2129,7 +2263,9 @@
         "message": "Unsupported TLA input: expression Apply \\prec"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\prec",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2156,7 +2292,9 @@
         "message": "Unsupported TLA input: expression Apply \\preceq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\preceq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2183,7 +2321,9 @@
         "message": "Unsupported TLA input: expression Apply \\propto"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\propto",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2210,7 +2350,9 @@
         "message": "Unsupported TLA input: expression Apply ??"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "??",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2237,7 +2379,9 @@
         "message": "Unsupported TLA input: expression Apply |="
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "|=",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2264,7 +2408,9 @@
         "message": "Unsupported TLA input: expression Apply |-"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "|-",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2291,7 +2437,9 @@
         "message": "Unsupported TLA input: expression Apply \\sim"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sim",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2318,7 +2466,9 @@
         "message": "Unsupported TLA input: expression Apply \\simeq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\simeq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2345,7 +2495,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqcap"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sqcap",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2372,7 +2524,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqcup"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sqcup",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2399,7 +2553,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsubset"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sqsubset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2426,7 +2582,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsubseteq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sqsubseteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2453,7 +2611,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsupset"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sqsupset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2480,7 +2640,9 @@
         "message": "Unsupported TLA input: expression Apply \\sqsupseteq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\sqsupseteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2507,7 +2669,9 @@
         "message": "Unsupported TLA input: expression Apply \\star"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\star",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2534,7 +2698,9 @@
         "message": "Unsupported TLA input: expression Apply \\subset"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\subset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2561,7 +2727,9 @@
         "message": "Unsupported TLA input: expression Apply \\succ"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\succ",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2588,7 +2756,9 @@
         "message": "Unsupported TLA input: expression Apply \\succeq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\succeq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2615,7 +2785,9 @@
         "message": "Unsupported TLA input: expression Apply \\supset"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\supset",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2642,7 +2814,9 @@
         "message": "Unsupported TLA input: expression Apply \\supseteq"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\supseteq",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2669,7 +2843,9 @@
         "message": "Unsupported TLA input: expression Apply \\uplus"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\uplus",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2696,7 +2872,9 @@
         "message": "Unsupported TLA input: expression Apply ||"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "||",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2723,7 +2901,9 @@
         "message": "Unsupported TLA input: expression Apply \\wr"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\wr",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -2751,7 +2931,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "-+->"
+        "operator": "-+->",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2786,7 +2967,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "@@"
+        "operator": "@@",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2821,7 +3003,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": ":>"
+        "operator": ":>",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2856,7 +3039,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "<:"
+        "operator": "<:",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2891,7 +3075,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "..."
+        "operator": "...",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2926,7 +3111,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "++"
+        "operator": "++",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2961,7 +3147,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "%%"
+        "operator": "%%",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -2996,7 +3183,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "|"
+        "operator": "|",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3031,7 +3219,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "||"
+        "operator": "||",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3066,7 +3255,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "--"
+        "operator": "--",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3101,7 +3291,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "**"
+        "operator": "**",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3136,7 +3327,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "&"
+        "operator": "&",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3171,7 +3363,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "&&"
+        "operator": "&&",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3206,7 +3399,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "/"
+        "operator": "/",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3241,7 +3435,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "//"
+        "operator": "//",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3276,7 +3471,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "^^"
+        "operator": "^^",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3311,7 +3507,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "\\cdot"
+        "operator": "\\cdot",
+        "args": 2
       },
       "rustCompile": {
         "kind": "error",
@@ -3346,7 +3543,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "^+"
+        "operator": "^+",
+        "args": 1
       },
       "rustCompile": {
         "kind": "error",
@@ -3381,7 +3579,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "^*"
+        "operator": "^*",
+        "args": 1
       },
       "rustCompile": {
         "kind": "error",
@@ -3416,7 +3615,8 @@
       },
       "rustParser": {
         "kind": "Apply",
-        "operator": "^#"
+        "operator": "^#",
+        "args": 1
       },
       "rustCompile": {
         "kind": "error",
@@ -4386,7 +4586,8 @@
         "message": "Expected \")\" but found \",\" at line 6, column 13"
       },
       "rustParser": {
-        "error": "Expected ), found \",\""
+        "error": "Expected ), found \",\"",
+        "errorKind": "syntax"
       },
       "irVersion": 2,
       "routes": [
@@ -4985,9 +5186,7 @@
         "kind": "compiled"
       },
       "rustCompile": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "TLA parsing: Expected ==, found \"NextWithProbe\" at 7:1"
+        "kind": "compiled"
       },
       "irVersion": 2,
       "routes": [
@@ -5025,9 +5224,7 @@
         "kind": "compiled"
       },
       "rustCompile": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "TLA parsing: Unrecognized character at 6:15"
+        "kind": "compiled"
       },
       "irVersion": 2,
       "routes": [
@@ -5046,9 +5243,7 @@
         "kind": "compiled"
       },
       "rustCompile": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "TLA parsing: Unrecognized character at 6:21"
+        "kind": "compiled"
       },
       "irVersion": 2,
       "routes": [
@@ -5067,9 +5262,7 @@
         "kind": "compiled"
       },
       "rustCompile": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "TLA parsing: Unrecognized character at 6:13"
+        "kind": "compiled"
       },
       "irVersion": 2,
       "routes": [
@@ -5088,9 +5281,7 @@
         "kind": "compiled"
       },
       "rustCompile": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "TLA parsing: Unrecognized character at 6:12"
+        "kind": "compiled"
       },
       "irVersion": 2,
       "routes": [
@@ -5111,7 +5302,7 @@
       "rustCompile": {
         "kind": "error",
         "code": "protocol",
-        "message": "TLA parsing: Expected identifier at 6:14"
+        "message": "Unsupported TLA input: label L must list exactly the bound names in its labeling scope"
       },
       "irVersion": 2,
       "routes": [
@@ -5357,9 +5548,7 @@
         "kind": "compiled"
       },
       "rustCompile": {
-        "kind": "error",
-        "code": "protocol",
-        "message": "TLA parsing: Unrecognized character at 6:7"
+        "kind": "compiled"
       },
       "irVersion": 2,
       "routes": [
@@ -5410,11 +5599,11 @@
       },
       "rustParser": {
         "kind": "Identifier",
-        "name": "+",
         "path": [
           "args",
           0
-        ]
+        ],
+        "name": "+"
       },
       "irVersion": 2,
       "routes": [
@@ -5444,8 +5633,9 @@
         "message": "Unsupported TLA input: fold operator argument"
       },
       "rustParser": {
-        "errorKind": "unsupported",
-        "error": "Unsupported syntax: LAMBDA"
+        "kind": "Apply",
+        "operator": "ApaFoldSet",
+        "args": 3
       },
       "irVersion": 2,
       "routes": [
@@ -5472,7 +5662,7 @@
         "message": "Unsupported TLA input: expression Subexpression"
       },
       "rustParser": {
-        "error": "Expected identifier"
+        "kind": "Selection"
       },
       "irVersion": 2,
       "routes": [
@@ -5498,8 +5688,7 @@
         "message": "Unsupported TLA input: LET INSTANCE"
       },
       "rustParser": {
-        "errorKind": "unsupported",
-        "error": "Unsupported syntax: INSTANCE"
+        "kind": "LetModule"
       },
       "irVersion": 2,
       "routes": [
@@ -5525,7 +5714,7 @@
         "message": "Unsupported TLA input: LET INSTANCE"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "LetModule"
       },
       "irVersion": 2,
       "routes": [
@@ -5550,7 +5739,9 @@
         "kind": "compiled"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "\\o",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -5575,7 +5766,9 @@
         "kind": "compiled"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "..",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -5600,7 +5793,9 @@
         "kind": "compiled"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "<=>",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
@@ -5625,7 +5820,9 @@
         "kind": "compiled"
       },
       "rustParser": {
-        "error": "Unrecognized character"
+        "kind": "Apply",
+        "operator": "~>",
+        "args": 2
       },
       "irVersion": 2,
       "routes": [
