@@ -42,3 +42,31 @@ just oracle-native-replay evals/runs/my-native-oracle evals/runs/my-native-oracl
 runには入力、期待report、sampleごとの合計nsと件数、順序、source、binary、hashと環境を保存する。replayは同じplatform・arch・Node版で全reportとhashを検査し、統計を再計算する。異なる環境の速度再現性や、保存dataの真正性は保証しない。runは新しいdirectoryへ作り、上書きしない。
 
 初回の[測定結果](../iterations/native-oracle.md)ではnativeの既定化を見送った。`idealis-core`全体のDTO生成、探索器のnative binding、callbackやclockのbindingは今回の対象に含めない。
+
+## object経路の費用を分ける
+
+```sh
+just oracle-native-test
+just oracle-object-phases .artifacts/my-object-phases
+just oracle-object-phases .artifacts/my-object-profile profile object-request nested-256
+```
+
+区間測定は入力検査・native呼出・stringify・decoder・全requestを分ける。JSONのnative呼出だけは事前生成した文字列を使う。profileの時間を高速化の比較に使わない。[調査結果とWITの設計候補](../iterations/native-object-profile.md)を参照。
+
+前後比較は凍結した変更前のJSとnative binaryを使う。保存証拠のarchiveに`before` snapshotと二つの候補を含めた。`before/manifest.json`の`files`へ相対pathとSHA-256を記録し、snapshot内に`dist/evals/roracle-native/client.js`とその依存、および`roracle-native.node`を置く。native binaryのhashが現在のbuildと異なる場合は、JSだけの比較として受理しない。
+
+```sh
+just oracle-object-compare .artifacts/saved-before .artifacts/my-object-comparison
+just oracle-object-compare .artifacts/saved-before .artifacts/my-object-control --control
+just oracle-object-replay .artifacts/saved-before .artifacts/my-object-comparison .artifacts/my-object-replay
+```
+
+比較は元の6入力と共有参照のない6入力を使い、全reportとJSON経路の後退を確認する。保存runは編集せず、新しいdirectoryへ再生する。hashは改変検知に使い、archiveの真正性は保証しない。
+
+今回の候補は次の手順で再生できる。native artifactと同じdarwin arm64、同じNode版を使う。
+
+```sh
+mkdir -p .artifacts/saved-object-profile
+tar -xzf evals/runs/native-object-profile/evidence.tar.gz -C .artifacts/saved-object-profile
+just oracle-object-replay .artifacts/saved-object-profile/before .artifacts/saved-object-profile/comparison-02 .artifacts/my-object-replay
+```

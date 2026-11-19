@@ -55,6 +55,18 @@ oracle-native-replay run output:
   pnpm build
   node dist/evals/roracle-native/replay.js {{quote(run)}} {{quote(output)}}
 
+oracle-object-phases output mode="measure" phase="object-request" fixture="nested-256":
+  pnpm build
+  node dist/evals/roracle-native/phases.js {{quote(output)}} {{quote(mode)}} {{quote(phase)}} {{quote(fixture)}}
+
+oracle-object-compare before output control="":
+  pnpm build
+  node dist/evals/roracle-native/compare-object.js {{quote(before)}} {{quote(output)}} {{quote(control)}}
+
+oracle-object-replay before saved output:
+  pnpm build
+  node dist/evals/roracle-native/replay-object.js {{quote(before)}} {{quote(saved)}} {{quote(output)}}
+
 oracle-wire-build:
   pnpm oracle:build
 

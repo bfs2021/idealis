@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
+import type { JsonValue } from "../../src/generated/roracle.js";
 import { decodeOracleReply } from "../workspace-oracle/protocol.js";
 import { snapshot } from "../workspace-oracle/snapshot.js";
 import { createOracle } from "../workspace-oracle/wasm.js";
+import { canonicalObject } from "./canonical.js";
 import { createNativeOracle, loadNativeBinding } from "./client.js";
 import { fixtures, observationMatrix, requestFor } from "./fixtures.js";
+import { summarizeObject } from "./object-summary.js";
 
 const bytes = await readFile(
   "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
@@ -19,6 +22,24 @@ const native = [
 export const registerNativeOracleContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,
 ): void => {
+  test("object speed comparison refuses empty suites and missing samples", () => {
+    assert.throws(() => summarizeObject([], []));
+    const fixture = fixtures[0];
+    assert.ok(fixture);
+    assert.throws(() =>
+      summarizeObject(
+        [
+          {
+            name: fixture.name,
+            iterations: fixture.iterations,
+            input: fixture.input,
+            expected: wasm.request(fixture.input),
+          },
+        ],
+        [],
+      ),
+    );
+  });
   test("native and Wasm preserve all 64 observation combinations and complete reports", () => {
     for (const reference of observationMatrix)
       for (const actual of observationMatrix) {
@@ -155,6 +176,56 @@ export const registerNativeOracleContract = (
       ],
       { stdio: "pipe" },
     );
+  });
+  test("object validation rechecks mutations, hidden fields and symbol keys on every call", () => {
+    const value = { changed: 7 };
+    canonicalObject(value);
+    Object.defineProperty(value, "hidden", { value: 7 });
+    assert.throws(() => canonicalObject(value), /hidden/);
+    const withSymbol = { [Symbol("ignored")]: 7 };
+    assert.throws(() => canonicalObject(withSymbol), /symbol/);
+    const extended = [7];
+    Object.defineProperty(extended, "extra", { value: 8 });
+    assert.throws(() => canonicalObject(extended), /extended/);
+    const accessor = [7];
+    let called = false;
+    Object.defineProperty(accessor, "0", {
+      get: () => {
+        called = true;
+        return 7;
+      },
+    });
+    assert.throws(() => canonicalObject(accessor), /accessors/);
+    assert.equal(called, false);
+    execFileSync(
+      process.execPath,
+      [
+        "--input-type=module",
+        "-e",
+        `
+      import assert from 'node:assert/strict';
+      import { canonicalObject } from './dist/evals/roracle-native/canonical.js';
+      canonicalObject({ stable: 7 });
+      let called = false;
+      Object.defineProperty(Object.prototype, 'newField', { enumerable: true, get() { called = true; return 7; } });
+      assert.throws(() => canonicalObject({ stable: 7 }), /inherited enumerable/);
+      assert.equal(called, false);
+    `,
+      ],
+      { stdio: "pipe" },
+    );
+  });
+  test("object validation keeps depth and expanded-node budgets for shared references", () => {
+    let value: JsonValue = null;
+    for (let index = 0; index < 129; index++) value = [value];
+    assert.throws(() => canonicalObject(value), /budget/);
+    let shared: JsonValue = 7;
+    for (let index = 0; index < 20; index++) shared = [shared, shared];
+    assert.throws(() => canonicalObject(shared), /budget/);
+    let keyed: JsonValue = 7;
+    for (let index = 0; index < 18; index++)
+      keyed = { left: keyed, right: keyed };
+    assert.throws(() => canonicalObject(keyed), /budget/);
   });
   test("missing native binaries never silently fall back to Wasm", () => {
     assert.throws(() =>
