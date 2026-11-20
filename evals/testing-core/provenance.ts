@@ -26,7 +26,7 @@ export const fingerprint = async () => {
     "evals/smt-subset/clients.ts",
     "evals/plans/0036-testing-core.md",
     "playwright.config.ts",
-    "vitest.config.ts",
+    "vite.config.ts",
     "package.json",
     "packages/idealis/package.json",
     "pnpm-workspace.yaml",

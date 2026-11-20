@@ -22,7 +22,7 @@ export const fingerprint = async () => {
     "evals/alloy-subset/corpus.ts",
     "evals/smt-subset/clients.ts",
     "evals/plans/0035-alloy-instance.md",
-    "vitest.config.ts",
+    "vite.config.ts",
     "playwright.config.ts",
     "package.json",
     "packages/idealis/package.json",

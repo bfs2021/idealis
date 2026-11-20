@@ -17,7 +17,6 @@ export const fingerprint = async () => {
     "evals/smt-subset/clients.ts",
     "evals/plans/0039-structured-fuzz.md",
     "playwright.config.ts",
-    "vitest.config.ts",
     "justfile",
     ".github/workflows/ci.yml",
     ".github/workflows/fuzz.yml",

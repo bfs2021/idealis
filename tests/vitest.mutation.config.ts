@@ -1,5 +1,1 @@
-import { defineConfig } from "vitest/config";
-
-export default defineConfig({
-  test: { include: ["tests/core.vitest.test.ts"] },
-});
+export { mutationConfig as default } from "../vite.config.js";

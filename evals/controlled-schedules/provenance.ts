@@ -19,7 +19,6 @@ export const fingerprint = async () => {
     "evals/plans/0038-controlled-schedules.md",
     "evals/plans/0038-packaging-regression.md",
     "playwright.config.ts",
-    "vitest.config.ts",
     "scripts/package.ts",
     "scripts/package-test.ts",
     "justfile",

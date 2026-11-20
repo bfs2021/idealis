@@ -58,34 +58,34 @@ jobs:
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
       - run: pnpm testing:build
       - run: node --test dist/evals/testing-core/contract-test.js
-      - run: pnpm exec vitest run --project=testing
+      - run: pnpm exec vp test run --project=testing
       - run: cargo fmt --manifest-path evals/controlled-schedules/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
       - run: cargo build --release --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
       - run: cargo run --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
       - run: node --test dist/evals/controlled-schedules/contract-test.js
-      - run: pnpm exec vitest run --project=schedules
+      - run: pnpm exec vp test run --project=schedules
       - run: cargo fmt --manifest-path evals/structured-fuzz/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
       - run: cargo build --release --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
       - run: node --test dist/evals/structured-fuzz/contract-test.js
-      - run: pnpm exec vitest run --project=fuzz
+      - run: pnpm exec vp test run --project=fuzz
       - run: cargo fmt --manifest-path crates/ralloy/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/ralloy/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/ralloy/Cargo.toml
       - run: pnpm ralloy:build
       - run: node --test dist/evals/alloy-subset/contract-test.js
       - run: node --test dist/evals/alloy-instance/contract-test.js
-      - run: pnpm exec vitest run --project=alloy
+      - run: pnpm exec vp test run --project=alloy
       - run: cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
       - run: node --test dist/evals/smt-subset/contract-test.js dist/evals/smt-expansion/contract-test.js dist/evals/smt-scripts/contract-test.js dist/evals/smt-tuning/contract-test.js
-      - run: pnpm exec vitest run --project=smt
+      - run: pnpm exec vp test run --project=smt
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build

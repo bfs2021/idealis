@@ -76,7 +76,7 @@ oracle-typed-test: oracle-typed-build oracle-wire-build oracle-native-build
   cargo test --all-targets --locked --manifest-path evals/roracle-wit/rust/Cargo.toml
   pnpm build
   node --test dist/evals/roracle-wit/contract-test.js
-  pnpm exec vitest run --project=typed-oracle
+  pnpm exec vp test run --project=typed-oracle
 
 oracle-typed-browser: oracle-typed-build oracle-wire-build
   pnpm exec playwright test --project=typed-oracle
@@ -183,7 +183,7 @@ fuzz-test: fuzz-build
   cargo test --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
   pnpm build
   node --test dist/evals/structured-fuzz/contract-test.js
-  pnpm exec vitest run --project=fuzz
+  pnpm exec vp test run --project=fuzz
 
 fuzz-browser:
   pnpm exec playwright test --project=fuzz
@@ -207,7 +207,7 @@ controlled-test: controlled-build testing-core-test
   cargo run --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
   pnpm build
   node --test dist/evals/controlled-schedules/contract-test.js
-  pnpm exec vitest run --project=schedules
+  pnpm exec vp test run --project=schedules
 
 controlled-browser: controlled-build
   pnpm exec playwright test --project=schedules
@@ -257,7 +257,7 @@ testing-example:
 testing-test: testing-build
   pnpm build
   node --test dist/evals/testing-core/contract-test.js
-  pnpm exec vitest run --project=testing
+  pnpm exec vp test run --project=testing
 
 testing-browser: testing-build
   pnpm exec playwright test --project=testing
@@ -300,7 +300,7 @@ ralloy-replay run:
 alloy-test: ralloy-build
   pnpm build
   node --test dist/evals/alloy-instance/contract-test.js
-  pnpm exec vitest run --project=alloy
+  pnpm exec vp test run --project=alloy
 
 alloy-browser: ralloy-build
   pnpm exec playwright test --project=alloy-instance
@@ -348,6 +348,12 @@ smt-browser: smt-build
 
 install:
   pnpm install --frozen-lockfile
+
+lint:
+  pnpm lint
+
+fmt:
+  pnpm fmt
 
 check:
   pnpm check
@@ -804,7 +810,7 @@ apalache-eval run java jar: portable-build
 
 backend-test: portable-build
   pnpm build
-  pnpm exec vitest run --project=core tests/backend.vitest.test.ts
+  pnpm exec vp test run --project=core tests/backend.vitest.test.ts
   node --test dist/evals/backend-contract/integration-test.js
 
 backend-eval run: portable-build
@@ -880,7 +886,7 @@ quint-replay java tlc_jar apalache_jar saved run: portable-build
 smt-expansion-test: smt-build
   pnpm build
   node --test dist/evals/smt-expansion/contract-test.js
-  pnpm exec vitest run --project=smt
+  pnpm exec vp test run --project=smt
 
 smt-expansion-eval phase run baseline parent="": smt-build
   pnpm build
@@ -894,7 +900,7 @@ smt-expansion-replay run:
 smt-script-test: smt-build
   pnpm build
   node --test dist/evals/smt-scripts/contract-test.js
-  pnpm exec vitest run --project=smt
+  pnpm exec vp test run --project=smt
 
 smt-script-eval phase run baseline parent="": smt-build
   pnpm build

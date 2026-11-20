@@ -27,7 +27,6 @@ export const fingerprint = async () => {
     "scripts/package.ts",
     "scripts/package-test.ts",
     "playwright.config.ts",
-    "vitest.config.ts",
     "justfile",
     "package.json",
     "packages/idealis/package.json",
