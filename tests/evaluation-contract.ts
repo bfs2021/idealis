@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
-import { createFaultyCounter } from "../evals/harness/counter-faults.js";
+import { createFaultyCounter } from "../evals/experiments/harness/counter-faults.js";
 import {
   checkHistory,
   incrementHistoryModel,
-} from "../evals/harness/history.js";
-import { runScheduledCounter } from "../evals/harness/scheduled-counter.js";
-import { enabledActions, generateCorpus } from "../evals/harness/search.js";
-import { createTtlDriver, ttlModel } from "../evals/harness/ttl.js";
+} from "../evals/experiments/harness/history.js";
+import { runScheduledCounter } from "../evals/experiments/harness/scheduled-counter.js";
+import {
+  enabledActions,
+  generateCorpus,
+} from "../evals/experiments/harness/search.js";
+import { createTtlDriver, ttlModel } from "../evals/experiments/harness/ttl.js";
 import { counterModel, createCounter } from "../examples/durable-counter.js";
 import {
   checkConformance,

@@ -78,7 +78,7 @@ Rustの`check_with_coverage`と、portableの`checkSafetyCoverage(core, program,
 
 defining module が直接 `EXTENDS Apalache` を指定するときだけ、`ApaFoldSet(Op, v, S)` と `ApaFoldSeqLeft(Op, v, seq)` を扱う。`Op` は呼び出し位置で可視のtop-level / LET定義のoperator名またはLAMBDAで、零 arity の引数をちょうど2つ持つ必要がある。累積値が第1引数、要素が第2引数。foldの専用frameでbound slotを2つ使い、v1では呼び出し位置でbodyを展開する。v2では同じslotをactualとして共有expression定義をcallする。Rust frontendはLAMBDAとoperator parameterを静的に特殊化し、再帰callbackはv2を要求する。他のApalache operatorはチェックリストの範囲に従う。`EXTENDS Apalache` がなければ fold 名も通常の名前解決に従う。展開深さ・bound variable の上限は変更しない。
 
-sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../evals/fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
+sequence は先頭から処理し、文字列・record・関数を含む任意の要素種を扱う。集合 fold は TLC v1.7.4 (`5a47802`) の順序に合わせ、整数、Boolean、tuple / sequence、集合、整数 key の関数と、それらの再帰的な組み合わせを扱う。整数は数値順、Boolean は FALSE / TRUE、tuple / sequence と集合は要素数の後に再帰的な辞書順、関数は domain 要素数の後に各 key / value を交互に比較する。集合要素内の全整数 function key の最大値と最小値の差が `i32::MAX` を超える場合は拒否する。TLC の interval / 明示 domain 間の32-bit減算で順序が反転するためで、IR は元の domain 表現を区別しない。primitive 整数や関数の値にこの幅制限は課さない。domain が `1..n` の関数は既存の値表現どおり sequence として扱う。文字列・record をどの深さでも含む集合は、IR に TLC の文字列・field 名の intern ID がないため、それぞれ理由を明示した評価時エラーで拒否する。非整数 key のその他の関数は従来の `Unsupported TLA input: set fold order for strings, records or functions` を維持する。集合foldの model value は未対応で、異なる値種の比較が必要な集合も拒否する。[pinned TLC ログ](../fixtures/tlc-apalache-folds/README.md)を対照にしており、Apalache 全体との互換性を表さない。
 
 primed variable は、同じ分岐で代入した後に読み取る。部分的な関数更新を左辺に置く式から、未代入の変数を逆算しない。ENABLED は列挙可能な action に限り、fairness の subscript は候補ごとに評価できる必要がある。未代入の next variable に任意の値を補わない。
 
@@ -125,7 +125,7 @@ just complex-tlc-replay /path/to/java /path/to/tla2tools.jar .artifacts/complex-
 
 [測定・差分検査・採用判断](../evals/iterations/0009-rust-safety.md) に、初回の改善不足、profile、literal decode と状態の連続格納の結果を記録している。
 
-複合値・temporal の条件は [0012 の計画](../evals/plans/0012-collections-temporal.md)。検査は native / Wasm / tla-ts / TLC で比較し、反例の state と loop を固定した別の仕様で再生する。強制した遷移が元の Next または stuttering であること、全 trace state が到達すること、fairness と性質の違反を確認する。誤った性質を要求する対照は違反する必要がある。原文の [Channel](../evals/fixtures/channel/Channel.tla) も検査する。
+複合値・temporal の条件は [0012 の計画](../evals/plans/0012-collections-temporal.md)。検査は native / Wasm / tla-ts / TLC で比較し、反例の state と loop を固定した別の仕様で再生する。強制した遷移が元の Next または stuttering であること、全 trace state が到達すること、fairness と性質の違反を確認する。誤った性質を要求する対照は違反する必要がある。原文の [Channel](../fixtures/channel/Channel.tla) も検査する。
 
 [0012〜0014 の評価結果](../evals/iterations/0012-collections-temporal.md) に、対応検査と性能の改善・未達条件を記録している。`safety-eval` の既定 plan は0014で、任意の既存 plan を第2引数に指定できる。
 

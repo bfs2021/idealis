@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { build } from "esbuild";
-import { config, names } from "../evals/quint-generated/cases.js";
+import { config, names } from "../evals/experiments/quint-generated/cases.js";
 
 let server: Server | undefined;
 let origin: string;
@@ -92,7 +92,7 @@ test("checks unchanged Quint output in Chromium", async ({ page }) => {
     await Promise.all(
       names.map(async (name) => {
         const source = await readFile(
-          `evals/fixtures/quint-generated/generated/${name}.tla`,
+          `fixtures/quint-generated/generated/${name}.tla`,
           "utf8",
         );
         return ["safety", "broken"].map((property) => ({

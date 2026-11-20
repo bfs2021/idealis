@@ -7,7 +7,7 @@ import {
   apalacheModule,
   loadTlcStandardModules,
   standardModulesDirectory,
-} from "../evals/tlc-differential/standard-modules.js";
+} from "../evals/experiments/tlc-differential/standard-modules.js";
 
 const directory = process.argv[2] ?? standardModulesDirectory;
 const path = resolve(directory, apalacheModule.file);

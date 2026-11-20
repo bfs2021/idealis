@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
-import { enumerateSchedules } from "../evals/runtime/schedules.js";
+import { enumerateSchedules } from "../evals/experiments/runtime/schedules.js";
 import {
   compileCounterTable,
   runDynamic,
   runTable,
-} from "../evals/runtime/table.js";
+} from "../evals/experiments/runtime/table.js";
 import { planBudget } from "../packages/idealis/src/budget.js";
 
 export const registerBudgetContract = (

@@ -9,7 +9,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { resolve } from "node:path";
-import { nativePath } from "../evals/roracle-native/client.js";
+import { nativePath } from "../evals/experiments/roracle-native/client.js";
 
 await mkdir(".artifacts", { recursive: true });
 const output = await mkdtemp(resolve(".artifacts/roracle-native-build-"));
@@ -20,9 +20,9 @@ execFileSync(
     "napi",
     "build",
     "--manifest-path",
-    "evals/roracle-native/rust/Cargo.toml",
+    "evals/experiments/roracle-native/rust/Cargo.toml",
     "--package-json-path",
-    "evals/roracle-native/package.json",
+    "evals/experiments/roracle-native/package.json",
     "--output-dir",
     output,
     "--dts",
@@ -33,7 +33,7 @@ execFileSync(
   ],
   { stdio: "inherit" },
 );
-const declaration = "evals/roracle-native/generated/index.d.ts";
+const declaration = "evals/experiments/roracle-native/generated/index.d.ts";
 const formatted = execFileSync(
   "pnpm",
   ["exec", "vp", "fmt", "--stdin-filepath", declaration],

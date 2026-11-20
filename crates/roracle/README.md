@@ -62,7 +62,7 @@ report.assert_matched();
 
 sampleごとに開始実装を回し、隣のsampleで順序を逆にする。reportには実行順と、固定iterationsの合計nsを保存する。mean/median/min/maxは1呼び出し当たりのns。速度比は`baselineのmedian / 対象のmedian`で、対象が速いほど1を超える。信頼区間や有意差は出さない。`max_evaluations`はreference・preflight・warmupを含む予定呼び出し数の上限で、壁時計のtimeoutではない。
 
-nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`へ単調増加するns時計を渡す。0時間・逆行・累積時間overflowは`unknown`にし、速度比を返さない。JSON ABIは観測batchの照合を扱う。benchmarkのcallbackとclockのJS bindingは提供しない。実行例は[comparison.rs](examples/comparison.rs)、外部実装比較は[評価アダプタ](../../evals/oracle-comparison)を参照。
+nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`へ単調増加するns時計を渡す。0時間・逆行・累積時間overflowは`unknown`にし、速度比を返さない。JSON ABIは観測batchの照合を扱う。benchmarkのcallbackとclockのJS bindingは提供しない。実行例は[comparison.rs](examples/comparison.rs)、外部実装比較は[評価アダプタ](../../evals/experiments/oracle-comparison)を参照。
 
 ## 対応範囲
 
@@ -74,7 +74,7 @@ nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`
 
 入力は16 MiB、4096 cases、256 implementationsまで。caseと実装は空にできず、IDの重複と観測数のずれを拒否する。JSONの構文と入れ子の制限もserde_jsonに従う。観測は`kind`とvariantに必要なfieldだけを受理する。公開Observationのserdeと同じ`[kind, payload]`形式も受理する。wire専用visitorでpayloadを一度だけ読み、公開ObservationのDeserialize実装は変えない。不正なvariantに対するmessageの詳細は旧版と変わる場合がある。この境界は収集済み観測の照合であり、実装関数の実行や計測は行わない。
 
-Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracle_output_ptr/len`とmemoryをexportする。inputへUTF-8 JSONを書き、dispatch後にoutputをコピーする。過大なresizeは0を返して前のinputを消す。bufferは次のresize/dispatchで無効になり、runtimeへの呼び出しは直列にする。JS bindingはworkspaceの[eval adapter](../../evals/workspace-oracle/README.md)へ置き、npm公開APIには追加していない。
+Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracle_output_ptr/len`とmemoryをexportする。inputへUTF-8 JSONを書き、dispatch後にoutputをコピーする。過大なresizeは0を返して前のinputを消す。bufferは次のresize/dispatchで無効になり、runtimeへの呼び出しは直列にする。JS bindingはworkspaceの[eval adapter](../../evals/experiments/workspace-oracle/README.md)へ置き、npm公開APIには追加していない。
 
 `dispatch_value(serde_json::Value)`も同じRequestとOracleGroupを使う。文字列を返すホストは `dispatch_value_to_json` を使うと、検査済みの応答を直接 JSON に書き出せる。どちらもcanonical serializationで16 MiBを検査し、深すぎる入れ子は再帰的にdropせず拒否する。文字列表現や重複fieldを保持する必要がある場合はbytes APIを使う。
 
@@ -82,12 +82,12 @@ Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracl
 
 開発用の`typescript` featureで`typescript::definitions()`を有効にする。`just oracle-types`はrequest/reportのTS宣言を生成し、`just oracle-types-check`は保存した宣言との一致を要求する。通常のbuildではts-rsを有効にしない。serdeの未知field拒否など、実行時の制約はRust側に残る。ts-rsが出す`deny_unknown_fields`未対応の警告は、TS型だけではこの制約を表せないことを示す。
 
-[napi-rsの実験binding](../../evals/roracle-native/README.md)も同じ生成型を参照する。bindingはこのcrateの依存に含めず、既存のWasm ABIを維持する。型生成の初回対象はroracleで、他crateの全DTOにはまだ広げていない。
+[napi-rsの実験binding](../../evals/experiments/roracle-native/README.md)も同じ生成型を参照する。bindingはこのcrateの依存に含めず、既存のWasm ABIを維持する。型生成の初回対象はroracleで、他crateの全DTOにはまだ広げていない。
 
 ## JSON境界のCriterionベンチ
 
 `just oracle-criterion`で単独・32 cases・入れ子256要素・unknownの4入力を測る。Valueとbytesの2出力を分け、入力の構築と出力の破棄は時計の外へ置く。parse・照合・全reportの生成は時計内に含む。Criterionは開発用依存で、配布libraryの実行時依存には含まない。
 
-変更前後は同じbenchの実行ファイルを保存し、buildやtestと同時に測定しない。[0054の比較](../../evals/iterations/0054-oracle-bench-tuning.md)と[workspace手順](../../evals/workspace-oracle/README.md)を参照。
+変更前後は同じbenchの実行ファイルを保存し、buildやtestと同時に測定しない。[0054の比較](../../evals/iterations/0054-oracle-bench-tuning.md)と[workspace手順](../../evals/experiments/workspace-oracle/README.md)を参照。
 
 [0055の比較](../../evals/iterations/0055-oracle-hotspots.md)は、JSON観測の読み直しとJS snapshotの中間配列を減らした結果を記録する。native/Wasmの境界、Nodeの全照合、IPC込みの往復は別々に測る。

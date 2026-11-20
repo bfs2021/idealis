@@ -48,7 +48,7 @@ workは式の処理と制約の緩和を数える。parserの費用やwall clock
 
 ## 実験用のAPI
 
-Rustは`idealis_smt::Problem::parse(source)`と`Problem::solve(max_work)`を持つ。`Problem::solve_assuming(&[Assumption], max_work)`は一時的なBool literalを加えて解く。`Assumption { symbol, positive }`は宣言済みBool名と極性を表す。nativeの`idealis-smt` binaryと`idealis-smt.wasm`は共通の`Engine`を使う。[TS側のwire型](../evals/smt-subset/wire.ts)がリクエストと応答を定義する。
+Rustは`idealis_smt::Problem::parse(source)`と`Problem::solve(max_work)`を持つ。`Problem::solve_assuming(&[Assumption], max_work)`は一時的なBool literalを加えて解く。`Assumption { symbol, positive }`は宣言済みBool名と極性を表す。nativeの`idealis-smt` binaryと`idealis-smt.wasm`は共通の`Engine`を使う。[TS側のwire型](../evals/experiments/smt-subset/wire.ts)がリクエストと応答を定義する。
 
 ```json
 {
@@ -98,7 +98,7 @@ workは全checkで共有し、各結果の`stats.work`を差し引く。残り0�
 
 各checkは探索をやり直す。Scriptを再求解しても前回の消費やassumptionsを持ち越さず、学習状態や中断地点の再利用は行わない。
 
-[Wasm loader](../evals/smt-subset/wasm.ts)はNodeやZ3へ依存しない。実Chromiumで`crossOriginIsolated === false`のままSAT、UNSAT、unknown、未対応、再利用を検査した。0030で測定した生Wasmは330,749 bytesで、Z3 Wasmは39,205,260 bytesだった。対応機能が異なるため、汎用ソルバー同士の容量比較にはしない。
+[Wasm loader](../evals/experiments/smt-subset/wasm.ts)はNodeやZ3へ依存しない。実Chromiumで`crossOriginIsolated === false`のままSAT、UNSAT、unknown、未対応、再利用を検査した。0030で測定した生Wasmは330,749 bytesで、Z3 Wasmは39,205,260 bytesだった。対応機能が異なるため、汎用ソルバー同士の容量比較にはしない。
 
 [評価0040](../evals/iterations/0040-smt-expansion.md)では、定数倍・整数iteの確認用140式と21件のcontext問い合わせをZ3へ照合した。旧版が受理した式は1/140、新版は140/140。新機能を狙った人工入力の対応率で、実用入力全体の対応率や速度の比較ではない。
 
@@ -115,7 +115,7 @@ just rsmt-build
 just rsmt-test
 just rsmt-example
 pnpm build
-node --test dist/evals/smt-subset/contract-test.js
+node --test dist/tests/smt-subset/contract-test.js
 just smt-browser
 just smt-expansion-test
 just smt-script-test

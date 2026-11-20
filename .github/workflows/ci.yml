@@ -23,12 +23,12 @@ jobs:
       - run: node --experimental-strip-types scripts/check-support.ts
       - run: pnpm test
       - run: node --test dist/scripts/check-support-test.js
-      - run: cargo fmt --manifest-path evals/sat-foundation/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/sat-foundation/rust/Cargo.toml -- -D warnings
-      - run: cargo test --all-targets --locked --manifest-path evals/sat-foundation/rust/Cargo.toml
-      - run: cargo build --release --locked --manifest-path evals/sat-foundation/rust/Cargo.toml
-      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/sat-foundation/rust/Cargo.toml
-      - run: node --test dist/evals/sat-foundation/contract-test.js
+      - run: cargo fmt --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml
+      - run: cargo build --release --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml
+      - run: node --test dist/tests/sat-foundation/contract-test.js
       - run: cargo fmt --manifest-path crates/roracle/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/roracle/Cargo.toml -- -D warnings
       - run: cargo test --locked --manifest-path crates/roracle/Cargo.toml
@@ -36,78 +36,78 @@ jobs:
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/roracle/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/roracle/Cargo.toml
       - run: pnpm oracle:types:check
-      - run: cargo fmt --manifest-path evals/roracle-native/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/roracle-native/rust/Cargo.toml -- -D warnings
+      - run: cargo fmt --manifest-path evals/experiments/roracle-native/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/roracle-native/rust/Cargo.toml -- -D warnings
       - run: pnpm oracle:native:build
       - run: pnpm oracle:native:test
-      - run: IDEALIS_ORACLE_BACKEND=native-json node --test dist/evals/workspace-oracle/contract-test.js
-      - run: IDEALIS_ORACLE_BACKEND=native-object node --test dist/evals/workspace-oracle/contract-test.js
+      - run: IDEALIS_ORACLE_BACKEND=native-json node --test dist/tests/workspace-oracle/contract-test.js
+      - run: IDEALIS_ORACLE_BACKEND=native-object node --test dist/tests/workspace-oracle/contract-test.js
       - run: node dist/scripts/prepare-tlc-modules.js
-      - run: node --test dist/evals/tlc-differential/compare-test.js dist/evals/tlc-differential/standard-modules-test.js
-      - run: cargo fmt --manifest-path evals/workspace-oracle/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
-      - run: cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
-      - run: cargo build --release --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
-      - run: node --test dist/evals/workspace-oracle/contract-test.js
-      - run: cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
-      - run: cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
-      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/oracle-comparison/rust/Cargo.toml
+      - run: node --test dist/tests/tlc-differential/compare-test.js dist/tests/tlc-differential/standard-modules-test.js
+      - run: cargo fmt --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- -D warnings
+      - run: cargo test --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml
+      - run: cargo build --release --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml
+      - run: node --test dist/tests/workspace-oracle/contract-test.js
+      - run: cargo fmt --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml -- -D warnings
+      - run: cargo build --release --locked --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml
       - run: cargo fmt --manifest-path crates/idealis-testing/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
       - run: pnpm testing:build
-      - run: node --test dist/evals/testing-core/contract-test.js
+      - run: node --test dist/tests/testing-core/contract-test.js
       - run: pnpm exec vp test run --project=testing
-      - run: cargo fmt --manifest-path evals/controlled-schedules/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml -- -D warnings
-      - run: cargo test --all-targets --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
-      - run: cargo build --release --locked --manifest-path evals/controlled-schedules/rust/Cargo.toml
-      - run: cargo run --release --locked --example loom --manifest-path evals/controlled-schedules/rust/Cargo.toml
-      - run: node --test dist/evals/controlled-schedules/contract-test.js
+      - run: cargo fmt --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
+      - run: cargo build --release --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
+      - run: cargo run --release --locked --example loom --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
+      - run: node --test dist/tests/controlled-schedules/contract-test.js
       - run: pnpm exec vp test run --project=schedules
-      - run: cargo fmt --manifest-path evals/structured-fuzz/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml -- -D warnings
-      - run: cargo test --all-targets --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
-      - run: cargo build --release --locked --manifest-path evals/structured-fuzz/rust/Cargo.toml
-      - run: node --test dist/evals/structured-fuzz/contract-test.js
+      - run: cargo fmt --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml
+      - run: cargo build --release --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml
+      - run: node --test dist/tests/structured-fuzz/contract-test.js
       - run: pnpm exec vp test run --project=fuzz
       - run: cargo fmt --manifest-path crates/ralloy/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/ralloy/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/ralloy/Cargo.toml
       - run: pnpm ralloy:build
-      - run: node --test dist/evals/alloy-subset/contract-test.js
-      - run: node --test dist/evals/alloy-instance/contract-test.js
+      - run: node --test dist/tests/alloy-subset/contract-test.js
+      - run: node --test dist/tests/alloy-instance/contract-test.js
       - run: pnpm exec vp test run --project=alloy
       - run: cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
-      - run: node --test dist/evals/smt-subset/contract-test.js dist/evals/smt-expansion/contract-test.js dist/evals/smt-scripts/contract-test.js dist/evals/smt-tuning/contract-test.js
+      - run: node --test dist/tests/smt-subset/contract-test.js dist/tests/smt-expansion/contract-test.js dist/tests/smt-scripts/contract-test.js dist/tests/smt-tuning/contract-test.js
       - run: pnpm exec vp test run --project=smt
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
       - run: pnpm rtla:build
-      - run: node --test dist/evals/oracle-tuning/wasm-test.js
-      - run: node --test dist/evals/rtla-compatibility/contract-test.js dist/evals/symbolic-operators/contract-test.js
+      - run: node --test dist/tests/oracle-tuning/wasm-test.js
+      - run: node --test dist/tests/rtla-compatibility/contract-test.js dist/tests/symbolic-operators/contract-test.js
       - run: cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
-      - run: node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js
-      - run: node dist/evals/rtla-compiler/evaluate.js .artifacts/rtla-compiler
-      - run: node --test dist/evals/quint-generated/contract-test.js
-      - run: node --test dist/evals/frontier-safety/contract-test.js
-      - run: node --test dist/evals/readme-comparison/contract-test.js
-      - run: node --test dist/evals/rust-safety/contract-test.js dist/evals/collections-temporal/contract-test.js dist/evals/tlc-differential/compare-test.js dist/evals/tlc-differential/regression-test.js dist/evals/parallel-safety/contract-test.js
-      - run: node dist/evals/collections-temporal/evaluate.js .artifacts/collections-temporal
-      - run: node dist/evals/collections-temporal/replay.js .artifacts/collections-temporal
-      - run: node dist/evals/rust-safety/evaluate.js .artifacts/rust-safety
-      - run: node dist/evals/rust-safety/replay.js .artifacts/rust-safety
+      - run: node --test dist/tests/tlc-differential/analysis-parity-test.js dist/tests/tlc-differential/frame-decoder-test.js dist/tests/p0-checker/contract-test.js
+      - run: node dist/evals/experiments/rtla-compiler/evaluate.js .artifacts/rtla-compiler
+      - run: node --test dist/tests/quint-generated/contract-test.js
+      - run: node --test dist/tests/frontier-safety/contract-test.js
+      - run: node --test dist/tests/readme-comparison/contract-test.js
+      - run: node --test dist/tests/rust-safety/contract-test.js dist/tests/collections-temporal/contract-test.js dist/tests/tlc-differential/compare-test.js dist/tests/tlc-differential/regression-test.js dist/tests/parallel-safety/contract-test.js
+      - run: node dist/evals/experiments/collections-temporal/evaluate.js .artifacts/collections-temporal
+      - run: node dist/evals/experiments/collections-temporal/replay.js .artifacts/collections-temporal
+      - run: node dist/evals/experiments/rust-safety/evaluate.js .artifacts/rust-safety
+      - run: node dist/evals/experiments/rust-safety/replay.js .artifacts/rust-safety
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: 1.25.x
           cache-dependency-path: adapters/go/go.sum
-      - run: node dist/evals/go/prepare.js
+      - run: node dist/evals/experiments/go/prepare.js
       - run: test -z "$(gofmt -l adapters/go)"
       - run: go mod verify && go vet ./...
         working-directory: adapters/go
@@ -116,23 +116,23 @@ jobs:
       - run: go test -race -count=1 ./...
         working-directory: adapters/go
       - run: node dist/scripts/go-consumer.js
-      - run: cargo fmt --manifest-path evals/shared-oracle-rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/shared-oracle-rust/Cargo.toml -- -D warnings
-      - run: cargo build --release --locked --manifest-path evals/shared-oracle-rust/Cargo.toml
+      - run: cargo fmt --manifest-path evals/experiments/shared-oracle-rust/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/shared-oracle-rust/Cargo.toml -- -D warnings
+      - run: cargo build --release --locked --manifest-path evals/experiments/shared-oracle-rust/Cargo.toml
       - run: CGO_ENABLED=0 go build -o ../../.artifacts/go/counter-replay ./cmd/counter-replay
         working-directory: adapters/go
-      - run: node --test dist/evals/cross-language/contract-test.js
-      - run: node dist/evals/cross-language/evaluate.js regression .artifacts/shared-oracle
-      - run: node dist/evals/cross-language/replay.js .artifacts/shared-oracle
+      - run: node --test dist/tests/cross-language/contract-test.js
+      - run: node dist/evals/experiments/cross-language/evaluate.js regression .artifacts/shared-oracle
+      - run: node dist/evals/experiments/cross-language/replay.js .artifacts/shared-oracle
       - run: CGO_ENABLED=0 go build -o ../../.artifacts/go/history-check ./cmd/history-check
         working-directory: adapters/go
       - run: CGO_ENABLED=0 go build -o ../../.artifacts/go/finite-bench ./cmd/finite-bench
         working-directory: adapters/go
-      - run: node --test dist/evals/async-tuning/contract-test.js
-      - run: node dist/evals/async-tuning/evaluate.js regression .artifacts/async-tuning
-      - run: node dist/evals/async-tuning/replay.js .artifacts/async-tuning
+      - run: node --test dist/tests/async-tuning/contract-test.js
+      - run: node dist/evals/experiments/async-tuning/evaluate.js regression .artifacts/async-tuning
+      - run: node dist/evals/experiments/async-tuning/replay.js .artifacts/async-tuning
       - run: pnpm portable:test
-      - run: node --test dist/evals/workspace-oracle/catalog-test.js
+      - run: node --test dist/tests/workspace-oracle/catalog-test.js
       - run: pnpm usable:test
       - run: pnpm runtime:build
       - run: pnpm runtime:test

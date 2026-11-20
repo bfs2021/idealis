@@ -9,9 +9,9 @@ const ignorePatterns = [
   "test-results/**",
   "playwright-report/**",
   "evals/runs/**",
-  "evals/fixtures/**",
-  "evals/structured-fuzz/fuzz/artifacts/**",
-  "evals/structured-fuzz/fuzz/corpus/**",
+  "fixtures/**",
+  "evals/experiments/structured-fuzz/fuzz/artifacts/**",
+  "evals/experiments/structured-fuzz/fuzz/corpus/**",
 ];
 
 const project = (name: string, ...include: string[]) => ({
@@ -26,18 +26,18 @@ export default defineConfig({
   test: {
     projects: [
       project("core", "tests/**/*.vitest.test.ts"),
-      project("wasm", "evals/wasm-host/runner.vitest.ts"),
-      project("native-oracle", "evals/roracle-native/runner.vitest.ts"),
-      project("typed-oracle", "evals/roracle-wit/runner.vitest.ts"),
-      project("testing", "evals/testing-core/runner.vitest.ts"),
-      project("schedules", "evals/controlled-schedules/runner.vitest.ts"),
-      project("fuzz", "evals/structured-fuzz/runner.vitest.ts"),
-      project("alloy", "evals/alloy-instance/runner.vitest.ts"),
+      project("wasm", "tests/wasm-host/runner.vitest.ts"),
+      project("native-oracle", "tests/roracle-native/runner.vitest.ts"),
+      project("typed-oracle", "tests/roracle-wit/runner.vitest.ts"),
+      project("testing", "tests/testing-core/runner.vitest.ts"),
+      project("schedules", "tests/controlled-schedules/runner.vitest.ts"),
+      project("fuzz", "tests/structured-fuzz/runner.vitest.ts"),
+      project("alloy", "tests/alloy-instance/runner.vitest.ts"),
       project(
         "smt",
-        "evals/smt-expansion/runner.vitest.ts",
-        "evals/smt-scripts/runner.vitest.ts",
-        "evals/smt-tuning/runner.vitest.ts",
+        "tests/smt-expansion/runner.vitest.ts",
+        "tests/smt-scripts/runner.vitest.ts",
+        "tests/smt-tuning/runner.vitest.ts",
       ),
     ],
   },
@@ -51,12 +51,15 @@ export default defineConfig({
       "**/pnpm-lock.yaml",
       "**/Cargo.toml",
       "crates/rtla/tests/fixtures/LICENSE.md",
-      "evals/roracle-wit/generated/*.js",
+      "evals/experiments/roracle-wit/generated/*.js",
     ],
   },
   lint: {
     categories: { correctness: "error" },
     rules: { "no-unused-vars": "warn", "unicorn/no-new-array": "warn" },
-    ignorePatterns: [...ignorePatterns, "evals/roracle-wit/generated/**"],
+    ignorePatterns: [
+      ...ignorePatterns,
+      "evals/experiments/roracle-wit/generated/**",
+    ],
   },
 });

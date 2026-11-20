@@ -44,7 +44,7 @@ CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保
 
 各crateの[対応チェックリストとコミット前の同期検査](docs/crate-checklists.md)を参照。
 
-roracleのrequest/report型はRustからTSへ生成する。Node向けnapi-rsは[比較実験](evals/roracle-native/README.md)として追加し、既定のWasm経路を維持する。他crate全体の型生成やnative bindingは未対応。
+roracleのrequest/report型はRustからTSへ生成する。Node向けnapi-rsは[比較実験](evals/experiments/roracle-native/README.md)として追加し、既定のWasm経路を維持する。他crate全体の型生成やnative bindingは未対応。
 
 | ライブラリ                                    | 入力                                           | 担当する処理・出力                                                                         |
 | --------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -88,13 +88,13 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 [独立した`idealis-smt` crate](crates/idealis-smt)は、整数の差分制約とBoolean式をnative/Wasmで解く。定数倍、整数`ite`、Rust/JSONのassert・push/pop・一時Bool assumptionsに対応する。SMT-LIB scriptのpush/pop・複数checkも、冒頭で宣言を固定する範囲で実行できる。[対応チェックリスト](docs/smt-checklist.md)と[SMT-LIBサブセット](docs/smt-subset.md)を明示し、idealisの他crateやZ3には依存しない。Z3を再利用した比較でも小さいTTL・amount・schedulerはnativeで約3.0-3.4倍速い一方、Boolean UNSATには後退と予算切れが残る。[全17入力の比較](evals/iterations/0031-smt-reuse.md)は切り出し前の測定で、idealisの公開backendへの組み込みは保留している。
 
-[`ralloy`](crates/ralloy)は、静的なsig・二項field・関係演算・量化・run/checkを有限scope内で検査する独立crate。JVMやZ3に依存せず、nativeとホストimportのないWasmで同じ探索器を使う。Alloy AnalyzerのSAT変換、継承、時間・var、整数演算は未対応。`@mizchi/idealis/alloy`からWasmを読み、モデルの探索と実装の関係スナップショットの照合に使える。[利用手順](docs/alloy.md)と[評価手順](evals/alloy-subset/README.md)を参照。汎用backend契約とCLIへの接続は今後の対象。
+[`ralloy`](crates/ralloy)は、静的なsig・二項field・関係演算・量化・run/checkを有限scope内で検査する独立crate。JVMやZ3に依存せず、nativeとホストimportのないWasmで同じ探索器を使う。Alloy AnalyzerのSAT変換、継承、時間・var、整数演算は未対応。`@mizchi/idealis/alloy`からWasmを読み、モデルの探索と実装の関係スナップショットの照合に使える。[利用手順](docs/alloy.md)と[評価手順](evals/experiments/alloy-subset/README.md)を参照。汎用backend契約とCLIへの接続は今後の対象。
 
 [`idealis-testing`](crates/idealis-testing)は、有限状態機械のPBT・縮小・差分比較・保存caseの再生を行う独立crate。TSは`@mizchi/idealis/testing`から同じWasmを使い、Vitest・node:test・ブラウザでDriverを動かす。[明示したactor列からのスケジュール生成](docs/testing.md#actorの操作順を制御する)も扱う。既存fast-check経路のStrategy/seed互換、任意threadの自動計装、全実行の証明は含めない。
 
 [`roracle`](crates/roracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
 
-開発用の[構造付きfuzzing](evals/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
+開発用の[構造付きfuzzing](evals/experiments/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
 
 [SAT/CNF候補の評価](evals/iterations/0037-sat-foundation.md)では、Varisat 0.2.2のnative/Wasmを独立全列挙と照合し、実ブラウザの動作を確認した。実行バジェットを保証するbackendへの採用は保留中。`ralloy`や`idealis-smt`には組み込まず、非公開のeval crateとして分離している。
 
@@ -119,7 +119,7 @@ pnpm workspace のルートで開発タスクを実行する。公開パッケ�
 
 評価と改善のループは `just eval-loop`、保存した故障の再現は `just replay-loop`。[evals/](evals/README.md) に仮説・条件・run・判断・次の仮説を残す。初回の幅広い比較は `just evaluate` / `just replay-evaluation` で再実行できる。実験用の探索器・履歴 checker は public API に含めない。
 
-時間・メモリから worker 数と探索深さを選ぶ `./budget`、独立 task の分割・集約を行う `./sharding` を追加した。[実行時間・Rust・cloud sharding の評価](evals/runtime/README.md) と [測定結果](evals/iterations/0003-runtime.md) を参照。Rust/Wasm は実験用カーネルとして分離している。
+時間・メモリから worker 数と探索深さを選ぶ `./budget`、独立 task の分割・集約を行う `./sharding` を追加した。[実行時間・Rust・cloud sharding の評価](evals/experiments/runtime/README.md) と [測定結果](evals/iterations/0003-runtime.md) を参照。Rust/Wasm は実験用カーネルとして分離している。
 
 独立した検査の配置と常駐workerへの配布は `./scheduling`。[予算・費用順配置・batch化のガイド](docs/scheduling.md) と [TLA検査の1/2/4/8-worker評価](evals/iterations/0017-parallel-safety.md) を参照。共通APIはNodeやsolverに依存せず、Node / browserのTLA adapterは評価用の試作として分離している。
 
@@ -238,7 +238,7 @@ nativeの8-worker要求は同じrunのTLC 8 workers比でcounter 2.67倍、funct
 
 ringは1,000状態、function-cubeは8 bitの256状態で、3実装の完了判定・distinct・generatedが一致した。小さいモデルの起動費用を含み、検査kernelの速度差を示す値ではない。Rustのprepared check/coverage比較、測定中のdrift検出、保存oracleからの再生と最初の失敗は[評価0051](evals/iterations/0051-oracle-library.md)へ記録した。APIは[RustのテストとCriterion風のgroup登録](crates/roracle/README.md)を参照。
 
-workspaceの差分検査は23ファイル・99比較を同じRust/Wasm照合器へ移した。変更前後のbinary/source snapshot、cold/reusedの比較、保存oracleへの再生を[チューニング手順](evals/workspace-oracle/README.md)で実行できる。正常対照の12 group・1222回の一致と、JSON bridgeの追加費用は[評価0052](evals/iterations/0052-workspace-oracle.md)へ記録した。 TLCの参照環境を修正し、既存24不一致も[評価0053](evals/iterations/0053-tlc-standard-modules.md)で解消した。155件の検査・32件の確認・155件の保存再生で不一致0を確認している。
+workspaceの差分検査は23ファイル・99比較を同じRust/Wasm照合器へ移した。変更前後のbinary/source snapshot、cold/reusedの比較、保存oracleへの再生を[チューニング手順](evals/experiments/workspace-oracle/README.md)で実行できる。正常対照の12 group・1222回の一致と、JSON bridgeの追加費用は[評価0052](evals/iterations/0052-workspace-oracle.md)へ記録した。 TLCの参照環境を修正し、既存24不一致も[評価0053](evals/iterations/0053-tlc-standard-modules.md)で解消した。155件の検査・32件の確認・155件の保存再生で不一致0を確認している。
 
 ## Rustコアの最適化前後
 

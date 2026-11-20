@@ -69,7 +69,7 @@ just smt-browser
 just package
 ```
 
-Wasmは`wasm32-unknown-unknown`向けの`idealis-smt.wasm`。既存の`smt_*` ABI v1を保ち、SharedArrayBufferを要求しない。読み書きする関数は`smt_input_resize`、`smt_dispatch`、`smt_output_ptr`、`smt_output_len`。[TS loader](https://github.com/mizchi/idealis/blob/main/evals/smt-subset/wasm.ts)で呼び出せる。
+Wasmは`wasm32-unknown-unknown`向けの`idealis-smt.wasm`。既存の`smt_*` ABI v1を保ち、SharedArrayBufferを要求しない。読み書きする関数は`smt_input_resize`、`smt_dispatch`、`smt_output_ptr`、`smt_output_len`。[TS loader](https://github.com/mizchi/idealis/blob/main/evals/experiments/smt-subset/wasm.ts)で呼び出せる。
 
 `just package`は`idealis-smt-<version>.crate`、`idealis-smt.wasm`とSHA-256/ABI manifestを作る。展開したidealis-smtのarchiveだけで別consumerをビルドし、SAT、UNSAT、unknown、未対応、scope・assumptionsと依存の独立性を検査する。registryへのpublishは行わない。Criterionの測定は`just rsmt-criterion`。
 

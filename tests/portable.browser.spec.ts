@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { expect, test } from "@playwright/test";
 import { build } from "esbuild";
-import { cases } from "../evals/collections-temporal/cases.js";
+import { cases } from "../evals/experiments/collections-temporal/cases.js";
 import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 let server: Server | undefined;

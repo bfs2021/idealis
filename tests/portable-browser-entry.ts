@@ -1,10 +1,14 @@
 import {
   coverageBounds,
   coverageInputs,
-} from "../evals/action-coverage/cases.js";
-import type { FrontendCase } from "../evals/frontend-semantics/cases.js";
-import { sharing } from "../evals/p0-checker/inputs.js";
-import { monotone, nodeSets, recordNodes } from "../evals/symmetry/cases.js";
+} from "../evals/experiments/action-coverage/cases.js";
+import type { FrontendCase } from "../evals/experiments/frontend-semantics/cases.js";
+import { sharing } from "../evals/experiments/p0-checker/inputs.js";
+import {
+  monotone,
+  nodeSets,
+  recordNodes,
+} from "../evals/experiments/symmetry/cases.js";
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
 import {

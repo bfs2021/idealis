@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { expect, test } from "@playwright/test";
 import { build } from "esbuild";
-import { cases } from "../evals/rust-safety/cases.js";
+import { cases } from "../evals/experiments/rust-safety/cases.js";
 import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 let server: Server;
@@ -10,7 +10,7 @@ let origin: string;
 test.beforeAll(async () => {
   const outputs = await Promise.all([
     build({
-      entryPoints: ["evals/parallel-safety/browser-test-entry.ts"],
+      entryPoints: ["tests/parallel-safety/browser-test-entry.ts"],
       bundle: true,
       platform: "browser",
       format: "iife",
@@ -18,7 +18,7 @@ test.beforeAll(async () => {
       write: false,
     }),
     build({
-      entryPoints: ["evals/parallel-safety/browser-worker.ts"],
+      entryPoints: ["evals/experiments/parallel-safety/browser-worker.ts"],
       bundle: true,
       platform: "browser",
       format: "esm",

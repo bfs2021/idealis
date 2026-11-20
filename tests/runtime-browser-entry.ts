@@ -1,5 +1,8 @@
-import { compileCounterTable, runTable } from "../evals/runtime/table.js";
-import { createWasmKernel } from "../evals/runtime/wasm.js";
+import {
+  compileCounterTable,
+  runTable,
+} from "../evals/experiments/runtime/table.js";
+import { createWasmKernel } from "../evals/experiments/runtime/wasm.js";
 import { planBudget } from "../packages/idealis/src/budget.js";
 import {
   createManifest,

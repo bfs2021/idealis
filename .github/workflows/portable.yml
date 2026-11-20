@@ -19,9 +19,9 @@ jobs:
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
       - run: pnpm portable:test
-      - run: node --test --test-name-pattern="portable Wasm|Quint generated|parser Wasm" dist/evals/wasm-host/contract-test.js
+      - run: node --test --test-name-pattern="portable Wasm|Quint generated|parser Wasm" dist/tests/wasm-host/contract-test.js
       - run: pnpm portable:eval .artifacts/portable-evaluation
-      - run: node dist/evals/portable/replay.js .artifacts/portable-evaluation
+      - run: node dist/evals/experiments/portable/replay.js .artifacts/portable-evaluation
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:

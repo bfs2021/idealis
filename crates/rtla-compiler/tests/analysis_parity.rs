@@ -46,12 +46,12 @@ fn complete(source: &str) {
 fn analysis_parity_role_table_matches_independent_expectation() {
     let text = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../../evals/fixtures/tlc-operator-sharing/analysis-roles.json"
+        "/../../fixtures/tlc-operator-sharing/analysis-roles.json"
     ))
     .unwrap();
     let mut expected: Vec<serde_json::Value> = serde_json::from_str(&text).unwrap();
     let additions: Vec<serde_json::Value> = serde_json::from_str(include_str!(
-        "../../../evals/fixtures/tlc-operator-sharing/analysis-rust-roles.json"
+        "../../../fixtures/tlc-operator-sharing/analysis-rust-roles.json"
     ))
     .unwrap();
     expected.extend(additions);
@@ -231,7 +231,7 @@ fn contains_node(value: &serde_json::Value, expected: &serde_json::Value) -> boo
 
 fn call_actual_case(id: &str) {
     let fixture: serde_json::Value = serde_json::from_str(include_str!(
-        "../../../evals/fixtures/tlc-operator-sharing/analysis-call-actual-cases.json"
+        "../../../fixtures/tlc-operator-sharing/analysis-call-actual-cases.json"
     ))
     .unwrap();
     let entry = fixture["cases"]

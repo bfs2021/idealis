@@ -17,7 +17,7 @@ test.beforeAll(async () => {
   const output = bundle.outputFiles[0];
   if (!output) throw new Error("No browser runtime bundle");
   const wasm = await readFile(
-    "evals/rust-probe/target/wasm32-unknown-unknown/release/idealis_runtime_probe.wasm",
+    "evals/experiments/rust-probe/target/wasm32-unknown-unknown/release/idealis_runtime_probe.wasm",
   );
   server = createServer((request, response) => {
     response.setHeader(

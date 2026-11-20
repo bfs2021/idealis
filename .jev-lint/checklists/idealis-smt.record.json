@@ -1,6 +1,6 @@
 {
   "schema": "jev-lint-documents-1",
-  "snapshotDigest": "95df715730da09deb34de168fd53d3dba225813a8d978053c37a6482b13f0581",
+  "snapshotDigest": "fd28233780c21c26f82b97b0b138b36d0a77b43f7a6bdf6fbd96a7b7c4eb53e3",
   "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
   "model": "jev-1.14.0",
   "snapshotChanged": false,
@@ -16,8 +16,8 @@
         "path": "crates/idealis-smt/README.md",
         "startLine": 1,
         "endLine": 76,
-        "quote": "# idealis-smt\n\n[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。\n\n任意精度整数の差分制約とBoolean式を解く、SMT-LIBサブセットのRustライブラリ。idealisの他crate、Node、Z3には依存しない。nativeとホストimport不要のWasmを同じソースから生成する。\n\n`QF_IDL`と、無条件の定数代入や同じ係数の定数倍を正規化して差分制約へ変換できる`QF_LIA`の一部を扱う。Boolean分岐とBellman-Fordの負閉路検査を使う。一般の線形整数式、Real、BitVec、配列、量化は対象外。[対応範囲・制約・実測結果](https://github.com/mizchi/idealis/blob/main/docs/smt-subset.md)を参照。\n\n## Rustから使う\n\nローカルcheckoutでは依存に`idealis-smt = { path = \"../idealis/crates/idealis-smt\" }`を追加する。registryへは未公開。\n\n```rust\nuse idealis_smt::Problem;\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let problem = Problem::parse(\n        \"(declare-const x Int)(assert (> x 10))(assert (< x 20))\",\n    )?;\n    let result = problem.solve(100_000);\n    assert_eq!(result.status, \"sat\");\n    println!(\"{}\", result.values[\"x\"]);\n    Ok(())\n}\n```\n\n公開境界は`Problem`、`Solver`、`Script`、`Assumption`、`Solution`、`Stats`、`Error`とJSON protocolの`Engine`。`Solver`はassertion scopeを保持し、`Assumption`は一時的なBool literalを指定する。parser、式、探索状態はprivate。`Solution`はserdeでJSONへ変換でき、整数値は精度を保つため10進文字列にする。\n\n- `sat`は全宣言の具体値を返す。\n- `unsat`はすべての枝が矛盾した場合に返す。\n- `unknown`はwork予算切れで、モデルを返さない。\n- `Problem::parse`の`Error`は未対応、不正入力、型や資源上限を表す。\n\n## assertion scopeと一時assumptions\n\n```rust\nuse idealis_smt::{Assumption, Solver};\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let mut solver = Solver::parse(\"(declare-const x Int)(declare-const b Bool)\")?;\n    solver.push(1)?;\n    solver.assert(\"(= (* 2 x) (ite b 6 8))\")?;\n    let assumptions = [Assumption { symbol: \"b\".into(), positive: true }];\n    assert_eq!(solver.check_assuming(&assumptions, 100_000)?.values[\"x\"], \"3\");\n    solver.pop(1)?;\n    solver.assert(\"(= x 9)\")?;\n    assert_eq!(solver.check(100_000).values[\"x\"], \"9\");\n    Ok(())\n}\n```\n\n宣言は初期sourceに固定し、scopeとassumptionsは各256件まで。失敗したassert/popは元のcontextを保つ。assert/popは再解析し、変更なしのcheckは解析結果だけを再利用する。学習状態の再利用は行わない。整数iteは最大256選択肢まで展開する。一般LIAや非線形乗算は未対応。\n\n## SMT-LIB scriptの問い合わせ列\n\n同じ制約のcheckは不変な解析結果を共有する。`Script::parse(source)`で全コマンドを検査し、`Script::solve(max_work)`で各checkの`Solution`を順番に返す。push/pop、複数check-sat、Bool literalのcheck-sat-assumingに対応する。宣言・logic・optionは冒頭に固定し、各assertが追加時点で対応式になる必要がある。scope内の宣言、define-fun、get-model/get-value、reset、exitは未対応。\n\nwork予算はスクリプト全体で共有する。残り0はunknown/workと空モデル。不正な後続コマンドは全体をerrorにし、部分的なSATを返さない。checkのない入力は空の結果列で、検査成功として扱わない。checkは最大256回。Scriptを再求解すると予算と探索を初めから始める。\n\n## nativeとWasm\n\n`idealis-smt` binaryはstdin/stdoutでJSONLを扱う。requestにはversion 1と、`run-script` / `solve` / `prepare` / `assert` / `push` / `pop` / `check` / `release`を指定する。prepareは解析結果を保持し、回答はcacheしない。run-scriptは`{source,maxWork}`を受け、`{kind:\"script-results\",results:[...]}`を返す。結果の整数値は文字列。\n\n```sh\njust rsmt-build\njust rsmt-test\njust rsmt-example\njust smt-browser\njust package\n```\n\nWasmは`wasm32-unknown-unknown`向けの`idealis-smt.wasm`。既存の`smt_*` ABI v1を保ち、SharedArrayBufferを要求しない。読み書きする関数は`smt_input_resize`、`smt_dispatch`、`smt_output_ptr`、`smt_output_len`。[TS loader](https://github.com/mizchi/idealis/blob/main/evals/smt-subset/wasm.ts)で呼び出せる。\n\n`just package`は`idealis-smt-<version>.crate`、`idealis-smt.wasm`とSHA-256/ABI manifestを作る。展開したidealis-smtのarchiveだけで別consumerをビルドし、SAT、UNSAT、unknown、未対応、scope・assumptionsと依存の独立性を検査する。registryへのpublishは行わない。Criterionの測定は`just rsmt-criterion`。\n\nCriterionは既存の整数チェーンと整数ite、scriptのparse/prepared solve、context操作の14ケースを持つ。[改善前後の計測](https://github.com/mizchi/idealis/blob/main/evals/iterations/0042-smt-tuning.md)に保存binaryと測定順、raw samplesを記録した。",
-        "contentHash": "1581286a22d03f15e4c63a3bcd33de42f7f939255ff1bc221ea5857e80fc034a"
+        "quote": "# idealis-smt\n\n[対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。\n\n任意精度整数の差分制約とBoolean式を解く、SMT-LIBサブセットのRustライブラリ。idealisの他crate、Node、Z3には依存しない。nativeとホストimport不要のWasmを同じソースから生成する。\n\n`QF_IDL`と、無条件の定数代入や同じ係数の定数倍を正規化して差分制約へ変換できる`QF_LIA`の一部を扱う。Boolean分岐とBellman-Fordの負閉路検査を使う。一般の線形整数式、Real、BitVec、配列、量化は対象外。[対応範囲・制約・実測結果](https://github.com/mizchi/idealis/blob/main/docs/smt-subset.md)を参照。\n\n## Rustから使う\n\nローカルcheckoutでは依存に`idealis-smt = { path = \"../idealis/crates/idealis-smt\" }`を追加する。registryへは未公開。\n\n```rust\nuse idealis_smt::Problem;\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let problem = Problem::parse(\n        \"(declare-const x Int)(assert (> x 10))(assert (< x 20))\",\n    )?;\n    let result = problem.solve(100_000);\n    assert_eq!(result.status, \"sat\");\n    println!(\"{}\", result.values[\"x\"]);\n    Ok(())\n}\n```\n\n公開境界は`Problem`、`Solver`、`Script`、`Assumption`、`Solution`、`Stats`、`Error`とJSON protocolの`Engine`。`Solver`はassertion scopeを保持し、`Assumption`は一時的なBool literalを指定する。parser、式、探索状態はprivate。`Solution`はserdeでJSONへ変換でき、整数値は精度を保つため10進文字列にする。\n\n- `sat`は全宣言の具体値を返す。\n- `unsat`はすべての枝が矛盾した場合に返す。\n- `unknown`はwork予算切れで、モデルを返さない。\n- `Problem::parse`の`Error`は未対応、不正入力、型や資源上限を表す。\n\n## assertion scopeと一時assumptions\n\n```rust\nuse idealis_smt::{Assumption, Solver};\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    let mut solver = Solver::parse(\"(declare-const x Int)(declare-const b Bool)\")?;\n    solver.push(1)?;\n    solver.assert(\"(= (* 2 x) (ite b 6 8))\")?;\n    let assumptions = [Assumption { symbol: \"b\".into(), positive: true }];\n    assert_eq!(solver.check_assuming(&assumptions, 100_000)?.values[\"x\"], \"3\");\n    solver.pop(1)?;\n    solver.assert(\"(= x 9)\")?;\n    assert_eq!(solver.check(100_000).values[\"x\"], \"9\");\n    Ok(())\n}\n```\n\n宣言は初期sourceに固定し、scopeとassumptionsは各256件まで。失敗したassert/popは元のcontextを保つ。assert/popは再解析し、変更なしのcheckは解析結果だけを再利用する。学習状態の再利用は行わない。整数iteは最大256選択肢まで展開する。一般LIAや非線形乗算は未対応。\n\n## SMT-LIB scriptの問い合わせ列\n\n同じ制約のcheckは不変な解析結果を共有する。`Script::parse(source)`で全コマンドを検査し、`Script::solve(max_work)`で各checkの`Solution`を順番に返す。push/pop、複数check-sat、Bool literalのcheck-sat-assumingに対応する。宣言・logic・optionは冒頭に固定し、各assertが追加時点で対応式になる必要がある。scope内の宣言、define-fun、get-model/get-value、reset、exitは未対応。\n\nwork予算はスクリプト全体で共有する。残り0はunknown/workと空モデル。不正な後続コマンドは全体をerrorにし、部分的なSATを返さない。checkのない入力は空の結果列で、検査成功として扱わない。checkは最大256回。Scriptを再求解すると予算と探索を初めから始める。\n\n## nativeとWasm\n\n`idealis-smt` binaryはstdin/stdoutでJSONLを扱う。requestにはversion 1と、`run-script` / `solve` / `prepare` / `assert` / `push` / `pop` / `check` / `release`を指定する。prepareは解析結果を保持し、回答はcacheしない。run-scriptは`{source,maxWork}`を受け、`{kind:\"script-results\",results:[...]}`を返す。結果の整数値は文字列。\n\n```sh\njust rsmt-build\njust rsmt-test\njust rsmt-example\njust smt-browser\njust package\n```\n\nWasmは`wasm32-unknown-unknown`向けの`idealis-smt.wasm`。既存の`smt_*` ABI v1を保ち、SharedArrayBufferを要求しない。読み書きする関数は`smt_input_resize`、`smt_dispatch`、`smt_output_ptr`、`smt_output_len`。[TS loader](https://github.com/mizchi/idealis/blob/main/evals/experiments/smt-subset/wasm.ts)で呼び出せる。\n\n`just package`は`idealis-smt-<version>.crate`、`idealis-smt.wasm`とSHA-256/ABI manifestを作る。展開したidealis-smtのarchiveだけで別consumerをビルドし、SAT、UNSAT、unknown、未対応、scope・assumptionsと依存の独立性を検査する。registryへのpublishは行わない。Criterionの測定は`just rsmt-criterion`。\n\nCriterionは既存の整数チェーンと整数ite、scriptのparse/prepared solve、context操作の14ケースを持つ。[改善前後の計測](https://github.com/mizchi/idealis/blob/main/evals/iterations/0042-smt-tuning.md)に保存binaryと測定順、raw samplesを記録した。",
+        "contentHash": "b04947b6eec7791cc5cdfca9412113efa11f282254f5859a98e801ef90e651d9"
       },
       "target": {
         "source": "source3",
@@ -28,14 +28,14 @@
         "contentHash": "f53fff7ca634b15ab667f8cf1d5a9f855b2870cd7a453b3f14554af6ff7876af"
       },
       "context": [],
-      "candidateId": "b8055e425c65b6a6c5a4ec0359b4b177694cc12bf4f2257461ae2bc0a9467d4d",
-      "contextHash": "4a32fc1582de399fdfe91ec6b9f60d9bd908e3635270e91aa4cce684538cbb5b",
+      "candidateId": "81263cd519e78ed347d48d3eb2d8d8f890ecfa254d789c23b33bbb7f05da63bd",
+      "contextHash": "167b7da5a0d22858c86231e4b5dfa3aa7c8ab18c6a75775c3f866b528a4b7f64",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.81,
+        "confidence": 0.84,
         "probabilities": {
-          "supports": 0.86,
-          "contradicts": 0.13,
+          "supports": 0.88,
+          "contradicts": 0.11,
           "unrelated": 0,
           "insufficient_context": 0.01
         }
@@ -66,12 +66,12 @@
       "contextHash": "ec5ae18cd68dfca9e420123d31d0b5676e1d29f22b8b8a8b50fae38bf2d4200e",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.67,
+        "confidence": 0.71,
         "probabilities": {
-          "supports": 0.75,
-          "contradicts": 0.2,
+          "supports": 0.78,
+          "contradicts": 0.19,
           "unrelated": 0,
-          "insufficient_context": 0.05
+          "insufficient_context": 0.03
         }
       }
     },
@@ -100,10 +100,10 @@
       "contextHash": "cf60b0b09cde292ede8b8c848f7e6c3354b5749fa0d1aacc9443db48801e2bdd",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.76,
+        "confidence": 0.73,
         "probabilities": {
-          "supports": 0.82,
-          "contradicts": 0.04,
+          "supports": 0.8,
+          "contradicts": 0.06,
           "unrelated": 0.01,
           "insufficient_context": 0.13
         }
@@ -134,12 +134,12 @@
       "contextHash": "3af7873aba7b6816d01895a1b685d6290673657946c110f7333150b525fbfdbf",
       "judgment": {
         "choice": "supports",
-        "confidence": 0.67,
+        "confidence": 0.65,
         "probabilities": {
-          "supports": 0.75,
+          "supports": 0.74,
           "contradicts": 0.11,
           "unrelated": 0.01,
-          "insufficient_context": 0.13
+          "insufficient_context": 0.14
         }
       }
     }
@@ -157,8 +157,8 @@
   },
   "usage": {
     "requests": 4,
-    "inputTokens": 19293,
-    "usd": 0.0008103060000000001
+    "inputTokens": 19294,
+    "usd": 0.000810348
   },
   "errors": []
 }

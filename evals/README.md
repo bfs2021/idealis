@@ -1,5 +1,7 @@
 # 評価しながら改善する
 
+実験の実装・計測・再生は [experiments/](experiments/)、回帰テストは [tests/](../tests/)、固定入力・期待値は [fixtures/](../fixtures/) に置く。実行時にケースを生成するコードは実験に含める。保存済みの計画・実行結果・考察は記録時のパスを保持する。
+
 [0072: source level・遅延関数・template共有](iterations/0072-frontend-semantics.md)は、SANY/TLCの拒否・正常/故障対照とnative/Wasm/Chromiumを照合する。共有化前後の完全応答・workとCriterionのcompile/fresh/preparedを分け、入力条件の修正と失敗も保存する。
 
 [0070: TLA+ frontendの追加対応](iterations/0070-tla-coverage.md)は二版のSANY構文木、native/Wasm/TLCの実行と反例、再帰の予算切れを比較する。高階・module・proofの構文保持と有限実行の範囲を区別する。
@@ -80,7 +82,7 @@ pnpm eval:replay evals/runs/my-run-confirmation
 | `runs/<id>/result.json`    | 集計、正常対照、評価、各証拠の digest。完了の目印                  |
 | `runs/ledger.jsonl`        | run の追記台帳。例外は `error`、正常対照の失敗は `controls-failed` |
 | `iterations/`              | 結果の解釈、採用・保留の理由、後退、次の仮説                       |
-| `harness/`                 | 実験用のモデル・実装・探索器。public API と分離                    |
+| `experiments/harness/`     | 実験用のモデル・実装・探索器。public API と分離                    |
 
 ## ループの進め方
 
@@ -99,7 +101,7 @@ pnpm eval:replay evals/runs/my-run-confirmation
 
 初回の幅広い pilot は `pnpm evaluate` / `pnpm evaluate:replay` で再実行できる。履歴は [0000](iterations/0000-pilot.md)。古い記録には後付けの厳密な provenance を主張せず、`legacy-import` として区別した。
 
-実行時間と Rust 化は [0003](iterations/0003-runtime.md)。[runtime/](runtime/README.md) に budget planner の前提、Rust/Wasm の比較、クラウド分割 CLI を記録している。
+実行時間と Rust 化は [0003](iterations/0003-runtime.md)。[runtime/](experiments/runtime/README.md) に budget planner の前提、Rust/Wasm の比較、クラウド分割 CLI を記録している。
 
 [0007 の計画](plans/0007-shared-oracle.md) は、同じ仕様 oracle で TS / Rust / Go の実装を直接操作する。`just cross-test`、`cross-eval` / `cross-replay` と [利用手順](../docs/shared-oracle.md) を参照。
 

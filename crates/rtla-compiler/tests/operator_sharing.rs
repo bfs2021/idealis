@@ -46,13 +46,13 @@ macro_rules! oracle {
         #[test]
         fn $test() {
             let module = rtla::parse_module(include_str!(concat!(
-                "../../../evals/fixtures/tlc-operator-sharing/",
+                "../../../fixtures/tlc-operator-sharing/",
                 $case,
                 "/Differential.tla"
             )))
             .unwrap();
             let config = rtla::parse_config(include_str!(concat!(
-                "../../../evals/fixtures/tlc-operator-sharing/",
+                "../../../fixtures/tlc-operator-sharing/",
                 $case,
                 "/Differential.cfg"
             )))
@@ -83,19 +83,19 @@ macro_rules! oracle {
                 max_temporal_nodes: None,
             });
             let golden: serde_json::Value = serde_json::from_str(include_str!(
-                "../../../evals/fixtures/tlc-operator-sharing/expected.json"
+                "../../../fixtures/tlc-operator-sharing/expected.json"
             ))
             .unwrap();
             let additional: serde_json::Value = serde_json::from_str(include_str!(
-                "../../../evals/fixtures/tlc-operator-sharing/expected-step3c.json"
+                "../../../fixtures/tlc-operator-sharing/expected-step3c.json"
             ))
             .unwrap();
             let generative: serde_json::Value = serde_json::from_str(include_str!(
-                "../../../evals/fixtures/tlc-operator-sharing/expected-step3d-a.json"
+                "../../../fixtures/tlc-operator-sharing/expected-step3d-a.json"
             ))
             .unwrap();
             let frames: serde_json::Value = serde_json::from_str(include_str!(
-                "../../../evals/fixtures/tlc-operator-sharing/expected-step3e-a.json"
+                "../../../fixtures/tlc-operator-sharing/expected-step3e-a.json"
             ))
             .unwrap();
             let fixture = golden["cases"]
@@ -511,7 +511,7 @@ fn v2_function_definition_domains_capture_free_except_old() {
 #[test]
 fn v2_function_definition_domains_propagate_target_and_membership_requirements() {
     let golden: serde_json::Value = serde_json::from_str(include_str!(
-        "../../../evals/fixtures/tlc-operator-sharing/expected-step3c.json"
+        "../../../fixtures/tlc-operator-sharing/expected-step3c.json"
     ))
     .unwrap();
     let stuttering_control = golden["cases"]

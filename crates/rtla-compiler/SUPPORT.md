@@ -80,7 +80,7 @@
 [operator共有の回帰](tests/operator_sharing.rs)も参照。
 [記号operatorの回帰](tests/symbolic.rs)、[binding検査](src/symbols.rs)と[構文・TLC比較](../../evals/iterations/0069-symbolic-operators.md)も参照。高階operatorは静的に特殊化し、operatorをstateへ格納する一般の値とは区別する。
 
-[operator-sharing cohort](../../evals/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。
+[operator-sharing cohort](../../tests/tlc-differential/operator-sharing-test.ts)は保存TLCログ、TS/Rust構造、native / Wasm完全応答、線形成長と小予算のbounded / workを検査する。固定した有限fragmentと入力での根拠であり、全TLA+互換や指数的な評価仕事の除去、一般的な速度改善は主張しない。
 
 生成的UNCHANGEDはcallerの字句環境で変数/tuple targetを解決する。通常式の引数・captureを外殻へ代入せず、membership用途を伝播する。action/temporal引数は共有callまたはanonymous frameでcallerのlexical bindingを保持する。LET内の自由な`@`はTLC対照に従って扱う。引数の`@`を呼出し先のEXCEPTへ渡す場合はv2を要求する。
 
