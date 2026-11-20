@@ -152,9 +152,11 @@ export const registerNativeOracleContract = (
     assert.ok(client);
     const cycle: { nested?: unknown } = {};
     cycle.nested = cycle;
+    const sparse: unknown[] = [];
+    sparse.length = 2;
     for (const invalid of [
       cycle,
-      new Array(2),
+      sparse,
       new Date(),
       Object.create({ inherited: 7 }),
     ]) {

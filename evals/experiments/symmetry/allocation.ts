@@ -81,7 +81,7 @@ await save("manifest.json", {
   snapshots,
   inputs,
   bounds,
-  routes: routes.map(({ request, ...route }) => route),
+  routes: routes.map(({ request: _request, ...route }) => route),
   node: process.version,
   cpu: cpus()[0]?.model,
   warmup: 1,

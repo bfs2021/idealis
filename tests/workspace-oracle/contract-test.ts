@@ -53,13 +53,15 @@ test("oracle equality retains the previous strict equality on portable snapshots
 test("nonportable values and cycles fail explicitly instead of losing data", () => {
   const cycle: unknown[] = [];
   cycle.push(cycle);
+  const sparse: unknown[] = [];
+  sparse.length = 2;
   for (const value of [
     cycle,
     new Date(),
     new Map(),
     () => 1,
     Symbol("x"),
-    new Array(2),
+    sparse,
   ])
     assert.throws(() => snapshot(value));
   assert.throws(
@@ -174,6 +176,8 @@ test("snapshot traversal preserves special keys, shared values and exact depth",
 });
 
 test("snapshot rejects hidden fields, extended arrays and accessors without invoking them", () => {
+  const trailingHole = [7];
+  trailingHole.length = 2;
   for (const value of [
     Object.defineProperty({}, "hidden", { value: 7 }),
     Object.defineProperty([7], "hidden", { value: 7 }),
@@ -181,7 +185,7 @@ test("snapshot rejects hidden fields, extended arrays and accessors without invo
     Object.assign({}, { [Symbol("hidden")]: 7 }),
     Object.assign([7], { [Symbol("hidden")]: 7 }),
     Object.create(null),
-    [7].concat(new Array(1)),
+    trailingHole,
   ])
     assert.throws(() => snapshot(value));
   for (const value of [

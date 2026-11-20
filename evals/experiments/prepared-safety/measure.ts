@@ -133,7 +133,7 @@ await save("manifest.json", {
   inputs,
   bounds,
   node: process.version,
-  routes: routes.map(({ core, ...route }) => route),
+  routes: routes.map(({ core: _core, ...route }) => route),
   warmup: 1,
   samples: 3,
   scope:

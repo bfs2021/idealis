@@ -19,7 +19,7 @@ import {
   parseZ3,
   wasmPath,
 } from "./clients.js";
-import { benchmarks, type Input } from "./corpus.js";
+import { benchmarks } from "./corpus.js";
 import { digest, fingerprint } from "./provenance.js";
 import { createWasm } from "./wasm.js";
 import { type Answer, solution } from "./wire.js";

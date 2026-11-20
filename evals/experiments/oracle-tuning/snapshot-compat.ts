@@ -64,6 +64,8 @@ for (let index = 0; index < 100; index++)
       { nested: [null, index] },
     ],
   });
+const sparse: unknown[] = [];
+sparse.length = 2;
 const rejected = [
   cycle,
   nested(49),
@@ -71,7 +73,7 @@ const rejected = [
   new Map(),
   Symbol("x"),
   () => 1,
-  new Array(2),
+  sparse,
   Object.create(null),
   Object.defineProperty({}, "hidden", { value: 7 }),
   Object.defineProperty([7], "extra", { value: 7 }),
