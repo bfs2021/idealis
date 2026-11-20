@@ -67,8 +67,8 @@ just replay-loop
 plan と run ID を明示する場合:
 
 ```sh
-pnpm eval:loop evals/plans/0001-longer-walk.json my-run
-pnpm eval:replay evals/runs/my-run-confirmation
+just eval-loop evals/plans/0001-longer-walk.json my-run
+just replay-loop evals/runs/my-run-confirmation
 ```
 
 | 場所                       | 記録するもの                                                       |
@@ -99,7 +99,7 @@ pnpm eval:replay evals/runs/my-run-confirmation
 
 実行済みの比較は [0001: 履歴長16](iterations/0001-longer-walk.md)、[0002: 8/16の混在](iterations/0002-mixed-depth.md)。次の仮説は [backlog](backlog.md) に残す。CI で同じ plan を反復するのは再現・回帰確認であり、新しい独立した確認実験として集計しない。
 
-初回の幅広い pilot は `pnpm evaluate` / `pnpm evaluate:replay` で再実行できる。履歴は [0000](iterations/0000-pilot.md)。古い記録には後付けの厳密な provenance を主張せず、`legacy-import` として区別した。
+初回の幅広い pilot は `just evaluate` / `just replay-evaluation` で再実行できる。履歴は [0000](iterations/0000-pilot.md)。古い記録には後付けの厳密な provenance を主張せず、`legacy-import` として区別した。
 
 実行時間と Rust 化は [0003](iterations/0003-runtime.md)。[runtime/](experiments/runtime/README.md) に budget planner の前提、Rust/Wasm の比較、クラウド分割 CLI を記録している。
 

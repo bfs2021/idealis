@@ -15,20 +15,17 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: node dist/scripts/release.js "$GITHUB_REF_NAME"
       - run: rustup target add wasm32-unknown-unknown
-      - run: pnpm check
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm package:prepare
+      - run: just check
+      - run: just package-prepare
       - run: node --test dist/tests/alloy-subset/contract-test.js
       - run: node --test dist/tests/alloy-instance/contract-test.js
-      - run: pnpm exec vp test run --project=alloy
+      - run: just vitest --project=alloy
       - run: node --test dist/tests/testing-core/contract-test.js
-      - run: pnpm exec vp test run --project=testing
-      - run: pnpm portable:test
-      - run: pnpm usable:test
-      - run: pnpm package:test
-      - run: pnpm wasm:build
-      - run: pnpm wasm:test
+      - run: just vitest --project=testing
+      - run: just portable-test
+      - run: just usable-test
+      - run: just package-test
+      - run: just wasm-test
       - run: npm install --global npm@11
       - run: node dist/scripts/release.js "$GITHUB_REF_NAME" --publish
         env:

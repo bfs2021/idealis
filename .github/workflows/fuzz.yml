@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - run: rustup target add wasm32-unknown-unknown
-      - run: pnpm testing:build
+      - run: just testing-build
       - run: cargo build --release --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml
       - run: rustup toolchain install nightly-2026-08-27 --profile minimal
       - run: cargo install cargo-fuzz --version 0.13.2 --locked

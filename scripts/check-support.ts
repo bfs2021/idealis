@@ -399,6 +399,7 @@ const scopes: readonly CrateScope[] = [
 ];
 const shared = [
   "scripts/check-support.ts",
+  "justfile",
   "package.json",
   "packages/idealis/package.json",
   "pnpm-workspace.yaml",

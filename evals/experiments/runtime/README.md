@@ -4,7 +4,7 @@
 rustup target add wasm32-unknown-unknown
 just runtime-build
 just runtime-test
-pnpm runtime:eval .artifacts/my-runtime-run
+just runtime-eval .artifacts/my-runtime-run
 ```
 
 Rust は依存 crate のない実験用カーネル。通常の TS ライブラリ利用には Rust のインストールは不要。Rust / Wasm の比較とブラウザ実行は追加のコマンドで検証する。
@@ -36,12 +36,12 @@ seed 61〜100の trace を照合し、故障版・正常版を元の TS モデ�
 ## Sharding CLI
 
 ```sh
-pnpm eval:shard prepare .artifacts/cloud/manifest.json
-pnpm eval:shard run .artifacts/cloud/manifest.json 0 4 .artifacts/cloud/shard-0 1 5000
-pnpm eval:shard run .artifacts/cloud/manifest.json 1 4 .artifacts/cloud/shard-1 1 5000
-pnpm eval:shard run .artifacts/cloud/manifest.json 2 4 .artifacts/cloud/shard-2 1 5000
-pnpm eval:shard run .artifacts/cloud/manifest.json 3 4 .artifacts/cloud/shard-3 1 5000
-pnpm eval:shard merge-directory .artifacts/cloud/manifest.json .artifacts/cloud/merged.json .artifacts/cloud
+just eval-shard prepare .artifacts/cloud/manifest.json
+just eval-shard run .artifacts/cloud/manifest.json 0 4 .artifacts/cloud/shard-0 1 5000
+just eval-shard run .artifacts/cloud/manifest.json 1 4 .artifacts/cloud/shard-1 1 5000
+just eval-shard run .artifacts/cloud/manifest.json 2 4 .artifacts/cloud/shard-2 1 5000
+just eval-shard run .artifacts/cloud/manifest.json 3 4 .artifacts/cloud/shard-3 1 5000
+just eval-shard merge-directory .artifacts/cloud/manifest.json .artifacts/cloud/merged.json .artifacts/cloud
 ```
 
 各 `run` は独立したホストで実行できる。引数は manifest / shard index / shard count / 出力先 / worker 数 / soft budget ms。worker 数はホストの calibration から planner が選んだ値を渡せる。クラウドのインスタンス数と、インスタンス内の worker 数は別に上限を設ける。
@@ -49,8 +49,8 @@ pnpm eval:shard merge-directory .artifacts/cloud/manifest.json .artifacts/cloud/
 実測 profile からバジェットを決めて準備する場合:
 
 ```sh
-pnpm eval:shard plan evals/runs/0003-runtime/profiles.json async-counter-3 100 1073741824 4 6 3 .artifacts/allocation.json
-pnpm eval:shard prepare .artifacts/allocated-manifest.json .artifacts/allocation.json
+just eval-shard plan evals/runs/0003-runtime/profiles.json async-counter-3 100 1073741824 4 6 3 .artifacts/allocation.json
+just eval-shard prepare .artifacts/allocated-manifest.json .artifacts/allocation.json
 ```
 
 `plan` の引数は profile / workload / ms / memory bytes / worker上限 / 深さ上限 / branching / 出力先。元の測定と同じホスト・workload で使い、他のインスタンスでは再測定する。`prepare` は選んだ深さ・ノード数を使い、完了する schedule に到達できなければ manifest を作らず `budget-exhausted` で終了する。検査範囲の情報は `.coverage.json` にも保存する。

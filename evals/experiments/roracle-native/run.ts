@@ -51,6 +51,7 @@ const sourcePaths = execFileSync(
     "scripts/oracle-types.ts",
     "scripts/build-native-oracle.ts",
     "evals/plans/native-oracle.md",
+    "justfile",
     "package.json",
     "packages/idealis/package.json",
     "pnpm-workspace.yaml",

@@ -24,6 +24,7 @@ export const portableFingerprint = async () => {
         "crates/rtla-compiler",
         "fixtures",
         "tests",
+        "justfile",
         "package.json",
         "packages/idealis/package.json",
         "pnpm-workspace.yaml",

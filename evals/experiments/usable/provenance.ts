@@ -31,6 +31,7 @@ export const usableFingerprint = async () => {
         "cli",
         "scripts",
         ".github",
+        "justfile",
         "package.json",
         "packages/idealis/package.json",
         "pnpm-workspace.yaml",

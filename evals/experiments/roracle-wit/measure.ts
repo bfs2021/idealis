@@ -85,6 +85,7 @@ const paths = execFileSync(
     "packages/idealis/src/generated/roracle.ts",
     "packages/idealis/src/trace.ts",
     "crates/roracle",
+    "justfile",
     "package.json",
     "packages/idealis/package.json",
     "pnpm-workspace.yaml",

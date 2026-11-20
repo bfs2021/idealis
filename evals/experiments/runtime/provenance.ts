@@ -28,6 +28,7 @@ export const runtimeFingerprint = async () => {
         ].map(collect),
       )
     ).flat(),
+    "justfile",
     "package.json",
     "packages/idealis/package.json",
     "pnpm-workspace.yaml",

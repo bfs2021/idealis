@@ -47,7 +47,7 @@ const commands = [
   ["just", ["evaluate"]],
   ["just", ["replay-evaluation"]],
   ["just", ["usable-test"]],
-  ["pnpm", ["usable:eval", join(directory, "usable")]],
+  ["just", ["usable-eval", join(directory, "usable")]],
   ["just", ["usable-replay", join(directory, "usable")]],
   ["just", ["cross-test"]],
   ["just", ["package"]],

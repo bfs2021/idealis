@@ -19,96 +19,84 @@ support-sync-staged:
 support-hooks:
   node --experimental-strip-types scripts/check-support.ts --install-hook
 
-support-test:
-  pnpm build
+support-test: build
   node --test dist/scripts/check-support-test.js
 
-support-eval run:
-  pnpm build
+support-eval run: build
   node dist/evals/experiments/crate-checklists/run.js {{quote(run)}}
 
-support-replay run:
-  pnpm build
+support-replay run: build
   node dist/evals/experiments/crate-checklists/run.js {{quote(run)}} --replay
 
 oracle-types:
-  pnpm oracle:types
+  node --experimental-strip-types scripts/oracle-types.ts
 
 oracle-types-check:
-  pnpm oracle:types:check
+  node --experimental-strip-types scripts/oracle-types.ts --check
 
-oracle-native-build:
-  pnpm oracle:native:build
+oracle-native-build: build
+  node dist/scripts/build-native-oracle.js --check
 
 oracle-native-test: oracle-native-build oracle-wire-build
   cargo fmt --manifest-path evals/experiments/roracle-native/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/experiments/roracle-native/rust/Cargo.toml -- -D warnings
-  pnpm oracle:native:test
+  node --test dist/tests/roracle-native/contract-test.js
+  pnpm exec vp test run --project=native-oracle
   IDEALIS_ORACLE_BACKEND=native-json node --test dist/tests/workspace-oracle/contract-test.js
   IDEALIS_ORACLE_BACKEND=native-object node --test dist/tests/workspace-oracle/contract-test.js
 
-oracle-native-eval output:
-  pnpm build
+oracle-native-eval output: build
   node dist/evals/experiments/roracle-native/run.js {{quote(output)}}
 
-oracle-native-replay run output:
-  pnpm build
+oracle-native-replay run output: build
   node dist/evals/experiments/roracle-native/replay.js {{quote(run)}} {{quote(output)}}
 
-oracle-object-phases output mode="measure" phase="object-request" fixture="nested-256":
-  pnpm build
+oracle-object-phases output mode="measure" phase="object-request" fixture="nested-256": build
   node dist/evals/experiments/roracle-native/phases.js {{quote(output)}} {{quote(mode)}} {{quote(phase)}} {{quote(fixture)}}
 
-oracle-object-compare before output control="":
-  pnpm build
+oracle-object-compare before output control="": build
   node dist/evals/experiments/roracle-native/compare-object.js {{quote(before)}} {{quote(output)}} {{quote(control)}}
 
-oracle-object-replay before saved output:
-  pnpm build
+oracle-object-replay before saved output: build
   node dist/evals/experiments/roracle-native/replay-object.js {{quote(before)}} {{quote(saved)}} {{quote(output)}}
 
 oracle-typed-build:
   node --experimental-strip-types evals/experiments/roracle-wit/build.ts --check
 
-oracle-typed-test: oracle-typed-build oracle-wire-build oracle-native-build
+oracle-typed-test: oracle-typed-build oracle-wire-build oracle-native-build build
   cargo fmt --manifest-path evals/experiments/roracle-wit/rust/Cargo.toml -- --check
   cargo clippy --all-targets --all-features --locked --manifest-path evals/experiments/roracle-wit/rust/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path evals/experiments/roracle-wit/rust/Cargo.toml
-  pnpm build
   node --test dist/tests/roracle-wit/contract-test.js
   pnpm exec vp test run --project=typed-oracle
 
 oracle-typed-browser: oracle-typed-build oracle-wire-build
   pnpm exec playwright test --project=typed-oracle
 
-oracle-typed-eval output:
-  pnpm build
+oracle-typed-eval output: build
   node dist/evals/experiments/roracle-wit/measure.js {{quote(output)}}
 
-oracle-typed-replay saved output:
-  pnpm build
+oracle-typed-replay saved output: build
   node dist/evals/experiments/roracle-wit/replay.js {{quote(saved)}} {{quote(output)}}
 
-oracle-typed-diagnose saved output:
-  pnpm build
+oracle-typed-diagnose saved output: build
   node dist/evals/experiments/roracle-wit/diagnose.js {{quote(saved)}} {{quote(output)}}
 
 oracle-wire-build:
-  pnpm oracle:build
+  cargo build --release --locked --manifest-path crates/roracle/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/roracle/Cargo.toml
 
 workspace-oracle-build: oracle-wire-build
   cargo build --release --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml
 
-workspace-oracle-test: workspace-oracle-build portable-build testing-build ralloy-build rsmt-build rtla-build
+workspace-oracle-test: workspace-oracle-build portable-build testing-build ralloy-build rsmt-build rtla-build build
   cargo fmt --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml
-  pnpm build
   node --test dist/tests/workspace-oracle/contract-test.js dist/tests/oracle-tuning/wasm-test.js dist/tests/workspace-oracle/catalog-test.js
 
 # Run builds and tests first; snapshots freeze their executables and sources.
-workspace-snapshot directory:
-  pnpm build
+workspace-snapshot directory: build
   node dist/evals/experiments/workspace-oracle/tune.js snapshot {{quote(directory)}}
 
 workspace-bench baseline candidate run:
@@ -145,9 +133,7 @@ oracle-tuning-kernel before after run:
 oracle-criterion:
   cargo bench --locked --manifest-path crates/roracle/Cargo.toml --bench wire
 
-oracle-build:
-  cargo build --release --locked --manifest-path crates/roracle/Cargo.toml
-  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/roracle/Cargo.toml
+oracle-build: oracle-wire-build
   cargo build --release --locked --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml
 
@@ -163,12 +149,10 @@ oracle-test: oracle-build workspace-oracle-test
   node --test --test-name-pattern="roracle|typed oracle" dist/tests/wasm-host/contract-test.js
 
 # Build and run other checks before this recipe; measurements run alone.
-oracle-eval run java jar:
-  pnpm build
+oracle-eval run java jar: build
   node dist/evals/experiments/oracle-comparison/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-oracle-replay run:
-  pnpm build
+oracle-replay run: build
   node dist/evals/experiments/oracle-comparison/replay.js {{quote(run)}}
 
 fuzz-build: testing-build
@@ -176,70 +160,61 @@ fuzz-build: testing-build
   cargo +nightly-2026-08-27 metadata --locked --format-version 1 --manifest-path evals/experiments/structured-fuzz/fuzz/Cargo.toml > /dev/null
   cargo +nightly-2026-08-27 fuzz build --sanitizer address --fuzz-dir evals/experiments/structured-fuzz/fuzz
 
-fuzz-test: fuzz-build
+fuzz-test: fuzz-build build
   cargo fmt --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml -- --check
   cargo fmt --manifest-path evals/experiments/structured-fuzz/fuzz/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml
-  pnpm build
   node --test dist/tests/structured-fuzz/contract-test.js
   pnpm exec vp test run --project=fuzz
 
 fuzz-browser:
   pnpm exec playwright test --project=fuzz
 
-fuzz-eval phase run parent="": fuzz-build
-  pnpm build
+fuzz-eval phase run parent="": fuzz-build build
   node dist/evals/experiments/structured-fuzz/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-fuzz-replay run:
-  pnpm build
+fuzz-replay run: build
   node dist/evals/experiments/structured-fuzz/replay.js {{quote(run)}}
 
 controlled-build: testing-build
   cargo build --release --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
   cargo build --release --locked --example loom --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
 
-controlled-test: controlled-build testing-core-test
+controlled-test: controlled-build testing-core-test build
   cargo fmt --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
   cargo run --release --locked --example loom --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
-  pnpm build
   node --test dist/tests/controlled-schedules/contract-test.js
   pnpm exec vp test run --project=schedules
 
 controlled-browser: controlled-build
   pnpm exec playwright test --project=schedules
 
-controlled-eval phase run parent="": controlled-build
-  pnpm build
+controlled-eval phase run parent="": controlled-build build
   node dist/evals/experiments/controlled-schedules/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-controlled-replay run:
-  pnpm build
+controlled-replay run: build
   node dist/evals/experiments/controlled-schedules/replay.js {{quote(run)}}
 
 sat-build:
   cargo build --release --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml
 
-sat-test: sat-build
+sat-test: sat-build build
   cargo fmt --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml
-  pnpm build
   node --test dist/tests/sat-foundation/contract-test.js
 
 sat-browser: sat-build
   pnpm exec playwright test --project=sat
 
-sat-eval phase run parent="": sat-build
-  pnpm build
+sat-eval phase run parent="": sat-build build
   node dist/evals/experiments/sat-foundation/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-sat-replay run:
-  pnpm build
+sat-replay run: build
   node dist/evals/experiments/sat-foundation/replay.js {{quote(run)}}
 
 testing-build: oracle-wire-build
@@ -254,20 +229,17 @@ testing-core-test:
 testing-example:
   cargo run --example counter --locked --manifest-path crates/idealis-testing/Cargo.toml
 
-testing-test: testing-build
-  pnpm build
+testing-test: testing-build build
   node --test dist/tests/testing-core/contract-test.js
   pnpm exec vp test run --project=testing
 
 testing-browser: testing-build
   pnpm exec playwright test --project=testing
 
-testing-eval phase run parent="": testing-build
-  pnpm build
+testing-eval phase run parent="": testing-build build
   node dist/evals/experiments/testing-core/run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-testing-replay run:
-  pnpm build
+testing-replay run: build
   node dist/evals/experiments/testing-core/replay.js {{quote(run)}}
 
 ralloy-build: oracle-wire-build
@@ -282,48 +254,44 @@ ralloy-test:
 ralloy-example:
   cargo run --example graph --locked --manifest-path crates/ralloy/Cargo.toml
 
-ralloy-contract: ralloy-build
-  pnpm build
+ralloy-contract: ralloy-build build
   node --test dist/tests/alloy-subset/contract-test.js
 
 ralloy-browser: ralloy-build
   pnpm exec playwright test --project=alloy
 
-ralloy-eval phase run java jar parent="": ralloy-build
-  pnpm build
+ralloy-eval phase run java jar parent="": ralloy-build build
   node dist/evals/experiments/alloy-subset/run.js {{quote(phase)}} {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(parent)}}
 
-ralloy-replay run:
-  pnpm build
+ralloy-replay run: build
   node dist/evals/experiments/alloy-subset/replay.js {{quote(run)}}
 
-alloy-test: ralloy-build
-  pnpm build
+alloy-test: ralloy-build build
   node --test dist/tests/alloy-instance/contract-test.js
   pnpm exec vp test run --project=alloy
 
 alloy-browser: ralloy-build
   pnpm exec playwright test --project=alloy-instance
 
-alloy-instance-eval phase run java jar parent="": ralloy-build
-  pnpm build
+alloy-instance-eval phase run java jar parent="": ralloy-build build
   node dist/evals/experiments/alloy-instance/run.js {{quote(phase)}} {{quote(run)}} {{quote(java)}} {{quote(jar)}} {{quote(parent)}}
 
-alloy-instance-replay run:
-  pnpm build
+alloy-instance-replay run: build
   node dist/evals/experiments/alloy-instance/replay.js {{quote(run)}}
 
 rsmt-build: oracle-wire-build
-  pnpm rsmt:build
+  cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
 
 rsmt-test:
-  pnpm rsmt:test
+  cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
 
 rsmt-example:
   cargo run --example ttl --locked --manifest-path crates/idealis-smt/Cargo.toml
 
-rsmt-compare run baseline: rsmt-build
-  pnpm build
+rsmt-compare run baseline: rsmt-build build
   node dist/evals/experiments/rsmt-extraction/compare.js check {{quote(run)}} {{quote(baseline)}}
 
 rsmt-criterion:
@@ -335,12 +303,10 @@ smt-test: rsmt-test
 
 smt-criterion: rsmt-criterion
 
-smt-verify phase run parent="": smt-build
-  pnpm build
+smt-verify phase run parent="": smt-build build
   node dist/evals/experiments/smt-subset/verify-run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-smt-bench run z3: smt-build
-  pnpm build
+smt-bench run z3: smt-build build
   node dist/evals/experiments/smt-subset/benchmark.js {{quote(run)}} {{quote(z3)}}
 
 smt-browser: smt-build
@@ -349,74 +315,108 @@ smt-browser: smt-build
 install:
   pnpm install --frozen-lockfile
 
+build-sdk:
+  pnpm exec tsc -p packages/idealis/tsconfig.json
+
+build: build-sdk
+  pnpm exec tsc -p tsconfig.json
+
+typecheck:
+  pnpm exec tsc --noEmit
+
 lint:
-  pnpm lint
+  pnpm exec vp lint
 
 fmt:
-  pnpm fmt
+  pnpm exec vp fmt --write
 
-check:
-  pnpm check
-  pnpm typecheck
-  pnpm test
+check: style-check typecheck test
 
-test:
-  pnpm test
+style-check:
+  pnpm exec vp check
+
+test: (vitest "--project=core") test-node
+
+[positional-arguments]
+vitest *args:
+  pnpm exec vp test run "$@"
+
+test-node: build
+  node --test dist/tests/node.test.js
 
 mutation:
-  pnpm test:mutation
+  pnpm exec mutator
 
-wasm-build:
-  pnpm build
-  pnpm wasm:build
+wasm-build: build
+  node dist/scripts/build-wasm-tests.js
 
 wasm-test: wasm-build
-  pnpm wasm:test
+  node --test dist/tests/wasm-host/contract-test.js
+  pnpm exec vp test run --project=wasm
 
 # Optional compatibility checks for browser workers and isolation.
 browser: portable-build
-  pnpm test:browser
+  pnpm exec playwright test --project=core
 
-demo:
-  pnpm example
+demo: build
+  node dist/examples/demo.js
 
-evaluate:
-  pnpm evaluate
+[positional-arguments]
+evaluate *args: build
+  node dist/evals/experiments/harness/evaluate.js "$@"
 
-replay-evaluation:
-  pnpm evaluate:replay
+[positional-arguments]
+replay-evaluation *args: build
+  node dist/evals/experiments/harness/replay.js "$@"
 
-eval-loop:
-  pnpm eval:loop evals/plans/0002-mixed-depth.json
+[positional-arguments]
+eval-loop plan="evals/plans/0002-mixed-depth.json" *args: build
+  node dist/evals/experiments/loop.js "$@"
 
-replay-loop:
-  pnpm eval:replay
+[positional-arguments]
+replay-loop *args: build
+  node dist/evals/experiments/replay.js "$@"
 
 runtime-build:
-  pnpm runtime:build
+  cargo build --release --manifest-path evals/experiments/rust-probe/Cargo.toml
+  cargo build --release --lib --target wasm32-unknown-unknown --manifest-path evals/experiments/rust-probe/Cargo.toml
 
-runtime-test:
-  pnpm runtime:test
+runtime-test: runtime-build build
+  cargo test --manifest-path evals/experiments/rust-probe/Cargo.toml
+  node --test dist/tests/runtime/rust-test.js dist/tests/runtime/system-test.js
   node --test --test-name-pattern="runtime Wasm" dist/tests/wasm-host/contract-test.js
 
-runtime-eval:
-  pnpm runtime:eval
+runtime-browser: runtime-build build
+  pnpm exec playwright test --project=runtime
+
+[positional-arguments]
+eval-shard +args: build
+  node dist/evals/experiments/runtime/shard-cli.js "$@"
+
+[positional-arguments]
+runtime-eval *args: build
+  node dist/evals/experiments/runtime/evaluate.js "$@"
 
 portable-build: oracle-wire-build
-  pnpm portable:build
+  cargo build --release --locked --manifest-path crates/idealis-core/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-core/Cargo.toml
 
-portable-test:
-  pnpm portable:test
+portable-test: portable-build rtlc-test rtla-test compiler-test
+  cargo test --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml
+  node --test dist/tests/portable/contract-test.js dist/tests/action-coverage/contract-test.js
   node --test --test-name-pattern="portable Wasm|Quint generated|parser Wasm" dist/tests/wasm-host/contract-test.js
 
-portable-eval:
-  pnpm portable:eval
+portable-browser: portable-build rtla-build build
+  pnpm exec playwright test --project portable rtla
 
-portable-replay run:
-  pnpm portable:replay {{quote(run)}}
+[positional-arguments]
+portable-eval *args: build
+  node dist/evals/experiments/portable/evaluate.js "$@"
 
-safety-build: portable-build
-  pnpm build
+portable-replay run: build
+  node dist/evals/experiments/portable/replay.js {{quote(run)}}
+
+safety-build: portable-build build
 
 safety-test: safety-build
   node --test dist/tests/rust-safety/contract-test.js dist/tests/collections-temporal/contract-test.js dist/tests/tlc-differential/compare-test.js dist/tests/tlc-differential/regression-test.js
@@ -424,15 +424,13 @@ safety-test: safety-build
 safety-eval run plan="0014-value-hash": safety-build
   node dist/evals/experiments/rust-safety/evaluate.js {{quote(run)}} {{quote(plan)}}
 
-safety-replay run:
-  pnpm build
+safety-replay run: build
   node dist/evals/experiments/rust-safety/replay.js {{quote(run)}}
 
 safety-tlc java jar: safety-build
   node dist/evals/experiments/rust-safety/tlc-check.js {{quote(java)}} {{quote(jar)}}
 
-go-test: portable-build
-  pnpm build
+go-test: portable-build build
   node dist/evals/experiments/go/prepare.js
   test -z "$(gofmt -l adapters/go)"
   cd adapters/go && go vet ./...
@@ -440,8 +438,7 @@ go-test: portable-build
   cd adapters/go && go test -race -count=1 ./...
   node dist/scripts/go-consumer.js
 
-cross-build: portable-build
-  pnpm build
+cross-build: portable-build build
   cargo build --release --locked --manifest-path evals/experiments/shared-oracle-rust/Cargo.toml
   mkdir -p .artifacts/go
   cd adapters/go && CGO_ENABLED=0 go build -o ../../.artifacts/go/counter-replay ./cmd/counter-replay
@@ -454,8 +451,7 @@ cross-test: cross-build
 cross-eval phase run parent="": cross-build
   node dist/evals/experiments/cross-language/evaluate.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-cross-replay run:
-  pnpm build
+cross-replay run: build
   node dist/evals/experiments/cross-language/replay.js {{quote(run)}}
 
 async-build: cross-build
@@ -468,26 +464,34 @@ async-test: async-build
 async-eval phase run parent="": async-build
   node dist/evals/experiments/async-tuning/evaluate.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
 
-async-replay run:
-  pnpm build
+async-replay run: build
   node dist/evals/experiments/async-tuning/replay.js {{quote(run)}}
 
-usable-test:
-  pnpm usable:test
+usable-test: build
+  node --test dist/tests/usable/contract-test.js
 
-usable-eval:
-  pnpm usable:eval
+[positional-arguments]
+usable-eval *args: build
+  node dist/evals/experiments/usable/evaluate.js "$@"
 
-usable-replay run:
-  pnpm usable:replay {{quote(run)}}
+usable-replay run: build
+  node dist/evals/experiments/usable/replay.js {{quote(run)}}
 
-usable-benchmark input output:
-  pnpm build
+usable-benchmark input output: build
   node dist/evals/experiments/usable/benchmark-run.js {{quote(input)}} {{quote(output)}}
 
-package:
-  pnpm package:prepare
-  pnpm package:test
+package: package-prepare package-test
+
+[positional-arguments]
+package-prepare *args: build rsmt-build
+  node dist/scripts/package.js "$@"
+
+[positional-arguments]
+package-test *args: build
+  node dist/scripts/package-test.js "$@"
+
+package-prepack: build-sdk testing-build ralloy-build portable-build rtla-build
+  node --experimental-strip-types scripts/prepare-npm-assets.ts
 
 complex-tlc java jar run: safety-build
   node dist/evals/experiments/collections-temporal/tlc-check.js {{quote(java)}} {{quote(jar)}} {{quote(run)}}
@@ -495,17 +499,14 @@ complex-tlc java jar run: safety-build
 complex-eval run parent="": safety-build
   node dist/evals/experiments/collections-temporal/evaluate.js {{quote(run)}} {{quote(parent)}}
 
-complex-replay run:
-  pnpm build
+complex-replay run: build
   node dist/evals/experiments/collections-temporal/replay.js {{quote(run)}}
 
-complex-tlc-replay java jar run:
-  pnpm build
+complex-tlc-replay java jar run: build
   node dist/evals/experiments/collections-temporal/tlc-replay.js {{quote(java)}} {{quote(jar)}} {{quote(run)}}
 
 
-tlc-modules:
-  pnpm build
+tlc-modules: build
   node dist/scripts/prepare-tlc-modules.js
 
 tlc-diff-test java jar: safety-build tlc-modules
@@ -519,8 +520,7 @@ tlc-diff java jar phase run: safety-build tlc-modules
 tlc-diff-replay java jar saved run: safety-build tlc-modules
   node dist/evals/experiments/tlc-differential/run.js {{quote(java)}} {{quote(jar)}} replay {{quote(run)}} {{quote(saved)}}
 
-checker-bench-test:
-  pnpm build
+checker-bench-test: build
   node --test dist/tests/checker-benchmark/contract-test.js
 
 checker-bench java jar archive run: safety-build
@@ -578,8 +578,7 @@ readme-bench java jar archive run: safety-build
 readme-bench-replay java jar archive saved run: safety-build
   node dist/evals/experiments/readme-comparison/evaluate.js {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}} {{quote(saved)}}
 
-criterion-prepare:
-  pnpm build
+criterion-prepare: build
   node dist/evals/experiments/criterion-safety/prepare.js
 
 criterion-test: criterion-prepare
@@ -595,33 +594,31 @@ criterion-controls run: safety-build
 criterion-compare run: safety-build
   node dist/evals/experiments/criterion-safety/compare.js {{quote(run)}}
 
-criterion-replay saved run:
-  pnpm build
+criterion-replay saved run: build
   node dist/evals/experiments/criterion-safety/compare.js {{quote(run)}} {{quote(saved)}}
 
 profile-criterion stage run: criterion-prepare
   IDEALIS_CRITERION_PLAN=0024-profile-tuning node dist/evals/experiments/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
 
-profile-record backend binary run:
-  pnpm build
+profile-record backend binary run: build
   node dist/evals/experiments/profile-tuning/record.js {{quote(backend)}} {{quote(binary)}} {{quote(run)}}
 
 profile-test: criterion-prepare
   node --test dist/tests/profile-tuning/hotspots-test.js dist/tests/profile-tuning/wasm-names-test.js
 
-profile-summary saved run:
-  pnpm build
+profile-summary saved run: build
   node dist/evals/experiments/profile-tuning/summarize.js {{quote(saved)}} {{quote(run)}}
 
 profile-scalar run: safety-build
   node dist/evals/experiments/profile-tuning/scalar-compare.js {{quote(run)}}
 
-profile-replay saved run:
-  pnpm build
+profile-replay saved run: build
   node dist/evals/experiments/profile-tuning/scalar-compare.js {{quote(run)}} {{quote(saved)}}
 
 rtlc-test:
-  pnpm rtlc:test
+  cargo fmt --manifest-path crates/rtlc/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/rtlc/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/rtlc/Cargo.toml
 
 rtlc-example:
   cargo run --example counter --locked --manifest-path crates/rtlc/Cargo.toml
@@ -638,20 +635,19 @@ compact-functions-kernel before after run:
 compact-functions-summary comparison criterion run:
   node dist/evals/experiments/compact-functions/summarize.js {{quote(comparison)}} {{quote(criterion)}} {{quote(run)}}
 
-rtlc-compare run:
-  pnpm build
+rtlc-compare run: build
   node dist/evals/experiments/rtlc-extraction/compare.js {{quote(run)}}
 
 rtla-build: oracle-wire-build
-  pnpm rtla:build
+  cargo build --release --locked --manifest-path crates/rtla/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rtla/Cargo.toml
 
 compiler-test:
   cargo fmt --manifest-path crates/rtla-compiler/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml -- -D warnings
   cargo test --all-targets --locked --manifest-path crates/rtla-compiler/Cargo.toml
 
-recursive-actions-test: portable-build
-  pnpm build
+recursive-actions-test: portable-build build
   cargo test --locked --manifest-path crates/rtlc/Cargo.toml --test recursive_actions
   cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test recursive_actions
   node --test dist/tests/recursive-actions/contract-test.js
@@ -659,42 +655,33 @@ recursive-actions-test: portable-build
 recursive-actions-oracle run java jar: safety-build
   node dist/evals/experiments/recursive-actions/execute.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-recursive-actions-freeze directory:
-  pnpm build
+recursive-actions-freeze directory: build
   node dist/evals/experiments/recursive-actions/bench.js freeze {{quote(directory)}}
 
-recursive-actions-bench snapshot run:
-  pnpm build
+recursive-actions-bench snapshot run: build
   node dist/evals/experiments/recursive-actions/bench.js run {{quote(run)}} {{quote(snapshot)}}
 
-recursive-actions-profile snapshot run:
-  pnpm build
+recursive-actions-profile snapshot run: build
   node dist/evals/experiments/recursive-actions/profile.js {{quote(run)}} {{quote(snapshot)}}
 
-frontend-semantics-test: portable-build
-  pnpm build
+frontend-semantics-test: portable-build build
   cargo test --locked --manifest-path crates/rtla-compiler/Cargo.toml --test levels --test lazy_functions --test templates
   cargo test --locked --manifest-path crates/rtlc/Cargo.toml --test temporal_calls
   node --test dist/tests/frontend-semantics/contract-test.js
 
-frontend-semantics-runtime directory:
-  pnpm build
+frontend-semantics-runtime directory: build
   node dist/evals/experiments/frontend-semantics/runtime.js {{quote(directory)}}
 
-frontend-semantics-oracle snapshot run java jar:
-  pnpm build
+frontend-semantics-oracle snapshot run java jar: build
   IDEALIS_FRONTEND_SNAPSHOT={{quote(snapshot)}} node dist/evals/experiments/frontend-semantics/execute.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-frontend-semantics-freeze directory:
-  pnpm build
+frontend-semantics-freeze directory: build
   node dist/evals/experiments/frontend-semantics/bench.js freeze {{quote(directory)}}
 
-frontend-semantics-bench snapshot run:
-  pnpm build
+frontend-semantics-bench snapshot run: build
   node dist/evals/experiments/frontend-semantics/bench.js run {{quote(run)}} {{quote(snapshot)}}
 
-frontend-semantics-profile snapshot run:
-  pnpm build
+frontend-semantics-profile snapshot run: build
   node dist/evals/experiments/frontend-semantics/profile.js {{quote(run)}} {{quote(snapshot)}}
 
 coverage-test: safety-build
@@ -733,8 +720,7 @@ tlc-finite-replay saved run java jar: safety-build
 compiler-criterion stage run: criterion-prepare
   IDEALIS_CRITERION_PLAN=0048-fairness-operators IDEALIS_CRITERION_TARGET=rtla-compiler node dist/evals/experiments/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
 
-temporal-profile run:
-  pnpm build
+temporal-profile run: build
   cargo build --release --locked --manifest-path crates/rtla-compiler/Cargo.toml --example temporal-profile
   node dist/evals/experiments/temporal-tuning/profile.js crates/rtla-compiler/target/release/examples/temporal-profile {{quote(run)}}
 
@@ -747,88 +733,73 @@ temporal-controls stage run: criterion-prepare
 temporal-parity baseline run: safety-build
   node dist/evals/experiments/temporal-tuning/parity.js {{quote(baseline)}} {{quote(run)}}
 
-temporal-compare before after run:
-  pnpm build
+temporal-compare before after run: build
   node dist/evals/experiments/temporal-tuning/compare.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
 
-temporal-alternating run:
-  pnpm build
+temporal-alternating run: build
   node dist/evals/experiments/temporal-tuning/alternating.js {{quote(run)}}
 
 criterion-baseline revision stage run: criterion-prepare
   IDEALIS_CRITERION_PLAN=0046-tlc-finite-support IDEALIS_CRITERION_REVISION={{quote(revision)}} node dist/evals/experiments/criterion-safety/run.js {{quote(stage)}} {{quote(run)}}
 
-criterion-verify run:
-  pnpm build
+criterion-verify run: build
   node dist/evals/experiments/criterion-safety/verify.js {{quote(run)}}
 
-compiler-eval run: portable-build
-  pnpm build
+compiler-eval run: portable-build build
   node dist/evals/experiments/rtla-compiler/evaluate.js {{quote(run)}}
 
-compiler-tlc run java jar: portable-build
-  pnpm build
+compiler-tlc run java jar: portable-build build
   node dist/evals/experiments/rtla-compiler/tlc.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-rtla-test:
-  pnpm rtla:test
+rtla-test: rtla-build build
+  cargo fmt --manifest-path crates/rtla/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/rtla/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/rtla/Cargo.toml
+  node --test dist/tests/rtla-parser/contract-test.js
 
 rtla-browser: rtla-build
   pnpm exec playwright test --project=rtla
 
-rtla-eval run java jar: rtla-build
-  pnpm build
+rtla-eval run java jar: rtla-build build
   node dist/evals/experiments/rtla-parser/evaluate.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-rtla-compat run upstream java_home jar snapshot version:
-  pnpm build
+rtla-compat run upstream java_home jar snapshot version: build
   node dist/evals/experiments/rtla-compatibility/run.js {{quote(run)}} {{quote(upstream)}} {{quote(java_home)}} {{quote(jar)}} {{quote(snapshot)}} {{quote(version)}}
 
-rtla-compat-test: rtla-build
-  pnpm build
+rtla-compat-test: rtla-build build
   node --test dist/tests/rtla-compatibility/contract-test.js
 
-rtla-symbols run java_home stable_jar preview_jar snapshot:
-  pnpm build
+rtla-symbols run java_home stable_jar preview_jar snapshot: build
   node dist/evals/experiments/symbolic-operators/run.js {{quote(run)}} {{quote(java_home)}} {{quote(stable_jar)}} {{quote(preview_jar)}} {{quote(snapshot)}}
 
-rtla-symbols-tlc run java jar: portable-build
-  pnpm build
+rtla-symbols-tlc run java jar: portable-build build
   node dist/evals/experiments/symbolic-operators/tlc.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-rtla-symbols-test: rtla-build portable-build
-  pnpm build
+rtla-symbols-test: rtla-build portable-build build
   node --test dist/tests/symbolic-operators/contract-test.js
 
-apalache-test:
-  pnpm build
+apalache-test: build
   node --test dist/tests/apalache-comparison/contract-test.js
 
-apalache-eval run java jar: portable-build
-  pnpm build
+apalache-eval run java jar: portable-build build
   node dist/evals/experiments/apalache-comparison/run.js {{quote(run)}} {{quote(java)}} {{quote(jar)}}
 
-backend-test: portable-build
-  pnpm build
+backend-test: portable-build build
   pnpm exec vp test run --project=core tests/backend.vitest.test.ts
   node --test dist/tests/backend-contract/integration-test.js
 
-backend-eval run: portable-build
-  pnpm build
+backend-eval run: portable-build build
   node dist/evals/experiments/backend-contract/evaluate.js {{quote(run)}}
 
 # Quint's generated TLA+ and replay against TLC.
-quint-test: portable-build
-  pnpm build
+quint-test: portable-build build
   node --test dist/tests/quint-generated/contract-test.js
 
-analysis-test: portable-build rtla-build
+analysis-test: portable-build rtla-build build
   cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
-  pnpm build
   node --test dist/tests/tlc-differential/analysis-parity-test.js dist/tests/tlc-differential/frame-decoder-test.js dist/tests/p0-checker/contract-test.js dist/tests/prepared-safety/contract-test.js dist/tests/tla-coverage/contract-test.js dist/tests/tla-coverage/normalize-test.js dist/tests/rtla-compatibility/contract-test.js dist/tests/recursive-actions/contract-test.js dist/tests/frontend-semantics/contract-test.js
 
-prepared-test: portable-build
-  pnpm build
+prepared-test: portable-build build
   cargo test --locked --manifest-path crates/idealis-core/Cargo.toml --test prepared_safety
   node --test dist/tests/prepared-safety/contract-test.js
 
@@ -839,20 +810,16 @@ prepared-summary run output:
   node dist/evals/experiments/prepared-safety/summarize.js {{quote(run)}} {{quote(output)}}
 
 # Freeze binaries first. These recipes do not rebuild Rust during measurement.
-p0-corpus before after java jar archive run:
-  pnpm build
+p0-corpus before after java jar archive run: build
   node dist/evals/experiments/p0-checker/corpus.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
 
-p0-profile binary run:
-  pnpm build
+p0-profile binary run: build
   node dist/evals/experiments/p0-checker/profile.js {{quote(binary)}} {{quote(run)}}
 
-p0-comparison before after java jar archive run:
-  pnpm build
+p0-comparison before after java jar archive run: build
   IDEALIS_COMPACT_ALL_MODELS=1 IDEALIS_COMPACT_PLAN=0062-p0-checker node dist/evals/experiments/compact-functions/compare.js {{quote(before)}} {{quote(after)}} {{quote(java)}} {{quote(jar)}} {{quote(archive)}} {{quote(run)}}
 
-p0-verify run:
-  pnpm build
+p0-verify run: build
   node dist/evals/experiments/p0-checker/verify.js {{quote(run)}}
 
 evaluator-kernel before after run filter="":
@@ -870,68 +837,54 @@ evaluator-verify snapshot run:
 evaluator-corpus-summary run output plan="0063-evaluator-tuning":
   IDEALIS_CHECKER_PLAN={{quote(plan)}} node dist/evals/experiments/evaluator-tuning/corpus-summary.js {{quote(run)}} {{quote(output)}}
 
-quint-generate output endpoint apalache_jar:
-  pnpm build
+quint-generate output endpoint apalache_jar: build
   node dist/evals/experiments/quint-generated/generate.js {{quote(output)}} {{quote(endpoint)}} {{quote(apalache_jar)}}
 
-quint-eval java tlc_jar apalache_jar run: portable-build
-  pnpm build
+quint-eval java tlc_jar apalache_jar run: portable-build build
   node dist/evals/experiments/quint-generated/run.js {{quote(run)}} {{quote(java)}} {{quote(tlc_jar)}} {{quote(apalache_jar)}}
 
-quint-replay java tlc_jar apalache_jar saved run: portable-build
-  pnpm build
+quint-replay java tlc_jar apalache_jar saved run: portable-build build
   node dist/evals/experiments/quint-generated/run.js {{quote(run)}} {{quote(java)}} {{quote(tlc_jar)}} {{quote(apalache_jar)}} {{quote(saved)}}
 
 # SMT expression and context expansion against Z3.
-smt-expansion-test: smt-build
-  pnpm build
+smt-expansion-test: smt-build build
   node --test dist/tests/smt-expansion/contract-test.js
   pnpm exec vp test run --project=smt
 
-smt-expansion-eval phase run baseline parent="": smt-build
-  pnpm build
+smt-expansion-eval phase run baseline parent="": smt-build build
   node dist/evals/experiments/smt-expansion/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
 
-smt-expansion-replay run:
-  pnpm build
+smt-expansion-replay run: build
   node dist/evals/experiments/smt-expansion/replay.js {{quote(run)}}
 
 # SMT-LIB scripts, ordered queries and a shared work budget.
-smt-script-test: smt-build
-  pnpm build
+smt-script-test: smt-build build
   node --test dist/tests/smt-scripts/contract-test.js
   pnpm exec vp test run --project=smt
 
-smt-script-eval phase run baseline parent="": smt-build
-  pnpm build
+smt-script-eval phase run baseline parent="": smt-build build
   node dist/evals/experiments/smt-scripts/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
 
-smt-script-replay run:
-  pnpm build
+smt-script-replay run: build
   node dist/evals/experiments/smt-scripts/replay.js {{quote(run)}}
 
 # Fixed SMT benchmarks and immutable before/after binaries.
 smt-tuning-build:
   CARGO_PROFILE_BENCH_STRIP=none cargo bench --no-run --locked --manifest-path crates/idealis-smt/Cargo.toml --bench solver
 
-smt-tuning-capture binary output:
-  pnpm build
+smt-tuning-capture binary output: build
   node dist/evals/experiments/smt-tuning/capture.js {{quote(binary)}} {{quote(output)}}
 
-smt-tuning-criterion stage provenance run:
-  pnpm build
+smt-tuning-criterion stage provenance run: build
   node dist/evals/experiments/smt-tuning/criterion.js {{quote(stage)}} {{quote(provenance)}} {{quote(run)}}
 
-smt-tuning-compare before after confirmation after_before run:
-  pnpm build
+smt-tuning-compare before after confirmation after_before run: build
   node dist/evals/experiments/smt-tuning/compare.js {{quote(before)}} {{quote(after)}} {{quote(confirmation)}} {{quote(after_before)}} {{quote(run)}}
 
-smt-tuning-eval phase run baseline parent="": smt-build
-  pnpm build
+smt-tuning-eval phase run baseline parent="": smt-build build
   node dist/evals/experiments/smt-tuning/run.js {{quote(phase)}} {{quote(run)}} {{quote(baseline)}} {{quote(parent)}}
 
-smt-tuning-replay run:
-  pnpm build
+smt-tuning-replay run: build
   node dist/evals/experiments/smt-tuning/replay.js {{quote(run)}}
 
 symmetry-test: safety-build

@@ -114,7 +114,7 @@ Node.js 24+、pnpm、just、Rustと`wasm32-unknown-unknown` targetを用意す�
 just rsmt-build
 just rsmt-test
 just rsmt-example
-pnpm build
+just build
 node --test dist/tests/smt-subset/contract-test.js
 just smt-browser
 just smt-expansion-test

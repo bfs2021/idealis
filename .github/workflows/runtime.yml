@@ -16,10 +16,8 @@ jobs:
       - uses: ./.github/actions/setup
       - run: rustup target add wasm32-unknown-unknown
       - run: cargo fmt --manifest-path evals/experiments/rust-probe/Cargo.toml -- --check
-      - run: pnpm runtime:build
-      - run: pnpm runtime:test
-      - run: node --test --test-name-pattern="runtime Wasm" dist/tests/wasm-host/contract-test.js
-      - run: pnpm runtime:eval .artifacts/runtime-evaluation
+      - run: just runtime-test
+      - run: just runtime-eval .artifacts/runtime-evaluation
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:

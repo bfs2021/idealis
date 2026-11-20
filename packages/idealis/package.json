@@ -114,7 +114,6 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "prepack": "pnpm run build && pnpm -w run package:assets"
+    "prepack": "just package-prepack"
   }
 }

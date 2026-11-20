@@ -18,10 +18,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - run: rustup target add wasm32-unknown-unknown
-      - run: pnpm check
-      - run: pnpm typecheck
+      - run: just check
       - run: node --experimental-strip-types scripts/check-support.ts
-      - run: pnpm test
       - run: node --test dist/scripts/check-support-test.js
       - run: cargo fmt --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/sat-foundation/rust/Cargo.toml -- -D warnings
@@ -35,13 +33,8 @@ jobs:
       - run: cargo test --locked --manifest-path crates/roracle/Cargo.toml --bench wire
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/roracle/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/roracle/Cargo.toml
-      - run: pnpm oracle:types:check
-      - run: cargo fmt --manifest-path evals/experiments/roracle-native/rust/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/roracle-native/rust/Cargo.toml -- -D warnings
-      - run: pnpm oracle:native:build
-      - run: pnpm oracle:native:test
-      - run: IDEALIS_ORACLE_BACKEND=native-json node --test dist/tests/workspace-oracle/contract-test.js
-      - run: IDEALIS_ORACLE_BACKEND=native-object node --test dist/tests/workspace-oracle/contract-test.js
+      - run: just oracle-types-check
+      - run: just oracle-native-test
       - run: node dist/scripts/prepare-tlc-modules.js
       - run: node --test dist/tests/tlc-differential/compare-test.js dist/tests/tlc-differential/standard-modules-test.js
       - run: cargo fmt --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- --check
@@ -56,40 +49,40 @@ jobs:
       - run: cargo fmt --manifest-path crates/idealis-testing/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
-      - run: pnpm testing:build
+      - run: just testing-build
       - run: node --test dist/tests/testing-core/contract-test.js
-      - run: pnpm exec vp test run --project=testing
+      - run: just vitest --project=testing
       - run: cargo fmt --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
       - run: cargo build --release --locked --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
       - run: cargo run --release --locked --example loom --manifest-path evals/experiments/controlled-schedules/rust/Cargo.toml
       - run: node --test dist/tests/controlled-schedules/contract-test.js
-      - run: pnpm exec vp test run --project=schedules
+      - run: just vitest --project=schedules
       - run: cargo fmt --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml
       - run: cargo build --release --locked --manifest-path evals/experiments/structured-fuzz/rust/Cargo.toml
       - run: node --test dist/tests/structured-fuzz/contract-test.js
-      - run: pnpm exec vp test run --project=fuzz
+      - run: just vitest --project=fuzz
       - run: cargo fmt --manifest-path crates/ralloy/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/ralloy/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/ralloy/Cargo.toml
-      - run: pnpm ralloy:build
+      - run: just ralloy-build
       - run: node --test dist/tests/alloy-subset/contract-test.js
       - run: node --test dist/tests/alloy-instance/contract-test.js
-      - run: pnpm exec vp test run --project=alloy
+      - run: just vitest --project=alloy
       - run: cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
       - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
       - run: node --test dist/tests/smt-subset/contract-test.js dist/tests/smt-expansion/contract-test.js dist/tests/smt-scripts/contract-test.js dist/tests/smt-tuning/contract-test.js
-      - run: pnpm exec vp test run --project=smt
+      - run: just vitest --project=smt
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
-      - run: pnpm portable:build
-      - run: pnpm rtla:build
+      - run: just portable-build
+      - run: just rtla-build
       - run: node --test dist/tests/oracle-tuning/wasm-test.js
       - run: node --test dist/tests/rtla-compatibility/contract-test.js dist/tests/symbolic-operators/contract-test.js
       - run: cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
@@ -131,21 +124,20 @@ jobs:
       - run: node --test dist/tests/async-tuning/contract-test.js
       - run: node dist/evals/experiments/async-tuning/evaluate.js regression .artifacts/async-tuning
       - run: node dist/evals/experiments/async-tuning/replay.js .artifacts/async-tuning
-      - run: pnpm portable:test
+      - run: just portable-test
       - run: node --test dist/tests/workspace-oracle/catalog-test.js
-      - run: pnpm usable:test
-      - run: pnpm runtime:build
-      - run: pnpm runtime:test
-      - run: pnpm wasm:test
-      - run: pnpm test:mutation
-      - run: pnpm evaluate
-      - run: pnpm evaluate:replay
-      - run: pnpm eval:loop evals/plans/0002-mixed-depth.json ci-mixed .artifacts/evals
-      - run: pnpm eval:replay .artifacts/evals/ci-mixed-confirmation
-      - run: node dist/scripts/package.js
-      - run: pnpm package:test
-      - run: pnpm usable:eval .artifacts/usable-evaluation
-      - run: pnpm usable:replay .artifacts/usable-evaluation
+      - run: just usable-test
+      - run: just runtime-test
+      - run: just wasm-test
+      - run: just mutation
+      - run: just evaluate
+      - run: just replay-evaluation
+      - run: just eval-loop evals/plans/0002-mixed-depth.json ci-mixed .artifacts/evals
+      - run: just replay-loop .artifacts/evals/ci-mixed-confirmation
+      - run: just package-prepare
+      - run: just package-test
+      - run: just usable-eval .artifacts/usable-evaluation
+      - run: just usable-replay .artifacts/usable-evaluation
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:

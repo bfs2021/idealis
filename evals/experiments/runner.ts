@@ -79,6 +79,7 @@ const fingerprint = async () => {
       )
     ).flat(),
     ...entrypoints,
+    "justfile",
     "package.json",
     "packages/idealis/package.json",
     "pnpm-workspace.yaml",
