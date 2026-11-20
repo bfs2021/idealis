@@ -1,5 +1,8 @@
 import { readFileSync } from "node:fs";
-import type { SafetyBounds, SafetyResult } from "../../src/contracts.js";
+import type {
+  SafetyBounds,
+  SafetyResult,
+} from "../../packages/idealis/src/contracts.js";
 export interface Case {
   readonly name: string;
   readonly source: string;

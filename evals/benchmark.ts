@@ -3,7 +3,10 @@ import {
   type CounterObservation,
   counterModel,
 } from "../examples/durable-counter.js";
-import { type ConformanceResult, checkConformance } from "../src/index.js";
+import {
+  type ConformanceResult,
+  checkConformance,
+} from "../packages/idealis/src/index.js";
 import {
   counterFaults,
   createFaultyCounter,

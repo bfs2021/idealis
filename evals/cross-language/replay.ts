@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { decodePortableResult } from "../../src/portable-wasm.js";
-import { isRecord } from "../../src/trace.js";
+import { decodePortableResult } from "../../packages/idealis/src/portable-wasm.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { counterFaults } from "../harness/counter-faults.js";
 import { digest } from "../usable/provenance.js";
 import { assertOracle } from "../workspace-oracle/node.js";

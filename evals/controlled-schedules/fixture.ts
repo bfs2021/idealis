@@ -4,7 +4,7 @@ import type {
   TestingJson,
   TestingPlan,
   TestingSchedule,
-} from "../../src/testing.js";
+} from "../../packages/idealis/src/testing.js";
 
 export const schedule = (actors: number): TestingSchedule => ({
   id: `increment-${actors}`,

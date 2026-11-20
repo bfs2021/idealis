@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { test } from "node:test";
 import { counterModel } from "../../examples/counter-model.js";
-import { checkConformance } from "../../src/index.js";
+import { checkConformance } from "../../packages/idealis/src/index.js";
 import {
   counterFaults,
   createFaultyCounter,

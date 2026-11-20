@@ -12,7 +12,7 @@ export const fingerprint = async () => {
     "--",
     "crates/oracle",
     "evals/workspace-oracle",
-    "src",
+    "packages/idealis/src",
     "scripts",
     "tests",
     "crates/idealis-core",

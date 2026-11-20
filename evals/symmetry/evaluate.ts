@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { differential } from "../tlc-differential/differential.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";

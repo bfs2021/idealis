@@ -1,4 +1,7 @@
-import type { SafetyBounds, TlaSourceInput } from "../../src/contracts.js";
+import type {
+  SafetyBounds,
+  TlaSourceInput,
+} from "../../packages/idealis/src/contracts.js";
 
 export interface CoverageInput extends TlaSourceInput {
   readonly name: string;

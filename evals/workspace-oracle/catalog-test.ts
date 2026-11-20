@@ -4,7 +4,7 @@ import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { catalog } from "./catalog.js";
 import { assertOracle } from "./node.js";
 

@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { check } from "tla-ts";
-import type { PortableCore, SafetyResult } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  PortableCore,
+  SafetyResult,
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import type { startNative } from "../usable/native.js";
 import { bounds, type Case } from "./cases.js";
 import { traceInput } from "./tlc.js";

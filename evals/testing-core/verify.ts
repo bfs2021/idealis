@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { createTestingWasm, type TestingResult } from "../../src/testing.js";
+import {
+  createTestingWasm,
+  type TestingResult,
+} from "../../packages/idealis/src/testing.js";
 import { assertOracle } from "../workspace-oracle/node.js";
 import { createNative, wasmPath } from "./clients.js";
 import { property } from "./reference.js";

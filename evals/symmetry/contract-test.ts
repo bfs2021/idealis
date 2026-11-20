@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { startNative } from "../usable/native.js";
 import { bounds, corpus, counter, partialOrderCorpus, plain } from "./cases.js";
 

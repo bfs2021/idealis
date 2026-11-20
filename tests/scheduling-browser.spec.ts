@@ -3,7 +3,7 @@ import { createServer, type Server } from "node:http";
 import { expect, test } from "@playwright/test";
 import { build } from "esbuild";
 import { cases } from "../evals/rust-safety/cases.js";
-import { compileTlaSafety } from "../src/tla-safety.js";
+import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 let server: Server;
 let origin: string;
@@ -25,7 +25,7 @@ test.beforeAll(async () => {
       write: false,
     }),
     build({
-      entryPoints: ["src/scheduling.ts"],
+      entryPoints: ["packages/idealis/src/scheduling.ts"],
       bundle: true,
       platform: "browser",
       write: false,
@@ -33,7 +33,7 @@ test.beforeAll(async () => {
     }),
   ]);
   expect(Object.keys(outputs[2]?.metafile?.inputs ?? {})).toEqual([
-    "src/scheduling.ts",
+    "packages/idealis/src/scheduling.ts",
   ]);
   const programs = cases
     .filter((input) =>

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 interface Items {
   definitions: unknown[];

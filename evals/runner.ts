@@ -8,7 +8,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { join } from "node:path";
-import { isRecord } from "../src/trace.js";
+import { isRecord } from "../packages/idealis/src/trace.js";
 import { benchmark } from "./benchmark.js";
 import {
   type EvaluationPlan,
@@ -70,7 +70,9 @@ const fingerprint = async () => {
     .map((entry) => join("evals", entry.name));
   const paths = [
     ...(
-      await Promise.all(["src", "examples", "evals/harness"].map(collect))
+      await Promise.all(
+        ["packages/idealis/src", "examples", "evals/harness"].map(collect),
+      )
     ).flat(),
     ...entrypoints,
     "package.json",

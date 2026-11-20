@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { isAbsolute, join, relative, resolve } from "node:path";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { digest } from "../usable/provenance.js";
 
 for (const directory of process.argv.slice(2)) {

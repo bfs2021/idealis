@@ -1,4 +1,4 @@
-import type { TlaSourceInput } from "../../src/contracts.js";
+import type { TlaSourceInput } from "../../packages/idealis/src/contracts.js";
 
 export interface ActionCase extends TlaSourceInput {
   readonly irVersion: 2;

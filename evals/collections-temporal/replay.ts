@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { check } from "tla-ts";
-import { createPortableWasm } from "../../src/portable-wasm.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";

@@ -2,11 +2,14 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { Worker } from "node:worker_threads";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety } from "../../src/safety.js";
-import { planSchedule, runSchedule } from "../../src/scheduling.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import {
+  planSchedule,
+  runSchedule,
+} from "../../packages/idealis/src/scheduling.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 import { cases } from "../rust-safety/cases.js";
 import { createClient } from "./client.js";
 import { createNodePool } from "./node-pool.js";

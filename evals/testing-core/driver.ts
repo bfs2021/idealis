@@ -4,8 +4,11 @@ import {
   createCounter,
   isCounterAction,
 } from "../../examples/durable-counter.js";
-import { checkConformance } from "../../src/conformance.js";
-import type { TestingCase, TestingVerdict } from "../../src/testing.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import type {
+  TestingCase,
+  TestingVerdict,
+} from "../../packages/idealis/src/testing.js";
 export const actions = (testCase: TestingCase): readonly CounterAction[] =>
   testCase.actions.map((action) => {
     if (!isCounterAction(action))

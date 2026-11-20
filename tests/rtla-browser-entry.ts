@@ -1,5 +1,5 @@
 import { createParserWasm } from "../evals/rtla-parser/wasm.js";
-import { isRecord } from "../src/trace.js";
+import { isRecord } from "../packages/idealis/src/trace.js";
 
 export const run = async (assetBase = "") => {
   const parser = await createParserWasm(

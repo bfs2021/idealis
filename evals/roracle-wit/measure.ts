@@ -5,7 +5,7 @@ import { cp, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { arch, cpus, platform } from "node:os";
 import { dirname, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { OracleRequest } from "../../src/generated/roracle.js";
+import type { OracleRequest } from "../../packages/idealis/src/generated/roracle.js";
 import { fixtures } from "../roracle-native/fixtures.js";
 import type { SavedFixture } from "../roracle-native/measure.js";
 import type { OracleClient } from "../workspace-oracle/protocol.js";
@@ -56,7 +56,7 @@ const runtime = [
   "evals/roracle-native/canonical.js",
   "evals/workspace-oracle/protocol.js",
   "evals/workspace-oracle/wasm.js",
-  "src/trace.js",
+  "packages/idealis/src/trace.js",
 ];
 for (const path of runtime) {
   const saved = resolve(output, "runtime", path);
@@ -74,8 +74,8 @@ const paths = execFileSync(
     "evals/roracle-native",
     "evals/workspace-oracle",
     "evals/plans/typed-oracle.md",
-    "src/generated/roracle.ts",
-    "src/trace.ts",
+    "packages/idealis/src/generated/roracle.ts",
+    "packages/idealis/src/trace.ts",
     "crates/oracle",
     "package.json",
     "pnpm-lock.yaml",

@@ -7,11 +7,14 @@ import type {
   SafetyBounds,
   SafetyProgram,
   SafetyResult,
-} from "../../src/contracts.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/contracts.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { digest } from "../usable/provenance.js";
 import { benchmarkCases } from "./cases.js";
 import { fingerprint } from "./provenance.js";

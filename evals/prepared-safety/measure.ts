@@ -3,10 +3,13 @@ import { spawnSync } from "node:child_process";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
-import type { PortableCommand, SafetyProgram } from "../../src/contracts.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  PortableCommand,
+  SafetyProgram,
+} from "../../packages/idealis/src/contracts.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { sharing } from "../p0-checker/inputs.js";
 import { config, names } from "../quint-generated/cases.js";
 import { bounds, cases } from "../single-model/cases.js";

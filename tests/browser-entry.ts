@@ -5,16 +5,23 @@ import {
   counterModel,
   createCounter,
 } from "../examples/durable-counter.js";
-import { checkConformance, checkModel, checkTrace } from "../src/index.js";
+import {
+  checkConformance,
+  checkModel,
+  checkTrace,
+} from "../packages/idealis/src/index.js";
 import {
   checkSafety,
   compileTlaSource,
   createPortableWasm,
-} from "../src/portable.js";
-import { checkProperty } from "../src/property.js";
-import { createSmtOracle } from "../src/smt.js";
-import { checkTlaSource } from "../src/tla-source.js";
-import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
+} from "../packages/idealis/src/portable.js";
+import { checkProperty } from "../packages/idealis/src/property.js";
+import { createSmtOracle } from "../packages/idealis/src/smt.js";
+import { checkTlaSource } from "../packages/idealis/src/tla-source.js";
+import {
+  compileTlaSafety,
+  generateTlaOracle,
+} from "../packages/idealis/src/tla.js";
 
 export const runGenerated = async (
   inputs: readonly { readonly source: string; readonly config: string }[],

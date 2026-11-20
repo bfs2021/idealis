@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
-import { shrinkCounterexample } from "../../src/shrink.js";
+import { shrinkCounterexample } from "../../packages/idealis/src/shrink.js";
 import type {
   TestingCase,
   TestingGenerator,
   TestingJson,
   TestingPlan,
   TestingVerdict,
-} from "../../src/testing.js";
-import { equalValues } from "../../src/trace.js";
+} from "../../packages/idealis/src/testing.js";
+import { equalValues } from "../../packages/idealis/src/trace.js";
 
 export const accepts = (
   generator: TestingGenerator,

@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { checkConformance } from "../../src/conformance.js";
-import { parseFiniteModel } from "../../src/finite.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import { parseFiniteModel } from "../../packages/idealis/src/finite.js";
 import {
   createPortableWasm,
   toPortableTrace,
   toPortableValue,
-} from "../../src/portable.js";
+} from "../../packages/idealis/src/portable.js";
 import { benchmarkFinite } from "./benchmark.js";
 import {
   createMutexDriver,

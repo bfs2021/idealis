@@ -1,4 +1,4 @@
-import type { SafetyBounds } from "../../src/contracts.js";
+import type { SafetyBounds } from "../../packages/idealis/src/contracts.js";
 import { benchmarks } from "../collections-temporal/benchmarks.js";
 
 export interface SafetyCase {

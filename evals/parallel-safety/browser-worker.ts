@@ -1,6 +1,6 @@
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety } from "../../src/safety.js";
-import { isRecord } from "../../src/trace.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { createProcessor } from "./processor.js";
 import type { WorkerSetup } from "./protocol.js";
 

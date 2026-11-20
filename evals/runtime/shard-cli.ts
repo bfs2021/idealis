@@ -1,6 +1,9 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { planBudget, type RuntimeProfile } from "../../src/budget.js";
+import {
+  planBudget,
+  type RuntimeProfile,
+} from "../../packages/idealis/src/budget.js";
 import {
   createManifest,
   mergeReports,
@@ -8,8 +11,8 @@ import {
   type TaskManifest,
   type TaskReport,
   verifyManifest,
-} from "../../src/sharding.js";
-import { equalValues, isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/sharding.js";
+import { equalValues, isRecord } from "../../packages/idealis/src/trace.js";
 import { checkHistory, incrementHistoryModel } from "../harness/history.js";
 import { createPool, runInline } from "./pool.js";
 import { runtimeFingerprint } from "./provenance.js";

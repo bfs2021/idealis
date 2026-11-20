@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import type { JsonValue } from "../../src/generated/roracle.js";
+import type { JsonValue } from "../../packages/idealis/src/generated/roracle.js";
 import { decodeOracleReply } from "../workspace-oracle/protocol.js";
 import { snapshot } from "../workspace-oracle/snapshot.js";
 import { createOracle } from "../workspace-oracle/wasm.js";

@@ -1,4 +1,7 @@
-import { planSchedule, runSchedule } from "../../src/scheduling.js";
+import {
+  planSchedule,
+  runSchedule,
+} from "../../packages/idealis/src/scheduling.js";
 import { createBrowserPool } from "./browser-pool.js";
 import type { WorkerSetup } from "./protocol.js";
 

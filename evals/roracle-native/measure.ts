@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import type { OracleRequest } from "../../src/generated/roracle.js";
+import type { OracleRequest } from "../../packages/idealis/src/generated/roracle.js";
 import type {
   OracleClient,
   OracleReport,

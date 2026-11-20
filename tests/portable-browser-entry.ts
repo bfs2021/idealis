@@ -7,17 +7,20 @@ import { sharing } from "../evals/p0-checker/inputs.js";
 import { monotone, nodeSets, recordNodes } from "../evals/symmetry/cases.js";
 import { counterModel } from "../examples/counter-model.js";
 import { createCounter, isCounterAction } from "../examples/durable-counter.js";
-import { createRtlcBackend, runBackend } from "../src/backend.js";
-import { checkConformance } from "../src/conformance.js";
+import {
+  createRtlcBackend,
+  runBackend,
+} from "../packages/idealis/src/backend.js";
+import { checkConformance } from "../packages/idealis/src/conformance.js";
 import type {
   SafetyBounds,
   SafetyProgram,
   SafetyResult,
   TlaSourceInput,
-} from "../src/contracts.js";
-import { compileFiniteModel } from "../src/finite.js";
-import { createSimulationHost } from "../src/host.js";
-import { PortableCoreError } from "../src/portable-value.js";
+} from "../packages/idealis/src/contracts.js";
+import { compileFiniteModel } from "../packages/idealis/src/finite.js";
+import { createSimulationHost } from "../packages/idealis/src/host.js";
+import { PortableCoreError } from "../packages/idealis/src/portable-value.js";
 import {
   checkFiniteHistories,
   checkPortableConformance,
@@ -33,8 +36,11 @@ import {
   toPortableTrace,
   toPortableValue,
   verifyHostTape,
-} from "../src/portable.js";
-import { checkTlaSource, compileTlaSource } from "../src/tla-source.js";
+} from "../packages/idealis/src/portable.js";
+import {
+  checkTlaSource,
+  compileTlaSource,
+} from "../packages/idealis/src/tla-source.js";
 
 export const run = async (assetBase = ""): Promise<Record<string, unknown>> => {
   const core = await createPortableWasm(

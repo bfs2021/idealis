@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSource } from "../../src/tla-source.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
 import {
   bounds,
   counter,

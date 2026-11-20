@@ -1,13 +1,19 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { after, test } from "node:test";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { checkTlaSource, compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import {
+  checkTlaSource,
+  compileTlaSource,
+} from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { bounds, config, names } from "../quint-generated/cases.js";
 import { counter, partialOrderCorpus } from "../symmetry/cases.js";
 import { startNative } from "../usable/native.js";

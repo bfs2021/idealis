@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { digest } from "../usable/provenance.js";
 import { normalizeRtla, normalizeSany } from "./normalize.js";
 

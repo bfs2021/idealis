@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSource } from "../../src/tla-source.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
 import { cases } from "../collections-temporal/cases.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { differential } from "../tlc-differential/differential.js";

@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
-import type { Model, PortableTrace } from "../../src/contracts.js";
-import { toPortableTrace } from "../../src/portable.js";
+import type {
+  Model,
+  PortableTrace,
+} from "../../packages/idealis/src/contracts.js";
+import { toPortableTrace } from "../../packages/idealis/src/portable.js";
 
 export const createOracle = <State, Action, Observation>(
   model: Model<State, Action, Observation>,

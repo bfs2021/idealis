@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { parentPort, workerData } from "node:worker_threads";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { runScheduledCounter } from "../harness/scheduled-counter.js";
 import { compileCounterTable, runTable } from "./table.js";
 import { createWasmKernel } from "./wasm.js";

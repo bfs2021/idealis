@@ -1,5 +1,5 @@
 import { parseModule } from "tla-ts";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 export const analysisBounds = { maxDepth: 8, maxStates: 100, maxWork: 10_000 };
 export const analysisLimits = {

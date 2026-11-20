@@ -2,7 +2,7 @@ import type {
   AlloyInput,
   AlloyInstance,
   AlloyInstanceCheck,
-} from "../../src/alloy.js";
+} from "../../packages/idealis/src/alloy.js";
 
 export interface Case {
   readonly name: string;

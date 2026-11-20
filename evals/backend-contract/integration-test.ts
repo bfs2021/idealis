@@ -5,9 +5,9 @@ import {
   BackendContractError,
   createRtlcBackend,
   runBackend,
-} from "../../src/backend.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+} from "../../packages/idealis/src/backend.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 
 const scope = {
   modelId: "ring:v1",

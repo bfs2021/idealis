@@ -7,7 +7,7 @@ import {
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, delimiter, join, resolve } from "node:path";
 import { parseModule } from "tla-ts";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { createParserWasm } from "../rtla-parser/wasm.js";
 import { digest } from "../usable/provenance.js";
 import { corpus, focus } from "./corpus.js";

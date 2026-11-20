@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
-import { PortableCoreError } from "../src/portable-value.js";
-import { decodeSafetyProgram } from "../src/safety-program.js";
-import { compileTlaSafety } from "../src/tla-safety.js";
+import { PortableCoreError } from "../packages/idealis/src/portable-value.js";
+import { decodeSafetyProgram } from "../packages/idealis/src/safety-program.js";
+import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 export const registerSourceContract = (
   test: (name: string, run: () => void) => unknown,

@@ -1,4 +1,4 @@
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 export interface Scope {
   readonly signatures: readonly {

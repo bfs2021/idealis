@@ -4,13 +4,13 @@ import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { counterModel } from "../../examples/counter-model.js";
 import { createCounter } from "../../examples/durable-counter.js";
-import { checkConformance } from "../../src/conformance.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
 import {
   checkFiniteHistory,
   compileFiniteModel,
   createFiniteModel,
-} from "../../src/finite.js";
-import { createSimulationHost } from "../../src/host.js";
+} from "../../packages/idealis/src/finite.js";
+import { createSimulationHost } from "../../packages/idealis/src/host.js";
 import {
   checkFiniteConformance,
   checkFiniteHistories,
@@ -20,8 +20,11 @@ import {
   toPortableTrace,
   toPortableValue,
   verifyHostTape,
-} from "../../src/portable.js";
-import { deletionCandidates, shrinkCounterexample } from "../../src/shrink.js";
+} from "../../packages/idealis/src/portable.js";
+import {
+  deletionCandidates,
+  shrinkCounterexample,
+} from "../../packages/idealis/src/shrink.js";
 import { exerciseHost } from "./scenario.js";
 
 test("the same host tape replays in TS, Rust/Wasm and native Rust", async () => {

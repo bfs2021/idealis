@@ -1,4 +1,4 @@
-import type { SimulationHost } from "../../src/contracts.js";
+import type { SimulationHost } from "../../packages/idealis/src/contracts.js";
 
 export const exerciseHost = (host: SimulationHost) => {
   host.write("counter", 1);

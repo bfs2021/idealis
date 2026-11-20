@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { AlloyError, createAlloyWasm } from "../../src/alloy.js";
+import {
+  AlloyError,
+  createAlloyWasm,
+} from "../../packages/idealis/src/alloy.js";
 import { processClient } from "../smt-subset/clients.js";
 import { fixed, graph } from "./corpus.js";
 

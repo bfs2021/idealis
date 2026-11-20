@@ -5,9 +5,9 @@ import type {
   PortableCommand,
   PortableCore,
   TlaSourceInput,
-} from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";

@@ -1,16 +1,17 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import type { PortableCommand } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import type { PortableCommand } from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { runTlc } from "../collections-temporal/tlc.js";
 import { classifyTlc } from "../tlc-differential/compare.js";
 import { differential } from "../tlc-differential/differential.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";
 import type { FrontendCase } from "./cases.js";
+import { readSnapshotSource } from "./snapshot-source.js";
 
 const [directory, java, jar] = process.argv.slice(2);
 assert.ok(directory && java && jar);
@@ -23,11 +24,12 @@ const paths = [
   "evals/frontend-semantics/value-cases.ts",
   "evals/frontend-semantics/generated.ts",
   "evals/frontend-semantics/execute.ts",
+  "evals/frontend-semantics/snapshot-source.ts",
   "evals/tlc-differential/differential.ts",
   "evals/collections-temporal/tlc.ts",
-  "src/safety-program.ts",
-  "src/contracts.ts",
-  "src/tla-source.ts",
+  "packages/idealis/src/safety-program.ts",
+  "packages/idealis/src/contracts.ts",
+  "packages/idealis/src/tla-source.ts",
   "crates/idealis-core/target/release/idealis-core",
   "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   jar,
@@ -234,7 +236,11 @@ try {
   await native.close();
 }
 for (const source of provenance.sources)
-  assert.equal(digest(await readFile(source.path)), source.sha256, source.path);
+  assert.equal(
+    digest(await readSnapshotSource(source.path)),
+    source.sha256,
+    source.path,
+  );
 for (const source of sources)
   assert.equal(digest(await readFile(source.path)), source.sha256, source.path);
 await save("results.json", results);

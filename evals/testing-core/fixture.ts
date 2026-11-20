@@ -1,4 +1,7 @@
-import type { TestingGenerator, TestingPlan } from "../../src/testing.js";
+import type {
+  TestingGenerator,
+  TestingPlan,
+} from "../../packages/idealis/src/testing.js";
 export const generator = (): TestingGenerator => {
   const add = [
     { type: "add", id: "a", amount: 1 },

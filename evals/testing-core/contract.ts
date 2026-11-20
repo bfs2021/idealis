@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import type { TestingPlan } from "../../src/contracts.js";
-import { createTestingWasm, TestingError } from "../../src/testing.js";
+import type { TestingPlan } from "../../packages/idealis/src/contracts.js";
+import {
+  createTestingWasm,
+  TestingError,
+} from "../../packages/idealis/src/testing.js";
 import { verify } from "./verify.js";
 
 export const plan = (): TestingPlan => ({

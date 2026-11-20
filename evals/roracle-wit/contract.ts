@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
-import type { JsonValue } from "../../src/generated/roracle.js";
-import { isRecord } from "../../src/trace.js";
+import type { JsonValue } from "../../packages/idealis/src/generated/roracle.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import {
   fixtures,
   observationMatrix,

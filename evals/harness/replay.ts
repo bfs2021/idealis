@@ -8,8 +8,8 @@ import {
   checkConformance,
   decodeTrace,
   TraceFormatError,
-} from "../../src/index.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/index.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { counterFaults, createFaultyCounter } from "./counter-faults.js";
 import { checkHistory, incrementHistoryModel } from "./history.js";
 import { runScheduledCounter } from "./scheduled-counter.js";

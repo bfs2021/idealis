@@ -11,7 +11,7 @@ let origin: string;
 
 test.beforeAll(async () => {
   const core = await build({
-    entryPoints: ["src/index.ts"],
+    entryPoints: ["packages/idealis/src/index.ts"],
     bundle: true,
     platform: "browser",
     format: "esm",
@@ -19,7 +19,9 @@ test.beforeAll(async () => {
     metafile: true,
   });
   expect(
-    Object.keys(core.metafile.inputs).every((name) => name.startsWith("src/")),
+    Object.keys(core.metafile.inputs).every((name) =>
+      name.startsWith("packages/idealis/src/"),
+    ),
   ).toBe(true);
   const bundle = await build({
     entryPoints: ["tests/browser-entry.ts"],

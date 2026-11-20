@@ -11,10 +11,10 @@ import type {
   PortableCommand,
   SafetyActionCoverage,
   TlaSourceInput,
-} from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSource } from "../../src/tla-source.js";
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
 import { runTlc, traceInput } from "../collections-temporal/tlc.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { classifyTlc } from "../tlc-differential/compare.js";

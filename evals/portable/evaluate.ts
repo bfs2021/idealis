@@ -5,8 +5,11 @@ import { dirname, join } from "node:path";
 import type { CounterAction } from "../../examples/counter-model.js";
 import { counterModel } from "../../examples/counter-model.js";
 import { isCounterAction } from "../../examples/durable-counter.js";
-import { checkConformance, checkTrace } from "../../src/conformance.js";
-import type { PortableResult } from "../../src/contracts.js";
+import {
+  checkConformance,
+  checkTrace,
+} from "../../packages/idealis/src/conformance.js";
+import type { PortableResult } from "../../packages/idealis/src/contracts.js";
 import {
   checkPortableConformance,
   checkPortableTrace,
@@ -14,7 +17,7 @@ import {
   fromPortableValue,
   toPortableTrace,
   toPortableValue,
-} from "../../src/portable.js";
+} from "../../packages/idealis/src/portable.js";
 import {
   counterFaults,
   createFaultyCounter,

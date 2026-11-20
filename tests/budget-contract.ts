@@ -5,7 +5,7 @@ import {
   runDynamic,
   runTable,
 } from "../evals/runtime/table.js";
-import { planBudget } from "../src/budget.js";
+import { planBudget } from "../packages/idealis/src/budget.js";
 
 export const registerBudgetContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,

@@ -1,7 +1,7 @@
 import {
   createTestingRuntime,
   type TestingRequest,
-} from "../../src/testing.js";
+} from "../../packages/idealis/src/testing.js";
 import { processClient } from "../smt-subset/clients.js";
 
 export const nativePath =

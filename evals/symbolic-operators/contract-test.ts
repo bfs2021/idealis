@@ -3,10 +3,13 @@ import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { test } from "node:test";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyResult } from "../../src/safety.js";
-import { checkTlaSource, compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyResult } from "../../packages/idealis/src/safety.js";
+import {
+  checkTlaSource,
+  compileTlaSource,
+} from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { bounds } from "../collections-temporal/cases.js";
 import { createParserWasm } from "../rtla-parser/wasm.js";
 import type { Report } from "../tlc-differential/differential.js";

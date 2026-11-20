@@ -4,20 +4,26 @@ import {
   counterModel,
   isCounterAction,
 } from "../../examples/durable-counter.js";
-import { checkConformance, checkTrace } from "../../src/conformance.js";
+import {
+  checkConformance,
+  checkTrace,
+} from "../../packages/idealis/src/conformance.js";
 import type {
   Driver,
   PortableResult,
   PortableValue,
-} from "../../src/contracts.js";
-import { checkFiniteHistory, createFiniteModel } from "../../src/finite.js";
-import { decodePortableResult } from "../../src/portable-wasm.js";
+} from "../../packages/idealis/src/contracts.js";
+import {
+  checkFiniteHistory,
+  createFiniteModel,
+} from "../../packages/idealis/src/finite.js";
+import { decodePortableResult } from "../../packages/idealis/src/portable-wasm.js";
 import {
   fromPortableValue,
   toPortableTrace,
   toPortableValue,
-} from "../../src/portable.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/portable.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import {
   type CounterFault,
   createFaultyCounter,

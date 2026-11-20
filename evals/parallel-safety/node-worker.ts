@@ -1,8 +1,11 @@
 import { parentPort, workerData } from "node:worker_threads";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { isRecord } from "../../src/trace.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { startNative } from "../usable/native.js";
 import { createProcessor } from "./processor.js";
 import type { WorkerSetup } from "./protocol.js";

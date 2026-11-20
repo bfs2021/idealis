@@ -1,4 +1,4 @@
-import type { JsonValue } from "../../src/generated/roracle.js";
+import type { JsonValue } from "../../packages/idealis/src/generated/roracle.js";
 
 export const canonicalObject = (input: JsonValue) => {
   const ancestors = new Set<object>();

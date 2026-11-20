@@ -1,11 +1,11 @@
 import { compileCounterTable, runTable } from "../evals/runtime/table.js";
 import { createWasmKernel } from "../evals/runtime/wasm.js";
-import { planBudget } from "../src/budget.js";
+import { planBudget } from "../packages/idealis/src/budget.js";
 import {
   createManifest,
   mergeReports,
   partitionTasks,
-} from "../src/sharding.js";
+} from "../packages/idealis/src/sharding.js";
 
 export const run = async (assetBase = ""): Promise<Record<string, unknown>> => {
   const table = compileCounterTable();

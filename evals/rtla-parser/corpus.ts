@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { cases } from "../collections-temporal/cases.js";
 import { boundaries } from "../tlc-differential/corpus.js";
 

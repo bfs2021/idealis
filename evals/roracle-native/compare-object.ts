@@ -4,7 +4,7 @@ import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { arch, cpus, platform } from "node:os";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { OracleRequest } from "../../src/generated/roracle.js";
+import type { OracleRequest } from "../../packages/idealis/src/generated/roracle.js";
 import { createOracle } from "../workspace-oracle/wasm.js";
 import type { createNativeOracle } from "./client.js";
 import { fixtures } from "./fixtures.js";
@@ -39,7 +39,7 @@ for (const path of [
   "dist/evals/roracle-native/client.js",
   "dist/evals/roracle-native/canonical.js",
   "dist/evals/workspace-oracle/protocol.js",
-  "dist/src/trace.js",
+  "dist/packages/idealis/src/trace.js",
   "evals/roracle-native/client.ts",
   "evals/roracle-native/canonical.ts",
   "evals/roracle-native/contract.ts",

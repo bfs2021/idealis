@@ -6,8 +6,8 @@ import { isCounterAction } from "../../examples/durable-counter.js";
 import {
   checkPortableConformance,
   createPortableWasm,
-} from "../../src/portable.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/portable.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import {
   counterFaults,
   createFaultyCounter,

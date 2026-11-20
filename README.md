@@ -56,7 +56,7 @@ roracleのrequest/report型はRustからTSへ生成する。Node向けnapi-rsは
 | [`ralloy`](crates/ralloy)                     | 静的なAlloyソースと有限scope                   | sig・二項関係・fact・assertの解析と、有限構造の列挙・instanceや反例の生成。                |
 | [`idealis-testing`](crates/idealis-testing)   | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
 | [`roracle`](crates/oracle)                    | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
-| [`@mizchi/idealis`](src)                      | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
+| [`@mizchi/idealis`](packages/idealis)         | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
 | [Go adapter](adapters/go)                     | 共通コアのWasmとGoのモデル・実装・履歴         | CGOなしでRustコアへ接続し、同じ値・オラクル・観測で照合と再生を行う。                      |
 
 RustのTLA+経路は、`TLA+ソース → rtlaのAST → rtla-compilerのIR → rtlcの探索・検査`。`idealis-core`がこの経路をnative/Wasmのリクエストへ接続する。TSはRust frontend APIから利用し、Go adapterは共通コアの有限モデル・履歴照合を利用する。rtlaとrtlcはそれぞれ単独で利用でき、idealis-coreへ依存しない。
@@ -291,7 +291,7 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 [`@mizchi/idealis/backend`](docs/backend-contract.md)は、完全探索、有界の反例なし、帰納性を区別する共通契約。model/property/意味論/仮定/backend版を結果へ結びつけ、空の初期集合・資源切れ・unknownを検査成功へ変換しない。rtlcのnative/Wasm bridgeを提供する。Apalacheの汎用adapterとSMT encodingは今後の対象。[契約と保存応答の検査](evals/iterations/0028-backend-contract.md)に結果を記録した。
 
 ```ts
-import { checkConformance, checkModel, checkTrace } from "./src/index.js";
+import { checkConformance, checkModel, checkTrace } from "@mizchi/idealis";
 import { counterModel, createCounter } from "./examples/durable-counter.js";
 
 const result = await checkConformance(counterModel, createCounter(), [
@@ -318,8 +318,8 @@ for (const trace of oracle.traces) {
 ```ts
 import assert from "node:assert/strict";
 import { array, constantFrom } from "fast-check";
-import { checkProperty } from "./src/property.js";
-import { checkDifferential } from "./src/index.js";
+import { checkProperty } from "@mizchi/idealis/property";
+import { checkDifferential } from "@mizchi/idealis";
 import {
   counterModel,
   createCounter,
@@ -353,12 +353,12 @@ assert.equal(diff.status, "matched");
 
 ## アダプターと移植性
 
-| import            | 役割                                                   | ランタイム                     |
-| ----------------- | ------------------------------------------------------ | ------------------------------ |
-| `src/index.ts`    | 有限モデルの BFS、合成、適合性比較、差分比較、トレース | 外部依存のない TS              |
-| `src/property.ts` | 生成、縮小、seed/path 再現                             | fast-check                     |
-| `src/tla.ts`      | 実際の TLA+ 検査結果と有限反例の変換                   | tla-ts                         |
-| `src/smt.ts`      | SMT-LIB の SAT/UNSAT/UNKNOWN と整数解の取り出し        | 呼び出し側で初期化した Z3 Wasm |
+| import                             | 役割                                                   | ランタイム                     |
+| ---------------------------------- | ------------------------------------------------------ | ------------------------------ |
+| `packages/idealis/src/index.ts`    | 有限モデルの BFS、合成、適合性比較、差分比較、トレース | 外部依存のない TS              |
+| `packages/idealis/src/property.ts` | 生成、縮小、seed/path 再現                             | fast-check                     |
+| `packages/idealis/src/tla.ts`      | 実際の TLA+ 検査結果と有限反例の変換                   | tla-ts                         |
+| `packages/idealis/src/smt.ts`      | SMT-LIB の SAT/UNSAT/UNKNOWN と整数解の取り出し        | 呼び出し側で初期化した Z3 Wasm |
 
 コアを import してもソルバーは読み込まれない。通常CIはNodeのWebAssemblyで23件の共有契約をNode test runnerとVitestから実行し、ブラウザ向けbundleも検査する。Web Worker輸送やcross-origin isolationなどの実ブラウザ互換性は、手動の[Browser compatibility workflow](.github/workflows/browser.yml)と`just browser`で確認する。Z3 のブラウザ実行には `z3-built.js` / `.wasm` の配信、SharedArrayBuffer、COOP/COEP ヘッダーが必要。
 

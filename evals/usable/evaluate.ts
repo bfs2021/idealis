@@ -2,15 +2,18 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { checkConformance } from "../../src/conformance.js";
-import type { PortableResult, PortableTrace } from "../../src/contracts.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import type {
+  PortableResult,
+  PortableTrace,
+} from "../../packages/idealis/src/contracts.js";
 import {
   checkFiniteHistory,
   compileFiniteModel,
   createFiniteModel,
-} from "../../src/finite.js";
-import { createSimulationHost } from "../../src/host.js";
-import { decodePortableResult } from "../../src/portable-wasm.js";
+} from "../../packages/idealis/src/finite.js";
+import { createSimulationHost } from "../../packages/idealis/src/host.js";
+import { decodePortableResult } from "../../packages/idealis/src/portable-wasm.js";
 import {
   checkFiniteHistories,
   coreDeletionCandidates,
@@ -18,9 +21,9 @@ import {
   toPortableTrace,
   toPortableValue,
   verifyHostTape,
-} from "../../src/portable.js";
-import { shrinkCounterexample } from "../../src/shrink.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/portable.js";
+import { shrinkCounterexample } from "../../packages/idealis/src/shrink.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { generateCorpus } from "../harness/search.js";
 import { benchmarkFinite } from "./benchmark.js";
 import {

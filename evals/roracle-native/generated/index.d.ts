@@ -6,5 +6,5 @@ export declare function abiVersion(): number;
 export declare function dispatchJson(input: string): string;
 
 export declare function dispatchObject(
-  input: import("../../../src/generated/roracle.js").OracleRequest,
+  input: import("../../../packages/idealis/src/generated/roracle.js").OracleRequest,
 ): string;

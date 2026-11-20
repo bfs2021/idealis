@@ -1,5 +1,8 @@
-import type { TestingCase, TestingVerdict } from "../../src/testing.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  TestingCase,
+  TestingVerdict,
+} from "../../packages/idealis/src/testing.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 export interface Evaluation {
   readonly verdict: TestingVerdict;

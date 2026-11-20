@@ -14,7 +14,7 @@ export const portableFingerprint = async () => {
         "--others",
         "--exclude-standard",
         "--",
-        "src",
+        "packages/idealis/src",
         "examples",
         "evals/portable",
         "crates/idealis-core",

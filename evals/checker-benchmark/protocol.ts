@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { benchmarkCases } from "../rust-safety/cases.js";
 
 export interface Input {

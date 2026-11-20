@@ -3,7 +3,7 @@ import type {
   JsonValue,
   OracleRequest,
   Status,
-} from "../../src/generated/roracle.js";
+} from "../../packages/idealis/src/generated/roracle.js";
 
 export interface OracleReport {
   readonly status: Status;

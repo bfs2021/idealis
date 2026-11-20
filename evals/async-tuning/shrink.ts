@@ -4,9 +4,9 @@ import {
   counterModel,
 } from "../../examples/counter-model.js";
 import { isCounterAction } from "../../examples/durable-counter.js";
-import { checkConformance } from "../../src/conformance.js";
-import { fromPortableValue } from "../../src/portable.js";
-import { shrinkCounterexample } from "../../src/shrink.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import { fromPortableValue } from "../../packages/idealis/src/portable.js";
+import { shrinkCounterexample } from "../../packages/idealis/src/shrink.js";
 import { buildSuite } from "../cross-language/suite.js";
 import { createFaultyCounter } from "../harness/counter-faults.js";
 

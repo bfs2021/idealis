@@ -4,16 +4,16 @@ import type {
   PortableCore,
   PortableResult,
   PortableTrace,
-} from "../../src/contracts.js";
+} from "../../packages/idealis/src/contracts.js";
 import {
   checkFiniteHistory,
   createFiniteModel,
   parseFiniteModel,
-} from "../../src/finite.js";
-import { parsePortableTrace } from "../../src/portable-value.js";
-import { decodePortableResult } from "../../src/portable-wasm.js";
-import { checkFiniteHistories } from "../../src/portable.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/finite.js";
+import { parsePortableTrace } from "../../packages/idealis/src/portable-value.js";
+import { decodePortableResult } from "../../packages/idealis/src/portable-wasm.js";
+import { checkFiniteHistories } from "../../packages/idealis/src/portable.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { startNative } from "./native.js";
 
 const decodeResults = (value: unknown): readonly PortableResult[] => {

@@ -35,7 +35,7 @@ if (command === "model") {
   if (!historyPath) throw new Error("A history file is required");
   const trace = decodePortableTrace(await readFile(historyPath, "utf8"));
   const core = await createPortableWasm(
-    await readFile(new URL("../../assets/idealis-core.wasm", import.meta.url)),
+    await readFile(new URL(import.meta.resolve("@mizchi/idealis/core.wasm"))),
   );
   const result = checkFiniteHistories(core, model, [trace])[0];
   if (!result) throw new Error("Missing check result");

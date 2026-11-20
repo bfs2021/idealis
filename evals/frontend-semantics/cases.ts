@@ -1,4 +1,4 @@
-import type { TlaSourceInput } from "../../src/contracts.js";
+import type { TlaSourceInput } from "../../packages/idealis/src/contracts.js";
 
 export interface FrontendCase extends TlaSourceInput {
   readonly name: string;

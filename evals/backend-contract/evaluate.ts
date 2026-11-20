@@ -7,20 +7,20 @@ import {
   createRtlcBackend,
   parseBackendResult,
   runBackend,
-} from "../../src/backend.js";
+} from "../../packages/idealis/src/backend.js";
 import type {
   BackendResult,
   BackendScope,
   PortableCore,
-} from "../../src/contracts.js";
+} from "../../packages/idealis/src/contracts.js";
 import {
   PortableCoreError,
   toPortableValue,
-} from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyResult } from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { cases } from "../apalache-comparison/cases.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { digest } from "../usable/provenance.js";

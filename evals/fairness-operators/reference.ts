@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { TlaSourceInput } from "../../src/contracts.js";
+import type { TlaSourceInput } from "../../packages/idealis/src/contracts.js";
 import { runTlc } from "../collections-temporal/tlc.js";
 import { classifyTlc } from "../tlc-differential/compare.js";
 import { digest } from "../usable/provenance.js";

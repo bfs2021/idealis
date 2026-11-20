@@ -4,10 +4,10 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { SafetyResult } from "../../src/contracts.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+import type { SafetyResult } from "../../packages/idealis/src/contracts.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 import { bounds, cases } from "./cases.js";
 import { fingerprint } from "./provenance.js";
 

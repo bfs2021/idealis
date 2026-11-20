@@ -3,9 +3,9 @@ import type {
   SafetyProgram,
   SafetyResult,
   ScheduledCompletion,
-} from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { SchedulingError } from "../../src/scheduling.js";
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { SchedulingError } from "../../packages/idealis/src/scheduling.js";
 import type { ProgramEntry, SafetyJob, SafetyOutcome } from "./protocol.js";
 
 export const createProcessor = (

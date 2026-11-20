@@ -5,8 +5,11 @@ import { availableParallelism } from "node:os";
 import { join, resolve } from "node:path";
 import { counterModel } from "../../examples/counter-model.js";
 import { createCounter } from "../../examples/durable-counter.js";
-import { planBudget, type RuntimeProfile } from "../../src/budget.js";
-import { checkConformance } from "../../src/index.js";
+import {
+  planBudget,
+  type RuntimeProfile,
+} from "../../packages/idealis/src/budget.js";
+import { checkConformance } from "../../packages/idealis/src/index.js";
 import { runNative } from "./native.js";
 import { createPool, runInline } from "./pool.js";
 import { runtimeFingerprint } from "./provenance.js";

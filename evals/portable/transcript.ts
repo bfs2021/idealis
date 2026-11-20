@@ -4,8 +4,8 @@ import type {
   PortableCommand,
   PortableCore,
   PortableOutput,
-} from "../../src/contracts.js";
-import { createPortableWasm } from "../../src/portable.js";
+} from "../../packages/idealis/src/contracts.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable.js";
 import { assertOracle } from "../workspace-oracle/node.js";
 
 export const createNativeComparison = async (bytes: Uint8Array) => {

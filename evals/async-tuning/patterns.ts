@@ -4,17 +4,20 @@ import {
   counterModel,
 } from "../../examples/counter-model.js";
 import { createCounter } from "../../examples/durable-counter.js";
-import { checkModel } from "../../src/checker.js";
-import { composeModels } from "../../src/compose.js";
-import { checkConformance } from "../../src/conformance.js";
-import type { Model } from "../../src/contracts.js";
-import { compileFiniteModel } from "../../src/finite.js";
+import { checkModel } from "../../packages/idealis/src/checker.js";
+import { composeModels } from "../../packages/idealis/src/compose.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import type { Model } from "../../packages/idealis/src/contracts.js";
+import { compileFiniteModel } from "../../packages/idealis/src/finite.js";
 import {
   checkConcurrentHistory,
   createHistoryRecorder,
-} from "../../src/history.js";
-import { createSimulationHost } from "../../src/host.js";
-import { fromPortableValue, toPortableValue } from "../../src/portable.js";
+} from "../../packages/idealis/src/history.js";
+import { createSimulationHost } from "../../packages/idealis/src/host.js";
+import {
+  fromPortableValue,
+  toPortableValue,
+} from "../../packages/idealis/src/portable.js";
 
 interface CreditState {
   readonly epoch: number;

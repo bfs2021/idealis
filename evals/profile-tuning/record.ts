@@ -5,10 +5,13 @@ import { Session } from "node:inspector/promises";
 import { cpus, loadavg } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { bounds } from "../single-model/cases.js";
 import { digest } from "../usable/provenance.js";
 import { inputs } from "./inputs.js";

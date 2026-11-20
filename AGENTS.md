@@ -3,7 +3,7 @@
 ユーザーには日本語で答える。Node.js 24+ と pnpm を使う。
 
 - TDD: 探索 → Red → Green → Refactoring。挙動を検証し、モデルと実装で遷移ロジックを共有しない。
-- コントラクトは `src/contracts.ts`。コアは Node API、テストランナー、ソルバーに依存させない。
+- コントラクトは `packages/idealis/src/contracts.ts`。コアは Node API、テストランナー、ソルバーに依存させない。
 - 状態と観測は immutable なスナップショット。`Model.key` は遷移に必要な状態を省略しない。
 - `complete` / `bounded` / `empty`、`matched` / `mismatch` / `invalid` を区別する。探索や生成が成立していない場合に合格させない。
 - TLA+ の意味論は tla-ts / TLC のソースと突き合わせる。互換性や証明範囲を推測で広げない。

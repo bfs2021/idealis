@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { decodeSafetyResult } from "../../src/safety.js";
-import { isRecord } from "../../src/trace.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import { decodeSafetyResult } from "../../packages/idealis/src/safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { startNative } from "../usable/native.js";
 import { bounds, type Input } from "./cases.js";
 

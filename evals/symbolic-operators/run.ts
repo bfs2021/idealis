@@ -6,7 +6,7 @@ import {
 } from "node:child_process";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, delimiter, join, resolve } from "node:path";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { referenceSource } from "../rtla-compatibility/reference.js";
 import { createParserWasm } from "../rtla-parser/wasm.js";
 import { digest } from "../usable/provenance.js";

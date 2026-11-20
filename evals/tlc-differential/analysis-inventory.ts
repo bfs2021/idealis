@@ -56,7 +56,7 @@ const paths = [
   "node_modules/tla-ts/src/lexer.ts",
   "node_modules/tla-ts/src/parser.ts",
   "node_modules/tla-ts/src/ast.ts",
-  "src/tla-safety.ts",
+  "packages/idealis/src/tla-safety.ts",
   "crates/rtla/src/lexer.rs",
   "crates/rtla/src/parser.rs",
   "crates/rtla/src/ast.rs",

@@ -106,8 +106,8 @@ if (route === "tlc-1x8" || route === "tlc-8x1") {
   );
 } else {
   assert.ok(route === "native-8" || route === "wasm-8");
-  const compiler = await import("../../src/tla-safety.js");
-  const scheduler = await import("../../src/scheduling.js");
+  const compiler = await import("../../packages/idealis/src/tla-safety.js");
+  const scheduler = await import("../../packages/idealis/src/scheduling.js");
   const adapter = await import("../parallel-safety/node-pool.js");
   const hashing = await import("../usable/provenance.js");
   const programs = input.inputs.map((entry) => ({

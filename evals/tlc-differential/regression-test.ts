@@ -2,14 +2,17 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { check } from "tla-ts";
-import type { PortableValue, SafetyResult } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  PortableValue,
+  SafetyResult,
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { bounds } from "../collections-temporal/cases.js";
 import { traceInput } from "../collections-temporal/tlc.js";
 import { startNative } from "../usable/native.js";

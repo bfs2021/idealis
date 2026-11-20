@@ -3,7 +3,7 @@ import type {
   SafetyProgram,
   SafetyResult,
   SchedulingJob,
-} from "../../src/contracts.js";
+} from "../../packages/idealis/src/contracts.js";
 
 export interface ProgramEntry {
   readonly id: string;

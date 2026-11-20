@@ -3,8 +3,8 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { setImmediate } from "node:timers/promises";
 import { build } from "esbuild";
-import type { Driver, Model } from "../../src/contracts.js";
-import { isRecord } from "../../src/trace.js";
+import type { Driver, Model } from "../../packages/idealis/src/contracts.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 export type MutexAction =
   | { readonly type: "acquire"; readonly id: string }

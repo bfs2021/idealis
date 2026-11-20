@@ -3,7 +3,7 @@ import { createServer, type Server } from "node:http";
 import { expect, test } from "@playwright/test";
 import { build } from "esbuild";
 import { cases } from "../evals/collections-temporal/cases.js";
-import { compileTlaSafety } from "../src/tla-safety.js";
+import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 let server: Server | undefined;
 let origin: string;

@@ -3,7 +3,7 @@ import type {
   Observation,
   OracleRequest,
   Status,
-} from "../../src/generated/roracle.js";
+} from "../../packages/idealis/src/generated/roracle.js";
 import type { dispatchObject } from "./generated/index.js";
 
 const valid: OracleRequest = {

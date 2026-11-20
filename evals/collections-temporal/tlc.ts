@@ -8,7 +8,7 @@ import type {
   SafetyProgram,
   SafetyResult,
   TlaSourceInput,
-} from "../../src/contracts.js";
+} from "../../packages/idealis/src/contracts.js";
 
 const valueExpression = (
   value: PortableValue,

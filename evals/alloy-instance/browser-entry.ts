@@ -1,4 +1,4 @@
-import { createAlloyWasm } from "../../src/alloy.js";
+import { createAlloyWasm } from "../../packages/idealis/src/alloy.js";
 
 export const run = async (assetBase = "") => {
   const runtime = await createAlloyWasm(

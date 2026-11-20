@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { PortableCoreError } from "../src/portable-value.js";
-import { decodeSafetyCoverageReport } from "../src/safety-coverage.js";
-import { decodeSafetyResult } from "../src/safety.js";
-import { compileTlaSafety } from "../src/tla-safety.js";
+import { PortableCoreError } from "../packages/idealis/src/portable-value.js";
+import { decodeSafetyCoverageReport } from "../packages/idealis/src/safety-coverage.js";
+import { decodeSafetyResult } from "../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 export const registerSafetyContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,

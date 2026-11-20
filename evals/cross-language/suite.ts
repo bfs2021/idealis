@@ -3,11 +3,17 @@ import {
   type CounterAction,
   counterModel,
 } from "../../examples/counter-model.js";
-import type { FiniteModel, PortableTrace } from "../../src/contracts.js";
-import { compileFiniteModel, parseFiniteModel } from "../../src/finite.js";
-import { parsePortableTrace } from "../../src/portable-value.js";
-import { toPortableTrace } from "../../src/portable.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  FiniteModel,
+  PortableTrace,
+} from "../../packages/idealis/src/contracts.js";
+import {
+  compileFiniteModel,
+  parseFiniteModel,
+} from "../../packages/idealis/src/finite.js";
+import { parsePortableTrace } from "../../packages/idealis/src/portable-value.js";
+import { toPortableTrace } from "../../packages/idealis/src/portable.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { type CounterFault, counterFaults } from "../harness/counter-faults.js";
 import { generateCorpus } from "../harness/search.js";
 

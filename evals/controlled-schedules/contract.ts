@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { createTestingWasm, TestingError } from "../../src/testing.js";
+import {
+  createTestingWasm,
+  TestingError,
+} from "../../packages/idealis/src/testing.js";
 import { wasmPath } from "../testing-core/clients.js";
 import { createSut } from "./clients.js";
 import { evaluate } from "./driver.js";

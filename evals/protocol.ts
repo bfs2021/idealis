@@ -1,4 +1,4 @@
-import { isRecord } from "../src/trace.js";
+import { isRecord } from "../packages/idealis/src/trace.js";
 import type { SearchStrategy } from "./harness/search.js";
 
 export interface Method {

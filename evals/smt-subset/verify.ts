@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { checkConformance } from "../../src/conformance.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
 import { createTtlDriver, type TtlAction, ttlModel } from "../harness/ttl.js";
 import { assertOracle } from "../workspace-oracle/node.js";
 import { createNative, createZ3, maxWork } from "./clients.js";

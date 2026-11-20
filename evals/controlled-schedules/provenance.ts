@@ -12,7 +12,7 @@ export const fingerprint = async () => {
     "--exclude-standard",
     "--",
     "crates/idealis-testing",
-    "src",
+    "packages/idealis/src",
     "evals/controlled-schedules",
     "evals/testing-core/clients.ts",
     "evals/smt-subset/clients.ts",

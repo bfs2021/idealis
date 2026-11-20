@@ -10,13 +10,16 @@ import type {
   SafetyProgramV2,
   SafetyResult,
   TlaSourceOptions,
-} from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { checkTlaSource, compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import {
+  checkTlaSource,
+  compileTlaSource,
+} from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { corpus } from "../rtla-parser/corpus.js";
 import { digest } from "../usable/provenance.js";
 import { operatorSharingCases } from "./corpus.js";

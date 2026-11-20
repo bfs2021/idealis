@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { digest } from "../usable/provenance.js";
+import { readSnapshotSource } from "./snapshot-source.js";
 
 const directory = process.argv[2];
 const planName = process.env.IDEALIS_CHECKER_PLAN ?? "0072-frontend-semantics";
@@ -43,7 +44,11 @@ for (const source of original.sources.filter(
   (source) =>
     source.path.startsWith("src/") || source.path.startsWith("crates/"),
 ))
-  assert.equal(digest(await readFile(source.path)), source.sha256, source.path);
+  assert.equal(
+    digest(await readSnapshotSource(source.path)),
+    source.sha256,
+    source.path,
+  );
 const commands = [
   ["just", ["check"]],
   ["just", ["safety-test"]],
@@ -61,7 +66,7 @@ const snapshots = JSON.parse(
 const before = await Promise.all(
   snapshots.sources.map(async (source: { path: string }) => ({
     path: source.path,
-    sha256: digest(await readFile(source.path)),
+    sha256: digest(await readSnapshotSource(source.path)),
   })),
 );
 assert.deepEqual(before, snapshots.sources);
@@ -108,7 +113,7 @@ for (const [index, [command, args]] of commands.entries()) {
 const after = await Promise.all(
   before.map(async (source: { path: string }) => ({
     path: source.path,
-    sha256: digest(await readFile(source.path)),
+    sha256: digest(await readSnapshotSource(source.path)),
   })),
 );
 const unchanged = JSON.stringify(before) === JSON.stringify(after);

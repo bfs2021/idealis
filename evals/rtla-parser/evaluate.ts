@@ -31,7 +31,7 @@ const paths = execFileSync("git", [
   "evals/plans/0026-rtla-parser.md",
   "evals/collections-temporal/cases.ts",
   "evals/usable/provenance.ts",
-  "src/trace.ts",
+  "packages/idealis/src/trace.ts",
   "tests/rtla-browser-entry.ts",
   "tests/rtla.browser.spec.ts",
   "playwright.config.ts",

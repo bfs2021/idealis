@@ -1,5 +1,5 @@
-import type { OracleRequest } from "../../src/generated/roracle.js";
-import { isRecord } from "../../src/trace.js";
+import type { OracleRequest } from "../../packages/idealis/src/generated/roracle.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import type {
   Batch,
   Observation,

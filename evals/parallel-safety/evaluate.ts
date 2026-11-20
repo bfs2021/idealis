@@ -7,12 +7,18 @@ import type {
   ScheduledCompletion,
   ScheduledRun,
   SchedulingProfile,
-} from "../../src/contracts.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { planSchedule, runSchedule } from "../../src/scheduling.js";
-import { verifyManifest } from "../../src/sharding.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/contracts.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import {
+  planSchedule,
+  runSchedule,
+} from "../../packages/idealis/src/scheduling.js";
+import { verifyManifest } from "../../packages/idealis/src/sharding.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { nativePath, wasmPath } from "../checker-benchmark/engines.js";
 import { order, summarize } from "../checker-benchmark/protocol.js";
 import { startNative } from "../usable/native.js";

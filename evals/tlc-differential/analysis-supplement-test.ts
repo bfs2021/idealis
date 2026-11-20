@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { test } from "node:test";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 const supplementalSource = `
 import { registerHooks } from 'node:module';

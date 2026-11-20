@@ -8,11 +8,11 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
-import type { PortableCommand } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyResult } from "../../src/safety.js";
-import { isRecord } from "../../src/trace.js";
+import type { PortableCommand } from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyResult } from "../../packages/idealis/src/safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";

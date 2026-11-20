@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import type { TestingCase } from "../../src/testing.js";
+import type { TestingCase } from "../../packages/idealis/src/testing.js";
 import { processClient } from "../smt-subset/clients.js";
 import { evaluate } from "./driver.js";
 

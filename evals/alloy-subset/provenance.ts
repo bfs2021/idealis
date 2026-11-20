@@ -25,7 +25,7 @@ export const fingerprint = async () => {
     "justfile",
     "package.json",
     "pnpm-lock.yaml",
-    "src/trace.ts",
+    "packages/idealis/src/trace.ts",
   ])
     .toString()
     .split("\0")

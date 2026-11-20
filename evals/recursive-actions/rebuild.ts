@@ -3,7 +3,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { unzipSync, zipSync } from "fflate";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { digest } from "../usable/provenance.js";
 
 interface Manifest {

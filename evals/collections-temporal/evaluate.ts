@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
 import { check } from "tla-ts";
-import { createPortableWasm } from "../../src/portable-wasm.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { startNative } from "../usable/native.js";
 import { digest } from "../usable/provenance.js";

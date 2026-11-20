@@ -3,7 +3,10 @@ import { type SpawnSyncReturns, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { SafetyOptions, SafetyProgram } from "../../src/contracts.js";
+import type {
+  SafetyOptions,
+  SafetyProgram,
+} from "../../packages/idealis/src/contracts.js";
 
 interface Fixture {
   readonly name: string;

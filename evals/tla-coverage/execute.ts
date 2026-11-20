@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { PortableCommand, TlaSourceInput } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  PortableCommand,
+  TlaSourceInput,
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { runTlc } from "../collections-temporal/tlc.js";
 import { classifyTlc } from "../tlc-differential/compare.js";
 import { differential } from "../tlc-differential/differential.js";

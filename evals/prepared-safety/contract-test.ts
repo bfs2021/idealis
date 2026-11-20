@@ -1,14 +1,14 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import type { SafetyProgram } from "../../src/contracts.js";
+import type { SafetyProgram } from "../../packages/idealis/src/contracts.js";
 import {
   checkSafety,
   compileTlaSource,
   createPortableWasm,
   PortableCoreError,
   prepareSafetyProgram,
-} from "../../src/portable.js";
+} from "../../packages/idealis/src/portable.js";
 import { bounds, cases } from "../collections-temporal/cases.js";
 
 const bytes = await readFile(

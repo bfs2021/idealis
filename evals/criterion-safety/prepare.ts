@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 import { cases } from "../single-model/cases.js";
 
 const sizes = [12, 12, 4, 10000];

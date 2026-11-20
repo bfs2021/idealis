@@ -1,4 +1,4 @@
-import type { SafetyResult } from "../../src/contracts.js";
+import type { SafetyResult } from "../../packages/idealis/src/contracts.js";
 import type { runTlc } from "../collections-temporal/tlc.js";
 import { compareOracle } from "../workspace-oracle/node.js";
 export interface Observation {

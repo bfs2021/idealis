@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { check } from "tla-ts";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety, decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkSafety,
+  decodeSafetyResult,
+} from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { startNative } from "../usable/native.js";
 import { bounds, type Input, type WarmRoute } from "./protocol.js";
 

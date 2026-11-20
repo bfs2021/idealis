@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
-import type { OracleRequest } from "../../src/generated/roracle.js";
-import { isRecord } from "../../src/trace.js";
+import type { OracleRequest } from "../../packages/idealis/src/generated/roracle.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import {
   decodeOracleReply,
   type OracleClient,

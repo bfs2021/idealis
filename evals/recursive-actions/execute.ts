@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import type { PortableCommand, TlaSourceInput } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import type {
+  PortableCommand,
+  TlaSourceInput,
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { bounds } from "../collections-temporal/cases.js";
 import { runTlc } from "../collections-temporal/tlc.js";
 import { classifyTlc } from "../tlc-differential/compare.js";
@@ -37,9 +40,9 @@ const paths = [
   "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   jar,
   "evals/collections-temporal/cases.ts",
-  "src/safety-program.ts",
-  "src/contracts.ts",
-  "src/tla-source.ts",
+  "packages/idealis/src/safety-program.ts",
+  "packages/idealis/src/contracts.ts",
+  "packages/idealis/src/tla-source.ts",
   "dist/evals/recursive-actions/execute.js",
   "dist/evals/recursive-actions/generated.js",
 ];

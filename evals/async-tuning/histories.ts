@@ -1,17 +1,20 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import type { ConcurrentHistory, FiniteModel } from "../../src/contracts.js";
-import { compileFiniteModel } from "../../src/finite.js";
+import type {
+  ConcurrentHistory,
+  FiniteModel,
+} from "../../packages/idealis/src/contracts.js";
+import { compileFiniteModel } from "../../packages/idealis/src/finite.js";
 import {
   checkConcurrentHistory,
   createHistoryRecorder,
-} from "../../src/history.js";
+} from "../../packages/idealis/src/history.js";
 import {
   createPortableWasm,
   loadFiniteModel,
   toPortableValue,
-} from "../../src/portable.js";
+} from "../../packages/idealis/src/portable.js";
 import { checkHistory, incrementHistoryModel } from "../harness/history.js";
 import {
   interleavings,

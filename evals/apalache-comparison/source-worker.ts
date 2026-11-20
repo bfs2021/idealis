@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 
 const input = JSON.parse(await readFile(process.argv[2] ?? "", "utf8"));
 const program = compileTlaSafety(input);

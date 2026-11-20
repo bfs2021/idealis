@@ -1,5 +1,5 @@
-import { createManifest } from "../../src/sharding.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+import { createManifest } from "../../packages/idealis/src/sharding.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 import { bounds, cases } from "../checker-benchmark/protocol.js";
 import { digest } from "../usable/provenance.js";
 import type { SafetyJob } from "./protocol.js";

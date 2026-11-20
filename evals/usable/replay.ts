@@ -1,15 +1,15 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { checkConformance } from "../../src/conformance.js";
-import { createSimulationHost } from "../../src/host.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import { createSimulationHost } from "../../packages/idealis/src/host.js";
 import {
   createPortableWasm,
   toPortableTrace,
   toPortableValue,
   verifyHostTape,
-} from "../../src/portable.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/portable.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import {
   createMutexDriver,
   isMutexAction,

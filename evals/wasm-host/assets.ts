@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { compileTlaSafety } from "../../src/tla-safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
 import { cases } from "../collections-temporal/cases.js";
 import { wasmPath } from "../sat-foundation/native.js";
 

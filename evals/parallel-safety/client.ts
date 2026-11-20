@@ -1,10 +1,10 @@
 import type {
   ScheduledCompletion,
   ScheduledExecutor,
-} from "../../src/contracts.js";
-import { decodeSafetyResult } from "../../src/safety.js";
-import { SchedulingError } from "../../src/scheduling.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/contracts.js";
+import { decodeSafetyResult } from "../../packages/idealis/src/safety.js";
+import { SchedulingError } from "../../packages/idealis/src/scheduling.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import type { SafetyOutcome } from "./protocol.js";
 
 export interface MessagePort {

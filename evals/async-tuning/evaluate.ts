@@ -6,10 +6,13 @@ import {
   type CounterAction,
   counterModel,
 } from "../../examples/counter-model.js";
-import { checkConformance } from "../../src/conformance.js";
-import type { PortableResult } from "../../src/contracts.js";
-import { compileFiniteModel } from "../../src/finite.js";
-import { toPortableTrace, toPortableValue } from "../../src/portable.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import type { PortableResult } from "../../packages/idealis/src/contracts.js";
+import { compileFiniteModel } from "../../packages/idealis/src/finite.js";
+import {
+  toPortableTrace,
+  toPortableValue,
+} from "../../packages/idealis/src/portable.js";
 import { executeSuite } from "../cross-language/runners.js";
 import {
   type CounterFault,

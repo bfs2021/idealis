@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { monotone, recordNodes } from "../evals/symmetry/cases.js";
-import { compileTlaSafety } from "../src/tla-safety.js";
+import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
 const files = await readdir(directory);

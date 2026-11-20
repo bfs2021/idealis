@@ -18,7 +18,7 @@ const paths = execFileSync(
     "--exclude-standard",
     "--",
     "crates",
-    "src",
+    "packages/idealis/src",
   ],
   { maxBuffer: 16 * 1024 * 1024 },
 )

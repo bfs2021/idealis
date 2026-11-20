@@ -8,7 +8,11 @@ import { runScheduledCounter } from "../evals/harness/scheduled-counter.js";
 import { enabledActions, generateCorpus } from "../evals/harness/search.js";
 import { createTtlDriver, ttlModel } from "../evals/harness/ttl.js";
 import { counterModel, createCounter } from "../examples/durable-counter.js";
-import { checkConformance, checkModel, checkTrace } from "../src/index.js";
+import {
+  checkConformance,
+  checkModel,
+  checkTrace,
+} from "../packages/idealis/src/index.js";
 
 export const registerEvaluationContract = (
   test: (name: string, run: () => void | Promise<void>) => unknown,

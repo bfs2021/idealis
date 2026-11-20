@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { counterModel, createCounter } from "../../examples/durable-counter.js";
-import { checkConformance, checkDifferential } from "../../src/conformance.js";
-import type { TestingCase, TestingJson } from "../../src/testing.js";
+import {
+  checkConformance,
+  checkDifferential,
+} from "../../packages/idealis/src/conformance.js";
+import type {
+  TestingCase,
+  TestingJson,
+} from "../../packages/idealis/src/testing.js";
 import { actions } from "./driver.js";
 
 export { evaluate } from "./driver.js";

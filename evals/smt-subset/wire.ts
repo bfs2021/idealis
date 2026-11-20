@@ -1,4 +1,4 @@
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 export interface Answer {
   readonly status: "sat" | "unsat" | "unknown";
   readonly values: Readonly<Record<string, string>>;

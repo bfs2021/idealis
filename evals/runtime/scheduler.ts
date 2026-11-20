@@ -2,7 +2,7 @@ import {
   type ExecutionBudget,
   planBudget,
   type RuntimeProfile,
-} from "../../src/budget.js";
+} from "../../packages/idealis/src/budget.js";
 import { checkHistory, incrementHistoryModel } from "../harness/history.js";
 import { createPool, runInline } from "./pool.js";
 import { enumerateSchedules } from "./schedules.js";

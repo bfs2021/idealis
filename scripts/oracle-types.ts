@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-const path = "src/generated/roracle.ts";
+const path = "packages/idealis/src/generated/roracle.ts";
 const raw = execFileSync(
   "cargo",
   [

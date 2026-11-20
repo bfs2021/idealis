@@ -7,10 +7,16 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
-import type { PortableCommand, TlaSourceInput } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { checkTlaSource, compileTlaSource } from "../../src/tla-source.js";
+import type {
+  PortableCommand,
+  TlaSourceInput,
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import {
+  checkTlaSource,
+  compileTlaSource,
+} from "../../packages/idealis/src/tla-source.js";
 import { runTlc, traceInput } from "../collections-temporal/tlc.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { classifyTlc, differences } from "../tlc-differential/compare.js";

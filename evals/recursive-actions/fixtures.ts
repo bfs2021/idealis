@@ -1,5 +1,5 @@
 import { writeFile } from "node:fs/promises";
-import type { TlaSourceInput } from "../../src/contracts.js";
+import type { TlaSourceInput } from "../../packages/idealis/src/contracts.js";
 
 interface Case extends TlaSourceInput {
   readonly name: string;

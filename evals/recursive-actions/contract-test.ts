@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import type { TlaSourceInput } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { checkSafety } from "../../src/safety.js";
-import { compileTlaSource } from "../../src/tla-source.js";
-import { isRecord } from "../../src/trace.js";
+import type { TlaSourceInput } from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import { checkSafety } from "../../packages/idealis/src/safety.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { startNative } from "../usable/native.js";
 import { generatedCases } from "./generated.js";
 

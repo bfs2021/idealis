@@ -8,10 +8,10 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
-import { fromPortableValue } from "../../src/portable-value.js";
-import { decodeSafetyResult } from "../../src/safety.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+import { fromPortableValue } from "../../packages/idealis/src/portable-value.js";
+import { decodeSafetyResult } from "../../packages/idealis/src/safety.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { fingerprint } from "../rust-safety/provenance.js";
 import { digest } from "../usable/provenance.js";
 import { type Case, cases } from "./cases.js";

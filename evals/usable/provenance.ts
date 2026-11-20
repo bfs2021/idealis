@@ -14,7 +14,7 @@ export const usableFingerprint = async () => {
         "--others",
         "--exclude-standard",
         "--",
-        "src",
+        "packages/idealis/src",
         "examples",
         "evals/usable",
         "evals/portable",

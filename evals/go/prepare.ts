@@ -1,16 +1,22 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { checkConformance } from "../../src/conformance.js";
-import type { Model, PortableTrace } from "../../src/contracts.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import type {
+  Model,
+  PortableTrace,
+} from "../../packages/idealis/src/contracts.js";
 import {
   checkFiniteHistory,
   compileFiniteModel,
   createFiniteModel,
-} from "../../src/finite.js";
-import { createSimulationHost } from "../../src/host.js";
-import { toPortableTrace, toPortableValue } from "../../src/portable.js";
-import { deletionCandidates } from "../../src/shrink.js";
+} from "../../packages/idealis/src/finite.js";
+import { createSimulationHost } from "../../packages/idealis/src/host.js";
+import {
+  toPortableTrace,
+  toPortableValue,
+} from "../../packages/idealis/src/portable.js";
+import { deletionCandidates } from "../../packages/idealis/src/shrink.js";
 import {
   createMutexDriver,
   loadMutex,

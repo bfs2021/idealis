@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
-import type { SafetyResult } from "../../src/contracts.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
+import type { SafetyResult } from "../../packages/idealis/src/contracts.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
 import { digest } from "../usable/provenance.js";
 
 interface Observation {

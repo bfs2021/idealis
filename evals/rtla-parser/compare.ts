@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { parseConfig, parseModule } from "tla-ts";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { assertOracle } from "../workspace-oracle/node.js";
 import { corpus, moduleFields, normalize } from "./corpus.js";
 import { syntaxCases } from "./syntax.js";

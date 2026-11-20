@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { test } from "node:test";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { createParserWasm } from "../rtla-parser/wasm.js";
 import { readArchive } from "../tla-coverage/archive.js";
 import { normalizeRtla, normalizeSany } from "../tla-coverage/normalize.js";

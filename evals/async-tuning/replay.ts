@@ -3,11 +3,14 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { counterModel } from "../../examples/counter-model.js";
 import { isCounterAction } from "../../examples/durable-counter.js";
-import { checkConformance } from "../../src/conformance.js";
-import { parseFiniteModel } from "../../src/finite.js";
-import { parseConcurrentHistory } from "../../src/history.js";
-import { toPortableTrace, toPortableValue } from "../../src/portable.js";
-import { isRecord } from "../../src/trace.js";
+import { checkConformance } from "../../packages/idealis/src/conformance.js";
+import { parseFiniteModel } from "../../packages/idealis/src/finite.js";
+import { parseConcurrentHistory } from "../../packages/idealis/src/history.js";
+import {
+  toPortableTrace,
+  toPortableValue,
+} from "../../packages/idealis/src/portable.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { executeSuite } from "../cross-language/runners.js";
 import { isFault, parseSuite } from "../cross-language/suite.js";
 import { createFaultyCounter } from "../harness/counter-faults.js";

@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { type AlloyInstanceCheck, createAlloyWasm } from "../../src/alloy.js";
+import {
+  type AlloyInstanceCheck,
+  createAlloyWasm,
+} from "../../packages/idealis/src/alloy.js";
 import { processClient } from "../smt-subset/clients.js";
 import { assertOracle } from "../workspace-oracle/node.js";
 import type { Case } from "./corpus.js";

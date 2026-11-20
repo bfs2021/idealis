@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { createInterface } from "node:readline";
-import type { PortableCommand } from "../../src/contracts.js";
+import type { PortableCommand } from "../../packages/idealis/src/contracts.js";
 
 export const startNative = (
   path = "crates/idealis-core/target/release/idealis-core",

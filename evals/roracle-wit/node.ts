@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import {
   decodeOracleReply,
   type OracleClient,

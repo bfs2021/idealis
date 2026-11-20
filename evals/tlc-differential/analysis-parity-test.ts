@@ -5,8 +5,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import { test } from "node:test";
 import { Worker } from "node:worker_threads";
-import { analysisRoles } from "../../src/tla-safety-analysis.js";
-import { isRecord } from "../../src/trace.js";
+import { analysisRoles } from "../../packages/idealis/src/tla-safety-analysis.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { verifyAnalysisInventory } from "./analysis-inventory.js";
 import {
   analysisBounds,
@@ -118,8 +118,8 @@ test("analysis parity independent source inventory and two-way position differen
 const workerSource = `
 import { parentPort } from 'node:worker_threads';
 import { readFile } from 'node:fs/promises';
-const { compileTlaSafety } = await import(new URL('./dist/src/tla-safety.js', 'file://' + process.cwd() + '/'));
-const { createPortableWasm } = await import(new URL('./dist/src/portable-wasm.js', 'file://' + process.cwd() + '/'));
+const { compileTlaSafety } = await import(new URL('./dist/packages/idealis/src/tla-safety.js', 'file://' + process.cwd() + '/'));
+const { createPortableWasm } = await import(new URL('./dist/packages/idealis/src/portable-wasm.js', 'file://' + process.cwd() + '/'));
 const core = await createPortableWasm(await readFile('crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm'));
 const capture = fn => { try { return fn(); } catch (e) { return {kind:'error',code:e.code,message:e.message}; } };
 parentPort.on('message', ({id,kind,input,programs,bounds}) => {

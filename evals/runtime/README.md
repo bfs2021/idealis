@@ -11,7 +11,7 @@ Rust は依存 crate のない実験用カーネル。通常の TS ライブラ�
 
 ## バジェットから並列度と深さを選ぶ
 
-`src/budget.ts` は pure TS。`durationMs`、`memoryBytes`、`maxWorkers`、`maxDepth`、`branching` と workload に対応する実測 profile を受け取る。起動時間を差し引いた容量とメモリの概算から、探索できる木の深さと状態数を選ぶ。profile がない場合は `uncalibrated`、初期状態の費用も賄えない場合は `insufficient-budget`。
+`packages/idealis/src/budget.ts` は pure TS。`durationMs`、`memoryBytes`、`maxWorkers`、`maxDepth`、`branching` と workload に対応する実測 profile を受け取る。起動時間を差し引いた容量とメモリの概算から、探索できる木の深さと状態数を選ぶ。profile がない場合は `uncalibrated`、初期状態の費用も賄えない場合は `insufficient-budget`。
 
 profile の `visitsPerMs` の単位を混ぜない。カーネルは遷移/ms。非同期実装では正常版と故障版を実行する1 schedule を1 visitとして測り、prefix の数を全部 schedule 相当で課金する保守的な上界を使った。実際の SUT、ソルバー、モデルの違いごとに calibration が必要。
 

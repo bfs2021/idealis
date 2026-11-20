@@ -7,14 +7,17 @@ import {
   createCounter,
   isCounterAction,
 } from "../../examples/durable-counter.js";
-import { checkConformance, checkTrace } from "../../src/conformance.js";
+import {
+  checkConformance,
+  checkTrace,
+} from "../../packages/idealis/src/conformance.js";
 import type {
   Driver,
   Model,
   PortableCommand,
   PortableCore,
   PortableOutput,
-} from "../../src/contracts.js";
+} from "../../packages/idealis/src/contracts.js";
 import {
   checkPortableConformance,
   checkPortableTrace,
@@ -24,9 +27,9 @@ import {
   PortableCoreError,
   toPortableTrace,
   toPortableValue,
-} from "../../src/portable.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { compileTlaSource } from "../../src/tla-source.js";
+} from "../../packages/idealis/src/portable.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import { compileTlaSource } from "../../packages/idealis/src/tla-source.js";
 import {
   counterFaults,
   createFaultyCounter,

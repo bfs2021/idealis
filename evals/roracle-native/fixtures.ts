@@ -2,7 +2,7 @@ import type {
   JsonValue,
   Observation,
   OracleRequest,
-} from "../../src/generated/roracle.js";
+} from "../../packages/idealis/src/generated/roracle.js";
 import { snapshot } from "../workspace-oracle/snapshot.js";
 
 export interface Fixture {

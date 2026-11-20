@@ -4,9 +4,12 @@ import { dirname, join } from "node:path";
 import type {
   ScheduledCompletion,
   SchedulingProfile,
-} from "../../src/contracts.js";
-import { planSchedule, runSchedule } from "../../src/scheduling.js";
-import { verifyManifest } from "../../src/sharding.js";
+} from "../../packages/idealis/src/contracts.js";
+import {
+  planSchedule,
+  runSchedule,
+} from "../../packages/idealis/src/scheduling.js";
+import { verifyManifest } from "../../packages/idealis/src/sharding.js";
 import { nativePath, wasmPath } from "../checker-benchmark/engines.js";
 import { digest } from "../usable/provenance.js";
 import { corpus } from "./corpus.js";

@@ -12,9 +12,9 @@ import {
   checkConformance,
   checkModel,
   checkTrace,
-} from "../../src/index.js";
-import { checkProperty } from "../../src/property.js";
-import { createSmtOracle } from "../../src/smt.js";
+} from "../../packages/idealis/src/index.js";
+import { checkProperty } from "../../packages/idealis/src/property.js";
+import { createSmtOracle } from "../../packages/idealis/src/smt.js";
 import {
   type CounterFault,
   counterFaults,

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { verifyManifest } from "../../src/sharding.js";
+import { verifyManifest } from "../../packages/idealis/src/sharding.js";
 import type { corpus } from "../parallel-safety/corpus.js";
 import { digest } from "../usable/provenance.js";
 

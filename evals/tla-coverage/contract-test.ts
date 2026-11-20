@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { checkTlaSource, compileTlaSource } from "../../src/tla-source.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import {
+  checkTlaSource,
+  compileTlaSource,
+} from "../../packages/idealis/src/tla-source.js";
 
 const core = await createPortableWasm(
   await readFile(

@@ -3,17 +3,17 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { counterModel } from "../../examples/counter-model.js";
-import { compileFiniteModel } from "../../src/finite.js";
+import { compileFiniteModel } from "../../packages/idealis/src/finite.js";
 import {
   checkConcurrentHistory,
   createHistoryRecorder,
-} from "../../src/history.js";
+} from "../../packages/idealis/src/history.js";
 import {
   checkFiniteHistories,
   createPortableWasm,
   loadFiniteModel,
   toPortableValue,
-} from "../../src/portable.js";
+} from "../../packages/idealis/src/portable.js";
 import { generateCorpus } from "../harness/search.js";
 import { assertOracle } from "../workspace-oracle/node.js";
 import { generateFeedbackCorpus } from "./feedback.js";

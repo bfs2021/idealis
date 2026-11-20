@@ -10,7 +10,7 @@ import {
 import { arch, cpus, loadavg, platform } from "node:os";
 import { join, resolve } from "node:path";
 import { zipSync } from "fflate";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { digest } from "../usable/provenance.js";
 
 interface Build {

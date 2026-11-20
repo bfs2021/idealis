@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import type { Case } from "./cases.js";
 
 export const classify = (

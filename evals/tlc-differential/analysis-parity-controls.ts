@@ -7,11 +7,11 @@ import type {
   PortableCommand,
   SafetyProgram,
   TlaSourceOptions,
-} from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+} from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { expandTemporalTemplates } from "./expand-temporal.js";
 
 const bounds = { maxDepth: 8, maxStates: 100, maxWork: 10_000 };

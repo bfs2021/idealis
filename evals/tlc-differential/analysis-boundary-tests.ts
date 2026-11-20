@@ -3,10 +3,10 @@ import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { parseModule } from "tla-ts";
-import type { SafetyProgram } from "../../src/contracts.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { compileTlaSafety } from "../../src/tla-safety.js";
-import { isRecord } from "../../src/trace.js";
+import type { SafetyProgram } from "../../packages/idealis/src/contracts.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { compileTlaSafety } from "../../packages/idealis/src/tla-safety.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { createParserWasm } from "../rtla-parser/wasm.js";
 
 interface CompileExpectation {

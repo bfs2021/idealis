@@ -21,10 +21,10 @@ export const registerWasmHostContract = (
   });
   test("portable code and browser workers bundle without Node dependencies", async () => {
     for (const entry of [
-      "src/index.ts",
-      "src/scheduling.ts",
-      "src/portable.ts",
-      "src/tla-source.ts",
+      "packages/idealis/src/index.ts",
+      "packages/idealis/src/scheduling.ts",
+      "packages/idealis/src/portable.ts",
+      "packages/idealis/src/tla-source.ts",
       "tests/portable-browser-entry.ts",
       "evals/parallel-safety/browser-worker.ts",
       "evals/workspace-oracle/browser-entry.ts",

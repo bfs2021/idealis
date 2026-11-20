@@ -5,8 +5,11 @@ import {
   isCounterAction,
   isCounterObservation,
 } from "../examples/durable-counter.js";
-import { checkConformance, decodeTrace } from "../src/index.js";
-import { isRecord } from "../src/trace.js";
+import {
+  checkConformance,
+  decodeTrace,
+} from "../packages/idealis/src/index.js";
+import { isRecord } from "../packages/idealis/src/trace.js";
 import {
   counterFaults,
   createFaultyCounter,

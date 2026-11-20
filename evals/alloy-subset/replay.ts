@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { isRecord } from "../../src/trace.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { nativePath, wasmPath } from "./clients.js";
 import { generated, handCases } from "./corpus.js";
 import { digest, fingerprint } from "./provenance.js";

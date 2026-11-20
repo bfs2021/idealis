@@ -1,4 +1,4 @@
-import { createTestingWasm } from "../../src/testing.js";
+import { createTestingWasm } from "../../packages/idealis/src/testing.js";
 import { evaluate } from "./driver.js";
 import { plan, schedule } from "./fixture.js";
 

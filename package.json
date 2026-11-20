@@ -10,67 +10,67 @@
   },
   "exports": {
     "./backend": {
-      "types": "./dist/src/backend.d.ts",
-      "default": "./dist/src/backend.js"
+      "types": "./dist/packages/idealis/src/backend.d.ts",
+      "default": "./dist/packages/idealis/src/backend.js"
     },
     "./scheduling": {
-      "types": "./dist/src/scheduling.d.ts",
-      "default": "./dist/src/scheduling.js"
+      "types": "./dist/packages/idealis/src/scheduling.d.ts",
+      "default": "./dist/packages/idealis/src/scheduling.js"
     },
     "./portable": {
-      "types": "./dist/src/portable.d.ts",
-      "default": "./dist/src/portable.js"
+      "types": "./dist/packages/idealis/src/portable.d.ts",
+      "default": "./dist/packages/idealis/src/portable.js"
     },
     "./budget": {
-      "types": "./dist/src/budget.d.ts",
-      "default": "./dist/src/budget.js"
+      "types": "./dist/packages/idealis/src/budget.d.ts",
+      "default": "./dist/packages/idealis/src/budget.js"
     },
     "./sharding": {
-      "types": "./dist/src/sharding.d.ts",
-      "default": "./dist/src/sharding.js"
+      "types": "./dist/packages/idealis/src/sharding.d.ts",
+      "default": "./dist/packages/idealis/src/sharding.js"
     },
     ".": {
-      "types": "./dist/src/index.d.ts",
-      "default": "./dist/src/index.js"
+      "types": "./dist/packages/idealis/src/index.d.ts",
+      "default": "./dist/packages/idealis/src/index.js"
     },
     "./property": {
-      "types": "./dist/src/property.d.ts",
-      "default": "./dist/src/property.js"
+      "types": "./dist/packages/idealis/src/property.d.ts",
+      "default": "./dist/packages/idealis/src/property.js"
     },
     "./tla": {
-      "types": "./dist/src/tla.d.ts",
-      "default": "./dist/src/tla.js"
+      "types": "./dist/packages/idealis/src/tla.d.ts",
+      "default": "./dist/packages/idealis/src/tla.js"
     },
     "./smt": {
-      "types": "./dist/src/smt.d.ts",
-      "default": "./dist/src/smt.js"
+      "types": "./dist/packages/idealis/src/smt.d.ts",
+      "default": "./dist/packages/idealis/src/smt.js"
     },
     "./finite": {
-      "types": "./dist/src/finite.d.ts",
-      "default": "./dist/src/finite.js"
+      "types": "./dist/packages/idealis/src/finite.d.ts",
+      "default": "./dist/packages/idealis/src/finite.js"
     },
     "./host": {
-      "types": "./dist/src/host.d.ts",
-      "default": "./dist/src/host.js"
+      "types": "./dist/packages/idealis/src/host.d.ts",
+      "default": "./dist/packages/idealis/src/host.js"
     },
     "./history": {
-      "types": "./dist/src/history.d.ts",
-      "default": "./dist/src/history.js"
+      "types": "./dist/packages/idealis/src/history.d.ts",
+      "default": "./dist/packages/idealis/src/history.js"
     },
     "./shrink": {
-      "types": "./dist/src/shrink.d.ts",
-      "default": "./dist/src/shrink.js"
+      "types": "./dist/packages/idealis/src/shrink.d.ts",
+      "default": "./dist/packages/idealis/src/shrink.js"
     },
     "./core.wasm": "./assets/idealis-core.wasm",
     "./rtla.wasm": "./assets/rtla.wasm",
     "./alloy": {
-      "types": "./dist/src/alloy.d.ts",
-      "default": "./dist/src/alloy.js"
+      "types": "./dist/packages/idealis/src/alloy.d.ts",
+      "default": "./dist/packages/idealis/src/alloy.js"
     },
     "./ralloy.wasm": "./assets/ralloy.wasm",
     "./testing": {
-      "types": "./dist/src/testing.d.ts",
-      "default": "./dist/src/testing.js"
+      "types": "./dist/packages/idealis/src/testing.d.ts",
+      "default": "./dist/packages/idealis/src/testing.js"
     },
     "./testing.wasm": "./assets/idealis-testing.wasm"
   },
@@ -138,8 +138,8 @@
     "url": "git+https://github.com/mizchi/idealis.git"
   },
   "files": [
-    "dist/src",
-    "dist/cli",
+    "dist/packages/idealis/src",
+    "dist/packages/idealis/cli",
     "assets",
     "README.md",
     "LICENSE",
@@ -150,7 +150,7 @@
     "tag": "next"
   },
   "bin": {
-    "idealis": "dist/cli/idealis.js"
+    "idealis": "dist/packages/idealis/cli/idealis.js"
   },
   "peerDependencies": {
     "fast-check": "4.10.2",

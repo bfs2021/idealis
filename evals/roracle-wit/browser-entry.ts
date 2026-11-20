@@ -1,4 +1,4 @@
-import { equalValues } from "../../src/trace.js";
+import { equalValues } from "../../packages/idealis/src/trace.js";
 import {
   fixtures,
   observationMatrix,

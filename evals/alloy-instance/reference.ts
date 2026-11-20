@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { AlloyInstanceCheck } from "../../src/alloy.js";
-import { isRecord } from "../../src/trace.js";
+import type { AlloyInstanceCheck } from "../../packages/idealis/src/alloy.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 import { pin } from "../alloy-subset/corpus.js";
 import type { Case } from "./corpus.js";
 

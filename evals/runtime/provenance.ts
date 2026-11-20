@@ -19,7 +19,7 @@ export const runtimeFingerprint = async () => {
     ...(
       await Promise.all(
         [
-          "src",
+          "packages/idealis/src",
           "examples",
           "evals/harness",
           "evals/runtime",

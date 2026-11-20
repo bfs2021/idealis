@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import type { PortableCommand } from "../../src/contracts.js";
-import { PortableCoreError } from "../../src/portable-value.js";
-import { createPortableWasm } from "../../src/portable-wasm.js";
-import { decodeSafetyProgram } from "../../src/safety-program.js";
-import { isRecord } from "../../src/trace.js";
+import type { PortableCommand } from "../../packages/idealis/src/contracts.js";
+import { PortableCoreError } from "../../packages/idealis/src/portable-value.js";
+import { createPortableWasm } from "../../packages/idealis/src/portable-wasm.js";
+import { decodeSafetyProgram } from "../../packages/idealis/src/safety-program.js";
+import { isRecord } from "../../packages/idealis/src/trace.js";
 
 const literal = { op: "literal", value: { type: "bool", value: true } };
 const signature = {
