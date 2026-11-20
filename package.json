@@ -20,7 +20,7 @@
     "portable:browser": "playwright test --project portable rtla",
     "portable:eval": "pnpm build && node dist/evals/portable/evaluate.js",
     "portable:replay": "pnpm build && node dist/evals/portable/replay.js",
-    "build": "pnpm --filter @mizchi/idealis build && tsc -p tsconfig.build.json",
+    "build": "pnpm --filter @mizchi/idealis build && tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit",
     "lint": "vp lint",
     "fmt": "vp fmt --write",

@@ -32,7 +32,7 @@ export const runtimeFingerprint = async () => {
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
     "tsconfig.json",
-    "tsconfig.build.json",
+    "packages/idealis/tsconfig.json",
     "evals/rust-probe/Cargo.toml",
     "evals/rust-probe/Cargo.lock",
   ].sort();

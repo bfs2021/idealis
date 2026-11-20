@@ -33,7 +33,7 @@ export const fingerprint = async () => {
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
     "tsconfig.json",
-    "tsconfig.build.json",
+    "packages/idealis/tsconfig.json",
     "vite.config.ts",
     ".github/workflows/ci.yml",
   ])

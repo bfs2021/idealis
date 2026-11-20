@@ -34,7 +34,7 @@ export const usableFingerprint = async () => {
         "pnpm-workspace.yaml",
         "pnpm-lock.yaml",
         "tsconfig.json",
-        "tsconfig.build.json",
+        "packages/idealis/tsconfig.json",
         "evals/plans/0005-usable-core.md",
       ])
         .toString()
