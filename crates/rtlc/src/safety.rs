@@ -467,6 +467,11 @@ impl<'program> Search<'program, '_> {
                 arena,
                 &mut |values, arena| {
                     enabled = true;
+                    if values.iter().any(Option::is_none) {
+                        // Surface accept's contextual diagnostic before the
+                        // cache conversion can replace it with a generic one.
+                        self.accept(values, Some(index), action, arena)?;
+                    }
                     if let Some(stored) = &mut successors {
                         let mut portable = vec![];
                         let mut fits = remaining >= 128;
@@ -860,7 +865,68 @@ mod tests {
         );
         assert!(error.message.contains("y"), "message: {}", error.message);
         assert!(
-            !error.message.contains("x,"), "assigned variable x must not be listed: {}",
+            !error.message.contains("x,"),
+            "assigned variable x must not be listed: {}",
+            error.message
+        );
+    }
+
+    #[test]
+    fn incomplete_successor_error_survives_expansion_cache() {
+        use super::{ExpansionOptions, SafetyExpansionCache};
+        use crate::ir::SafetyBounds;
+        let program: crate::ir::SafetyProgram = serde_json::from_value(serde_json::json!({
+            "format": "modelt.safety-program",
+            "version": 1,
+            "name": "Missing",
+            "variables": ["x", "y"],
+            "initial": [{
+                "name": "Init",
+                "steps": [
+                    {"kind": "assign", "slot": 0, "value": {"op": "literal", "value": {"type": "int", "value": "0"}}},
+                    {"kind": "assign", "slot": 1, "value": {"op": "literal", "value": {"type": "int", "value": "0"}}}
+                ]
+            }],
+            "next": [{
+                "name": "A",
+                "steps": [
+                    {"kind": "assign", "slot": 0, "value": {"op": "read", "slot": 0, "next": false}}
+                ]
+            }],
+            "invariants": [],
+            "assumptions": [],
+            "checkDeadlock": false
+        }))
+        .unwrap();
+        let digest = "a".repeat(64);
+        let error = program
+            .check_incremental(
+                SafetyBounds {
+                    max_depth: 64,
+                    max_states: 10000,
+                    max_work: 1000000,
+                    max_temporal_nodes: None,
+                },
+                &mut SafetyExpansionCache::default(),
+                ExpansionOptions {
+                    enabled: true,
+                    build_digest: &digest,
+                    max_entries: 10000,
+                },
+            )
+            .unwrap_err();
+        assert_eq!(error.code, "protocol");
+        assert!(
+            error
+                .message
+                .contains("action A of the next-state relation"),
+            "message: {}",
+            error.message
+        );
+        assert!(error.message.contains("y"), "message: {}", error.message);
+        assert!(
+            !error.message.contains("Incomplete cached state"),
+            "cache serialization must not replace the contextual diagnostic: {}",
             error.message
         );
     }
