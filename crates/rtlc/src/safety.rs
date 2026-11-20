@@ -556,6 +556,30 @@ impl<'program> Search<'program, '_> {
         action: usize,
         arena: &mut Arena,
     ) -> Result<(), CoreError> {
+        if values.iter().any(Option::is_none) {
+            let unassigned: Vec<&str> = values
+                .iter()
+                .zip(self.program.variables.iter())
+                .filter_map(|(value, name)| value.is_none().then_some(name.as_str()))
+                .collect();
+            let subject = if unassigned.len() == 1 {
+                "variable"
+            } else {
+                "variables"
+            };
+            let verb = if unassigned.len() == 1 { "is" } else { "are" };
+            let variables = unassigned.join(", ");
+            return Err(CoreError::protocol(&match parent {
+                Some(_) => format!(
+                    "Successor state is not completely specified by action {} of the next-state relation. The following {} {} not assigned: {}",
+                    self.program.next[action].name, subject, verb, variables
+                ),
+                None => format!(
+                    "Initial state is not completely specified. The following {} {} not assigned: {}",
+                    subject, verb, variables
+                ),
+            }));
+        }
         let hash = get_hash(values)?;
         self.result.generated += 1;
         if !self.program.constraints.is_empty()
@@ -790,5 +814,54 @@ mod tests {
         assert_eq!(store.find(0, &first[..1]), None);
         assert!(store.push(0, &[Some(Scalar::Int(0)), None]).is_err());
         assert_eq!(store.find(0, &third), Some(2));
+    }
+
+    #[test]
+    fn incomplete_successor_error_names_action_and_variable() {
+        use crate::ir::SafetyBounds;
+        let program: crate::ir::SafetyProgram = serde_json::from_value(serde_json::json!({
+            "format": "modelt.safety-program",
+            "version": 1,
+            "name": "Missing",
+            "variables": ["x", "y"],
+            "initial": [{
+                "name": "Init",
+                "steps": [
+                    {"kind": "assign", "slot": 0, "value": {"op": "literal", "value": {"type": "int", "value": "0"}}},
+                    {"kind": "assign", "slot": 1, "value": {"op": "literal", "value": {"type": "int", "value": "0"}}}
+                ]
+            }],
+            "next": [{
+                "name": "A",
+                "steps": [
+                    {"kind": "assign", "slot": 0, "value": {"op": "read", "slot": 0, "next": false}}
+                ]
+            }],
+            "invariants": [],
+            "assumptions": [],
+            "checkDeadlock": false
+        }))
+        .unwrap();
+        let error = program
+            .check(SafetyBounds {
+                max_depth: 64,
+                max_states: 10000,
+                max_work: 1000000,
+                max_temporal_nodes: None,
+            })
+            .unwrap_err();
+        assert_eq!(error.code, "protocol");
+        assert!(
+            error
+                .message
+                .contains("action A of the next-state relation"),
+            "message: {}",
+            error.message
+        );
+        assert!(error.message.contains("y"), "message: {}", error.message);
+        assert!(
+            !error.message.contains("x,"), "assigned variable x must not be listed: {}",
+            error.message
+        );
     }
 }
