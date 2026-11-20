@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 
 for (const manifest of [
-  "crates/oracle/Cargo.toml",
+  "crates/roracle/Cargo.toml",
   "crates/idealis-core/Cargo.toml",
   "crates/rtla/Cargo.toml",
   "crates/idealis-smt/Cargo.toml",

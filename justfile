@@ -143,23 +143,23 @@ oracle-tuning-kernel before after run:
   node dist/evals/oracle-tuning/kernel.js {{quote(before)}} {{quote(after)}} {{quote(run)}}
 
 oracle-criterion:
-  cargo bench --locked --manifest-path crates/oracle/Cargo.toml --bench wire
+  cargo bench --locked --manifest-path crates/roracle/Cargo.toml --bench wire
 
 oracle-build:
-  cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
-  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
+  cargo build --release --locked --manifest-path crates/roracle/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/roracle/Cargo.toml
   cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
   cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/oracle-comparison/rust/Cargo.toml
 
 oracle-test: oracle-build workspace-oracle-test
-  cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
-  cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
-  cargo test --locked --manifest-path crates/oracle/Cargo.toml
-  cargo test --locked --manifest-path crates/oracle/Cargo.toml --bench wire
+  cargo fmt --manifest-path crates/roracle/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/roracle/Cargo.toml -- -D warnings
+  cargo test --locked --manifest-path crates/roracle/Cargo.toml
+  cargo test --locked --manifest-path crates/roracle/Cargo.toml --bench wire
   cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
-  cargo run --example comparison --locked --manifest-path crates/oracle/Cargo.toml
+  cargo run --example comparison --locked --manifest-path crates/roracle/Cargo.toml
   node --test --test-name-pattern="roracle|typed oracle" dist/evals/wasm-host/contract-test.js
 
 # Build and run other checks before this recipe; measurements run alone.

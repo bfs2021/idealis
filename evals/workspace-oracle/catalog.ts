@@ -151,7 +151,7 @@ export const catalog = (): readonly Suite[] => {
     },
     {
       id: "roracle",
-      binary: "crates/oracle/target/release/roracle",
+      binary: "crates/roracle/target/release/roracle",
       cases: [1, 32].map((count) => ({
         id: `batch-${count}`,
         request: {

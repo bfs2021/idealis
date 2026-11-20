@@ -29,12 +29,12 @@ jobs:
       - run: cargo build --release --locked --manifest-path evals/sat-foundation/rust/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/sat-foundation/rust/Cargo.toml
       - run: node --test dist/evals/sat-foundation/contract-test.js
-      - run: cargo fmt --manifest-path crates/oracle/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path crates/oracle/Cargo.toml -- -D warnings
-      - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml
-      - run: cargo test --locked --manifest-path crates/oracle/Cargo.toml --bench wire
-      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/oracle/Cargo.toml
-      - run: cargo build --release --locked --manifest-path crates/oracle/Cargo.toml
+      - run: cargo fmt --manifest-path crates/roracle/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/roracle/Cargo.toml -- -D warnings
+      - run: cargo test --locked --manifest-path crates/roracle/Cargo.toml
+      - run: cargo test --locked --manifest-path crates/roracle/Cargo.toml --bench wire
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/roracle/Cargo.toml
+      - run: cargo build --release --locked --manifest-path crates/roracle/Cargo.toml
       - run: pnpm oracle:types:check
       - run: cargo fmt --manifest-path evals/roracle-native/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/roracle-native/rust/Cargo.toml -- -D warnings

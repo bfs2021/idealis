@@ -105,7 +105,7 @@ const engines = [
   },
 ];
 const bytes = await readFile(
-  "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+  "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
 );
 await writeFile(resolve(output, "roracle.wasm"), bytes, { flag: "wx" });
 const wasm = createOracle(bytes);

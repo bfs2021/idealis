@@ -4,15 +4,18 @@ import { join } from "node:path";
 export const readOracleWasm = async (
   root: string,
 ): Promise<Buffer<ArrayBuffer>> => {
-  const directory = join(
-    root,
-    "crates/oracle/target/wasm32-unknown-unknown/release",
-  );
-  try {
-    return await readFile(join(directory, "roracle.wasm"));
-  } catch (error) {
-    if (error instanceof Error && "code" in error && error.code === "ENOENT")
-      return readFile(join(directory, "idealis_oracle.wasm"));
-    throw error;
+  const release = "target/wasm32-unknown-unknown/release";
+  for (const crate of ["roracle", "oracle"]) {
+    try {
+      return await readFile(
+        join(root, "crates", crate, release, "roracle.wasm"),
+      );
+    } catch (error) {
+      if (
+        !(error instanceof Error && "code" in error && error.code === "ENOENT")
+      )
+        throw error;
+    }
   }
+  return readFile(join(root, "crates/oracle", release, "idealis_oracle.wasm"));
 };

@@ -37,7 +37,7 @@ const binding = loadNativeBinding();
 const objectClient = createNativeOracle("native-object");
 const jsonClient = createNativeOracle("native-json");
 const wasmBytes = await readFile(
-  "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+  "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
 );
 const wasm = createOracle(wasmBytes);
 const sourcePaths = [

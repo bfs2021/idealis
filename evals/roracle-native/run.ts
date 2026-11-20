@@ -29,7 +29,7 @@ const save = async (name: string, value: unknown) => {
 const wasmPath = resolve(output, "roracle.wasm");
 const addonPath = resolve(output, "roracle-native.node");
 await copyFile(
-  "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+  "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
   wasmPath,
 );
 await copyFile(nativePath, addonPath);
@@ -40,7 +40,7 @@ const sourcePaths = execFileSync(
     "--cached",
     "--others",
     "--exclude-standard",
-    "crates/oracle",
+    "crates/roracle",
     "packages/idealis/src/generated/roracle.ts",
     "packages/idealis/src/trace.ts",
     "evals/workspace-oracle",
@@ -49,6 +49,8 @@ const sourcePaths = execFileSync(
     "scripts/build-native-oracle.ts",
     "evals/plans/native-oracle.md",
     "package.json",
+    "packages/idealis/package.json",
+    "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
   ],
   { encoding: "utf8" },

@@ -41,7 +41,7 @@ if (command === "freeze") {
   );
   for (const [path, target] of [
     ["evals/workspace-oracle/rust/target/release/workspace-oracle", "runner"],
-    ["crates/oracle/target/release/roracle", "oracle"],
+    ["crates/roracle/target/release/roracle", "oracle"],
   ]) {
     assert.ok(path && target);
     const bytes = await readFile(path);
@@ -79,7 +79,7 @@ if (command === "freeze") {
     "--cached",
     "--others",
     "--exclude-standard",
-    "crates/oracle",
+    "crates/roracle",
     "evals/workspace-oracle",
     "evals/roracle-native/client.ts",
     "evals/roracle-native/canonical.ts",

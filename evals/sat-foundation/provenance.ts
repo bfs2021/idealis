@@ -19,6 +19,8 @@ export const fingerprint = async () => {
     "justfile",
     ".github/workflows/ci.yml",
     "package.json",
+    "packages/idealis/package.json",
+    "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
     "tsconfig.json",
     "tsconfig.build.json",

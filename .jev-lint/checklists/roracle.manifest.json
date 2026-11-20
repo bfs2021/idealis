@@ -1,89 +1,89 @@
 {
   "schema": "jev-lint-documents-manifest-1",
-  "roots": ["crates/oracle/SUPPORT.md"],
+  "roots": ["crates/roracle/SUPPORT.md"],
   "files": {
     "source0": {
-      "path": "crates/oracle/Cargo.lock",
+      "path": "crates/roracle/Cargo.lock",
       "role": "reference"
     },
     "source1": {
-      "path": "crates/oracle/Cargo.toml",
+      "path": "crates/roracle/Cargo.toml",
       "role": "reference"
     },
     "source2": {
-      "path": "crates/oracle/README.md",
+      "path": "crates/roracle/README.md",
       "role": "reference"
     },
     "source3": {
-      "path": "crates/oracle/SUPPORT.md",
+      "path": "crates/roracle/SUPPORT.md",
       "role": "document"
     },
     "source4": {
-      "path": "crates/oracle/benches/wire.rs",
+      "path": "crates/roracle/benches/wire.rs",
       "role": "reference"
     },
     "source5": {
-      "path": "crates/oracle/examples/comparison.rs",
+      "path": "crates/roracle/examples/comparison.rs",
       "role": "reference"
     },
     "source6": {
-      "path": "crates/oracle/examples/observations.rs",
+      "path": "crates/roracle/examples/observations.rs",
       "role": "reference"
     },
     "source7": {
-      "path": "crates/oracle/examples/typescript.rs",
+      "path": "crates/roracle/examples/typescript.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "crates/oracle/src/bench.rs",
+      "path": "crates/roracle/src/bench.rs",
       "role": "reference"
     },
     "source9": {
-      "path": "crates/oracle/src/group.rs",
+      "path": "crates/roracle/src/group.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "crates/oracle/src/lib.rs",
+      "path": "crates/roracle/src/lib.rs",
       "role": "reference"
     },
     "source11": {
-      "path": "crates/oracle/src/main.rs",
+      "path": "crates/roracle/src/main.rs",
       "role": "reference"
     },
     "source12": {
-      "path": "crates/oracle/src/report.rs",
+      "path": "crates/roracle/src/report.rs",
       "role": "reference"
     },
     "source13": {
-      "path": "crates/oracle/src/typescript.rs",
+      "path": "crates/roracle/src/typescript.rs",
       "role": "reference"
     },
     "source14": {
-      "path": "crates/oracle/src/wasm.rs",
+      "path": "crates/roracle/src/wasm.rs",
       "role": "reference"
     },
     "source15": {
-      "path": "crates/oracle/src/wire.rs",
+      "path": "crates/roracle/src/wire.rs",
       "role": "reference"
     },
     "source16": {
-      "path": "crates/oracle/src/wire_observation.rs",
+      "path": "crates/roracle/src/wire_observation.rs",
       "role": "reference"
     },
     "source17": {
-      "path": "crates/oracle/tests/bytes.rs",
+      "path": "crates/roracle/tests/bytes.rs",
       "role": "reference"
     },
     "source18": {
-      "path": "crates/oracle/tests/json.rs",
+      "path": "crates/roracle/tests/json.rs",
       "role": "reference"
     },
     "source19": {
-      "path": "crates/oracle/tests/oracle.rs",
+      "path": "crates/roracle/tests/oracle.rs",
       "role": "reference"
     },
     "source20": {
-      "path": "crates/oracle/tests/value.rs",
+      "path": "crates/roracle/tests/value.rs",
       "role": "reference"
     },
     "source21": {
@@ -91,17 +91,25 @@
       "role": "reference"
     },
     "source22": {
-      "path": "pnpm-lock.yaml",
+      "path": "packages/idealis/package.json",
       "role": "reference"
     },
     "source23": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source24": {
+      "path": "pnpm-workspace.yaml",
+      "role": "reference"
+    },
+    "source25": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
   },
   "comparisons": [
     {
-      "id": "oracle-readme",
+      "id": "roracle-readme",
       "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
       "mode": "semantic",
       "reference": {
@@ -112,7 +120,7 @@
       }
     },
     {
-      "id": "oracle-implementation-0",
+      "id": "roracle-implementation-0",
       "topic": "version付き観測batchをOracleGroupへ通すJSON境界、件数と入力size、CLIとWasm ABI",
       "mode": "semantic",
       "reference": {
@@ -146,7 +154,7 @@
       ]
     },
     {
-      "id": "oracle-implementation-1",
+      "id": "roracle-implementation-1",
       "topic": "開発用typescript featureのRust契約からのTS型生成、既定依存と実行時serde制約との分離",
       "mode": "semantic",
       "reference": {
@@ -171,7 +179,7 @@
       ]
     },
     {
-      "id": "oracle-implementation-2",
+      "id": "roracle-implementation-2",
       "topic": "typed observation比較とmatched/mismatch/invalid/unknown/error、集約の優先順位",
       "mode": "semantic",
       "reference": {
@@ -183,7 +191,7 @@
       "context": []
     },
     {
-      "id": "oracle-implementation-3",
+      "id": "roracle-implementation-3",
       "topic": "groupとcase登録、入力付きreport、保存oracleを呼ばないreplay、構造検査",
       "mode": "semantic",
       "reference": {
@@ -195,7 +203,7 @@
       "context": []
     },
     {
-      "id": "oracle-implementation-4",
+      "id": "roracle-implementation-4",
       "topic": "preflightと全呼出照合、予算、clock、順序、raw samplesと速度比、部分失敗",
       "mode": "semantic",
       "reference": {

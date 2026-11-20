@@ -1,52 +1,24 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { monotone, recordNodes } from "../evals/symmetry/cases.js";
 import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
 
 const directory = resolve(process.argv[2] ?? ".artifacts/packages");
-const files = await readdir(directory);
-const tarball = files.find(
-  (file) => file.startsWith("mizchi-idealis-") && file.endsWith(".tgz"),
-);
-const crate = files.find(
-  (file) => file.startsWith("idealis-core-") && file.endsWith(".crate"),
-);
-const rtlcCrate = files.find(
-  (file) => file.startsWith("rtlc-") && file.endsWith(".crate"),
-);
-const rtlaCrate = files.find(
-  (file) => file.startsWith("rtla-") && file.endsWith(".crate"),
-);
-const compilerCrate = files.find(
-  (file) => file.startsWith("rtla-compiler-") && file.endsWith(".crate"),
-);
-const rsmtCrate = files.find(
-  (file) => file.startsWith("idealis-smt-") && file.endsWith(".crate"),
-);
-const ralloyCrate = files.find(
-  (file) => file.startsWith("ralloy-") && file.endsWith(".crate"),
-);
-const testingCrate = files.find(
-  (file) => file.startsWith("idealis-testing-") && file.endsWith(".crate"),
-);
-const oracleCrate = files.find(
-  (file) => file.startsWith("roracle-") && file.endsWith(".crate"),
-);
-assert.ok(
-  tarball &&
-    crate &&
-    rtlcCrate &&
-    rtlaCrate &&
-    compilerCrate &&
-    rsmtCrate &&
-    ralloyCrate &&
-    testingCrate &&
-    oracleCrate,
-  "Prepare npm and all eight Rust packages first, including standalone idealis-testing",
-);
+const version = JSON.parse(
+  await readFile("packages/idealis/package.json", "utf8"),
+).version;
+const tarball = `mizchi-idealis-${version}.tgz`;
+const crate = `idealis-core-${version}.crate`;
+const rtlcCrate = `rtlc-${version}.crate`;
+const rtlaCrate = `rtla-${version}.crate`;
+const compilerCrate = `rtla-compiler-${version}.crate`;
+const rsmtCrate = `idealis-smt-${version}.crate`;
+const ralloyCrate = `ralloy-${version}.crate`;
+const testingCrate = `idealis-testing-${version}.crate`;
+const oracleCrate = `roracle-${version}.crate`;
 const consumer = await mkdtemp(join(tmpdir(), "idealis-consumer-"));
 await writeFile(
   join(consumer, "package.json"),
@@ -280,7 +252,6 @@ execFileSync("tar", ["-xzf", join(directory, crate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlcCrate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlaCrate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, compilerCrate), "-C", consumer]);
-const version = JSON.parse(await readFile("package.json", "utf8")).version;
 for (const archive of [
   crate,
   rtlcCrate,

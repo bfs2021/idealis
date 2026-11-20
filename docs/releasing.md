@@ -40,7 +40,7 @@ cargo publish --locked --manifest-path crates/idealis-testing/Cargo.toml
 
 ## 次回以降
 
-package.json / Cargo.toml の version を同じ新しい値にし、Cargo.lock と CHANGELOG を更新してチェックを通す。初回に `0.1.0-alpha.0` を公開した後は、同じ version のタグで再 publish しない。次の `0.1.0-alpha.1` 等へ上げる。
+`packages/idealis/package.json` / Cargo.toml の version を同じ新しい値にし、Cargo.lock と CHANGELOG を更新してチェックを通す。初回に `0.1.0-alpha.0` を公開した後は、同じ version のタグで再 publish しない。次の `0.1.0-alpha.1` 等へ上げる。
 
 `v<version>` の push は release.yml を起動する。tag / npm / Cargo の version 一致、型・テスト、pack、単独 consumer、ブラウザを検査してから OIDC で npm publish し、Wasm と archives を GitHub Release へ添付する。pre-release は next、安定版は latest。NPM_TOKEN は使わない。
 

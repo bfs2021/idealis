@@ -1,6 +1,6 @@
 # roracle
 
-Cargoの依存名とRustのimportは`roracle`。リポジトリ内の配置は`crates/oracle`。
+Cargoの依存名とRustのimportは`roracle`。リポジトリ内の配置は`crates/roracle`。
 
 Rustの`#[test]`から複数実装を同じオラクルへ照合し、同じ登録で速度を比較する試作ライブラリ。任意の入力型と`PartialEq`の観測型を使える。TLA+やSMTの検査器、テストランナー、外部プロセスの実行機能は内蔵しない。
 

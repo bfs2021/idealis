@@ -4,16 +4,16 @@
 
 SUPPORT.mdはRustのcrate archiveにも同梱する。配布検査では8つのarchiveすべてにチェックリストがあることを確認する。
 
-| crate           | チェックリスト                                                                |
-| --------------- | ----------------------------------------------------------------------------- |
-| rtla            | [構文解析とAST](../crates/rtla/SUPPORT.md)                                    |
-| rtla-compiler   | [ASTから有限IRへの変換](../crates/rtla-compiler/SUPPORT.md)                   |
-| rtlc            | [有限IRの探索・性質・反例](../crates/rtlc/SUPPORT.md)                         |
-| idealis-core    | [値・Model/Driver・履歴・ホスト・protocol](../crates/idealis-core/SUPPORT.md) |
-| idealis-smt     | [SMT-LIBと求解](../crates/idealis-smt/SUPPORT.md)                             |
-| ralloy          | [静的Alloyと固定instance](../crates/ralloy/SUPPORT.md)                        |
-| idealis-testing | [生成・縮小・再生・差分比較](../crates/idealis-testing/SUPPORT.md)            |
-| roracle         | [実装登録・差分検査・保存oracle再生・比較ベンチ](../crates/oracle/SUPPORT.md) |
+| crate           | チェックリスト                                                                 |
+| --------------- | ------------------------------------------------------------------------------ |
+| rtla            | [構文解析とAST](../crates/rtla/SUPPORT.md)                                     |
+| rtla-compiler   | [ASTから有限IRへの変換](../crates/rtla-compiler/SUPPORT.md)                    |
+| rtlc            | [有限IRの探索・性質・反例](../crates/rtlc/SUPPORT.md)                          |
+| idealis-core    | [値・Model/Driver・履歴・ホスト・protocol](../crates/idealis-core/SUPPORT.md)  |
+| idealis-smt     | [SMT-LIBと求解](../crates/idealis-smt/SUPPORT.md)                              |
+| ralloy          | [静的Alloyと固定instance](../crates/ralloy/SUPPORT.md)                         |
+| idealis-testing | [生成・縮小・再生・差分比較](../crates/idealis-testing/SUPPORT.md)             |
+| roracle         | [実装登録・差分検査・保存oracle再生・比較ベンチ](../crates/roracle/SUPPORT.md) |
 
 jev-lint 0.8.0のdocuments APIで、各READMEとチェックリスト、選択した実装境界の記述を比較する。比較箇所と全Rust source/test/bench・同梱JSON/TLA/CFG fixture・Cargo manifest/lock等の内容digestは`.jev-lint/checklists/*.manifest.json`と`*.record.json`へ保存する。モデルはjev-1.14.0に固定する。
 

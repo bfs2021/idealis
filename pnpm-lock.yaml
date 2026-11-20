@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@mizchi/idealis':
+        specifier: workspace:*
+        version: link:packages/idealis
       '@mizchi/mutator':
         specifier: 0.2.0
         version: 0.2.0(@playwright/test@1.65.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@24.19.2)(esbuild@0.27.7)(typescript@7.0.2)(yaml@2.9.1))(vitest@5.1.0(@types/node@24.19.2)(@vitest/browser-preview@5.1.0)(@vitest/ui@5.1.0(vitest@5.1.0))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@24.19.2)(esbuild@0.27.7)(typescript@7.0.2)(yaml@2.9.1)))
@@ -44,6 +47,21 @@ importers:
       vitest:
         specifier: 5.1.0
         version: 5.1.0(@types/node@24.19.2)(@vitest/browser-preview@5.1.0)(@vitest/ui@5.1.0(vitest@5.1.0))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@24.19.2)(esbuild@0.27.7)(typescript@7.0.2)(yaml@2.9.1))
+      z3-solver:
+        specifier: 5.4.1
+        version: 5.4.1
+
+  packages/idealis:
+    dependencies:
+      fast-check:
+        specifier: 4.10.2
+        version: 4.10.2
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
+      tla-ts:
+        specifier: 0.0.10
+        version: 0.0.10
       z3-solver:
         specifier: 5.4.1
         version: 5.4.1

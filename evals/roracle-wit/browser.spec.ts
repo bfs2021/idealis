@@ -39,7 +39,7 @@ test("pure WIT binding runs the same full reports in Chromium", async ({
       {
         type: "application/wasm",
         bytes: await readFile(
-          "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+          "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
         ),
       },
     ],

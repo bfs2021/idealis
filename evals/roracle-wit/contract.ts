@@ -15,7 +15,7 @@ import { createTypedClient } from "./node.js";
 
 const oracle = createOracle(
   await readFile(
-    "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+    "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
   ),
 );
 const clients = await Promise.all(

@@ -1,6 +1,6 @@
 # roracleの評価
 
-`crates/oracle`の同じ実装登録で、TLC・tla-ts・idealisの差分テストと比較ベンチを動かす。条件は[0051のplan](../plans/0051-oracle-library.md)で固定した。
+`crates/roracle`の同じ実装登録で、TLC・tla-ts・idealisの差分テストと比較ベンチを動かす。条件は[0051のplan](../plans/0051-oracle-library.md)で固定した。
 
 ```sh
 just oracle-test

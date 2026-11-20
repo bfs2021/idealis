@@ -11,7 +11,7 @@ import { fixtures, observationMatrix, requestFor } from "./fixtures.js";
 import { summarizeObject } from "./object-summary.js";
 
 const bytes = await readFile(
-  "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+  "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
 );
 const wasm = createOracle(bytes);
 const native = [

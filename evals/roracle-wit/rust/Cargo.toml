@@ -12,7 +12,7 @@ component = []
 node = ["dep:napi", "dep:napi-derive", "dep:napi-build"]
 
 [dependencies]
-roracle = { path = "../../../crates/oracle" }
+roracle = { path = "../../../crates/roracle" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 wit-bindgen = "=0.63.0"

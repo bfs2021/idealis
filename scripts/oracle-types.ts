@@ -11,7 +11,7 @@ const raw = execFileSync(
     "--quiet",
     "--locked",
     "--manifest-path",
-    "crates/oracle/Cargo.toml",
+    "crates/roracle/Cargo.toml",
     "--features",
     "typescript",
     "--example",

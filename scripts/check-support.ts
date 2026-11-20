@@ -351,7 +351,7 @@ const scopes: readonly CrateScope[] = [
     ],
   },
   {
-    name: "oracle",
+    name: "roracle",
     evidence: [
       {
         path: "src/wire.rs",
@@ -397,7 +397,13 @@ const scopes: readonly CrateScope[] = [
     ],
   },
 ];
-const shared = ["scripts/check-support.ts", "package.json", "pnpm-lock.yaml"];
+const shared = [
+  "scripts/check-support.ts",
+  "package.json",
+  "packages/idealis/package.json",
+  "pnpm-workspace.yaml",
+  "pnpm-lock.yaml",
+];
 const manifestPath = (name: string) =>
   `.jev-lint/checklists/${name}.manifest.json`;
 const recordPath = (name: string) => `.jev-lint/checklists/${name}.record.json`;

@@ -24,6 +24,8 @@ export const portableFingerprint = async () => {
         "fixtures",
         "tests",
         "package.json",
+        "packages/idealis/package.json",
+        "pnpm-workspace.yaml",
         "pnpm-lock.yaml",
         "tsconfig.json",
         "tsconfig.build.json",

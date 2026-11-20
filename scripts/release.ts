@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const pkg = JSON.parse(await readFile("package.json", "utf8"));
+const pkg = JSON.parse(await readFile("packages/idealis/package.json", "utf8"));
 const tag = process.argv[2];
 if (tag !== `v${pkg.version}`)
   throw new Error("Release tag and package version differ");
@@ -14,6 +14,7 @@ for (const name of [
   "idealis-smt",
   "ralloy",
   "idealis-testing",
+  "roracle",
 ]) {
   const cargo = await readFile(`crates/${name}/Cargo.toml`, "utf8");
   if (!cargo.includes(`version = "${pkg.version}"`))
@@ -34,6 +35,7 @@ if (process.argv[3] === "--publish") {
     [
       tarball,
       resolve(directory, `idealis-core-${pkg.version}.crate`),
+      resolve(directory, `roracle-${pkg.version}.crate`),
       resolve(directory, `rtlc-${pkg.version}.crate`),
       resolve(directory, `rtla-${pkg.version}.crate`),
       resolve(directory, `rtla-compiler-${pkg.version}.crate`),
@@ -72,6 +74,7 @@ if (process.argv[3] === "--publish") {
       tag,
       tarball,
       resolve(directory, `idealis-core-${pkg.version}.crate`),
+      resolve(directory, `roracle-${pkg.version}.crate`),
       resolve(directory, `rtlc-${pkg.version}.crate`),
       resolve(directory, `rtla-${pkg.version}.crate`),
       resolve(directory, `rtla-compiler-${pkg.version}.crate`),

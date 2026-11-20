@@ -47,6 +47,7 @@ execFileSync(
     "--dir",
     "evals/roracle-wit/toolchain",
     "install",
+    "--ignore-workspace",
     "--frozen-lockfile",
     "--ignore-scripts",
   ],

@@ -55,7 +55,7 @@ roracleのrequest/report型はRustからTSへ生成する。Node向けnapi-rsは
 | [`idealis-smt`](crates/idealis-smt)（旧rsmt） | 対応するSMT-LIB式                              | 任意精度Intの差分制約とBool式。SATモデル、UNSAT、work切れのunknownを返す独立した試作。     |
 | [`ralloy`](crates/ralloy)                     | 静的なAlloyソースと有限scope                   | sig・二項関係・fact・assertの解析と、有限構造の列挙・instanceや反例の生成。                |
 | [`idealis-testing`](crates/idealis-testing)   | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
-| [`roracle`](crates/oracle)                    | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
+| [`roracle`](crates/roracle)                   | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
 | [`@mizchi/idealis`](packages/idealis)         | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
 | [Go adapter](adapters/go)                     | 共通コアのWasmとGoのモデル・実装・履歴         | CGOなしでRustコアへ接続し、同じ値・オラクル・観測で照合と再生を行う。                      |
 
@@ -92,7 +92,7 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 [`idealis-testing`](crates/idealis-testing)は、有限状態機械のPBT・縮小・差分比較・保存caseの再生を行う独立crate。TSは`@mizchi/idealis/testing`から同じWasmを使い、Vitest・node:test・ブラウザでDriverを動かす。[明示したactor列からのスケジュール生成](docs/testing.md#actorの操作順を制御する)も扱う。既存fast-check経路のStrategy/seed互換、任意threadの自動計装、全実行の証明は含めない。
 
-[`roracle`](crates/oracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
+[`roracle`](crates/roracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
 
 開発用の[構造付きfuzzing](evals/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
 
@@ -112,6 +112,8 @@ just mutation
 rustup target add wasm32-unknown-unknown
 just wasm-test
 ```
+
+pnpm workspace のルートで開発タスクを実行する。公開パッケージは [packages/idealis](packages/idealis) にあり、SDK と CLI は `pnpm --filter @mizchi/idealis build` でビルドできる。
 
 `just check` は Vite+ の format・lint 検査、TypeScript の型検査、Vitest、`node:test` を実行する。整形には `pnpm exec vp fmt` を使う。`just wasm-test` は実Wasmの判定・ABI・反例再生・エラー復旧とnativeとの照合をNodeで実行する。ブラウザやDOMの起動は必要ない。共通の挙動テストを両ランナーに登録している。`just mutation` は `@mizchi/mutator` で TS ソースを変異させ、Vitest で検査する。
 
@@ -234,7 +236,7 @@ nativeの8-worker要求は同じrunのTLC 8 workers比でcounter 2.67倍、funct
 | linear-ring   |               4.505 |      71.607 |  584.650 |
 | function-cube |               2.675 |      78.875 |  593.217 |
 
-ringは1,000状態、function-cubeは8 bitの256状態で、3実装の完了判定・distinct・generatedが一致した。小さいモデルの起動費用を含み、検査kernelの速度差を示す値ではない。Rustのprepared check/coverage比較、測定中のdrift検出、保存oracleからの再生と最初の失敗は[評価0051](evals/iterations/0051-oracle-library.md)へ記録した。APIは[RustのテストとCriterion風のgroup登録](crates/oracle/README.md)を参照。
+ringは1,000状態、function-cubeは8 bitの256状態で、3実装の完了判定・distinct・generatedが一致した。小さいモデルの起動費用を含み、検査kernelの速度差を示す値ではない。Rustのprepared check/coverage比較、測定中のdrift検出、保存oracleからの再生と最初の失敗は[評価0051](evals/iterations/0051-oracle-library.md)へ記録した。APIは[RustのテストとCriterion風のgroup登録](crates/roracle/README.md)を参照。
 
 workspaceの差分検査は23ファイル・99比較を同じRust/Wasm照合器へ移した。変更前後のbinary/source snapshot、cold/reusedの比較、保存oracleへの再生を[チューニング手順](evals/workspace-oracle/README.md)で実行できる。正常対照の12 group・1222回の一致と、JSON bridgeの追加費用は[評価0052](evals/iterations/0052-workspace-oracle.md)へ記録した。 TLCの参照環境を修正し、既存24不一致も[評価0053](evals/iterations/0053-tlc-standard-modules.md)で解消した。155件の検査・32件の確認・155件の保存再生で不一致0を確認している。
 

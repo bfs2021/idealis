@@ -39,15 +39,17 @@ test("a frozen oracle worker runs its own Wasm binding outside the checkout", as
 
 test("frozen oracle snapshots accept current and historical Wasm filenames", async () => {
   const root = await mkdtemp(join(tmpdir(), "roracle-frozen-"));
-  const directory = join(
-    root,
-    "crates/oracle/target/wasm32-unknown-unknown/release",
-  );
+  const release = "target/wasm32-unknown-unknown/release";
+  const historical = join(root, "crates/oracle", release);
+  const directory = join(root, "crates/roracle", release);
   try {
     await mkdir(directory, { recursive: true });
     await assert.rejects(readOracleWasm(root), { code: "ENOENT" });
-    await writeFile(join(directory, "idealis_oracle.wasm"), "historical");
+    await mkdir(historical, { recursive: true });
+    await writeFile(join(historical, "idealis_oracle.wasm"), "historical");
     assert.equal((await readOracleWasm(root)).toString(), "historical");
+    await writeFile(join(historical, "roracle.wasm"), "renamed binary");
+    assert.equal((await readOracleWasm(root)).toString(), "renamed binary");
     await writeFile(join(directory, "roracle.wasm"), "current");
     assert.equal((await readOracleWasm(root)).toString(), "current");
   } finally {

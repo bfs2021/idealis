@@ -76,7 +76,7 @@ test("nonportable values and cycles fail explicitly instead of losing data", () 
 test("batch wire preserves unknown and execution failure without matching them", async () => {
   const core = createOracle(
     await readFile(
-      "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+      "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
     ),
   );
   for (const kind of ["unknown", "invalid", "error"]) {

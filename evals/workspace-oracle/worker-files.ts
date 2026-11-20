@@ -8,5 +8,5 @@ export const costWorkerFiles: readonly string[] = [
   "dist/evals/roracle-native/client.js",
   "dist/evals/roracle-native/canonical.js",
   "dist/packages/idealis/src/trace.js",
-  "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+  "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
 ];

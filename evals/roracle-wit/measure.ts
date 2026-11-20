@@ -40,7 +40,7 @@ await cp("evals/roracle-wit/generated", resolve(output, "generated"), {
   recursive: true,
 });
 await cp(
-  "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+  "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
   resolve(output, "roracle.wasm"),
 );
 await cp(
@@ -76,8 +76,10 @@ const paths = execFileSync(
     "evals/plans/typed-oracle.md",
     "packages/idealis/src/generated/roracle.ts",
     "packages/idealis/src/trace.ts",
-    "crates/oracle",
+    "crates/roracle",
     "package.json",
+    "packages/idealis/package.json",
+    "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
   ],
   { encoding: "utf8" },

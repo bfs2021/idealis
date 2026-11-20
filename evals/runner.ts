@@ -76,6 +76,8 @@ const fingerprint = async () => {
     ).flat(),
     ...entrypoints,
     "package.json",
+    "packages/idealis/package.json",
+    "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
   ].sort();
   const files = await Promise.all(

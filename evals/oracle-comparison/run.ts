@@ -58,7 +58,7 @@ const sources = execFileSync("git", [
   "--cached",
   "--others",
   "--exclude-standard",
-  "crates/oracle",
+  "crates/roracle",
   "crates/rtla",
   "crates/rtla-compiler",
   "crates/rtlc",

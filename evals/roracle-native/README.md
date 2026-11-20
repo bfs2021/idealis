@@ -10,7 +10,7 @@ just oracle-types-check
 just oracle-native-test
 ```
 
-`crates/oracle`の`typescript` featureで、`packages/idealis/src/generated/roracle.ts`を生成する。通常のRust/Wasmではtypegenを有効にしない。napi-rsの生成する`generated/index.d.ts`も同じ`OracleRequest`を参照する。CIは両生成物の鮮度と型エラーの対照を確認する。
+`crates/roracle`の`typescript` featureで、`packages/idealis/src/generated/roracle.ts`を生成する。通常のRust/Wasmではtypegenを有効にしない。napi-rsの生成する`generated/index.d.ts`も同じ`OracleRequest`を参照する。CIは両生成物の鮮度と型エラーの対照を確認する。
 
 TSの構造型は実行時の入力検査ではない。RustのserdeとOracleGroupがversion、必須field、未知field、空suite、重複ID、件数を検査する。生成型は推奨するobject形式を表し、既存のwire visitorが受理するlegacy sequence形式を追加のTS APIとして公開しない。
 

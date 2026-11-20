@@ -19,7 +19,7 @@ export const binaries: Readonly<Record<string, string>> = {
     "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
   "/sat.wasm": wasmPath,
   "/wire.wasm":
-    "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+    "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
   "/typed-oracle.wasm":
     "evals/oracle-comparison/rust/target/wasm32-unknown-unknown/release/oracle_comparison.wasm",
 };

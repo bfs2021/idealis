@@ -10,7 +10,7 @@ export const fingerprint = async () => {
     "--others",
     "--exclude-standard",
     "--",
-    "crates/oracle",
+    "crates/roracle",
     "evals/workspace-oracle",
     "packages/idealis/src",
     "scripts",
@@ -32,6 +32,8 @@ export const fingerprint = async () => {
     "justfile",
     ".github/workflows/ci.yml",
     "package.json",
+    "packages/idealis/package.json",
+    "pnpm-workspace.yaml",
     "pnpm-lock.yaml",
     "tsconfig.json",
     "tsconfig.build.json",
@@ -43,7 +45,7 @@ export const fingerprint = async () => {
     [
       ...new Set([
         ...files,
-        "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+        "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
       ]),
     ]
       .sort()

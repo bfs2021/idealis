@@ -14,7 +14,7 @@ const createWorkspaceOracle = (): OracleClient => {
   if (backend !== "wasm") throw new Error(`Unknown oracle backend: ${backend}`);
   return createOracle(
     readFileSync(
-      "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
+      "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
     ),
   );
 };
