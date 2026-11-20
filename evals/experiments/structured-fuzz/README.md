@@ -1,6 +1,6 @@
 # testing protocolの構造付きfuzzing
 
-非公開eval crateで、`idealis-testing::Engine`と保存caseを検査する。生JSONLを変異させる`raw`と、Arbitraryから有効なcommandとfeedbackを作る`structured`を使う。対象はprotocolの状態と応答で、TLA+/Alloy/SMTの構文や実装SUTの全動作ではない。
+非公開eval crateで、`idealis-connect::Engine`と保存caseを検査する。生JSONLを変異させる`raw`と、Arbitraryから有効なcommandとfeedbackを作る`structured`を使う。対象はprotocolの状態と応答で、TLA+/Alloy/SMTの構文や実装SUTの全動作ではない。
 
 ```sh
 rustup toolchain install nightly-2026-08-27 --profile minimal

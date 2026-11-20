@@ -6,7 +6,7 @@ for (const manifest of [
   "crates/rtla/Cargo.toml",
   "crates/rusmt/Cargo.toml",
   "crates/ralloy/Cargo.toml",
-  "crates/idealis-testing/Cargo.toml",
+  "crates/idealis-connect/Cargo.toml",
   "evals/experiments/rust-probe/Cargo.toml",
   "evals/experiments/sat-foundation/rust/Cargo.toml",
   "evals/experiments/oracle-comparison/rust/Cargo.toml",
@@ -20,6 +20,7 @@ for (const manifest of [
   );
 }
 for (const manifest of [
+  "crates/idealis-cli/Cargo.toml",
   "evals/experiments/controlled-schedules/rust/Cargo.toml",
   "evals/experiments/structured-fuzz/rust/Cargo.toml",
 ])

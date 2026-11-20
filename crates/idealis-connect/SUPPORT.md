@@ -1,4 +1,4 @@
-# idealis-testingの対応チェックリスト
+# idealis-connectの対応チェックリスト
 
 チェック済みは有限生成器からの生成・評価・縮小・再生・差分比較。SUTとテストランナーはホストが所有する。未チェックは未対応または対象外で、実装予定を約束しない。
 
@@ -12,7 +12,7 @@
 - [x] 許容観測集合と各targetの差分比較。対象の多数決をオラクルにしない。
 - [x] Scheduleのactorごとの順序を保つ操作列と有限Generatorへの変換。
 - [x] version付きCase、JSONのsafe integer、protocol/resource上限とwork予算。
-- [x] serde/serde_jsonを使う独立Rustライブラリ、native JSONLとホストimport不要のWasm ABI v1。
+- [x] serde/serde_jsonを使う独立Rustライブラリ、nativeのEngine::dispatchとホストimport不要のWasm ABI v1。
 
 ## 非対応・対象外
 

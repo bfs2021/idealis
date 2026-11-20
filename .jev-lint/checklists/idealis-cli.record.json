@@ -1,0 +1,96 @@
+{
+  "schema": "jev-lint-documents-1",
+  "snapshotDigest": "61c8f02bf4d9d7bf7e9bd9c4e3c772e57d29a87260bb5a559365fabb7901f710",
+  "questionDigest": "209d6df378ccb747fcb0e821998fcd6105bc76638a88d22488d3b398d6a21595",
+  "model": "jev-1.14.0",
+  "snapshotChanged": false,
+  "status": "complete",
+  "qualityVerdict": "UNREVIEWED",
+  "candidates": [
+    {
+      "id": "idealis-cli-readme",
+      "topic": "記載条件内の対応機能、未対応・対象外、数値や結果の制約",
+      "mode": "semantic",
+      "reference": {
+        "source": "source2",
+        "path": "crates/idealis-cli/README.md",
+        "startLine": 1,
+        "endLine": 11,
+        "quote": "# idealis-cli\n\nモデルの許容観測と実装の観測を比較する Rust CLI。標準入力から1行ずつ JSON を読み、同じ `idealis_connect::Engine` に渡して応答を標準出力へ返す。各言語のホストは実装を駆動し、観測を CLI に渡す。\n\n```sh\necho '{\"version\":1,\"request\":{\"kind\":\"compare\",\"oracle\":{\"kind\":\"allowed\",\"values\":[1,2]},\"targets\":[{\"id\":\"counter\",\"outcome\":{\"kind\":\"value\",\"value\":3}}]}}' | cargo run --quiet --manifest-path crates/idealis-cli/Cargo.toml\n```\n\nこの例では counter の観測値 3 が許容集合から外れるため、応答の `result.status` は `mismatch` になる。生成・縮小・再生ではプロセスを開いたままにし、各 `Evaluate` に対応する ID と判定を `resume` で返す。\n\n[ライブラリとプロトコル](../idealis-connect/README.md) · [対応範囲](SUPPORT.md)",
+        "contentHash": "dab054a924077674f7e5261f9cfde4e1c0d2748d6997fd9d638b13260e48660c"
+      },
+      "target": {
+        "source": "source3",
+        "path": "crates/idealis-cli/SUPPORT.md",
+        "startLine": 1,
+        "endLine": 7,
+        "quote": "# idealis-cli の対応範囲\n\n- [x] 標準入力の各行を同一の idealis-connect Engine へ渡し、各応答を JSON と改行で標準出力へ書き、毎回 flush する。\n- [x] モデルの許容値と各実装の観測を渡し、応答から対象ごとの照合結果を取得できる。\n- [ ] SUT プロセスの起動、モデルファイルの読み込み、観測の自動収集。\n\n[実行口](src/main.rs)と[差分の入出力テスト](tests/jsonl.rs)を参照。",
+        "contentHash": "4265996e8d39963ab81c850827ab183540fcd828b25814617b70b44b9acf750a"
+      },
+      "context": [],
+      "candidateId": "93d3f5d7b5595d41d69c5fe4b6aefd0aaa687718c0c65c1601e78de0a9db6da0",
+      "contextHash": "ab2bcb7a3508e00df23902429f5a16a03ce83df5aeb0f55c02be020feb215881",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 0.83,
+        "probabilities": {
+          "supports": 0.87,
+          "contradicts": 0.09,
+          "unrelated": 0,
+          "insufficient_context": 0.04
+        }
+      }
+    },
+    {
+      "id": "idealis-cli-implementation-0",
+      "topic": "JSONLの各行を同じEngineへ渡し、応答を行単位でflushするnative実行口",
+      "mode": "semantic",
+      "reference": {
+        "source": "source4",
+        "path": "crates/idealis-cli/src/main.rs",
+        "startLine": 1,
+        "endLine": 12,
+        "quote": "use std::io::{self, BufRead, Write};\nfn main() {\n    let mut engine = idealis_connect::Engine::default();\n    let mut output = io::BufWriter::new(io::stdout().lock());\n    for input in io::stdin().lock().lines() {\n        let input = input.expect(\"read request\");\n        let reply = engine.dispatch(input.as_bytes());\n        serde_json::to_writer(&mut output, &reply).expect(\"serialize response\");\n        output.write_all(b\"\\n\").expect(\"write newline\");\n        output.flush().expect(\"flush response\");\n    }\n}",
+        "contentHash": "83da21a5632cf5f856e108ae131d843091b2e1d51107f617b7c52e5a0f63226a"
+      },
+      "target": {
+        "source": "source3",
+        "path": "crates/idealis-cli/SUPPORT.md",
+        "startLine": 1,
+        "endLine": 7,
+        "quote": "# idealis-cli の対応範囲\n\n- [x] 標準入力の各行を同一の idealis-connect Engine へ渡し、各応答を JSON と改行で標準出力へ書き、毎回 flush する。\n- [x] モデルの許容値と各実装の観測を渡し、応答から対象ごとの照合結果を取得できる。\n- [ ] SUT プロセスの起動、モデルファイルの読み込み、観測の自動収集。\n\n[実行口](src/main.rs)と[差分の入出力テスト](tests/jsonl.rs)を参照。",
+        "contentHash": "4265996e8d39963ab81c850827ab183540fcd828b25814617b70b44b9acf750a"
+      },
+      "context": [],
+      "candidateId": "d9c80170c28b459e283ca3241aba01c412d02ef301f518a44a33c51e9c58a0b1",
+      "contextHash": "ff032b467d9a5ef1bfc3b3de56832d92a0b41753c6ad48189cef9806aa3d5568",
+      "judgment": {
+        "choice": "supports",
+        "confidence": 1,
+        "probabilities": {
+          "supports": 1,
+          "contradicts": 0,
+          "unrelated": 0,
+          "insufficient_context": 0
+        }
+      }
+    }
+  ],
+  "coverage": {
+    "expected": 2,
+    "selected": 2,
+    "answered": 2,
+    "missing": 0,
+    "contradictions": 0,
+    "unassessed": 0,
+    "deferred": 0,
+    "issues": 0,
+    "unboundDocuments": 0
+  },
+  "usage": {
+    "requests": 2,
+    "inputTokens": 2645,
+    "usd": 0.00011109000000000002
+  },
+  "errors": []
+}

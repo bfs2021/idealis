@@ -16,7 +16,7 @@ export const binaries: Readonly<Record<string, string>> = {
   "/ralloy.wasm":
     "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
   "/testing.wasm":
-    "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+    "crates/idealis-connect/target/wasm32-unknown-unknown/release/idealis_connect.wasm",
   "/sat.wasm": wasmPath,
   "/wire.wasm":
     "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",

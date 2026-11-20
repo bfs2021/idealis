@@ -46,9 +46,12 @@ jobs:
       - run: cargo clippy --all-targets --locked --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml -- -D warnings
       - run: cargo build --release --locked --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml
       - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path evals/experiments/oracle-comparison/rust/Cargo.toml
-      - run: cargo fmt --manifest-path crates/idealis-testing/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml -- -D warnings
-      - run: cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
+      - run: cargo fmt --manifest-path crates/idealis-connect/Cargo.toml -- --check
+      - run: cargo fmt --manifest-path crates/idealis-cli/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-connect/Cargo.toml -- -D warnings
+      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-cli/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path crates/idealis-connect/Cargo.toml
+      - run: cargo test --all-targets --locked --manifest-path crates/idealis-cli/Cargo.toml
       - run: just testing-build
       - run: node --test dist/tests/testing-core/contract-test.js
       - run: just vitest --project=testing

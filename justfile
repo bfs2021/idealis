@@ -218,16 +218,19 @@ sat-replay run: build
   node dist/evals/experiments/sat-foundation/replay.js {{quote(run)}}
 
 testing-build: oracle-wire-build
-  cargo build --release --locked --manifest-path crates/idealis-testing/Cargo.toml
-  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-testing/Cargo.toml
+  cargo build --release --locked --manifest-path crates/idealis-cli/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-connect/Cargo.toml
 
 testing-core-test:
-  cargo fmt --manifest-path crates/idealis-testing/Cargo.toml -- --check
-  cargo clippy --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml -- -D warnings
-  cargo test --all-targets --locked --manifest-path crates/idealis-testing/Cargo.toml
+  cargo fmt --manifest-path crates/idealis-connect/Cargo.toml -- --check
+  cargo fmt --manifest-path crates/idealis-cli/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/idealis-connect/Cargo.toml -- -D warnings
+  cargo clippy --all-targets --locked --manifest-path crates/idealis-cli/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/idealis-connect/Cargo.toml
+  cargo test --all-targets --locked --manifest-path crates/idealis-cli/Cargo.toml
 
 testing-example:
-  cargo run --example counter --locked --manifest-path crates/idealis-testing/Cargo.toml
+  cargo run --example counter --locked --manifest-path crates/idealis-connect/Cargo.toml
 
 testing-test: testing-build build
   node --test dist/tests/testing-core/contract-test.js

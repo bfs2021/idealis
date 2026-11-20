@@ -9,7 +9,7 @@ test("public testing runtime generates, shrinks and replays real counter failure
     globalName: "testing",
   });
   const wasm = await readFile(
-    "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+    "crates/idealis-connect/target/wasm32-unknown-unknown/release/idealis_connect.wasm",
   );
   await page.route("http://testing.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;

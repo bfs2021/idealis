@@ -2,7 +2,7 @@ name: Fuzz smoke
 on:
   pull_request:
     paths:
-      - crates/idealis-testing/**
+      - crates/idealis-connect/**
       - evals/experiments/structured-fuzz/**
       - tests/structured-fuzz/**
       - .github/workflows/fuzz.yml

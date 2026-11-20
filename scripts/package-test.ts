@@ -17,7 +17,8 @@ const rtlaCrate = `rtla-${version}.crate`;
 const compilerCrate = `rtla-compiler-${version}.crate`;
 const rusmtCrate = `rusmt-${version}.crate`;
 const ralloyCrate = `ralloy-${version}.crate`;
-const testingCrate = `idealis-testing-${version}.crate`;
+const cliCrate = `idealis-cli-${version}.crate`;
+const connectCrate = `idealis-connect-${version}.crate`;
 const oracleCrate = `roracle-${version}.crate`;
 const consumer = await mkdtemp(join(tmpdir(), "idealis-consumer-"));
 await writeFile(
@@ -259,7 +260,8 @@ for (const archive of [
   compilerCrate,
   rusmtCrate,
   ralloyCrate,
-  testingCrate,
+  connectCrate,
+  cliCrate,
   oracleCrate,
 ]) {
   const entries = execFileSync("tar", ["-tzf", join(directory, archive)])
@@ -479,28 +481,46 @@ const alloyModule = await WebAssembly.compile(
 );
 assert.deepEqual(WebAssembly.Module.imports(alloyModule), []);
 const testingConsumer = await mkdtemp(
-  join(tmpdir(), "idealis-testing-consumer-"),
+  join(tmpdir(), "idealis-connect-consumer-"),
 );
 execFileSync("tar", [
   "-xzf",
-  join(directory, testingCrate),
+  join(directory, connectCrate),
   "-C",
   testingConsumer,
 ]);
 await writeFile(
   join(testingConsumer, "Cargo.toml"),
-  `[package]\nname="testing-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-testing={path="idealis-testing-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+  `[package]\nname="testing-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-connect={path="idealis-connect-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
 );
 await writeFile(
   join(testingConsumer, "main.rs"),
   await readFile(
     join(
       testingConsumer,
-      `idealis-testing-${version}`,
+      `idealis-connect-${version}`,
       "examples",
       "counter.rs",
     ),
   ),
+);
+execFileSync("tar", ["-xzf", join(directory, cliCrate), "-C", testingConsumer]);
+const cliManifest = join(
+  testingConsumer,
+  `idealis-cli-${version}`,
+  "Cargo.toml",
+);
+execFileSync(
+  "cargo",
+  [
+    "test",
+    "--offline",
+    "--manifest-path",
+    cliManifest,
+    "--config",
+    `patch.crates-io.idealis-connect.path=${JSON.stringify(join(testingConsumer, `idealis-connect-${version}`))}`,
+  ],
+  { cwd: testingConsumer, stdio: "pipe" },
 );
 const testing = execFileSync("cargo", ["run", "--offline", "--quiet"], {
   cwd: testingConsumer,
@@ -508,13 +528,13 @@ const testing = execFileSync("cargo", ["run", "--offline", "--quiet"], {
 })
   .toString()
   .trim();
-assert.equal(testing, "standalone idealis-testing consumer checked");
+assert.equal(testing, "standalone idealis-connect consumer checked");
 await writeFile(
   join(testingConsumer, "main.rs"),
   await readFile(
     join(
       testingConsumer,
-      `idealis-testing-${version}`,
+      `idealis-connect-${version}`,
       "examples",
       "schedule.rs",
     ),
@@ -551,7 +571,7 @@ assert.ok(
 assert.deepEqual(
   WebAssembly.Module.imports(
     await WebAssembly.compile(
-      new Uint8Array(await readFile(join(directory, "idealis-testing.wasm")))
+      new Uint8Array(await readFile(join(directory, "idealis-connect.wasm")))
         .buffer,
     ),
   ),
@@ -607,7 +627,7 @@ assert.ok(
       "rtlc",
       "rtla-compiler",
       "idealis-core",
-      "idealis-testing",
+      "idealis-connect",
       "z3",
       "z3-sys",
     ].includes(entry.name),
@@ -649,7 +669,8 @@ const result = {
     compilerCrate,
     rusmtCrate,
     ralloyCrate,
-    testingCrate,
+    connectCrate,
+    cliCrate,
     oracleCrate,
   ],
 };

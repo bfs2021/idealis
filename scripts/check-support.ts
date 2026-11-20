@@ -330,7 +330,17 @@ const scopes: readonly CrateScope[] = [
     ],
   },
   {
-    name: "idealis-testing",
+    name: "idealis-cli",
+    evidence: [
+      {
+        path: "src/main.rs",
+        topic:
+          "JSONLの各行を同じEngineへ渡し、応答を行単位でflushするnative実行口",
+      },
+    ],
+  },
+  {
+    name: "idealis-connect",
     evidence: [
       {
         path: "src/session.rs",

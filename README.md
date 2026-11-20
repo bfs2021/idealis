@@ -38,7 +38,7 @@
 | TLA+とSMTの相互運用          | 共通backend契約はあるが、値・式の変換と統合した検査経路は今後の対象。                   |
 | 埋め込みinvariant            | モデル状態のinvariant検査はある。各言語のソース注釈の抽出・VC生成は未実装。             |
 
-CLIは`idealis`、npm packageは`@mizchi/idealis`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。Quint Connectの接続方法とWhy3のfrontend/backend分離を参考にしており、両ツールの言語・APIとの互換実装を提供する段階ではない。
+npm の CLI は `idealis`、Rust の JSONL 実行口は `idealis-cli`。npm packageは`@mizchi/idealis`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。Quint Connectの接続方法とWhy3のfrontend/backend分離を参考にしており、両ツールの言語・APIとの互換実装を提供する段階ではない。
 
 ## 構成とライブラリの役割
 
@@ -54,7 +54,8 @@ roracleのrequest/report型はRustからTSへ生成する。Node向けnapi-rsは
 | [`idealis-core`](crates/idealis-core)       | TLA+ソース、IR、有限モデル、観測・履歴         | frontendとcheckerの接続、実装照合、履歴検査、再生とnative JSONL/Wasm境界。                 |
 | [`rusmt`](crates/rusmt)（旧idealis-smt）    | 対応するSMT-LIB式                              | 任意精度Intの差分制約とBool式。SATモデル、UNSAT、work切れのunknownを返す独立した試作。     |
 | [`ralloy`](crates/ralloy)                   | 静的なAlloyソースと有限scope                   | sig・二項関係・fact・assertの解析と、有限構造の列挙・instanceや反例の生成。                |
-| [`idealis-testing`](crates/idealis-testing) | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
+| [`idealis-cli`](crates/idealis-cli)         | JSONL の要求と実装の観測                       | idealis-connect のセッションを起動し、生成した操作列とモデル差分の判定を返す。             |
+| [`idealis-connect`](crates/idealis-connect) | 有限生成器、保存case、feedback、複数実装の観測 | 生成・縮小・差分比較・再生をRustで管理し、各言語のDriverへ評価を要求する。                 |
 | [`roracle`](crates/roracle)                 | 固定入力・独立したreference・実装callback      | 同じ登録で差分テスト・保存oracle再生・正しさを確認した比較ベンチを実行する。               |
 | [`@mizchi/idealis`](packages/idealis)       | TSのモデルとDriver、backendの入出力            | オラクル生成、適合性照合、差分・PBT、反例縮小、スケジューリングとCLI。                     |
 | [Go adapter](adapters/go)                   | 共通コアのWasmとGoのモデル・実装・履歴         | CGOなしでRustコアへ接続し、同じ値・オラクル・観測で照合と再生を行う。                      |
@@ -90,9 +91,9 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 [`ralloy`](crates/ralloy)は、静的なsig・二項field・関係演算・量化・run/checkを有限scope内で検査する独立crate。JVMやZ3に依存せず、nativeとホストimportのないWasmで同じ探索器を使う。Alloy AnalyzerのSAT変換、継承、時間・var、整数演算は未対応。`@mizchi/idealis/alloy`からWasmを読み、モデルの探索と実装の関係スナップショットの照合に使える。[利用手順](docs/alloy.md)と[評価手順](evals/experiments/alloy-subset/README.md)を参照。汎用backend契約とCLIへの接続は今後の対象。
 
-[`idealis-testing`](crates/idealis-testing)は、有限状態機械のPBT・縮小・差分比較・保存caseの再生を行う独立crate。TSは`@mizchi/idealis/testing`から同じWasmを使い、Vitest・node:test・ブラウザでDriverを動かす。[明示したactor列からのスケジュール生成](docs/testing.md#actorの操作順を制御する)も扱う。既存fast-check経路のStrategy/seed互換、任意threadの自動計装、全実行の証明は含めない。
+[`idealis-connect`](crates/idealis-connect)は、有限状態機械のPBT・縮小・差分比較・保存caseの再生を行う独立crate。TSは`@mizchi/idealis/testing`から同じWasmを使い、Vitest・node:test・ブラウザでDriverを動かす。[明示したactor列からのスケジュール生成](docs/testing.md#actorの操作順を制御する)も扱う。既存fast-check経路のStrategy/seed互換、任意threadの自動計装、全実行の証明は含めない。
 
-[`roracle`](crates/roracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-testingと併用する。
+[`roracle`](crates/roracle)は、Rustの`#[test]`からcaseと複数実装を登録し、差分検査と比較ベンチで共有する。保存したオラクルへの再生と、測定中の結果変化の検出を扱う。PBT・縮小はidealis-connectと併用する。
 
 開発用の[構造付きfuzzing](evals/experiments/structured-fuzz/README.md)では、testing protocolと保存caseをASanで検査し、保存corpusをnative/Wasmで再生する。到達性、状態破損の対照、実行予算と採用範囲は[0039の評価](evals/iterations/0039-structured-fuzz.md)に記録した。
 
@@ -286,7 +287,7 @@ TS / Rust の共通コアは `./portable`。同じ Rust ソースを native と 
 
 検査器は独立した[`rtlc` crate](crates/rtlc)へ分離した。IR・値評価・探索・temporal/fairness・native並列化を持ち、idealis-coreへの依存はない。idealis-coreは実装照合・履歴・host・縮小と既存Wasm/JSONL adapterを担当する。`just rtlc-test` / `just rtlc-example`で単独利用を検査し、`just package`で両crateと単独consumerを確認できる。
 
-構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で8つのcrateとWasmの配布物を確認できる。
+構文解析は独立した[`rtla` crate](crates/rtla)、ASTからIRへの変換は[`rtla-compiler`](crates/rtla-compiler)が担当する。[Rust frontend](docs/rust-frontend.md)の`compileTlaSource` / `checkTlaSource`で、ブラウザでもtla-tsなしでソースの解析・変換・検査を実行できる。既存の`compileTlaSafety`はtla-tsを使う比較対象として残す。`just compiler-test` / `just compiler-eval <新規run>`で検査し、`just package`で9つのcrateとWasmの配布物を確認できる。
 
 [Apalacheとの比較](docs/apalache-comparison.md)は、SMTによる有界検査とrtlcの状態列挙の保証を分け、同じ6条件の起動込み時間と反例を記録する。小規模pilotを大規模モデルの速度順位へ一般化しない。
 

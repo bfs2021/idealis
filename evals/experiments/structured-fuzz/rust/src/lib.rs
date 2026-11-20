@@ -1,5 +1,5 @@
 use arbitrary::Unstructured;
-use idealis_testing::{Case, Effect, Engine, TestStatus, Verdict};
+use idealis_connect::{Case, Effect, Engine, TestStatus, Verdict};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -60,7 +60,7 @@ impl Audit {
         let expected = self.reference.dispatch(&bytes);
         assert_eq!(response, expected, "protocol state differs");
         if response["kind"] == "error" {
-            serde_json::from_value::<idealis_testing::Error>(response["error"].clone())
+            serde_json::from_value::<idealis_connect::Error>(response["error"].clone())
                 .expect("named protocol/resource error");
             self.report.errors += 1;
             self.reference = Engine::default();

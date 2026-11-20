@@ -23,7 +23,7 @@
 
 ## 非対応・対象外
 
-- [ ] PBTの生成器・縮小・seed互換。idealis-testingの役割であり、このcrateでは提供しない。
+- [ ] PBTの生成器・縮小・seed互換。idealis-connectの役割であり、このcrateでは提供しない。
 - [ ] solverやcheckerの内蔵、自動的な観測の正規化、任意言語のbinding。
 - [ ] 信頼区間・統計検定・Criterion互換のrunner/proc macro、並列測定やsharding。
 - [ ] callbackのtimeout・panic捕捉・プロセス隔離、共有可変入力の検出、保存データの真正性検証。

@@ -12,7 +12,7 @@ for (const [crate, manifest] of [
   ["idealis-core", "manifest.json"],
   ["rtla", "rtla-manifest.json"],
   ["ralloy", "ralloy-manifest.json"],
-  ["idealis-testing", "idealis-testing-manifest.json"],
+  ["idealis-connect", "idealis-connect-manifest.json"],
 ] as const) {
   const binary = await readFile(
     `crates/${crate}/target/wasm32-unknown-unknown/release/${crate.replaceAll("-", "_")}.wasm`,

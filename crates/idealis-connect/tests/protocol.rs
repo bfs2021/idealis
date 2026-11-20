@@ -1,4 +1,4 @@
-use idealis_testing::{Engine, ErrorKind, Generator, Plan, Session};
+use idealis_connect::{Engine, ErrorKind, Generator, Plan, Session};
 use serde_json::{Value, json};
 
 fn request(engine: &mut Engine, request: Value) -> Value {

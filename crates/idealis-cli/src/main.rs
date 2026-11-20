@@ -1,6 +1,6 @@
 use std::io::{self, BufRead, Write};
 fn main() {
-    let mut engine = idealis_testing::Engine::default();
+    let mut engine = idealis_connect::Engine::default();
     let mut output = io::BufWriter::new(io::stdout().lock());
     for input in io::stdin().lock().lines() {
         let input = input.expect("read request");

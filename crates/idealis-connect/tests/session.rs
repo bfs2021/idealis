@@ -1,4 +1,4 @@
-use idealis_testing::{Effect, Generator, Plan, Session, ShrinkStatus, TestStatus, Verdict};
+use idealis_connect::{Effect, Generator, Plan, Session, ShrinkStatus, TestStatus, Verdict};
 use serde_json::json;
 
 fn generator() -> Generator {
@@ -14,7 +14,7 @@ fn plan() -> Plan {
         max_work: 100_000,
     }
 }
-fn case(actions: serde_json::Value) -> idealis_testing::Case {
+fn case(actions: serde_json::Value) -> idealis_connect::Case {
     serde_json::from_value(json!({"format":"idealis.test-case","version":1,"rng":"xorshift32-v1","generatorId":"counter-actions","generatorVersion":"1","seed":1,"index":0,"actions":actions})).unwrap()
 }
 fn evaluate(actions: &[serde_json::Value]) -> Verdict {
@@ -45,7 +45,7 @@ fn evaluate(actions: &[serde_json::Value]) -> Verdict {
 fn run(
     session: &mut Session,
     evaluate: impl Fn(&[serde_json::Value]) -> Verdict,
-) -> idealis_testing::TestResult {
+) -> idealis_connect::TestResult {
     loop {
         match session.effect() {
             Effect::Evaluate { id, case, .. } => {

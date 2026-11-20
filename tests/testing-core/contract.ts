@@ -33,7 +33,7 @@ export const registerContract = (
   test("portable property sessions require valid cases and preserve unknown and host errors", async () => {
     const runtime = await createTestingWasm(
       await readFile(
-        "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+        "crates/idealis-connect/target/wasm32-unknown-unknown/release/idealis_connect.wasm",
       ),
     );
     const passed = await runtime.property(plan(), () => ({
@@ -86,7 +86,7 @@ export const registerContract = (
   test("a callback can compare values while nested property sessions are rejected", async () => {
     const runtime = await createTestingWasm(
       await readFile(
-        "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
+        "crates/idealis-connect/target/wasm32-unknown-unknown/release/idealis_connect.wasm",
       ),
     );
     const result = await runtime.property({ ...plan(), cases: 1 }, async () => {

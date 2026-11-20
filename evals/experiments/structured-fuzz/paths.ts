@@ -1,7 +1,7 @@
 export const nativePath =
   "evals/experiments/structured-fuzz/rust/target/release/idealis-fuzz-eval";
 export const wasmPath =
-  "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm";
+  "crates/idealis-connect/target/wasm32-unknown-unknown/release/idealis_connect.wasm";
 export const fuzzRoot = "evals/experiments/structured-fuzz/fuzz";
 export const nightly = "nightly-2026-08-27";
 export const fuzzBinary = (target: "raw" | "structured"): string =>

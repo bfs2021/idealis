@@ -43,7 +43,11 @@ const artifacts = async (
   ).flat();
 };
 // Frozen snapshots keep the executable under the suite name used when recorded.
-const suiteId = (id: string) => (id === "idealis-smt" ? "rusmt" : id);
+const renamedSuites = new Map([
+  ["idealis-smt", "rusmt"],
+  ["idealis-testing", "idealis-connect"],
+]);
+const suiteId = (id: string) => renamedSuites.get(id) ?? id;
 const readSnapshot = async (directory: string): Promise<Snapshot> => {
   const snapshot: Snapshot = JSON.parse(
     await readFile(join(directory, "manifest.json"), "utf8"),

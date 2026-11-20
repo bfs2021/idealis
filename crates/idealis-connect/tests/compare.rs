@@ -1,4 +1,4 @@
-use idealis_testing::{ComparisonStatus, Observation, Target, compare};
+use idealis_connect::{ComparisonStatus, Observation, Target, compare};
 use serde_json::json;
 
 fn value(id: &str, value: serde_json::Value) -> Target {

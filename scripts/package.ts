@@ -28,14 +28,15 @@ const crates = [
   "idealis-core",
   "rusmt",
   "ralloy",
-  "idealis-testing",
+  "idealis-connect",
+  "idealis-cli",
   "roracle",
 ];
 for (const name of crates) {
   await mkdir(resolve(workspace, name));
   for (const file of [
     "src",
-    "examples",
+    ...(name === "idealis-cli" ? [] : ["examples"]),
     "tests",
     "Cargo.toml",
     "Cargo.lock",
@@ -93,8 +94,8 @@ for (const file of [
   "rtla-manifest.json",
   "ralloy.wasm",
   "ralloy-manifest.json",
-  "idealis-testing.wasm",
-  "idealis-testing-manifest.json",
+  "idealis-connect.wasm",
+  "idealis-connect-manifest.json",
 ]) {
   await copyFile(
     resolve(packageDir, "assets", file),
@@ -110,5 +111,5 @@ await writeFile(
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(smt).digest("hex"), bytes: smt.length }, null, 2)}\n`,
 );
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/rusmt/ralloy/idealis-testing/roracle Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/rusmt/ralloy/idealis-connect/idealis-cli/roracle Cargo and Wasm artifacts: ${target}`,
 );

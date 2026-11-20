@@ -37,14 +37,14 @@ const cases = [
   },
   {
     id: "testing-clean",
-    crate: "idealis-testing",
+    crate: "idealis-connect",
     expected: "supports",
     remove: null,
     addition: null,
   },
   {
     id: "testing-scalar",
-    crate: "idealis-testing",
+    crate: "idealis-connect",
     expected: "contradicts",
     remove:
       "- [ ] scalar値の縮小、任意の高階Strategy、Proptest/fast-checkのStrategyやseedとの互換性。",

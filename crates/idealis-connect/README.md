@@ -1,4 +1,4 @@
-# idealis-testing
+# idealis-connect
 
 [対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
 
@@ -36,7 +36,7 @@ SUTはホストが指定actorを1操作ずつ進める。threadやawaitの自動
 
 ## nativeとWasm
 
-binaryはversion=1のJSONLを扱う。requestのkindはschedule、property、shrink、replay、resume、cancel、compare。scheduleは`{ kind: "schedule", schedule: ... }`へ`{ kind: "generator", generator: ... }`を返す。property/shrink/replayは同時に1セッションだけ実行し、cancelで解放する。schedule/compareは進行中のセッションとは独立。無効なrequestやfeedback IDは進行中の要求を消費しない。
+[idealis-cli](../idealis-cli/README.md)はこのライブラリのEngineを起動し、version=1のJSONLを扱う。requestのkindはschedule、property、shrink、replay、resume、cancel、compare。scheduleは`{ kind: "schedule", schedule: ... }`へ`{ kind: "generator", generator: ... }`を返す。property/shrink/replayは同時に1セッションだけ実行し、cancelで解放する。schedule/compareは進行中のセッションとは独立。無効なrequestやfeedback IDは進行中の要求を消費しない。
 
 Wasm ABI v1はtesting_abi_version、testing_input_resize、testing_dispatch、testing_output_ptr、testing_output_len。ホストは同じJSONを渡す。並列に実行する場合はworkerごとに別runtimeを使う。
 

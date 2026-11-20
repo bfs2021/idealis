@@ -1,4 +1,4 @@
-use idealis_testing::{
+use idealis_connect::{
     ActionEdge, Case, Effect, Generator, Plan, Session, ShrinkStatus, TestStatus, Verdict,
 };
 use std::collections::BTreeMap;
@@ -32,7 +32,7 @@ fn evaluate(case: &Case) -> Verdict {
     }
 }
 
-fn main() -> Result<(), idealis_testing::Error> {
+fn main() -> Result<(), idealis_connect::Error> {
     let generator = Generator {
         id: "counter".into(),
         version: "1".into(),
@@ -87,6 +87,6 @@ fn main() -> Result<(), idealis_testing::Error> {
         panic!("replay result")
     };
     assert_eq!(result.status, TestStatus::Failed);
-    println!("standalone idealis-testing consumer checked");
+    println!("standalone idealis-connect consumer checked");
     Ok(())
 }

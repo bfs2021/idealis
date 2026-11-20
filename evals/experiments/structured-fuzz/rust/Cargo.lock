@@ -13,13 +13,13 @@ name = "idealis-fuzz-eval"
 version = "0.0.0"
 dependencies = [
  "arbitrary",
- "idealis-testing",
+ "idealis-connect",
  "serde",
  "serde_json",
 ]
 
 [[package]]
-name = "idealis-testing"
+name = "idealis-connect"
 version = "0.1.0-alpha.0"
 dependencies = [
  "serde",

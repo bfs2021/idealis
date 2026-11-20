@@ -66,7 +66,7 @@ nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`
 
 ## 対応範囲
 
-[`idealis-testing`](../idealis-testing)は有限生成器・feedback・縮小を管理する。このcrateは固定入力に対する実装登録・照合・測定・reportを担当する。生成したcaseを`case`へ登録して併用できる。自動PBT、縮小、並列実行、プロセス隔離、任意言語のbindingはこのcrateには含まない。[対応チェックリスト](SUPPORT.md)を参照。
+[`idealis-connect`](../idealis-connect)は有限生成器・feedback・縮小を管理する。このcrateは固定入力に対する実装登録・照合・測定・reportを担当する。生成したcaseを`case`へ登録して併用できる。自動PBT、縮小、並列実行、プロセス隔離、任意言語のbindingはこのcrateには含まない。[対応チェックリスト](SUPPORT.md)を参照。
 
 ## 観測batchのJSON境界
 

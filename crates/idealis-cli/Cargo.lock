@@ -3,7 +3,15 @@
 version = 4
 
 [[package]]
-name = "idealis-testing"
+name = "idealis-cli"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "idealis-connect",
+ "serde_json",
+]
+
+[[package]]
+name = "idealis-connect"
 version = "0.1.0-alpha.0"
 dependencies = [
  "serde",

@@ -4,10 +4,9 @@ import {
 } from "../../../packages/idealis/src/testing.js";
 import { processClient } from "../smt-subset/clients.js";
 
-export const nativePath =
-  "crates/idealis-testing/target/release/idealis-testing";
+export const nativePath = "crates/idealis-cli/target/release/idealis-cli";
 export const wasmPath =
-  "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm";
+  "crates/idealis-connect/target/wasm32-unknown-unknown/release/idealis_connect.wasm";
 export const createNative = () => {
   const client = processClient(nativePath, [], true);
   const exchanges: { request: TestingRequest; response: unknown }[] = [];

@@ -71,7 +71,7 @@
       "types": "./dist/src/testing.d.ts",
       "default": "./dist/src/testing.js"
     },
-    "./testing.wasm": "./assets/idealis-testing.wasm"
+    "./testing.wasm": "./assets/idealis-connect.wasm"
   },
   "repository": {
     "type": "git",
@@ -81,7 +81,14 @@
   "files": [
     "dist/src",
     "dist/cli",
-    "assets",
+    "assets/idealis-core.wasm",
+    "assets/manifest.json",
+    "assets/rtla.wasm",
+    "assets/rtla-manifest.json",
+    "assets/ralloy.wasm",
+    "assets/ralloy-manifest.json",
+    "assets/idealis-connect.wasm",
+    "assets/idealis-connect-manifest.json",
     "README.md",
     "LICENSE",
     "docs"

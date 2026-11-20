@@ -1,6 +1,6 @@
-use idealis_testing::{Effect, Plan, Schedule, ScheduleActor, Session, TestStatus, Verdict};
+use idealis_connect::{Effect, Plan, Schedule, ScheduleActor, Session, TestStatus, Verdict};
 
-fn main() -> Result<(), idealis_testing::Error> {
+fn main() -> Result<(), idealis_connect::Error> {
     let generator = Schedule {
         id: "consumer-schedule".into(),
         version: "1".into(),

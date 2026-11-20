@@ -126,8 +126,8 @@ export const catalog = (): readonly Suite[] => {
         })),
     },
     {
-      id: "idealis-testing",
-      binary: "crates/idealis-testing/target/release/idealis-testing",
+      id: "idealis-connect",
+      binary: "crates/idealis-cli/target/release/idealis-cli",
       cases: [1, 32].map((count) => ({
         id: `allowed-${count}`,
         request: {

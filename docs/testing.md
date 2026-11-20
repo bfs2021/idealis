@@ -1,6 +1,6 @@
 # RustとWasmでPBT・差分テストを駆動する
 
-`idealis-testing`は生成・縮小・再生の状態をRustで管理し、ホストへcaseの評価を要求する。TSでは`@mizchi/idealis/testing`から使う。SUTの初期化・操作・障害注入・観測は各言語のDriverが担当する。Node、テストランナー、形式仕様のbackendはコアの依存に含めない。
+`idealis-connect`は生成・縮小・再生の状態をRustで管理し、ホストへcaseの評価を要求する。TSでは`@mizchi/idealis/testing`から使う。SUTの初期化・操作・障害注入・観測は各言語のDriverが担当する。Node、テストランナー、形式仕様のbackendはコアの依存に含めない。
 
 ## TSから使う
 
@@ -111,7 +111,7 @@ JSONでは配列順を保持し、objectのfield順を無視する。値はplain
 
 ## nativeの接続と並列実行
 
-Rustは`Session::property/shrink/replay`を作り、Evaluateをホストで実行して`resume`へ返す。[単独Rust consumer](../crates/idealis-testing/examples/counter.rs)を参照。native binaryは同じJSONL protocolを提供する。TSの別transportは`createTestingRuntime(dispatch)`へ接続できる。[native接続例](../evals/experiments/testing-core/clients.ts)を参照。
+Rustは`Session::property/shrink/replay`を作り、Evaluateをホストで実行して`resume`へ返す。[単独Rust consumer](../crates/idealis-connect/examples/counter.rs)を参照。Rustの `idealis-cli` は同じJSONL protocolを提供する。TSの別transportは`createTestingRuntime(dispatch)`へ接続できる。[native接続例](../evals/experiments/testing-core/clients.ts)を参照。
 
 1 runtimeは1つのproperty/shrink/replay sessionを所有する。並列workerには別runtimeを作る。比較は進行中のsessionと独立して呼べる。既存の`@mizchi/idealis/property`はfast-checkを使う経路として残す。Strategyやseed/pathは新APIと互換ではない。
 

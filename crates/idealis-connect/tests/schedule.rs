@@ -1,4 +1,4 @@
-use idealis_testing::{Engine, ErrorKind, Generator, Schedule, ScheduleActor};
+use idealis_connect::{Engine, ErrorKind, Generator, Schedule, ScheduleActor};
 use serde_json::{Value, json};
 
 fn schedule(actors: usize) -> Schedule {

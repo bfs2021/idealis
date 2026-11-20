@@ -1,6 +1,6 @@
 # 明示した並行スケジュールの評価
 
-`idealis-testing`のScheduleをnative/Wasmで構築し、TSのasync generatorとチャネルでgateした実Rust threadを同じactor順で進める。対象は2/3 actorによる既知のlost updateと正常なincrement。期待値は完了したwrite数で、SUTの観測を転用しない。
+`idealis-connect`のScheduleをnative/Wasmで構築し、TSのasync generatorとチャネルでgateした実Rust threadを同じactor順で進める。対象は2/3 actorによる既知のlost updateと正常なincrement。期待値は完了したwrite数で、SUTの観測を転用しない。
 
 ```sh
 just controlled-test
