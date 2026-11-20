@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { catalog } from "./catalog.js";
+import { costWorkerFiles } from "./worker-files.js";
 
 const output = process.argv[2];
 const parent = process.argv[3];
@@ -12,7 +13,6 @@ const runner = resolve(
   "evals/workspace-oracle/rust/target/release/workspace-oracle",
 );
 const worker = resolve("dist/evals/workspace-oracle/cost-worker.js");
-const wasm = "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm";
 const digest = (bytes: Uint8Array) =>
   createHash("sha256").update(bytes).digest("hex");
 const save = async (name: string, value: unknown) =>
@@ -85,14 +85,9 @@ if (parent) {
   const fingerprints = await Promise.all(
     [
       runner,
-      worker,
-      wasm,
       process.execPath,
       "evals/workspace-oracle/cost.ts",
-      "dist/evals/workspace-oracle/node.js",
-      "dist/evals/workspace-oracle/snapshot.js",
-      "dist/evals/workspace-oracle/wasm.js",
-      "dist/src/trace.js",
+      ...costWorkerFiles,
     ].map(async (path) => ({ path, sha256: digest(await readFile(path)) })),
   );
   await save("manifest.json", { plan: "0052", fingerprints });

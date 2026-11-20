@@ -24,6 +24,7 @@ assert.ok(root && output);
 assert.ok(mode === "profile" || mode === "measure");
 const directory = resolve(output);
 const frozen = resolve(root);
+process.env.IDEALIS_ORACLE_BACKEND = "wasm";
 await mkdir(directory);
 const save = async (name: string, value: unknown) =>
   writeFile(join(directory, name), `${JSON.stringify(value, null, 2)}\n`, {

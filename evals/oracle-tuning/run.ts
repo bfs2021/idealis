@@ -5,6 +5,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { cpus, totalmem } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { catalog } from "../workspace-oracle/catalog.js";
+import { costWorkerFiles } from "../workspace-oracle/worker-files.js";
 
 const digest = (bytes: Uint8Array | string) =>
   createHash("sha256").update(bytes).digest("hex");
@@ -31,14 +32,7 @@ if (command === "freeze") {
   await mkdir(dirname(first), { recursive: true });
   await mkdir(first);
   const files = await Promise.all(
-    [
-      "dist/evals/workspace-oracle/node.js",
-      "dist/evals/workspace-oracle/snapshot.js",
-      "dist/evals/workspace-oracle/wasm.js",
-      "dist/evals/workspace-oracle/cost-worker.js",
-      "dist/src/trace.js",
-      "crates/oracle/target/wasm32-unknown-unknown/release/roracle.wasm",
-    ].map(async (path) => {
+    costWorkerFiles.map(async (path) => {
       const bytes = await readFile(path);
       await mkdir(dirname(join(first, path)), { recursive: true });
       await writeFile(join(first, path), bytes, { flag: "wx" });
@@ -87,6 +81,8 @@ if (command === "freeze") {
     "--exclude-standard",
     "crates/oracle",
     "evals/workspace-oracle",
+    "evals/roracle-native/client.ts",
+    "evals/roracle-native/canonical.ts",
     "evals/oracle-tuning",
     "evals/plans/0054-oracle-bench-tuning.md",
   ])

@@ -47,7 +47,8 @@ jobs:
       - run: cargo fmt --manifest-path evals/workspace-oracle/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml -- -D warnings
       - run: cargo test --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
-      - run: node --test dist/evals/workspace-oracle/contract-test.js dist/evals/oracle-tuning/wasm-test.js
+      - run: cargo build --release --locked --manifest-path evals/workspace-oracle/rust/Cargo.toml
+      - run: node --test dist/evals/workspace-oracle/contract-test.js
       - run: cargo fmt --manifest-path evals/oracle-comparison/rust/Cargo.toml -- --check
       - run: cargo clippy --all-targets --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml -- -D warnings
       - run: cargo build --release --locked --manifest-path evals/oracle-comparison/rust/Cargo.toml
@@ -89,6 +90,7 @@ jobs:
       - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-core/Cargo.toml -- -D warnings
       - run: pnpm portable:build
       - run: pnpm rtla:build
+      - run: node --test dist/evals/oracle-tuning/wasm-test.js
       - run: node --test dist/evals/rtla-compatibility/contract-test.js dist/evals/symbolic-operators/contract-test.js
       - run: cargo build --locked --manifest-path crates/rtla-compiler/Cargo.toml --example analysis_roles
       - run: node --test dist/evals/tlc-differential/analysis-parity-test.js dist/evals/tlc-differential/frame-decoder-test.js dist/evals/p0-checker/contract-test.js

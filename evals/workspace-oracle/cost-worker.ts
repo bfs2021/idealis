@@ -3,6 +3,7 @@ import { isDeepStrictEqual } from "node:util";
 import { compareOracle } from "./node.js";
 
 const mode = process.argv[2];
+process.env.IDEALIS_ORACLE_BACKEND = "wasm";
 if (mode !== "legacy" && mode !== "oracle")
   throw new Error("Expected legacy/oracle mode");
 for await (const line of createInterface({ input: process.stdin })) {
