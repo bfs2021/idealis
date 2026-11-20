@@ -2,9 +2,9 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { setImmediate } from "node:timers/promises";
-import { build } from "esbuild";
 import type { Driver, Model } from "../../../packages/idealis/src/contracts.js";
 import { isRecord } from "../../../packages/idealis/src/trace.js";
+import { bundleModule } from "../../../scripts/bundle-module.js";
 
 export type MutexAction =
   | { readonly type: "acquire"; readonly id: string }
@@ -106,18 +106,11 @@ export const loadMutex = async (
       .digest("hex");
     if (actual !== file.sha256) throw new Error("Upstream fixture changed");
   }
-  const compiled = await build({
-    entryPoints: [join(root, revision, "Mutex.ts")],
-    bundle: true,
-    write: false,
-    format: "esm",
+  const compiled = await bundleModule(join(root, revision, "Mutex.ts"), {
     platform: "node",
-    target: "node24",
   });
-  const output = compiled.outputFiles[0];
-  if (!output) throw new Error("Missing upstream bundle");
   const module: unknown = await import(
-    `data:text/javascript;base64,${Buffer.from(output.contents).toString("base64")}`
+    `data:text/javascript;base64,${Buffer.from(compiled.code).toString("base64")}`
   );
   if (!isRecord(module) || typeof module.default !== "function")
     throw new Error("Invalid upstream constructor");

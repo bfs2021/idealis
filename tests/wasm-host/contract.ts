@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import { build } from "esbuild";
+import { isBuiltin } from "node:module";
 import { init, killThreads } from "z3-solver";
 import {
   config,
   names,
 } from "../../evals/experiments/quint-generated/cases.js";
+import { bundleModule } from "../../scripts/bundle-module.js";
 import { binaries, withAssets } from "./assets.js";
 
 export const registerWasmHostContract = (
@@ -35,18 +36,11 @@ export const registerWasmHostContract = (
       "tests/smt-scripts/browser-entry.ts",
       "tests/alloy-instance/browser-entry.ts",
     ]) {
-      const result = await build({
-        entryPoints: [entry],
-        platform: "browser",
-        bundle: true,
-        format: "esm",
-        write: false,
-        metafile: true,
-      });
-      assert.ok(result.outputFiles[0]?.contents.length, entry);
+      const result = await bundleModule(entry);
+      assert.ok(result.code.length, entry);
       assert.equal(
-        Object.keys(result.metafile.inputs).some((name) =>
-          name.startsWith("node:"),
+        result.inputs.some(
+          (name) => isBuiltin(name) || name.includes("__vite-browser-external"),
         ),
         false,
         entry,

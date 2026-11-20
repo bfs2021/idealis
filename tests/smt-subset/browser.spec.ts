@@ -1,20 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
+import { bundleModule } from "../../scripts/bundle-module.js";
 
 test("pure Rust SMT subset runs in Chromium without cross-origin isolation", async ({
   page,
 }) => {
-  const bundle = await build({
-    entryPoints: ["tests/smt-subset/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/smt-subset/browser-entry.ts", {
     globalName: "smtSubset",
-    write: false,
   });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing browser bundle");
   const wasm = await readFile(
     "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
   );
@@ -22,8 +15,8 @@ test("pure Rust SMT subset runs in Chromium without cross-origin isolation", asy
     const path = new URL(route.request().url()).pathname;
     if (path === "/bundle.js")
       await route.fulfill({
-        contentType: "application/javascript",
-        body: javascript.text,
+        contentType: "application/javascript; charset=utf-8",
+        body: bundle.code,
       });
     else if (path === "/subset.wasm")
       await route.fulfill({ contentType: "application/wasm", body: wasm });

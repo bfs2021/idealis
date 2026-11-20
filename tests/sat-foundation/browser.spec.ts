@@ -1,32 +1,28 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
 import {
   nativeReplies,
   wasmPath,
 } from "../../evals/experiments/sat-foundation/native.js";
 import { validate } from "../../evals/experiments/sat-foundation/oracle.js";
+import { bundleModule } from "../../scripts/bundle-module.js";
 import type { run } from "./browser-entry.js";
 
 test("Varisat solves CNF in Chromium without host imports or isolation", async ({
   page,
 }, info) => {
-  const bundle = await build({
-    entryPoints: ["tests/sat-foundation/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/sat-foundation/browser-entry.ts", {
     globalName: "satEval",
-    write: false,
   });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing SAT browser bundle");
   const wasm = await readFile(wasmPath);
   await page.route("http://sat.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     await route.fulfill(
       path === "/bundle.js"
-        ? { contentType: "application/javascript", body: javascript.text }
+        ? {
+            contentType: "application/javascript; charset=utf-8",
+            body: bundle.code,
+          }
         : path === "/sat.wasm"
           ? { contentType: "application/wasm", body: wasm }
           : {

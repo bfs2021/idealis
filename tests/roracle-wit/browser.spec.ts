@@ -1,30 +1,18 @@
-import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { expect, test } from "@playwright/test";
+import { bundleModule } from "../../scripts/bundle-module.js";
 
 test("pure WIT binding runs the same full reports in Chromium", async ({
   page,
 }) => {
-  execFileSync(
-    "pnpm",
-    [
-      "exec",
-      "esbuild",
-      "tests/roracle-wit/browser-entry.ts",
-      "--bundle",
-      "--platform=browser",
-      "--format=esm",
-      "--outfile=.artifacts/typed-oracle-browser.js",
-    ],
-    { stdio: "pipe" },
-  );
+  const bundle = await bundleModule("tests/roracle-wit/browser-entry.ts");
   const files = new Map([
     [
       "/entry.js",
       {
-        type: "text/javascript",
-        bytes: await readFile(".artifacts/typed-oracle-browser.js"),
+        type: "text/javascript; charset=utf-8",
+        bytes: Buffer.from(bundle.code),
       },
     ],
     [

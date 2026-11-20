@@ -1,29 +1,26 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
 import { createSut } from "../../evals/experiments/controlled-schedules/clients.js";
 import { wasmPath } from "../../evals/experiments/testing-core/clients.js";
+import { bundleModule } from "../../scripts/bundle-module.js";
 import type { run } from "./browser-entry.js";
 
 test("controls, shrinks and replays async actors without browser isolation", async ({
   page,
 }, info) => {
-  const bundle = await build({
-    entryPoints: ["tests/controlled-schedules/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
-    globalName: "schedules",
-    write: false,
-  });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing schedule bundle");
+  const bundle = await bundleModule(
+    "tests/controlled-schedules/browser-entry.ts",
+    { globalName: "schedules" },
+  );
   const wasm = await readFile(wasmPath);
   await page.route("http://schedules.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     await route.fulfill(
       path === "/bundle.js"
-        ? { contentType: "application/javascript", body: javascript.text }
+        ? {
+            contentType: "application/javascript; charset=utf-8",
+            body: bundle.code,
+          }
         : path === "/testing.wasm"
           ? { contentType: "application/wasm", body: wasm }
           : {

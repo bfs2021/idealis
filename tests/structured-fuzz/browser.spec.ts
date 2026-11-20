@@ -1,12 +1,12 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
 import {
   type AuditRecord,
   createAudit,
 } from "../../evals/experiments/structured-fuzz/clients.js";
 import { regression } from "../../evals/experiments/structured-fuzz/corpus.js";
 import { wasmPath } from "../../evals/experiments/structured-fuzz/paths.js";
+import { bundleModule } from "../../scripts/bundle-module.js";
 import type { run } from "./browser-entry.js";
 
 test("replays rejected requests, saved cases and feedback phases in Chromium", async ({
@@ -19,22 +19,18 @@ test("replays rejected requests, saved cases and feedback phases in Chromium", a
   } finally {
     await audit.close();
   }
-  const bundle = await build({
-    entryPoints: ["tests/structured-fuzz/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/structured-fuzz/browser-entry.ts", {
     globalName: "fuzzReplay",
-    write: false,
   });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing fuzz replay bundle");
   const wasm = await readFile(wasmPath);
   await page.route("http://fuzz.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     await route.fulfill(
       path === "/bundle.js"
-        ? { contentType: "application/javascript", body: javascript.text }
+        ? {
+            contentType: "application/javascript; charset=utf-8",
+            body: bundle.code,
+          }
         : path === "/testing.wasm"
           ? { contentType: "application/wasm", body: wasm }
           : path === "/cases.json"

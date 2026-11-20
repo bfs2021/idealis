@@ -1,20 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
+import { bundleModule } from "../../scripts/bundle-module.js";
 
 test("workspace snapshots use the actual oracle JSON ABI in Chromium", async ({
   page,
 }) => {
-  const bundle = await build({
-    entryPoints: ["tests/workspace-oracle/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/workspace-oracle/browser-entry.ts", {
     globalName: "workspaceOracle",
-    write: false,
   });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing oracle bundle");
   const bytes = await readFile(
     "crates/roracle/target/wasm32-unknown-unknown/release/roracle.wasm",
   );
@@ -27,7 +20,10 @@ test("workspace snapshots use the actual oracle JSON ABI in Chromium", async ({
       path === "/wire.wasm"
         ? { contentType: "application/wasm", body: bytes }
         : path === "/bundle.js"
-          ? { contentType: "application/javascript", body: javascript.text }
+          ? {
+              contentType: "application/javascript; charset=utf-8",
+              body: bundle.code,
+            }
           : {
               contentType: "text/html",
               body: '<!doctype html><script src="/bundle.js"></script>',

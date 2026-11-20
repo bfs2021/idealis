@@ -1,20 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
+import { bundleModule } from "../../scripts/bundle-module.js";
 
 test("public Alloy adapter checks an observed instance in Chromium", async ({
   page,
 }) => {
-  const bundle = await build({
-    entryPoints: ["tests/alloy-instance/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/alloy-instance/browser-entry.ts", {
     globalName: "ralloy",
-    write: false,
   });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing browser bundle");
   const wasm = await readFile(
     "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
   );
@@ -22,7 +15,10 @@ test("public Alloy adapter checks an observed instance in Chromium", async ({
     const path = new URL(route.request().url()).pathname;
     await route.fulfill(
       path === "/bundle.js"
-        ? { contentType: "application/javascript", body: javascript.text }
+        ? {
+            contentType: "application/javascript; charset=utf-8",
+            body: bundle.code,
+          }
         : path === "/ralloy.wasm"
           ? { contentType: "application/wasm", body: wasm }
           : {

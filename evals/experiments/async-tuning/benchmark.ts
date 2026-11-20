@@ -1,8 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
-import { build } from "esbuild";
 import { checkConformance } from "../../../packages/idealis/src/conformance.js";
 import type { PortableResult } from "../../../packages/idealis/src/contracts.js";
 import {
@@ -17,6 +15,7 @@ import {
   loadFiniteModel,
 } from "../../../packages/idealis/src/portable.js";
 import { isRecord } from "../../../packages/idealis/src/trace.js";
+import { bundleModule } from "../../../scripts/bundle-module.js";
 import { mutexModel, mutexRegression } from "../usable/mutex.js";
 import { digest } from "../usable/provenance.js";
 import { createOracle } from "./oracle.js";
@@ -164,21 +163,12 @@ export const benchmark = async () => {
     await readFile("fixtures/trace-buffer-before.json", "utf8"),
   );
   assert.equal(digest(beforeSource), baseline.sha256);
-  const bundled = await build({
-    stdin: {
-      contents: beforeSource,
-      resolveDir: resolve("packages/idealis/src"),
-      loader: "ts",
-    },
-    bundle: true,
-    write: false,
-    format: "esm",
-    platform: "node",
-  });
-  const javascript = bundled.outputFiles[0];
-  assert.ok(javascript);
+  const bundled = await bundleModule(
+    "packages/idealis/src/trace-buffer-before.ts",
+    { source: beforeSource, platform: "node" },
+  );
   const previous: unknown = await import(
-    `data:text/javascript;base64,${Buffer.from(javascript.contents).toString("base64")}`
+    `data:text/javascript;base64,${Buffer.from(bundled.code).toString("base64")}`
   );
   assert.ok(
     isRecord(previous) && typeof previous.checkConformance === "function",

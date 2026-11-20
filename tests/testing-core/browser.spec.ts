@@ -1,20 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
+import { bundleModule } from "../../scripts/bundle-module.js";
 
 test("public testing runtime generates, shrinks and replays real counter failures", async ({
   page,
 }) => {
-  const bundle = await build({
-    entryPoints: ["tests/testing-core/browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/testing-core/browser-entry.ts", {
     globalName: "testing",
-    write: false,
   });
-  const javascript = bundle.outputFiles[0];
-  if (!javascript) throw new Error("Missing browser bundle");
   const wasm = await readFile(
     "crates/idealis-testing/target/wasm32-unknown-unknown/release/idealis_testing.wasm",
   );
@@ -22,7 +15,10 @@ test("public testing runtime generates, shrinks and replays real counter failure
     const path = new URL(route.request().url()).pathname;
     await route.fulfill(
       path === "/bundle.js"
-        ? { contentType: "application/javascript", body: javascript.text }
+        ? {
+            contentType: "application/javascript; charset=utf-8",
+            body: bundle.code,
+          }
         : path === "/testing.wasm"
           ? { contentType: "application/wasm", body: wasm }
           : {

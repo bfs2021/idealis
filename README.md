@@ -364,7 +364,7 @@ assert.equal(diff.status, "matched");
 
 コアを import してもソルバーは読み込まれない。通常CIはNodeのWebAssemblyで23件の共有契約をNode test runnerとVitestから実行し、ブラウザ向けbundleも検査する。Web Worker輸送やcross-origin isolationなどの実ブラウザ互換性は、手動の[Browser compatibility workflow](.github/workflows/browser.yml)と`just browser`で確認する。Z3 のブラウザ実行には `z3-built.js` / `.wasm` の配信、SharedArrayBuffer、COOP/COEP ヘッダーが必要。
 
-`tla-ts@0.0.10` は Node/Bun 向け参照を含むため、ブラウザで通常の import をそのままバンドルすると失敗する。この試作では esbuild の `alias: { "node:zlib": "fflate" }`、`external: ["bun:jsc"]`、`define: { global: "globalThis" }` を使う。Bun 専用の動的 import はブラウザでは到達しない。TLA+ は既定の単一ワーカーで検査する。具体的な配信とビルドは [ブラウザテスト](tests/browser.spec.ts) を参照。
+`tla-ts@0.0.10` は Node/Bun 向け参照を含むため、ブラウザで通常の import をそのままバンドルすると失敗する。この試作では Vite+ の `resolve.alias: { "node:zlib": "fflate" }`、`build.rolldownOptions.external: ["bun:jsc"]`、`define: { global: "globalThis" }` を使う。Bun 専用の動的 import はブラウザでは到達しない。TLA+ は既定の単一ワーカーで検査する。具体的な配信とビルドは [ブラウザテスト](tests/browser.spec.ts) を参照。
 
 Z3 は `init()` の結果を `createSmtOracle(api)` に渡す。Node では利用後に `killThreads(api.em)` を呼ぶ。整数解を十進文字列で返し、無制限整数の精度を保つ。SMT-LIB の assertion を渡す API であり、任意の TS 関数を自動で記号実行する機能はない。
 

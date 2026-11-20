@@ -1,23 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { expect, test } from "@playwright/test";
-import { build } from "esbuild";
 import { cases } from "../evals/experiments/collections-temporal/cases.js";
 import { compileTlaSafety } from "../packages/idealis/src/tla-safety.js";
+import { bundleModule } from "../scripts/bundle-module.js";
 
 let server: Server | undefined;
 let origin: string;
 test.beforeAll(async () => {
-  const bundle = await build({
-    entryPoints: ["tests/portable-browser-entry.ts"],
-    bundle: true,
-    platform: "browser",
-    format: "iife",
+  const bundle = await bundleModule("tests/portable-browser-entry.ts", {
     globalName: "portableBrowser",
-    write: false,
   });
-  const output = bundle.outputFiles[0];
-  if (!output) throw new Error("Missing portable browser bundle");
   const wasm = await readFile(
     "crates/idealis-core/target/wasm32-unknown-unknown/release/idealis_core.wasm",
   );
@@ -70,7 +63,7 @@ test.beforeAll(async () => {
       request.url === "/core.wasm"
         ? "application/wasm"
         : request.url === "/bundle.js"
-          ? "text/javascript"
+          ? "text/javascript; charset=utf-8"
           : request.url === "/safety.json" || request.url === "/complex.json"
             ? "application/json"
             : "text/html",
@@ -79,7 +72,7 @@ test.beforeAll(async () => {
       request.url === "/core.wasm"
         ? wasm
         : request.url === "/bundle.js"
-          ? output.contents
+          ? Buffer.from(bundle.code)
           : request.url === "/safety.json"
             ? safety
             : request.url === "/complex.json"
