@@ -28,6 +28,16 @@ support-eval run: build
 support-replay run: build
   node dist/evals/experiments/crate-checklists/run.js {{quote(run)}} --replay
 
+[positional-arguments]
+connect-bindings model module template *options:
+  @node scripts/connect-bindings.ts "$@"
+
+connect-conformance-test: build
+  node --test dist/tests/connect/conformance.test.js
+
+connect-bindings-test:
+  node --test tests/connect/bindings.test.ts
+
 oracle-types:
   node --experimental-strip-types scripts/oracle-types.ts
 
