@@ -336,7 +336,11 @@ const scopes: readonly CrateScope[] = [
         path: "src/bin/idealis/tlc.rs",
         topic: "有限TLCの引数、終了値、予算切れと検査完了の区別",
         targetContains: "`idealis tlc` は",
-        context: ["src/bin/idealis/modules.rs", "tests/tla_cli.rs"],
+        context: [
+          "src/bin/idealis/modules.rs",
+          "src/bin/idealis/trace.rs",
+          "tests/tla_cli.rs",
+        ],
       },
       {
         path: "src/bin/idealis/tla.rs",

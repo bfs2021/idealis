@@ -25,6 +25,38 @@ const results = [
   ["tla", ["Unknown.tla"], 0, "Semantic errors:"],
   ["tla", ["-s", "Unknown.tla"], 0, "Parsing file"],
   ["tla", ["SyntaxError.tla"], 255, ""],
+  [
+    "tlc",
+    ["-modelcheck", "-workers", "auto", "Counter"],
+    0,
+    "No error has been found",
+  ],
+  ["tlc", ["-difftrace", "Diff"], 12, "State 3:"],
+  ["tlc", ["-difftrace", "-config", "First", "Diff"], 12, "State 2:"],
+  [
+    "tlc",
+    ["-config", "Immediate", "-difftrace", "Diff"],
+    12,
+    "is violated by the initial state:",
+  ],
+  [
+    "tlc",
+    ["-config", "Future", "-difftrace", "Diff"],
+    13,
+    "State 2: Stuttering",
+  ],
+  [
+    "tlc",
+    ["-config", "Counter", "-difftrace", "Values"],
+    12,
+    'v = <<TRUE, [tag |-> "ok"], {1, 2}>>',
+  ],
+  ["tlc", ["-config", "Rejected", "Values"], 151, "is equal to FALSE"],
+  ["tlc", ["-config", "Property", "Values"], 151, "is equal to FALSE"],
+  ["tlc", ["-h"], 1, "-workers"],
+  ["tlc", ["-workers", "0", "Counter"], 1, ""],
+  ["tla", ["-STAT", "Level"], 0, "Semantic errors:"],
+  ["tla", ["-l", "Level"], 0, "Semantic processing of module Level"],
   ["tlc", ["-xx", "Counter"], 1, ""],
   ["tlc", ["MissingModel"], 255, ""],
 ] as const;
@@ -57,7 +89,25 @@ try {
       const message = `${bin} ${command} ${args.join(" ")}\n${output.stdout}\n${output.stderr}`;
       assert.equal(output.status, code, message);
       assert.ok(output.stdout.includes(diagnostic), message);
-      if (command === "tla" && args[0] === "-s")
+      if (args[0] === "-difftrace") {
+        const states = output.stdout
+          .split(/^State \d+:.*$/m)
+          .slice(1)
+          .map((block) =>
+            block
+              .split("\n")
+              .filter((line) => line.startsWith("/\\ "))
+              .sort(),
+          );
+        const first = ['/\\ stable = "constant"', "/\\ x = 0"];
+        const changed = ["/\\ x = 1"];
+        const expected =
+          args[1] === "-config"
+            ? [first, changed]
+            : [first, changed, ['/\\ stable = "constant"', "/\\ x = 2"]];
+        assert.deepEqual(states, expected, message);
+      }
+      if (command === "tla" && (args[0] === "-s" || args[0] === "-l"))
         assert.ok(!output.stdout.includes("Semantic errors:"), message);
     }
   }

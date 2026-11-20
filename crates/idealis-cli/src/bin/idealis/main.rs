@@ -1,6 +1,7 @@
 mod modules;
 mod tla;
 mod tlc;
+mod trace;
 
 use std::process::ExitCode;
 
@@ -14,7 +15,7 @@ fn main() -> ExitCode {
         Some("tla") => tla::run(args),
         _ => Err((
             1,
-            "Usage: idealis tlc [options] spec | idealis tla [-s] [-l] spec...".into(),
+            "Usage: idealis tlc [options] spec | idealis tla [-s] [-l] [-stat] spec...".into(),
         )),
     };
     match result {

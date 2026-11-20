@@ -9,13 +9,18 @@ pub fn run(mut args: impl Iterator<Item = String>) -> Result<u8> {
     let mut spec = None;
     let mut config = None;
     let mut workers = 1;
+    let mut difftrace = false;
     let mut no_deadlock = false;
     while let Some(arg) = args.next() {
         match arg.as_str() {
-            "-help" => {
-                println!("Usage: idealis tlc [-config file] [-workers N] [-deadlock] spec");
+            "-h" | "-help" => {
+                println!(
+                    "Usage: idealis tlc [-config file] [-workers N|auto] [-modelcheck] [-deadlock] [-difftrace] spec"
+                );
                 return Ok(1);
             }
+            "-modelcheck" => {}
+            "-difftrace" => difftrace = true,
             "-deadlock" => no_deadlock = true,
             "-config" => {
                 config = Some(
@@ -26,13 +31,21 @@ pub fn run(mut args: impl Iterator<Item = String>) -> Result<u8> {
             }
             "-workers" => {
                 let value = args.next().ok_or((1, "-workers requires a count".into()))?;
-                workers = value
-                    .parse()
-                    .ok()
-                    .filter(|n| (1..=256).contains(n))
-                    .ok_or((1, format!("Unsupported worker count: {value}")))?;
+                workers = if value.trim().eq_ignore_ascii_case("auto") {
+                    if cfg!(target_arch = "wasm32") {
+                        1
+                    } else {
+                        std::thread::available_parallelism().map_or(1, |n| n.get().min(256))
+                    }
+                } else {
+                    value
+                        .parse()
+                        .ok()
+                        .filter(|n| (1..=256).contains(n))
+                        .ok_or((1, format!("Unsupported worker count: {value}")))?
+                };
                 if cfg!(target_arch = "wasm32") && workers != 1 {
-                    return Err((1, "The npm Wasm build supports -workers 1".into()));
+                    return Err((1, "The npm Wasm build supports -workers 1 or auto".into()));
                 }
             }
             flag if flag.starts_with('-') => {
@@ -68,20 +81,30 @@ pub fn run(mut args: impl Iterator<Item = String>) -> Result<u8> {
         .map_err(|e| (150, e.to_string()))?;
     let program = rtla_compiler::compile_modules(&bundle.root, &config, &bundle.dependencies)
         .map_err(|e| (150, e.to_string()))?;
-    let result = program
-        .check_with_options(
-            SafetyBounds {
-                max_depth: 1000,
-                max_states: 100000,
-                max_work: 10000000,
-                max_temporal_nodes: Some(100000),
-            },
-            SafetyOptions {
-                workers,
-                ..Default::default()
-            },
-        )
-        .map_err(|e| (255, e.to_string()))?;
+    let check = program.check_with_options(
+        SafetyBounds {
+            max_depth: 1000,
+            max_states: 100000,
+            max_work: 10000000,
+            max_temporal_nodes: Some(100000),
+        },
+        SafetyOptions {
+            workers,
+            ..Default::default()
+        },
+    );
+    let result = match check {
+        Ok(result) => result,
+        // rtlc exposes this configuration diagnostic through its portable protocol.
+        Err(error)
+            if error.code == "protocol"
+                && error.message == "Constant invariant or property is false" =>
+        {
+            println!("Error: Constant invariant or property is equal to FALSE");
+            return Ok(151);
+        }
+        Err(error) => return Err((255, error.to_string())),
+    };
     let code = match result.status.as_str() {
         "complete" => {
             println!("Model checking completed. No error has been found.");
@@ -104,14 +127,25 @@ pub fn run(mut args: impl Iterator<Item = String>) -> Result<u8> {
     };
     if let Some(violation) = result.violation {
         match result.status.as_str() {
+            "invariant-violation" if difftrace && violation.trace.len() == 1 => println!(
+                "Error: Invariant {} is violated by the initial state:",
+                violation.name
+            ),
+            "liveness-violation" if difftrace => {
+                println!("Error: Temporal properties were violated.")
+            }
             "invariant-violation" => println!("Error: Invariant {} is violated.", violation.name),
             "deadlock" => println!("Error: Deadlock reached."),
             _ => println!("Error: {}: {}", result.status, violation.name),
         }
-        println!(
-            "{}",
-            serde_json::to_string(&violation).expect("serializable counterexample")
-        );
+        if difftrace {
+            super::trace::print_diff(&program.variables, &violation, &result.status);
+        } else {
+            println!(
+                "{}",
+                serde_json::to_string(&violation).expect("serializable counterexample")
+            );
+        }
     }
     println!("{} distinct states found.", result.states);
     Ok(code)
