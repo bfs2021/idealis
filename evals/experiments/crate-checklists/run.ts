@@ -23,14 +23,14 @@ import { digest } from "../usable/provenance.js";
 const cases = [
   {
     id: "smt-clean",
-    crate: "idealis-smt",
+    crate: "rusmt",
     expected: "supports",
     remove: null,
     addition: null,
   },
   {
     id: "smt-real",
-    crate: "idealis-smt",
+    crate: "rusmt",
     expected: "contradicts",
     remove: "- [ ] Real/LRA、Real/Int混合。",
     addition: "- [x] Real/LRAの一般的な式とReal/Int混合を求解できる。",
@@ -149,7 +149,7 @@ if (process.argv[3] === "--replay") {
           assert.ok(item.remove && content.includes(item.remove));
           content = content.replace(item.remove, "");
           const heading =
-            item.crate === "idealis-smt" ? "## 対応済みの基礎" : "## 対応済み";
+            item.crate === "rusmt" ? "## 対応済みの基礎" : "## 対応済み";
           assert.ok(content.includes(heading));
           content = content.replace(heading, `${heading}\n\n${item.addition}`);
         }

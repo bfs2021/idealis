@@ -1,4 +1,4 @@
-# idealis-smt
+# rusmt
 
 [対応範囲・非対応のチェックリスト](SUPPORT.md)を参照。
 
@@ -8,10 +8,10 @@
 
 ## Rustから使う
 
-ローカルcheckoutでは依存に`idealis-smt = { path = "../idealis/crates/idealis-smt" }`を追加する。registryへは未公開。
+ローカルcheckoutでは依存に`rusmt = { path = "../idealis/crates/rusmt" }`を追加する。registryへは未公開。
 
 ```rust
-use idealis_smt::Problem;
+use rusmt::Problem;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let problem = Problem::parse(
@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ## assertion scopeと一時assumptions
 
 ```rust
-use idealis_smt::{Assumption, Solver};
+use rusmt::{Assumption, Solver};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut solver = Solver::parse("(declare-const x Int)(declare-const b Bool)")?;
@@ -59,18 +59,18 @@ work予算はスクリプト全体で共有する。残り0はunknown/workと空
 
 ## nativeとWasm
 
-`idealis-smt` binaryはstdin/stdoutでJSONLを扱う。requestにはversion 1と、`run-script` / `solve` / `prepare` / `assert` / `push` / `pop` / `check` / `release`を指定する。prepareは解析結果を保持し、回答はcacheしない。run-scriptは`{source,maxWork}`を受け、`{kind:"script-results",results:[...]}`を返す。結果の整数値は文字列。
+`rusmt` binaryはstdin/stdoutでJSONLを扱う。requestにはversion 1と、`run-script` / `solve` / `prepare` / `assert` / `push` / `pop` / `check` / `release`を指定する。prepareは解析結果を保持し、回答はcacheしない。run-scriptは`{source,maxWork}`を受け、`{kind:"script-results",results:[...]}`を返す。結果の整数値は文字列。
 
 ```sh
-just rsmt-build
-just rsmt-test
-just rsmt-example
+just rusmt-build
+just rusmt-test
+just rusmt-example
 just smt-browser
 just package
 ```
 
-Wasmは`wasm32-unknown-unknown`向けの`idealis-smt.wasm`。既存の`smt_*` ABI v1を保ち、SharedArrayBufferを要求しない。読み書きする関数は`smt_input_resize`、`smt_dispatch`、`smt_output_ptr`、`smt_output_len`。[TS loader](https://github.com/mizchi/idealis/blob/main/evals/experiments/smt-subset/wasm.ts)で呼び出せる。
+Wasmは`wasm32-unknown-unknown`向けの`rusmt.wasm`。既存の`smt_*` ABI v1を保ち、SharedArrayBufferを要求しない。読み書きする関数は`smt_input_resize`、`smt_dispatch`、`smt_output_ptr`、`smt_output_len`。[TS loader](https://github.com/mizchi/idealis/blob/main/evals/experiments/smt-subset/wasm.ts)で呼び出せる。
 
-`just package`は`idealis-smt-<version>.crate`、`idealis-smt.wasm`とSHA-256/ABI manifestを作る。展開したidealis-smtのarchiveだけで別consumerをビルドし、SAT、UNSAT、unknown、未対応、scope・assumptionsと依存の独立性を検査する。registryへのpublishは行わない。Criterionの測定は`just rsmt-criterion`。
+`just package`は`rusmt-<version>.crate`、`rusmt.wasm`とSHA-256/ABI manifestを作る。展開したrusmtのarchiveだけで別consumerをビルドし、SAT、UNSAT、unknown、未対応、scope・assumptionsと依存の独立性を検査する。registryへのpublishは行わない。Criterionの測定は`just rusmt-criterion`。
 
 Criterionは既存の整数チェーンと整数ite、scriptのparse/prepared solve、context操作の14ケースを持つ。[改善前後の計測](https://github.com/mizchi/idealis/blob/main/evals/iterations/0042-smt-tuning.md)に保存binaryと測定順、raw samplesを記録した。

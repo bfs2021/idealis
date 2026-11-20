@@ -72,11 +72,11 @@ jobs:
       - run: node --test dist/tests/alloy-subset/contract-test.js
       - run: node --test dist/tests/alloy-instance/contract-test.js
       - run: just vitest --project=alloy
-      - run: cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
-      - run: cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
-      - run: cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
-      - run: cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
-      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
+      - run: cargo fmt --manifest-path crates/rusmt/Cargo.toml -- --check
+      - run: cargo clippy --all-targets --locked --manifest-path crates/rusmt/Cargo.toml -- -D warnings
+      - run: cargo test --all-targets --locked --manifest-path crates/rusmt/Cargo.toml
+      - run: cargo build --release --locked --manifest-path crates/rusmt/Cargo.toml
+      - run: cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rusmt/Cargo.toml
       - run: node --test dist/tests/smt-subset/contract-test.js dist/tests/smt-expansion/contract-test.js dist/tests/smt-scripts/contract-test.js dist/tests/smt-tuning/contract-test.js
       - run: just vitest --project=smt
       - run: cargo fmt --manifest-path crates/idealis-core/Cargo.toml -- --check

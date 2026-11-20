@@ -21,7 +21,7 @@ const fixtures = async (
   try {
     for (const name of ["repeat-64", "scopes-32", "ite-64", "integer-ite"]) {
       const source = await readFile(
-        `crates/idealis-smt/benches/fixtures/${name}.smt2`,
+        `crates/rusmt/benches/fixtures/${name}.smt2`,
         "utf8",
       );
       const request = {

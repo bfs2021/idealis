@@ -15,7 +15,7 @@ assert.equal(digest(await readFile(binary.binary)), binary.sha256);
 const driver = await fingerprint();
 assert.deepEqual(
   driver.sources.filter((file) =>
-    file.path.startsWith("crates/idealis-smt/benches/"),
+    file.path.startsWith("crates/rusmt/benches/"),
   ),
   binary.benchmarkSources,
 );

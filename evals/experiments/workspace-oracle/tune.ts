@@ -42,6 +42,8 @@ const artifacts = async (
     )
   ).flat();
 };
+// Frozen snapshots keep the executable under the suite name used when recorded.
+const suiteId = (id: string) => (id === "idealis-smt" ? "rusmt" : id);
 const readSnapshot = async (directory: string): Promise<Snapshot> => {
   const snapshot: Snapshot = JSON.parse(
     await readFile(join(directory, "manifest.json"), "utf8"),
@@ -49,7 +51,7 @@ const readSnapshot = async (directory: string): Promise<Snapshot> => {
   assert.equal(snapshot.version, 1);
   assert.ok(snapshot.binaries.length > 0);
   assert.equal(
-    new Set(snapshot.binaries.map((entry) => entry.id)).size,
+    new Set(snapshot.binaries.map((entry) => suiteId(entry.id))).size,
     snapshot.binaries.length,
   );
   for (const entry of snapshot.binaries) {
@@ -139,8 +141,14 @@ if (command === "snapshot") {
   const before = await readSnapshot(first);
   const after = await readSnapshot(second);
   assertOracle(
-    after.binaries.map((entry) => ({ id: entry.id, cases: entry.cases })),
-    before.binaries.map((entry) => ({ id: entry.id, cases: entry.cases })),
+    after.binaries.map((entry) => ({
+      id: suiteId(entry.id),
+      cases: entry.cases,
+    })),
+    before.binaries.map((entry) => ({
+      id: suiteId(entry.id),
+      cases: entry.cases,
+    })),
     "baseline/candidate suite identities and complete requests",
   );
   await mkdir(dirname(output), { recursive: true });
@@ -163,15 +171,17 @@ if (command === "snapshot") {
   });
   const records = [];
   try {
-    for (const suite of before.binaries)
+    for (const [index, suite] of before.binaries.entries()) {
+      const candidate = after.binaries[index];
+      assert.ok(candidate);
       for (const mode of ["cold", "reused"]) {
-        const name = `${suite.id}-${mode}`;
+        const name = `${suiteId(suite.id)}-${mode}`;
         const input = {
           version: 1,
           name,
           mode,
           baseline: { path: resolve(first, suite.id), args: [] },
-          candidate: { path: resolve(second, suite.id), args: [] },
+          candidate: { path: resolve(second, candidate.id), args: [] },
           cases: suite.cases,
           config: {
             baseline: "baseline",
@@ -205,6 +215,7 @@ if (command === "snapshot") {
           ),
         });
       }
+    }
     await save(join(output, "result.json"), {
       status: "complete",
       records,

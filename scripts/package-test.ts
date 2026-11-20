@@ -15,7 +15,7 @@ const crate = `idealis-core-${version}.crate`;
 const rtlcCrate = `rtlc-${version}.crate`;
 const rtlaCrate = `rtla-${version}.crate`;
 const compilerCrate = `rtla-compiler-${version}.crate`;
-const rsmtCrate = `idealis-smt-${version}.crate`;
+const rusmtCrate = `rusmt-${version}.crate`;
 const ralloyCrate = `ralloy-${version}.crate`;
 const testingCrate = `idealis-testing-${version}.crate`;
 const oracleCrate = `roracle-${version}.crate`;
@@ -257,7 +257,7 @@ for (const archive of [
   rtlcCrate,
   rtlaCrate,
   compilerCrate,
-  rsmtCrate,
+  rusmtCrate,
   ralloyCrate,
   testingCrate,
   oracleCrate,
@@ -390,25 +390,23 @@ assert.ok(
       entry.name === "idealis-core" || entry.name === "rtlc",
   ),
 );
-const smtConsumer = await mkdtemp(join(tmpdir(), "idealis-smt-consumer-"));
-execFileSync("tar", ["-xzf", join(directory, rsmtCrate), "-C", smtConsumer]);
+const smtConsumer = await mkdtemp(join(tmpdir(), "rusmt-consumer-"));
+execFileSync("tar", ["-xzf", join(directory, rusmtCrate), "-C", smtConsumer]);
 await writeFile(
   join(smtConsumer, "Cargo.toml"),
-  `[package]\nname="idealis-smt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nidealis-smt={path="idealis-smt-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
+  `[package]\nname="rusmt-consumer"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nrusmt={path="rusmt-${version}"}\n[[bin]]\nname="consumer"\npath="main.rs"\n`,
 );
 await writeFile(
   join(smtConsumer, "main.rs"),
-  await readFile(
-    join(smtConsumer, `idealis-smt-${version}`, "examples", "ttl.rs"),
-  ),
+  await readFile(join(smtConsumer, `rusmt-${version}`, "examples", "ttl.rs")),
 );
-const rsmt = execFileSync("cargo", ["run", "--offline", "--quiet"], {
+const rusmt = execFileSync("cargo", ["run", "--offline", "--quiet"], {
   cwd: smtConsumer,
   stdio: "pipe",
 })
   .toString()
   .trim();
-assert.equal(rsmt, "standalone idealis-smt consumer checked");
+assert.equal(rusmt, "standalone rusmt consumer checked");
 const smtMetadata = JSON.parse(
   execFileSync("cargo", ["metadata", "--offline", "--format-version", "1"], {
     cwd: smtConsumer,
@@ -417,7 +415,7 @@ const smtMetadata = JSON.parse(
 );
 assert.ok(
   smtMetadata.packages.some(
-    (entry: { name: string }) => entry.name === "idealis-smt",
+    (entry: { name: string }) => entry.name === "rusmt",
   ),
 );
 assert.ok(
@@ -426,7 +424,7 @@ assert.ok(
       entry.name,
     ),
   ),
-  "idealis-smt must remain independent of idealis hosts, TLA frontends and Z3",
+  "rusmt must remain independent of idealis hosts, TLA frontends and Z3",
 );
 const alloyConsumer = await mkdtemp(join(tmpdir(), "ralloy-consumer-"));
 execFileSync("tar", [
@@ -467,7 +465,7 @@ assert.ok(
   !alloyMetadata.packages.some((entry: { name: string }) =>
     [
       "idealis-core",
-      "idealis-smt",
+      "rusmt",
       "rtla",
       "rtla-compiler",
       "rtlc",
@@ -542,7 +540,7 @@ assert.ok(
       "rtlc",
       "rtla-compiler",
       "idealis-core",
-      "idealis-smt",
+      "rusmt",
       "ralloy",
       "loom",
       "z3",
@@ -627,7 +625,7 @@ const result = {
   rust,
   rtlc,
   rtla,
-  rsmt,
+  rusmt,
   ralloy,
   testing,
   testingSchedule,
@@ -637,7 +635,7 @@ const result = {
   ralloyDependencies: alloyMetadata.packages
     .map((entry: { name: string }) => entry.name)
     .sort(),
-  rsmtDependencies: smtMetadata.packages
+  rusmtDependencies: smtMetadata.packages
     .map((entry: { name: string }) => entry.name)
     .sort(),
   parserWasm: "packaged rtla Wasm parsed without solvers",
@@ -649,7 +647,7 @@ const result = {
     rtlcCrate,
     rtlaCrate,
     compilerCrate,
-    rsmtCrate,
+    rusmtCrate,
     ralloyCrate,
     testingCrate,
     oracleCrate,

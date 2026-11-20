@@ -1,6 +1,6 @@
 # SAT/CNF候補の評価
 
-Varisat 0.2.2を使う非公開のeval crate。有限の連言標準形（CNF）、assumptions、節の増分追加をnative/Wasmで検査する。既存の`ralloy`や`idealis-smt`へは組み込まず、npm/Cargoの配布対象にも追加しない。
+Varisat 0.2.2を使う非公開のeval crate。有限の連言標準形（CNF）、assumptions、節の増分追加をnative/Wasmで検査する。既存の`ralloy`や`rusmt`へは組み込まず、npm/Cargoの配布対象にも追加しない。
 
 ```sh
 just sat-test

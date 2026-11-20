@@ -1,4 +1,4 @@
-use idealis_smt::{Problem, Script, Solver};
+use rusmt::{Problem, Script, Solver};
 
 #[test]
 fn criterion_fixtures_exercise_complete_queries_and_restored_contexts() {

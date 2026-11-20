@@ -294,7 +294,7 @@ const scopes: readonly CrateScope[] = [
     ],
   },
   {
-    name: "idealis-smt",
+    name: "rusmt",
     evidence: [
       {
         path: "src/parser.rs",

@@ -12,7 +12,7 @@ export const binaries: Readonly<Record<string, string>> = {
   "/runtime.wasm":
     "evals/experiments/rust-probe/target/wasm32-unknown-unknown/release/idealis_runtime_probe.wasm",
   "/subset.wasm":
-    "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
+    "crates/rusmt/target/wasm32-unknown-unknown/release/rusmt.wasm",
   "/ralloy.wasm":
     "crates/ralloy/target/wasm32-unknown-unknown/release/ralloy.wasm",
   "/testing.wasm":

@@ -9,7 +9,7 @@ test("SMT-LIB scripts and shared budgets run without host imports in Chromium", 
     globalName: "smtScripts",
   });
   const wasm = await readFile(
-    "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
+    "crates/rusmt/target/wasm32-unknown-unknown/release/rusmt.wasm",
   );
   await page.route("http://smt-scripts.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;

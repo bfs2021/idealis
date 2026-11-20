@@ -4,7 +4,7 @@ for (const manifest of [
   "crates/roracle/Cargo.toml",
   "crates/idealis-core/Cargo.toml",
   "crates/rtla/Cargo.toml",
-  "crates/idealis-smt/Cargo.toml",
+  "crates/rusmt/Cargo.toml",
   "crates/ralloy/Cargo.toml",
   "crates/idealis-testing/Cargo.toml",
   "evals/experiments/rust-probe/Cargo.toml",

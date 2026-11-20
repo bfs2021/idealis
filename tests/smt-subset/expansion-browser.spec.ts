@@ -9,7 +9,7 @@ test("expanded arithmetic and contexts run without host imports in Chromium", as
     globalName: "smtExpansion",
   });
   const wasm = await readFile(
-    "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
+    "crates/rusmt/target/wasm32-unknown-unknown/release/rusmt.wasm",
   );
   await page.route("http://smt-expansion.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;

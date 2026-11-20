@@ -16,7 +16,7 @@ await writeFile(
       binary: resolve(binary),
       sha256: digest(await readFile(binary)),
       benchmarkSources: source.sources.filter((file) =>
-        file.path.startsWith("crates/idealis-smt/benches/"),
+        file.path.startsWith("crates/rusmt/benches/"),
       ),
       commit: execFileSync("git", ["rev-parse", "HEAD"]).toString().trim(),
       dirtyPaths: execFileSync("git", ["status", "--short"]).toString(),

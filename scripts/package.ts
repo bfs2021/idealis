@@ -26,7 +26,7 @@ const crates = [
   "rtlc",
   "rtla-compiler",
   "idealis-core",
-  "idealis-smt",
+  "rusmt",
   "ralloy",
   "idealis-testing",
   "roracle",
@@ -43,7 +43,7 @@ for (const name of crates) {
     "SUPPORT.md",
     "LICENSE",
     ...(["rtla", "ralloy"].includes(name) ? ["NOTICE"] : []),
-    ...(["idealis-smt", "roracle"].includes(name) ? ["benches"] : []),
+    ...(["rusmt", "roracle"].includes(name) ? ["benches"] : []),
   ])
     await cp(`crates/${name}/${file}`, resolve(workspace, name, file), {
       recursive: true,
@@ -102,13 +102,13 @@ for (const file of [
   );
 }
 const smt = await readFile(
-  "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
+  "crates/rusmt/target/wasm32-unknown-unknown/release/rusmt.wasm",
 );
-await writeFile(resolve(target, "idealis-smt.wasm"), smt);
+await writeFile(resolve(target, "rusmt.wasm"), smt);
 await writeFile(
-  resolve(target, "idealis-smt-manifest.json"),
+  resolve(target, "rusmt-manifest.json"),
   `${JSON.stringify({ version: pkg.version, abi: 1, sha256: createHash("sha256").update(smt).digest("hex"), bytes: smt.length }, null, 2)}\n`,
 );
 console.log(
-  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/idealis-smt/ralloy/idealis-testing/roracle Cargo and Wasm artifacts: ${target}`,
+  `Verified npm, rtla/rtla-compiler/rtlc/idealis-core/rusmt/ralloy/idealis-testing/roracle Cargo and Wasm artifacts: ${target}`,
 );

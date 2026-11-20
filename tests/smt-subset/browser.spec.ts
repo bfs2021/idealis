@@ -9,7 +9,7 @@ test("pure Rust SMT subset runs in Chromium without cross-origin isolation", asy
     globalName: "smtSubset",
   });
   const wasm = await readFile(
-    "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm",
+    "crates/rusmt/target/wasm32-unknown-unknown/release/rusmt.wasm",
   );
   await page.route("http://smt.test/**", async (route) => {
     const path = new URL(route.request().url()).pathname;

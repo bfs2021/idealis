@@ -1,4 +1,4 @@
-use idealis_smt::{Engine, Script};
+use rusmt::{Engine, Script};
 use serde_json::{Value, json};
 
 fn solve(source: &str, budget: u32) -> Value {

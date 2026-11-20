@@ -1,4 +1,4 @@
-use idealis_smt::{Assumption, Engine, Problem, Solver};
+use rusmt::{Assumption, Engine, Problem, Solver};
 use serde_json::{Value, json};
 
 fn solve(source: &str) -> Value {

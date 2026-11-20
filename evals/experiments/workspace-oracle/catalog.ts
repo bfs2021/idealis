@@ -87,8 +87,8 @@ export const catalog = (): readonly Suite[] => {
       ],
     },
     {
-      id: "idealis-smt",
-      binary: "crates/idealis-smt/target/release/idealis-smt",
+      id: "rusmt",
+      binary: "crates/rusmt/target/release/rusmt",
       cases: benchmarks()
         .slice(0, 2)
         .map((input) => ({

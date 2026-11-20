@@ -17,7 +17,7 @@ export const fingerprint = async () => {
     "fixtures/workspace-oracle",
     "evals/experiments/smt-subset",
     "tests/smt-subset",
-    "crates/idealis-smt",
+    "crates/rusmt",
     "evals/plans/0030-smt-subset.md",
     "evals/plans/0031-smt-reuse.md",
     "evals/plans/0032-rsmt-extraction.md",

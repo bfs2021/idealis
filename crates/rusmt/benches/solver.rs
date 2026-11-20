@@ -1,5 +1,5 @@
 use criterion::{Criterion, criterion_group, criterion_main};
-use idealis_smt::{Problem, Script, Solver};
+use rusmt::{Problem, Script, Solver};
 use std::{hint::black_box, time::Duration};
 
 fn cases(criterion: &mut Criterion) {

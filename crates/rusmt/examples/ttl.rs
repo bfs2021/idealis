@@ -1,4 +1,4 @@
-use idealis_smt::{Assumption, Problem, Script, Solver};
+use rusmt::{Assumption, Problem, Script, Solver};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let problem = Problem::parse(
@@ -55,6 +55,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .iter()
             .all(|result| result.status == "unknown")
     );
-    println!("standalone idealis-smt consumer checked");
+    println!("standalone rusmt consumer checked");
     Ok(())
 }

@@ -89,7 +89,7 @@ oracle-wire-build:
 workspace-oracle-build: oracle-wire-build
   cargo build --release --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml
 
-workspace-oracle-test: workspace-oracle-build portable-build testing-build ralloy-build rsmt-build rtla-build build
+workspace-oracle-test: workspace-oracle-build portable-build testing-build ralloy-build rusmt-build rtla-build build
   cargo fmt --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- --check
   cargo clippy --all-targets --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml -- -D warnings
   cargo test --locked --manifest-path evals/experiments/workspace-oracle/rust/Cargo.toml
@@ -279,29 +279,35 @@ alloy-instance-eval phase run java jar parent="": ralloy-build build
 alloy-instance-replay run: build
   node dist/evals/experiments/alloy-instance/replay.js {{quote(run)}}
 
-rsmt-build: oracle-wire-build
-  cargo build --release --locked --manifest-path crates/idealis-smt/Cargo.toml
-  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/idealis-smt/Cargo.toml
+rusmt-build: oracle-wire-build
+  cargo build --release --locked --manifest-path crates/rusmt/Cargo.toml
+  cargo build --release --locked --lib --target wasm32-unknown-unknown --manifest-path crates/rusmt/Cargo.toml
 
-rsmt-test:
-  cargo fmt --manifest-path crates/idealis-smt/Cargo.toml -- --check
-  cargo clippy --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml -- -D warnings
-  cargo test --all-targets --locked --manifest-path crates/idealis-smt/Cargo.toml
+rusmt-test:
+  cargo fmt --manifest-path crates/rusmt/Cargo.toml -- --check
+  cargo clippy --all-targets --locked --manifest-path crates/rusmt/Cargo.toml -- -D warnings
+  cargo test --all-targets --locked --manifest-path crates/rusmt/Cargo.toml
 
-rsmt-example:
-  cargo run --example ttl --locked --manifest-path crates/idealis-smt/Cargo.toml
+rusmt-example:
+  cargo run --example ttl --locked --manifest-path crates/rusmt/Cargo.toml
 
-rsmt-compare run baseline: rsmt-build build
+rusmt-compare run baseline: rusmt-build build
   node dist/evals/experiments/rsmt-extraction/compare.js check {{quote(run)}} {{quote(baseline)}}
 
-rsmt-criterion:
-  cargo bench --locked --manifest-path crates/idealis-smt/Cargo.toml --bench solver
+rusmt-criterion:
+  cargo bench --locked --manifest-path crates/rusmt/Cargo.toml --bench solver
 
-smt-build: rsmt-build
+alias rsmt-build := rusmt-build
+alias rsmt-test := rusmt-test
+alias rsmt-example := rusmt-example
+alias rsmt-compare := rusmt-compare
+alias rsmt-criterion := rusmt-criterion
 
-smt-test: rsmt-test
+smt-build: rusmt-build
 
-smt-criterion: rsmt-criterion
+smt-test: rusmt-test
+
+smt-criterion: rusmt-criterion
 
 smt-verify phase run parent="": smt-build build
   node dist/evals/experiments/smt-subset/verify-run.js {{quote(phase)}} {{quote(run)}} {{quote(parent)}}
@@ -483,7 +489,7 @@ usable-benchmark input output: build
 package: package-prepare package-test
 
 [positional-arguments]
-package-prepare *args: build rsmt-build
+package-prepare *args: build rusmt-build
   node dist/scripts/package.js "$@"
 
 [positional-arguments]
@@ -870,7 +876,7 @@ smt-script-replay run: build
 
 # Fixed SMT benchmarks and immutable before/after binaries.
 smt-tuning-build:
-  CARGO_PROFILE_BENCH_STRIP=none cargo bench --no-run --locked --manifest-path crates/idealis-smt/Cargo.toml --bench solver
+  CARGO_PROFILE_BENCH_STRIP=none cargo bench --no-run --locked --manifest-path crates/rusmt/Cargo.toml --bench solver
 
 smt-tuning-capture binary output: build
   node dist/evals/experiments/smt-tuning/capture.js {{quote(binary)}} {{quote(output)}}

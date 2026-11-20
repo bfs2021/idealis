@@ -18,7 +18,9 @@ console.log(
   JSON.stringify({
     samples: samples.totalWeight,
     hotspots: samples.hotspots
-      .filter((row) => row.name.includes("idealis_smt"))
+      .filter(
+        (row) => row.name.includes("rusmt") || row.name.includes("idealis_smt"),
+      )
       .sort((left, right) => right.inclusive - left.inclusive)
       .slice(0, 12),
   }),

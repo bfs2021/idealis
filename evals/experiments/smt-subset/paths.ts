@@ -1,4 +1,4 @@
-export const nativePath = "crates/idealis-smt/target/release/idealis-smt";
+export const nativePath = "crates/rusmt/target/release/rusmt";
 export const wasmPath =
-  "crates/idealis-smt/target/wasm32-unknown-unknown/release/idealis_smt.wasm";
+  "crates/rusmt/target/wasm32-unknown-unknown/release/rusmt.wasm";
 export const maxWork = 2_000_000;
