@@ -24,7 +24,7 @@ export const fingerprint = async () => {
     "src/trace.ts",
     "examples/counter-model.ts",
     "examples/durable-counter.ts",
-    "smt-playwright.config.ts",
+    "playwright.config.ts",
     "justfile",
     "package.json",
     "pnpm-lock.yaml",

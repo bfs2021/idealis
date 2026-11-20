@@ -10,12 +10,12 @@ import {
   compileFiniteModel,
   createFiniteModel,
 } from "../../src/finite.js";
+import { decodePortableResult } from "../../src/portable-wasm.js";
 import {
   checkFiniteHistories,
   createPortableWasm,
   loadFiniteModel,
 } from "../../src/portable.js";
-import { decodePortableResult } from "../../src/portable-wasm.js";
 import { isRecord } from "../../src/trace.js";
 import { mutexModel, mutexRegression } from "../usable/mutex.js";
 import { digest } from "../usable/provenance.js";

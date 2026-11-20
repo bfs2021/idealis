@@ -8,16 +8,16 @@ assert.ok(directory);
 const find = async (directory: string): Promise<string[]> =>
   (
     await Promise.all(
-      (
-        await readdir(directory, { withFileTypes: true })
-      ).map(async (entry): Promise<string[]> => {
-        const path = join(directory, entry.name);
-        return entry.isDirectory()
-          ? find(path)
-          : entry.name === "estimates.json" && directory.endsWith("/new")
-            ? [path]
-            : [];
-      }),
+      (await readdir(directory, { withFileTypes: true })).map(
+        async (entry): Promise<string[]> => {
+          const path = join(directory, entry.name);
+          return entry.isDirectory()
+            ? find(path)
+            : entry.name === "estimates.json" && directory.endsWith("/new")
+              ? [path]
+              : [];
+        },
+      ),
     )
   ).flat();
 const paths = (await find(join(directory, "0/criterion"))).sort();

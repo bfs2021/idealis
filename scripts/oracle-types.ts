@@ -21,7 +21,7 @@ const raw = execFileSync(
 );
 const formatted = execFileSync(
   "pnpm",
-  ["exec", "biome", "format", "--stdin-file-path", path],
+  ["exec", "vp", "fmt", "--stdin-filepath", path],
   { input: raw, encoding: "utf8" },
 );
 if (process.argv.includes("--check"))

@@ -6,9 +6,7 @@ export const runtimeFingerprint = async () => {
   const collect = async (directory: string): Promise<string[]> =>
     (
       await Promise.all(
-        (
-          await readdir(directory, { withFileTypes: true })
-        ).map(async (entry) =>
+        (await readdir(directory, { withFileTypes: true })).map(async (entry) =>
           entry.isDirectory()
             ? collect(join(directory, entry.name))
             : entry.isFile() && /\.(ts|rs)$/.test(entry.name)

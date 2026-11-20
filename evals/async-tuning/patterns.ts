@@ -183,9 +183,10 @@ export const runPatterns = async () => {
       { kind: "write" },
       ...[4, 5, 6]
         .filter((time) => time > state)
-        .map(
-          (time): LeaseAction => ({ kind: "advance", amount: time - state }),
-        ),
+        .map((time): LeaseAction => ({
+          kind: "advance",
+          amount: time - state,
+        })),
     ],
     step: (state, action) =>
       action.kind === "advance"

@@ -17,6 +17,7 @@ import type {
 } from "../src/contracts.js";
 import { compileFiniteModel } from "../src/finite.js";
 import { createSimulationHost } from "../src/host.js";
+import { PortableCoreError } from "../src/portable-value.js";
 import {
   checkFiniteHistories,
   checkPortableConformance,
@@ -33,7 +34,6 @@ import {
   toPortableValue,
   verifyHostTape,
 } from "../src/portable.js";
-import { PortableCoreError } from "../src/portable-value.js";
 import { checkTlaSource, compileTlaSource } from "../src/tla-source.js";
 
 export const run = async (assetBase = ""): Promise<Record<string, unknown>> => {

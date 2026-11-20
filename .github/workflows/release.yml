@@ -21,9 +21,9 @@ jobs:
       - run: pnpm package:prepare
       - run: node --test dist/evals/alloy-subset/contract-test.js
       - run: node --test dist/evals/alloy-instance/contract-test.js
-      - run: pnpm exec vitest run --config alloy-vitest.config.ts
+      - run: pnpm exec vitest run --project=alloy
       - run: node --test dist/evals/testing-core/contract-test.js
-      - run: pnpm exec vitest run --config testing-vitest.config.ts
+      - run: pnpm exec vitest run --project=testing
       - run: pnpm portable:test
       - run: pnpm usable:test
       - run: pnpm package:test

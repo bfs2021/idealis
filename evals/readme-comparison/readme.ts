@@ -27,6 +27,7 @@ const tables = renderComparison(result);
 const start = "<!-- checker-comparison:start -->";
 const end = "<!-- checker-comparison:end -->";
 const section = `${start}
+
 ## モデル検査の速度比較
 
 同じTLA+ source/configを各回別processで解析し、完全探索した起動込み時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、TLC v1.7.4 / Temurin 21.0.13+9で測った。

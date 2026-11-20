@@ -18,8 +18,8 @@ export const fingerprint = async () => {
     "evals/smt-subset/clients.ts",
     "evals/plans/0038-controlled-schedules.md",
     "evals/plans/0038-packaging-regression.md",
-    "schedules-playwright.config.ts",
-    "schedules-vitest.config.ts",
+    "playwright.config.ts",
+    "vitest.config.ts",
     "scripts/package.ts",
     "scripts/package-test.ts",
     "justfile",
@@ -28,7 +28,7 @@ export const fingerprint = async () => {
     "pnpm-lock.yaml",
     "tsconfig.json",
     "tsconfig.build.json",
-    "biome.json",
+    "vite.config.ts",
     ".gitignore",
   ])
     .toString()

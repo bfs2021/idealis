@@ -17,9 +17,7 @@ assert.ok(Number.isSafeInteger(count) && count > 0);
 const find = async (directory: string): Promise<string[]> =>
   (
     await Promise.all(
-      (
-        await readdir(directory, { withFileTypes: true })
-      ).map(async (entry) => {
+      (await readdir(directory, { withFileTypes: true })).map(async (entry) => {
         const path = join(directory, entry.name);
         if (entry.isDirectory()) return find(path);
         return entry.name === "estimates.json" && directory.endsWith("/new")

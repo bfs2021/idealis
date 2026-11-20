@@ -11,12 +11,12 @@ import type {
   PortableValue,
 } from "../../src/contracts.js";
 import { checkFiniteHistory, createFiniteModel } from "../../src/finite.js";
+import { decodePortableResult } from "../../src/portable-wasm.js";
 import {
   fromPortableValue,
   toPortableTrace,
   toPortableValue,
 } from "../../src/portable.js";
-import { decodePortableResult } from "../../src/portable-wasm.js";
 import { isRecord } from "../../src/trace.js";
 import {
   type CounterFault,

@@ -43,9 +43,8 @@ export const createPool = async (
             worker.once("error", failed);
             worker.once("message", (ready: unknown) => {
               worker.off("error", failed);
-              ready === "ready"
-                ? resolve()
-                : reject(new Error("Invalid worker handshake"));
+              if (ready === "ready") resolve();
+              else reject(new Error("Invalid worker handshake"));
             });
           }),
       ),

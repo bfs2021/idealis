@@ -16,8 +16,8 @@ export const fingerprint = async () => {
     "evals/structured-fuzz",
     "evals/smt-subset/clients.ts",
     "evals/plans/0039-structured-fuzz.md",
-    "fuzz-playwright.config.ts",
-    "fuzz-vitest.config.ts",
+    "playwright.config.ts",
+    "vitest.config.ts",
     "justfile",
     ".github/workflows/ci.yml",
     ".github/workflows/fuzz.yml",
@@ -25,7 +25,7 @@ export const fingerprint = async () => {
     "pnpm-lock.yaml",
     "tsconfig.json",
     "tsconfig.build.json",
-    "biome.json",
+    "vite.config.ts",
     ".gitignore",
   ])
     .toString()

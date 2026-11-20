@@ -28,14 +28,14 @@ export const fingerprint = async () => {
     "examples/durable-counter.ts",
     "scripts/package.ts",
     "scripts/package-test.ts",
-    "smt-playwright.config.ts",
-    "smt-vitest.config.ts",
+    "playwright.config.ts",
+    "vitest.config.ts",
     "justfile",
     "package.json",
     "pnpm-lock.yaml",
     "tsconfig.json",
     "tsconfig.build.json",
-    "biome.json",
+    "vite.config.ts",
     ".github/workflows/ci.yml",
   ])
     .toString()

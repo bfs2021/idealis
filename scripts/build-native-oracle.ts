@@ -36,7 +36,7 @@ execFileSync(
 const declaration = "evals/roracle-native/generated/index.d.ts";
 const formatted = execFileSync(
   "pnpm",
-  ["exec", "biome", "format", "--stdin-file-path", declaration],
+  ["exec", "vp", "fmt", "--stdin-filepath", declaration],
   { input: await readFile(resolve(output, "index.d.ts")), encoding: "utf8" },
 );
 if (process.argv.includes("--check"))

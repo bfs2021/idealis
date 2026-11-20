@@ -92,7 +92,7 @@ for (const [name, content] of Object.entries(result.files)) {
   if (name.endsWith(".d.ts")) {
     const formatted = execFileSync(
       "pnpm",
-      ["exec", "biome", "format", "--stdin-file-path", path],
+      ["exec", "vp", "fmt", "--stdin-filepath", path],
       { input: content, encoding: "utf8" },
     );
     if (process.argv.includes("--check"))
@@ -133,7 +133,7 @@ execFileSync(
 const nativeTypes = resolve(generated, "native.d.ts");
 const formatted = execFileSync(
   "pnpm",
-  ["exec", "biome", "format", "--stdin-file-path", nativeTypes],
+  ["exec", "vp", "fmt", "--stdin-filepath", nativeTypes],
   {
     input: await readFile(resolve(temporary, "native.d.ts")),
     encoding: "utf8",

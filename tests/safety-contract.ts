@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { PortableCoreError } from "../src/portable-value.js";
-import { decodeSafetyResult } from "../src/safety.js";
 import { decodeSafetyCoverageReport } from "../src/safety-coverage.js";
+import { decodeSafetyResult } from "../src/safety.js";
 import { compileTlaSafety } from "../src/tla-safety.js";
 
 export const registerSafetyContract = (

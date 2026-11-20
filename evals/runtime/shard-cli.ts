@@ -315,9 +315,7 @@ if (command === "plan") {
     try {
       return (
         await Promise.all(
-          (
-            await readdir(directory, { withFileTypes: true })
-          ).map((entry) =>
+          (await readdir(directory, { withFileTypes: true })).map((entry) =>
             entry.isDirectory()
               ? collect(join(directory, entry.name))
               : entry.name === "reports.json"

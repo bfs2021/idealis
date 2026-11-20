@@ -538,34 +538,38 @@ test("operator sharing v1 baseline covers all 239 existing compiler inputs separ
   }
 });
 for (const [index, input] of frozen.entries())
-  test(`operator sharing v1 byte identity: ${input.name}`, {
-    timeout: 60_000,
-  }, () => {
-    const saved = baseline.cases[index];
-    assert.ok(saved);
-    assert.equal(saved.name, input.name);
-    assert.equal(saved.sourceSha256, digest(input.source));
-    assert.equal(saved.configSha256, digest(input.config));
-    for (const irVersion of [undefined, 1] as const) {
-      const selected = {
-        source: input.source,
-        config: input.config,
-        ...(irVersion === undefined ? {} : { irVersion }),
-      };
-      assert.deepEqual(
-        serialization(() => compileTlaSafety(selected)),
-        saved.ts,
-      );
-      assert.deepEqual(
-        serialization(() => compileTlaSource(core, selected)),
-        saved.rust,
-      );
-      assert.equal(
-        digest(JSON.stringify(native({ kind: "compile-tla", ...selected }))),
-        saved.nativeSha256,
-      );
-    }
-  });
+  test(
+    `operator sharing v1 byte identity: ${input.name}`,
+    {
+      timeout: 60_000,
+    },
+    () => {
+      const saved = baseline.cases[index];
+      assert.ok(saved);
+      assert.equal(saved.name, input.name);
+      assert.equal(saved.sourceSha256, digest(input.source));
+      assert.equal(saved.configSha256, digest(input.config));
+      for (const irVersion of [undefined, 1] as const) {
+        const selected = {
+          source: input.source,
+          config: input.config,
+          ...(irVersion === undefined ? {} : { irVersion }),
+        };
+        assert.deepEqual(
+          serialization(() => compileTlaSafety(selected)),
+          saved.ts,
+        );
+        assert.deepEqual(
+          serialization(() => compileTlaSource(core, selected)),
+          saved.rust,
+        );
+        assert.equal(
+          digest(JSON.stringify(native({ kind: "compile-tla", ...selected }))),
+          saved.nativeSha256,
+        );
+      }
+    },
+  );
 
 const v1Refusals = new Map([
   ...[
@@ -652,34 +656,42 @@ for (const input of inputs) {
       currentBehaviorCases.some((entry) => entry.name === input.name)
         ? "current"
         : "TLC";
-    test(`operator sharing v${irVersion} TS/${oracle}: ${input.name}`, {
-      timeout: 60_000,
-    }, () => {
-      assertVersionedOracle(
-        fixture,
-        irVersion,
-        capture(() => ({
-          kind: "safety",
-          result: checkSafety(
-            core,
-            compileTlaSafety(selected),
-            budget(input.name),
-          ),
-        })),
-      );
-    });
-    test(`operator sharing v${irVersion} Rust/${oracle}: ${input.name}`, {
-      timeout: 60_000,
-    }, () => {
-      assertVersionedOracle(
-        fixture,
-        irVersion,
-        capture(() => ({
-          kind: "safety",
-          result: checkTlaSource(core, selected, budget(input.name)),
-        })),
-      );
-    });
+    test(
+      `operator sharing v${irVersion} TS/${oracle}: ${input.name}`,
+      {
+        timeout: 60_000,
+      },
+      () => {
+        assertVersionedOracle(
+          fixture,
+          irVersion,
+          capture(() => ({
+            kind: "safety",
+            result: checkSafety(
+              core,
+              compileTlaSafety(selected),
+              budget(input.name),
+            ),
+          })),
+        );
+      },
+    );
+    test(
+      `operator sharing v${irVersion} Rust/${oracle}: ${input.name}`,
+      {
+        timeout: 60_000,
+      },
+      () => {
+        assertVersionedOracle(
+          fixture,
+          irVersion,
+          capture(() => ({
+            kind: "safety",
+            result: checkTlaSource(core, selected, budget(input.name)),
+          })),
+        );
+      },
+    );
   }
   const selected = versioned(input, 2);
   test(`operator sharing v2 frontend parity: ${input.name}`, () => {
@@ -695,78 +707,96 @@ for (const input of inputs) {
     assert.equal(ts.kind, "compiled", JSON.stringify(ts));
     assert.equal(rust.kind, "compiled", JSON.stringify(rust));
   });
-  test(`operator sharing v2 native/Wasm compile parity: ${input.name}`, {
-    timeout: 60_000,
-  }, () => {
-    const request = { kind: "compile-tla" as const, ...selected };
-    const wasm = capture(() => core.request({ version: 1, request }));
-    const response = native(request);
-    assert.deepEqual(response, wasm);
-    assert.ok(isRecord(response));
-    assert.equal(response.kind, "compiled", JSON.stringify(response));
-  });
-  test(`operator sharing v2 native/Wasm check parity: ${input.name}`, {
-    timeout: 60_000,
-  }, () => {
-    const request = {
-      kind: "check-tla" as const,
-      ...selected,
-      bounds: budget(input.name),
-    };
-    const wasm = capture(() => core.request({ version: 1, request }));
-    const response = native(request);
-    assert.deepEqual(response, wasm);
-    assertV2Oracle(fixture, response);
-  });
-  if (
-    amended ||
-    currentBehaviorCases.some((entry) => entry.name === input.name)
-  ) {
-    test(`operator sharing v2 TS native/Wasm check parity: ${input.name}`, {
+  test(
+    `operator sharing v2 native/Wasm compile parity: ${input.name}`,
+    {
       timeout: 60_000,
-    }, () => {
-      const program = compileTlaSafety(selected);
+    },
+    () => {
+      const request = { kind: "compile-tla" as const, ...selected };
+      const wasm = capture(() => core.request({ version: 1, request }));
+      const response = native(request);
+      assert.deepEqual(response, wasm);
+      assert.ok(isRecord(response));
+      assert.equal(response.kind, "compiled", JSON.stringify(response));
+    },
+  );
+  test(
+    `operator sharing v2 native/Wasm check parity: ${input.name}`,
+    {
+      timeout: 60_000,
+    },
+    () => {
       const request = {
-        kind: "check-safety" as const,
-        program,
+        kind: "check-tla" as const,
+        ...selected,
         bounds: budget(input.name),
       };
       const wasm = capture(() => core.request({ version: 1, request }));
       const response = native(request);
       assert.deepEqual(response, wasm);
       assertV2Oracle(fixture, response);
-    });
-    for (const frontend of amended ? [] : (["TS", "Rust"] as const))
-      test(`operator sharing v1 ${frontend} current native/Wasm result: ${input.name}`, {
+    },
+  );
+  if (
+    amended ||
+    currentBehaviorCases.some((entry) => entry.name === input.name)
+  ) {
+    test(
+      `operator sharing v2 TS native/Wasm check parity: ${input.name}`,
+      {
         timeout: 60_000,
-      }, () => {
-        if (frontend === "TS") {
-          const compiled = capture(() => compileTlaSafety(versioned(input, 1)));
-          if ("kind" in compiled) {
-            assertVersionedOracle(fixture, 1, compiled);
-            return;
+      },
+      () => {
+        const program = compileTlaSafety(selected);
+        const request = {
+          kind: "check-safety" as const,
+          program,
+          bounds: budget(input.name),
+        };
+        const wasm = capture(() => core.request({ version: 1, request }));
+        const response = native(request);
+        assert.deepEqual(response, wasm);
+        assertV2Oracle(fixture, response);
+      },
+    );
+    for (const frontend of amended ? [] : (["TS", "Rust"] as const))
+      test(
+        `operator sharing v1 ${frontend} current native/Wasm result: ${input.name}`,
+        {
+          timeout: 60_000,
+        },
+        () => {
+          if (frontend === "TS") {
+            const compiled = capture(() =>
+              compileTlaSafety(versioned(input, 1)),
+            );
+            if ("kind" in compiled) {
+              assertVersionedOracle(fixture, 1, compiled);
+              return;
+            }
+            const request = {
+              kind: "check-safety" as const,
+              program: compiled,
+              bounds: budget(input.name),
+            };
+            const wasm = capture(() => core.request({ version: 1, request }));
+            const response = native(request);
+            assert.deepEqual(response, wasm);
+            assertVersionedOracle(fixture, 1, response);
+          } else {
+            const request = {
+              kind: "check-tla" as const,
+              ...versioned(input, 1),
+              bounds: budget(input.name),
+            };
+            const wasm = capture(() => core.request({ version: 1, request }));
+            const response = native(request);
+            assert.deepEqual(response, wasm);
+            assertVersionedOracle(fixture, 1, response);
           }
-          const request = {
-            kind: "check-safety" as const,
-            program: compiled,
-            bounds: budget(input.name),
-          };
-          const wasm = capture(() => core.request({ version: 1, request }));
-          const response = native(request);
-          assert.deepEqual(response, wasm);
-          assertVersionedOracle(fixture, 1, response);
-        } else {
-          const request = {
-            kind: "check-tla" as const,
-            ...versioned(input, 1),
-            bounds: budget(input.name),
-          };
-          const wasm = capture(() => core.request({ version: 1, request }));
-          const response = native(request);
-          assert.deepEqual(response, wasm);
-          assertVersionedOracle(fixture, 1, response);
-        }
-      });
+        },
+      );
   }
 }
 
@@ -786,73 +816,77 @@ const existingBounds = {
   maxTemporalNodes: 10_000,
 };
 for (const input of existing)
-  test(`operator sharing existing cohort v2 acceptance and v1 semantics: ${input.name}`, {
-    timeout: 60_000,
-  }, () => {
-    const selected = versioned(input, 2);
-    const request = { kind: "compile-tla" as const, ...selected };
-    const ts = capture(() => ({
-      kind: "compiled" as const,
-      program: compileTlaSafety(selected),
-    }));
-    const rust = capture(() => core.request({ version: 1, request }));
-    assert.deepEqual(native(request), rust);
-    if (
-      ["string-len-supplementary", "string-tail-prefix"].includes(input.name)
-    ) {
-      assert.deepEqual(ts, {
-        kind: "error",
-        code: "protocol",
-        message:
-          "Unsupported TLA input: TLC 1.7.4 string literal contains a character outside the byte range",
-      });
-      assert.deepEqual(rust, {
-        kind: "error",
-        code: "protocol",
-        message:
-          "Unsupported TLA input: TLC 1.7.4 string literal outside byte range",
-      });
-      return;
-    }
-    assert.deepEqual(normalize(ts), normalize(rust));
-    assert.equal(ts.kind, "compiled", JSON.stringify(ts));
-    assert.equal(rust.kind, "compiled", JSON.stringify(rust));
-    assert.ok(ts.kind === "compiled");
-    const check = {
-      kind: "check-tla" as const,
-      ...selected,
-      bounds: existingBounds,
-    };
-    const wasm = capture(() => core.request({ version: 1, request: check }));
-    assert.deepEqual(native(check), wasm);
-    const tsCheck = {
-      kind: "check-safety" as const,
-      program: ts.program,
-      bounds: existingBounds,
-    };
-    const tsWasm = capture(() =>
-      core.request({ version: 1, request: tsCheck }),
-    );
-    assert.deepEqual(native(tsCheck), tsWasm);
-    assert.deepEqual(tsWasm, wasm);
-    const v1 = capture(() =>
-      core.request({
-        version: 1,
-        request: { ...check, irVersion: 1 },
-      }),
-    );
-    const tsV1 = capture(() => ({
-      kind: "safety" as const,
-      result: checkSafety(
-        core,
-        compileTlaSafety(versioned(input, 1)),
-        existingBounds,
-      ),
-    }));
-    assert.equal(wasm.kind, v1.kind, JSON.stringify({ v1, v2: wasm }));
-    assert.deepEqual(semanticOutcome(tsV1), semanticOutcome(v1));
-    assert.deepEqual(semanticOutcome(wasm), semanticOutcome(v1));
-  });
+  test(
+    `operator sharing existing cohort v2 acceptance and v1 semantics: ${input.name}`,
+    {
+      timeout: 60_000,
+    },
+    () => {
+      const selected = versioned(input, 2);
+      const request = { kind: "compile-tla" as const, ...selected };
+      const ts = capture(() => ({
+        kind: "compiled" as const,
+        program: compileTlaSafety(selected),
+      }));
+      const rust = capture(() => core.request({ version: 1, request }));
+      assert.deepEqual(native(request), rust);
+      if (
+        ["string-len-supplementary", "string-tail-prefix"].includes(input.name)
+      ) {
+        assert.deepEqual(ts, {
+          kind: "error",
+          code: "protocol",
+          message:
+            "Unsupported TLA input: TLC 1.7.4 string literal contains a character outside the byte range",
+        });
+        assert.deepEqual(rust, {
+          kind: "error",
+          code: "protocol",
+          message:
+            "Unsupported TLA input: TLC 1.7.4 string literal outside byte range",
+        });
+        return;
+      }
+      assert.deepEqual(normalize(ts), normalize(rust));
+      assert.equal(ts.kind, "compiled", JSON.stringify(ts));
+      assert.equal(rust.kind, "compiled", JSON.stringify(rust));
+      assert.ok(ts.kind === "compiled");
+      const check = {
+        kind: "check-tla" as const,
+        ...selected,
+        bounds: existingBounds,
+      };
+      const wasm = capture(() => core.request({ version: 1, request: check }));
+      assert.deepEqual(native(check), wasm);
+      const tsCheck = {
+        kind: "check-safety" as const,
+        program: ts.program,
+        bounds: existingBounds,
+      };
+      const tsWasm = capture(() =>
+        core.request({ version: 1, request: tsCheck }),
+      );
+      assert.deepEqual(native(tsCheck), tsWasm);
+      assert.deepEqual(tsWasm, wasm);
+      const v1 = capture(() =>
+        core.request({
+          version: 1,
+          request: { ...check, irVersion: 1 },
+        }),
+      );
+      const tsV1 = capture(() => ({
+        kind: "safety" as const,
+        result: checkSafety(
+          core,
+          compileTlaSafety(versioned(input, 1)),
+          existingBounds,
+        ),
+      }));
+      assert.equal(wasm.kind, v1.kind, JSON.stringify({ v1, v2: wasm }));
+      assert.deepEqual(semanticOutcome(tsV1), semanticOutcome(v1));
+      assert.deepEqual(semanticOutcome(wasm), semanticOutcome(v1));
+    },
+  );
 
 test("operator sharing explicit v2 compiles on both frontends and bridges", () => {
   const selected = versioned(inputAt("sharing-unused-argument"), 2);
@@ -1310,29 +1344,33 @@ for (const [name, input] of [
     ),
   ],
 ] as const)
-  test(`operator sharing v2 handwritten source control: ${name}`, {
-    timeout: 60_000,
-  }, () => {
-    const ts = compileTlaSafety(input);
-    const rust = compileTlaSource(core, input);
-    assert.equal(ts.version, 2);
-    assert.equal(rust.version, 2);
-    assert.deepEqual(normalize(ts), normalize(rust));
-    assertSharedAccepted(ts);
-    assertSharedAccepted(rust);
-    const compileRequest = { kind: "compile-tla" as const, ...input };
-    const wasm = core.request({ version: 1, request: compileRequest });
-    assert.equal(wasm.kind, "compiled");
-    assert.deepEqual(native(compileRequest), wasm);
-    const checkRequest = {
-      kind: "check-tla" as const,
-      ...input,
-      bounds,
-    };
-    const checked = core.request({ version: 1, request: checkRequest });
-    assert.equal(checked.kind, "safety");
-    assert.deepEqual(native(checkRequest), checked);
-  });
+  test(
+    `operator sharing v2 handwritten source control: ${name}`,
+    {
+      timeout: 60_000,
+    },
+    () => {
+      const ts = compileTlaSafety(input);
+      const rust = compileTlaSource(core, input);
+      assert.equal(ts.version, 2);
+      assert.equal(rust.version, 2);
+      assert.deepEqual(normalize(ts), normalize(rust));
+      assertSharedAccepted(ts);
+      assertSharedAccepted(rust);
+      const compileRequest = { kind: "compile-tla" as const, ...input };
+      const wasm = core.request({ version: 1, request: compileRequest });
+      assert.equal(wasm.kind, "compiled");
+      assert.deepEqual(native(compileRequest), wasm);
+      const checkRequest = {
+        kind: "check-tla" as const,
+        ...input,
+        bounds,
+      };
+      const checked = core.request({ version: 1, request: checkRequest });
+      assert.equal(checked.kind, "safety");
+      assert.deepEqual(native(checkRequest), checked);
+    },
+  );
 
 test("operator sharing v2 handwritten source refusal: nested actuals exceed 40", () => {
   const input = sourceControl(
@@ -1388,62 +1426,78 @@ const compileParity = (input: TlaSourceOptions): SafetyProgram => {
 };
 
 for (const position of ["invariant", "guard", "prime", "membership"] as const)
-  test(`operator sharing compile-only forward chain 5000: ${position}`, {
+  test(
+    `operator sharing compile-only forward chain 5000: ${position}`,
+    {
+      timeout: 60_000,
+    },
+    () => {
+      const terminal =
+        position === "membership"
+          ? "0..1"
+          : position === "prime"
+            ? "x"
+            : "x = 0";
+      const declarations = Array.from(
+        { length: 5000 },
+        (_, id) => `O${id} == ${id === 4999 ? terminal : `O${id + 1}`}`,
+      ).join("\n");
+      const input = {
+        source: `---- MODULE ForwardChain ----\nEXTENDS Naturals\nVARIABLE x\n${declarations}\nInit == x = 0\nNext == ${position === "guard" ? "O0 /\\ " : ""}UNCHANGED x\nSafe == ${position === "invariant" ? "O0" : position === "prime" ? "O0 = 0" : position === "membership" ? "x \\in O0" : "x = 0"}\nP == [][O0' = x]_x\n====`,
+        config: `INIT Init\nNEXT Next\nINVARIANT Safe${position === "prime" ? "\nPROPERTY P" : ""}`,
+        irVersion: 2 as const,
+      };
+      const program = compileParity(input);
+      assert.equal(program.version, 2);
+      assert.ok(program.definitions && program.definitions.length >= 5000);
+    },
+  );
+
+test(
+  "operator sharing compile-only 5000-definition cycle is a typed refusal",
+  {
     timeout: 60_000,
-  }, () => {
-    const terminal =
-      position === "membership" ? "0..1" : position === "prime" ? "x" : "x = 0";
-    const declarations = Array.from(
-      { length: 5000 },
-      (_, id) => `O${id} == ${id === 4999 ? terminal : `O${id + 1}`}`,
-    ).join("\n");
+  },
+  () => {
     const input = {
-      source: `---- MODULE ForwardChain ----\nEXTENDS Naturals\nVARIABLE x\n${declarations}\nInit == x = 0\nNext == ${position === "guard" ? "O0 /\\ " : ""}UNCHANGED x\nSafe == ${position === "invariant" ? "O0" : position === "prime" ? "O0 = 0" : position === "membership" ? "x \\in O0" : "x = 0"}\nP == [][O0' = x]_x\n====`,
-      config: `INIT Init\nNEXT Next\nINVARIANT Safe${position === "prime" ? "\nPROPERTY P" : ""}`,
+      source: `---- MODULE LongCycle ----\nVARIABLE x\n${Array.from({ length: 5000 }, (_, id) => `O${id} == O${(id + 1) % 5000}`).join("\n")}\nInit == x = 0\nNext == UNCHANGED x\nSafe == O0\n====`,
+      config: "INIT Init\nNEXT Next\nINVARIANT Safe",
+      irVersion: 2 as const,
+    };
+    const ts = capture(() => compileTlaSafety(input));
+    const rust = capture(() => compileTlaSource(core, input));
+    assert.deepEqual(ts, {
+      kind: "error",
+      code: "protocol",
+      message: "Unsupported TLA input: recursive operator definitions",
+    });
+    assert.deepEqual(rust, {
+      kind: "error",
+      code: "protocol",
+      message:
+        "Unsupported TLA input: recursive operator definitions require RECURSIVE declarations",
+    });
+    assert.deepEqual(native({ kind: "compile-tla", ...input }), rust);
+  },
+);
+
+test(
+  "operator sharing compile-only sibling LET scopes share declaration storage",
+  {
+    timeout: 60_000,
+  },
+  () => {
+    const tuple = `<<${Array.from({ length: 64 }, (_, index) => index).join(",")}>>`;
+    const input = {
+      source: `---- MODULE ScopeCost ----\nVARIABLE x\n${Array.from({ length: 1000 }, (_, id) => `D${id} == ${tuple}`).join("\n")}\nInit == x = 0\nNext == UNCHANGED x\nSafe == <<${Array.from({ length: 1000 }, (_, id) => `LET Local == D${id} IN Local`).join(",")}>>\n====`,
+      config: "INIT Init\nNEXT Next\nINVARIANT Safe",
       irVersion: 2 as const,
     };
     const program = compileParity(input);
     assert.equal(program.version, 2);
-    assert.ok(program.definitions && program.definitions.length >= 5000);
-  });
-
-test("operator sharing compile-only 5000-definition cycle is a typed refusal", {
-  timeout: 60_000,
-}, () => {
-  const input = {
-    source: `---- MODULE LongCycle ----\nVARIABLE x\n${Array.from({ length: 5000 }, (_, id) => `O${id} == O${(id + 1) % 5000}`).join("\n")}\nInit == x = 0\nNext == UNCHANGED x\nSafe == O0\n====`,
-    config: "INIT Init\nNEXT Next\nINVARIANT Safe",
-    irVersion: 2 as const,
-  };
-  const ts = capture(() => compileTlaSafety(input));
-  const rust = capture(() => compileTlaSource(core, input));
-  assert.deepEqual(ts, {
-    kind: "error",
-    code: "protocol",
-    message: "Unsupported TLA input: recursive operator definitions",
-  });
-  assert.deepEqual(rust, {
-    kind: "error",
-    code: "protocol",
-    message:
-      "Unsupported TLA input: recursive operator definitions require RECURSIVE declarations",
-  });
-  assert.deepEqual(native({ kind: "compile-tla", ...input }), rust);
-});
-
-test("operator sharing compile-only sibling LET scopes share declaration storage", {
-  timeout: 60_000,
-}, () => {
-  const tuple = `<<${Array.from({ length: 64 }, (_, index) => index).join(",")}>>`;
-  const input = {
-    source: `---- MODULE ScopeCost ----\nVARIABLE x\n${Array.from({ length: 1000 }, (_, id) => `D${id} == ${tuple}`).join("\n")}\nInit == x = 0\nNext == UNCHANGED x\nSafe == <<${Array.from({ length: 1000 }, (_, id) => `LET Local == D${id} IN Local`).join(",")}>>\n====`,
-    config: "INIT Init\nNEXT Next\nINVARIANT Safe",
-    irVersion: 2 as const,
-  };
-  const program = compileParity(input);
-  assert.equal(program.version, 2);
-  assert.equal(program.definitions?.length, 2001);
-});
+    assert.equal(program.definitions?.length, 2001);
+  },
+);
 
 for (const arms of [1, 48, 127, 128, 129, 169])
   test(`operator sharing CASE preserves existing limits: ${arms} arms`, () => {

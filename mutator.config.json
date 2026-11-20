@@ -3,6 +3,6 @@
   "include": ["src/conformance.ts", "examples/durable-counter.ts"],
   "concurrency": 2,
   "runner": "vitest",
-  "vitestConfig": "vitest.mutation.config.ts",
+  "vitestConfig": "tests/vitest.mutation.config.ts",
   "reporters": ["text", "json"]
 }

@@ -736,7 +736,7 @@ const run = async () => {
   if (sync && code === 0)
     execFileSync(
       "pnpm",
-      ["exec", "biome", "format", "--write", ".jev-lint/checklists"],
+      ["exec", "vp", "fmt", "--write", ".jev-lint/checklists"],
       { cwd: root, stdio: "inherit" },
     );
   process.exitCode = code;

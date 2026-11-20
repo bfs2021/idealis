@@ -5,8 +5,8 @@ import {
 } from "../../examples/counter-model.js";
 import type { FiniteModel, PortableTrace } from "../../src/contracts.js";
 import { compileFiniteModel, parseFiniteModel } from "../../src/finite.js";
-import { toPortableTrace } from "../../src/portable.js";
 import { parsePortableTrace } from "../../src/portable-value.js";
+import { toPortableTrace } from "../../src/portable.js";
 import { isRecord } from "../../src/trace.js";
 import { type CounterFault, counterFaults } from "../harness/counter-faults.js";
 import { generateCorpus } from "../harness/search.js";

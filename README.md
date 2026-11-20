@@ -113,7 +113,7 @@ rustup target add wasm32-unknown-unknown
 just wasm-test
 ```
 
-`just check` は lint、型検査、Vitest、`node:test` を実行する。`just wasm-test` は実Wasmの判定・ABI・反例再生・エラー復旧とnativeとの照合をNodeで実行する。ブラウザやDOMの起動は必要ない。共通の挙動テストを両ランナーに登録している。`just mutation` は `@mizchi/mutator` で TS ソースを変異させ、Vitest で検査する。
+`just check` は Vite+ の format・lint 検査、TypeScript の型検査、Vitest、`node:test` を実行する。整形には `pnpm exec vp fmt` を使う。`just wasm-test` は実Wasmの判定・ABI・反例再生・エラー復旧とnativeとの照合をNodeで実行する。ブラウザやDOMの起動は必要ない。共通の挙動テストを両ランナーに登録している。`just mutation` は `@mizchi/mutator` で TS ソースを変異させ、Vitest で検査する。
 
 評価と改善のループは `just eval-loop`、保存した故障の再現は `just replay-loop`。[evals/](evals/README.md) に仮説・条件・run・判断・次の仮説を残す。初回の幅広い比較は `just evaluate` / `just replay-evaluation` で再実行できる。実験用の探索器・履歴 checker は public API に含めない。
 
@@ -199,6 +199,7 @@ native 8は反復の幅が重なり、最終反復では逆転した。関数モ
 Apple M5 arm64、Node 24.22.2、tla-ts 0.0.10、固定arm64 Java/TLCを使用した。WasmはNode上の値。非専用ホストの負荷変動を含む。[全sample・最小/最大・Criterion・互換性検査](evals/iterations/0057-probe-updates.md)を参照。domain共有とbit圧縮の[前回0056](evals/iterations/0056-compact-functions.md)、下の0022時点の4モデル表は別runで、今回の値と混在させていない。
 
 <!-- checker-comparison:start -->
+
 ## モデル検査の速度比較
 
 0062の同一runで、同じTLA+ source/configを各回別processから完全探索した時間。単位は秒、各条件1 warmup後3回の中央値。Apple M5 arm64、32 GiB、Node 24.22.2、tla-ts 0.0.10、tla2tools v1.7.4 / Temurin 21.0.13+9。native/Wasmは共通のTS frontend・Node起動・IR転送を含むIR v1経路で、Rustのsource APIだけの時間とは分ける。

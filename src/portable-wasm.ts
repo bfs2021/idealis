@@ -25,9 +25,9 @@ import {
   parsePortableTrace,
   toPortableValue,
 } from "./portable-value.js";
-import { decodeSafetyResult } from "./safety.js";
 import { decodeSafetyCoverageReport } from "./safety-coverage.js";
 import { decodeSafetyProgram } from "./safety-program.js";
+import { decodeSafetyResult } from "./safety.js";
 import { isRecord } from "./trace.js";
 
 const fields = (

@@ -10,9 +10,9 @@ import {
   createFiniteModel,
   parseFiniteModel,
 } from "../../src/finite.js";
-import { checkFiniteHistories } from "../../src/portable.js";
 import { parsePortableTrace } from "../../src/portable-value.js";
 import { decodePortableResult } from "../../src/portable-wasm.js";
+import { checkFiniteHistories } from "../../src/portable.js";
 import { isRecord } from "../../src/trace.js";
 import { startNative } from "./native.js";
 

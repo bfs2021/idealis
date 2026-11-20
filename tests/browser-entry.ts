@@ -13,8 +13,8 @@ import {
 } from "../src/portable.js";
 import { checkProperty } from "../src/property.js";
 import { createSmtOracle } from "../src/smt.js";
-import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
 import { checkTlaSource } from "../src/tla-source.js";
+import { compileTlaSafety, generateTlaOracle } from "../src/tla.js";
 
 export const runGenerated = async (
   inputs: readonly { readonly source: string; readonly config: string }[],

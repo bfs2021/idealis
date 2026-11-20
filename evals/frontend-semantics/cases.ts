@@ -57,16 +57,14 @@ export const levelCases: readonly FrontendCase[] = [
 });
 
 export const benchmarkCases: readonly FrontendCase[] = [
-  ...[4, 6].map(
-    (depth): FrontendCase => ({
-      name: `action-repeat-${depth}`,
-      family: "template",
-      expected: "complete",
-      irVersion: 2,
-      source: `---- MODULE Differential ----\nEXTENDS Naturals\nVARIABLE x\nA0(v) == x'=v\n${Array.from({ length: depth }, (_, index) => `A${index + 1}(v) == A${index}(v) \\/ A${index}(v)`).join("\n")}\nInit == x=0\nNext == A${depth}((x+1)%4)\n====`,
-      config: "INIT Init\nNEXT Next\nCHECK_DEADLOCK FALSE",
-    }),
-  ),
+  ...[4, 6].map((depth): FrontendCase => ({
+    name: `action-repeat-${depth}`,
+    family: "template",
+    expected: "complete",
+    irVersion: 2,
+    source: `---- MODULE Differential ----\nEXTENDS Naturals\nVARIABLE x\nA0(v) == x'=v\n${Array.from({ length: depth }, (_, index) => `A${index + 1}(v) == A${index}(v) \\/ A${index}(v)`).join("\n")}\nInit == x=0\nNext == A${depth}((x+1)%4)\n====`,
+    config: "INIT Init\nNEXT Next\nCHECK_DEADLOCK FALSE",
+  })),
   {
     name: "action-capture",
     family: "template",
@@ -80,16 +78,14 @@ Next == \E delta \in {1,2}: LET Step(v) == x'=(x+delta+v)%4 IN Step(0) \/ Step(0
 ====`,
     config: "INIT Init\nNEXT Next\nCHECK_DEADLOCK FALSE",
   },
-  ...[3, 5].map(
-    (depth): FrontendCase => ({
-      name: `temporal-repeat-${depth}`,
-      family: "template",
-      expected: "complete",
-      irVersion: 2,
-      source: `---- MODULE Differential ----\nEXTENDS Naturals\nVARIABLE x\nT0(limit) == [](x<limit)\n${Array.from({ length: depth }, (_, index) => `T${index + 1}(limit) == T${index}(limit) /\\ T${index}(limit)`).join("\n")}\nInit == x=0\nNext == x'=(x+1)%4\nLive == T${depth}(4)\n====`,
-      config: "INIT Init\nNEXT Next\nPROPERTY Live\nCHECK_DEADLOCK FALSE",
-    }),
-  ),
+  ...[3, 5].map((depth): FrontendCase => ({
+    name: `temporal-repeat-${depth}`,
+    family: "template",
+    expected: "complete",
+    irVersion: 2,
+    source: `---- MODULE Differential ----\nEXTENDS Naturals\nVARIABLE x\nT0(limit) == [](x<limit)\n${Array.from({ length: depth }, (_, index) => `T${index + 1}(limit) == T${index}(limit) /\\ T${index}(limit)`).join("\n")}\nInit == x=0\nNext == x'=(x+1)%4\nLive == T${depth}(4)\n====`,
+    config: "INIT Init\nNEXT Next\nPROPERTY Live\nCHECK_DEADLOCK FALSE",
+  })),
   {
     name: "scalar-control",
     family: "template",

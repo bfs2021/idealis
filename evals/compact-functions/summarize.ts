@@ -81,7 +81,7 @@ const models = cases("large")
       const samples = selected.filter((sample) => sample.route === route);
       assert.equal(samples.length, 3);
       assert.deepEqual(
-        [...samples.map((sample) => sample.iteration)].sort(),
+        samples.map((sample) => sample.iteration).sort(),
         [1, 2, 3],
       );
       const wall = stats(samples.map((sample) => sample.wallMs));

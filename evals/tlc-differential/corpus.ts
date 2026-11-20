@@ -182,15 +182,13 @@ export const foldCases = (): readonly Input[] => [
       `ApaFoldSet(Op, <<>>, {${member}})`,
     );
   }),
-  ...(["ApaFoldSet", "ApaFoldSeqLeft"] as const).map(
-    (operator): Input => ({
-      name: `fold-own-${operator}`,
-      family: "value",
-      goldenFrontendParity: true,
-      source: `---- MODULE Differential ----\nVARIABLE x\n${operator}(a, b, c) == b\nInit == x = ${operator}(0, 7, {})\nNext == UNCHANGED x\nProp == x # x\n====`,
-      config: "INIT Init\nNEXT Next\nINVARIANT Prop\nCHECK_DEADLOCK FALSE",
-    }),
-  ),
+  ...(["ApaFoldSet", "ApaFoldSeqLeft"] as const).map((operator): Input => ({
+    name: `fold-own-${operator}`,
+    family: "value",
+    goldenFrontendParity: true,
+    source: `---- MODULE Differential ----\nVARIABLE x\n${operator}(a, b, c) == b\nInit == x = ${operator}(0, 7, {})\nNext == UNCHANGED x\nProp == x # x\n====`,
+    config: "INIT Init\nNEXT Next\nINVARIANT Prop\nCHECK_DEADLOCK FALSE",
+  })),
   {
     name: "fold-next-action",
     family: "graph",
@@ -469,15 +467,13 @@ export const boundaries = (): readonly Input[] => [
         "IF TRUE THEN UNCHANGED x ELSE CASE FALSE -> x' = 9",
       ],
     ] as const
-  ).map(
-    ([name, next]): Input => ({
-      name,
-      goldenFrontendParity: true,
-      family: "control",
-      source: `---- MODULE Differential ----\nEXTENDS Sequences\nVARIABLE x\nInit == x = 0\nNext == ${next}\n====`,
-      config: "INIT Init\nNEXT Next",
-    }),
-  ),
+  ).map(([name, next]): Input => ({
+    name,
+    goldenFrontendParity: true,
+    family: "control",
+    source: `---- MODULE Differential ----\nEXTENDS Sequences\nVARIABLE x\nInit == x = 0\nNext == ${next}\n====`,
+    config: "INIT Init\nNEXT Next",
+  })),
   {
     name: "positive-control",
     family: "control",

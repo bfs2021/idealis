@@ -515,18 +515,17 @@ type SafetyExpressionFor<Version extends 1 | 2> =
       readonly domain: SafetyDomain<Version>;
     }
   | (Version extends 2
-      ?
-          | (SafetyFrameFor<Version> & {
-              readonly op: "frame";
-              readonly body: SafetyExpressionFor<Version>;
-            })
-          | {
-              readonly op: "call";
-              readonly definition: number;
-              readonly arguments: readonly SafetyExpressionFor<Version>[];
-              readonly captures: readonly SafetyExpressionFor<Version>[];
-            }
-          | { readonly op: "parameter" | "capture"; readonly slot: number }
+      ? | (SafetyFrameFor<Version> & {
+            readonly op: "frame";
+            readonly body: SafetyExpressionFor<Version>;
+          })
+        | {
+            readonly op: "call";
+            readonly definition: number;
+            readonly arguments: readonly SafetyExpressionFor<Version>[];
+            readonly captures: readonly SafetyExpressionFor<Version>[];
+          }
+        | { readonly op: "parameter" | "capture"; readonly slot: number }
       : never);
 
 export type SafetyExpression = SafetyExpressionFor<1>;
@@ -567,17 +566,16 @@ export type SafetyStep<Version extends 1 | 2 = 1> =
       readonly domain: SafetyDomain<Version>;
     }
   | (Version extends 2
-      ?
-          | {
-              readonly kind: "call";
-              readonly definition: number;
-              readonly arguments: readonly SafetyExpressionFor<Version>[];
-              readonly captures: readonly SafetyExpressionFor<Version>[];
-            }
-          | (SafetyFrameFor<Version> & {
-              readonly kind: "frame";
-              readonly branches: readonly SafetyBranch<Version>[];
-            })
+      ? | {
+            readonly kind: "call";
+            readonly definition: number;
+            readonly arguments: readonly SafetyExpressionFor<Version>[];
+            readonly captures: readonly SafetyExpressionFor<Version>[];
+          }
+        | (SafetyFrameFor<Version> & {
+            readonly kind: "frame";
+            readonly branches: readonly SafetyBranch<Version>[];
+          })
       : never);
 
 export interface SafetyBranch<Version extends 1 | 2 = 1> {
@@ -608,17 +606,16 @@ export type TemporalFormula<Version extends 1 | 2 = 1> =
       readonly right: TemporalFormula<Version>;
     }
   | (Version extends 2
-      ?
-          | {
-              readonly kind: "call";
-              readonly definition: number;
-              readonly arguments: readonly SafetyExpressionFor<Version>[];
-              readonly captures: readonly SafetyExpressionFor<Version>[];
-            }
-          | (SafetyFrameFor<Version> & {
-              readonly kind: "frame";
-              readonly formula: TemporalFormula<Version>;
-            })
+      ? | {
+            readonly kind: "call";
+            readonly definition: number;
+            readonly arguments: readonly SafetyExpressionFor<Version>[];
+            readonly captures: readonly SafetyExpressionFor<Version>[];
+          }
+        | (SafetyFrameFor<Version> & {
+            readonly kind: "frame";
+            readonly formula: TemporalFormula<Version>;
+          })
       : never);
 
 export interface TemporalProperty<Version extends 1 | 2 = 1> {

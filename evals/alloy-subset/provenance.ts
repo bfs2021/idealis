@@ -16,7 +16,7 @@ export const fingerprint = async () => {
     "crates/ralloy",
     "evals/alloy-subset",
     "evals/plans/0034-alloy-subset.md",
-    "alloy-playwright.config.ts",
+    "playwright.config.ts",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
     "scripts/package.ts",

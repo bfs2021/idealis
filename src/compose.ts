@@ -100,18 +100,18 @@ export const composeModels = <
         right.key(state.right.state),
       ]),
     actions: (state) => [
-      ...left.actions(state.left.state).map(
-        (action): ProductAction<LeftAction, RightAction> => ({
+      ...left
+        .actions(state.left.state)
+        .map((action): ProductAction<LeftAction, RightAction> => ({
           target: "left",
           action,
-        }),
-      ),
-      ...right.actions(state.right.state).map(
-        (action): ProductAction<LeftAction, RightAction> => ({
+        })),
+      ...right
+        .actions(state.right.state)
+        .map((action): ProductAction<LeftAction, RightAction> => ({
           target: "right",
           action,
-        }),
-      ),
+        })),
       ...(options.sharedActions?.(state) ?? []).map(
         (action): ProductAction<LeftAction, RightAction> => ({
           target: "both",

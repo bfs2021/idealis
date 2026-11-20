@@ -263,13 +263,11 @@ try {
       64,
     );
   }
-  for (const workers of [
-    ...new Set([
-      1,
-      Math.min(2, availableParallelism()),
-      Math.min(4, availableParallelism()),
-    ]),
-  ]) {
+  for (const workers of new Set([
+    1,
+    Math.min(2, availableParallelism()),
+    Math.min(4, availableParallelism()),
+  ])) {
     const pool = await createPool(workers);
     try {
       await calibrate(

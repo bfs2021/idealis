@@ -220,7 +220,7 @@ export const decodeCases = (
   trace: readonly number[],
 ): readonly (readonly CounterAction[])[] => {
   const cases: CounterAction[][] = [];
-  for (let offset = 0; offset < trace.length; ) {
+  for (let offset = 0; offset < trace.length;) {
     const length = trace[offset++];
     if (length === undefined || length < 1 || offset + length > trace.length)
       throw new Error("Malformed kernel trace");

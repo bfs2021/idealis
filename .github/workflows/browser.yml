@@ -17,14 +17,6 @@ jobs:
       - run: rustup target add wasm32-unknown-unknown
       - run: pnpm wasm:build
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:browser
-      - run: pnpm portable:browser
-      - run: pnpm runtime:browser
-      - run: pnpm exec playwright test --config oracle-playwright.config.ts
-      - run: pnpm exec playwright test --config sat-playwright.config.ts
-      - run: pnpm exec playwright test --config testing-playwright.config.ts
-      - run: pnpm exec playwright test --config schedules-playwright.config.ts
-      - run: pnpm exec playwright test --config fuzz-playwright.config.ts
-      - run: pnpm exec playwright test --config smt-playwright.config.ts
-      - run: pnpm exec playwright test --config alloy-playwright.config.ts
-      - run: pnpm exec playwright test --config alloy-instance-playwright.config.ts
+      - run: >-
+          pnpm exec playwright test --workers=1
+          --project core portable rtla runtime oracle sat testing schedules fuzz smt alloy alloy-instance

@@ -302,26 +302,24 @@ const wireFixtures: readonly WireFixture[] = [
     "slot",
     "Invalid safety assignment slot",
   ),
-  ...["slot", "tupleSize"].map(
-    (field): WireFixture => ({
-      name: `Binding.${field}`,
-      value: {
-        ...wireBase,
-        invariants: [
-          {
-            name: "Safe",
-            expression: {
-              op: "forall",
-              bounds: [{ slot: 0, tupleSize: 1, domain: wireDomain }],
-              body: wireLiteral,
-            },
+  ...["slot", "tupleSize"].map((field): WireFixture => ({
+    name: `Binding.${field}`,
+    value: {
+      ...wireBase,
+      invariants: [
+        {
+          name: "Safe",
+          expression: {
+            op: "forall",
+            bounds: [{ slot: 0, tupleSize: 1, domain: wireDomain }],
+            body: wireLiteral,
           },
-        ],
-      },
-      path: ["invariants", 0, "expression", "bounds", 0, field],
-      nativeMaxError: "Invalid bound variable slot",
-    }),
-  ),
+        },
+      ],
+    },
+    path: ["invariants", 0, "expression", "bounds", 0, field],
+    nativeMaxError: "Invalid bound variable slot",
+  })),
   ...["id", "parameterCount", "captureCount", "localScope"].map(
     (field): WireFixture => ({
       name: `Definition.${field}`,

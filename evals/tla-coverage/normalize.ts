@@ -138,7 +138,7 @@ export const normalizeSany = (tree: unknown): unknown => {
       .filter(
         (node) =>
           node.image.startsWith("N_") ||
-          /^"/.test(node.image) ||
+          node.image.startsWith('"') ||
           node.image === "@",
       )
       .map((node) => expression(node, level));

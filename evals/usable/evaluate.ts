@@ -10,6 +10,7 @@ import {
   createFiniteModel,
 } from "../../src/finite.js";
 import { createSimulationHost } from "../../src/host.js";
+import { decodePortableResult } from "../../src/portable-wasm.js";
 import {
   checkFiniteHistories,
   coreDeletionCandidates,
@@ -18,7 +19,6 @@ import {
   toPortableValue,
   verifyHostTape,
 } from "../../src/portable.js";
-import { decodePortableResult } from "../../src/portable-wasm.js";
 import { shrinkCounterexample } from "../../src/shrink.js";
 import { isRecord } from "../../src/trace.js";
 import { generateCorpus } from "../harness/search.js";

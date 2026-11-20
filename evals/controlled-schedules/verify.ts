@@ -104,9 +104,7 @@ export const verify = async (
                 await native.runtime.replay(
                   testCase,
                   async (value) =>
-                    (
-                      await sut.evaluate(actors, value, false)
-                    ).verdict,
+                    (await sut.evaluate(actors, value, false)).verdict,
                 )
               ).status,
               "passed",

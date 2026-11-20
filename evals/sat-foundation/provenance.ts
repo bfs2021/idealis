@@ -15,14 +15,14 @@ export const fingerprint = async () => {
     "evals/sat-foundation",
     "evals/plans/0037-sat-foundation.md",
     "evals/plans/0037-sat-protocol.md",
-    "sat-playwright.config.ts",
+    "playwright.config.ts",
     "justfile",
     ".github/workflows/ci.yml",
     "package.json",
     "pnpm-lock.yaml",
     "tsconfig.json",
     "tsconfig.build.json",
-    "biome.json",
+    "vite.config.ts",
     ".gitignore",
   ])
     .toString()

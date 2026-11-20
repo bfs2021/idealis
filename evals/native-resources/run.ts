@@ -28,9 +28,8 @@ const paths = [
 ];
 const fixtures: Fixture[] = (
   await Promise.all(
-    paths.map(
-      async (path): Promise<Fixture[]> =>
-        JSON.parse(await readFile(path, "utf8")),
+    paths.map(async (path): Promise<Fixture[]> =>
+      JSON.parse(await readFile(path, "utf8")),
     ),
   )
 ).flat();
