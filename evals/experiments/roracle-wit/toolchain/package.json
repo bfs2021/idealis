@@ -2,7 +2,10 @@
   "name": "roracle-wit-toolchain",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "pnpm": ">=12"
+  },
   "devDependencies": {
     "@bytecodealliance/jco-transpile": "0.24.0"
   }
