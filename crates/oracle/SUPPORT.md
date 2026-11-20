@@ -17,7 +17,7 @@
 
 - [x] wire専用visitorによる観測payloadの直接deserialize。公開Observationのserdeに対し、kind/field・順序・重複・null・数値・2要素sequenceの受理/拒否と保持した観測を検査する。公開型と全reportは保ち、不正variantの詳細診断文は固定しない。
 
-- [x] dispatch_valueでcanonical JSON Valueを同じRequestとOracleGroupへ通す。16 MiBのcanonical serialization sizeとparser相当の入れ子制限を検査し、過深入力は再帰dropを避ける。bytesとの全report比較と拒否入力を検査する。
+- [x] dispatch_valueでcanonical JSON Valueを同じRequestとOracleGroupへ通す。16 MiBのcanonical serialization sizeとparser相当の入れ子制限を検査し、過深入力は再帰dropを避ける。dispatch_value_to_jsonは同じ検査を通し、全応答をJSON文字列へ直接出力する。bytesとの全report比較と拒否入力を検査する。
 
 - [x] 開発用typescript featureのtypescript::definitionsでRustのrequest/report型からTS宣言を生成する。既定buildはts-rsやNode bindingを要求しない。生成型はobject形式を表し、serdeの実行時制約やlegacy sequenceの全受理範囲をTS型だけで表さない。
 

@@ -76,7 +76,7 @@ nativeの`bench`は`Instant`を使う。Wasmは`bench_with_clock(config, clock)`
 
 Wasmは`oracle_abi_version`、`oracle_input_resize`、`oracle_dispatch`、`oracle_output_ptr/len`とmemoryをexportする。inputへUTF-8 JSONを書き、dispatch後にoutputをコピーする。過大なresizeは0を返して前のinputを消す。bufferは次のresize/dispatchで無効になり、runtimeへの呼び出しは直列にする。JS bindingはworkspaceの[eval adapter](../../evals/workspace-oracle/README.md)へ置き、npm公開APIには追加していない。
 
-`dispatch_value(serde_json::Value)`も同じRequestとOracleGroupを使う。canonical serializationで16 MiBを検査し、深すぎる入れ子は再帰的にdropせず拒否する。文字列表現や重複fieldを保持する必要がある場合はbytes APIを使う。
+`dispatch_value(serde_json::Value)`も同じRequestとOracleGroupを使う。文字列を返すホストは `dispatch_value_to_json` を使うと、検査済みの応答を直接 JSON に書き出せる。どちらもcanonical serializationで16 MiBを検査し、深すぎる入れ子は再帰的にdropせず拒否する。文字列表現や重複fieldを保持する必要がある場合はbytes APIを使う。
 
 ## RustからTS型を生成する
 

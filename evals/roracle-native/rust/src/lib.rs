@@ -12,5 +12,5 @@ pub fn dispatch_json(input: String) -> String {
 
 #[napi(ts_args_type = "input: import('../../../src/generated/roracle.js').OracleRequest")]
 pub fn dispatch_object(input: serde_json::Value) -> String {
-    serde_json::to_string(&roracle::dispatch_value(input)).expect("serializable oracle response")
+    roracle::dispatch_value_to_json(input)
 }

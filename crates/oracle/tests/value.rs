@@ -1,4 +1,4 @@
-use roracle::{dispatch, dispatch_value};
+use roracle::{dispatch, dispatch_value, dispatch_value_to_json};
 use serde_json::{Value, json};
 
 fn request(reference: Value, actual: Value) -> Value {
@@ -20,10 +20,10 @@ fn value_and_bytes_keep_every_report_and_status() {
     for reference in &observations {
         for actual in &observations {
             let input = request(reference.clone(), actual.clone());
-            assert_eq!(
-                dispatch_value(input.clone()),
-                dispatch(&serde_json::to_vec(&input).unwrap())
-            );
+            let expected = dispatch(&serde_json::to_vec(&input).unwrap());
+            assert_eq!(dispatch_value(input.clone()), expected);
+            let direct: Value = serde_json::from_str(&dispatch_value_to_json(input)).unwrap();
+            assert_eq!(direct, expected);
         }
     }
 }
@@ -35,7 +35,10 @@ fn malformed_values_remain_errors() {
         json!({}),
         request(json!({"kind":"value"}), json!({"kind":"value","value":7})),
     ] {
-        assert_eq!(dispatch_value(input.clone())["kind"], "error");
+        let expected = dispatch_value(input.clone());
+        assert_eq!(expected["kind"], "error");
+        let direct: Value = serde_json::from_str(&dispatch_value_to_json(input.clone())).unwrap();
+        assert_eq!(direct, expected);
         assert_eq!(
             dispatch(&serde_json::to_vec(&input).unwrap())["kind"],
             "error"

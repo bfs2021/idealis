@@ -243,6 +243,19 @@ export const registerNativeOracleContract = (
     assert.throws(() => decodeOracleReply(JSON.stringify(reply)));
     delete reply.report.reference;
     assert.throws(() => decodeOracleReply(JSON.stringify(reply)));
+    for (const actual of [
+      { kind: "value", value: null, extra: true },
+      { kind: "allowed", values: null },
+      { kind: "unknown", reason: 1 },
+      { kind: "invalid" },
+      { kind: "error", message: false },
+    ]) {
+      const broken = JSON.parse(
+        loadNativeBinding().dispatchJson(JSON.stringify(fixtures[0]?.input)),
+      );
+      broken.report.cases[0].comparisons[0].actual = actual;
+      assert.throws(() => decodeOracleReply(JSON.stringify(broken)));
+    }
     for (const cases of [
       [],
       [
