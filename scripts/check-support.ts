@@ -333,6 +333,18 @@ const scopes: readonly CrateScope[] = [
     name: "idealis-cli",
     evidence: [
       {
+        path: "src/bin/idealis/tlc.rs",
+        topic: "有限TLCの引数、終了値、予算切れと検査完了の区別",
+        targetContains: "`idealis tlc` は",
+        context: ["src/bin/idealis/modules.rs", "tests/tla_cli.rs"],
+      },
+      {
+        path: "src/bin/idealis/tla.rs",
+        topic: "SANY互換の限定した解析オプションと診断",
+        targetContains: "`idealis tla` は",
+        context: ["src/bin/idealis/modules.rs", "tests/tla_cli.rs"],
+      },
+      {
         path: "src/main.rs",
         topic:
           "JSONLの各行を同じEngineへ渡し、応答を行単位でflushするnative実行口",

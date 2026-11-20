@@ -499,7 +499,13 @@ package-prepare *args: build rusmt-build
 package-test *args: build
   node dist/scripts/package-test.js "$@"
 
-package-prepack: build-sdk testing-build ralloy-build portable-build rtla-build
+cli-wasm-build:
+  cargo build --release --locked --target wasm32-wasip1 --bin idealis --manifest-path crates/idealis-cli/Cargo.toml
+
+cli-compare java jar: package-prepack
+  node --experimental-strip-types scripts/compare-tla-cli.ts {{quote(java)}} {{quote(jar)}}
+
+package-prepack: cli-wasm-build build-sdk testing-build ralloy-build portable-build rtla-build
   node --experimental-strip-types scripts/prepare-npm-assets.ts
 
 complex-tlc java jar run: safety-build

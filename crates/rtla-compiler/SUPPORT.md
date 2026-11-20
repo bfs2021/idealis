@@ -4,6 +4,8 @@
 
 ## 対応済み
 
+- [x] `analyze_modules` で実行用設定なしのモジュール束に既存 linker と任意の level 検査を適用する。単独解析で proof・nested module は拒否する。
+
 - [x] 共有IRの統合でも既存v1のSYMMETRY設定を保持する。明示v2のSYMMETRYはlowering前に理由を示して拒否する。
 
 - [x] `CompileOptions.irVersion`でv1を既定・明示選択し、明示v2ではexpression定義を共有するSafetyProgramを返す。通常のv1 loweringと省略時の選択を保持し、v1拒否から自動再試行しない。別のEXCEPTへ渡す自由な`@`はv2を要求する。

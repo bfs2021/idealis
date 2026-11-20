@@ -249,6 +249,20 @@ assert.equal(
   ]).status,
   2,
 );
+await writeFile(join(consumer, "PackageSafety.tla"), sourceInput.source);
+await writeFile(join(consumer, "PackageSafety.cfg"), sourceInput.config);
+for (const [args, status, diagnostic] of [
+  [["tlc", "-workers", "1", "PackageSafety"], 12, "Safe"],
+  [
+    ["tla", join(consumer, "PackageSafety.tla")],
+    0,
+    "Semantic processing of module PackageSafety",
+  ],
+] as const) {
+  const output = spawnSync(cli, [...args], { cwd: consumer, encoding: "utf8" });
+  assert.equal(output.status, status, output.stdout + output.stderr);
+  assert.ok(output.stdout.includes(diagnostic), output.stdout);
+}
 execFileSync("tar", ["-xzf", join(directory, crate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlcCrate), "-C", consumer]);
 execFileSync("tar", ["-xzf", join(directory, rtlaCrate), "-C", consumer]);
@@ -517,8 +531,10 @@ execFileSync(
     "--offline",
     "--manifest-path",
     cliManifest,
-    "--config",
-    `patch.crates-io.idealis-connect.path=${JSON.stringify(join(testingConsumer, `idealis-connect-${version}`))}`,
+    ...["idealis-connect", "rtla", "rtlc", "rtla-compiler"].flatMap((name) => [
+      "--config",
+      `patch.crates-io.${name}.path=${JSON.stringify(join(name === "idealis-connect" ? testingConsumer : consumer, `${name}-${version}`))}`,
+    ]),
   ],
   { cwd: testingConsumer, stdio: "pipe" },
 );

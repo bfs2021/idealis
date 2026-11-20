@@ -19,34 +19,94 @@
       "role": "document"
     },
     "source4": {
-      "path": "crates/idealis-cli/src/main.rs",
+      "path": "crates/idealis-cli/src/bin/idealis/main.rs",
       "role": "reference"
     },
     "source5": {
-      "path": "crates/idealis-cli/tests/jsonl.rs",
+      "path": "crates/idealis-cli/src/bin/idealis/modules.rs",
       "role": "reference"
     },
     "source6": {
-      "path": "justfile",
+      "path": "crates/idealis-cli/src/bin/idealis/tla.rs",
       "role": "reference"
     },
     "source7": {
-      "path": "package.json",
+      "path": "crates/idealis-cli/src/bin/idealis/tlc.rs",
       "role": "reference"
     },
     "source8": {
-      "path": "packages/idealis/package.json",
+      "path": "crates/idealis-cli/src/main.rs",
       "role": "reference"
     },
     "source9": {
-      "path": "pnpm-lock.yaml",
+      "path": "crates/idealis-cli/tests/jsonl.rs",
       "role": "reference"
     },
     "source10": {
-      "path": "pnpm-workspace.yaml",
+      "path": "crates/idealis-cli/tests/specs/Bad.cfg",
       "role": "reference"
     },
     "source11": {
+      "path": "crates/idealis-cli/tests/specs/Bound.cfg",
+      "role": "reference"
+    },
+    "source12": {
+      "path": "crates/idealis-cli/tests/specs/Counter.cfg",
+      "role": "reference"
+    },
+    "source13": {
+      "path": "crates/idealis-cli/tests/specs/Counter.tla",
+      "role": "reference"
+    },
+    "source14": {
+      "path": "crates/idealis-cli/tests/specs/Empty.cfg",
+      "role": "reference"
+    },
+    "source15": {
+      "path": "crates/idealis-cli/tests/specs/Limit.tla",
+      "role": "reference"
+    },
+    "source16": {
+      "path": "crates/idealis-cli/tests/specs/Proof.tla",
+      "role": "reference"
+    },
+    "source17": {
+      "path": "crates/idealis-cli/tests/specs/Stop.cfg",
+      "role": "reference"
+    },
+    "source18": {
+      "path": "crates/idealis-cli/tests/specs/Stop.tla",
+      "role": "reference"
+    },
+    "source19": {
+      "path": "crates/idealis-cli/tests/specs/Unknown.tla",
+      "role": "reference"
+    },
+    "source20": {
+      "path": "crates/idealis-cli/tests/tla_cli.rs",
+      "role": "reference"
+    },
+    "source21": {
+      "path": "justfile",
+      "role": "reference"
+    },
+    "source22": {
+      "path": "package.json",
+      "role": "reference"
+    },
+    "source23": {
+      "path": "packages/idealis/package.json",
+      "role": "reference"
+    },
+    "source24": {
+      "path": "pnpm-lock.yaml",
+      "role": "reference"
+    },
+    "source25": {
+      "path": "pnpm-workspace.yaml",
+      "role": "reference"
+    },
+    "source26": {
       "path": "scripts/check-support.ts",
       "role": "reference"
     }
@@ -65,10 +125,50 @@
     },
     {
       "id": "idealis-cli-implementation-0",
+      "topic": "有限TLCの引数、終了値、予算切れと検査完了の区別",
+      "mode": "semantic",
+      "reference": {
+        "source": "source7"
+      },
+      "target": {
+        "source": "source3",
+        "contains": "`idealis tlc` は"
+      },
+      "context": [
+        {
+          "source": "source5"
+        },
+        {
+          "source": "source20"
+        }
+      ]
+    },
+    {
+      "id": "idealis-cli-implementation-1",
+      "topic": "SANY互換の限定した解析オプションと診断",
+      "mode": "semantic",
+      "reference": {
+        "source": "source6"
+      },
+      "target": {
+        "source": "source3",
+        "contains": "`idealis tla` は"
+      },
+      "context": [
+        {
+          "source": "source5"
+        },
+        {
+          "source": "source20"
+        }
+      ]
+    },
+    {
+      "id": "idealis-cli-implementation-2",
       "topic": "JSONLの各行を同じEngineへ渡し、応答を行単位でflushするnative実行口",
       "mode": "semantic",
       "reference": {
-        "source": "source4"
+        "source": "source8"
       },
       "target": {
         "source": "source3"

@@ -38,7 +38,7 @@
 | TLA+とSMTの相互運用          | 共通backend契約はあるが、値・式の変換と統合した検査経路は今後の対象。                   |
 | 埋め込みinvariant            | モデル状態のinvariant検査はある。各言語のソース注釈の抽出・VC生成は未実装。             |
 
-npm の CLI は `idealis`、Rust の JSONL 実行口は `idealis-cli`。npm packageは`@mizchi/idealis`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。Quint Connectの接続方法とWhy3のfrontend/backend分離を参考にしており、両ツールの言語・APIとの互換実装を提供する段階ではない。
+`idealis tlc -workers 1 -config Spec.cfg Spec.tla` と `idealis tla Spec.tla` は Java なしで実行できる。[対応オプションと終了コード](crates/idealis-cli/README.md#tla-ファイルを検査する)を参照。npm の CLI は `idealis`、Rust の JSONL 実行口は `idealis-cli`。npm packageは`@mizchi/idealis`。[旧名からの移行と保存形式の互換性](docs/migration.md)を参照。Quint Connectの接続方法とWhy3のfrontend/backend分離を参考にしており、両ツールの言語・APIとの互換実装を提供する段階ではない。
 
 ## 構成とライブラリの役割
 
@@ -103,18 +103,18 @@ TLA+はRust/Wasm frontendとtla-ts経路を持ち、`z3-solver`を任意のSMT a
 
 観測付きの有限モデルを TS / Rust で共有する方法、反例の縮小、時計・通信・永続化の注入は [利用ガイド](docs/using-models.md) を参照。`just package` で solver を必須にしない npm/Cargo/Wasm archive と CLI を作り、別 consumer で検証できる。[公開手順と CI の分割](docs/releasing.md) は別途記載している。
 
-Node.js 24+、pnpm 12+、just を使う。リポジトリで Rust backend とWasmの開発検査を実行する場合は Rust と `wasm32-unknown-unknown` target も必要。配布 Wasm の利用側で Rust をビルドする必要はない。npm には未公開。
+Node.js 24+、pnpm 12+、just を使う。リポジトリで Rust backend とWasmの開発検査を実行する場合は Rust と `wasm32-unknown-unknown` target も必要。npm の TLA+ CLI をビルドする場合は `wasm32-wasip1` も使う。配布 Wasm の利用側で Rust をビルドする必要はない。npm には未公開。
 
 ```sh
 just install
 just check
 just demo
 just mutation
-rustup target add wasm32-unknown-unknown
+rustup target add wasm32-unknown-unknown wasm32-wasip1
 just wasm-test
 ```
 
-pnpm workspace のルートで開発タスクを実行する。公開パッケージは [packages/idealis](packages/idealis) にあり、SDK と CLI は `just build-sdk` でビルドできる。
+pnpm workspace のルートで開発タスクを実行する。公開パッケージは [packages/idealis](packages/idealis) にあり、SDK と CLI の TypeScript 部分は `just build-sdk`、配布する Wasm を含む CLI は `just package-prepack` でビルドできる。
 
 `just check` は Vite+ の format・lint 検査、TypeScript の型検査、Vitest、`node:test` を実行する。テスト対象と lint・format のルールは `vite.config.ts` にまとめている。単独で lint を実行するには `just lint`、整形を書き込むには `just fmt`、全 Vitest プロジェクトを実行するには `just vitest` を使う。`just wasm-test` は実Wasmの判定・ABI・反例再生・エラー復旧とnativeとの照合をNodeで実行する。ブラウザやDOMの起動は必要ない。共通の挙動テストを両ランナーに登録している。`just mutation` は `@mizchi/mutator` で TS ソースを変異させ、Vitest で検査する。
 

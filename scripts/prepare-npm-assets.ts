@@ -24,6 +24,10 @@ for (const [crate, manifest] of [
     `${JSON.stringify({ version, abi: 1, sha256, bytes: binary.length }, null, 2)}\n`,
   );
 }
+await copyFile(
+  "crates/idealis-cli/target/wasm32-wasip1/release/idealis.wasm",
+  join(assets, "idealis-cli.wasm"),
+);
 await copyFile("README.md", join(packageDir, "README.md"));
 await copyFile("LICENSE", join(packageDir, "LICENSE"));
 await cp("docs", join(packageDir, "docs"), { recursive: true });

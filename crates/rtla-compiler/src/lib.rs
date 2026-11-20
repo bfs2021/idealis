@@ -319,6 +319,21 @@ pub fn compile_with_options(
     compile_flat(module, config, options, false)
 }
 
+/// Check names and, optionally, expression levels in an executable module bundle.
+pub fn analyze_modules(root: &Module, modules: &[Module], check_levels: bool) -> Result<()> {
+    if std::iter::once(root).chain(modules).any(|module| {
+        !module.theorems.is_empty() || !module.directives.is_empty() || !module.modules.is_empty()
+    }) {
+        return unsupported("standalone analysis of proofs or nested modules");
+    }
+    let config = rtla::parse_config("").expect("empty configuration");
+    let (linked, _, _) = link::resolve(root, &config, modules)?;
+    if check_levels {
+        levels::validate(&linked)?;
+    }
+    Ok(())
+}
+
 /// Compile an explicit in-memory module bundle without filesystem access.
 pub fn compile_modules(
     module: &Module,

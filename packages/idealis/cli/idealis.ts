@@ -12,7 +12,7 @@ const command = process.argv[2];
 const modelPath = process.argv[3];
 if (!modelPath || (command !== "check" && command !== "model"))
   throw new Error(
-    "Usage: idealis check <model.json> <history.json> | idealis model <model.json>",
+    "Usage: idealis check <model.json> <history.json> | idealis model <model.json> | idealis tlc [options] spec | idealis tla [-s] [-l] spec...",
   );
 const model = parseFiniteModel(JSON.parse(await readFile(modelPath, "utf8")));
 if (command === "model") {
